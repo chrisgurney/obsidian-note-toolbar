@@ -1,6 +1,6 @@
 import { Rect } from "@codemirror/view";
 import NoteToolbarPlugin from "main";
-import { FrontMatterCache, getIcon, ItemView, MarkdownView, Menu, MenuItem, MenuPositionDef, Notice, Platform, setIcon, setTooltip, TFile, TFolder } from "obsidian";
+import { CanvasView, FrontMatterCache, getIcon, ItemView, MarkdownView, Menu, MenuItem, MenuPositionDef, Notice, Platform, setIcon, setTooltip, TFile, TFolder } from "obsidian";
 import { DefaultStyleType, ItemType, LocalVar, MobileStyleType, OBSIDIAN_UI_ELEMENTS, PositionType, t, ToggleUiStateType, ToolbarSettings, ToolbarStyle } from "Settings/NoteToolbarSettings";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
 import { calcComponentVisToggles, getViewId, hasStyle, isValidUri, putFocusInMenu } from "Utils/Utils";
@@ -246,7 +246,16 @@ export default class ToolbarRenderer {
         }
 
 		this.updatePhoneNavigation(position);
-		
+
+		// fix: (#415) unable to connect Canvas cards when the toolbar is in Top (fixed) position
+		const updateCanvasViewportCache = () => {
+			if (!view.leaf.isDeferred && view.getViewType() == 'canvas') {
+				if ('canvas' in view && view.canvas) {
+					(view.canvas as CanvasView).onResize();
+				}
+			}
+		};
+
         // add the toolbar to the editor or modal UI
         const modalEl = activeDocument.querySelector('.modal-container .note-toolbar-ui') as HTMLElement;
         const viewEl = view?.containerEl as HTMLElement | null;
@@ -278,8 +287,10 @@ export default class ToolbarRenderer {
                 const viewHeader = viewEl?.querySelector('.view-header') as HTMLElement;
                 // FIXME: add to modal header, but this is causing duplicate toolbars
                 // if (modalEl) viewHeader = modalEl.querySelector('.modal-header') as HTMLElement;
-                if (viewHeader) viewHeader.insertAdjacentElement(Platform.isPhone ? 'beforebegin' : 'afterend', embedBlock)
-					else this.ntb.debug("🛑 renderToolbar: Unable to find .view-header to insert toolbar");
+                if (viewHeader) {
+					viewHeader.insertAdjacentElement(Platform.isPhone ? 'beforebegin' : 'afterend', embedBlock);
+				}
+				else this.ntb.debug("🛑 renderToolbar: Unable to find .view-header to insert toolbar");
 				// update height for header repositioning on phones
 				if (Platform.isPhone) {
 					const setToolbarHeight = () => {
@@ -312,6 +323,8 @@ export default class ToolbarRenderer {
                 }
                 break;
         }
+
+		updateCanvasViewportCache();
 
         this.ntb.debug(`🎨 Rendered toolbar: "${toolbar.name}" in view:`, getViewId(view));
         this.ntb.debugGroupEnd();
