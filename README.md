@@ -16,6 +16,7 @@ The [Note Toolbar plugin](https://obsidian.md/plugins?id=note-toolbar) for [Obsi
 
 **Jump to:**
 
+- [Disclosures](#disclosures)
 - [Features](#features)
 - [Installation](#installation)
 - [Getting Started](#getting-started-)
