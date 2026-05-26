@@ -4,7 +4,7 @@ import { ExportSettings, t, ToolbarSettings, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, 
 import { confirmImportWithModal } from "Settings/UI/Modals/ImportConfirmModal";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
 import { exportToCallout, importFromCallout } from "Utils/ImportExport";
-import { URL_GHIO } from "Utils/Urls";
+import { URLS } from "Utils/Urls";
 
 export default class ProtocolManager {
 
@@ -138,7 +138,7 @@ export default class ProtocolManager {
         const callout = await exportToCallout(this.ntb, toolbar, options);
 		const shareUri = useObsidianUri 
 			? `obsidian://note-toolbar?import=${encodeURIComponent(callout)}`
-			: `${URL_GHIO}${encodeURIComponent(`obsidian://note-toolbar?import=${callout}`)}`
+			: `${URLS.GHIO_SHARE}${encodeURIComponent(`obsidian://note-toolbar?import=${callout}`)}`
         return shareUri;
     }
 

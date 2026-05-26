@@ -3,7 +3,7 @@ import TipItems from "Help/tips.json";
 import NoteToolbarPlugin from "main";
 import { Component, ItemView, MarkdownRenderer, requestUrl, setIcon, setTooltip, ViewStateResult, WorkspaceLeaf } from "obsidian";
 import { t, VIEW_TYPE_TIP } from "Settings/NoteToolbarSettings";
-import { URL_GHUC_TIPS } from "Utils/Urls";
+import { URLS } from "Utils/Urls";
 
 interface TipViewState {
     id: string;
@@ -63,11 +63,11 @@ export default class TipView extends ItemView {
 				tipText = tipMd;
             }
             else {
-                tipText = t('setting.help.error-failed-to-load', { baseUrl: URL_GHUC_TIPS, lang: language, name: tip.id });
+                tipText = t('setting.help.error-failed-to-load', { baseUrl: URLS.GHUC_TIPS, lang: language, name: tip.id });
             }
         }
         catch (error) {
-            tipText = t('setting.help.error-failed-to-load', { baseUrl: URL_GHUC_TIPS, lang: language, name: tip.id });
+            tipText = t('setting.help.error-failed-to-load', { baseUrl: URLS.GHUC_TIPS, lang: language, name: tip.id });
             tipText += `\n>[!error]-\n> \`${error as string}\`\n`;
         }
         finally {
@@ -131,13 +131,13 @@ export default class TipView extends ItemView {
      */
     async getTip(filename: string, language: string = 'en'): Promise<string | null> {
         try {
-            const res = await requestUrl(`${URL_GHUC_TIPS}/${language}/${filename}.md`);
+            const res = await requestUrl(`${URLS.GHUC_TIPS}/${language}/${filename}.md`);
             if (res.status !== 200) return null;
             return res.text ?? '';
         } catch (e) {
             this.ntb.debug(`Error fetching tip for language (${language}). Falling back to English.\n${e instanceof Error ? e.message : String(e)}`);
             try {
-                const res = await requestUrl(`${URL_GHUC_TIPS}/en/${filename}.md`);
+                const res = await requestUrl(`${URLS.GHUC_TIPS}/en/${filename}.md`);
                 if (res.status !== 200) return null;
                 return res.text ?? '';
             } catch {

@@ -2,7 +2,7 @@ import NoteToolbarPlugin from "main";
 import { ButtonComponent, getIcon, ItemView, Notice, Platform, setIcon, Setting, setTooltip, TFile, TFolder, ToggleComponent } from "obsidian";
 import { COMMAND_DOES_NOT_EXIST, ComponentType, DEFAULT_ITEM_VISIBILITY_SETTINGS, IGNORE_PLUGIN_IDS, ItemComponentVisibility, ItemType, SettingType, t, ToolbarItemSettings, ToolbarSettings, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_WHATS_NEW, ViewModeType, Visibility, WHATSNEW_VERSION } from "Settings/NoteToolbarSettings";
 import SettingsManager from "Settings/SettingsManager";
-import { URL_GH_USER_GUIDE } from "Utils/Urls";
+import { URLS } from "Utils/Urls";
 import { hasVisibleComponents, importArgs } from "Utils/Utils";
 import { PLUGIN_VERSION } from "version";
 import { confirmWithModal } from "../Modals/ConfirmModal";
@@ -1065,7 +1065,7 @@ export function learnMoreFr(message: string, page: string, linkText: string = t(
 	messageFr.append(
 		message, ' ',
 	);
-	const learnMoreLink = messageFr.createEl('a', { href: `${URL_GH_USER_GUIDE}/${page}`, text: linkText });
+	const learnMoreLink = messageFr.createEl('a', { href: `${URLS.GH_USER_GUIDE}/${page}`, text: linkText });
 	learnMoreLink.addClass('note-toolbar-setting-focussable-link');
 	return messageFr;
 }
@@ -1084,7 +1084,7 @@ export function headingLearnMoreFr(title: string, desc: string, page: string, li
 	// description + learn more link
 	const descFr = messageFr.createEl('div', 'setting-item-description');
 	descFr.append(desc, ' ');
-	const learnMoreLink = descFr.createEl('a', { href: `${URL_GH_USER_GUIDE}/${page}`, text: linkText });
+	const learnMoreLink = descFr.createEl('a', { href: `${URLS.GH_USER_GUIDE}/${page}`, text: linkText });
 	learnMoreLink.addClass('note-toolbar-setting-focussable-link');
 
 	return messageFr;

@@ -4,7 +4,7 @@ import { Component, ItemView, MarkdownRenderer, Scope, setIcon, Setting, setTool
 import { t, ToolbarItemSettings, VIEW_TYPE_GALLERY } from 'Settings/NoteToolbarSettings';
 import ItemSuggester from 'Settings/UI/Suggesters/ItemSuggester';
 import { iconTextFr } from 'Settings/UI/Utils/SettingsUIUtils';
-import { URL_GH_USER_GUIDE } from "Utils/Urls";
+import { URLS } from "Utils/Urls";
 
 interface Category {
 	name: { [key: string]: string };
@@ -144,7 +144,7 @@ export default class GalleryView extends ItemView {
             createDiv({ cls: 'note-toolbar-setting-link-text' }, el => 
                 el.append( iconTextFr('pen-box', t('setting.help.label-feedback')), createSpan({ cls: 'note-toolbar-setting-link-description', text: t('setting.help.label-feedback-description') }) )
             ),
-            createDiv().createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.help.label-feedback'), href: URL_GH_USER_GUIDE + '/Feedback', attr: { 'aria-label': t('setting.help.button-open-github') } })
+            createDiv().createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.help.label-feedback'), href: URLS.GH_USER_GUIDE + '/Feedback', attr: { 'aria-label': t('setting.help.button-open-github') } })
         );
 
 		// on clicking an item, prompt for toolbar and add it
