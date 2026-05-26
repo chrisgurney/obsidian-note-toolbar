@@ -8422,86 +8422,6 @@
           }
         },
         {
-          "uuid": "a1da6815-3235-4055-b2ed-2f78e6098d81",
-          "hasCommand": false,
-          "icon": "clipboard-copy",
-          "inGallery": false,
-          "label": "",
-          "link": "",
-          "linkAttr": {
-            "commandId": "",
-            "hasVars": false,
-            "target": "",
-            "type": "javascript"
-          },
-          "plugin": "",
-          "scriptConfig": {
-            "expression": "const e = app.workspace.activeLeaf.view?.editor;\ntry { await window.navigator.clipboard.writeText(e.getSelection()); app.commands.executeCommandById('editor:focus'); } catch (e) { console.error(e); new Notice(ntb.t('api.msg.error-console')); }",
-            "pluginFunction": "evaluate"
-          },
-          "tooltip": "Copy",
-          "visibility": {
-            "desktop": {
-              "components": [
-                "icon",
-                "label"
-              ]
-            },
-            "mobile": {
-              "components": [
-                "icon",
-                "label"
-              ]
-            },
-            "tablet": {
-              "components": [
-                "icon",
-                "label"
-              ]
-            }
-          }
-        },
-        {
-          "uuid": "14e37678-d9cc-4534-8f15-613c488be640",
-          "hasCommand": false,
-          "icon": "clipboard-copy",
-          "inGallery": false,
-          "label": "",
-          "link": "",
-          "linkAttr": {
-            "commandId": "",
-            "hasVars": false,
-            "target": "",
-            "type": "javascript"
-          },
-          "plugin": "",
-          "scriptConfig": {
-            "expression": "const e = app.workspace.activeLeaf.view?.editor;\ntry { await window.navigator.clipboard.writeText(e.getSelection()); app.commands.executeCommandById('editor:focus'); } catch (e) { console.error(e); new Notice(ntb.t('api.msg.error-console')); }",
-            "pluginFunction": "evaluate"
-          },
-          "tooltip": "Copy",
-          "visibility": {
-            "desktop": {
-              "components": [
-                "icon",
-                "label"
-              ]
-            },
-            "mobile": {
-              "components": [
-                "icon",
-                "label"
-              ]
-            },
-            "tablet": {
-              "components": [
-                "icon",
-                "label"
-              ]
-            }
-          }
-        },
-        {
           "uuid": "863a17ef-89e7-4100-9b24-2d4d68e4d194",
           "hasCommand": false,
           "icon": "file-plus-2",
@@ -8717,46 +8637,6 @@
             "pluginFunction": "evaluate"
           },
           "tooltip": "Copy",
-          "visibility": {
-            "desktop": {
-              "components": [
-                "icon",
-                "label"
-              ]
-            },
-            "mobile": {
-              "components": [
-                "icon",
-                "label"
-              ]
-            },
-            "tablet": {
-              "components": [
-                "icon",
-                "label"
-              ]
-            }
-          }
-        },
-        {
-          "uuid": "e8ce1de6-e377-46f5-8aa4-c661b590252d",
-          "hasCommand": false,
-          "icon": "clipboard-paste",
-          "inGallery": false,
-          "label": "",
-          "link": "",
-          "linkAttr": {
-            "commandId": "",
-            "hasVars": false,
-            "target": "",
-            "type": "javascript"
-          },
-          "plugin": "",
-          "scriptConfig": {
-            "expression": "const e = app.workspace.activeLeaf.view?.editor;\ntry { let rs = e.replaceSelection; let text = await window.navigator.clipboard.readText(); if (text) rs.apply(e, [text]); e?.focus(); } catch (e) { console.error(e); new Notice(ntb.t('api.msg.error-console')); }",
-            "pluginFunction": "evaluate"
-          },
-          "tooltip": "Paste",
           "visibility": {
             "desktop": {
               "components": [
@@ -17963,46 +17843,6 @@
           },
           "inGallery": false,
           "hasCommand": false
-        },
-        {
-          "uuid": "32f8f126-5bb0-43ed-accf-b0dcb068a5e2",
-          "hasCommand": false,
-          "icon": "clipboard-check",
-          "inGallery": false,
-          "label": "",
-          "link": "",
-          "linkAttr": {
-            "commandId": "",
-            "hasVars": false,
-            "target": "",
-            "type": "javascript"
-          },
-          "plugin": "",
-          "scriptConfig": {
-            "expression": "const e = app.workspace.activeLeaf.view?.editor;\nif (!e) return;\nconst c = e.getValue();\nconst b = c.startsWith('---\\n') ? c.replace(/^---\\n[\\s\\S]*?\\n---\\n*/, '') : c;\nawait navigator.clipboard.writeText(b);\nnew Notice(ntb.t('api.msg.clipboard-copied'));",
-            "pluginFunction": "evaluate"
-          },
-          "tooltip": "Copy note content",
-          "visibility": {
-            "desktop": {
-              "components": [
-                "icon",
-                "label"
-              ]
-            },
-            "mobile": {
-              "components": [
-                "icon",
-                "label"
-              ]
-            },
-            "tablet": {
-              "components": [
-                "icon",
-                "label"
-              ]
-            }
-          }
         }
       ],
       "mobileStyles": [],
