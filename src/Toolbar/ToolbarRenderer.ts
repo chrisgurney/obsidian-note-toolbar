@@ -326,7 +326,11 @@ export default class ToolbarRenderer {
 
 		// fix: (#415) unable to connect Canvas cards when the toolbar is in Top (fixed) position
 		// updateCanvasViewportCache();
-		if (view.getViewType() == 'canvas') view.onResize();
+		if (view.getViewType() === 'canvas') {
+			requestAnimationFrame(() => {
+				view.onResize();
+			});
+		}
 
         this.ntb.debug(`🎨 Rendered toolbar: "${toolbar.name}" in view:`, getViewId(view));
         this.ntb.debugGroupEnd();
