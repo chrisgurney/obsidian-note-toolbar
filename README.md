@@ -40,10 +40,11 @@ The [Note Toolbar plugin](https://obsidian.md/plugins?id=note-toolbar) for [Obsi
 
 In order for Note Toolbar to provide a built-in library of helpful tools, and scripting extensibility, the plugin needs access to read, write, and list files within a vault, as well as selective clipboard access. _The majority of these features are completely optional._
 
-Expand below to what these are used for, and let me know (via [GitHub ↗](https://github.com/chrisgurney/obsidian-note-toolbar/issues/546) or [Google form ↗](https://forms.gle/sa75KNAQiWTtAY4P8)) if you have any questions or concerns.
+Expand below to see what's accessed and why. Let me know (via [GitHub ↗](https://github.com/chrisgurney/obsidian-note-toolbar/issues/546) or [Google form ↗](https://forms.gle/sa75KNAQiWTtAY4P8)) if you have any questions or concerns.
 
 <details>
-<summary>Learn more...</summary>
+<summary>See disclosures...</summary>
+<br/>
 <ul>
   <li><b>Vault Read: Reads individual vault files via the Obsidian API</b></li>
   <ul>
@@ -62,8 +63,8 @@ Expand below to what these are used for, and let me know (via [GitHub ↗](https
   </ul>
   <li><b>Clipboard Access: Reads or writes the system clipboard. May expose content copied from outside Obsidian.</b></li>
   <ul>
-    <li>The clipboard is <em>read</em>: if using the Gallery's <em>Paste</em> item; or using Note Toolbar's `clipboard` API function (provided as a convenience for user scripts).</li>
-    <li>The clipboard is <em>written</em>: when getting the callout version of a toolbar, getting the developer ID, a command URI, sharing a toolbar, and in various Gallery items that you can choose to add.</li>
+    <li>The clipboard is <em>read</em>... if using the Gallery's <em>Paste</em> item; or using Note Toolbar's `clipboard` API function (provided as a convenience for user scripts).</li>
+    <li>The clipboard is <em>written</em>... when getting the callout version of a toolbar, getting the developer ID, a command URI, sharing a toolbar, and in various Gallery items that you can choose to add.</li>
   </ul>
 </ul>
 
