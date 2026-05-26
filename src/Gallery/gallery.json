@@ -83,7 +83,7 @@
                 "uk": "Інструменти роботи з файлами."
             },
             "itemIds": [
-                "file-new", "obsidian-kanban-create", "canvas-new", "file-append", "file-move", "file-in-explorer", "file-in-system", "vscode-open"
+                "file-new", "obsidian-kanban-create", "canvas-new", "file-move", "file-in-explorer", "file-in-system", "vscode-open"
             ]
         },
         {

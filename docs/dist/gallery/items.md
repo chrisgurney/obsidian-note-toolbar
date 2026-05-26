@@ -43,7 +43,6 @@ Tools for working with files.
 | New note | Creates a new note. |
 | New kanban | Create a new kanban board. |
 | New canvas | Create a new canvas file. |
-| Append text | Appends the prompted text to a file you specify. |
 | Move file to folder | Move current file to a chosen folder. |
 | Show file in navigation | Reveal the active file in navigation. |
 | Show file in system | Reveal the active file in the system's file explorer. *Not supported on: mobile* |

@@ -314,24 +314,6 @@
         "type": "command"
     },
     {
-        "id": "file-append",
-        "description": {
-            "en": "Appends the prompted text to a file you specify.",
-            "ja": "入力したテキストを指定したファイルに追加します。",
-            "zh": "将提示框输入的文本附加到您指定的文件中。",
-            "uk": "Додайте текст через запит до вказаного файлу."
-        },
-        "icon": "file-plus-2",
-        "script": "const fn = 'File.md'; // CHANGE THIS\nconst f = ntb.app.vault.getAbstractFileByPath(fn);\nif (!f) { new Notice(ntb.t('api.msg.file-not-exist')); return; };\nconst txt = await ntb.prompt({ large: true });\nif (txt) { const c = await ntb.app.vault.read(f); await ntb.app.vault.modify(f, c + '\\n\\n' + txt); }",
-        "tooltip": {
-            "en": "Append text",
-            "ja": "テキストを追加",
-            "zh": "附加文本",
-            "uk": "Додати текст"
-        },
-        "type": "javascript"
-    },
-    {
         "id": "file-in-explorer",
         "commandId": "file-explorer:reveal-active-file",
         "description": {
