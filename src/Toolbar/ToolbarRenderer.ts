@@ -1,6 +1,6 @@
 import { Rect } from "@codemirror/view";
 import NoteToolbarPlugin from "main";
-import { CanvasView, FrontMatterCache, getIcon, ItemView, MarkdownView, Menu, MenuItem, MenuPositionDef, Notice, Platform, setIcon, setTooltip, TFile, TFolder } from "obsidian";
+import { FrontMatterCache, getIcon, ItemView, MarkdownView, Menu, MenuItem, MenuPositionDef, Notice, Platform, setIcon, setTooltip, TFile, TFolder } from "obsidian";
 import { DefaultStyleType, ItemType, LocalVar, MobileStyleType, OBSIDIAN_UI_ELEMENTS, PositionType, t, ToggleUiStateType, ToolbarSettings, ToolbarStyle } from "Settings/NoteToolbarSettings";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
 import { calcComponentVisToggles, getViewId, hasStyle, isValidUri, putFocusInMenu } from "Utils/Utils";
@@ -248,13 +248,13 @@ export default class ToolbarRenderer {
 		this.updatePhoneNavigation(position);
 
 		// fix: (#415) unable to connect Canvas cards when the toolbar is in Top (fixed) position
-		const updateCanvasViewportCache = () => {
-			if (!view.leaf.isDeferred && view.getViewType() == 'canvas') {
-				if ('canvas' in view && view.canvas) {
-					(view.canvas as CanvasView).onResize();
-				}
-			}
-		};
+		// const updateCanvasViewportCache = () => {
+		// 	if (!view.leaf.isDeferred && view.getViewType() == 'canvas') {
+		// 		if ('canvas' in view && view.canvas) {
+		// 			view.onResize();
+		// 		}
+		// 	}
+		// };
 
         // add the toolbar to the editor or modal UI
         const modalEl = activeDocument.querySelector('.modal-container .note-toolbar-ui') as HTMLElement;
@@ -324,7 +324,9 @@ export default class ToolbarRenderer {
                 break;
         }
 
-		updateCanvasViewportCache();
+		// fix: (#415) unable to connect Canvas cards when the toolbar is in Top (fixed) position
+		// updateCanvasViewportCache();
+		if (view.getViewType() == 'canvas') view.onResize();
 
         this.ntb.debug(`🎨 Rendered toolbar: "${toolbar.name}" in view:`, getViewId(view));
         this.ntb.debugGroupEnd();

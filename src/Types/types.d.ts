@@ -47,12 +47,12 @@ declare module "obsidian" {
         }
     }
 
-    interface CanvasView extends TextFileView {
-        canvas: {
-            // allows us to update viewport dimension cache of the CanvasView
-            onResize: () => void;
-        }
-    }
+    // interface CanvasView extends TextFileView {
+    //     canvas: {
+    //         // allows us to update viewport dimension cache of the CanvasView
+    //         onResize: () => void;
+    //     }
+    // }
 
     /** internal chooser API used by SuggestModal */
     interface ChooserType<T> {
