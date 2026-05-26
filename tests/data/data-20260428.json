@@ -8779,46 +8779,6 @@
           }
         },
         {
-          "uuid": "d2f6e4ab-c275-4da8-a84c-6c341a3a4449",
-          "hasCommand": false,
-          "icon": "file-stack",
-          "inGallery": false,
-          "label": "",
-          "link": "",
-          "linkAttr": {
-            "commandId": "",
-            "hasVars": false,
-            "target": "",
-            "type": "javascript"
-          },
-          "plugin": "",
-          "scriptConfig": {
-            "expression": "const src = '.obsidian/plugins/note-toolbar/data.json';\nconst date = new Date().toISOString().slice(0, 10).replace(/-/g, '');\nconst dest = `note-toolbar-${date}-data.json`;\napp.vault.adapter.read(src).then(data => { app.vault.adapter.write(dest, data); new Notice(ntb.t('api.msg.file-created', {filename: dest})); });",
-            "pluginFunction": "evaluate"
-          },
-          "tooltip": "Backup Note Toolbar config",
-          "visibility": {
-            "desktop": {
-              "components": [
-                "icon",
-                "label"
-              ]
-            },
-            "mobile": {
-              "components": [
-                "icon",
-                "label"
-              ]
-            },
-            "tablet": {
-              "components": [
-                "icon",
-                "label"
-              ]
-            }
-          }
-        },
-        {
           "uuid": "5e328fb8-5591-4d30-8fb6-8a2c91923fdc",
           "hasCommand": false,
           "icon": "",
