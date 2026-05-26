@@ -1,6 +1,6 @@
 import { Rect } from "@codemirror/view";
 import NoteToolbarPlugin from "main";
-import { FrontMatterCache, getIcon, ItemView, MarkdownView, Menu, MenuItem, MenuPositionDef, Notice, Platform, setIcon, setTooltip, TFile, TFolder } from "obsidian";
+import { CanvasView, FrontMatterCache, getIcon, ItemView, MarkdownView, Menu, MenuItem, MenuPositionDef, Notice, Platform, setIcon, setTooltip, TFile, TFolder } from "obsidian";
 import { DefaultStyleType, ItemType, LocalVar, MobileStyleType, OBSIDIAN_UI_ELEMENTS, PositionType, t, ToggleUiStateType, ToolbarSettings, ToolbarStyle } from "Settings/NoteToolbarSettings";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
 import { calcComponentVisToggles, getViewId, hasStyle, isValidUri, putFocusInMenu } from "Utils/Utils";
@@ -276,10 +276,19 @@ export default class ToolbarRenderer {
             }
             case PositionType.Top: {
                 const viewHeader = viewEl?.querySelector('.view-header') as HTMLElement;
+				// fix: (#415) unable to connect Canvas cards when the toolbar is in Top (fixed) position
+				const updateCanvasViewportCache = () => {
+					if (!view.leaf.isDeferred && view.getViewType() == 'canvas') {
+						(view as CanvasView).canvas?.onResize();
+					}
+				};
                 // FIXME: add to modal header, but this is causing duplicate toolbars
                 // if (modalEl) viewHeader = modalEl.querySelector('.modal-header') as HTMLElement;
-                if (viewHeader) viewHeader.insertAdjacentElement(Platform.isPhone ? 'beforebegin' : 'afterend', embedBlock)
-					else this.ntb.debug("🛑 renderToolbar: Unable to find .view-header to insert toolbar");
+                if (viewHeader) {
+					viewHeader.insertAdjacentElement(Platform.isPhone ? 'beforebegin' : 'afterend', embedBlock);
+					if (!Platform.isPhone) updateCanvasViewportCache();
+				}
+				else this.ntb.debug("🛑 renderToolbar: Unable to find .view-header to insert toolbar");
 				// update height for header repositioning on phones
 				if (Platform.isPhone) {
 					const setToolbarHeight = () => {
@@ -287,6 +296,7 @@ export default class ToolbarRenderer {
 						if (height === 0) return;
 						activeDocument.body.style.setProperty('--ntb-toolbar-height', `${height}px`);
 						this.phoneTbarHeightCache.set(toolbar.uuid, { height, timestamp: toolbar.updated });
+						updateCanvasViewportCache();
 					};
 					embedBlock.addEventListener('transitionend', setToolbarHeight);
 					// fallback: if no transition fires (e.g. on restart), read height after layout settles
