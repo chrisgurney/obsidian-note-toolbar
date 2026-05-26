@@ -12857,52 +12857,6 @@
           }
         },
         {
-          "uuid": "863a17ef-89e7-4100-9b24-2d4d68e4d194",
-          "hasCommand": false,
-          "icon": "file-plus-2",
-          "inGallery": false,
-          "label": "",
-          "link": "",
-          "linkAttr": {
-            "commandId": "",
-            "hasVars": false,
-            "target": "",
-            "type": "javascript"
-          },
-          "plugin": "",
-          "scriptConfig": {
-            "expression": "const fn = 'Today.md'; // CHANGE THIS\nconst f = app.vault.getAbstractFileByPath(fn);\nif (!f) { new Notice(ntb.t('api.msg.file-not-exist')); return; };\nconst txt = await ntb.prompt({ });\nif (txt) { const c = await app.vault.read(f); await app.vault.modify(f, c + '\\n\\n' + txt); }",
-            "pluginFunction": "evaluate"
-          },
-          "tooltip": "Append text",
-          "visibility": {
-            "desktop": {
-              "allViews": {
-                "components": [
-                  "icon",
-                  "label"
-                ]
-              }
-            },
-            "mobile": {
-              "allViews": {
-                "components": [
-                  "icon",
-                  "label"
-                ]
-              }
-            },
-            "tablet": {
-              "allViews": {
-                "components": [
-                  "icon",
-                  "label"
-                ]
-              }
-            }
-          }
-        },
-        {
           "uuid": "20ac12d1-e3c2-4395-8e04-f4f6dfe2eec3",
           "hasCommand": false,
           "icon": "lucide-message-circle-question",
