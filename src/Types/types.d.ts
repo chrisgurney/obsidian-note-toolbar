@@ -50,7 +50,7 @@ declare module "obsidian" {
     interface CanvasView extends TextFileView {
         canvas: {
             // allows us to update viewport dimension cache of the CanvasView
-            onResize(): void;
+            onResize: () => void;
         }
     }
 
