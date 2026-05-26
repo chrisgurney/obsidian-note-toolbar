@@ -88,7 +88,8 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		this.displayFocusScroll(focusSelector, scrollToFocus);
 
 		// show the What's New view once, if the user hasn't seen it yet
-		this.ntb.settingsUtils.showWhatsNewIfNeeded();
+		// FIXME: settings UI blank on mobile
+		// this.ntb.settingsUtils.showWhatsNewIfNeeded();
 
 	}
 

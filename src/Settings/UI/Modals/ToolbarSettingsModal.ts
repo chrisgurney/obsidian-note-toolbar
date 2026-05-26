@@ -174,7 +174,8 @@ export default class ToolbarSettingsModal extends Modal {
 		this.rememberLastPosition(this.modalEl);
 
 		// show the What's New view once, if the user hasn't seen it yet
-		this.ntb.settingsUtils.showWhatsNewIfNeeded();
+		// FIXME: settings UI blank on mobile
+		// this.ntb.settingsUtils.showWhatsNewIfNeeded();
 
 	}
 
