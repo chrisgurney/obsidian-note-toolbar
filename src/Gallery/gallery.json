@@ -246,7 +246,7 @@
                 "uk": "Отримайте допомогу від спільноти Obsidian."
             },
             "itemIds": [
-                "obsidian-help-site", "obsidian-markdown-reference", "obsidian-forum"
+                "obsidian-help-site", "obsidian-markdown-reference"
             ]
         },
         {

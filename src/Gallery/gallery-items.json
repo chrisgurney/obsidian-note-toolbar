@@ -994,24 +994,6 @@
         "type": "command"
     },
     {
-        "id": "obsidian-forum",
-        "description": {
-            "en": "Opens Obsidian's forum for discussions and support.",
-            "ja": "Obsidianのフォーラムを開いて議論やサポートを受けます。",
-            "zh": "打开 Obsidian 的论坛进行讨论和支持。",
-            "uk": "Відкрийте форум Obsidian для обговорень та підтримки."
-        },
-        "icon": "message-circle",
-        "tooltip": {
-            "en": "Obsidian forum",
-            "ja": "Obsidianフォーラム",
-            "zh": "Obsidian 论坛",
-            "uk": "Форум Obsidian"
-        },
-        "uri": "https://forum.obsidian.md/",
-        "type": "uri"
-    },
-    {
         "id": "obsidian-help-site",
         "description": {
             "en": "Opens the official Obsidian Help site.",
