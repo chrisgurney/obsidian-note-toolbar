@@ -247,15 +247,6 @@ export default class ToolbarRenderer {
 
 		this.updatePhoneNavigation(position);
 
-		// fix: (#415) unable to connect Canvas cards when the toolbar is in Top (fixed) position
-		// const updateCanvasViewportCache = () => {
-		// 	if (!view.leaf.isDeferred && view.getViewType() == 'canvas') {
-		// 		if ('canvas' in view && view.canvas) {
-		// 			view.onResize();
-		// 		}
-		// 	}
-		// };
-
         // add the toolbar to the editor or modal UI
         const modalEl = activeDocument.querySelector('.modal-container .note-toolbar-ui') as HTMLElement;
         const viewEl = view?.containerEl as HTMLElement | null;
@@ -325,15 +316,7 @@ export default class ToolbarRenderer {
         }
 
 		// fix: (#415) unable to connect Canvas cards when the toolbar is in Top (fixed) position
-		// updateCanvasViewportCache();
-		if (view.getViewType() === 'canvas') {
-			queueMicrotask(() => {
-				requestAnimationFrame(() => {
-					this.ntb.debug('Triggering canvas resize...');
-					view.onResize();
-				});
-			});
-		}
+		if (view.getViewType() === 'canvas') view.onResize();
 
         this.ntb.debug(`🎨 Rendered toolbar: "${toolbar.name}" in view:`, getViewId(view));
         this.ntb.debugGroupEnd();
