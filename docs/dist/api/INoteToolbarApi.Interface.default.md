@@ -311,7 +311,6 @@ await ntb.menu([
 const b = ntb.app.internalPlugins.plugins['bookmarks'];
 if (!b?.enabled) return;
 const i = b.instance?.getBookmarks();
-const b = ntb.app.internalPlugins.plugins['bookmarks'];
 const mi = i
   .filter(b => b.type === 'file' || b.type === 'folder')
   .map(b => ({
