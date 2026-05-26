@@ -8579,86 +8579,6 @@
           }
         },
         {
-          "uuid": "b821d010-df79-486d-a389-24d4ff04be39",
-          "hasCommand": false,
-          "icon": "scissors",
-          "inGallery": false,
-          "label": "",
-          "link": "",
-          "linkAttr": {
-            "commandId": "",
-            "hasVars": false,
-            "target": "",
-            "type": "javascript"
-          },
-          "plugin": "",
-          "scriptConfig": {
-            "expression": "const e = app.workspace.activeLeaf.view?.editor;\ntry { await window.navigator.clipboard.writeText(e.getSelection()); e.replaceSelection(''); e?.focus(); } catch (e) { console.error(e); new Notice(ntb.t('api.msg.error-console')); }",
-            "pluginFunction": "evaluate"
-          },
-          "tooltip": "Cut",
-          "visibility": {
-            "desktop": {
-              "components": [
-                "icon",
-                "label"
-              ]
-            },
-            "mobile": {
-              "components": [
-                "icon",
-                "label"
-              ]
-            },
-            "tablet": {
-              "components": [
-                "icon",
-                "label"
-              ]
-            }
-          }
-        },
-        {
-          "uuid": "7e345fab-12fb-4905-8dca-b6d6e9a5c7e0",
-          "hasCommand": false,
-          "icon": "clipboard-copy",
-          "inGallery": false,
-          "label": "",
-          "link": "",
-          "linkAttr": {
-            "commandId": "",
-            "hasVars": false,
-            "target": "",
-            "type": "javascript"
-          },
-          "plugin": "",
-          "scriptConfig": {
-            "expression": "const e = app.workspace.activeLeaf.view?.editor;\ntry { await window.navigator.clipboard.writeText(e.getSelection()); e?.focus(); } catch (e) { console.error(e); new Notice(ntb.t('api.msg.error-console')); }",
-            "pluginFunction": "evaluate"
-          },
-          "tooltip": "Copy",
-          "visibility": {
-            "desktop": {
-              "components": [
-                "icon",
-                "label"
-              ]
-            },
-            "mobile": {
-              "components": [
-                "icon",
-                "label"
-              ]
-            },
-            "tablet": {
-              "components": [
-                "icon",
-                "label"
-              ]
-            }
-          }
-        },
-        {
           "uuid": "5e328fb8-5591-4d30-8fb6-8a2c91923fdc",
           "hasCommand": false,
           "icon": "",
@@ -11215,46 +11135,6 @@
           },
           "plugin": "",
           "tooltip": "New Excalidraw drawing",
-          "visibility": {
-            "desktop": {
-              "components": [
-                "icon",
-                "label"
-              ]
-            },
-            "mobile": {
-              "components": [
-                "icon",
-                "label"
-              ]
-            },
-            "tablet": {
-              "components": [
-                "icon",
-                "label"
-              ]
-            }
-          }
-        },
-        {
-          "uuid": "08821659-8fa9-4a62-a993-99b994594df0",
-          "hasCommand": false,
-          "icon": "clipboard-check",
-          "inGallery": false,
-          "label": "",
-          "link": "",
-          "linkAttr": {
-            "commandId": "",
-            "hasVars": false,
-            "target": "",
-            "type": "javascript"
-          },
-          "plugin": "",
-          "scriptConfig": {
-            "expression": "const e = app.workspace.activeLeaf.view?.editor;\nif (!e) return;\nconst c = e.getValue();\nconst b = c.startsWith('---\\n') ? c.replace(/^---\\n[\\s\\S]*?\\n---\\n*/, '') : c;\nawait navigator.clipboard.writeText(b);\nnew Notice(ntb.t('api.msg.clipboard-copied'));",
-            "pluginFunction": "evaluate"
-          },
-          "tooltip": "Copy note content",
           "visibility": {
             "desktop": {
               "components": [
