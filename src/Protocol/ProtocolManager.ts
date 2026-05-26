@@ -138,7 +138,7 @@ export default class ProtocolManager {
         const callout = await exportToCallout(this.ntb, toolbar, options);
 		const shareUri = useObsidianUri 
 			? `obsidian://note-toolbar?import=${encodeURIComponent(callout)}`
-			: `${URL_GHIO}/open.htm?uri=${encodeURIComponent(`obsidian://note-toolbar?import=${callout}`)}`
+			: `${URL_GHIO}${encodeURIComponent(`obsidian://note-toolbar?import=${callout}`)}`
         return shareUri;
     }
 
