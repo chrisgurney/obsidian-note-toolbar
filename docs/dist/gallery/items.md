@@ -181,7 +181,6 @@ Get access to Note Toolbar settings and tools quickly.
 | Quick Tools | Opens a searchable window with access to all toolbar items. |
 | Toolbar settings | Opens the active Note Toolbar's settings to customize your toolbar. |
 | Note Toolbar User Guide | Access the Note Toolbar User Guide for help and tips. |
-| Backup Note Toolbar config | Copy Note Toolbar's settings (data.json) file into the vault. |
 
 ## Obsidian Support
 
@@ -191,7 +190,6 @@ Get help from Obsidian community resources.
 | --- | --- |
 | Obsidian Help | Opens the official Obsidian Help site. |
 | Markdown reference | Opens Obsidian's Markdown formatting guide. |
-| Obsidian forum | Opens Obsidian's forum for discussions and support. |
 
 ## Search
 
