@@ -328,7 +328,9 @@ export default class ToolbarRenderer {
 		// updateCanvasViewportCache();
 		if (view.getViewType() === 'canvas') {
 			requestAnimationFrame(() => {
-				view.onResize();
+				requestAnimationFrame(() => {
+					view.onResize();
+				});
 			});
 		}
 
