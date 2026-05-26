@@ -1,7 +1,7 @@
 import NoteToolbarPlugin from "main";
 import { ItemView, WorkspaceLeaf } from "obsidian";
 import { PositionType, t, VIEW_TYPE_HELP } from "Settings/NoteToolbarSettings";
-import { URL_DONATE, URL_GH_DISCUSSIONS, URL_GH_ISSUES, URL_GH_USER_GUIDE, URL_GOOG_FEEDBACK_FORM, URL_GOOG_ISSUE_FORM } from "Utils/Urls";
+import { URL_DONATE, URL_GH_DISCUSSIONS, URL_GH_ISSUES, URL_GH_USER_GUIDE } from "Utils/Urls";
 import { PLUGIN_VERSION } from "version";
 import { iconTextFr } from "../Settings/UI/Utils/SettingsUIUtils";
 import { renderTipItems } from "./TipView";
@@ -93,7 +93,7 @@ export default class HelpView extends ItemView {
 
         supportEl.createDiv({ cls: 'note-toolbar-setting-link' }).append(
             createDiv({ cls: 'note-toolbar-setting-link-text' }, el => el.append(iconTextFr('bug', t('setting.help.label-bug')))),
-            createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.help.button-open-external'), href: URL_GOOG_ISSUE_FORM, attr: { 'aria-label': t('setting.help.button-open-google') } })
+            createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.help.button-open-external'), href: URL_GH_USER_GUIDE + '/Feedback', attr: { 'aria-label': t('setting.help.button-open-github') } })
         );
 
         // Donate
@@ -104,7 +104,7 @@ export default class HelpView extends ItemView {
 
         contribEl.createDiv({ cls: 'note-toolbar-setting-link' }).append(
             createDiv({ cls: 'note-toolbar-setting-link-text' }, el => el.append(iconTextFr('pen-box', t('setting.help.label-feedback')))),
-            createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.help.button-open-external'), href: URL_GOOG_FEEDBACK_FORM, attr: { 'aria-label': t('setting.help.button-open-google') } })
+            createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.help.button-open-external'), href: URL_GH_USER_GUIDE + '/Feedback', attr: { 'aria-label': t('setting.help.button-open-github') } })
         );
 
         contribEl.createDiv({ cls: 'note-toolbar-setting-link' }).append(

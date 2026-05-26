@@ -364,7 +364,6 @@
       "button-open": "打开↗",
       "button-open-external": "打开 ↗",
       "button-open-github": "打开github.com",
-      "button-open-google": "打开Goog​​le.com",
       "button-read": "阅读↗",
       "description": "为您的笔记创建上下文感知的工具栏。",
       "error-failed-to-load": "无法加载：\n{{baseUrl}}/{{lang}}/{{name}}.md",

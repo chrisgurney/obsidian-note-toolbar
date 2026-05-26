@@ -433,7 +433,6 @@
             "button-open": "Відкрити",
             "button-open-external": "Відкрити ↗",
             "button-open-github": "Відвідати github.com",
-            "button-open-google": "Відвідати google.com",
             "button-read": "Читати ↗",
             "error-failed-to-load": "Помилка завантаження:\n{{baseUrl}}/{{lang}}/{{name}}.md",
             "heading": "Довідка та корисне Note Toolbar",

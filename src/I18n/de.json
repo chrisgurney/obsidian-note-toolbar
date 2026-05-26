@@ -339,7 +339,6 @@
             "button-open": "Öffnen",
             "button-open-external": "Öffnen ↗",
             "button-open-github": "github.com öffnen",
-            "button-open-google": "google.com öffnen",
             "button-read": "Lesen ↗",
             "description": "Erstelle kontextabhängige Toolbars für deine Notizen.",
             "error-failed-to-load": "Konnte nicht geladen werden:\n{{baseUrl}}/{{lang}}/{{name}}.md",

@@ -360,7 +360,6 @@
             "button-open": "開く",
             "button-open-external": "開く ↗",
             "button-open-github": "github.comを開く",
-            "button-open-google": "google.comを開く",
             "button-read": "読む ↗",
             "description": "ノートのためのコンテキスト対応ツールバー。",
             "error-failed-to-load": "読み込みに失敗しました:\n{{baseUrl}}/{{lang}}/{{name}}.md",
