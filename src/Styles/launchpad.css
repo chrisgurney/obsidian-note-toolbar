@@ -56,8 +56,8 @@
         }
     }
     &[data-callout-metadata*="border"] {
-        border: solid 1px var(--cg-nt-tbar-border-color) !important;
-        border-radius: var(--button-radius) !important;
+        border: solid 1px var(--cg-nt-tbar-border-color);
+        border-radius: var(--button-radius);
         padding: 1em;
     }
     &[data-callout-metadata*="glass"] {
