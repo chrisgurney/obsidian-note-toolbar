@@ -430,9 +430,7 @@
         border-left: .25em solid var(--background-modifier-border);
     }
     pre {
-        &:has(code) {
-            overflow-x: auto;
-        }
+        overflow-x: auto;
         & code {
             font-size: calc(var(--font-ui-small) + 1px);
             overflow: scroll;
