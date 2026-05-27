@@ -482,7 +482,7 @@
 }
 
 .note-toolbar-setting-whatsnew-content {
-    code:not(.language-md):not(.language-sh):not(.language-ts) {
+    pre:not(.language-css):not(.language-md):not(.language-js):not(.language-sh):not(.language-ts) code {
         background-color: var(--code-background);
         border-width: var(--code-border-width);
         padding: 0.3em;
