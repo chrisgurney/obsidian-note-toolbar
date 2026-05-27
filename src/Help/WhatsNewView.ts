@@ -40,7 +40,7 @@ export default class WhatsNewView extends ItemView {
 		this.renderSkeleton(markdownEl);
 
 		const ctaEl = contentDiv.createDiv();
-		ctaEl.addClass('note-toolbar-setting-view-cta', 'is-readable-line-width');
+		ctaEl.addClass('is-readable-line-width');
 
 		ctaEl.createDiv({ cls: 'note-toolbar-setting-link' }).append(
 			createDiv({ cls: 'note-toolbar-setting-link-text' }, el => 

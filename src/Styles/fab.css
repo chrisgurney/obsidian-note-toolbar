@@ -94,26 +94,26 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
     100% { transform: scale(1.5); }
 }
 
-.cg-note-toolbar-fab {
+button.cg-note-toolbar-fab {
     aspect-ratio: 1;
-    background-color: var(--cg-nt-fab-bg-color-desktop) !important;
+    background-color: var(--cg-nt-fab-bg-color-desktop);
     color: var(--cg-nt-fab-icon-color-desktop);
     border-radius: var(--cg-nt-fab-border-radius-desktop);
-    height: auto !important;
-    padding: var(--cg-nt-fab-padding-desktop) !important;
+    height: auto;
+    padding: var(--cg-nt-fab-padding-desktop);
     &:is(:active, :hover, :focus-visible) {
-        color: var(--cg-nt-fab-icon-color-desktop) !important;
-        background-color: var(--cg-nt-fab-bg-color-hover-desktop) !important;
+        color: var(--cg-nt-fab-icon-color-desktop);
+        background-color: var(--cg-nt-fab-bg-color-hover-desktop);
     }
     .is-mobile & {
-        background: var(--cg-nt-fab-bg-color) !important;
+        background: var(--cg-nt-fab-bg-color);
         border-radius: var(--cg-nt-fab-border-radius);
         color: var(--cg-nt-fab-icon-color);
-        padding: var(--cg-nt-fab-padding) !important;
+        padding: var(--cg-nt-fab-padding);
         transition: transform 0.2s ease-out;
         &:is(:active, :hover, :focus-visible) {
-            background: var(--cg-nt-fab-bg-color) !important;
-            color: var(--cg-nt-fab-icon-color) !important;
+            background: var(--cg-nt-fab-bg-color);
+            color: var(--cg-nt-fab-icon-color);
         }
         &:is(:active) {
             @media (prefers-reduced-motion: no-preference) {
@@ -150,9 +150,9 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
 /* Licensed under the MIT License; see the LICENSE file */
 body button.cg-note-toolbar-fab[data-fab-metadata*="glass"],
 body.is-mobile button.cg-note-toolbar-fab[data-fab-metadata*="mgls"] {
-    background-color: var(--ntb-liquid-glass-background) !important;
-    background-image: unset !important;
-    backdrop-filter: var(--raised-blur) !important;
+    background-color: var(--ntb-liquid-glass-background);
+    background-image: unset;
+    backdrop-filter: var(--raised-blur);
     border: var(--border-width) solid var(--background-modifier-border);
     box-shadow: var(--ntb-shadow-xs);
     /* fix? ghosting effect with overlays when glass style is being used; happens on desktop */
@@ -168,9 +168,9 @@ body.is-mobile button.cg-note-toolbar-fab[data-fab-metadata*="mgls"] {
     }
     .is-mobile & {
         &:is(:active, :hover, :focus-visible) {
-            background: unset !important;
-            background-color: var(--ntb-liquid-glass-background) !important;
-            color: var(--text-normal) !important;
+            background: unset;
+            background-color: var(--ntb-liquid-glass-background);
+            color: var(--text-normal);
         }
     }
 }

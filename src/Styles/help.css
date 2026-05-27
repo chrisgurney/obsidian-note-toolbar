@@ -20,7 +20,7 @@
         display: none;
     }
     & .setting-item-control {
-        margin-top: 0 !important;
+        margin-top: 0;
         justify-content: flex-start;
         & .search-input-container {
             width: 100%;
@@ -139,7 +139,7 @@
     height: unset;
     justify-content: flex-end;
     min-height: 140px;
-    padding: 16px !important;
+    padding: 16px;
     position: relative;
     text-align: unset;
     width: 200px;
@@ -208,14 +208,14 @@
         }
         display: flex;
         font-size: var(--font-ui-small);
-        margin: 0 !important;
+        margin: 0;
         text-wrap: wrap;
     }
     & .note-toolbar-card-item-plugins {
         display: flex;
         vertical-align: middle;
         gap: 0.25em;
-        margin-top: 0.5em !important;
+        margin-top: 0.5em;
         & svg {
             height: var(--font-ui-small);
             width: var(--font-ui-small);
@@ -323,18 +323,9 @@
     padding-bottom: var(--navbar-height);
 }
 
-.note-toolbar-setting-whatsnew-view {
-    & .note-toolbar-setting-view-cta {
-        & .setting-item {
-            margin-bottom: 0;
-            padding: var(--size-4-4) 0;
-        }
-    }
-}
-
 .note-toolbar-setting-help-view-title {
     & h1, p, svg {
-        color: var(--text-normal) !important;
+        color: var(--text-normal);
     }
 }
 
@@ -343,14 +334,6 @@
     border: 1px solid var(--background-modifier-border);
     margin: 0em 0em 1em 0em;
     padding: 0em 1em;
-    & .setting-item {
-        align-items: center !important;
-        margin-bottom: 0 !important;
-        padding: 1em 0em !important;
-    }
-    & .setting-item-control {
-        margin-top: 0 !important;
-    }
 }
 
 .note-toolbar-setting-help-video {
@@ -431,24 +414,6 @@
   100% { opacity: 1; transform: scale(1); }
 }
 
-.note-toolbar-setting-view-cta {
-    & .setting-item {
-        background: transparent !important;
-        border-radius: 0%;
-        border-top: 1px solid var(--background-modifier-border);
-        padding-top: 0.75em;
-        .is-phone & {
-            flex-direction: row !important;
-            & .setting-item-control {
-                width: auto !important;
-                & button {
-                    width: auto;
-                }
-            }
-        }
-    }
-}
-
 .note-toolbar-setting-gallery-content,
 .note-toolbar-setting-help-content,
 .note-toolbar-setting-tip-content,
@@ -465,9 +430,7 @@
         border-left: .25em solid var(--background-modifier-border);
     }
     pre {
-        &:has(code) {
-            overflow-x: auto;
-        }
+        overflow-x: auto;
         & code {
             font-size: calc(var(--font-ui-small) + 1px);
             overflow: scroll;
@@ -517,7 +480,7 @@
 }
 
 .note-toolbar-setting-whatsnew-content {
-    code:not(.language-ts) {
+    pre:not(.language-css):not(.language-md):not(.language-js):not(.language-sh):not(.language-ts) code {
         background-color: var(--code-background);
         border-width: var(--code-border-width);
         padding: 0.3em;

@@ -55,10 +55,6 @@
                 /* per what Obsidian's CSS does */
                 padding-bottom: max(100px, var(--safe-area-inset-bottom));
             }
-            /* hide the Web Viewer navigation bar */
-            & .workspace-leaf-content[data-type="webviewer"] .view-header {
-                display: none !important;
-            }
         }
         & .modal-title > .markdown-preview-view > * {
             margin: unset;

@@ -1205,7 +1205,7 @@ input[type="text"].note-toolbar-setting-error,
         & .note-toolbar-item-suggester-name {
             font-size: var(--cg-nt-quick-tools-item-font-size);
         }
-        & svg.svg-icon {
+        & .note-toolbar-item-suggestion-container svg.svg-icon {
             height: var(--cg-nt-quick-tools-icon-size);
             width: var(--cg-nt-quick-tools-icon-size);
         }

@@ -3,11 +3,6 @@
  * Needs to be imported last.
  */
 
-body[data-ntb-csstheme="Baseline"] {
-    --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1 + 16px);
-    --cg-nt-tbar-top-sticky-pos-mobile: calc(1rem * -1 + 1px);
-}
-
 body[data-ntb-csstheme="Border"] {
     & .cg-note-toolbar-container[data-tbar-position="bottom"],
     & .cg-note-toolbar-container[data-tbar-position="top"] {
@@ -27,8 +22,17 @@ body[data-ntb-csstheme="Baseline"], body[data-ntb-csstheme="Cupertino"] {
         --cg-nt-fab-pos-x-mobile: var(--navbar-side-offset);
         --cg-nt-fab-pos-y-mobile: var(--navbar-bottom-offset);
     }
+}
+
+body[data-ntb-csstheme="Baseline"] {
+    --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1 + 16px);
+    --cg-nt-tbar-top-sticky-pos-mobile: calc(1rem * -1 + 1px);
+    & .cg-note-toolbar-container[data-tbar-position="bottom"],
+    & .cg-note-toolbar-container[data-tbar-position="top"] {
+        --cg-nt-tbar-bg-color: var(--background-primary);
+    }
     &.is-mobile.theme-dark {
-        --cg-nt-tbar-bg-color: unset !important;
+        --cg-nt-tbar-bg-color: unset;
     }
 }
 
@@ -40,20 +44,21 @@ body[data-ntb-csstheme="Cupertino"] {
     --ntb-shadow-base: var(--shadow-base);
     --ntb-shadow-xs: var(--shadow-xs);
     &.is-mobile.theme-dark {
+        --cg-nt-tbar-bg-color: unset;
         & .callout[data-callout="note-toolbar-output"] {
-            background-color: #000000 !important;
+            background-color: #000000;
         }
     }
     /* Liquid Glass effect for the Cupertino theme, thanks to @aaaaalexis */
     /* Licensed under the MIT License; see the LICENSE file */
     & .callout[data-callout="note-toolbar"] {
         background-color: var(--cg-nt-tbar-bg-color);
-        mix-blend-mode: normal !important;
+        mix-blend-mode: normal;
         & ul {
             gap: var(--size-4-2);
             & a, span.external-link {
                 background-color: var(--cg-nt-item-button-bg-color);
-                backdrop-filter: var(--raised-blur) !important;
+                backdrop-filter: var(--raised-blur);
                 border-color: var(--background-modifier-border);
                 border-radius: var(--cg-nt-item-border-radius);
                 border-style: solid;
@@ -73,7 +78,7 @@ body[data-ntb-csstheme="Cupertino"] {
     /* Licensed under the MIT License; see the LICENSE file */
     & button.cg-note-toolbar-fab {
         background-color: var(--cg-nt-item-button-bg-color);
-        backdrop-filter: var(--raised-blur) !important;
+        backdrop-filter: var(--raised-blur);
         border-color: var(--background-modifier-border);
         border-radius: var(--cg-nt-item-border-radius);
         border-style: solid;
@@ -90,8 +95,8 @@ body[data-ntb-csstheme="Cupertino"] {
         }
         .is-mobile & {
             &:is(:active, :hover, :focus-visible) {
-                background-color: var(--ntb-liquid-glass-background) !important;
-                color: var(--text-normal) !important;
+                background-color: var(--ntb-liquid-glass-background);
+                color: var(--text-normal);
             }
         }
     }
@@ -104,7 +109,7 @@ body[data-ntb-csstheme="Minimal"] {
         .is-readable-line-width & {
             max-width: var(--max-width);
             width: var(--line-width);
-            margin-inline: var(--content-margin) !important;
+            margin-inline: var(--content-margin);
         }
     }
 }

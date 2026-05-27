@@ -1,6 +1,7 @@
 /** @type {import('stylelint').Config} */
 export default {
   // extends: ["stylelint-config-standard"],
+  ignoreFiles: [ 'styles.css' ],
   rules: {
     // "comment-empty-line-before": null,
     // "declaration-empty-line-before": null,

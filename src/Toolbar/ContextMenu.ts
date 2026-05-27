@@ -347,7 +347,11 @@ export default class ContextMenu {
 		const defaultPositions = [];
 		if (Platform.isPhone) {
 			defaultPositions.push({ type: PositionType.Top, titleKey: 'setting.position.option-top', icon: 'arrow-up-to-line' });
-			defaultPositions.push({ type: PositionType.TabBar, titleKey: 'setting.position.option-tabbar', icon: 'panel-top' });
+			// should not be able to set position to tab bar, if view header is hidden
+			const isViewHeaderHidden = this.ntb.settings.obsidianUiVisibility['view-header'] === false;
+			if (!isViewHeaderHidden) {
+				defaultPositions.push({ type: PositionType.TabBar, titleKey: 'setting.position.option-tabbar', icon: 'panel-top' });
+			}
 		}
 		else {
 			defaultPositions.push({ type: PositionType.TabBar, titleKey: 'setting.position.option-tabbar', icon: 'panel-top' });
