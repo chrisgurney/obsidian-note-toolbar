@@ -14,14 +14,6 @@
         margin-inline-start: 0;
         margin-inline-end: 0;
     }
-    &:hover {
-        &:not(:has(.note-toolbar-launchpad)) {
-            /* fix: (#14) flickering problem experienced with Banner plugin beta in use */
-            overflow: inherit !important;
-        }
-    }
-    /* width: var(--var-max-width);
-    max-width: var(--var-max-width); */
 
     &[data-tbar-position="bottom"],
     &[data-tbar-position="top"] {
@@ -32,10 +24,6 @@
         padding-bottom: 0;
         padding-top: 0;
         z-index: var(--cg-nt-tbar-z-index);
-        &:hover {
-            /* undoes fix (#14) which causes a layout shift on hover */
-            overflow: visible !important;
-        }
         & .cg-note-toolbar-callout {
             margin-bottom: 0;
             margin-inline: auto auto !important;
