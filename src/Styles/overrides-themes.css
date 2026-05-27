@@ -3,11 +3,6 @@
  * Needs to be imported last.
  */
 
-body[data-ntb-csstheme="Baseline"] {
-    --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1 + 16px);
-    --cg-nt-tbar-top-sticky-pos-mobile: calc(1rem * -1 + 1px);
-}
-
 body[data-ntb-csstheme="Border"] {
     & .cg-note-toolbar-container[data-tbar-position="bottom"],
     & .cg-note-toolbar-container[data-tbar-position="top"] {
@@ -27,8 +22,17 @@ body[data-ntb-csstheme="Baseline"], body[data-ntb-csstheme="Cupertino"] {
         --cg-nt-fab-pos-x-mobile: var(--navbar-side-offset);
         --cg-nt-fab-pos-y-mobile: var(--navbar-bottom-offset);
     }
+}
+
+body[data-ntb-csstheme="Baseline"] {
+    --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1 + 16px);
+    --cg-nt-tbar-top-sticky-pos-mobile: calc(1rem * -1 + 1px);
+    & .cg-note-toolbar-container[data-tbar-position="bottom"],
+    & .cg-note-toolbar-container[data-tbar-position="top"] {
+        --cg-nt-tbar-bg-color: var(--background-primary);
+    }
     &.is-mobile.theme-dark {
-        --cg-nt-tbar-bg-color: unset !important;
+        --cg-nt-tbar-bg-color: unset;
     }
 }
 
@@ -40,6 +44,7 @@ body[data-ntb-csstheme="Cupertino"] {
     --ntb-shadow-base: var(--shadow-base);
     --ntb-shadow-xs: var(--shadow-xs);
     &.is-mobile.theme-dark {
+        --cg-nt-tbar-bg-color: unset;
         & .callout[data-callout="note-toolbar-output"] {
             background-color: #000000 !important;
         }
