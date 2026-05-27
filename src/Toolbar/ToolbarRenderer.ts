@@ -220,7 +220,7 @@ export default class ToolbarRenderer {
             case PositionType.Bottom:
             case PositionType.Props:
             case PositionType.Top: {
-                noteToolbarElement = await this.renderAsCallout(toolbar, file, view);
+                noteToolbarElement = await this.renderAsCallout(toolbar, position, file, view);
                 // extra div workaround to emulate callout-in-content structure, to use same sticky css
                 const div = activeDocument.createElement("div");
                 div.append(noteToolbarElement);
@@ -326,11 +326,12 @@ export default class ToolbarRenderer {
     /**
      * Renders the given toolbar as a callout (to add to the container) and returns it.
      * @param toolbar ToolbarSettings to render
+	 * @param position PositionType of the toolbar, to set as a data attribute to assist with styling
      * @param file TFile of the note to render the toolbar for
      * @param view ItemView to render toolbar in, just used for context
      * @returns HTMLElement cg-note-toolbar-callout
      */
-    async renderAsCallout(toolbar: ToolbarSettings, file: TFile | null, view: ItemView): Promise<HTMLElement> {
+    async renderAsCallout(toolbar: ToolbarSettings, position: PositionType, file: TFile | null, view: ItemView): Promise<HTMLElement> {
         
         /* create the unordered list of menu items */
         const noteToolbarUl = activeDocument.createElement("ul");
@@ -358,6 +359,7 @@ export default class ToolbarRenderer {
             if (toolbar.customClasses) noteToolbarCallout.addClasses([...toolbar.customClasses.split(' ')]);
             noteToolbarCallout.setAttribute("data-callout", "note-toolbar");
             noteToolbarCallout.setAttribute("data-callout-metadata", [...toolbar.defaultStyles, ...toolbar.mobileStyles].join('-'));
+			noteToolbarCallout.setAttribute("data-tbar-position", position);
             noteToolbarCallout.append(noteToolbarCalloutContent);
             
             // support for Page preview plugin
@@ -1235,7 +1237,7 @@ export default class ToolbarRenderer {
 			[TbarData.Updated]: toolbar.updated
 		});
 		
-		const renderedToolbarEl = await this.renderAsCallout(toolbar, activeFile, activeView);
+		const renderedToolbarEl = await this.renderAsCallout(toolbar, positionType, activeFile, activeView);
 		toolbarContainerEl.appendChild(renderedToolbarEl);
 		activeDocument.body.appendChild(toolbarContainerEl);
 
