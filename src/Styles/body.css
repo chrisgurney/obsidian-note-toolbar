@@ -146,7 +146,7 @@ body {
 
             --view-header-height: 0px;
             & .view-header {
-                display: none !important;
+                display: none;
             }
             & .view-content {
                 mask-image: var(--view-top-fade-mask);
@@ -157,7 +157,7 @@ body {
 
             --navbar-height: 0px;
             & .mobile-navbar {
-                display: none !important;
+                display: none;
             }
          }
     }
