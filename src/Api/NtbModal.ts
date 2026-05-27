@@ -60,6 +60,12 @@ export default class NtbModal extends Modal {
             this.leaf = this.ntb.app.workspace.createLeafInParent(this.ntb.app.workspace.rootSplit, 0);
             if (this.leaf) (this.leaf.containerEl as HTMLElement).hide();
             await this.leaf.setViewState({type: 'webviewer', state: { url: this.content, navigate: true }, active: true});
+            // hide the web viewer's header (remove if nobody requests this)
+            // const webviewerHeaderEl = this.leaf.view.containerEl.querySelector<HTMLElement>('.view-header.view-header-always-show');
+            // if (webviewerHeaderEl) {
+            //     webviewerHeaderEl.removeClass('view-header-always-show');
+            //     webviewerHeaderEl.hide();
+            // }
             this.contentEl.appendChild(this.leaf.view.containerEl);
         }
     }
