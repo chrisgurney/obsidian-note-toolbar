@@ -104,7 +104,7 @@ body[data-ntb-csstheme="Minimal"] {
         .is-readable-line-width & {
             max-width: var(--max-width);
             width: var(--line-width);
-            margin-inline: var(--content-margin) !important;
+            margin-inline: var(--content-margin);
         }
     }
 }

@@ -784,13 +784,3 @@ body:not(.is-mobile):not(.is-focused), .workspace-leaf:not(.mod-active) {
         }
     }
 }
-
-/* 
-body:not(.is-mobile):not(.is-focused) .callout[data-callout="note-toolbar"][data-callout-metadata*="glass"]:not([data-callout-metadata*="card"]) {
-    & ul {
-        & a, span.external-link {
-            backdrop-filter: unset !important;
-            border: solid 1px red;
-        }
-    }
-} */
