@@ -205,7 +205,7 @@ body {
 }
 
 .ntb-hidden {
-    display: none !important;
+    display: none;
 }
 
 /* fix: tooltips appearing on elements below tapped elements */
