@@ -19,9 +19,9 @@
     overflow-wrap: anywhere;
     vertical-align: middle;
     width: 100%;
-    & svg {
-        height: var(--font-ui-smaller) !important;
-        width: var(--font-ui-smaller) !important;
+    & svg.svg-icon {
+        height: var(--font-ui-smaller);
+        width: var(--font-ui-smaller);
     }
 }
 
