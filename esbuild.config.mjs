@@ -173,6 +173,7 @@ const stylesPlugin = {
 	  build.onEnd(async () => {
 		try {
 			if (fileInliner('src/Styles/styles.css', 'styles.css')) isDocsChange = true;
+			if (isDocsChange) console.log(`[styles] ✓ generated styles.css`);
 		} catch (error) {
 			console.error("\x1b[31m[styles] Error:\x1b[0m", error);
 			process.exit(1);
@@ -314,7 +315,7 @@ if (prod) {
 		console.log('[watch] watching for changes...');
 	});
 	watcher.on('change', async (path) => {
-		console.log(`[watch] file changed: ${path}`);
+		console.log(`[watch] file modified: ${path}`);
 		try {
 			await context.rebuild();
 		} 
