@@ -743,8 +743,8 @@ body.is-phone .cg-note-toolbar-container[data-tbar-position*="top"] {
 /* Licensed under the MIT License; see the LICENSE file */
 body .callout[data-callout="note-toolbar"][data-callout-metadata*="glass"]:not([data-callout-metadata*="card"]),
 body.is-mobile .callout[data-callout="note-toolbar"][data-callout-metadata*="mgls"]:not([data-callout-metadata*="card"]) {
-    background: unset !important;
-    mix-blend-mode: normal !important;
+    background: unset;
+    mix-blend-mode: normal;
     overflow: visible;
     & .callout-content {
         overflow: visible;
@@ -752,11 +752,11 @@ body.is-mobile .callout[data-callout="note-toolbar"][data-callout-metadata*="mgl
     & ul {
         gap: var(--size-4-2);
         & a, span.external-link {
-            background-color: var(--ntb-liquid-glass-background) !important;
-            backdrop-filter: var(--raised-blur) !important;
+            background-color: var(--ntb-liquid-glass-background);
+            backdrop-filter: var(--raised-blur);
             /* fix: have to disable blur as workaround for Electron issue: if Obsidian translucent windows are enabled, there are ghosting images */
             body.is-translucent:not(.is-mobile) & {
-                backdrop-filter: unset !important;
+                backdrop-filter: unset;
             }
             border: var(--border-width) solid var(--background-modifier-border);
             border-radius: 32px;
@@ -768,7 +768,7 @@ body.is-mobile .callout[data-callout="note-toolbar"][data-callout-metadata*="mgl
                 box-shadow: none;
                 opacity: unset;
                 body.is-translucent:not(.is-mobile) & {
-                    background-color: var(--interactive-normal) !important;
+                    background-color: var(--interactive-normal);
                 }
             }
         }
