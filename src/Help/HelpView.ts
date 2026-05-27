@@ -58,7 +58,7 @@ export default class HelpView extends ItemView {
 
         contentDiv.createEl('h2').setText(t('setting.help.heading-learn'));
         const guideEl = contentDiv.createDiv();
-        guideEl.addClass('note-toolbar-setting-view-cta', 'note-toolbar-setting-help-view-section');
+        guideEl.addClass('note-toolbar-setting-help-view-section');
 
         guideEl.createDiv({ cls: 'note-toolbar-setting-link' }).append(
             createDiv({ cls: 'note-toolbar-setting-link-text' }, el => el.append(iconTextFr('party-popper', t('setting.help.label-whats-new')))),
@@ -79,7 +79,7 @@ export default class HelpView extends ItemView {
 
         contentDiv.createEl('h2').setText(t('setting.help.heading-support'));
         const supportEl = contentDiv.createDiv();
-        supportEl.addClass('note-toolbar-setting-view-cta', 'note-toolbar-setting-help-view-section');
+        supportEl.addClass('note-toolbar-setting-help-view-section');
 
         supportEl.createDiv({ cls: 'note-toolbar-setting-link' }).append(
             createDiv({ cls: 'note-toolbar-setting-link-text' }, el => el.append(iconTextFr('messages-square', t('setting.help.label-support')))),
@@ -100,7 +100,7 @@ export default class HelpView extends ItemView {
 
         contentDiv.createEl('h2').setText(t('setting.help.heading-donate'));
         const contribEl = contentDiv.createDiv();
-        contribEl.addClass('note-toolbar-setting-view-cta', 'note-toolbar-setting-help-view-section');
+        contribEl.addClass('note-toolbar-setting-help-view-section');
 
         contribEl.createDiv({ cls: 'note-toolbar-setting-link' }).append(
             createDiv({ cls: 'note-toolbar-setting-link-text' }, el => el.append(iconTextFr('pen-box', t('setting.help.label-feedback')))),
