@@ -173,7 +173,7 @@ const stylesPlugin = {
 	  build.onEnd(async () => {
 		try {
 			if (fileInliner('src/Styles/styles.css', 'styles.css')) isDocsChange = true;
-			if (isDocsChange) console.log(`[styles] ✓ generated styles.css`);
+			if (isDocsChange) console.log(`\x1b[32m[styles] ✓ generated styles.css\x1b[0m`);
 		} catch (error) {
 			console.error("\x1b[31m[styles] Error:\x1b[0m", error);
 			process.exit(1);
