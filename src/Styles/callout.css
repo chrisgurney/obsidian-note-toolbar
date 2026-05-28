@@ -71,9 +71,10 @@
 }
 
 .callout[data-callout="note-toolbar-output"] {
-    background-color: var(--background-primary) !important;
-    background-image: unset !important;
-    margin: 0em !important;
+    background: none;
+    background-color: var(--background-primary);
+    background-image: unset;
+    margin: 0em;
     padding: 0em;
     &:has(> .callout-title) {
         border: 4px dashed var(--background-secondary);
@@ -93,6 +94,11 @@
             color: var(--background-secondary);
         }
     }
+}
+
+/* overrides Cupertino theme's background gradient */
+body.mod-macos .callout.callout[data-callout='note-toolbar-output'] {
+    background: none;
 }
 
 .callout[data-callout="note-toolbar"] {
