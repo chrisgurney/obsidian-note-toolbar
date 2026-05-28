@@ -39,7 +39,7 @@ export class CalloutPluginClass implements PluginValue {
     process(view: EditorView): void {
         // timeout lets CodeMirror finish updating the DOM before querying it
         activeWindow.setTimeout(() => {
-            this.ntb.debug('Processing callouts...');
+            // this.ntb.debug('Processing callouts...');
             view.dom.querySelectorAll('.cm-embed-block').forEach((el) => {
                 const toolbarEl = el.querySelector('.callout[data-callout="note-toolbar"]');
                 el.toggleAttribute(TbarData.EmbedIsNoteToolbar, !!toolbarEl);
