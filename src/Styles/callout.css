@@ -171,7 +171,7 @@ body .workspace .callout[data-callout="note-toolbar"] {
                 }
             }
             &.hide-in-mode {
-                display: none !important;
+                display: none;
             }
             & span.hide {
                 display: none;
@@ -188,7 +188,7 @@ body .workspace .callout[data-callout="note-toolbar"] {
                 }
             }
             &::before {
-                content: none !important; /* removes decoration added by ITS theme */
+                content: none; /* removes decoration added by ITS theme */
             }
         }
 
@@ -259,15 +259,18 @@ body .workspace .callout[data-callout="note-toolbar"] {
             background-image: none; /* hide the external link icon */
             gap: 0 0.5em;
             &::after {
-                content: none !important; /* removes decoration added by ITS theme */
+                content: none; /* removes decoration added by ITS theme */
             }
         }
 
         & span.cm-iconize-icon, span.iconize-icon-in-link {
-            transform: unset !important;
             align-items: center;
             vertical-align: middle;
             margin-right: unset;
+            /* fix to counter the inline transform on the span */
+            & svg {
+                transform: translateY(-13%);
+            }
             /* fix for bold Iconize icons #162 */
             & svg svg[stroke-width='16px'] {
                 stroke-width: 2;
@@ -383,7 +386,7 @@ body .workspace .callout[data-callout="note-toolbar"] {
                     min-width: var(--ntb-callout-card-width-mobile);
                 }
                 & a, span.external-link {
-                    padding: 16px !important;
+                    padding: 16px;
                     align-items: center;
                     border-radius: var(--radius-m);
                     color: var(--cg-nt-item-text-color);
@@ -537,7 +540,7 @@ body .workspace .callout[data-callout="note-toolbar"] {
     }
 
     &[data-callout-metadata*="wide"] {
-        max-width: none !important;
+        max-width: none;
     }
 
     &[data-callout-metadata*="mwd"] {
