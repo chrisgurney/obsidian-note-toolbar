@@ -45,7 +45,7 @@
     margin-top: var(--ntb-tbar-top-mt-phone);
     padding-top: var(--ntb-tbar-top-pt-phone);
 }
-
+/* FIXME: common ancestor of .view-header and .view-content, to add position to, if not body? */
 .is-phone:has(.cg-note-toolbar-container[data-tbar-position="top"]) .view-header {
     margin-top: var(--ntb-tbar-top-header-mt-phone);
     padding-top: var(--ntb-tbar-top-header-pt-phone);
