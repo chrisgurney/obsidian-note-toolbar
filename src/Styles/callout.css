@@ -96,6 +96,7 @@ body.mod-macos .callout.callout[data-callout='note-toolbar-output'] {
     background: none;
 }
 
+body .callout[data-callout="note-toolbar"],
 body .workspace .callout[data-callout="note-toolbar"] {
 
     /* fix: (#378) rese t CSS rules applied by themes (e.g., Velocity) */
