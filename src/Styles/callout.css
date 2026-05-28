@@ -72,12 +72,9 @@
     background: none;
     background-color: var(--background-primary);
     background-image: unset;
+    border: 4px dashed var(--background-secondary);
     margin: 0em;
-    padding: 0em;
-    &:has(> .callout-title) {
-        border: 4px dashed var(--background-secondary);
-        padding: 1em;
-    }
+    padding: 1em;
     & .callout-content {
         color: var(--background-secondary);       
     }
