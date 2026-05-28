@@ -182,7 +182,7 @@ body .workspace .callout[data-callout="note-toolbar"] {
             & span.hide-on-desktop {
                 display: none;
                 .is-mobile & {
-                    display: block !important;
+                    display: block;
                 }
             }
             &::before {
