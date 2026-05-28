@@ -8,6 +8,7 @@ import { calcComponentVisToggles, getViewId, hasStyle, isValidUri, putFocusInMen
 // note: make sure CSS is updated if these are changed
 export enum TbarData {
 	FabMeta = 'data-fab-metadata',
+	Launchpad = 'data-is-launchpad',
 	Name = 'data-name',
 	OverrideTbar = 'data-override-tbar',
 	Position = 'data-tbar-position',
@@ -186,6 +187,7 @@ export default class ToolbarRenderer {
             [TbarData.Updated]: toolbar.updated,
             [TbarData.ViewMode]: markdownViewMode
         });
+		embedBlock.toggleAttribute(TbarData.Launchpad, useLaunchpad);
 
         // render the toolbar based on its position
         switch (position) {
