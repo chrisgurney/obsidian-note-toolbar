@@ -24,6 +24,7 @@ import SettingsManager from 'Settings/SettingsManager';
 import NoteToolbarSettingTab from 'Settings/UI/NoteToolbarSettingTab';
 import SettingsUIUtils from 'Settings/UI/Utils/SettingsUIUtils';
 import CalloutHandler from 'Toolbar/CalloutHandler';
+import CalloutPlugin from 'Toolbar/CalloutPlugin';
 import TextToolbar, { TextToolbarClass } from 'Toolbar/TextToolbar';
 import ToolbarElementHelper from 'Toolbar/ToolbarElementHelper';
 import ToolbarHandler from 'Toolbar/ToolbarHandler';
@@ -173,6 +174,9 @@ export default class NoteToolbarPlugin extends Plugin {
 			// needs to be done after plugins are setup so that string variable checks work
 			this.commands.setupItemCommands();
 			this.commands.setupToolbarCommands();
+
+			// register extension to modify editable callout blocks, for styling
+			this.registerEditorExtension(CalloutPlugin(this));
 
 			// register the text toolbar if enabled; this might be required for backwards compat (#451)
 			if (this.settings.textToolbar) {

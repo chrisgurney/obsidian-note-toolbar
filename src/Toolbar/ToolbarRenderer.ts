@@ -7,8 +7,11 @@ import { calcComponentVisToggles, getViewId, hasStyle, isValidUri, putFocusInMen
 
 // note: make sure CSS is updated if these are changed
 export enum TbarData {
+	EmbedIsNoteToolbar = 'data-is-ntb',
+    EmbedMeta = 'data-ntb-meta',
 	FabMeta = 'data-fab-metadata',
 	Launchpad = 'data-is-launchpad',
+	LiItemType = 'data-ntb-type',
 	Name = 'data-name',
 	OverrideTbar = 'data-override-tbar',
 	Position = 'data-tbar-position',
@@ -504,6 +507,7 @@ export default class ToolbarRenderer {
 				// create its list item container 
 				const noteToolbarLi = activeDocument.createElement("li");
 				noteToolbarLi.dataset.index = i.toString();
+				noteToolbarLi.setAttribute('data-ntb-type', item.linkAttr.type);
 				// set its visibility
 				if (!showInMode) noteToolbarLi.addClass('hide-in-mode');
 				if (!showOnMobile) noteToolbarLi.addClass('hide-on-mobile');

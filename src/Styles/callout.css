@@ -2,34 +2,32 @@
  * Callouts
  */
 
-.cm-embed-block:not([data-is-launchpad]):has(> div > .callout[data-callout="note-toolbar"]) {
-    &:hover {
-        box-shadow: none; /* hide the border on hover of the toolbar callout */
-        & .edit-block-button {
-            display: none; /* hide the edit icon that appears */
-        }
+ /* hide built-in callout border on hover + edit icon */
+.cm-embed-block.cm-embed-block:not([data-is-launchpad]).cg-note-toolbar-container:hover,
+.cm-embed-block.cm-embed-block:not([data-is-launchpad])[data-is-ntb]:hover {
+    box-shadow: none; 
+    & .edit-block-button {
+        display: none;
     }
 }
 
-.cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="sticky"]),
-.cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="mstcky"]) {
-    &[data-tbar-position="props"] {
-        position: sticky;
-        top: var(--cg-nt-tbar-top-sticky-pos-desktop);
-        z-index: 2;
-        .is-mobile &, .is-phone & {
-            top: var(--cg-nt-tbar-top-sticky-pos-mobile);
-        }
+/* sticky callouts and props toolbars */
+.cm-embed-block.cm-embed-block[data-is-ntb]:is([data-ntb-meta*="sticky"], [data-ntb-meta*="mstcky"]),
+.cm-embed-block.cg-note-toolbar-callout[data-tbar-position="props"]:is([data-ntb-meta*="sticky"], [data-ntb-meta*="mstcky"]) {
+    position: sticky;
+    top: var(--cg-nt-tbar-top-sticky-pos-desktop);
+    z-index: 2;
+    .is-mobile &, .is-phone & {
+        top: var(--cg-nt-tbar-top-sticky-pos-mobile);
     }
 }
 
-/* default, if not specified */
-.cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="nosticky"]) {
+.cm-embed-block.cm-embed-block[data-is-ntb][data-ntb-meta*="nosticky"] {
     top: inherit;
     position: relative;
 }
 
-.cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="mnstcky"]) {
+.cm-embed-block.cm-embed-block[data-is-ntb][data-ntb-meta*="mnstcky"] {
     .is-mobile &, .is-phone & {
         top: inherit;
         position: relative;
@@ -192,16 +190,13 @@ body .workspace .callout[data-callout="note-toolbar"] {
             }
         }
 
-        & li:has(> data[data-spread]),
-        & li:has(> a.external-link + data[data-spread]) {
+        & li[data-ntb-type="spreader"] {
             flex: auto;
             & a:hover {
                 background: none;
             }
         }
-        & li:has(> hr),
-        & li:has(> data[data-sep]),
-        & li:has(> a.external-link + data[data-sep]) {
+        & li[data-ntb-type="separator"] {
             border-left: var(--cg-nt-item-sep-width) solid var(--cg-nt-item-sep-color);
             margin: var(--cg-nt-item-sep-margin-y) var(--cg-nt-item-sep-margin-x);
             width: 1px;
@@ -212,9 +207,7 @@ body .workspace .callout[data-callout="note-toolbar"] {
                 margin: initial;
             }
         }
-        & li:has(> br),
-        & li:has(> data[data-break]),
-        & li:has(> a.external-link + data[data-break]) {
+        & li[data-ntb-type="break"] {
             flex-basis: 100%;
             height: 0;
         }
