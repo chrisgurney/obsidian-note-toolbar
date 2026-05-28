@@ -378,16 +378,13 @@ body .workspace .callout[data-callout="note-toolbar"] {
                 }
                 & a, span.external-link {
                     padding: 16px;
-                    align-items: center;
+                    align-items: start;
                     border-radius: var(--radius-m);
                     color: var(--cg-nt-item-text-color);
+                    margin-top: 48px;
                     width: 100%;
                     text-wrap: wrap;
                     user-select: none;
-                    &:has(span.cm-iconize-icon) {                        
-                        align-items: start;
-                        margin-top: 48px;
-                    }
                     & span.cm-iconize-icon {
                         align-items: center;
                         display: flex;
