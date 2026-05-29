@@ -35,28 +35,27 @@
     }
 }
 
-.note-toolbar-setting-plugin-error,
-.note-toolbar-setting-plugin-onboarding {
-    padding: 1em !important;
-    border-radius: 8px;
-}
-
 .note-toolbar-setting-plugin-error {
+    padding: 1em;
+    border-radius: 8px;
     & .setting-item-name {
         color: var(--text-error);
     }
-    border: solid 1px var(--text-error) !important;
+    border: solid 1px var(--text-error);
 }
 
-.note-toolbar-setting-plugin-onboarding {
-    border: solid 1px var(--color-accent-1) !important;
+.note-toolbar-setting-plugin-onboarding,
+.modal .modal-content .setting-item.note-toolbar-setting-plugin-onboarding:first-child {
+    padding: 1em;
+    border-radius: 8px;
+    border: solid 1px var(--color-accent-1);
     position: relative;
     & .setting-item-name {
         color: var(--color-accent-1);
     }
     & .setting-item-control {
         .is-phone & {
-            margin-top: unset !important;
+            margin-top: unset;
         }
     }
 }
@@ -83,7 +82,6 @@
         }
     }
     & .setting-item {
-        background-color: transparent !important;
         border-radius: 0;
         border-top: var(--border-width) solid var(--background-modifier-border);
         &:first-child {
@@ -151,10 +149,10 @@
         box-shadow: inset 0 0 0 2px var(--background-modifier-border-focus);
     }
     &[data-active="true"] {
-        display: inherit !important;
+        display: inherit;
     }
     &[data-active="false"] {
-        display: none !important;
+        display: none;
     }
 }
 
