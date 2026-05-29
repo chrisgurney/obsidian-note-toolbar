@@ -176,6 +176,20 @@
         }
     }
 
+    & .note-toolbar-setting-folder-list-item-container .note-toolbar-setting-mapping-field {
+        border-top: none;
+        padding: 0;
+        & .setting-item-info {
+            display: none;
+        }
+        & .setting-item-control {
+            justify-content: flex-start;
+            .is-mobile & {
+                margin-top: 0;
+            }
+        }
+    }
+
     & .note-toolbar-setting-no-background {
         background-color: transparent;
     }
@@ -880,19 +894,6 @@ input[type="text"].note-toolbar-setting-error,
     }
 }
 
-.note-toolbar-setting-mapping-field {
-    border-top: none !important;
-    padding: 0 !important;
-    & .setting-item-info {
-        display: none;
-    }
-    & .setting-item-control {
-        justify-content: flex-start;
-        .is-mobile & {
-            margin-top: 0 !important;
-        }
-    }
-}
 
 .note-toolbar-setting-item-field {
     border-top: none !important;
