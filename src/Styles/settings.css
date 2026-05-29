@@ -86,6 +86,12 @@
         }
     }
 
+    & .note-toolbar-setting-header-phone {
+        .is-phone & {
+            padding-top: 2.25em
+        }
+    }
+
     & .note-toolbar-setting-items-button-container {
         align-items: center;
         display: flex;
@@ -774,10 +780,6 @@ input[type="text"].note-toolbar-setting-error,
     }
 }
 
-.is-phone .note-toolbar-setting-header-phone {
-    padding-top: 2.25em !important
-}
-
 .note-toolbar-setting-item-full-width {
     align-items: flex-start;
     flex-direction: column;
@@ -893,7 +895,6 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 }
-
 
 .note-toolbar-setting-item-field {
     border-top: none !important;
