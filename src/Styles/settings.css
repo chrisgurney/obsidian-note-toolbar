@@ -71,6 +71,29 @@
 }
 
 .modal .modal-content .note-toolbar-setting-ui {
+
+    & .note-toolbar-setting-items-button-container {
+        align-items: center;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        .is-phone & {
+            justify-content: end;
+        }
+        & .setting-item {
+            border-top: none;
+            padding: 0;
+            & .setting-item-info {
+                display: none;
+            }
+            & .setting-item-control {
+                gap: var(--size-4-4);
+                margin-top: 0;
+            }
+        }
+    }
+
     & .note-toolbar-setting-toolbar-list {
         background-color: var(--setting-items-background);
         border-radius: var(--setting-items-radius);
@@ -153,6 +176,110 @@
 
     & .note-toolbar-setting-top-spacing {
         margin-top: 2em;
+    }
+
+    & .note-toolbar-setting-app-toolbars-container,
+    & .note-toolbar-setting-callout-container,
+    & .note-toolbar-setting-contexts-container,
+    & .note-toolbar-setting-items-container,
+    & .note-toolbar-setting-mappings-container,
+    & .note-toolbar-setting-navbar-container,
+    & .note-toolbar-setting-rules-container {
+        padding-top: 0.75em;
+        & .setting-item-heading {
+            flex-direction: row;
+            & .setting-item-info {
+                cursor: pointer;
+            }
+            .is-mobile & {
+                & .setting-item-control {
+                    gap: var(--size-4-4);
+                    width: unset;
+                }
+            }
+            .is-phone & {
+                padding-top: 1.5em;
+            }
+        }
+        & #tbar-search {
+            padding-top: 0;
+            margin-bottom: 0;
+            & .setting-item-info {
+                display: none;
+            }
+            & .setting-item-control {
+                margin-top: unset;
+            }
+        }
+        &[data-active="true"] {
+            & .note-toolbar-setting-items-collapsible-container,
+            & .note-toolbar-setting-items-list-container {
+                display: inherit;
+                & .setting-item-name {
+                    display: flex;
+                }
+            }
+            & .setting-item .note-toolbar-setting-item-expand svg {
+                transform: rotate(0deg);
+                transition: 0.1s;
+            }
+        }
+        &[data-active="false"] {
+            & .note-toolbar-setting-items-collapsible-container,
+            & .note-toolbar-setting-items-list-container {
+                display: none;
+            }
+            & .setting-item .note-toolbar-setting-item-expand svg {
+                transform: rotate(-90deg);
+                transition: 0.1s;
+            }
+            & .setting-item-heading {
+                margin-bottom: 0.75em;
+            }
+        }
+    }
+
+    & .note-toolbar-setting-callout-container,
+    & .note-toolbar-setting-contexts-container,
+    & .note-toolbar-setting-mappings-container,
+    & .note-toolbar-setting-rules-container {
+        & .setting-item {
+            .is-phone & {
+                & .setting-item-control {
+                    justify-content: flex-end;
+                }
+            }
+        }
+    }
+
+    & .note-toolbar-setting-items-container {
+        & .setting-item {
+            .is-phone & {
+                flex-direction: unset;
+            }
+        }
+    }
+
+    /* collapsible sections - bottom border */
+    & .note-toolbar-setting-app-toolbars-container,
+    & .note-toolbar-setting-callout-container,
+    & .note-toolbar-setting-contexts-container,
+    & .note-toolbar-setting-mappings-container,
+    & .note-toolbar-setting-navbar-container {
+        &[data-active="true"] {
+            margin-bottom: 0.75em;
+        }
+    }
+
+    & .note-toolbar-setting-items-container,
+    & .note-toolbar-setting-items-list-container {
+        & .note-toolbar-setting-button {
+            & .setting-item-info {
+                .is-phone & {
+                    display: none;
+                }
+            }
+        }  
     }
 
 }
@@ -534,110 +661,8 @@ input[type="text"].note-toolbar-setting-error,
     margin-bottom: 1em;
 }
 
-.note-toolbar-setting-app-toolbars-container,
-.note-toolbar-setting-callout-container,
-.note-toolbar-setting-contexts-container,
-.note-toolbar-setting-items-container,
-.note-toolbar-setting-mappings-container,
-.note-toolbar-setting-navbar-container,
-.note-toolbar-setting-rules-container {
-    padding-top: 0.75em;
-    & .setting-item-heading {
-        flex-direction: row !important;
-        & .setting-item-info {
-            cursor: pointer;
-        }
-        .is-mobile & {
-            & .setting-item-control {
-                gap: var(--size-4-4);
-                width: unset !important;
-            }
-        }
-        .is-phone & {
-            padding-top: 1.5em !important;
-        }
-    }
-    & #tbar-search {
-        padding-top: 0;
-        margin-bottom: 0;
-        & .setting-item-info {
-            display: none;
-        }
-        & .setting-item-control {
-            margin-top: unset;
-        }
-    }
-    &[data-active="true"] {
-        & .note-toolbar-setting-items-collapsible-container,
-        & .note-toolbar-setting-items-list-container {
-            display: inherit !important;
-            & .setting-item-name {
-                display: flex;
-            }
-        }
-        & .setting-item .note-toolbar-setting-item-expand svg {
-            transform: rotate(0deg);
-            transition: 0.1s;
-        }
-    }
-    &[data-active="false"] {
-        & .note-toolbar-setting-items-collapsible-container,
-        & .note-toolbar-setting-items-list-container {
-            display: none !important;
-        }
-        & .setting-item .note-toolbar-setting-item-expand svg {
-            transform: rotate(-90deg);
-            transition: 0.1s;
-        }
-        & .setting-item-heading {
-            margin-bottom: 0.75em;
-        }
-    }
-}
-
-.note-toolbar-setting-callout-container,
-.note-toolbar-setting-contexts-container,
-.note-toolbar-setting-mappings-container,
-.note-toolbar-setting-rules-container {
-    & .setting-item {
-        .is-phone & {
-            & .setting-item-control {
-                justify-content: flex-end !important;
-            }
-        }
-    }
-}
-
-.note-toolbar-setting-items-container {
-    & .setting-item {
-        .is-phone & {
-            flex-direction: unset !important;
-        }
-    }
-}
-
-/* collapsible sections - bottom border */
-.note-toolbar-setting-app-toolbars-container,
-.note-toolbar-setting-callout-container,
-.note-toolbar-setting-contexts-container,
-.note-toolbar-setting-mappings-container,
-.note-toolbar-setting-navbar-container {
-    &[data-active="true"] {
-        margin-bottom: 0.75em;
-    }
-}
-
 .note-toolbar-setting-item-heading-top-spacing {
     padding-top: 1.5em;
-}
-
-.is-phone .note-toolbar-setting-items-container,
-.is-phone .note-toolbar-setting-items-list-container {
-    & .note-toolbar-setting-button {
-        & .setting-item-info {
-            display: none;
-        }
-    }  
 }
 
 .note-toolbar-setting-item-full-control-phone {
@@ -645,28 +670,6 @@ input[type="text"].note-toolbar-setting-error,
         width: 100%;
         & .setting-item-control {
             width: 100%;
-        }
-    }
-}
-
-.note-toolbar-setting-items-button-container {
-    align-items: center !important;
-    display: flex;
-    flex-direction: row !important;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    .is-phone & {
-        justify-content: end;
-    }
-    & .setting-item {
-        border-top: none;
-        padding: 0 !important;
-        & .setting-item-info {
-            display: none;
-        }
-        & .setting-item-control {
-            gap: var(--size-4-4);
-            margin-top: 0 !important;
         }
     }
 }
