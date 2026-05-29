@@ -117,7 +117,7 @@ export default class ToolbarItemUi {
             iconField.settingEl.id = 'note-toolbar-item-field-icon';
 
             const labelField = new Setting(textFieldsContainer)
-                .setClass("note-toolbar-setting-item-field")
+                .setClass("note-toolbar-setting-item-label-tooltip")
                 .addText(text => {
                     text
                     .setPlaceholder(t('setting.item.option-label-placeholder'))
@@ -135,7 +135,7 @@ export default class ToolbarItemUi {
             labelField.settingEl.id = 'note-toolbar-item-field-label';
 
             const tooltipField = new Setting(textFieldsContainer)
-                .setClass("note-toolbar-setting-item-field")
+                .setClass("note-toolbar-setting-item-label-tooltip")
                 .addText(text => {
                     text
                     .setPlaceholder(t('setting.item.option-tooltip-placeholder'))
