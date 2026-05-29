@@ -133,12 +133,22 @@
         padding-bottom: 1em;
     }
 
+    & .note-toolbar-setting-group-container {
+        &[data-active="false"] {
+            display: none;
+        }
+    }
+
     & .note-toolbar-setting-no-background {
         background-color: transparent;
     }
 
     & .note-toolbar-setting-no-border {
         border-top: none;
+    }
+
+    & .note-toolbar-setting-top-border {
+        border-top: solid 1px var(--background-modifier-border);
     }
 
     & .note-toolbar-setting-top-spacing {
@@ -465,16 +475,6 @@ input[type="text"].note-toolbar-setting-error,
 
 .is-phone .note-toolbar-setting-header-phone {
     padding-top: 2.25em !important
-}
-
-.note-toolbar-setting-top-border {
-    border-top: solid 1px var(--background-modifier-border) !important;
-}
-
-.note-toolbar-setting-group-container {
-    &[data-active="false"] {
-        display: none !important;
-    }
 }
 
 .note-toolbar-setting-item-full-width {
