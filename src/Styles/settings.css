@@ -23,7 +23,7 @@
     & .is-disabled {
         opacity: 0.6;
         & .setting-item-control:focus-within {
-            box-shadow: none !important;
+            box-shadow: none;
         }
         &:hover {
             background-color: initial;
@@ -70,57 +70,90 @@
     font-size: var(--font-ui-small);
 }
 
-.note-toolbar-setting-toolbar-list {
-    background-color: var(--setting-items-background);
-    border-radius: var(--setting-items-radius);
-    margin: 0em 0em 1em 0em;
-    padding: 1em 1em;
-    .is-mobile & {
-        padding: 1em;
-        & .setting-item > .setting-item-control > button {
-            width: unset !important;
-        }
-    }
-    & .setting-item {
-        border-radius: 0;
-        border-top: var(--border-width) solid var(--background-modifier-border);
-        &:first-child {
-            border-top: none;
-        }
-        padding: 0.5em;
-        margin: 0.25em;
-        /* options button */
-        & button:first-child {
-            opacity: 0;
-            .is-mobile & {
-                opacity: 1;
-                width: auto;
+.modal .modal-content .note-toolbar-setting-ui {
+    & .note-toolbar-setting-toolbar-list {
+        background-color: var(--setting-items-background);
+        border-radius: var(--setting-items-radius);
+        margin: 0em 0em 1em 0em;
+        padding: 1em 1em;
+        .is-mobile & {
+            padding: 1em;
+            & .setting-item > .setting-item-control > button {
+                width: unset;
             }
         }
-        /* edit button */
-        & button:last-child {
-            .is-mobile & {
-                width: auto;
+        & .setting-item {
+            border-radius: 0;
+            border-top: var(--border-width) solid var(--background-modifier-border);
+            &:first-child {
+                border-top: none;
             }
-        }
-        &:hover button:first-child {
-            opacity: 1;
-        }
-        &:focus-within {
-            outline: solid 2px var(--background-modifier-border-focus);
-            border-radius: var(--radius-m);
+            padding: 0.5em;
+            margin: 0.25em;
+            /* options button */
             & button:first-child {
+                opacity: 0;
+                .is-mobile & {
+                    opacity: 1;
+                    width: auto;
+                }
+            }
+            /* edit button */
+            & button:last-child {
+                .is-mobile & {
+                    width: auto;
+                }
+            }
+            &:hover button:first-child {
                 opacity: 1;
             }
+            &:focus-within {
+                outline: solid 2px var(--background-modifier-border-focus);
+                border-radius: var(--radius-m);
+                & button:first-child {
+                    opacity: 1;
+                }
+            }
         }
-    }
-    & .setting-item-control {
-        .is-phone & {
-            justify-content: flex-end !important;
-            width: unset !important;
+        & .setting-item-control {
+            .is-phone & {
+                justify-content: flex-end;
+                width: unset;
+            }
         }
+    } 
+
+    & .note-toolbar-setting-bottom-spacing {
+        margin-bottom: 2em;
     }
-} 
+
+    & .note-toolbar-setting-button {
+        border-top: none;
+        padding-top: 0;
+        padding-bottom: 1em;
+    }
+
+    & .note-toolbar-setting-no-background {
+        background-color: transparent;
+    }
+
+    & .note-toolbar-setting-no-border {
+        border-top: none;
+    }
+
+    & .note-toolbar-setting-top-spacing {
+        margin-top: 2em;
+    }
+
+}
+
+.modal.note-toolbar-setting-modal-container .modal-content {
+
+    & .note-toolbar-setting-no-border {
+        border-top: none;
+    }
+
+}
 
 .mod-cta .note-toolbar-setting-text-with-icon {
     & svg {
@@ -133,7 +166,7 @@
     gap: 0 0.5em;
     align-items: center;
     & svg {
-        color: var(--text-color) !important;
+        color: var(--text-color);
         vertical-align: middle;
     }
 }
@@ -173,33 +206,32 @@
             padding-bottom: 0;
         }
     }
+    & .note-toolbar-setting-item-preview-code {
+        font-family: var(--font-monospace);
+        white-space: normal;
+        overflow-wrap: anywhere;
+    }
     + .note-toolbar-setting-field-error {
         padding-top: 8px;
         padding-bottom: 16px;
     }
     &[data-active="true"] {
-        display: flex !important;
+        display: flex;
     }
     &[data-active="false"] {
-        display: none !important;
+        display: none;
     }
 }
 
 .note-toolbar-setting-ui {
     .setting-item {
         &[data-active="true"] {
-            display: flex !important;
+            display: flex;
         }
         &[data-active="false"] {
-            display: none !important;
+            display: none;
         }
     }
-}
-
-.note-toolbar-setting-item-preview-code {
-    font-family: var(--font-monospace);
-    white-space: normal !important;
-    overflow-wrap: anywhere;
 }
 
 .note-toolbar-setting-item-preview .note-toolbar-setting-item-preview-code {
@@ -431,34 +463,12 @@ input[type="text"].note-toolbar-setting-error,
     }
 }
 
-.note-toolbar-setting-button {
-    border-top: none;
-    padding-top: 0 !important;
-    padding-bottom: 1em !important;
-}
-
 .is-phone .note-toolbar-setting-header-phone {
     padding-top: 2.25em !important
 }
 
-.note-toolbar-setting-no-background {
-    background-color: transparent !important;
-}
-
-.note-toolbar-setting-no-border {
-    border-top: none !important;
-}
-
 .note-toolbar-setting-top-border {
     border-top: solid 1px var(--background-modifier-border) !important;
-}
-
-.note-toolbar-setting-top-spacing {
-    margin-top: 2em !important;
-}
-
-.note-toolbar-setting-bottom-spacing {
-    margin-bottom: 2em !important;
 }
 
 .note-toolbar-setting-group-container {

@@ -88,7 +88,6 @@ export default class GalleryView extends ItemView {
 
 		const searchSetting = new Setting(markdownEl)
 			.setClass('note-toolbar-setting-item-full-width-phone')
-			.setClass('note-toolbar-setting-no-border')
 			.setClass('note-toolbar-gallery-view-search')
 			.addSearch((cb) => {
 				new ItemSuggester(this.ntb, undefined, cb.inputEl, (galleryItem) => {

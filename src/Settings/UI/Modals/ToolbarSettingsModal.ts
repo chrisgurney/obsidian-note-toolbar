@@ -117,7 +117,7 @@ export default class ToolbarSettingsModal extends Modal {
 		// this.ntb.debug("🟡 REDRAWING MODAL 🟡");
 
 		this.contentEl.empty();
-		this.modalEl.addClass('note-toolbar-setting-ui');
+
 		this.modalEl.addClass('note-toolbar-setting-modal-container');
 		this.modalEl.addClass('note-toolbar-setting-modal-phone-top-inset-fix');
 
@@ -125,7 +125,7 @@ export default class ToolbarSettingsModal extends Modal {
 		this.ntb.adapters.checkPlugins();
 
 		const settingsDiv = createDiv();
-		settingsDiv.className = "vertical-tab-content note-toolbar-setting-modal";
+		settingsDiv.className = "vertical-tab-content note-toolbar-setting-modal note-toolbar-setting-ui";
 
 		// show warning message about properties being changed
 		const onboardingId = 'new-toolbar-mapping';
