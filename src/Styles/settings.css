@@ -37,11 +37,11 @@
 
 .note-toolbar-setting-plugin-error {
     padding: 1em;
+    border: solid 1px var(--text-error);
     border-radius: 8px;
     & .setting-item-name {
         color: var(--text-error);
     }
-    border: solid 1px var(--text-error);
 }
 
 .note-toolbar-setting-plugin-onboarding,
