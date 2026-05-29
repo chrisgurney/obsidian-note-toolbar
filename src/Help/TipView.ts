@@ -2,7 +2,7 @@ import { renderGalleryItems } from "Gallery/GalleryView";
 import TipItems from "Help/tips.json";
 import NoteToolbarPlugin from "main";
 import { Component, ItemView, MarkdownRenderer, requestUrl, setIcon, setTooltip, ViewStateResult, WorkspaceLeaf } from "obsidian";
-import { t, VIEW_TYPE_TIP } from "Settings/NoteToolbarSettings";
+import { t, VIEW_TYPE_GALLERY, VIEW_TYPE_TIP } from "Settings/NoteToolbarSettings";
 import { URLS } from "Utils/Urls";
 
 interface TipViewState {
@@ -309,14 +309,14 @@ export function renderTipItems(ntb: NoteToolbarPlugin, containerEl: HTMLDivEleme
 
     });
 
-    ntb.registerDomEvent(containerEl, 'click', (event) => { 
+    ntb.registerDomEvent(containerEl, 'click', async (event) => { 
         const tipEl = (event.target as HTMLElement).closest('.note-toolbar-card-item');
         if (tipEl) {
             if (tipEl.id === 'gallery') {
-                window.open('obsidian://note-toolbar?gallery', '_blank');
+                await ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true });
             }
             else {
-                window.open(`obsidian://note-toolbar?tip=${tipEl.id}`, '_blank');
+                await ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_TIP, active: true, state: { id: tipEl.id } });
             }
         }
     });
