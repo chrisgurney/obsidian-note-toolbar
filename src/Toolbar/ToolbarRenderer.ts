@@ -1023,13 +1023,6 @@ export default class ToolbarRenderer {
 		this.ntb.app.saveLocalStorage(LocalVar.ActiveItem, activeItemId ?? '');
 	}
 
-	/**
-	 * Only updates the last clicked position if there isn't already one stored.
-	 */
-	updateLastClickedPos(): void {
-		if (!this.lastClickedPos) this.lastClickedPos = this.ntb.utils.getPosition();
-	}
-
 	/** 
 	 * Repositions Obsidian's navbar if necessary, and hides navbars/actions if configured.
 	 * @param toolbarPosition position of current toolbar.
