@@ -506,9 +506,9 @@ input[type="text"].note-toolbar-setting-error,
     }
     padding: 8px 0;
     & .setting-item {
-        align-items: center !important;
-        border-bottom: none !important;
-        margin-bottom: 0 !important;
+        align-items: center;
+        border-bottom: none;
+        margin-bottom: 0;
         padding: unset;
     }
     & .note-toolbar-setting-item-fields {
@@ -527,8 +527,8 @@ input[type="text"].note-toolbar-setting-error,
 }
 
 .note-toolbar-setting-items-header {
-    border-bottom: 1px solid var(--background-modifier-border) !important;
-    border-width: 0 0 var(--border-width) 0 !important;
+    border-bottom: 1px solid var(--background-modifier-border);
+    border-width: 0 0 var(--border-width) 0;
     border-radius: 0%;
     padding-bottom: 1em;
     margin-bottom: 1em;
