@@ -300,6 +300,72 @@
 
 .modal.note-toolbar-setting-modal-container .modal-content {
 
+    & .note-toolbar-setting-item-styles {
+        & > .setting-item-info {
+            align-self: flex-start;
+        }
+        & .note-toolbar-setting-item-style {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: end;
+            gap: 0.25em;
+            width: 100%;
+            .setting-item {
+                /* box-shadow: blue 0px 0px 0px 1px !important; */
+                border-top: none;
+                border: dashed 1px var(--pill-color-remove);
+                border-radius: var(--pill-radius);
+                gap: 0;
+                padding-top: 0;
+                padding-bottom: 0;
+                padding-inline: 0.75em 0.25em;
+                flex-wrap: nowrap;
+                height: var(--input-height);
+                .is-mobile & {
+                    flex-direction: row;
+                    align-items: center;
+                }
+                &:first-child {
+                    border: dashed 1px var(--pill-color-remove);
+                }
+                &:last-child {
+                    border: none;
+                    padding: 0em;
+                    flex: 0 0 100%;
+                }
+                & .setting-item-info {
+                    align-self: unset;
+                    margin-inline-end: 0.25em;
+                    color: var(--pill-color);
+                    & .setting-item-name {
+                        font-size: var(--metadata-input-font-size);
+                    }
+                }
+                & .setting-item-control {
+                    --icon-size: var(--icon-xs);
+                    --icon-stroke: var(--icon-xs-stroke-width);
+                    .is-mobile & {
+                        margin-top: 0;
+                    }
+                    .is-phone & {
+                        width: inherit;
+                    }
+                    & .extra-setting-button:active,
+                    & .extra-setting-button:hover {
+                        border-radius: var(--pill-radius);
+                    }
+                    & select.dropdown, 
+                    & select.dropdown:active,
+                    & select.dropdown:focus {
+                        border-radius: var(--pill-radius);
+                        font-size: var(--metadata-input-font-size);
+                    }
+                }
+            }
+        }
+    }
+
     & .note-toolbar-setting-no-border {
         border-top: none;
     }
@@ -1150,72 +1216,6 @@ input[type="text"].note-toolbar-setting-error,
     flex-wrap: wrap;
     gap: 0.5em 1em;
     padding-bottom: 0.25em;
-}
-
-.note-toolbar-setting-item-styles {
-    & > .setting-item-info {
-        align-self: flex-start;
-    }
-}
-
-.note-toolbar-setting-item-style {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: end;
-    gap: 0.25em;
-    width: 100%;
-    .setting-item {
-        border-top: none !important;
-        border: dashed 1px var(--pill-color-remove) !important;
-        border-radius: var(--pill-radius) !important;
-        gap: 0 !important;
-        padding-top: 0 !important;
-        padding-bottom: 0 !important;
-        padding-inline: 0.75em 0.25em !important;
-        flex-wrap: nowrap;
-        height: var(--input-height);
-        .is-mobile & {
-            flex-direction: row !important;
-            align-items: center !important;
-        }
-        &:first-child {
-            border: dashed 1px var(--pill-color-remove) !important;
-        }
-        &:last-child {
-            border: none !important;
-            padding: 0em !important;
-            flex: 0 0 100%;
-        }
-        & .setting-item-info {
-            align-self: unset !important;
-            margin-inline-end: 0.25em;
-            color: var(--pill-color);
-            & .setting-item-name {
-                font-size: var(--metadata-input-font-size);
-            }
-        }
-        & .setting-item-control {
-            --icon-size: var(--icon-xs);
-            --icon-stroke: var(--icon-xs-stroke-width);
-            .is-mobile & {
-                margin-top: 0 !important;
-            }
-            .is-phone & {
-                width: inherit !important;
-            }
-            & .extra-setting-button:active,
-            & .extra-setting-button:hover {
-                border-radius: var(--pill-radius);
-            }
-            & select.dropdown, 
-            & select.dropdown:active,
-            & select.dropdown:focus {
-                border-radius: var(--pill-radius);
-                font-size: var(--metadata-input-font-size);
-            }
-        }
-    }
 }
 
 .note-toolbar-setting-item-suggester-dialog {
