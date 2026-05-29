@@ -1176,7 +1176,7 @@ export default class ToolbarItemUi {
                 button.extraSettingsEl.tabIndex = 0;
                 this.ntb.settingsUtils.handleKeyClick(button.extraSettingsEl);     
             });
-        advancedSetting.settingEl.addClass('note-toolbar-setting-subfield-advanced');
+        advancedSetting.settingEl.addClass('note-toolbar-setting-subfield-advanced-heading');
         this.ntb.registerDomEvent(advancedSetting.infoEl, 'click', (event) => {
             advancedSettingsDiv.toggleAttribute('data-active');
         });
