@@ -1015,35 +1015,36 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 
+    & .note-toolbar-setting-item-link-advanced {
+        display: none;
+        &[data-active] {
+            display: flex;
+        }
+        flex-direction: column;
+        flex-grow: 1;
+        gap: 1em;
+        & .setting-group {
+            .is-mobile & {
+                border: var(--border-width) solid var(--background-modifier-border);
+                border-radius: var(--radius-m);
+            }
+            & .setting-item-info {
+                display: initial;
+                & .setting-item-name {
+                    font-size: var(--font-ui-small);
+                }
+            }
+            & .setting-item-control {
+                justify-content: end;
+                .is-mobile & {
+                    margin-top: 0;
+                }
+            }
+        }
+    }
+
 }
 
-.note-toolbar-setting-item-link-advanced {
-    display: none;
-    &[data-active] {
-        display: flex;
-    }
-    flex-direction: column;
-    flex-grow: 1;
-    gap: 1em;
-    & .setting-group {
-        .is-mobile & {
-            border: var(--border-width) solid var(--background-modifier-border);
-            border-radius: var(--radius-m);
-        }
-    }
-    & .setting-item-info {
-        display: initial !important;
-        & .setting-item-name {
-            font-size: var(--font-ui-small);
-        }
-    }
-    & .setting-item-control {
-        justify-content: end !important;
-        .is-mobile & {
-            margin-top: 0 !important;
-        }
-    }
-}
 
 .note-toolbar-setting-focussable-link {
     &:focus-within {
