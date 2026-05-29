@@ -213,10 +213,10 @@ export default class SettingsUIUtils {
 		if (showEditLink) {
 			const toolbarLinkContainer = createDiv();
 			toolbarLinkContainer.addClass('note-toolbar-setting-tbar-preview-edit');
-			const toolbarLink = createEl('a');
-			toolbarLink.href = "obsidian://note-toolbar?toolbarsettings=" + encodeURIComponent(toolbar.name);
-			toolbarLink.setText(t('setting.item.label-preview-edit', { toolbar: toolbar.name, interpolation: { escapeValue: false } }));
-			toolbarLinkContainer.appendChild(toolbarLink);
+			const toolbarLinkEl = createEl('a');
+			toolbarLinkEl.addEventListener('click', () => this.ntb.settingsManager.openToolbarSettings(toolbar));
+			toolbarLinkEl.setText(t('setting.item.label-preview-edit', { toolbar: toolbar.name, interpolation: { escapeValue: false } }));
+			toolbarLinkContainer.appendChild(toolbarLinkEl);
 			toolbarFr.appendChild(toolbarLinkContainer);
 		}
 
