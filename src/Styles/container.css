@@ -26,7 +26,7 @@
         z-index: var(--cg-nt-tbar-z-index);
         & .cg-note-toolbar-callout {
             margin-bottom: 0;
-            margin-inline: auto auto !important;
+            margin-inline: auto auto;
             transition: border-top 0.5s ease-out;
         }
     }
