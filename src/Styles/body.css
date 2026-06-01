@@ -212,5 +212,5 @@ body {
 /* fix: tooltips appearing on elements below tapped elements */
 body.is-phone .tooltip {
     /* FIXME: test on phones; try: make selector more specific? */
-    display: none !important;
+    /* display: none !important; */
 }
