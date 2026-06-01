@@ -202,6 +202,9 @@ export default class NoteToolbarPlugin extends Plugin {
 		// remove the global API
 		if (window["ntb"]) delete window["ntb"];
 
+		// cleanup listeners
+		this.listeners.document.cleanup();
+
 		this.debug('UNLOADED');
 
 	}

@@ -135,8 +135,7 @@
 }
 
 /* hides the FAB when a sidebar is open on phones */
-.is-phone .app-container:has(.workspace.is-left-sidedock-open) .cg-note-toolbar-container[data-tbar-position*="fab"],
-.is-phone .app-container:has(.workspace.is-right-sidedock-open) .cg-note-toolbar-container[data-tbar-position*="fab"] {
+body.is-phone.ntb-is-sidedock-open .cg-note-toolbar-container[data-tbar-position*="fab"] {
     display: none;
 }
 
