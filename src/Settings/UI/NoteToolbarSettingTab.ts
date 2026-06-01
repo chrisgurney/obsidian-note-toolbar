@@ -773,12 +773,10 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 									text: t('setting.mappings.error-folder-already-mapped'), 
 									attr: { id: "note-toolbar-name-error" }, cls: "note-toolbar-setting-error-message" });
 								toolbarFolderListItemDiv.insertAdjacentElement('afterend', errorDiv);
-								toolbarFolderListItemDiv.children[0].addClass("note-toolbar-setting-error");
 							}
 						}
 						else {
 							document.getElementById("note-toolbar-name-error")?.remove();
-							toolbarFolderListItemDiv.children[0].removeClass("note-toolbar-setting-error");
 							mapping.folder = newFolder ? normalizePath(newFolder) : "";
 							await this.ntb.settingsManager.save();
 						}
