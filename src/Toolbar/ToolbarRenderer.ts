@@ -634,7 +634,10 @@ export default class ToolbarRenderer {
 
 		// apply custom classes to the sub-menu by getting the note's toolbar 
 		const activeToolbar = this.ntb.settingsManager.getCurrentToolbar();
-		if (activeToolbar && activeToolbar.customClasses) menu.dom.addClasses([...activeToolbar.customClasses.split(' ')]);
+		if (activeToolbar) {
+			menu.dom.setAttribute(TbarData.EmbedMeta, [...activeToolbar.defaultStyles, ...activeToolbar.mobileStyles].join('-'));
+			if (activeToolbar.customClasses) menu.dom.addClasses([...activeToolbar.customClasses.split(' ')]);
+		}
 
 		return menu;
 
@@ -703,7 +706,10 @@ export default class ToolbarRenderer {
 								subMenu.dom.addClass('note-toolbar-menu');
 								// apply custom classes to the sub-menu by getting the note's toolbar 
 								const activeToolbar = this.ntb.settingsManager.getCurrentToolbar();
-								if (activeToolbar && activeToolbar.customClasses) subMenu.dom.addClasses([...activeToolbar.customClasses.split(' ')]);
+								if (activeToolbar) {
+									subMenu.dom.setAttribute(TbarData.EmbedMeta, [...activeToolbar.defaultStyles, ...activeToolbar.mobileStyles].join('-'));
+									if (activeToolbar.customClasses) subMenu.dom.addClasses([...activeToolbar.customClasses.split(' ')]);
+								}
 								// render the sub-menu items
 								const menuToolbar = this.ntb.settingsManager.getToolbar(toolbarItem.link);
 								if (menuToolbar) {
