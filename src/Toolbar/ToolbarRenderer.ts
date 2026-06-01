@@ -155,7 +155,7 @@ export default class ToolbarRenderer {
 
 		// for styling the meta container, when the toolbar is in the properties position
 		if (view instanceof MarkdownView) {
-			view.contentEl.setAttribute(TbarData.Position, position);
+			view.containerEl.setAttribute(TbarData.Position, position);
 		}
 
         if (!(view instanceof MarkdownView)) {
