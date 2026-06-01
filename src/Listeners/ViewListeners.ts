@@ -17,6 +17,12 @@ export default class ViewListeners {
         if (activeView && this.ntb.utils.hasToolbarForItemView(activeView)) {
             this.setupScrollListener(activeView);
         }
+
+		// on phones, for header spacing in non-markdown files
+        if (Platform.isPhone) {
+            const isNotMarkdown = !(activeView instanceof MarkdownView || activeView?.getViewType() === 'empty');
+            activeDocument.body.toggleClass('ntb-top-spacing', isNotMarkdown);
+        }
     }
 
     /**

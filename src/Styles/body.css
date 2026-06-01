@@ -125,8 +125,7 @@ body {
                  --ntb-tbar-top-spacing-md: calc(var(--view-header-height) + var(--ntb-tbar-top-spacing-pad));
              }
          }
-         /* FIXME: add data type to the body element? */
-         &:not(:has(.workspace-leaf-content[data-type*="markdown"])) {
+         &.ntb-top-spacing {
              --ntb-tbar-top-spacing-md: 0px;
              &.is-floating-nav {
                  --ntb-tbar-top-spacing: calc(var(--view-header-height) + var(--ntb-tbar-top-spacing-pad));
