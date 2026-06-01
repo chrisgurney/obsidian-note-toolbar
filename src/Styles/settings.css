@@ -1074,7 +1074,7 @@ input[type="text"].note-toolbar-setting-error,
         vertical-align: middle;
     }
     &[data-active="false"] {
-        display: none !important;
+        display: none;
     }
 }
 
@@ -1134,7 +1134,7 @@ input[type="text"].note-toolbar-setting-error,
     }
     & .setting-item-control {
         .is-mobile & {
-            margin-top: 0 !important;
+            margin-top: 0;
         }
         & button {
             background: none;
