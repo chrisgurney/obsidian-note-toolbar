@@ -29,10 +29,11 @@
             background-color: initial;
         }
     }
+    /* FIXME: test in Obsidian 1.13 and remove if it was fixed */
     /* fix: Settings: Keyboard focus is not visible after tabbing away from toggle control (#501) */
-    & .checkbox-container:has(input:focus) {
+    /* & .checkbox-container:has(input:focus) {
         box-shadow: 0 0 0 var(--input-border-width-focus) var(--background-modifier-border-focus);
-    }
+    } */
 }
 
 .note-toolbar-setting-plugin-error {
