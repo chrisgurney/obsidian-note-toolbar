@@ -205,6 +205,15 @@
         border-top: none;
     }
 
+    & .note-toolbar-setting-position-group {
+        & .setting-items > .setting-item:nth-last-child(2) {
+            padding-bottom: 0;
+        }
+        & .setting-items > .setting-item:last-child {
+            border-top: none;
+        }
+    }
+
     & .note-toolbar-setting-top-border {
         border-top: solid 1px var(--background-modifier-border);
     }
@@ -1254,12 +1263,6 @@ input[type="text"].note-toolbar-setting-error,
     width: calc(var(--dialog-width) / 1.5);
     .is-phone & {
         width: inherit;
-    }
-}
-
-.note-toolbar-setting-position-group {
-    & .setting-item:has(+ .setting-item[data-active="false"]) {
-        padding-bottom: 0;
     }
 }
 
