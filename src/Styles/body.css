@@ -208,8 +208,8 @@ body {
     display: none;
 }
 
+/* FIXME: test in Obsidian 1.13 on phones; remove if fixed and if not, try: make selector more specific? */
 /* fix: tooltips appearing on elements below tapped elements */
-body.is-phone .tooltip {
-    /* FIXME: test on phones; try: make selector more specific? */
-    /* display: none !important; */
-}
+/* body.is-phone .tooltip {
+    display: none !important;
+} */
