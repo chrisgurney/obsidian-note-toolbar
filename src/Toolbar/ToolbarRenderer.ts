@@ -153,6 +153,11 @@ export default class ToolbarRenderer {
             return;
         }
 
+		// for styling the meta container, when the toolbar is in the properties position
+		if (view instanceof MarkdownView) {
+			view.contentEl.setAttribute(TbarData.Position, position);
+		}
+
         if (!(view instanceof MarkdownView)) {
             const isToolbarVisible = this.ntb.utils.hasToolbarForItemView(view);
             if (!isToolbarVisible) {
@@ -179,6 +184,7 @@ export default class ToolbarRenderer {
 			}
 		}
 
+		// create toolbar container
         let noteToolbarElement: HTMLElement | undefined;
         const embedBlock = activeDocument.createElement((position === PositionType.TabBar) ? 'button' : 'div');
         embedBlock.addClass('cg-note-toolbar-container');
