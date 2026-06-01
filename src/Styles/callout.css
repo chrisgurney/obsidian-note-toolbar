@@ -704,15 +704,13 @@ body.is-phone .cg-note-toolbar-container {
             }
         }
     }
-    &[data-tbar-position*="top"] {
-        &:has(.callout[data-callout="note-toolbar"]:is([data-callout-metadata*="autohide"], [data-callout-metadata*="mhd"]):not([data-callout-metadata*="mnhd"])) {
-            transition: opacity 0.3s ease-in-out, transform 0.3s ease-out;
-            body.is-hidden-nav & {
-                opacity: 0;
-                transition: opacity 0.3s ease-in-out;
-                transform: translateY(calc(var(--ntb-toolbar-height) * -1));
-                visibility: hidden;
-            }
+    &[data-tbar-position*="top"]:is([data-ntb-meta*="autohide"], [data-ntb-meta*="mhd"]):not([data-ntb-meta*="mnhd"]) {
+        transition: opacity 0.3s ease-in-out, transform 0.3s ease-out;
+        body.is-hidden-nav & {
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            transform: translateY(calc(var(--ntb-toolbar-height) * -1));
+            visibility: hidden;
         }
     }
 }

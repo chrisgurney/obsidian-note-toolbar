@@ -230,6 +230,7 @@ export default class ToolbarRenderer {
                 const div = activeDocument.createElement("div");
                 div.append(noteToolbarElement);
                 embedBlock.addClasses(['cm-embed-block', 'cm-callout', 'cg-note-toolbar-bar-container']);
+				embedBlock.setAttribute(TbarData.EmbedMeta, [...toolbar.defaultStyles, ...toolbar.mobileStyles].join('-'));
                 embedBlock.append(div);
                 this.ntb.registerDomEvent(embedBlock, 'contextmenu', (e) => this.ntb.toolbars.onContextMenu(e));
                 this.ntb.registerDomEvent(embedBlock, 'keydown', (e) => this.ntb.toolbars.onKeyDown(e));	

@@ -6,7 +6,7 @@
     border-radius: var(--cg-nt-tbar-border-radius);
     /* fix: (#90) box-shadow appearing over top of text */
     /* box-shadow: 0 0 0 1px var(--cg-nt-tbar-bg-color); */
-    &:has(.callout[data-callout-metadata*="autohide"]) {
+    &[data-ntb-meta*="autohide"] {
         box-shadow: none;
     }
     margin-bottom: 1em;
@@ -125,7 +125,7 @@
 
 .is-phone .cg-note-toolbar-container[data-tbar-position*="bottom"] {
     /* if toolbar doesn't wrap, container needs a constrained width so it's scrollable */
-    &:has(.cg-note-toolbar-callout[data-callout-metadata*="mnwrp"]) {
+    &[data-ntb-meta*="mnwrp"] {
         max-width: 100%;
     }
     /* reduce padding to better align with formatting toolbar */
