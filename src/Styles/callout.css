@@ -12,8 +12,8 @@
 }
 
 /* sticky callouts and props toolbars */
-.cm-embed-block.cm-embed-block:is([data-ntb-meta*="sticky"], [data-ntb-meta*="mstcky"]),
-.cm-embed-block.cm-embed-block .cg-note-toolbar-callout[data-tbar-position="props"]:is([data-ntb-meta*="sticky"], [data-ntb-meta*="mstcky"]) {
+.cm-embed-block.cm-embed-block[data-is-ntb]:is([data-ntb-meta*="sticky"], [data-ntb-meta*="mstcky"]),
+.cm-embed-block.cm-embed-block.cg-note-toolbar-container[data-tbar-position="props"]:is([data-ntb-meta*="sticky"], [data-ntb-meta*="mstcky"]) {
     position: sticky;
     top: var(--cg-nt-tbar-top-sticky-pos-desktop);
     z-index: 2;
