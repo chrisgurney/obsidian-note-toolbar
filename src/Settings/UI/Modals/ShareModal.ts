@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { ButtonComponent, Modal, Notice, Setting, ToggleComponent } from "obsidian";
+import { Modal, Setting, TextAreaComponent, ToggleComponent } from "obsidian";
 import { t, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { toolbarHasMenu } from "Utils/Utils";
 import { fixToggleTab, learnMoreFr } from "../Utils/SettingsUIUtils";
@@ -36,19 +36,21 @@ export default class ShareModal extends Modal {
         // share link
         //
 
-		new Setting(this.contentEl)
-			.setName(this.shareUri)
-			.addButton((button: ButtonComponent) => {
-				button
-					.setButtonText(t('export.button-copy-link'))
-					.setTooltip(t('export.button-copy-link-description'))
-					.setCta()
-					.onClick(async () => {
-                        await activeWindow.navigator.clipboard.writeText(this.shareUri);
-                        new Notice(t('export.notice-shared')).containerEl.addClass('mod-success');
-                        this.close();
-					});
-			});
+        new Setting(this.contentEl)
+            .addTextArea((text: TextAreaComponent) => {
+                text.setValue(this.shareUri);
+                requestAnimationFrame((): void => {
+                    text.inputEl.focus();
+                    text.inputEl.select();
+                    this.ntb.registerDomEvent(text.inputEl, 'focus', (event) => {
+                        text.inputEl.select();
+                    });
+                    this.ntb.registerDomEvent(text.inputEl, 'mouseup', (event) => {
+                        event.preventDefault();
+                        text.inputEl.select();
+                    });
+                });
+            });
 
         new Setting(this.contentEl)
             .setName(t('export.option-uri'))

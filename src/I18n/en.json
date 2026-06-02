@@ -194,12 +194,10 @@
         "notice-command-updated": "Command updated:\n{{command}}"
     },
     "export": {
-        "button-copy-link": "Copy link",
-        "button-copy-link-description": "Copy this link to your clipboard",
         "item-generic": "Item{{number}}",
         "label-callout": "Copy as callout",
         "label-share": "Share...",
-        "label-share-description": "Share this link with another Note Toolbar user to add your toolbar to their vault.",
+        "label-share-description": "Copy and share this link with another Note Toolbar user to add your toolbar to their vault.",
         "label-share-preview": "preview",
         "notice-completed": "Toolbar copied to clipboard as callout. Open settings to adjust formatting.",
         "notice-shared": "Note Toolbar link copied to clipboard",

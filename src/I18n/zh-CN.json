@@ -152,8 +152,6 @@
     "name-use-item": "调用 {{item}}"
   },
   "export": {
-    "button-copy-link": "复制链接",
-    "button-copy-link-description": "将此链接复制到剪贴板",
     "item-generic": "项目{{number}}",
     "label-callout": "复制为标注（Callout）",
     "label-share": "分享…",

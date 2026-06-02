@@ -1322,16 +1322,19 @@ input[type="text"].note-toolbar-setting-error,
     font-size: var(--font-ui-small);
 }
 
+.note-toolbar-copy-dialog,
 .note-toolbar-share-dialog {
-    .setting-item:first-of-type {
+    & .setting-item:first-of-type {
         border-top: none;
-        overflow: hidden;
-        .setting-item-info {
-            overflow: auto;
-            .setting-item-name {
-                font-family: var(--font-monospace);
-                font-size: var(--font-ui-smaller);
-                text-wrap: nowrap;
+        /* overflow: hidden; */
+        & .setting-item-info {
+            display: none;
+        }
+        & .setting-item-control {
+            width: 100%;
+            & textarea {
+                height: 4rem;
+                width: 100%;
             }
         }
     }

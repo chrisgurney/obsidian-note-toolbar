@@ -152,8 +152,6 @@
         "name-use-item": "使用: {{item}}"
     },
     "export": {
-        "button-copy-link": "リンクをコピー",
-        "button-copy-link-description": "このリンクをクリップボードにコピー",
         "item-generic": "アイテム{{number}}",
         "label-callout": "コールアウトとしてコピー",
         "label-share": "共有...",

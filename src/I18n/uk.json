@@ -194,8 +194,6 @@
         "notice-command-updated": "Команда оновлена:\n{{command}}"
     },
     "export": {
-        "button-copy-link": "Копіювати посилання",
-        "button-copy-link-description": "Скопіювати посилання до буфера обміну",
         "item-generic": "Елемент {{number}}",
         "label-callout": "Скопіювати як виноску",
         "label-share": "Поділитися...",

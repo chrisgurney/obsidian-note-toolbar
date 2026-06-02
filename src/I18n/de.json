@@ -149,8 +149,6 @@
         "name-use-item": "Benutze: {{item}}"
     },
     "export": {
-        "button-copy-link": "Link kopieren",
-        "button-copy-link-description": "Link in die Zwischenablage kopieren",
         "item-generic": "Element{{number}}",
         "label-callout": "Als Hinweis kopieren",
         "label-share": "Teilen...",
