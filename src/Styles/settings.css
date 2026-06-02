@@ -1036,16 +1036,22 @@ input[type="text"].note-toolbar-setting-error,
                 border: var(--border-width) solid var(--background-modifier-border);
                 border-radius: var(--radius-m);
             }
-            & .setting-item-info {
-                display: initial;
-                & .setting-item-name {
-                    font-size: var(--font-ui-small);
-                }
-            }
-            & .setting-item-control {
-                justify-content: end;
+            & .setting-items {
                 .is-mobile & {
-                    margin-top: 0;
+                    /* fix: this padding is missing in Obsidian 1.13 */
+                    padding: var(--setting-items-padding);
+                }
+                & .setting-item-info {
+                    display: initial;
+                    & .setting-item-name {
+                        font-size: var(--font-ui-small);
+                    }
+                }
+                & .setting-item-control {
+                    justify-content: end;
+                    .is-mobile & {
+                        margin-top: 0;
+                    }
                 }
             }
         }
