@@ -867,6 +867,9 @@ input[type="text"].note-toolbar-setting-error,
         & .note-toolbar-setting-item-icon {
             padding-top: 0;
             padding-bottom: 0;
+            .is-mobile & {
+                padding-bottom: 0.75em;
+            }
             & .setting-item-info {
                 display: none;
             }
