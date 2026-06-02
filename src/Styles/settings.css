@@ -4,6 +4,10 @@
 .note-toolbar-setting-ui, .note-toolbar-setting-modal-container {
     & .setting-group {
         & .setting-items {
+            .is-mobile & {
+                /* fix: this padding is missing in Obsidian 1.13 */
+                padding: var(--size-4-5);
+            }
             &:focus-within {
                 box-shadow: inset 0 0 0 2px var(--background-modifier-border-focus);
             }
@@ -1037,10 +1041,6 @@ input[type="text"].note-toolbar-setting-error,
                 border-radius: var(--radius-m);
             }
             & .setting-items {
-                .is-mobile & {
-                    /* fix: this padding is missing in Obsidian 1.13 */
-                    padding: var(--size-4-5);
-                }
                 & .setting-item-info {
                     display: initial;
                     & .setting-item-name {
