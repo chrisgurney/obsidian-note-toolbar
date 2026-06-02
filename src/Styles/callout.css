@@ -671,10 +671,6 @@ body .workspace .callout[data-callout="note-toolbar"] {
             background-color: unset;
             border-radius: unset;
         }
-        &:not([data-tbar-position="bottom"]):hover {
-            /* themes like Cyber Glow add a hover color to callouts; remove it for toolbars */
-            background-color: unset;
-        }
     }
     
 }
