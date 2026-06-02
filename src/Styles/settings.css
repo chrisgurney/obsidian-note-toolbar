@@ -1039,7 +1039,7 @@ input[type="text"].note-toolbar-setting-error,
             & .setting-items {
                 .is-mobile & {
                     /* fix: this padding is missing in Obsidian 1.13 */
-                    padding: var(--setting-items-padding);
+                    padding: var(--size-4-5);
                 }
                 & .setting-item-info {
                     display: initial;
