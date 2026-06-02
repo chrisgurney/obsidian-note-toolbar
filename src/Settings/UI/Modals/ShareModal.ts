@@ -42,6 +42,7 @@ export default class ShareModal extends Modal {
                 requestAnimationFrame((): void => {
                     text.inputEl.focus();
                     text.inputEl.select();
+                    text.inputEl.scrollTop = 0;
                     this.ntb.registerDomEvent(text.inputEl, 'focus', (event) => {
                         text.inputEl.select();
                     });
