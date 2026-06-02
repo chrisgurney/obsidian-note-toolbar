@@ -61,7 +61,7 @@ body.is-phone .workspace-leaf-content[data-tbar-position="top"] .view-header {
 } */
 
 /* removes safe area inset from these variables, as it's taken into account above the toolbar */
-body.is-phone .workspace-leaf-content[data-tbar-position="top"] .view-content {
+body.is-phone .mod-root .cg-note-toolbar-container[data-tbar-position="top"] ~ .view-content {
     --view-top-fade-mask: var(--ntb-tbar-top-fade-mask);
     --view-top-spacing: var(--ntb-tbar-top-spacing);
     --view-top-spacing-markdown: var(--ntb-tbar-top-spacing-md);
