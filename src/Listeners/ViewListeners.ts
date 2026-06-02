@@ -21,7 +21,7 @@ export default class ViewListeners {
 		// on phones, for header spacing in non-markdown files
         if (Platform.isPhone) {
             const isNotMarkdown = !(activeView instanceof MarkdownView || activeView?.getViewType() === 'empty');
-            activeDocument.body.toggleClass('ntb-top-spacing', isNotMarkdown);
+            activeDocument.body.toggleClass('ntb-is-not-markdown', isNotMarkdown);
         }
     }
 

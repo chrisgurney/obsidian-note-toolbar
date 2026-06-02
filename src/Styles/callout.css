@@ -22,15 +22,16 @@
     }
 }
 
-.cm-embed-block.cm-embed-block[data-is-ntb][data-ntb-meta*="nosticky"] {
-    top: inherit;
-    position: relative;
-}
-
-.cm-embed-block.cm-embed-block[data-is-ntb][data-ntb-meta*="mnstcky"] {
-    .is-mobile &, .is-phone & {
+.cm-embed-block.cm-embed-block[data-is-ntb] {
+    &[data-ntb-meta*="nosticky"] {
         top: inherit;
         position: relative;
+    }
+    &[data-ntb-meta*="mnstcky"] {
+        .is-mobile &, .is-phone & {
+            top: inherit;
+            position: relative;
+        }
     }
 }
 
@@ -41,30 +42,22 @@
     }
 }
 
-.is-phone .cm-embed-block[data-tbar-position="top"] {
+body.is-phone .cm-embed-block[data-tbar-position="top"] {
     margin-top: var(--ntb-tbar-top-mt-phone);
     padding-top: var(--ntb-tbar-top-pt-phone);
 }
-body.is-phone .workspace-leaf-content[data-tbar-position="top"] .view-header {
-    margin-top: var(--ntb-tbar-top-header-mt-phone);
-    padding-top: var(--ntb-tbar-top-header-pt-phone);
-}
 
-/* fixes header div getting squished when the toolbar's at the top position */
-/* .view-header:has(+ [data-tbar-position="top"]) {
-    min-height: var(--header-height);
-} */
-
-/* removes padding above the top navigation, when Obsidian's Floating navigation setting is disabled */
-/* .is-phone .view-header:has(+ [data-tbar-position="top"]) {
-    padding-top: 0;
-} */
-
-/* removes safe area inset from these variables, as it's taken into account above the toolbar */
-body.is-phone .mod-root .cg-note-toolbar-container[data-tbar-position="top"] ~ .view-content {
-    --view-top-fade-mask: var(--ntb-tbar-top-fade-mask);
-    --view-top-spacing: var(--ntb-tbar-top-spacing);
-    --view-top-spacing-markdown: var(--ntb-tbar-top-spacing-md);
+body.is-phone .mod-root .cg-note-toolbar-container[data-tbar-position="top"] {
+    & ~ .view-header {
+        margin-top: var(--ntb-tbar-top-header-mt-phone);
+        padding-top: var(--ntb-tbar-top-header-pt-phone);
+    }
+    /* removes safe area inset from these variables, as it's taken into account above the toolbar */
+    & ~ .view-content {
+        --view-top-fade-mask: var(--ntb-tbar-top-fade-mask);
+        --view-top-spacing: var(--ntb-tbar-top-spacing);
+        --view-top-spacing-markdown: var(--ntb-tbar-top-spacing-md);
+    }
 }
 
 .callout[data-callout="note-toolbar-output"] {
