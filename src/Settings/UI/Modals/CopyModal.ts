@@ -1,0 +1,56 @@
+import NoteToolbarPlugin from "main";
+import { Modal, Setting, TextAreaComponent } from "obsidian";
+import { t } from "Settings/NoteToolbarSettings";
+
+export default class CopyModal extends Modal {
+
+	constructor(
+        private ntb: NoteToolbarPlugin,
+        private text: string,
+        private title: string,
+        private desc?: string | DocumentFragment,
+        private notes?: string
+    ) {
+        super(ntb.app);
+        this.modalEl.addClass('note-toolbar-copy-dialog', 'note-toolbar-setting-dialog-phonefix');
+    }
+
+    public onOpen() {
+        this.setTitle(this.title);
+        this.display();
+    }
+
+    public display() {
+
+        this.contentEl.empty();
+        this.modalEl.addClass('note-toolbar-setting-modal-container');
+
+        this.contentEl.createEl('p', { text: this.desc ?? t('copy.description') });
+
+        new Setting(this.contentEl)
+            .setName('Copy the text below')
+            .addTextArea((text: TextAreaComponent) => {
+                text.setValue(this.text);
+                requestAnimationFrame((): void => {
+                    text.inputEl.focus();
+                    text.inputEl.select();
+                    text.inputEl.scrollTop = 0;
+                    this.ntb.registerDomEvent(text.inputEl, 'focus', (event) => {
+                        text.inputEl.select();
+                    });
+                    this.ntb.registerDomEvent(text.inputEl, 'mouseup', (event) => {
+                        event.preventDefault();
+                        text.inputEl.select();
+                    });
+                });
+            });
+
+        if (this.notes) {
+            const disclaimers = this.contentEl.createDiv();
+            disclaimers.addClass('note-toolbar-setting-field-help');
+            disclaimers.createEl('p', { text: this.notes });
+        }
+
+    }
+
+}

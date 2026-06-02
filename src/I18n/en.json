@@ -193,9 +193,13 @@
         "name-use-item": "Use: {{item}}",
         "notice-command-updated": "Command updated:\n{{command}}"
     },
+    "copy": {
+        "description": "Copy the text below."
+    },
     "export": {
         "item-generic": "Item{{number}}",
         "label-callout": "Copy as callout",
+        "label-callout-description": "Copy and paste this callout into a note. Open settings to adjust formatting.",
         "label-share": "Share...",
         "label-share-description": "Copy and share this link with another Note Toolbar user to add your toolbar to their vault.",
         "label-share-preview": "preview",
