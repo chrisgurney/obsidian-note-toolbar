@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from 'main';
-import { ButtonComponent, debounce, Menu, MenuItem, normalizePath, Notice, Platform, PluginSettingTab, setIcon, Setting, SettingGroup, setTooltip, ToggleComponent } from 'obsidian';
+import { ButtonComponent, debounce, Menu, MenuItem, normalizePath, Platform, PluginSettingTab, setIcon, Setting, SettingGroup, setTooltip, ToggleComponent } from 'obsidian';
 import { FolderMapping, OBSIDIAN_UI_ELEMENTS, OBSIDIAN_UI_MOBILE_NAVBAR_OPTIONS, RIBBON_ACTION_OPTIONS, RibbonAction, SETTINGS_VERSION, SettingType, t, ToolbarSettings } from 'Settings/NoteToolbarSettings';
 import IconSuggestModal from 'Settings/UI/Modals/IconSuggestModal';
 import FolderSuggester from 'Settings/UI/Suggesters/FolderSuggester';
@@ -288,10 +288,10 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 												.setIcon('copy')
 												.onClick(async () => {
 													const calloutExport = await exportToCallout(this.ntb, toolbar, this.ntb.settings.export);
-													const copyModal = new CopyTextModal( this.ntb, calloutExport,
+													const copyTextModal = new CopyTextModal( this.ntb, calloutExport,
 														t('export.label-callout'),
 														learnMoreFr(t('export.label-callout-description'), 'Creating-callouts-from-toolbars'));
-													copyModal.open();
+													copyTextModal.open();
 												});
 										});
 									}
@@ -300,9 +300,11 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 										menuItem
 											.setTitle(t('setting.toolbars.menu-copy-id'))
 											.setIcon('code')
-											.onClick(async (menuEvent) => {
-												await activeWindow.navigator.clipboard.writeText(toolbar.uuid);
-												new Notice(t('setting.toolbars.menu-copy-id-notice')).containerEl.addClass('mod-success');
+											.onClick((menuEvent) => {
+												const copyTextModal = new CopyTextModal( this.ntb, toolbar.uuid,
+													t('setting.toolbars.menu-copy-id-title'),
+													learnMoreFr(t('setting.toolbars.menu-copy-id-description'), 'Developer-IDs'));
+												copyTextModal.open();
 											});
 									});
 									menu.addSeparator();

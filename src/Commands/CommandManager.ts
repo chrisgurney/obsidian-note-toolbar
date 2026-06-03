@@ -1,8 +1,10 @@
 import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, EMPTY_TOOLBAR_ID, LocalVar, PositionType, t, ToggleUiStateType, ToolbarItemSettings, ToolbarSettings, ToolbarStyle, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP } from "Settings/NoteToolbarSettings";
 import CommandSuggestModal from "Settings/UI/Modals/CommandSuggestModal";
+import CopyTextModal from "Settings/UI/Modals/CopyTextModal";
 import ItemSuggestModal from "Settings/UI/Modals/ItemSuggestModal";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
 import ToolbarSuggestModal from "Settings/UI/Modals/ToolbarSuggestModal";
+import { learnMoreFr } from "Settings/UI/Utils/SettingsUIUtils";
 import { getItemText } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
 import { Command, ItemView, Notice } from "obsidian";
@@ -310,8 +312,10 @@ export default class CommandManager {
             const commandText = returnDataElement
                 ? `[]()<data data-ntb-command="${command.id}"/> <!-- ${command.name} -->`
                 : `obsidian://note-toolbar?command=${command.id}`;
-            void activeWindow.navigator.clipboard.writeText(commandText);
-            new Notice(t('command.copy-command-notice')).containerEl.addClass('mod-success');
+            const copyTextModal = new CopyTextModal( this.ntb, commandText,
+                t('command.copy-command-title'),
+                learnMoreFr(t('command.copy-command-description'), 'Note-Toolbar-Callouts'));
+            copyTextModal.open();
         });
         modal.open();
     }

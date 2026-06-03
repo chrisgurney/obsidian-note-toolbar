@@ -131,7 +131,6 @@
   "command": {
     "callouts-locked-notice": "锁定笔记工具栏标注",
     "callouts-unlocked-notice": "解锁笔记工具栏标注",
-    "copy-command-notice": "命令已复制到剪贴板",
     "name-copy-cmd-as-data-element": "复制命令的 callout 项目",
     "name-copy-cmd-uri": "复制命令的 URI",
     "name-focus": "聚焦",
@@ -405,7 +404,6 @@
       "label-preview-empty-no-items": "缺少项目，编辑此工具栏以添加项目。",
       "label-review-plugin": "查看插件",
       "menu-copy-id": "复制开发者 ID",
-      "menu-copy-id-notice": "已将工具栏项目的ID复制到剪贴板。",
       "menu-copy-item": "复制项目至工具栏…",
       "menu-copy-item-notice": "已将项目复制到工具栏：{{toolbarName}}",
       "menu-more-actions": "更多操作…",

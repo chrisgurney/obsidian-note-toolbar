@@ -169,7 +169,8 @@
         "success-uri-opened": "Opened: {{uri}}"
     },
     "command": {
-        "copy-command-notice": "Command copied to clipboard",
+        "copy-command-description": "Copy this URI and execute this command from Note Toolbar Callouts.",
+        "copy-command-title": "Command URI",
         "callouts-locked-notice": "Locked Note Toolbar Callouts",
         "callouts-unlocked-notice": "Unlocked Note Toolbar Callouts",
         "name-copy-cmd-as-data-element": "Copy callout item for command",
@@ -482,7 +483,8 @@
             "label-preview-empty-no-items": "No items. Edit this toolbar to add items.",
             "label-review-plugin": "Review\u00A0plugin",
             "menu-copy-id": "Copy developer ID",
-            "menu-copy-id-notice": "Toolbar item ID copied to clipboard.",
+            "menu-copy-id-description": "Copy this ID to reference this item from the API.",
+            "menu-copy-id-title": "Item developer ID",
             "menu-copy-item": "Copy item to toolbar...",
             "menu-copy-item-notice": "Copied item to toolbar: {{toolbarName}}",
             "menu-more-actions": "More actions...",
@@ -794,7 +796,8 @@
             "label-tbar-name-not-set": "Toolbar name not set",
             "link-create": "Create a toolbar",
             "menu-copy-id": "Copy developer ID",
-            "menu-copy-id-notice": "Toolbar ID copied to clipboard.",
+            "menu-copy-id-description": "Copy this ID to reference this toolbar from the API.",
+            "menu-copy-id-title": "Toolbar developer ID",
             "name": "Toolbars",
             "name-with-count": "Toolbars ({{count}})",
             "new-tbar-name": "Toolbar"
