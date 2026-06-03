@@ -1342,6 +1342,7 @@ input[type="text"].note-toolbar-setting-error,
     }
     &.note-toolbar-copy-text-dialog, &.note-toolbar-share-dialog {
         & .setting-item:first-of-type {
+            align-items: flex-start;
             border-top: none;
             flex-direction: column;
             & .setting-item-control {
