@@ -2,7 +2,7 @@ import NoteToolbarPlugin from "main";
 import { Modal, Setting, TextAreaComponent } from "obsidian";
 import { t } from "Settings/NoteToolbarSettings";
 
-export default class CopyModal extends Modal {
+export default class CopyTextModal extends Modal {
 
 	constructor(
         private ntb: NoteToolbarPlugin,

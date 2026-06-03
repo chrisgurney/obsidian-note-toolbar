@@ -1,7 +1,7 @@
 import NoteToolbarPlugin from "main";
 import { ItemView, Menu, MenuItem, Platform } from "obsidian";
 import { ItemType, PositionType, t } from "Settings/NoteToolbarSettings";
-import CopyModal from "Settings/UI/Modals/CopyModal";
+import CopyTextModal from "Settings/UI/Modals/CopyTextModal";
 import ItemModal from "Settings/UI/Modals/ItemModal";
 import ShareModal from "Settings/UI/Modals/ShareModal";
 import StyleModal from "Settings/UI/Modals/StyleModal";
@@ -311,7 +311,7 @@ export default class ContextMenu {
 					.onClick(async (menuEvent) => {
 						if (toolbarSettings) {
 							const calloutExport = await exportToCallout(this.ntb, toolbarSettings, this.ntb.settings.export);
-							const copyModal = new CopyModal( this.ntb, calloutExport,
+							const copyModal = new CopyTextModal( this.ntb, calloutExport,
 								t('export.label-callout'),
 								 learnMoreFr(t('export.label-callout-description'), 'Creating-callouts-from-toolbars'));
 							copyModal.open();

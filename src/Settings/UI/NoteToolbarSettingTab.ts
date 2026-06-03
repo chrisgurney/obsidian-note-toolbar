@@ -8,7 +8,7 @@ import Sortable from 'sortablejs';
 import TextToolbar from 'Toolbar/TextToolbar';
 import { exportToCallout } from 'Utils/ImportExport';
 import { arraymove, getElementPosition, moveElement } from 'Utils/Utils';
-import CopyModal from './Modals/CopyModal';
+import CopyTextModal from './Modals/CopyTextModal';
 import { importFromModal } from './Modals/ImportModal';
 import ShareModal from './Modals/ShareModal';
 import { fixToggleTab, iconTextFr, learnMoreFr } from "./Utils/SettingsUIUtils";
@@ -288,7 +288,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 												.setIcon('copy')
 												.onClick(async () => {
 													const calloutExport = await exportToCallout(this.ntb, toolbar, this.ntb.settings.export);
-													const copyModal = new CopyModal( this.ntb, calloutExport,
+													const copyModal = new CopyTextModal( this.ntb, calloutExport,
 														t('export.label-callout'),
 														learnMoreFr(t('export.label-callout-description'), 'Creating-callouts-from-toolbars'));
 													copyModal.open();
