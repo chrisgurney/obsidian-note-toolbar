@@ -27,16 +27,8 @@ export default class ShareModal extends Modal {
         this.contentEl.empty();
         this.modalEl.addClass('note-toolbar-setting-modal-container');
 
-        this.contentEl.createEl(
-            "p", 
-            { text: learnMoreFr(t('export.label-share-description'), 'Sharing-toolbars') }
-        );
-
-        //
-        // share link
-        //
-
         new Setting(this.contentEl)
+            .setName(learnMoreFr(t('export.label-share-description'), 'Sharing-toolbars'))
             .addTextArea((text: TextAreaComponent) => {
                 text.setValue(this.shareUri);
                 requestAnimationFrame((): void => {

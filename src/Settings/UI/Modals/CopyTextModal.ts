@@ -12,7 +12,7 @@ export default class CopyTextModal extends Modal {
         private notes?: string
     ) {
         super(ntb.app);
-        this.modalEl.addClass('note-toolbar-copy-dialog', 'note-toolbar-setting-dialog-phonefix');
+        this.modalEl.addClass('note-toolbar-copy-text-dialog', 'note-toolbar-setting-dialog-phonefix');
     }
 
     public onOpen() {
@@ -25,10 +25,8 @@ export default class CopyTextModal extends Modal {
         this.contentEl.empty();
         this.modalEl.addClass('note-toolbar-setting-modal-container');
 
-        this.contentEl.createEl('p', { text: this.desc ?? t('copy.description') });
-
         new Setting(this.contentEl)
-            .setName('Copy the text below')
+            .setName(this.desc ?? t('copy.description'))
             .addTextArea((text: TextAreaComponent) => {
                 text.setValue(this.text);
                 requestAnimationFrame((): void => {

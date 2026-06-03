@@ -1323,34 +1323,6 @@ input[type="text"].note-toolbar-setting-error,
     font-size: var(--font-ui-small);
 }
 
-.note-toolbar-copy-dialog,
-.note-toolbar-share-dialog {
-    & .setting-item:first-of-type {
-        border-top: none;
-        /* overflow: hidden; */
-        & .setting-item-info {
-            display: none;
-        }
-        & .setting-item-control {
-            width: 100%;
-            & textarea {
-                height: 4rem;
-                width: 100%;
-            }
-        }
-    }
-}
-
-.is-phone {
-    & .note-toolbar-setting-modal-phone-top-inset-fix {
-        /* fix/workaround for Obsidian v1.5.11 bug: tall modals opened from settings have an inaccessible close button */
-        top: var(--safe-area-inset-top);
-    }
-    & .note-toolbar-setting-modal-phone-bottom-inset-fix {
-        padding-bottom: var(--safe-area-inset-bottom);
-    }
-}
-
 .note-toolbar-setting-modal-container {
     & .setting-item-heading {
         padding-left: 0;
@@ -1367,5 +1339,28 @@ input[type="text"].note-toolbar-setting-error,
                 border-radius: var(--radius-m);
             }
         }
+    }
+    &.note-toolbar-copy-text-dialog, &.note-toolbar-share-dialog {
+        & .setting-item:first-of-type {
+            border-top: none;
+            flex-direction: column;
+            & .setting-item-control {
+                width: 100%;
+                & textarea {
+                    height: 5rem;
+                    width: 100%;
+                }
+            }
+        }
+    }
+}
+
+.is-phone {
+    & .note-toolbar-setting-modal-phone-top-inset-fix {
+        /* fix/workaround for Obsidian v1.5.11 bug: tall modals opened from settings have an inaccessible close button */
+        top: var(--safe-area-inset-top);
+    }
+    & .note-toolbar-setting-modal-phone-bottom-inset-fix {
+        padding-bottom: var(--safe-area-inset-bottom);
     }
 }
