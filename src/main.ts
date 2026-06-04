@@ -16,7 +16,7 @@ import VaultListeners from 'Listeners/VaultListeners';
 import ViewListeners from 'Listeners/ViewListeners';
 import WindowListeners from 'Listeners/WindowListeners';
 import WorkspaceListeners from 'Listeners/WorkspaceListeners';
-import { Platform, Plugin, requireApiVersion, WorkspaceLeaf, WorkspacesPlugin } from 'obsidian';
+import { Platform, Plugin, WorkspaceLeaf, WorkspacesPlugin } from 'obsidian';
 import ProtocolManager from 'Protocol/ProtocolManager';
 import { NoteToolbarSettings, t, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_TIP, VIEW_TYPE_WHATS_NEW } from 'Settings/NoteToolbarSettings';
 import SettingsIcons from 'Settings/SettingsIcons';
@@ -156,7 +156,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.listeners.window.register();
 
 			// add commands
-			if (Platform.isDesktop && requireApiVersion('1.12.2')) this.cli.register();
+			this.cli.register();
 			this.commands.addCommands();
 
 			// prototcol handler
