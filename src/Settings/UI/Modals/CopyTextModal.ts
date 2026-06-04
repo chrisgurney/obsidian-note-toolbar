@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { Modal, Setting, TextAreaComponent } from "obsidian";
+import { Modal, Platform, Setting, TextAreaComponent } from "obsidian";
 import { t } from "Settings/NoteToolbarSettings";
 
 export default class CopyTextModal extends Modal {
@@ -37,9 +37,11 @@ export default class CopyTextModal extends Modal {
                     this.ntb.registerDomEvent(text.inputEl, 'focus', (event) => {
                         text.inputEl.select();
                     });
-                    text.inputEl.addEventListener('copy', () => {
-                        requestAnimationFrame(() => this.close());
-                    });
+                    if (Platform.isDesktop) {
+                        text.inputEl.addEventListener('copy', () => {
+                            requestAnimationFrame(() => this.close());
+                        });
+                    }
                 });
             });
 

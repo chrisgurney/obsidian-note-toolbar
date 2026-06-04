@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { Modal, Setting, TextAreaComponent, ToggleComponent } from "obsidian";
+import { Modal, Platform, Setting, TextAreaComponent, ToggleComponent } from "obsidian";
 import { t, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { toolbarHasMenu } from "Utils/Utils";
 import { fixToggleTab, learnMoreFr } from "../Utils/SettingsUIUtils";
@@ -39,9 +39,11 @@ export default class ShareModal extends Modal {
                     this.ntb.registerDomEvent(text.inputEl, 'focus', (event) => {
                         text.inputEl.select();
                     });
-                    text.inputEl.addEventListener('copy', () => {
-                        requestAnimationFrame(() => this.close());
-                    });
+                    if (Platform.isDesktop) {
+                        text.inputEl.addEventListener('copy', () => {
+                            requestAnimationFrame(() => this.close());
+                        });
+                    }
                 });
             });
 
