@@ -304,7 +304,7 @@ export default class ToolbarRenderer {
 					};
 					embedBlock.addEventListener('transitionend', setToolbarHeight);
 					// fallback: if no transition fires (e.g. on restart), read height after layout settles
-					setTimeout(setToolbarHeight, 200);
+					window.setTimeout(setToolbarHeight, 200);
 				}
                 break;
             }

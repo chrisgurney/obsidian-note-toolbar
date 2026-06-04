@@ -44,7 +44,7 @@ export default class ShareModal extends Modal {
                             window.requestAnimationFrame(() => this.close());
                         });
                     }
-                    setTimeout(() => {
+                    window.setTimeout(() => {
                         text.inputEl.focus();
                         text.inputEl.select();
                     }, 50);
