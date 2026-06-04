@@ -217,7 +217,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * Toggle debugging based on user setting.
 	 */
 	toggleDebugging() {
-		/* eslint-disable no-console */
+		/* eslint-disable no-console -- overriding console functions for use throughout the plugin */
 		// all errors should be logged
 		this.error = console.error.bind(console);
 		// setup debug functions, preserving line numbers

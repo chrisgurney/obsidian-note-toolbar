@@ -1,5 +1,7 @@
 import INoteToolbarApi from "Api/INoteToolbarApi";
-/* globals DataAdapter, KeymapInfo */
+
+declare const DataAdapter: unknown;
+declare const KeymapInfo: unknown;
 
 declare global {
     
