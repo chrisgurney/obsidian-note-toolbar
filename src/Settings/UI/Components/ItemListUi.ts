@@ -364,10 +364,10 @@ export default class ItemListUi {
                     if (currentTarget.querySelector('.note-toolbar-setting-tbar-preview')) {
                         focusOn = ItemFormComponent.Link;
                     }
-                    else if (target instanceof SVGElement || target?.closest('svg') || !!target.querySelector(':scope > svg')) {
+                    else if (target.instanceOf(SVGElement) || target?.closest('svg') || !!target.querySelector(':scope > svg')) {
                         focusOn = ItemFormComponent.Icon;
                     }
-                    else if (target instanceof HTMLSpanElement) {
+                    else if (target.instanceOf(HTMLSpanElement)) {
                         if (target.classList.contains("note-toolbar-setting-item-preview-tooltip")) {
                             focusOn = ItemFormComponent.Tooltip;
                         }
