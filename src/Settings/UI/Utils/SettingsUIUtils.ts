@@ -751,7 +751,7 @@ export default class SettingsUIUtils {
 		setFieldHelp(setting.controlEl, toolbarPreviewFr);
 		const tbarEl = setting.controlEl.querySelector('.note-toolbar-setting-tbar-preview');
 		// only apply fade if the preview is overflowing
-		if (tbarEl) activeWindow.setTimeout(() => {
+		if (tbarEl) window.setTimeout(() => {
 			tbarEl.classList.toggle('note-toolbar-setting-tbar-preview-fade', tbarEl.scrollWidth > tbarEl.clientWidth);
 		}, 0);
 	}

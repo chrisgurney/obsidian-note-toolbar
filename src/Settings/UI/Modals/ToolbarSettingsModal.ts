@@ -518,7 +518,7 @@ export default class ToolbarSettingsModal extends Modal {
 	public scrollToPosition(selectors: string, scrollToClass?: string) {
 		const focusEl = this.contentEl.querySelector(selectors) as HTMLElement;
 		focusEl?.focus();
-		activeWindow.setTimeout(() => { 
+		window.setTimeout(() => { 
 			const scrollToEl = scrollToClass ? focusEl.closest(scrollToClass) as HTMLElement : undefined;
 			scrollToEl?.scrollIntoView({ behavior: 'instant', block: 'center' });
 		}, Platform.isMobile ? 100 : 0); // delay on mobile for the on-screen keyboard

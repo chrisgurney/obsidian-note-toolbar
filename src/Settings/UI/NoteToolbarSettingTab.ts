@@ -112,7 +112,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 				// TODO: does this focus() need a setTimeout? 
 				focusEl?.focus();
 				if (scrollToFocus) {
-					activeWindow.setTimeout(() => { 
+					window.setTimeout(() => { 
 						focusEl?.scrollIntoView({ behavior: 'instant', block: 'center' });
 					}, Platform.isMobile ? 100 : 0); // delay on mobile for the on-screen keyboard	
 				}
@@ -549,7 +549,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 				toolbarSearchEl.setAttribute('data-active', 'true');
 				// set focus in search field
 				const searchInputEl = toolbarSearchEl?.querySelector('input');
-				activeWindow.setTimeout(() => {
+				window.setTimeout(() => {
 					searchInputEl?.focus();
 				}, 50);
 			}

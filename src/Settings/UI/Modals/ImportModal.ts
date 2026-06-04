@@ -88,7 +88,7 @@ export default class ImportModal extends Modal {
             });
 
         // set focus in the textarea
-        activeWindow.setTimeout(() => {
+        window.setTimeout(() => {
             const textArea = this.containerEl.querySelector('textarea') as HTMLElement;
             textArea?.focus();
         }, 50);

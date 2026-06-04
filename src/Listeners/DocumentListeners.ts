@@ -58,7 +58,7 @@ export default class DocumentListeners {
         // possible issue? not always true?
         this.isMouseSelecting = true;
         // timeout is because selectionchange event is asynchronous and might not fire before mouseup
-        activeWindow.setTimeout(() => this.renderPreviewTextToolbar(), 10);
+        window.setTimeout(() => void this.renderPreviewTextToolbar(), 10);
     }
 
     onKeyDown = (event: KeyboardEvent) => {
@@ -107,7 +107,7 @@ export default class DocumentListeners {
         this.isMouseDown = false;
         if (this.ntb.settings.textToolbar && this.previewSelection) {
             // timeout is because selectionchange event is asynchronous and might not fire before mouseup
-            if (this.isMouseSelecting) activeWindow.setTimeout(() => this.renderPreviewTextToolbar(), 10);
+            if (this.isMouseSelecting) window.setTimeout(() => void this.renderPreviewTextToolbar(), 10);
         }
         this.isMouseSelecting = false;
     }

@@ -56,7 +56,7 @@ export default class StyleModal extends Modal {
 			
 		// set initial keyboard focus on the relvant dropdown
 		if (Platform.isDesktop) {
-			activeWindow.setTimeout(() => {
+			window.setTimeout(() => {
 				const dropdown = this.contentEl.querySelector(`#default-style-dropdown > select`) as HTMLElement;
 				dropdown.focus();
 			}, 50);
