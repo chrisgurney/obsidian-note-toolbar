@@ -54,23 +54,13 @@ Expand below to see what's accessed and why. Let me know (via [GitHub ↗](https
   </ul>
   <li><b>Vault Read: Reads individual vault files via the Obsidian API</b></li>
   <ul>
-    <li>Used in Gallery items such as <em>Append text</em>.</li>
     <li>Used by script items to read in a user script to execute it (if configured to do so).</li>
     <li>Used in Note Toolbar's <code>modal</code> API to display a file.</li>
-  </ul>
-  <li><b>Vault Write: Creates or modifies vault files via the Obsidian API</b></li>
-  <ul>
-    <li>Used by Gallery items such as <em>Append text</em>.</li>
   </ul>
   <li><b>Vault Enumeration: Enumerates all files in the vault. Gives the plugin access to every file path in the vault.</b></li>
   <ul>
     <li>Used by the Settings UI to show a list of files in the vault (e.g., to select a script file).</li>
     <li>Used in Note Toolbar's <code>fileSuggester</code> API to allow for file search and selection.</li>
-  </ul>
-  <li><b>Clipboard Access: Reads or writes the system clipboard. May expose content copied from outside Obsidian.</b></li>
-  <ul>
-    <li>The clipboard is <em>read</em>... if using the Gallery's <em>Paste</em> item; or using Note Toolbar's `clipboard` API function (provided as a convenience for user scripts).</li>
-    <li>The clipboard is <em>written</em>... when getting the callout version of a toolbar, getting the developer ID, a command URI, sharing a toolbar, and in various Gallery items that you can choose to add.</li>
   </ul>
 </ul>
 
