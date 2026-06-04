@@ -423,12 +423,13 @@ export default class SettingsManager {
 		}
 
 		switch (item.linkAttr.type) {
-			case ItemType.JavaScript:
+			case ItemType.JavaScript: {
 				if (item.scriptConfig?.expression) {
 					item.scriptConfig.pluginFunction = 'evaluate';
 					return true;
 				}
 				break;
+			}
 			case ItemType.Plugin: {
 				const pluginType = await this.resolvePluginType(item);
 				return pluginType ? true : false;

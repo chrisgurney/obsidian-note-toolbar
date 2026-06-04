@@ -85,14 +85,13 @@
             "uk": "Копіює вибраний текст у буфер обміну."
         },
         "icon": "clipboard-copy",
-        "script": "const e = ntb.app.workspace.activeLeaf.view?.editor;\ntry { await activeWindow.navigator.clipboard.writeText(e.getSelection()); e?.focus(); } catch (e) { console.error(e); new Notice(ntb.t('api.msg.error-console')); }",
         "tooltip": {
             "en": "Copy",
             "ja": "コピー",
             "zh": "复制",
             "uk": "Копіювати"
         },
-        "type": "javascript"
+        "type": "additional"
     },
     {
         "id": "copy-block-link",
@@ -103,14 +102,13 @@
             "uk": "Копіює посилання на поточний блок до буфера обміну."
         },
         "icon": "link-2",
-        "script": "const { metadataCache: m } = app, e = ntb.app.workspace.activeEditor?.editor, f = ntb.app.workspace.getActiveFile(), l = e?.getCursor().line, b = e?.getLine(l).match(/\\^([\\w-]+)/)?.[1] || m.getFileCache(f)?.blocks?.[l]?.id;\nb ? (window.navigator.clipboard.writeText(`[[${f.path}#^${b}]]`), new Notice(ntb.t('api.msg.clipboard-copied'))) : new Notice(ntb.t('api.msg.block-no-id'));",
         "tooltip": {
             "en": "Copy link to block",
             "ja": "ブロックへのリンクをコピー",
             "zh": "复制块链接（Block ID）",
             "uk": "Посилання на блок"
         },
-        "type": "javascript"
+        "type": "additional"
     },
     {
         "id": "copy-note-content",
@@ -121,14 +119,13 @@
             "uk": "Копіюйте вміст поточної нотатки до буфера обміну, ігноруючи властивості."
         },
         "icon": "clipboard-check",
-        "script": "const e = ntb.app.workspace.activeLeaf.view?.editor;\nif (!e) return;\nconst c = e.getValue();\nconst b = c.startsWith('---\\n') ? c.replace(/^---\\n[\\s\\S]*?\\n---\\n*/, '') : c;\nawait activeWindow.navigator.clipboard.writeText(b);\nnew Notice(ntb.t('api.msg.clipboard-copied'));",
         "tooltip": {
             "en": "Copy note content",
             "ja": "ノートの内容をコピー",
             "zh": "复制笔记内容",
             "uk": "Скопіювати вміст нотатки"
         },
-        "type": "javascript"
+        "type": "additional"
     },
     {
         "id": "copy-obsidian-url",
@@ -157,14 +154,13 @@
             "uk": "Вирізає вибраний текст у буфер обміну."
         },
         "icon": "scissors",
-        "script": "const e = ntb.app.workspace.activeLeaf.view?.editor;\ntry { await activeWindow.navigator.clipboard.writeText(e.getSelection()); e.replaceSelection(''); e?.focus(); } catch (e) { console.error(e); new Notice(ntb.t('api.msg.error-console')); }",
         "tooltip": {
             "en": "Cut",
             "ja": "切り取り",
             "zh": "剪切",
             "uk": "Вирізати"
         },
-        "type": "javascript"
+        "type": "additional"
     },
     {
         "id": "cycle-list-checklist",
@@ -717,17 +713,16 @@
         "type": "command"
     },
     {
-        "id": "insert-external-embed",
+        "id": "paste-external-embed",
         "description": {
-            "en": "Add an embedded external link."
+            "en": "Pastes an embedded external link."
         },
         "focus": "editor",
         "icon": "image-play",
-        "script": "const c = await ntb.clipboard().then(t => t.trim());\nconst u = URL.canParse(c) ? c : await ntb.prompt({\n  placeholder: ntb.t('api.ui.prompt-placeholder-url')\n});\nif (!u) return;\nntb.setSelection(`![](${u})`);",
         "tooltip": {
-            "en": "Add external embed"
+            "en": "Paste external embed"
         },
-        "type": "javascript"
+        "type": "additional"
     },
     {
         "id": "insert-horizontal-rule",
@@ -1093,14 +1088,13 @@
             "uk": "Вставте текст з буфера обміну."
         },
         "icon": "clipboard-paste",
-        "script": "const e = ntb.app.workspace.activeLeaf.view?.editor;\ntry { let rs = e.replaceSelection; let text = await activeWindow.navigator.clipboard.readText(); if (text) rs.apply(e, [text]); e?.focus(); } catch (e) { console.error(e); new Notice(ntb.t('api.msg.error-console')); }",
         "tooltip": {
             "en": "Paste",
             "ja": "貼り付け",
             "zh": "粘贴",
             "uk": "Вставити"
         },
-        "type": "javascript"
+        "type": "additional"
     },
     {
         "id": "periodic-notes-daily-next",

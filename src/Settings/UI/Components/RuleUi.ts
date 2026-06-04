@@ -250,12 +250,10 @@ export default class RuleUi {
                                     text: t('setting.mappings.error-folder-already-mapped'), 
                                     attr: { id: "note-toolbar-name-error" }, cls: "note-toolbar-setting-error-message" });
                                 conditionEl.insertAdjacentElement('afterend', errorDiv);
-                                conditionEl.children[0].addClass("note-toolbar-setting-error");
                             }
                         }
                         else {
                             document.getElementById("note-toolbar-name-error")?.remove();
-                            conditionEl.children[0].removeClass("note-toolbar-setting-error");
                             // rule.folder = newRule ? normalizePath(newRule) : "";
                             await this.ntb.settingsManager.save();
                         }

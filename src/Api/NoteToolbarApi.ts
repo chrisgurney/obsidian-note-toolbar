@@ -33,12 +33,15 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
     readonly app: App;
 
     /**
-     * Gets the clipboard value. 
+     * Gets the clipboard value.
+     * Deprecated: Use `await activeWindow.navigator.clipboard.readText()` instead. 
      * 
      * @see INoteToolbarApi.clipboard
+     * @deprecated
      */
-    async clipboard(): Promise<string | null> {
-        return await activeWindow.navigator.clipboard.readText();
+    clipboard(): string | null {
+        new Notice('The clipboard() function is deprecated. See the documentation.');
+        return '';
     }
 
     /**

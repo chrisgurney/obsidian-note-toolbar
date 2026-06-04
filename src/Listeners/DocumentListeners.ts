@@ -15,6 +15,7 @@ export default class DocumentListeners {
 	public pointerY: number = 0;
 
     private previewSelection: Selection | null = null;
+    private sidebarObserver: MutationObserver | null = null;
 
     constructor(
         private ntb: NoteToolbarPlugin
@@ -28,6 +29,25 @@ export default class DocumentListeners {
         this.ntb.registerDomEvent(activeDocument, 'mouseup', this.onMouseUp);
         this.ntb.registerDomEvent(activeDocument, 'mousedown', this.onMouseDown);
         this.ntb.registerDomEvent(activeDocument, 'selectionchange', this.onSelectionChange);
+
+        // track whether sidebar is open on phones, for styling purposes
+        if (Platform.isPhone) {
+            const workspaceEl = this.ntb.app.workspace.containerEl.closest('.workspace');
+            if (workspaceEl) {
+                this.sidebarObserver = new MutationObserver(() => {
+                    const isOpen = workspaceEl?.classList.contains('is-left-sidedock-open') 
+                        || workspaceEl?.classList.contains('is-right-sidedock-open')
+                        || false;
+                    activeDocument.body.toggleClass('ntb-is-sidedock-open', isOpen);
+                });
+                this.sidebarObserver.observe(workspaceEl, { attributes: true, attributeFilter: ['class'] });
+            }
+        }
+
+    }
+
+    public cleanup() {
+        this.sidebarObserver?.disconnect();
     }
 
     onContextMenu = () => {

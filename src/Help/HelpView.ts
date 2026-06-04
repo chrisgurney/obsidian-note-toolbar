@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { ItemView, WorkspaceLeaf } from "obsidian";
-import { PositionType, t, VIEW_TYPE_HELP } from "Settings/NoteToolbarSettings";
+import { PositionType, t, VIEW_TYPE_HELP, VIEW_TYPE_WHATS_NEW } from "Settings/NoteToolbarSettings";
 import { URLS } from "Utils/Urls";
 import { PLUGIN_VERSION } from "version";
 import { iconTextFr } from "../Settings/UI/Utils/SettingsUIUtils";
@@ -62,7 +62,9 @@ export default class HelpView extends ItemView {
 
         guideEl.createDiv({ cls: 'note-toolbar-setting-link' }).append(
             createDiv({ cls: 'note-toolbar-setting-link-text' }, el => el.append(iconTextFr('party-popper', t('setting.help.label-whats-new')))),
-            createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.help.button-open'), href: 'obsidian://note-toolbar?whatsnew', attr: { 'aria-label': t('setting.button-whats-new-tooltip') } })
+            createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.help.button-open'), attr: { 'aria-label': t('setting.button-whats-new-tooltip') } }, el => {
+                el.addEventListener('click', () => void this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_WHATS_NEW, active: true }));
+            })
         );
 
         guideEl.createDiv({ cls: 'note-toolbar-setting-link' }).append(
@@ -72,7 +74,9 @@ export default class HelpView extends ItemView {
 
         guideEl.createDiv({ cls: 'note-toolbar-setting-link' }).append(
             createDiv({ cls: 'note-toolbar-setting-link-text' }, el => el.append(iconTextFr('settings', t('setting.help.label-settings')))),
-            createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.help.button-open'), href: 'obsidian://note-toolbar?settings', attr: { 'aria-label': t('setting.help.tooltip-settings') } })
+            createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.help.button-open'), attr: { 'aria-label': t('setting.help.tooltip-settings') } }, el => {
+                el.addEventListener('click', () => this.ntb.commands.openSettings());
+            })
         );
 
         // Support

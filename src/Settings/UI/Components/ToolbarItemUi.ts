@@ -3,6 +3,7 @@ import NoteToolbarPlugin from "main";
 import { ButtonComponent, debounce, DropdownComponent, ExtraButtonComponent, MarkdownViewModeType, Menu, MenuItem, normalizePath, Notice, PaneType, Platform, setIcon, Setting, SettingGroup, ToggleComponent } from "obsidian";
 import { ComponentType, ItemType, LINK_OPTIONS, SETTINGS_DISCLAIMERS, SettingType, t, TARGET_OPTIONS, ToolbarItemSettings, ToolbarSettings, ViewModeType } from "Settings/NoteToolbarSettings";
 import { addComponentVisibility, getElementPosition, removeComponentVisibility } from "Utils/Utils";
+import CopyTextModal from "../Modals/CopyTextModal";
 import IconSuggestModal from "../Modals/IconSuggestModal";
 import ItemModal from "../Modals/ItemModal";
 import ToolbarSettingsModal, { SettingsAttr } from "../Modals/ToolbarSettingsModal";
@@ -117,7 +118,7 @@ export default class ToolbarItemUi {
             iconField.settingEl.id = 'note-toolbar-item-field-icon';
 
             const labelField = new Setting(textFieldsContainer)
-                .setClass("note-toolbar-setting-item-field")
+                .setClass("note-toolbar-setting-item-label-tooltip")
                 .addText(text => {
                     text
                     .setPlaceholder(t('setting.item.option-label-placeholder'))
@@ -135,7 +136,7 @@ export default class ToolbarItemUi {
             labelField.settingEl.id = 'note-toolbar-item-field-label';
 
             const tooltipField = new Setting(textFieldsContainer)
-                .setClass("note-toolbar-setting-item-field")
+                .setClass("note-toolbar-setting-item-label-tooltip")
                 .addText(text => {
                     text
                     .setPlaceholder(t('setting.item.option-tooltip-placeholder'))
@@ -459,7 +460,7 @@ export default class ToolbarItemUi {
 
         menu.addSeparator();
 
-        if (![ItemType.Break, ItemType.Group, ItemType.Menu, ItemType.Separator, ItemType.Spreader].contains(toolbarItem.linkAttr.type)) {
+        if (![ItemType.Break, ItemType.Group, ItemType.Separator, ItemType.Spreader].contains(toolbarItem.linkAttr.type)) {
 
             // copy item command URI
             if (toolbarItem.hasCommand) {
@@ -469,10 +470,12 @@ export default class ToolbarItemUi {
                         menuItem
                             .setTitle(t('setting.use-item-command.name-copy'))
                             .setIcon('copy')
-                            .onClick(async (menuEvent) => {
+                            .onClick((menuEvent) => {
                                 const commandText = `obsidian://note-toolbar?command=${itemCommand.id}`;
-                                await activeWindow.navigator.clipboard.writeText(commandText);
-                                new Notice(t('command.copy-command-notice')).containerEl.addClass('mod-success');
+                                const copyTextModal = new CopyTextModal( this.ntb, commandText,
+                                    t('command.copy-command-title'),
+                                    learnMoreFr(t('command.copy-command-description'), 'Note-Toolbar-Callouts'));
+                                copyTextModal.open();
                             });
                     });
                 }
@@ -518,9 +521,11 @@ export default class ToolbarItemUi {
             menuItem
                 .setTitle(t('setting.item.menu-copy-id'))
                 .setIcon('code')
-                .onClick(async (menuEvent) => {
-                    await activeWindow.navigator.clipboard.writeText(toolbarItem.uuid);
-                    new Notice(t('setting.item.menu-copy-id-notice')).containerEl.addClass('mod-success');
+                .onClick((menuEvent) => {
+                    const copyTextModal = new CopyTextModal( this.ntb, toolbarItem.uuid,
+                        t('setting.item.menu-copy-id-title'),
+                        learnMoreFr(t('setting.item.menu-copy-id-description'), 'Developer-IDs'));
+                    copyTextModal.open();
                 });
         });
 
@@ -1176,7 +1181,7 @@ export default class ToolbarItemUi {
                 button.extraSettingsEl.tabIndex = 0;
                 this.ntb.settingsUtils.handleKeyClick(button.extraSettingsEl);     
             });
-        advancedSetting.settingEl.addClass('note-toolbar-setting-subfield-advanced');
+        advancedSetting.settingEl.addClass('note-toolbar-setting-subfield-advanced-heading');
         this.ntb.registerDomEvent(advancedSetting.infoEl, 'click', (event) => {
             advancedSettingsDiv.toggleAttribute('data-active');
         });

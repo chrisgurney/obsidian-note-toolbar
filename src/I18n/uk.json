@@ -169,7 +169,6 @@
         "success-uri-opened": "Відкрито: {{uri}}"
     },
     "command": {
-        "copy-command-notice": "Команду скопійовано до буфера обміну",
         "callouts-locked-notice": "Заблокувати виноски Note Toolbar",
         "callouts-unlocked-notice": "Розблоковані виноски Note Toolbar",
         "name-copy-cmd-as-data-element": "Копіювати елемент виноски для команди",
@@ -194,8 +193,6 @@
         "notice-command-updated": "Команда оновлена:\n{{command}}"
     },
     "export": {
-        "button-copy-link": "Копіювати посилання",
-        "button-copy-link-description": "Скопіювати посилання до буфера обміну",
         "item-generic": "Елемент {{number}}",
         "label-callout": "Скопіювати як виноску",
         "label-share": "Поділитися...",
@@ -480,7 +477,6 @@
             "label-preview-empty-no-items": "Немає елементів. Редагуйте цю панель для додавання елементів.",
             "label-review-plugin": "Огляд додатка",
             "menu-copy-id": "Скопіювати ID для розробки",
-            "menu-copy-id-notice": "ID елемента скопійовано до буфера обміну.",
             "menu-copy-item": "Скопіювати до панелі...",
             "menu-copy-item-notice": "Скопійовано елемент до панелі: {{toolbarName}}",
             "menu-more-actions": "Додаткові дії...",
@@ -792,7 +788,6 @@
             "label-tbar-name-not-set": "Не вказано ім'я панелі",
             "link-create": "Створити панель",
             "menu-copy-id": "Скопіювати ID для розробки",
-            "menu-copy-id-notice": "Кулінарний ID скопійовано до буфера обміну.",
             "name": "Панелі",
             "name-with-count": "Панелі ({{count}})",
             "new-tbar-name": "Нова панель"

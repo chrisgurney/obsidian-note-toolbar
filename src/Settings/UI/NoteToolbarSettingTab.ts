@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from 'main';
-import { ButtonComponent, debounce, Menu, MenuItem, normalizePath, Notice, Platform, PluginSettingTab, setIcon, Setting, SettingGroup, setTooltip, ToggleComponent } from 'obsidian';
+import { ButtonComponent, debounce, Menu, MenuItem, normalizePath, Platform, PluginSettingTab, setIcon, Setting, SettingGroup, setTooltip, ToggleComponent } from 'obsidian';
 import { FolderMapping, OBSIDIAN_UI_ELEMENTS, OBSIDIAN_UI_MOBILE_NAVBAR_OPTIONS, RIBBON_ACTION_OPTIONS, RibbonAction, SETTINGS_VERSION, SettingType, t, ToolbarSettings } from 'Settings/NoteToolbarSettings';
 import IconSuggestModal from 'Settings/UI/Modals/IconSuggestModal';
 import FolderSuggester from 'Settings/UI/Suggesters/FolderSuggester';
@@ -8,6 +8,7 @@ import Sortable from 'sortablejs';
 import TextToolbar from 'Toolbar/TextToolbar';
 import { exportToCallout } from 'Utils/ImportExport';
 import { arraymove, getElementPosition, moveElement } from 'Utils/Utils';
+import CopyTextModal from './Modals/CopyTextModal';
 import { importFromModal } from './Modals/ImportModal';
 import ShareModal from './Modals/ShareModal';
 import { fixToggleTab, iconTextFr, learnMoreFr } from "./Utils/SettingsUIUtils";
@@ -37,9 +38,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		private ntb: NoteToolbarPlugin
 	) {
 		super(ntb.app, ntb);
-		// TODO? add back in when more plugins have icons
-		// this.icon = 'circle-ellipsis';
-		// this.ruleUi = new RuleUi(this.plugin, this);
+		this.icon = this.ntb.settings.icon || 'circle-ellipsis';
 	}
 
 	/*************************************************************************
@@ -289,10 +288,10 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 												.setIcon('copy')
 												.onClick(async () => {
 													const calloutExport = await exportToCallout(this.ntb, toolbar, this.ntb.settings.export);
-													await activeWindow.navigator.clipboard.writeText(calloutExport);
-													new Notice(
-														learnMoreFr(t('export.notice-completed'), 'Creating-callouts-from-toolbars')
-													).containerEl.addClass('mod-success');
+													const copyTextModal = new CopyTextModal( this.ntb, calloutExport,
+														t('export.label-callout'),
+														learnMoreFr(t('export.label-callout-description'), 'Creating-callouts-from-toolbars'));
+													copyTextModal.open();
 												});
 										});
 									}
@@ -301,9 +300,11 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 										menuItem
 											.setTitle(t('setting.toolbars.menu-copy-id'))
 											.setIcon('code')
-											.onClick(async (menuEvent) => {
-												await activeWindow.navigator.clipboard.writeText(toolbar.uuid);
-												new Notice(t('setting.toolbars.menu-copy-id-notice')).containerEl.addClass('mod-success');
+											.onClick((menuEvent) => {
+												const copyTextModal = new CopyTextModal( this.ntb, toolbar.uuid,
+													t('setting.toolbars.menu-copy-id-title'),
+													learnMoreFr(t('setting.toolbars.menu-copy-id-description'), 'Developer-IDs'));
+												copyTextModal.open();
 											});
 									});
 									menu.addSeparator();
@@ -651,7 +652,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		if (settingItemsEl) {
 			
 			const itemsContainerEl = createDiv();
-			itemsContainerEl.addClass('note-toolbar-setting-items-list-container');
+			itemsContainerEl.addClasses([ 'note-toolbar-setting-items-list-container', 'note-toolbar-setting-folder-mapping-container' ]);
 
 			if (this.ntb.settings.folderMappings.length == 0) {
 
@@ -775,12 +776,10 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 									text: t('setting.mappings.error-folder-already-mapped'), 
 									attr: { id: "note-toolbar-name-error" }, cls: "note-toolbar-setting-error-message" });
 								toolbarFolderListItemDiv.insertAdjacentElement('afterend', errorDiv);
-								toolbarFolderListItemDiv.children[0].addClass("note-toolbar-setting-error");
 							}
 						}
 						else {
 							document.getElementById("note-toolbar-name-error")?.remove();
-							toolbarFolderListItemDiv.children[0].removeClass("note-toolbar-setting-error");
 							mapping.folder = newFolder ? normalizePath(newFolder) : "";
 							await this.ntb.settingsManager.save();
 						}

@@ -35,18 +35,14 @@ export default interface INoteToolbarApi<T> {
 
     /**
      * Gets the clipboard value.
+     * Deprecated: Use `await activeWindow.navigator.clipboard.readText()` instead. 
      * 
      * @returns The clipboard value or `null`.
      * 
-     * @example
-     * // gets the clipboard value
-     * const value = await ntb.clipboard();
-     * 
-     * new Notice(value);
-     * 
      * @group Utilities
+     * @deprecated
      */
-    clipboard: () => Promise<string | null>;
+    clipboard: () => string | null;
 
     /**
      * Exports the given toolbar as a [Note Toolbar callout](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-Callouts).

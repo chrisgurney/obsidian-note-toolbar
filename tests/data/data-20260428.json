@@ -2623,46 +2623,6 @@
           }
         },
         {
-          "uuid": "ac38b461-50bc-4da6-bdd7-ea4ce39b8389",
-          "icon": "",
-          "label": "",
-          "tooltip": "",
-          "hasCommand": false,
-          "inGallery": false,
-          "link": "",
-          "linkAttr": {
-            "commandCheck": false,
-            "commandId": "",
-            "hasVars": false,
-            "type": "javascript"
-          },
-          "visibility": {
-            "desktop": {
-              "components": [
-                "icon",
-                "label"
-              ]
-            },
-            "mobile": {
-              "components": [
-                "icon",
-                "label"
-              ]
-            },
-            "tablet": {
-              "components": [
-                "icon",
-                "label"
-              ]
-            },
-            "viewMode": "all"
-          },
-          "scriptConfig": {
-            "pluginFunction": "evaluate",
-            "expression": "const e = ntb.app.workspace.activeLeaf.view?.editor;\nif (!e) return;\nconst c = await ntb.clipboard().then(t => t.trim());\nconst u = URL.canParse(c) ? c : await ntb.prompt({\n  placeholder: \"Type a URL\"\n});\nif (!u) return;\ne.replaceRange(`![](${u})`, e.getCursor());"
-          }
-        },
-        {
           "uuid": "a0b47748-78e6-4b30-ae9a-5155e1c499a4",
           "icon": "",
           "label": "",

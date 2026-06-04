@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { ButtonComponent, Modal, Notice, Setting, ToggleComponent } from "obsidian";
+import { Modal, Platform, Setting, TextAreaComponent, ToggleComponent } from "obsidian";
 import { t, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { toolbarHasMenu } from "Utils/Utils";
 import { fixToggleTab, learnMoreFr } from "../Utils/SettingsUIUtils";
@@ -27,28 +27,29 @@ export default class ShareModal extends Modal {
         this.contentEl.empty();
         this.modalEl.addClass('note-toolbar-setting-modal-container');
 
-        this.contentEl.createEl(
-            "p", 
-            { text: learnMoreFr(t('export.label-share-description'), 'Sharing-toolbars') }
-        );
-
-        //
-        // share link
-        //
-
-		new Setting(this.contentEl)
-			.setName(this.shareUri)
-			.addButton((button: ButtonComponent) => {
-				button
-					.setButtonText(t('export.button-copy-link'))
-					.setTooltip(t('export.button-copy-link-description'))
-					.setCta()
-					.onClick(async () => {
-                        await activeWindow.navigator.clipboard.writeText(this.shareUri);
-                        new Notice(t('export.notice-shared')).containerEl.addClass('mod-success');
-                        this.close();
-					});
-			});
+        new Setting(this.contentEl)
+            .setName(learnMoreFr(t('export.label-share-description'), 'Sharing-toolbars'))
+            .addTextArea((text: TextAreaComponent) => {
+                text.setValue(this.shareUri);
+                requestAnimationFrame((): void => {
+                    text.inputEl.focus();
+                    text.inputEl.select();
+                    text.inputEl.readOnly = true;
+                    text.inputEl.scrollTop = 0;
+                    this.ntb.registerDomEvent(text.inputEl, 'focus', (event) => {
+                        text.inputEl.select();
+                    });
+                    if (Platform.isDesktop) {
+                        text.inputEl.addEventListener('copy', () => {
+                            requestAnimationFrame(() => this.close());
+                        });
+                    }
+                    setTimeout(() => {
+                        text.inputEl.focus();
+                        text.inputEl.select();
+                    }, 50);
+                });
+            });
 
         new Setting(this.contentEl)
             .setName(t('export.option-uri'))

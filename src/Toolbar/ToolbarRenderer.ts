@@ -7,7 +7,11 @@ import { calcComponentVisToggles, getViewId, hasStyle, isValidUri, putFocusInMen
 
 // note: make sure CSS is updated if these are changed
 export enum TbarData {
+	EmbedIsNoteToolbar = 'data-is-ntb',
+    EmbedMeta = 'data-ntb-meta',
 	FabMeta = 'data-fab-metadata',
+	Launchpad = 'data-is-launchpad',
+	LiItemType = 'data-ntb-type',
 	Name = 'data-name',
 	OverrideTbar = 'data-override-tbar',
 	Position = 'data-tbar-position',
@@ -149,6 +153,11 @@ export default class ToolbarRenderer {
             return;
         }
 
+		// for styling the meta container, when the toolbar is in the properties position
+		if (view instanceof MarkdownView) {
+			view.containerEl.setAttribute(TbarData.Position, position);
+		}
+
         if (!(view instanceof MarkdownView)) {
             const isToolbarVisible = this.ntb.utils.hasToolbarForItemView(view);
             if (!isToolbarVisible) {
@@ -175,6 +184,7 @@ export default class ToolbarRenderer {
 			}
 		}
 
+		// create toolbar container
         let noteToolbarElement: HTMLElement | undefined;
         const embedBlock = activeDocument.createElement((position === PositionType.TabBar) ? 'button' : 'div');
         embedBlock.addClass('cg-note-toolbar-container');
@@ -186,6 +196,7 @@ export default class ToolbarRenderer {
             [TbarData.Updated]: toolbar.updated,
             [TbarData.ViewMode]: markdownViewMode
         });
+		embedBlock.toggleAttribute(TbarData.Launchpad, useLaunchpad);
 
         // render the toolbar based on its position
         switch (position) {
@@ -225,6 +236,7 @@ export default class ToolbarRenderer {
                 const div = activeDocument.createElement("div");
                 div.append(noteToolbarElement);
                 embedBlock.addClasses(['cm-embed-block', 'cm-callout', 'cg-note-toolbar-bar-container']);
+				embedBlock.setAttribute(TbarData.EmbedMeta, [...toolbar.defaultStyles, ...toolbar.mobileStyles].join('-'));
                 embedBlock.append(div);
                 this.ntb.registerDomEvent(embedBlock, 'contextmenu', (e) => this.ntb.toolbars.onContextMenu(e));
                 this.ntb.registerDomEvent(embedBlock, 'keydown', (e) => this.ntb.toolbars.onKeyDown(e));	
@@ -502,6 +514,7 @@ export default class ToolbarRenderer {
 				// create its list item container 
 				const noteToolbarLi = activeDocument.createElement("li");
 				noteToolbarLi.dataset.index = i.toString();
+				noteToolbarLi.setAttribute('data-ntb-type', item.linkAttr.type);
 				// set its visibility
 				if (!showInMode) noteToolbarLi.addClass('hide-in-mode');
 				if (!showOnMobile) noteToolbarLi.addClass('hide-on-mobile');
@@ -621,7 +634,10 @@ export default class ToolbarRenderer {
 
 		// apply custom classes to the sub-menu by getting the note's toolbar 
 		const activeToolbar = this.ntb.settingsManager.getCurrentToolbar();
-		if (activeToolbar && activeToolbar.customClasses) menu.dom.addClasses([...activeToolbar.customClasses.split(' ')]);
+		if (activeToolbar) {
+			menu.dom.setAttribute(TbarData.EmbedMeta, [...activeToolbar.defaultStyles, ...activeToolbar.mobileStyles].join('-'));
+			if (activeToolbar.customClasses) menu.dom.addClasses([...activeToolbar.customClasses.split(' ')]);
+		}
 
 		return menu;
 
@@ -690,7 +706,10 @@ export default class ToolbarRenderer {
 								subMenu.dom.addClass('note-toolbar-menu');
 								// apply custom classes to the sub-menu by getting the note's toolbar 
 								const activeToolbar = this.ntb.settingsManager.getCurrentToolbar();
-								if (activeToolbar && activeToolbar.customClasses) subMenu.dom.addClasses([...activeToolbar.customClasses.split(' ')]);
+								if (activeToolbar) {
+									subMenu.dom.setAttribute(TbarData.EmbedMeta, [...activeToolbar.defaultStyles, ...activeToolbar.mobileStyles].join('-'));
+									if (activeToolbar.customClasses) subMenu.dom.addClasses([...activeToolbar.customClasses.split(' ')]);
+								}
 								// render the sub-menu items
 								const menuToolbar = this.ntb.settingsManager.getToolbar(toolbarItem.link);
 								if (menuToolbar) {
@@ -1015,13 +1034,6 @@ export default class ToolbarRenderer {
 	 */
 	updateActiveItem(activeItemId?: string): void {
 		this.ntb.app.saveLocalStorage(LocalVar.ActiveItem, activeItemId ?? '');
-	}
-
-	/**
-	 * Only updates the last clicked position if there isn't already one stored.
-	 */
-	updateLastClickedPos(): void {
-		if (!this.lastClickedPos) this.lastClickedPos = this.ntb.utils.getPosition();
 	}
 
 	/** 

@@ -3,7 +3,9 @@ import NoteToolbarPlugin from "main";
 import { Notice, PaneType, Platform } from "obsidian";
 import { DEFAULT_ITEM_VISIBILITY_SETTINGS, EMPTY_TOOLBAR, EMPTY_TOOLBAR_ID, ItemFocusType, ItemType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { confirmWithModal } from "Settings/UI/Modals/ConfirmModal";
+import LinkModal from "Settings/UI/Modals/LinkModal";
 import ToolbarSuggestModal from "Settings/UI/Modals/ToolbarSuggestModal";
+import { URLS } from "Utils/Urls";
 
 export type GalleryItemSettings = {
     id: string;
@@ -89,6 +91,17 @@ export default class GalleryManager {
 
         // prompts for certain item types
         switch (galleryItem.linkAttr.type) {
+			case ItemType.Additional: {
+				const linkModal = new LinkModal(
+					this.ntb, 
+					URLS.GH_USER_GUIDE + '/Additional-Gallery-items', 
+					t('gallery.label-additional-title', { item: galleryItem.tooltip }), 
+					t('gallery.label-additional-description'),
+					t('gallery.label-additional-cta')
+				);
+				linkModal.open();
+				break;
+			}
             case ItemType.Command: {
                 // check if the item's command exists, before displaying toolbar modal
                 const command = this.ntb.app.commands.commands[galleryItem.linkAttr.commandId];
@@ -178,7 +191,7 @@ export default class GalleryManager {
                     pluginFunction: 'TBD'
                 } : undefined,
                 tooltip: item.tooltip ? (item.tooltip[language] || item.tooltip['en']) : '',
-                visibility: DEFAULT_ITEM_VISIBILITY_SETTINGS
+                visibility: { ...DEFAULT_ITEM_VISIBILITY_SETTINGS }
             }));
         
         this.items.sort((a, b) => a.tooltip.localeCompare(b.tooltip));

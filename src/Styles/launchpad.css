@@ -2,7 +2,7 @@
  * New tab toolbar (Launchpad) 
  */
 
-.note-toolbar-launchpad-container {
+body .workspace .note-toolbar-launchpad-container {
     display: flex;
     flex-direction: column;
     overflow-y: auto;
@@ -14,7 +14,7 @@
     }
 }
 
-.note-toolbar-launchpad {
+body .workspace .note-toolbar-launchpad {
     & .callout-content {
         margin-left: auto;
         margin-right: auto;

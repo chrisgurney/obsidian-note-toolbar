@@ -599,26 +599,20 @@ new Notice(currentFile.name);
 
 ***
 
-### clipboard
+### ~~clipboard~~
 
-> **clipboard**: () => `Promise`\<`string` \| `null`\>
+> **clipboard**: () => `string` \| `null`
 
 Gets the clipboard value.
+Deprecated: Use `await activeWindow.navigator.clipboard.readText()` instead.
 
 #### Returns
 
-`Promise`\<`string` \| `null`\>
+`string` \| `null`
 
 The clipboard value or `null`.
 
-#### Example
-
-```ts
-// gets the clipboard value
-const value = await ntb.clipboard();
-
-new Notice(value);
-```
+#### Deprecated
 
 ***
 

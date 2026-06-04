@@ -64,10 +64,10 @@ export default class ProtocolManager {
 			if (activeFile) {
 				if (toolbar) {
 					await this.ntb.render.renderAsMenu(toolbar, activeFile).then(menu => { 
-						this.ntb.render.updateLastClickedPos();
-						if (this.ntb.render.lastClickedPos) {
+                        const position = this.ntb.render.lastClickedPos ?? this.ntb.utils.getPosition('pointer');
+                        if (position) {
 							this.ntb.render.showMenuAtPosition(menu,
-								{ x: this.ntb.render.lastClickedPos.left, y: this.ntb.render.lastClickedPos.bottom, overlap: true, left: false }
+								{ x: position.left, y: position.bottom, overlap: true, left: false }
 							)
 						}
 						else {

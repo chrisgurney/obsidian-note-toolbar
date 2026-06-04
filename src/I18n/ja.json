@@ -129,7 +129,6 @@
         }
     },
     "command": {
-        "copy-command-notice": "コマンドをクリップボードにコピーしました",
         "callouts-locked-notice": "Note Toolbarコールアウトをロックしました",
         "callouts-unlocked-notice": "Note Toolbarコールアウトのロックを解除しました",
         "name-copy-cmd-as-data-element": "コマンドのコールアウトアイテムをコピー",
@@ -152,8 +151,6 @@
         "name-use-item": "使用: {{item}}"
     },
     "export": {
-        "button-copy-link": "リンクをコピー",
-        "button-copy-link-description": "このリンクをクリップボードにコピー",
         "item-generic": "アイテム{{number}}",
         "label-callout": "コールアウトとしてコピー",
         "label-share": "共有...",
@@ -401,7 +398,6 @@
             "label-preview-empty-no-items": "アイテムがありません。このツールバーを編集してアイテムを追加してください。",
             "label-review-plugin": "プラグインをレビュー",
             "menu-copy-id": "開発者IDをコピー",
-            "menu-copy-id-notice": "ツールバーアイテムIDをクリップボードにコピーしました。",
             "menu-copy-item": "アイテムをツールバーにコピー...",
             "menu-copy-item-notice": "アイテムをツールバーにコピーしました: {{toolbarName}}",
             "menu-more-actions": "その他のアクション...",

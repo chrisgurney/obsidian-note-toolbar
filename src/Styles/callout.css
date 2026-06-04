@@ -2,37 +2,36 @@
  * Callouts
  */
 
-.cm-embed-block:has(> div > .callout[data-callout="note-toolbar"]:not(.note-toolbar-launchpad)) {
-    &:hover {
-        box-shadow: none !important; /* hide the border on hover of the toolbar callout */
-        & .edit-block-button {
-            display: none; /* hide the edit icon that appears */
-        }
+ /* hide built-in callout border on hover + edit icon */
+.cm-embed-block.cm-embed-block:not([data-is-launchpad]).cg-note-toolbar-container:hover,
+.cm-embed-block.cm-embed-block:not([data-is-launchpad])[data-is-ntb]:hover {
+    box-shadow: none; 
+    & .edit-block-button {
+        display: none;
     }
 }
 
-.cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="sticky"]),
-.cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="mstcky"]) {
-    &[data-tbar-position="props"] {
-        position: sticky;
-        top: var(--cg-nt-tbar-top-sticky-pos-desktop);
-        z-index: 2;
-        .is-mobile &, .is-phone & {
-            top: var(--cg-nt-tbar-top-sticky-pos-mobile);
-        }
-    }
-}
-
-/* default, if not specified */
-.cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="nosticky"]) {
-    top: inherit;
-    position: relative;
-}
-
-.cm-embed-block:has(> div > .callout[data-callout="note-toolbar"][data-callout-metadata*="mnstcky"]) {
+/* sticky callouts and props toolbars */
+.cm-embed-block.cm-embed-block[data-is-ntb]:is([data-ntb-meta*="sticky"], [data-ntb-meta*="mstcky"]),
+.cm-embed-block.cm-embed-block.cg-note-toolbar-container[data-tbar-position="props"]:is([data-ntb-meta*="sticky"], [data-ntb-meta*="mstcky"]) {
+    position: sticky;
+    top: var(--cg-nt-tbar-top-sticky-pos-desktop);
+    z-index: 2;
     .is-mobile &, .is-phone & {
+        top: var(--cg-nt-tbar-top-sticky-pos-mobile);
+    }
+}
+
+.cm-embed-block.cm-embed-block[data-is-ntb] {
+    &[data-ntb-meta*="nosticky"] {
         top: inherit;
         position: relative;
+    }
+    &[data-ntb-meta*="mnstcky"] {
+        .is-mobile &, .is-phone & {
+            top: inherit;
+            position: relative;
+        }
     }
 }
 
@@ -43,42 +42,31 @@
     }
 }
 
-.is-phone .cm-embed-block[data-tbar-position="top"] {
+body.is-phone .cm-embed-block[data-tbar-position="top"] {
     margin-top: var(--ntb-tbar-top-mt-phone);
     padding-top: var(--ntb-tbar-top-pt-phone);
 }
 
-.is-phone:has(.cg-note-toolbar-container[data-tbar-position="top"]) .view-header {
-    margin-top: var(--ntb-tbar-top-header-mt-phone);
-    padding-top: var(--ntb-tbar-top-header-pt-phone);
-}
-
-/* fixes header div getting squished when the toolbar's at the top position */
-/* .view-header:has(+ [data-tbar-position="top"]) {
-    min-height: var(--header-height);
-} */
-
-/* removes padding above the top navigation, when Obsidian's Floating navigation setting is disabled */
-/* .is-phone .view-header:has(+ [data-tbar-position="top"]) {
-    padding-top: 0;
-} */
-
-/* removes safe area inset from these variables, as it's taken into account above the toolbar */
-.is-phone:has(.cg-note-toolbar-container[data-tbar-position="top"]) .view-content {
-    --view-top-fade-mask: var(--ntb-tbar-top-fade-mask);
-    --view-top-spacing: var(--ntb-tbar-top-spacing);
-    --view-top-spacing-markdown: var(--ntb-tbar-top-spacing-md);
+body.is-phone .mod-root .cg-note-toolbar-container[data-tbar-position="top"] {
+    & ~ .view-header {
+        margin-top: var(--ntb-tbar-top-header-mt-phone);
+        padding-top: var(--ntb-tbar-top-header-pt-phone);
+    }
+    /* removes safe area inset from these variables, as it's taken into account above the toolbar */
+    & ~ .view-content {
+        --view-top-fade-mask: var(--ntb-tbar-top-fade-mask);
+        --view-top-spacing: var(--ntb-tbar-top-spacing);
+        --view-top-spacing-markdown: var(--ntb-tbar-top-spacing-md);
+    }
 }
 
 .callout[data-callout="note-toolbar-output"] {
-    background-color: var(--background-primary) !important;
-    background-image: unset !important;
-    margin: 0em !important;
-    padding: 0em;
-    &:has(> .callout-title) {
-        border: 4px dashed var(--background-secondary);
-        padding: 1em;
-    }
+    background: none;
+    background-color: var(--background-primary);
+    background-image: unset;
+    border: 4px dashed var(--background-secondary);
+    margin: 0em;
+    padding: 1em;
     & .callout-content {
         color: var(--background-secondary);       
     }
@@ -95,16 +83,22 @@
     }
 }
 
-.callout[data-callout="note-toolbar"] {
+/* overrides Cupertino theme's background gradient */
+body.mod-macos .callout.callout[data-callout='note-toolbar-output'] {
+    background: none;
+}
 
-    /* fix: (#378) reset CSS rules applied by themes (e.g., Velocity) */
-    background-image: unset !important;
-    box-shadow: unset !important;
+body .callout[data-callout="note-toolbar"],
+body .workspace .callout[data-callout="note-toolbar"] {
+
+    /* fix: (#378) rese t CSS rules applied by themes (e.g., Velocity) */
+    background-image: unset;
+    box-shadow: unset;
 
     background-color: var(--cg-nt-tbar-bg-color);
     border-radius: var(--cg-nt-tbar-border-radius);
     border-style: none;
-    outline: none !important;
+    outline: none;
     padding: 0;
     padding-inline: var(--cg-nt-tbar-padding-inline);
     width: 100%;
@@ -116,7 +110,7 @@
     & .callout-content {
 
         /* fix: (#378) reset CSS rules applied by themes (e.g., Primary) */
-        box-shadow: unset !important;
+        box-shadow: unset;
 
         & ul {
             display: flex;
@@ -165,7 +159,7 @@
                 }
             }
             &.hide-in-mode {
-                display: none !important;
+                display: none;
             }
             & span.hide {
                 display: none;
@@ -178,24 +172,21 @@
             & span.hide-on-desktop {
                 display: none;
                 .is-mobile & {
-                    display: block !important;
+                    display: block;
                 }
             }
             &::before {
-                content: none !important; /* removes decoration added by ITS theme */
+                content: none; /* removes decoration added by ITS theme */
             }
         }
 
-        & li:has(> data[data-spread]),
-        & li:has(> a.external-link + data[data-spread]) {
+        & li[data-ntb-type="spreader"] {
             flex: auto;
             & a:hover {
                 background: none;
             }
         }
-        & li:has(> hr),
-        & li:has(> data[data-sep]),
-        & li:has(> a.external-link + data[data-sep]) {
+        & li[data-ntb-type="separator"] {
             border-left: var(--cg-nt-item-sep-width) solid var(--cg-nt-item-sep-color);
             margin: var(--cg-nt-item-sep-margin-y) var(--cg-nt-item-sep-margin-x);
             width: 1px;
@@ -206,9 +197,7 @@
                 margin: initial;
             }
         }
-        & li:has(> br),
-        & li:has(> data[data-break]),
-        & li:has(> a.external-link + data[data-break]) {
+        & li[data-ntb-type="break"] {
             flex-basis: 100%;
             height: 0;
         }
@@ -253,15 +242,18 @@
             background-image: none; /* hide the external link icon */
             gap: 0 0.5em;
             &::after {
-                content: none !important; /* removes decoration added by ITS theme */
+                content: none; /* removes decoration added by ITS theme */
             }
         }
 
         & span.cm-iconize-icon, span.iconize-icon-in-link {
-            transform: unset !important;
             align-items: center;
             vertical-align: middle;
             margin-right: unset;
+            /* fix to counter the inline transform on the span */
+            & svg {
+                transform: translateY(-13%);
+            }
             /* fix for bold Iconize icons #162 */
             & svg svg[stroke-width='16px'] {
                 stroke-width: 2;
@@ -377,17 +369,14 @@
                     min-width: var(--ntb-callout-card-width-mobile);
                 }
                 & a, span.external-link {
-                    padding: 16px !important;
-                    align-items: center;
+                    padding: 16px;
+                    align-items: start;
                     border-radius: var(--radius-m);
                     color: var(--cg-nt-item-text-color);
+                    margin-top: 48px;
                     width: 100%;
                     text-wrap: wrap;
                     user-select: none;
-                    &:has(span.cm-iconize-icon) {                        
-                        align-items: start;
-                        margin-top: 48px;
-                    }
                     & span.cm-iconize-icon {
                         align-items: center;
                         display: flex;
@@ -531,7 +520,7 @@
     }
 
     &[data-callout-metadata*="wide"] {
-        max-width: none !important;
+        max-width: none;
     }
 
     &[data-callout-metadata*="mwd"] {
@@ -675,10 +664,6 @@
             background-color: unset;
             border-radius: unset;
         }
-        &:not([data-tbar-position="bottom"]):hover {
-            /* themes like Cyber Glow add a hover color to callouts; remove it for toolbars */
-            background-color: unset;
-        }
     }
     
 }
@@ -707,15 +692,13 @@ body.is-phone .cg-note-toolbar-container {
             }
         }
     }
-    &[data-tbar-position*="top"] {
-        &:has(.callout[data-callout="note-toolbar"]:is([data-callout-metadata*="autohide"], [data-callout-metadata*="mhd"]):not([data-callout-metadata*="mnhd"])) {
-            transition: opacity 0.3s ease-in-out, transform 0.3s ease-out;
-            body.is-hidden-nav & {
-                opacity: 0;
-                transition: opacity 0.3s ease-in-out;
-                transform: translateY(calc(var(--ntb-toolbar-height) * -1));
-                visibility: hidden;
-            }
+    &[data-tbar-position*="top"]:is([data-ntb-meta*="autohide"], [data-ntb-meta*="mhd"]):not([data-ntb-meta*="mnhd"]) {
+        transition: opacity 0.3s ease-in-out, transform 0.3s ease-out;
+        body.is-hidden-nav & {
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            transform: translateY(calc(var(--ntb-toolbar-height) * -1));
+            visibility: hidden;
         }
     }
 }

@@ -133,6 +133,7 @@
         }
     },
     "cli": {
+        "error-cannot-add-additional-item": "Error: This item ({{item}}) is available on the Additional Gallery items page in the User Guide, which contains optional items that require manual setup.",
         "error-dv-code-and-file-exclusive": "Error: Provide eval, query, or file/path",
         "error-dv-code-or-file-required": "Error: eval/query or file/path is required",
         "error-file-not-found": "Error: File not found: {{file}}",
@@ -169,7 +170,8 @@
         "success-uri-opened": "Opened: {{uri}}"
     },
     "command": {
-        "copy-command-notice": "Command copied to clipboard",
+        "copy-command-description": "Copy this URI and execute this command from Note Toolbar Callouts.",
+        "copy-command-title": "Command URI",
         "callouts-locked-notice": "Locked Note Toolbar Callouts",
         "callouts-unlocked-notice": "Unlocked Note Toolbar Callouts",
         "name-copy-cmd-as-data-element": "Copy callout item for command",
@@ -193,13 +195,15 @@
         "name-use-item": "Use: {{item}}",
         "notice-command-updated": "Command updated:\n{{command}}"
     },
+    "copy": {
+        "description": "Copy the text below."
+    },
     "export": {
-        "button-copy-link": "Copy link",
-        "button-copy-link-description": "Copy this link to your clipboard",
         "item-generic": "Item{{number}}",
         "label-callout": "Copy as callout",
+        "label-callout-description": "Copy and paste this callout into a note. Open settings to adjust formatting.",
         "label-share": "Share...",
-        "label-share-description": "Share this link with another Note Toolbar user to add your toolbar to their vault.",
+        "label-share-description": "Copy and share this link with another Note Toolbar user to add your toolbar to their vault.",
         "label-share-preview": "preview",
         "notice-completed": "Toolbar copied to clipboard as callout. Open settings to adjust formatting.",
         "notice-shared": "Note Toolbar link copied to clipboard",
@@ -214,6 +218,9 @@
         "error-missing-item-type": "Gallery item: Missing item type property",
         "error-missing-property": "Missing plugin or script property in Gallery data.",
         "label-add-item": "Click or tap to add any of these to a toolbar:",
+        "label-additional-cta": "Open Additional Gallery items ↗",
+        "label-additional-description": "This item is not included in the default Gallery.\n\nFollow the instructions on the **Additional Gallery items** page, which contains optional items that require manual setup.",
+        "label-additional-title": "How to add: {{item}}",
         "label-plugin": "{{plugin}}",
         "label-requires-plugin": "Requires plugin: {{plugin}}",
         "label-suggestions": "SUGGESTIONS FROM ITEM GALLERY",
@@ -480,7 +487,8 @@
             "label-preview-empty-no-items": "No items. Edit this toolbar to add items.",
             "label-review-plugin": "Review\u00A0plugin",
             "menu-copy-id": "Copy developer ID",
-            "menu-copy-id-notice": "Toolbar item ID copied to clipboard.",
+            "menu-copy-id-description": "Copy this ID to reference this item from the API.",
+            "menu-copy-id-title": "Item developer ID",
             "menu-copy-item": "Copy item to toolbar...",
             "menu-copy-item-notice": "Copied item to toolbar: {{toolbarName}}",
             "menu-more-actions": "More actions...",
@@ -792,7 +800,8 @@
             "label-tbar-name-not-set": "Toolbar name not set",
             "link-create": "Create a toolbar",
             "menu-copy-id": "Copy developer ID",
-            "menu-copy-id-notice": "Toolbar ID copied to clipboard.",
+            "menu-copy-id-description": "Copy this ID to reference this toolbar from the API.",
+            "menu-copy-id-title": "Toolbar developer ID",
             "name": "Toolbars",
             "name-with-count": "Toolbars ({{count}})",
             "new-tbar-name": "Toolbar"

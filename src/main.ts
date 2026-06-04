@@ -24,6 +24,7 @@ import SettingsManager from 'Settings/SettingsManager';
 import NoteToolbarSettingTab from 'Settings/UI/NoteToolbarSettingTab';
 import SettingsUIUtils from 'Settings/UI/Utils/SettingsUIUtils';
 import CalloutHandler from 'Toolbar/CalloutHandler';
+import CalloutPlugin from 'Toolbar/CalloutPlugin';
 import TextToolbar, { TextToolbarClass } from 'Toolbar/TextToolbar';
 import ToolbarElementHelper from 'Toolbar/ToolbarElementHelper';
 import ToolbarHandler from 'Toolbar/ToolbarHandler';
@@ -174,6 +175,9 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.commands.setupItemCommands();
 			this.commands.setupToolbarCommands();
 
+			// register extension to modify editable callout blocks, for styling
+			this.registerEditorExtension(CalloutPlugin(this));
+
 			// register the text toolbar if enabled; this might be required for backwards compat (#451)
 			if (this.settings.textToolbar) {
 				this.textToolbar = TextToolbar(this);
@@ -197,6 +201,9 @@ export default class NoteToolbarPlugin extends Plugin {
 		if (this.render.floatingToolbarEl) this.render.floatingToolbarEl.remove();
 		// remove the global API
 		if (window["ntb"]) delete window["ntb"];
+
+		// cleanup listeners
+		this.listeners.document.cleanup();
 
 		this.debug('UNLOADED');
 

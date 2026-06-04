@@ -6,7 +6,7 @@
     border-radius: var(--cg-nt-tbar-border-radius);
     /* fix: (#90) box-shadow appearing over top of text */
     /* box-shadow: 0 0 0 1px var(--cg-nt-tbar-bg-color); */
-    &:has(.callout[data-callout-metadata*="autohide"]) {
+    &[data-ntb-meta*="autohide"] {
         box-shadow: none;
     }
     margin-bottom: 1em;
@@ -26,7 +26,7 @@
         z-index: var(--cg-nt-tbar-z-index);
         & .cg-note-toolbar-callout {
             margin-bottom: 0;
-            margin-inline: auto auto !important;
+            margin-inline: auto auto;
             transition: border-top 0.5s ease-out;
         }
     }
@@ -49,8 +49,8 @@
             }
             /* fix: bottom margin needs to be removed when keyboard is open on phone */
             .is-phone.ntb-is-keyboard-open & {
-                margin-bottom: unset !important;
-                transition: unset !important;
+                margin-bottom: unset;
+                transition: unset;
             }
         }
 
@@ -125,7 +125,7 @@
 
 .is-phone .cg-note-toolbar-container[data-tbar-position*="bottom"] {
     /* if toolbar doesn't wrap, container needs a constrained width so it's scrollable */
-    &:has(.cg-note-toolbar-callout[data-callout-metadata*="mnwrp"]) {
+    &[data-ntb-meta*="mnwrp"] {
         max-width: 100%;
     }
     /* reduce padding to better align with formatting toolbar */
@@ -135,13 +135,12 @@
 }
 
 /* hides the FAB when a sidebar is open on phones */
-.is-phone .app-container:has(.workspace.is-left-sidedock-open) .cg-note-toolbar-container[data-tbar-position*="fab"],
-.is-phone .app-container:has(.workspace.is-right-sidedock-open) .cg-note-toolbar-container[data-tbar-position*="fab"] {
+body.is-phone.ntb-is-sidedock-open .cg-note-toolbar-container[data-tbar-position*="fab"] {
     display: none;
 }
 
 /* remove spacing after props section, only if toolbar is in props position */
 /* TODO: apply class to .metadata-container when in props position instead of using :has() */
-.metadata-container:has(+ .cg-note-toolbar-bar-container[data-tbar-position="props"]) {
+.workspace-leaf-content[data-tbar-position*="props"] .metadata-container {
     margin-block-end: 0;
 }

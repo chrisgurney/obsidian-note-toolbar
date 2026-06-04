@@ -1,7 +1,7 @@
 import { getLanguage, PaneType } from "obsidian";
 
 /* updates link to plugin's release notes and displays What's New view */
-export const WHATSNEW_VERSION = '1.32';
+export const WHATSNEW_VERSION = '1.33';
 
 /* only update when settings structure changes to trigger migrations */
 export const SETTINGS_VERSION = 20260428.1;
@@ -76,6 +76,7 @@ export const enum FileType {
 }
 // note: can't make this a constant as it's used in Object.values()
 export enum ItemType {
+	Additional = 'additional', // used for Gallery items that are provided as examples externally
 	Break = 'break',
 	Command = 'command',
 	Dataview = 'dataview',
@@ -175,6 +176,7 @@ export const MOBILE_STYLE_COMPLIMENTS: MobileStyleType[][] = [
 ];
 
 export const SettingFieldItemMap: Record<ItemType, SettingType> = {
+	[ItemType.Additional]: SettingType.Ignore,
 	[ItemType.Break]: SettingType.Ignore,
 	[ItemType.Command]: SettingType.Command,
 	[ItemType.Dataview]: SettingType.Script,

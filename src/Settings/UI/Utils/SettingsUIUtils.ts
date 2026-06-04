@@ -8,6 +8,7 @@ import { PLUGIN_VERSION } from "version";
 import { confirmWithModal } from "../Modals/ConfirmModal";
 import ItemModal from "../Modals/ItemModal";
 import ItemSuggestModal, { ItemSuggestMode } from "../Modals/ItemSuggestModal";
+import LinkModal from "../Modals/LinkModal";
 import ToolbarSettingsModal from "../Modals/ToolbarSettingsModal";
 import ToolbarSuggestModal from "../Modals/ToolbarSuggestModal";
 import NoteToolbarSettingTab from "../NoteToolbarSettingTab";
@@ -213,10 +214,10 @@ export default class SettingsUIUtils {
 		if (showEditLink) {
 			const toolbarLinkContainer = createDiv();
 			toolbarLinkContainer.addClass('note-toolbar-setting-tbar-preview-edit');
-			const toolbarLink = createEl('a');
-			toolbarLink.href = "obsidian://note-toolbar?toolbarsettings=" + encodeURIComponent(toolbar.name);
-			toolbarLink.setText(t('setting.item.label-preview-edit', { toolbar: toolbar.name, interpolation: { escapeValue: false } }));
-			toolbarLinkContainer.appendChild(toolbarLink);
+			const toolbarLinkEl = createEl('a');
+			toolbarLinkEl.addEventListener('click', () => this.ntb.settingsManager.openToolbarSettings(toolbar));
+			toolbarLinkEl.setText(t('setting.item.label-preview-edit', { toolbar: toolbar.name, interpolation: { escapeValue: false } }));
+			toolbarLinkContainer.appendChild(toolbarLinkEl);
 			toolbarFr.appendChild(toolbarLinkContainer);
 		}
 
@@ -457,6 +458,19 @@ export default class SettingsUIUtils {
 							void parent.itemListUi.addItemHandler(selectedItem.linkAttr.type, itemContainer);
 							return;
 						}
+					}
+
+					const isAdditionalItem = selectedItem.linkAttr.type === ItemType.Additional;
+					if (isAdditionalItem) {
+						const linkModal = new LinkModal(
+							this.ntb, 
+							URLS.GH_USER_GUIDE + '/Additional-Gallery-items', 
+							t('gallery.label-additional-title', { item: selectedItem.tooltip }), 
+							t('gallery.label-additional-description'),
+							t('gallery.label-additional-cta')
+						);
+						linkModal.open();
+						return;
 					}
 
 					const newItem = await this.ntb.settingsManager.duplicateToolbarItem(toolbar, selectedItem, toolbarInsertIndex);

@@ -128,7 +128,6 @@
         }
     },
     "command": {
-        "copy-command-notice": "Befehl in Zwischenablage kopiert",
         "callouts-locked-notice": "Gesperrte Note Toolbar Callouts",
         "callouts-unlocked-notice": "Entsperrte Note Toolbar Callouts",
         "name-copy-cmd-as-data-element": "Callout Element für Befehl kopieren",
@@ -149,8 +148,6 @@
         "name-use-item": "Benutze: {{item}}"
     },
     "export": {
-        "button-copy-link": "Link kopieren",
-        "button-copy-link-description": "Link in die Zwischenablage kopieren",
         "item-generic": "Element{{number}}",
         "label-callout": "Als Hinweis kopieren",
         "label-share": "Teilen...",
@@ -380,7 +377,6 @@
             "label-preview-empty-no-items": "Keine Elemente. Toolbar bearbeiten, um Elemente hinzuzufügen.",
             "label-review-plugin": "Review\u00A0-Plugin",
             "menu-copy-id": "Entwickler-ID kopieren",
-            "menu-copy-id-notice": "Toolbar Element-ID in die Zwischenablage kopiert.",
             "menu-copy-item": "Element in die Toolbar kopieren...",
             "menu-copy-item-notice": "Elemement in die Toolbar kopiert: {{toolbarName}}",
             "menu-more-actions": "Weitere Aktionen...",
