@@ -107,7 +107,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 
 		// scroll to provided selector, or last scroll position
 		if (focusSelector) {
-			requestAnimationFrame(() => {
+			window.requestAnimationFrame(() => {
 				const focusEl = this.containerEl.querySelector(focusSelector) as HTMLElement;
 				// TODO: does this focus() need a setTimeout? 
 				focusEl?.focus();
@@ -121,7 +121,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		else if (this.lastScrollPosition != null && this.lastScrollPosition > 0) {
 			// wait for content to render before scrolling
 			const targetPosition = this.lastScrollPosition;
-			requestAnimationFrame(() => {
+			window.requestAnimationFrame(() => {
 				this.containerEl.scrollTo({ top: targetPosition, behavior: "auto" });
 				// this.ntb.debug("Restored scroll to:", targetPosition);
 			});
@@ -334,7 +334,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 						});
 
 					// for performance, render previews after a slight delay
-					requestAnimationFrame(() => {
+					window.requestAnimationFrame(() => {
 						toolbarListItemSetting.descEl.append(this.ntb.settingsUtils.createToolbarPreviewFr(toolbar, this.ntb.settingsManager));
 					});
 

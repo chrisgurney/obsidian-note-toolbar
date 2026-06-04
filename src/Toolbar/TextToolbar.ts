@@ -107,7 +107,7 @@ export class TextToolbarClass implements PluginValue {
             return;
         }
 
-        requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
 
             if (!this.selection) return;
 

@@ -31,7 +31,7 @@ export default class ShareModal extends Modal {
             .setName(learnMoreFr(t('export.label-share-description'), 'Sharing-toolbars'))
             .addTextArea((text: TextAreaComponent) => {
                 text.setValue(this.shareUri);
-                requestAnimationFrame((): void => {
+                window.requestAnimationFrame((): void => {
                     text.inputEl.focus();
                     text.inputEl.select();
                     text.inputEl.readOnly = true;
@@ -41,7 +41,7 @@ export default class ShareModal extends Modal {
                     });
                     if (Platform.isDesktop) {
                         text.inputEl.addEventListener('copy', () => {
-                            requestAnimationFrame(() => this.close());
+                            window.requestAnimationFrame(() => this.close());
                         });
                     }
                     setTimeout(() => {

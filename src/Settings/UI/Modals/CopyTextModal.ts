@@ -29,7 +29,7 @@ export default class CopyTextModal extends Modal {
             .setName(this.desc ?? t('copy.description'))
             .addTextArea((text: TextAreaComponent) => {
                 text.setValue(this.text);
-                requestAnimationFrame((): void => {
+                window.requestAnimationFrame((): void => {
                     text.inputEl.focus();
                     text.inputEl.select();
                     text.inputEl.readOnly = true;
@@ -39,7 +39,7 @@ export default class CopyTextModal extends Modal {
                     });
                     if (Platform.isDesktop) {
                         text.inputEl.addEventListener('copy', () => {
-                            requestAnimationFrame(() => this.close());
+                            window.requestAnimationFrame(() => this.close());
                         });
                     }
                     setTimeout(() => {
