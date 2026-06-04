@@ -1008,7 +1008,7 @@ export function getDisclaimersFr(disclaimers: {[key: string]: string}[], keysToC
 	keysToCheck.forEach(keyToCheck => {
 		const disclaimer = disclaimers.find(d => keyToCheck in d);
 		if (disclaimer) {
-			if (!first) disclaimersFr.append(document.createElement('br'));
+			if (!first) disclaimersFr.append(activeDocument.createElement('br'));
 			disclaimersFr.append('* ', getValueForKey(disclaimers, keyToCheck) );
 			first = false;
 		}

@@ -245,7 +245,7 @@ export default class RuleUi {
                             //     }
                             // )
                         ) {
-                            if (document.getElementById("note-toolbar-name-error") === null) {
+                            if (activeDocument.getElementById("note-toolbar-name-error") === null) {
                                 const errorDiv = createEl("div", { 
                                     text: t('setting.mappings.error-folder-already-mapped'), 
                                     attr: { id: "note-toolbar-name-error" }, cls: "note-toolbar-setting-error-message" });
@@ -253,7 +253,7 @@ export default class RuleUi {
                             }
                         }
                         else {
-                            document.getElementById("note-toolbar-name-error")?.remove();
+                            activeDocument.getElementById("note-toolbar-name-error")?.remove();
                             // rule.folder = newRule ? normalizePath(newRule) : "";
                             await this.ntb.settingsManager.save();
                         }
