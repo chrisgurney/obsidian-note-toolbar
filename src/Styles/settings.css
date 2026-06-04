@@ -243,12 +243,18 @@
     }
 
     & .note-toolbar-setting-position-group {
-        & .setting-items > .setting-item:nth-last-child(2) {
-            padding-bottom: 0;
+        & .setting-items {
+            & .setting-item {
+                align-items: center;
+            }
+            & > .setting-item:nth-last-child(2) {
+                padding-bottom: 0;
+            }
+            & > .setting-item:last-child {
+                border-top: none;
+            }
         }
-        & .setting-items > .setting-item:last-child {
-            border-top: none;
-        }
+ 
     }
 
     & .note-toolbar-setting-top-border {
@@ -423,6 +429,9 @@
                     border: none;
                     padding: 0em;
                     flex: 0 0 100%;
+                    &::before {
+                        border: none;
+                    }
                 }
                 & .setting-item-info {
                     align-self: unset;
