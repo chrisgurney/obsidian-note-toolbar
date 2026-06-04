@@ -42,6 +42,10 @@ export default class CopyTextModal extends Modal {
                             requestAnimationFrame(() => this.close());
                         });
                     }
+                    setTimeout(() => {
+                        text.inputEl.focus();
+                        text.inputEl.select();
+                    }, 50);
                 });
             });
 

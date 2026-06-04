@@ -44,6 +44,10 @@ export default class ShareModal extends Modal {
                             requestAnimationFrame(() => this.close());
                         });
                     }
+                    setTimeout(() => {
+                        text.inputEl.focus();
+                        text.inputEl.select();
+                    }, 50);
                 });
             });
 
