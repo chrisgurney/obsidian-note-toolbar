@@ -3,6 +3,7 @@ import tsparser from "@typescript-eslint/parser";
 import tseslint from 'typescript-eslint';
 import { defineConfig } from "eslint/config";
 import obsidianmd from "eslint-plugin-obsidianmd";
+import { deprecate } from "node:util";
 
 export default defineConfig([
 
@@ -21,6 +22,7 @@ export default defineConfig([
 
     // You can add your own configuration to override or add rules
     rules: {
+      "@typescript-eslint/no-deprecated": "warn",
     },
   },
 ]);
