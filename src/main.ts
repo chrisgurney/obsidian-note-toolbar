@@ -57,7 +57,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 	listeners!: {
 		callout: CalloutListeners;
-		document: DocumentListeners;
+		doc: DocumentListeners;
 		metadata: MetadataListeners;
 		vault: VaultListeners;
 		view: ViewListeners;
@@ -93,7 +93,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		// listeners
 		this.listeners = {
 			callout: new CalloutListeners(this),
-			document: new DocumentListeners(this),
+			doc: new DocumentListeners(this),
 			metadata: new MetadataListeners(this),
 			vault: new VaultListeners(this),
 			view: new ViewListeners(this),
@@ -152,7 +152,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.listeners.metadata.register();
 			this.listeners.vault.register();
 			this.listeners.view.register();
-			this.listeners.document.register();	
+			this.listeners.doc.register();	
 			this.listeners.window.register();
 
 			// add commands
@@ -203,7 +203,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		if (window["ntb"]) delete window["ntb"];
 
 		// cleanup listeners
-		this.listeners.document.cleanup();
+		this.listeners.doc.cleanup();
 
 		this.debug('UNLOADED');
 

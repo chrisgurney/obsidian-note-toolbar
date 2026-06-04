@@ -36,14 +36,14 @@ export class TextToolbarClass implements PluginValue {
         // if there's no text toolbar set, there's nothing to do; or
         // if disabled, do not display for keyboard selections
         if (!this.ntb.settings.textToolbar ||
-            (!this.ntb.settings.textToolbarOnKeyboard && this.ntb.listeners.document.isKeyboardSelection)
+            (!this.ntb.settings.textToolbarOnKeyboard && this.ntb.listeners.doc.isKeyboardSelection)
         ) {
             if (this.ntb.render.hasFloatingTextToolbar()) this.ntb.render.removeFloatingToolbar();
             return;
         };
         
         // don't show toolbar until mouse selection is complete
-        if (this.ntb.listeners.document.isMouseDown) {
+        if (this.ntb.listeners.doc.isMouseDown) {
             // fix: in source mode the mouse up event doesn't seem to fire after selection
             const currentView = this.ntb.app.workspace.getActiveViewOfType(MarkdownView);
             const isSourceMode = currentView?.getState().source;
@@ -61,9 +61,9 @@ export class TextToolbarClass implements PluginValue {
         // this.ntb.debug('selection:', selection);
 
         // right-clicking for some reason selects the current line if it's empty
-        if (this.ntb.listeners.document.isContextOpening && this.selection.from === this.selection.from + 1) {
+        if (this.ntb.listeners.doc.isContextOpening && this.selection.from === this.selection.from + 1) {
             // this.ntb.debug('TextToolbar: selection is just new line - exiting');
-            this.ntb.listeners.document.isContextOpening = false;
+            this.ntb.listeners.doc.isContextOpening = false;
             return;
         }
 
