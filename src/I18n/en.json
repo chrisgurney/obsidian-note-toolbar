@@ -133,6 +133,7 @@
         }
     },
     "cli": {
+        "error-cannot-add-additional-item": "Error: This item ({{item}}) is available on the Additional Gallery items page in the User Guide, which contains optional items that require manual setup.",
         "error-dv-code-and-file-exclusive": "Error: Provide eval, query, or file/path",
         "error-dv-code-or-file-required": "Error: eval/query or file/path is required",
         "error-file-not-found": "Error: File not found: {{file}}",
@@ -217,6 +218,9 @@
         "error-missing-item-type": "Gallery item: Missing item type property",
         "error-missing-property": "Missing plugin or script property in Gallery data.",
         "label-add-item": "Click or tap to add any of these to a toolbar:",
+        "label-additional-cta": "Open Additional Gallery items ↗",
+        "label-additional-description": "This item is not included in the default Gallery.\n\nFollow the instructions on the **Additional Gallery items** page, which contains optional items that require manual setup.",
+        "label-additional-title": "How to add: {{item}}",
         "label-plugin": "{{plugin}}",
         "label-requires-plugin": "Requires plugin: {{plugin}}",
         "label-suggestions": "SUGGESTIONS FROM ITEM GALLERY",

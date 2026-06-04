@@ -76,6 +76,7 @@ export const enum FileType {
 }
 // note: can't make this a constant as it's used in Object.values()
 export enum ItemType {
+	Additional = 'additional', // used for Gallery items that are provided as examples externally
 	Break = 'break',
 	Command = 'command',
 	Dataview = 'dataview',
@@ -175,6 +176,7 @@ export const MOBILE_STYLE_COMPLIMENTS: MobileStyleType[][] = [
 ];
 
 export const SettingFieldItemMap: Record<ItemType, SettingType> = {
+	[ItemType.Additional]: SettingType.Ignore,
 	[ItemType.Break]: SettingType.Ignore,
 	[ItemType.Command]: SettingType.Command,
 	[ItemType.Dataview]: SettingType.Script,

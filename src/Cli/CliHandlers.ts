@@ -231,6 +231,7 @@ export default class CliHandlers {
                 const galleryItemId = id.replace('gallery:', '');
                 item = this.ntb.gallery.getItemById(galleryItemId);
                 if (!item) { cliResult += color(t('cli.error-invalid-item', { item: id }), 'red') + '\n'; continue; }
+                if (item.linkAttr.type === ItemType.Additional) { cliResult += color(t('cli.error-cannot-add-additional-item', { item: item.tooltip }), 'red') + '\n'; continue; }
                 const [newItem] = await this.ntb.gallery.addItemToToolbar(toolbar, item, itemPosition);
                 if (newItem && itemPosition !== undefined) itemPosition++;
             }

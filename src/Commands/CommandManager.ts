@@ -305,7 +305,7 @@ export default class CommandManager {
     }
 
     /**
-     * Copies the selected command to the clipboard as a NTB URI or callout data element.
+     * Provides the selected command as a NTB URI or callout data element.
      */
     copy(returnDataElement: boolean = false) {
         const modal = new CommandSuggestModal(this.ntb, (command) => {
