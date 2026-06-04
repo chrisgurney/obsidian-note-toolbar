@@ -652,7 +652,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		if (settingItemsEl) {
 			
 			const itemsContainerEl = createDiv();
-			itemsContainerEl.addClass('note-toolbar-setting-items-list-container');
+			itemsContainerEl.addClasses([ 'note-toolbar-setting-items-list-container', 'note-toolbar-setting-folder-mapping-container' ]);
 
 			if (this.ntb.settings.folderMappings.length == 0) {
 

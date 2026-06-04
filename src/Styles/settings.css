@@ -187,6 +187,10 @@
         }
     }
 
+    & .note-toolbar-setting-folder-mapping-container {
+        padding: var(--setting-items-padding-y) var(--setting-items-padding-x);
+    }
+
     & .note-toolbar-setting-folder-list-item-container {
         align-items: center;
         display: flex;
