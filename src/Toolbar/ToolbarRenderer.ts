@@ -731,7 +731,7 @@ export default class ToolbarRenderer {
 						}	
 
 						menu.addItem((item: MenuItem) => {
-							const itemTitleFr = document.createDocumentFragment();
+							const itemTitleFr = activeDocument.createDocumentFragment();
 							itemTitleFr.append(title);
 							// show hotkey
 							if (!Platform.isPhone) {

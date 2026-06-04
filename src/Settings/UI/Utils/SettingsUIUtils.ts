@@ -137,12 +137,12 @@ export default class SettingsUIUtils {
 		showEditLink: boolean = false
 	): DocumentFragment {
 
-		const toolbarFr: DocumentFragment = document.createDocumentFragment();
+		const toolbarFr: DocumentFragment = activeDocument.createDocumentFragment();
 
 		const previewContainer = toolbarFr.createDiv();
 		previewContainer.addClass('note-toolbar-setting-tbar-preview');
 
-		const itemsFr: DocumentFragment = document.createDocumentFragment();
+		const itemsFr: DocumentFragment = activeDocument.createDocumentFragment();
 
 		if (toolbar.items.length > 0) {
 			toolbar.items
@@ -181,7 +181,7 @@ export default class SettingsUIUtils {
 								defaultItemFr.addClass("note-toolbar-setting-toolbar-list-preview-item");
 								if (item.icon) {
 									if (itemIcon) {
-										const iconFr = document.createDocumentFragment();
+										const iconFr = activeDocument.createDocumentFragment();
 										iconFr.appendChild(itemIcon.cloneNode(true) as SVGSVGElement);
 										defaultItemFr.append(iconFr);
 									}
@@ -238,7 +238,7 @@ export default class SettingsUIUtils {
 			const helpContainerEl = settingsDiv.createDiv();
 			helpContainerEl.addClass('note-toolbar-setting-help-section-phone');
 
-			const helpDesc = document.createDocumentFragment();
+			const helpDesc = activeDocument.createDocumentFragment();
 			helpDesc.append("v" + PLUGIN_VERSION, " • ");
 			const whatsNewLink = helpDesc.createEl("a", { href: "#", text: t('setting.button-whats-new') });
 			this.ntb.registerDomEvent(whatsNewLink, 'click', async (event) => { 
@@ -265,7 +265,7 @@ export default class SettingsUIUtils {
 		}
 		else {
 
-			const helpDesc = document.createDocumentFragment();
+			const helpDesc = activeDocument.createDocumentFragment();
 			const whatsNewLink = helpDesc.createEl("a", { href: "#", text: t('setting.button-whats-new') });
 			this.ntb.registerDomEvent(whatsNewLink, 'click', async (event) => { 
 				await this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_WHATS_NEW, active: true });
@@ -309,8 +309,8 @@ export default class SettingsUIUtils {
 	 */
 	emptyMessageFr(message: string, linkText?: string, linkCallback?: () => void): DocumentFragment {
 
-		const messageFr = document.createDocumentFragment();
-		const messageFrText = document.createElement("i");
+		const messageFr = activeDocument.createDocumentFragment();
+		const messageFrText = activeDocument.createElement("i");
 		messageFrText.textContent = message;
 		messageFr.append(messageFrText);
 
@@ -380,7 +380,7 @@ export default class SettingsUIUtils {
 	}
 
 	getToolbarUsageFr(toolbar: ToolbarSettings, parent: ToolbarSettingsModal): DocumentFragment {
-		const usageFr = document.createDocumentFragment();
+		const usageFr = activeDocument.createDocumentFragment();
 		const usageStats = this.getToolbarUsageText(toolbar);
 		if (usageStats) {
 			usageFr.append(t('setting.usage.description'));
@@ -724,7 +724,7 @@ export default class SettingsUIUtils {
 						// as it's not easy to listen for plugins being enabled,
 						// user will have to click a refresh link to dismiss the error
 						this.ntb.registerDomEvent(errorLink, 'click', (event) => {
-							const refreshLink = document.createDocumentFragment().createEl('a', { text: t('setting.item.option-command-error-refresh'), href: '#' } );
+							const refreshLink = activeDocument.createDocumentFragment().createEl('a', { text: t('setting.item.option-command-error-refresh'), href: '#' } );
 							const refreshIcon = refreshLink.createSpan();
 							setIcon(refreshIcon, 'refresh-cw');
 							const oldLink = event.currentTarget as HTMLElement;
@@ -1003,7 +1003,7 @@ export function fixToggleTab(toggle: ToggleComponent) {
  * @returns DocumentFragment with disclaimers to show in settings UI
  */
 export function getDisclaimersFr(disclaimers: {[key: string]: string}[], keysToCheck: string[]): DocumentFragment {
-	const disclaimersFr = document.createDocumentFragment();
+	const disclaimersFr = activeDocument.createDocumentFragment();
 	let first = true;
 	keysToCheck.forEach(keyToCheck => {
 		const disclaimer = disclaimers.find(d => keyToCheck in d);
@@ -1058,7 +1058,7 @@ export function getValueForKey(dict: {[key: string]: string}[], key: string): st
 }
 
 export function iconTextFr(icon: string, text: string): DocumentFragment {
-	const headingFr = document.createDocumentFragment();
+	const headingFr = activeDocument.createDocumentFragment();
 	const headingEl = headingFr.createEl('span');
 	headingEl.addClass('note-toolbar-setting-text-with-icon');
 	const headingIcon = headingEl.createEl('span');
@@ -1076,7 +1076,7 @@ export function iconTextFr(icon: string, text: string): DocumentFragment {
  * @returns DocumentFragment containing the message and styling.
  */
 export function learnMoreFr(message: string, page: string, linkText: string = t('setting.button-learn-more')): DocumentFragment {
-	const messageFr = document.createDocumentFragment();
+	const messageFr = activeDocument.createDocumentFragment();
 	messageFr.append(
 		message, ' ',
 	);
@@ -1093,7 +1093,7 @@ export function learnMoreFr(message: string, page: string, linkText: string = t(
  * @returns DocumentFragment containing the message and styling.
  */
 export function headingLearnMoreFr(title: string, desc: string, page: string, linkText: string = t('setting.button-learn-more')): DocumentFragment {
-	const messageFr = document.createDocumentFragment();
+	const messageFr = activeDocument.createDocumentFragment();
 	messageFr.append(title);
 
 	// description + learn more link
@@ -1116,7 +1116,7 @@ export function pluginLinkFr(commandId: string, linkText?: string): DocumentFrag
 	const pluginId = commandId.includes(':') ? commandId.split(':')[0].trim() : undefined;
 	// don't show Community Plugins link for Obsidian's built-in commands
 	if (pluginId && pluginId !== 'workspace') {
-		pluginLinkFr = document.createDocumentFragment();
+		pluginLinkFr = activeDocument.createDocumentFragment();
 		// TODO: return link to core plugin settings if ID is in CORE_PLUGIN_IDS
 		const pluginLink = pluginLinkFr.createEl('a', { 
 			href: `obsidian://show-plugin?id=${pluginId}`, 

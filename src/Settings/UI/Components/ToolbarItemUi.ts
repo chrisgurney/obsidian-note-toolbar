@@ -812,7 +812,7 @@ export default class ToolbarItemUi {
                         fieldDiv.removeClass('note-toolbar-setting-item-link-field');
                         fieldDiv.addClass('note-toolbar-setting-plugin-error');
                         fieldDiv.setText(t('adapter.error.plugin-disabled'));
-                        const pluginLinkFr = document.createDocumentFragment();
+                        const pluginLinkFr = activeDocument.createDocumentFragment();
                         const pluginLink = pluginLinkFr.createEl('a', { 
                             href: `obsidian://show-plugin?id=${type}`, 
                             text: LINK_OPTIONS[type]
@@ -916,7 +916,7 @@ export default class ToolbarItemUi {
                                 const isNativeMenusEnabled: boolean = !!this.ntb.app.vault.getConfig('nativeMenus');
                                 if (isNativeMenusEnabled) {
                                     menuHelpFr.append(
-                                        document.createElement('br'),
+                                        activeDocument.createElement('br'),
                                         getDisclaimersFr(SETTINGS_DISCLAIMERS, ['nativeMenus']));
                                 }
                                 setFieldHelp(menuSetting.controlEl, menuHelpFr);
@@ -1242,7 +1242,7 @@ export default class ToolbarItemUi {
     }
 
     getUriTargetDescription(target: PaneType | 'default' | 'modal'): DocumentFragment {
-        const descFr = document.createDocumentFragment();
+        const descFr = activeDocument.createDocumentFragment();
         descFr.append(t('setting.item.option-uri-target-description'));
         if (Platform.isPhone && ['split', 'window'].includes(target)) descFr.append(descFr.createEl('br'), '* ', t('setting.item.option-uri-target-disclaimer-device'));
         if (Platform.isTablet && target === 'window') descFr.append(descFr.createEl('br'), '* ', t('setting.item.option-uri-target-disclaimer-device'));
@@ -1274,7 +1274,7 @@ export default class ToolbarItemUi {
             case ItemType.Group:
             case ItemType.Menu: {
                 const menuGroupToolbar = this.ntb.settingsManager.getToolbar(toolbarItem.link);
-                const fieldHelp = document.createDocumentFragment();
+                const fieldHelp = activeDocument.createDocumentFragment();
                 if (menuGroupToolbar) fieldHelp.append(this.ntb.settingsUtils.createToolbarPreviewFr(menuGroupToolbar, undefined, true))
                     else fieldHelp.append(
                         learnMoreFr(
@@ -1310,7 +1310,7 @@ export default class ToolbarItemUi {
         button.buttonEl.toggleClass('note-toolbar-setting-state-active', isCurrentlyHidden);
 
         setIcon(button.buttonEl, this.visIcons[platform][state]);
-        if (label) button.buttonEl.appendChild(document.createTextNode(label));
+        if (label) button.buttonEl.appendChild(activeDocument.createTextNode(label));
         button.setTooltip(tooltip);
 	}
 

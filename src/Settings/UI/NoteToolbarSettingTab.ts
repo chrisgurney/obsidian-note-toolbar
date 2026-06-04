@@ -232,7 +232,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 			this.ntb.settings.toolbars.forEach(
 				(toolbar) => {
 					
-					const toolbarNameFr = document.createDocumentFragment();
+					const toolbarNameFr = activeDocument.createDocumentFragment();
 					toolbarNameFr.append(toolbar.name ? toolbar.name : t('setting.toolbars.label-tbar-name-not-set'));
 					// show hotkey
 					if (!Platform.isPhone) {
@@ -771,7 +771,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 								}
 							)
 						) {
-							if (document.getElementById("note-toolbar-name-error") === null) {
+							if (activeDocument.getElementById("note-toolbar-name-error") === null) {
 								const errorDiv = createEl("div", { 
 									text: t('setting.mappings.error-folder-already-mapped'), 
 									attr: { id: "note-toolbar-name-error" }, cls: "note-toolbar-setting-error-message" });
@@ -779,7 +779,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 							}
 						}
 						else {
-							document.getElementById("note-toolbar-name-error")?.remove();
+							activeDocument.getElementById("note-toolbar-name-error")?.remove();
 							mapping.folder = newFolder ? normalizePath(newFolder) : "";
 							await this.ntb.settingsManager.save();
 						}

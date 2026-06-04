@@ -95,8 +95,8 @@ export default class ToolbarStyleUi {
         );
         defaultStyleDropdown.controlEl.id = 'default-style-dropdown';
 
-        const defaultDesc = document.createDocumentFragment();
-        defaultDesc.append(t('setting.styles.option-default-description'), document.createElement('br'));
+        const defaultDesc = activeDocument.createDocumentFragment();
+        defaultDesc.append(t('setting.styles.option-default-description'), activeDocument.createElement('br'));
         defaultDesc.append(getDisclaimersFr(DEFAULT_STYLE_DISCLAIMERS, this.toolbar.defaultStyles));
 
         styleGroup.addSetting((defaultSetting) => {
@@ -172,8 +172,8 @@ export default class ToolbarStyleUi {
                     })
         );
 
-        const mobileDesc = document.createDocumentFragment();
-        mobileDesc.append(t('setting.styles.option-mobile-description'), document.createElement('br'));
+        const mobileDesc = activeDocument.createDocumentFragment();
+        mobileDesc.append(t('setting.styles.option-mobile-description'), activeDocument.createElement('br'));
         mobileDesc.append(getDisclaimersFr(MOBILE_STYLE_DISCLAIMERS, this.toolbar.mobileStyles));
 
         styleGroup.addSetting((mobileSetting) => {
