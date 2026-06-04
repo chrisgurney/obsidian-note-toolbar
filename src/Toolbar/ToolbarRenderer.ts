@@ -211,7 +211,7 @@ export default class ToolbarRenderer {
                         await this.renderAsMenu(toolbar, file, this.ntb.settings.showEditInFabMenu).then(menu => {
                             navigator.vibrate(50);
                             menu.showAtPosition(event);
-                            if (event instanceof KeyboardEvent) putFocusInMenu();
+                            if (event.instanceOf(KeyboardEvent)) putFocusInMenu();
                         });
                     });
                 }
