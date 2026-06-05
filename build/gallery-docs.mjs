@@ -34,6 +34,10 @@ export function galleryDocs(itemsFile, galleryFile, outputFile) {
             //     description += ` • Uses plugin: ${item.pluginName})`;
             // }
 
+            if (item.type === 'additional') {
+                description += ` *Add from: [[Additional Gallery items]]*`;
+            }
+
             const exclusionNote = getExclusionNote(item);
             description += `${exclusionNote ? ` *${exclusionNote}*` : ''}`;
             

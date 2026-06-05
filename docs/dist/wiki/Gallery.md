@@ -41,13 +41,13 @@ For quick text editing and history control.
 
 | Item | Description |
 | --- | --- |
-| Copy | Copies the selected text to the clipboard. |
-| Cut | Cuts the selected text to the clipboard. |
-| Paste | Pastes the text from the clipboard. |
+| Copy | Copies the selected text to the clipboard. *Add from: [[Additional Gallery items]]* |
+| Cut | Cuts the selected text to the clipboard. *Add from: [[Additional Gallery items]]* |
+| Paste | Pastes the text from the clipboard. *Add from: [[Additional Gallery items]]* |
 | Undo | Reverts the latest action. |
 | Redo | Reapplies the last undone action. |
 | Clear formatting | Remove all text formatting. |
-| Copy note content | Copy body of the note to the clipboard, ignoring frontmatter. |
+| Copy note content | Copy body of the note to the clipboard, ignoring frontmatter. *Add from: [[Additional Gallery items]]* |
 
 ## Editing
 
@@ -59,7 +59,7 @@ Adjust the order and arrangement of content.
 | Move line down | Move the current line down. |
 | Toggle comment | Add or remove comments. |
 | Toggle inline math | Apply or remove inline math formatting. |
-| Copy link to block | Copies a link to the current block to the clipboard. |
+| Copy link to block | Copies a link to the current block to the clipboard. *Add from: [[Additional Gallery items]]* |
 
 ## Files
 
@@ -121,7 +121,7 @@ Add various types of content like links or media.
 | Add internal link | Add an internal link. |
 | Insert table | Insert a table. |
 | Add embed | Add an embedded file or note. |
-| Paste external embed | Pastes an embedded external link. |
+| Paste external embed | Pastes an embedded external link. *Add from: [[Additional Gallery items]]* |
 | Insert attachment | Insert a file attachment. |
 | Insert math block | Insert a math block. |
 
