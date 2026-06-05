@@ -604,7 +604,6 @@ new Notice(currentFile.name);
 > **clipboard**: () => `string` \| `null`
 
 Gets the clipboard value.
-Deprecated: Use `await activeWindow.navigator.clipboard.readText()` instead.
 
 #### Returns
 
@@ -613,6 +612,8 @@ Deprecated: Use `await activeWindow.navigator.clipboard.readText()` instead.
 The clipboard value or `null`.
 
 #### Deprecated
+
+Since 1.33. Use `await activeWindow.navigator.clipboard.readText()` instead.
 
 ***
 

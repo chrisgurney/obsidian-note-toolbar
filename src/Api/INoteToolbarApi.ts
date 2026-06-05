@@ -35,12 +35,11 @@ export default interface INoteToolbarApi<T> {
 
     /**
      * Gets the clipboard value.
-     * Deprecated: Use `await activeWindow.navigator.clipboard.readText()` instead. 
      * 
      * @returns The clipboard value or `null`.
      * 
      * @group Utilities
-     * @deprecated
+     * @deprecated Since 1.33. Use `await activeWindow.navigator.clipboard.readText()` instead.
      */
     clipboard: () => string | null;
 
