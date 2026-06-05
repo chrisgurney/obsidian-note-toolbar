@@ -48,7 +48,11 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 	/**
 	 * Displays the main settings.
 	 */
-	public display(focusSelector?: string, scrollToFocus: boolean = false): void {
+	public display(): void {
+		this.render();
+	}
+
+	public render(focusSelector?: string, scrollToFocus: boolean = false): void {
 
 		const { containerEl } = this;
 		containerEl.empty();
@@ -194,7 +198,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 							await this.ntb.settingsManager.addToolbar(importedToolbar);
 							await this.ntb.settingsManager.save();
 							this.ntb.commands.openToolbarSettingsForId(importedToolbar.uuid);
-							this.display();
+							this.render();
 						}
 					});
 				});
@@ -266,7 +270,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 											.setIcon('copy-plus')
 											.onClick(() => {
 												void this.ntb.settingsManager.duplicateToolbar(toolbar).then((newToolbarUuid) => {
-													this.display(`.note-toolbar-setting-toolbar-list > div[data-tbar-uuid="${newToolbarUuid}"] > .setting-item-control > .mod-cta`);
+													this.render(`.note-toolbar-setting-toolbar-list > div[data-tbar-uuid="${newToolbarUuid}"] > .setting-item-control > .mod-cta`);
 												});
 											});
 									});
@@ -313,7 +317,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 											.setTitle(t('setting.delete-toolbar.button-delete'))
 											.setIcon('minus-circle')
 											.onClick(async () => {
-												await this.ntb.settingsUtils.confirmDeleteToolbar(toolbar, () => this.display());
+												await this.ntb.settingsUtils.confirmDeleteToolbar(toolbar, () => this.render());
 											})
 											.setWarning(true);
 									});									
@@ -348,7 +352,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 									const modifierPressed = (Platform.isWin || Platform.isLinux) ? e?.ctrlKey : e?.metaKey;
 									if (modifierPressed) {
 										void this.ntb.settingsManager.duplicateToolbar(toolbar).then((newToolbarUuid) => {
-											this.display(`.note-toolbar-setting-toolbar-list > div[data-tbar-uuid="${newToolbarUuid}"] > .setting-item-control > .mod-cta`);
+											this.render(`.note-toolbar-setting-toolbar-list > div[data-tbar-uuid="${newToolbarUuid}"] > .setting-item-control > .mod-cta`);
 										});
 									}
 								}
@@ -662,7 +666,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 						const newMapping = { folder: "", toolbar: "" };
 						this.ntb.settings.folderMappings.push(newMapping);
 						void this.ntb.settingsManager.save().then(() => {
-							this.display('.note-toolbar-sortablejs-list > div:last-child input[type="search"]', true);
+							this.render('.note-toolbar-sortablejs-list > div:last-child input[type="search"]', true);
 						});
 					}) });
 				emptyMsgEl.addClass('note-toolbar-setting-empty-message');
@@ -719,7 +723,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 						// TODO: add a form item to the existing list
 							// TODO: put the existing code in a function
 						// TODO: set the focus in the form
-						this.display('.note-toolbar-sortablejs-list > div:last-child input[type="search"]', true);
+						this.render('.note-toolbar-sortablejs-list > div:last-child input[type="search"]', true);
 					});
 				button.buttonEl.setText(iconTextFr('plus', t('setting.mappings.button-new')));
 			});
@@ -1627,7 +1631,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 				break;
 		}
 		await this.ntb.settingsManager.save();
-		this.display();
+		this.render();
 	}
 
 	async listMoveHandlerById(

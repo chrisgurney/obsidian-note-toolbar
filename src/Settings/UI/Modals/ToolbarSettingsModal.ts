@@ -59,7 +59,7 @@ export default class ToolbarSettingsModal extends Modal {
 		const { contentEl } = this;
 		contentEl.empty();
 		// refresh the parent window, so we see the new toolbar
-		this.parent?.display();
+		this.parent?.render();
 		
 		// if this is the only toolbar, prompt once to make this the Default
 		const onboardingId = `default-${this.toolbar.uuid}`;
@@ -80,7 +80,7 @@ export default class ToolbarSettingsModal extends Modal {
 						this.ntb.settings.defaultToolbar = this.toolbar.uuid;
 						void this.ntb.settingsManager.save().then(() => {
 							// refresh the parent window again, so we can see the updated Default setting
-							this.parent?.display();
+							this.parent?.render();
 						});
 					}
 				});
