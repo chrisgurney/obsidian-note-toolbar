@@ -812,8 +812,7 @@ export default class ToolbarItemUi {
                         fieldDiv.removeClass('note-toolbar-setting-item-link-field');
                         fieldDiv.addClass('note-toolbar-setting-plugin-error');
                         fieldDiv.setText(t('adapter.error.plugin-disabled'));
-                        const pluginLinkFr = activeDocument.createDocumentFragment();
-                        const pluginLink = pluginLinkFr.createEl('a', { 
+                        const pluginLink = new DocumentFragment().createEl('a', { 
                             href: `obsidian://show-plugin?id=${type}`, 
                             text: LINK_OPTIONS[type]
                         });
@@ -1242,7 +1241,7 @@ export default class ToolbarItemUi {
     }
 
     getUriTargetDescription(target: PaneType | 'default' | 'modal'): DocumentFragment {
-        const descFr = activeDocument.createDocumentFragment();
+        const descFr = new DocumentFragment();
         descFr.append(t('setting.item.option-uri-target-description'));
         if (Platform.isPhone && ['split', 'window'].includes(target)) descFr.append(descFr.createEl('br'), '* ', t('setting.item.option-uri-target-disclaimer-device'));
         if (Platform.isTablet && target === 'window') descFr.append(descFr.createEl('br'), '* ', t('setting.item.option-uri-target-disclaimer-device'));
@@ -1274,7 +1273,7 @@ export default class ToolbarItemUi {
             case ItemType.Group:
             case ItemType.Menu: {
                 const menuGroupToolbar = this.ntb.settingsManager.getToolbar(toolbarItem.link);
-                const fieldHelp = activeDocument.createDocumentFragment();
+                const fieldHelp = new DocumentFragment();
                 if (menuGroupToolbar) fieldHelp.append(this.ntb.settingsUtils.createToolbarPreviewFr(menuGroupToolbar, undefined, true))
                     else fieldHelp.append(
                         learnMoreFr(

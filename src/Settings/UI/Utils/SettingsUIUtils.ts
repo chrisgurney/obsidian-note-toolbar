@@ -47,11 +47,11 @@ export default class SettingsUIUtils {
 	 * @param onConfirm callback to execute after successful deletion
 	 */
 	async confirmDeleteToolbar(toolbar: ToolbarSettings, onConfirm: () => void): Promise<void> {
-		const questionFr = activeDocument.createDocumentFragment();
+		const questionFr = new DocumentFragment();
 		questionFr.createEl('p', { text: t('setting.delete-toolbar.label-delete-confirm') });
 		questionFr.createEl('p', { text: t('setting.delete-toolbar.warning-permanent') });
 
-		const notesFr = activeDocument.createDocumentFragment();
+		const notesFr = new DocumentFragment();
 		const warningsFr = notesFr.createEl('ul');
 
 		// warnings if this toolbar is assigned to any app locations
@@ -137,12 +137,12 @@ export default class SettingsUIUtils {
 		showEditLink: boolean = false
 	): DocumentFragment {
 
-		const toolbarFr: DocumentFragment = activeDocument.createDocumentFragment();
+		const toolbarFr: DocumentFragment = new DocumentFragment();
 
 		const previewContainer = toolbarFr.createDiv();
 		previewContainer.addClass('note-toolbar-setting-tbar-preview');
 
-		const itemsFr: DocumentFragment = activeDocument.createDocumentFragment();
+		const itemsFr: DocumentFragment = new DocumentFragment();
 
 		if (toolbar.items.length > 0) {
 			toolbar.items
@@ -181,7 +181,7 @@ export default class SettingsUIUtils {
 								defaultItemFr.addClass("note-toolbar-setting-toolbar-list-preview-item");
 								if (item.icon) {
 									if (itemIcon) {
-										const iconFr = activeDocument.createDocumentFragment();
+										const iconFr = new DocumentFragment();
 										iconFr.appendChild(itemIcon.cloneNode(true) as SVGSVGElement);
 										defaultItemFr.append(iconFr);
 									}
@@ -238,7 +238,7 @@ export default class SettingsUIUtils {
 			const helpContainerEl = settingsDiv.createDiv();
 			helpContainerEl.addClass('note-toolbar-setting-help-section-phone');
 
-			const helpDesc = activeDocument.createDocumentFragment();
+			const helpDesc = new DocumentFragment();
 			helpDesc.append("v" + PLUGIN_VERSION, " • ");
 			const whatsNewLink = helpDesc.createEl("a", { href: "#", text: t('setting.button-whats-new') });
 			this.ntb.registerDomEvent(whatsNewLink, 'click', async (event) => { 
@@ -265,7 +265,7 @@ export default class SettingsUIUtils {
 		}
 		else {
 
-			const helpDesc = activeDocument.createDocumentFragment();
+			const helpDesc = new DocumentFragment();
 			const whatsNewLink = helpDesc.createEl("a", { href: "#", text: t('setting.button-whats-new') });
 			this.ntb.registerDomEvent(whatsNewLink, 'click', async (event) => { 
 				await this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_WHATS_NEW, active: true });
@@ -309,7 +309,7 @@ export default class SettingsUIUtils {
 	 */
 	emptyMessageFr(message: string, linkText?: string, linkCallback?: () => void): DocumentFragment {
 
-		const messageFr = activeDocument.createDocumentFragment();
+		const messageFr = new DocumentFragment();
 		const messageFrText = activeDocument.createElement("i");
 		messageFrText.textContent = message;
 		messageFr.append(messageFrText);
@@ -380,7 +380,7 @@ export default class SettingsUIUtils {
 	}
 
 	getToolbarUsageFr(toolbar: ToolbarSettings, parent: ToolbarSettingsModal): DocumentFragment {
-		const usageFr = activeDocument.createDocumentFragment();
+		const usageFr = new DocumentFragment();
 		const usageStats = this.getToolbarUsageText(toolbar);
 		if (usageStats) {
 			usageFr.append(t('setting.usage.description'));
@@ -724,7 +724,7 @@ export default class SettingsUIUtils {
 						// as it's not easy to listen for plugins being enabled,
 						// user will have to click a refresh link to dismiss the error
 						this.ntb.registerDomEvent(errorLink, 'click', (event) => {
-							const refreshLink = activeDocument.createDocumentFragment().createEl('a', { text: t('setting.item.option-command-error-refresh'), href: '#' } );
+							const refreshLink = new DocumentFragment().createEl('a', { text: t('setting.item.option-command-error-refresh'), href: '#' } );
 							const refreshIcon = refreshLink.createSpan();
 							setIcon(refreshIcon, 'refresh-cw');
 							const oldLink = event.currentTarget as HTMLElement;
@@ -1003,7 +1003,7 @@ export function fixToggleTab(toggle: ToggleComponent) {
  * @returns DocumentFragment with disclaimers to show in settings UI
  */
 export function getDisclaimersFr(disclaimers: {[key: string]: string}[], keysToCheck: string[]): DocumentFragment {
-	const disclaimersFr = activeDocument.createDocumentFragment();
+	const disclaimersFr = new DocumentFragment();
 	let first = true;
 	keysToCheck.forEach(keyToCheck => {
 		const disclaimer = disclaimers.find(d => keyToCheck in d);
@@ -1058,7 +1058,7 @@ export function getValueForKey(dict: {[key: string]: string}[], key: string): st
 }
 
 export function iconTextFr(icon: string, text: string): DocumentFragment {
-	const headingFr = activeDocument.createDocumentFragment();
+	const headingFr = new DocumentFragment();
 	const headingEl = headingFr.createEl('span');
 	headingEl.addClass('note-toolbar-setting-text-with-icon');
 	const headingIcon = headingEl.createEl('span');
@@ -1076,7 +1076,7 @@ export function iconTextFr(icon: string, text: string): DocumentFragment {
  * @returns DocumentFragment containing the message and styling.
  */
 export function learnMoreFr(message: string, page: string, linkText: string = t('setting.button-learn-more')): DocumentFragment {
-	const messageFr = activeDocument.createDocumentFragment();
+	const messageFr = new DocumentFragment();
 	messageFr.append(
 		message, ' ',
 	);
@@ -1093,7 +1093,7 @@ export function learnMoreFr(message: string, page: string, linkText: string = t(
  * @returns DocumentFragment containing the message and styling.
  */
 export function headingLearnMoreFr(title: string, desc: string, page: string, linkText: string = t('setting.button-learn-more')): DocumentFragment {
-	const messageFr = activeDocument.createDocumentFragment();
+	const messageFr = new DocumentFragment();
 	messageFr.append(title);
 
 	// description + learn more link
@@ -1116,7 +1116,7 @@ export function pluginLinkFr(commandId: string, linkText?: string): DocumentFrag
 	const pluginId = commandId.includes(':') ? commandId.split(':')[0].trim() : undefined;
 	// don't show Community Plugins link for Obsidian's built-in commands
 	if (pluginId && pluginId !== 'workspace') {
-		pluginLinkFr = activeDocument.createDocumentFragment();
+		pluginLinkFr = new DocumentFragment();
 		// TODO: return link to core plugin settings if ID is in CORE_PLUGIN_IDS
 		const pluginLink = pluginLinkFr.createEl('a', { 
 			href: `obsidian://show-plugin?id=${pluginId}`, 

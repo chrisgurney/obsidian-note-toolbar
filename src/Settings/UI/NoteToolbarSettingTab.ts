@@ -236,7 +236,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 			this.ntb.settings.toolbars.forEach(
 				(toolbar) => {
 					
-					const toolbarNameFr = activeDocument.createDocumentFragment();
+					const toolbarNameFr = new DocumentFragment();
 					toolbarNameFr.append(toolbar.name ? toolbar.name : t('setting.toolbars.label-tbar-name-not-set'));
 					// show hotkey
 					if (!Platform.isPhone) {
