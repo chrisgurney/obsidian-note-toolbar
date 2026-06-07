@@ -127,7 +127,7 @@ export default class ToolbarRenderer {
      */
     async render(toolbar: ToolbarSettings, file: TFile | null, view?: ItemView): Promise<void> {
 
-        this.ntb.debugGroup(`render: ${toolbar.name}`);
+        this.ntb.debug(`render: ${toolbar.name}`);
 
 		// try setting the toolbar's height early, to reduce flickering
 		if (Platform.isPhone) {
@@ -148,8 +148,7 @@ export default class ToolbarRenderer {
         if (!view) view = this.ntb.app.workspace.getActiveViewOfType(MarkdownView) ?? undefined;
         if (!view) view = this.ntb.app.workspace.getActiveViewOfType(ItemView) ?? undefined;
         if (!view) {
-			this.ntb.debug("🛑 renderToolbar: can not find active view → exiting");
-            this.ntb.debugGroupEnd();
+			this.ntb.debug("| 🛑 renderToolbar: can not find active view → exiting");
             return;
         }
 
@@ -161,15 +160,14 @@ export default class ToolbarRenderer {
         if (!(view instanceof MarkdownView)) {
             const isToolbarVisible = this.ntb.utils.hasToolbarForItemView(view);
             if (!isToolbarVisible) {
-                this.ntb.debug("🛑 renderToolbar: nothing to render in this view → exiting");
-                this.ntb.debugGroupEnd();
+                this.ntb.debug("| 🛑 renderToolbar: nothing to render in this view → exiting");
                 return;
             }
             if (position === PositionType.Props) position = PositionType.Top;
         }
 
 		if (!this.ntb.utils.hasVisibleItems(toolbar)) {
-			this.ntb.debug("renderToolbar: toolbar has no visible items → rendering as hidden");
+			this.ntb.debug("| renderToolbar: toolbar has no visible items → rendering as hidden");
 			position = PositionType.Hidden;
 		}
 
@@ -253,7 +251,6 @@ export default class ToolbarRenderer {
         if (useLaunchpad && noteToolbarElement) {
             noteToolbarElement.addClass('note-toolbar-launchpad');
             view.contentEl.insertAdjacentElement('afterbegin', embedBlock);
-            this.ntb.debugGroupEnd();
             return;
         }
 
@@ -267,7 +264,7 @@ export default class ToolbarRenderer {
                 // position relative to modal container if in a modal
                 if (modalEl) modalEl.insertAdjacentElement('afterbegin', embedBlock)
 					else if (viewEl) viewEl.insertAdjacentElement('afterbegin', embedBlock)
-                    else this.ntb.debug(`🛑 renderToolbar: Unable to find active leaf to insert toolbar`);
+                    else this.ntb.debug(`| 🛑 renderToolbar: Unable to find active leaf to insert toolbar`);
                 break;
             case PositionType.FabLeft:
             case PositionType.FabRight:
@@ -293,7 +290,7 @@ export default class ToolbarRenderer {
                 if (viewHeader) {
 					viewHeader.insertAdjacentElement(Platform.isPhone ? 'beforebegin' : 'afterend', embedBlock);
 				}
-				else this.ntb.debug("🛑 renderToolbar: Unable to find .view-header to insert toolbar");
+				else this.ntb.debug("| 🛑 renderToolbar: Unable to find .view-header to insert toolbar");
 				// update height for header repositioning on phones
 				if (Platform.isPhone) {
 					const setToolbarHeight = () => {
@@ -320,7 +317,7 @@ export default class ToolbarRenderer {
 							propsEl = this.ntb.el.getPropsEl(view);
 							if (propsEl) break;
 						}
-						if (!propsEl) this.ntb.debug("🛑 renderToolbar: Unable to find .metadata-container to insert toolbar");
+						if (!propsEl) this.ntb.debug("| 🛑 renderToolbar: Unable to find .metadata-container to insert toolbar");
                     }
                     propsEl?.insertAdjacentElement("afterend", embedBlock);
                 }
@@ -330,8 +327,7 @@ export default class ToolbarRenderer {
 		// fix: (#415) unable to connect Canvas cards when the toolbar is in Top (fixed) position
 		if (view.getViewType() === 'canvas') view.onResize();
 
-        this.ntb.debug(`🎨 Rendered toolbar: "${toolbar.name}" in view:`, getViewId(view));
-        this.ntb.debugGroupEnd();
+        this.ntb.debug(`| 🎨 Rendered toolbar: "${toolbar.name}" in view:`, getViewId(view));
 
     }
     
@@ -903,7 +899,7 @@ export default class ToolbarRenderer {
 	 */
 	async update(toolbar: ToolbarSettings, activeFile: TFile | null, view?: ItemView) {
 
-		this.ntb.debugGroup(`updateToolbar: ${toolbar.name}`);
+		this.ntb.debug(`updateToolbar: ${toolbar.name}`);
 
 		if (this.ntb.settings.keepPropsState) {
 			// restore properties to the state they were before
@@ -919,7 +915,6 @@ export default class ToolbarRenderer {
 
 		// no need to run update for certain positions
 		if ([PositionType.FabLeft, PositionType.FabRight, PositionType.Hidden, PositionType.Text, undefined].includes(currentPosition)) {
-			this.ntb.debugGroupEnd();
 			return;
 		}
 
@@ -928,7 +923,6 @@ export default class ToolbarRenderer {
 		const toolbarElUpdated = toolbarEl?.getAttribute(TbarData.Updated);
 		// const toolbarElOverride = toolbarEl?.getAttribute(TbarData.OverrideTbar);
 		if (toolbarEl === null || toolbar.name !== toolbarElName || toolbar.updated !== toolbarElUpdated) {
-			this.ntb.debugGroupEnd();
 			return;
 		}
 
@@ -1010,8 +1004,6 @@ export default class ToolbarRenderer {
 		}
 
 		this.updatePhoneNavigation(currentPosition);
-
-		this.ntb.debugGroupEnd();
 
 	}
 
@@ -1314,14 +1306,14 @@ export default class ToolbarRenderer {
 	 */
 	removeIfNeeded(correctToolbar: ToolbarSettings | undefined, view?: ItemView): boolean {
 
-		this.ntb.debugGroup('removeIfNeeded');
+		this.ntb.debug('removeIfNeeded');
 
 		let toolbarRemoved: boolean = false;
 
 		// get toolbar elements in current view, or active view if not provided
 		const existingToolbarEls = this.ntb.el.getAllToolbarEl(view);
 
-		this.ntb.debug("removeIfNeeded: correct:", correctToolbar?.name);
+		this.ntb.debug("| removeIfNeeded: correct:", correctToolbar?.name);
 		if (existingToolbarEls?.length > 0) {
 			// remove everything on phones
 			if (Platform.isPhone) {
@@ -1340,11 +1332,10 @@ export default class ToolbarRenderer {
 			}
 		}
 		else {
-			this.ntb.debug("removeIfNeeded: no existing toolbar");
+			this.ntb.debug("| removeIfNeeded: no existing toolbar");
 			toolbarRemoved = true;
 		}
 
-		this.ntb.debugGroupEnd();
 		return toolbarRemoved;
 	}
 

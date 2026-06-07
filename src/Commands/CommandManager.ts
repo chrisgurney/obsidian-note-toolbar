@@ -220,15 +220,14 @@ export default class CommandManager {
      */
     async focus(isFloatingToolbar: boolean = false): Promise<void> {
 
-        this.ntb.debugGroup("focus");
+        this.ntb.debug("focus");
 
         // display the text toolbar at the current cursor position, if it's not already rendered
         if (isFloatingToolbar && !this.ntb.render.hasFloatingToolbar()) {
             // FIXME? remove this check because of Reading/Preview mode?
             const editor = this.ntb.app.workspace.activeEditor?.editor;
             if (!editor) {
-                this.ntb.debug('editor not available - exiting');
-                this.ntb.debugGroupEnd();
+                this.ntb.debug('| editor not available - exiting');
                 return;
             };
             const toolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.textToolbar);
@@ -244,7 +243,7 @@ export default class CommandManager {
             case PositionType.FabLeft: {
                 // trigger the menu
                 const toolbarFabEl = toolbarEl?.querySelector('button.cg-note-toolbar-fab') as HTMLButtonElement;
-                this.ntb.debug("button: ", toolbarFabEl);
+                this.ntb.debug("| button: ", toolbarFabEl);
                 if (toolbarEl) {
                     const toolbar = this.ntb.settingsManager.getToolbarById(toolbarEl.id);
                     // show the toolbar's menu if it has a default item set
@@ -280,7 +279,7 @@ export default class CommandManager {
                 // get the list and set focus on the first visible item
                 const itemsUl: HTMLElement | null = this.ntb.el.getToolbarListEl(isFloatingToolbar);
                 if (itemsUl) {
-                    // this.ntb.debug("toolbar: ", itemsUl);
+                    // this.ntb.debug("| toolbar: ", itemsUl);
                     const items = Array.from(itemsUl.children);
                     const visibleItems = items.filter(item => {
                         const hasSpan = item.querySelector('span') !== null; // to filter out separators
@@ -288,7 +287,7 @@ export default class CommandManager {
                         return hasSpan && isVisible;
                     });
                     const linkEl = visibleItems[0] ? visibleItems[0].querySelector('span') : null;
-                    // this.ntb.debug("focussed item: ", linkEl);
+                    // this.ntb.debug("| focussed item: ", linkEl);
                     visibleItems[0]?.addClass(ToolbarStyle.ItemFocused);
                     linkEl?.focus();
                 }
@@ -299,8 +298,6 @@ export default class CommandManager {
                 // do nothing
                 break;
         }
-
-        this.ntb.debugGroupEnd();
 
     }
 

@@ -12,7 +12,7 @@ export default class SettingsMigrator {
 
         let new_version: number;
 
-        this.ntb.debugGroup("SettingsMigrator: running migrations...");
+        this.ntb.debug("SettingsMigrator: running migrations...");
 
         // first version without update (i.e., version is `undefined`)
         // MIGRATION: moved styles to defaultStyles (and introduced mobileStyles) 
@@ -245,7 +245,7 @@ export default class SettingsMigrator {
         // MIGRATION: set gallery flag on existing items
         if (old_version === 20250302.1) {
             new_version = 20250313.1;
-            this.ntb.debug("- starting migration: " + old_version + " -> " + new_version);
+            this.ntb.debug("| - starting migration: " + old_version + " -> " + new_version);
             loaded_settings.toolbars?.forEach((tb: ToolbarSettings, index: number) => {
                 tb.items.forEach((item: ToolbarItemSettings, item_index: number) => {
                     this.ntb.settings.toolbars[index].items[item_index].inGallery = false;
@@ -258,7 +258,7 @@ export default class SettingsMigrator {
         // MIGRATION: separated view `mode` visibility setting (remove "allViews" level)
         if (old_version === 20250313.1) {
             new_version = 20260122.1;
-            this.ntb.debug("starting migration: " + old_version + " -> " + new_version);
+            this.ntb.debug("| starting migration: " + old_version + " -> " + new_version);
             loaded_settings.toolbars?.forEach((tb: ToolbarSettings, index: number) => {
                 tb.items.forEach((item: ToolbarItemSettings, item_index: number) => {
                     const visibility = this.ntb.settings.toolbars[index].items[item_index].visibility as unknown as Record<string, { allViews?: unknown }>;
@@ -277,7 +277,7 @@ export default class SettingsMigrator {
         // MIGRATION: removed deprecated recent* settings (no longer needed) #542
         if (old_version === 20260122.1) {
             new_version = 20260428.1;
-            this.ntb.debug("starting migration: " + old_version + " -> " + new_version);
+            this.ntb.debug("| starting migration: " + old_version + " -> " + new_version);
             //@ts-expect-error: property may not exist
             delete this.ntb.settings.recentFiles;
             //@ts-expect-error: property may not exist
@@ -291,8 +291,7 @@ export default class SettingsMigrator {
         // COMMENT THIS OUT while testing new migration code
         this.ntb.settings.version = SETTINGS_VERSION;
 
-        this.ntb.debug("migrated settings:", this.ntb.settings);
-        this.ntb.debugGroupEnd();
+        this.ntb.debug("| migrated settings:", this.ntb.settings);
 
     }
     

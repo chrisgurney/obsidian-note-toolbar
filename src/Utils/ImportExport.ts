@@ -271,7 +271,7 @@ export function importFromCallout(
     fromShareUri: boolean = false
 ): ToolbarSettings {
 
-    ntb.debugGroup('importFromCallout');
+    ntb.debug('importFromCallout');
 
     const lines = callout.trim().split('\n');
     const isToolbarProvided = toolbar ? true : false;
@@ -317,10 +317,10 @@ export function importFromCallout(
                     style && !DEFAULT_STYLE_KEYS.includes(style) && !MOBILE_STYLE_KEYS.includes(style)
                 );
     
-                ntb.debug('• name?', name);
-                ntb.debug('• styles?', validDefaultStyles, validMobileStyles);
+                ntb.debug('| • name?', name);
+                ntb.debug('| • styles?', validDefaultStyles, validMobileStyles);
                 if (invalidStyles.length > 0) {
-                    ntb.debug('  • invalid:', invalidStyles);
+                    ntb.debug('|   • invalid:', invalidStyles);
                     errorLog += `${t('import.errorlog-invalid-styles', { styles: invalidStyles })}\n`;
                 }
             
@@ -336,7 +336,7 @@ export function importFromCallout(
     // parse the rest
     lines.map((line, index) => {
 
-        ntb.debugGroup(index + 1);
+        ntb.debug('| ', index + 1);
         
         let itemType: ItemType | undefined = undefined;
 
@@ -364,9 +364,9 @@ export function importFromCallout(
             // get the components of the external or internal link
             const linkMatch = linkText.match(/\[(.*?)\]\((.*?)\)$|\[\[(.*?)(?:\|(.*?))?\]\]/);
 
-            ntb.debug(line);
-            ntb.debug('dataMatch:', dataMatch);
-            ntb.debug('linkMatch:', linkMatch);
+            ntb.debug('! ', line);
+            ntb.debug('| dataMatch:', dataMatch);
+            ntb.debug('| linkMatch:', linkMatch);
 
             if (linkMatch) {
 
@@ -412,7 +412,7 @@ export function importFromCallout(
                 if (dataMatch || uriMatch) {
                     const dataUriType = dataMatch ? dataMatch[1] : (uriMatch ? uriMatch[1] : '');
                     const dataUriValue = dataMatch ? dataMatch[2] : (uriMatch ? uriMatch[2] : '');
-                    ntb.debug('• data?', dataUriType, link);
+                    ntb.debug('| • data?', dataUriType, link);
         
                     switch (dataUriType as ItemType) {
                         case ItemType.Command: {
@@ -431,7 +431,7 @@ export function importFromCallout(
                         case ItemType.Templater: {
                             itemType = dataUriType as ItemType;
                             const dataEl = line.match(/<data\s[^>]*\/?>/);
-                            ntb.debug(dataUriType, dataEl);
+                            ntb.debug('| ', dataUriType, dataEl);
                             
                             if (dataEl) {
                                 const parser = new DOMParser();
@@ -469,15 +469,14 @@ export function importFromCallout(
 
         }
 
-        ntb.debugGroup('RESULT →');
-        ntb.debug('icon?', icon);
-        ntb.debug('label?', label);
-        ntb.debug('tooltip?', tooltip);
-        ntb.debug('link?', link);
-        ntb.debug('commandId?', commandId);
-        ntb.debug('scriptConfig?', scriptConfig);
-        ntb.debug(`=> ${itemType?.toUpperCase()}`);
-        ntb.debugGroupEnd();
+        ntb.debug('RESULT →');
+        ntb.debug('| icon?', icon);
+        ntb.debug('| label?', label);
+        ntb.debug('| tooltip?', tooltip);
+        ntb.debug('| link?', link);
+        ntb.debug('| commandId?', commandId);
+        ntb.debug('| scriptConfig?', scriptConfig);
+        ntb.debug(`| => ${itemType?.toUpperCase()}`);
 
         errorLog += itemType ? '' : `${t('import.errorlog-item', { number: index + 1 })} ${t('import.errorlog-invalid-format', { line: line })}\n`;
 
@@ -507,8 +506,6 @@ export function importFromCallout(
 
         }
 
-        ntb.debugGroupEnd();
-
     });
 
     // show errors to the user
@@ -516,8 +513,6 @@ export function importFromCallout(
         errorLog = `${t('import.errorlog-heading')}\n${errorLog}`;
         new Notice(errorLog, 10000).containerEl.addClass('mod-warning');
     }
-
-    ntb.debugGroupEnd();
 
     return toolbar;
 

@@ -68,8 +68,6 @@ export default class NoteToolbarPlugin extends Plugin {
 	textToolbar: ViewPlugin<TextToolbarClass> | null = null;
 
 	debug!: (...args: unknown[]) => void;
-	debugGroup!: (...args: unknown[]) => void;
-	debugGroupEnd!: (...args: unknown[]) => void;
 	error!: (...args: unknown[]) => void;
 
 	/**
@@ -217,22 +215,16 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * Toggle debugging based on user setting.
 	 */
 	toggleDebugging() {
-		/* eslint-disable no-console -- override console functions to use a debug flag, for use throughout the plugin */
 		// all errors should be logged
 		this.error = console.error.bind(console);
 		// setup debug functions, preserving line numbers
 		if (this.settings.debugEnabled) {
-			this.debug = console.log.bind(console);
-			this.debugGroup = console.group.bind(console);
-			this.debugGroupEnd = console.groupEnd.bind(console);
+			this.debug = console.debug.bind(console);
 		}
 		// otherwise do nothing when debug functions are called
 		else {
 			this.debug = (...args: unknown[]) => {};
-			this.debugGroup = (...args: unknown[]) => {};
-			this.debugGroupEnd = (...args: unknown[]) => {};
 		}
-		/* eslint-enable no-console -- override console functions to use a debug flag, for use throughout the plugin */
 	}
 
 	// #endregion
