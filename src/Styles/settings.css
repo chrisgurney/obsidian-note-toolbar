@@ -291,6 +291,9 @@
         & #tbar-search {
             padding-top: 0;
             margin-bottom: 0;
+            &:not(.is-mobile &) {
+                padding-bottom: unset;
+            }
             & .setting-item-info {
                 display: none;
             }

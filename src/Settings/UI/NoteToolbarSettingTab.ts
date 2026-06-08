@@ -525,9 +525,6 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 				);
 			}
 		}
-		else {
-			toolbarSearchSetting.settingEl.setCssProps({'padding-bottom': 'unset'});
-		}
 	}
 
 	/**
