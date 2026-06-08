@@ -62,25 +62,30 @@ export default interface INoteToolbarApi<T> {
     export: (toolbar: IToolbar) => Promise<string | null>;
 
     /**
-     * Shows a file suggester modal and waits for the user's selection.
+     * Shows a file suggester modal for the provided files and waits for the user's selection. Files are sorted by recency.
      * 
      * @param options Optional display options.
      * @returns The selected [TAbstractFile](https://docs.obsidian.md/Reference/TypeScript+API/TAbstractFile).
+     * @remarks This function replaces the old fileSuggester(options?).
      * 
      * @example
-     * const fileOrFolder = await ntb.fileSuggester();
-     * new Notice(fileOrFolder.name);
+     * const fileOrFolder = await ntb.fileSuggester(
+     *   ntb.app.vault.getAllLoadedFiles()
+     * );
+     * if (fileOrFolder) new Notice(fileOrFolder.name);
      * 
      * @example
      * // show only folders
-     * const folder = await ntb.fileSuggester({
-     *  foldersonly: true
-     * });
-     * new Notice(folder.name);
+     * const folder = await ntb.fileSuggester(
+     *   ntb.app.vault.getAllLoadedFiles(),
+     *   { foldersonly: true }
+     * );
+     * if (folder) new Notice(folder.name);
      * 
      * @group UI Components
+     * @since 1.33.15
      */
-    fileSuggester: (options?: NtbFileSuggesterOptions) => Promise<TAbstractFile | null>;
+    fileSuggester: (files: TAbstractFile[], options?: NtbFileSuggesterOptions) => Promise<TAbstractFile | null>;
 
     /**
      * Gets the active (last activated) toolbar item.

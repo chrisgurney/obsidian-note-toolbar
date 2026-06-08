@@ -61,14 +61,14 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
      * @see INoteToolbarApi.fileSuggester
      */
     async fileSuggester(
+        files: TAbstractFile[],
         options?: NtbFileSuggesterOptions
-    ): Promise<TAbstractFile> {
+    ): Promise<TAbstractFile | null> {
 
-        const abstractFiles = this.ntb.app.vault.getAllLoadedFiles();
         const recentFiles = JSON.parse(this.ntb.app.loadLocalStorage(LocalVar.RecentFiles) as string || '[]') as string[];
 
-        let files: TAbstractFile[] = [];
-        files = abstractFiles.filter((file: TAbstractFile) => {
+        // filter provided files based on options
+        files = files.filter((file: TAbstractFile) => {
             if (options?.folder) {
                 const normalizedFolder = normalizePath(options.folder);
                 if (!file.path.startsWith(normalizedFolder + '/')) return false;
@@ -118,9 +118,8 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
         try {
             return await promise;
         } 
-        catch (error) {
-            this.ntb.error(error);
-            return null as unknown as TAbstractFile;
+        catch {
+            return null;
         }
 
     };

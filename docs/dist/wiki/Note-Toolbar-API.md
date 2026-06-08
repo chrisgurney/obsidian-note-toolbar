@@ -255,14 +255,15 @@ Functions for showing various UI components, such as menus, modals, toolbars, an
 
 ### fileSuggester
 
-> **fileSuggester**: (`options?`) => `Promise`\<`TAbstractFile` \| `null`\>
+> **fileSuggester**: (`files`, `options?`) => `Promise`\<`TAbstractFile` \| `null`\>
 
-Shows a file suggester modal and waits for the user's selection.
+Shows a file suggester modal for the provided files and waits for the user's selection. Files are sorted by recency.
 
 #### Parameters
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
+| `files` | `TAbstractFile`[] | - |
 | `options?` | \{ `allowCustomInput?`: `boolean`; `class?`: `string`; `collapse?`: `boolean`; `default?`: `string`; `exact?`: `boolean`; `filesonly?`: `boolean`; `folder?`: `string`; `foldersonly?`: `boolean`; `icon?`: `string`; `keymap?`: `object`[]; `label?`: `string`; `limit?`: `number`; `placeholder?`: `string`; `prefixes?`: `Record`\<`string`, `unknown`[] \| (() => `unknown`[] \| `Promise`\<`unknown`\>)\>; `rendermd?`: `boolean`; \} | Optional display options. |
 | `options.allowCustomInput?` | `boolean` | If set to `true`, the user can input a custom value that is not in the list of suggestions. Default is `false`. |
 | `options.class?` | `string` | Optional CSS class(es) to add to the component. |
@@ -286,20 +287,31 @@ Shows a file suggester modal and waits for the user's selection.
 
 The selected [TAbstractFile](https://docs.obsidian.md/Reference/TypeScript+API/TAbstractFile).
 
+#### Remarks
+
+This function replaces the old fileSuggester(options?).
+
 #### Examples
 
 ```ts
-const fileOrFolder = await ntb.fileSuggester();
-new Notice(fileOrFolder.name);
+const fileOrFolder = await ntb.fileSuggester(
+  ntb.app.vault.getAllLoadedFiles()
+);
+if (fileOrFolder) new Notice(fileOrFolder.name);
 ```
 
 ```ts
 // show only folders
-const folder = await ntb.fileSuggester({
- foldersonly: true
-});
-new Notice(folder.name);
+const folder = await ntb.fileSuggester(
+  ntb.app.vault.getAllLoadedFiles(),
+  { foldersonly: true }
+);
+if (folder) new Notice(folder.name);
 ```
+
+#### Since
+
+1.33.15
 
 ***
 
