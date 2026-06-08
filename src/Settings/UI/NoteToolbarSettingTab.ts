@@ -1552,7 +1552,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		otherGroup.addSetting((debugSetting) => {
 			debugSetting
 				.setName(t('setting.other.debugging.name'))
-				.setDesc(t('setting.other.debugging.description'))
+				.setDesc((learnMoreFr(t('setting.other.debugging.description'), 'Debugging')))
 				.addToggle((toggle) => {
 					toggle.setValue(this.ntb.settings.debugEnabled)
 					toggle.onChange(async (value) => {
