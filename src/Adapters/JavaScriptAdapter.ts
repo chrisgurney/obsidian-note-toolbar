@@ -126,7 +126,7 @@ export default class JavaScriptAdapter extends Adapter {
             return;
         }
 
-        const contents = await this.ntb?.app.vault.read(viewFile);
+        const contents = await this.ntb?.app.vault.cachedRead(viewFile);
         if (contents) {
             return await this.evaluate(contents, argsJson, containerEl, ErrorBehavior.Report);
         }

@@ -262,7 +262,7 @@ export default class DataviewAdapter extends Adapter {
             return;
         }
 
-        let contents = await this.ntb?.app.vault.read(viewFile);
+        let contents = await this.ntb?.app.vault.cachedRead(viewFile);
         if (contents) {
             // if (contents.includes("await")) contents = "(async () => { " + contents + " })()";
             contents += `\n//# sourceURL=${viewFile.path}`;
