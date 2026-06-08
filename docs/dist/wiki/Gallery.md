@@ -163,7 +163,7 @@ Navigate between notes and files.
 | Navigate forward | Go forwards. |
 | Previous file | Open previous file in the folder, sorted A-Z. Loops to the last file. |
 | Next file | Open next file in the folder, sorted A-Z. Loops to the first file. |
-| Open file in new tab | Opens the selected file in a new tab. |
+| Open file in new tab | Opens the selected file in a new tab. *Add from: [[Additional Gallery items]]* |
 | File switcher | Open the file switcher. |
 | Previous tab | Go to the previous tab. |
 | Next tab | Go to the next tab. |
@@ -184,7 +184,7 @@ Replace the new tab view with a toolbar. [Learn more](https://github.com/chrisgu
 | Home | Go to your home note. (Enter your home note in the URL.) |
 | Today's daily note | Go to today's daily note. |
 | New note | Creates a new note. |
-| Open file in new tab | Opens the selected file in a new tab. |
+| Open file in new tab | Opens the selected file in a new tab. *Add from: [[Additional Gallery items]]* |
 | New from template | Create a new note from a template you select. |
 | Show bookmarks | Opens the bookmarks sidebar. |
 

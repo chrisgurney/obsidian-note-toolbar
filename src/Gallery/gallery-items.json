@@ -391,14 +391,13 @@
             "uk": "Відкрийте обраний файл в новій вкладці."
         },
         "icon": "file-plus",
-        "script": "const file = await ntb.fileSuggester({filesonly: true});\nif (file) ntb.app.workspace.getLeaf(true).openFile(file);",
         "tooltip": {
             "en": "Open file in new tab",
             "ja": "新しいタブでファイルを開く",
             "zh": "在新标签页中打开文件",
             "uk": "Відкрити в новій вкладці"
         },
-        "type": "javascript"
+        "type": "additional"
     },
     {
         "id": "file-next",
