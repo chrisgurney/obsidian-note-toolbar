@@ -347,8 +347,10 @@ Shows a modal with the provided content.
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `content` | `string` \| `TFile` | Content to display in the modal, either as a string or a file within the vault. |
-| `options?` | \{ `class?`: `string`; `title?`: `string`; `webpage?`: `boolean`; \} | Optional display options. |
+| `options?` | \{ `class?`: `string`; `contextPath?`: `string`; `originAsContext?`: `boolean`; `title?`: `string`; `webpage?`: `boolean`; \} | Optional display options. |
 | `options.class?` | `string` | Optional CSS class(es) to add to the component. |
+| `options.contextPath?` | `string` | Optionally specify which file rendered content should use as context. For example, Bases queries that use `this.file` will refer to this file. |
+| `options.originAsContext?` | `boolean` | Use the file that opened the modal as context (assumes the active file); defaults to `false`. Ignored when `contextPath` is provided. |
 | `options.title?` | `string` | Optional title for the modal, with markdown formatting supported. |
 | `options.webpage?` | `boolean` | If `true`, the modal will show the web page URL in `content` using the Web Viewer core plugin (if enabled); defaults to `false`. |
 
@@ -377,6 +379,17 @@ if (file) {
 }
 else {
   new Notice(`File not found: ${filename}`);
+}
+```
+
+```ts
+// renders a Base for the current file
+const fn = "Bases/Backlinks.base";
+const f = ntb.app.vault.getAbstractFileByPath(fn);
+if (f) { 
+  await ntb.modal(f, {
+    originAsContext: true
+  });
 }
 ```
 

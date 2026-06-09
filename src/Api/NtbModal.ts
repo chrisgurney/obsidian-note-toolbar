@@ -12,6 +12,7 @@ export default class NtbModal extends Modal {
     private isEditable: boolean;
     private isWebviewer: boolean;
     private class: string;
+    private contextPath: string;
 
     private leaf!: WorkspaceLeaf;
 
@@ -29,6 +30,8 @@ export default class NtbModal extends Modal {
             title: title = '',
             editable: editable = false,
             webpage: webpage = false,
+            contextPath: contextPath,
+            originAsContext: originAsContext = false,
             class: css_classes = ''
         } = this.options || {};
 
@@ -36,6 +39,15 @@ export default class NtbModal extends Modal {
         this.isEditable = editable;
         this.isWebviewer = webpage;
         this.class = css_classes;
+
+        // for Markdown rendering context (including Bases):
+        // unless specified, use the file that opened the modal as context (assumes the active file); default to ''
+        const activeFilePath = this.ntb.app.workspace.getActiveFile()?.path ?? '';
+        this.contextPath = 
+            contextPath ??
+            (originAsContext
+                ? activeFilePath
+                : ((this.content instanceof TFile) ? this.content.path : ''));
 
         this.modalEl.addClasses(['prompt', 'note-toolbar-ui']);
         if (this.class) this.modalEl.addClasses([...this.class.split(' ')]);
@@ -114,7 +126,7 @@ export default class NtbModal extends Modal {
                 else {
                     const embedMd = `![[${this.content.path}]]`;
                     const embedMdComponent = new Component();
-                    await MarkdownRenderer.render(this.ntb.app, embedMd, containerEl, this.content.path, embedMdComponent);
+                    await MarkdownRenderer.render(this.ntb.app, embedMd, containerEl, this.contextPath, embedMdComponent);
                 };
             }
             catch (error) {

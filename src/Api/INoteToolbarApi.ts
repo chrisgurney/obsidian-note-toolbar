@@ -206,6 +206,16 @@ export default interface INoteToolbarApi<T> {
      *   new Notice(`File not found: ${filename}`);
      * }
      * 
+     * @example
+     * // renders a Base for the current file
+     * const fn = "Bases/Backlinks.base";
+     * const f = ntb.app.vault.getAbstractFileByPath(fn);
+     * if (f) { 
+     *   await ntb.modal(f, {
+     *     originAsContext: true
+     *   });
+     * }
+     * 
      * @see `NtbModal.js` in the [examples/Scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts).
      * @group UI Components
      */
@@ -439,10 +449,20 @@ export interface NtbModalOptions {
      */
     class?: string;
     /**
+     * Optionally specify which file rendered content should use as context.
+     * For example, Bases queries that use `this.file` will refer to this file.
+     */
+    contextPath?: string;
+    /**
      * If `true`, and a file was provided, content can be edited; defaults to `false`.
      * @hidden
      */
     editable?: boolean;
+    /**
+     * Use the file that opened the modal as context (assumes the active file); defaults to `false`.
+     * Ignored when `contextPath` is provided.
+     */
+    originAsContext?: boolean;
     /**
      * Optional title for the modal, with markdown formatting supported.
      */
