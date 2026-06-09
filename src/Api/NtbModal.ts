@@ -114,7 +114,7 @@ export default class NtbModal extends Modal {
                 else {
                     const embedMd = `![[${this.content.path}]]`;
                     const embedMdComponent = new Component();
-                    await MarkdownRenderer.render(this.ntb.app, embedMd, containerEl, "", embedMdComponent);
+                    await MarkdownRenderer.render(this.ntb.app, embedMd, containerEl, this.content.path, embedMdComponent);
                 };
             }
             catch (error) {
