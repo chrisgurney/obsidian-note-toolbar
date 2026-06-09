@@ -32,18 +32,4 @@ export const URLS = {
      */
     GHIO_SHARE: 'https://chrisgurney.github.io/obsidian-note-toolbar/open.htm?uri=',
 
-    /**
-     * Release notes are fetched as markdown from this URL, in the required language.
-     * 
-     * Example: https://raw.githubusercontent.com/chrisgurney/obsidian-note-toolbar/master/docs/releases/en/1.30.md
-     */
-    GHUC_RELEASE_NOTES: 'https://raw.githubusercontent.com/chrisgurney/obsidian-note-toolbar/master/docs/releases',
-
-    /**
-     * Tips are fetched as markdown from this URL, in the required language.
-     * 
-     * Example: https://raw.githubusercontent.com/chrisgurney/obsidian-note-toolbar/master/docs/tips/en/getting-started.md
-     */
-    GHUC_TIPS: 'https://raw.githubusercontent.com/chrisgurney/obsidian-note-toolbar/master/docs/tips',
-
 } as const;
