@@ -703,7 +703,7 @@ export default class SettingsUIUtils {
 		parent: NoteToolbarSettingTab | ToolbarSettingsModal | ItemModal, 
 		fieldEl: HTMLElement | null, 
 		position: 'afterend' | 'beforeend',
-		errorText?: string, 
+		errorText?: string | DocumentFragment, 
 		errorLink?: HTMLAnchorElement
 	) {
 		if (fieldEl) {
@@ -717,9 +717,8 @@ export default class SettingsUIUtils {
 					: fieldContainerEl?.querySelector('.note-toolbar-setting-field-error') !== null;
 			if (fieldContainerEl && !hasError) {
 				if (errorText) {
-					const errorDiv = createEl('div', { 
-						text: errorText, 
-						cls: 'note-toolbar-setting-field-error' });
+					const errorDiv = createEl('div', { cls: 'note-toolbar-setting-field-error' });
+					errorDiv.append(errorText);
 					if (errorLink) {
 						// as it's not easy to listen for plugins being enabled,
 						// user will have to click a refresh link to dismiss the error
@@ -808,7 +807,7 @@ export default class SettingsUIUtils {
 		}
 
 		let status: Status = Status.Valid;
-		let statusMessage: string = '';
+		let statusMessage: string | DocumentFragment = '';
 		let statusLink: HTMLAnchorElement | undefined = undefined;
 		let isValid = true;
 
@@ -837,7 +836,18 @@ export default class SettingsUIUtils {
 					if (!(itemValue in this.ntb.app.commands.commands)) {
 						status = Status.Invalid;
 						if (itemValue === COMMAND_DOES_NOT_EXIST) {
-							statusMessage = t('setting.item.option-command-error-does-not-exist');
+							const statusFr = new DocumentFragment(); 
+							statusFr.append(t('setting.item.option-command-error-does-not-exist'));
+							statusFr.createEl('p', undefined, (el) => {
+								const link = createEl('a', { text: t('setting.item.option-command-help-gallery-link') });
+								link.onclick = async (e) => {
+									e.preventDefault();
+									if (parent instanceof ItemModal || parent instanceof ToolbarSettingsModal) parent.close();
+									await this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true });
+								};
+								el.append(t('setting.item.option-command-help-gallery'), ' ', link)
+							});
+							statusMessage = statusFr;
 						}
 						else {
 							statusMessage = t('setting.item.option-command-error-not-available-search');
