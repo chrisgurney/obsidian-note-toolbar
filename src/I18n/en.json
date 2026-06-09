@@ -441,7 +441,7 @@
             "button-open-external": "Open ↗",
             "button-open-github": "Open github.com",
             "button-read": "Read ↗",
-            "error-failed-to-load": "Failed to load:\n{{baseUrl}}/{{lang}}/{{name}}.md",
+            "error-failed-to-load": "Failed to load:\n{{path}}/{{lang}}/{{name}}.md",
             "heading": "Help using Note Toolbar",
             "heading-donate": "Contribute",
             "heading-get-started": "Getting started",

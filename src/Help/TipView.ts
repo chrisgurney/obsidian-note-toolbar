@@ -1,9 +1,20 @@
 import { renderGalleryItems } from "Gallery/GalleryView";
 import TipItems from "Help/tips.json";
 import NoteToolbarPlugin from "main";
-import { Component, ItemView, MarkdownRenderer, requestUrl, setIcon, setTooltip, ViewStateResult, WorkspaceLeaf } from "obsidian";
+import { Component, ItemView, MarkdownRenderer, setIcon, setTooltip, ViewStateResult, WorkspaceLeaf } from "obsidian";
 import { t, VIEW_TYPE_GALLERY, VIEW_TYPE_TIP } from "Settings/NoteToolbarSettings";
-import { URLS } from "Utils/Urls";
+
+import tip_en_daily_notes from 'Help/Tips/en/daily-notes.md';
+import tip_en_getting_started from 'Help/Tips/en/getting-started.md';
+import tip_en_mobile_tips from 'Help/Tips/en/mobile-tips.md';
+
+export const TIPS: Record<string, Record<string, string>> = {
+    en: {
+        'daily-notes': tip_en_daily_notes,
+        'getting-started': tip_en_getting_started,
+        'mobile-tips': tip_en_mobile_tips
+    }
+};
 
 interface TipViewState {
     id: string;
@@ -56,23 +67,9 @@ export default class TipView extends ItemView {
 		this.renderSkeleton(contentEl);
 
         // fetch and display the content
-        let tipText = '';
-        try {
-            const tipMd = await this.getTip(tip.id, language);
-            if (tipMd) {
-				tipText = tipMd;
-            }
-            else {
-                tipText = t('setting.help.error-failed-to-load', { baseUrl: URLS.GHUC_TIPS, lang: language, name: tip.id });
-            }
-        }
-        catch (error) {
-            tipText = t('setting.help.error-failed-to-load', { baseUrl: URLS.GHUC_TIPS, lang: language, name: tip.id });
-            tipText += `\n>[!error]-\n> \`${error as string}\`\n`;
-        }
-        finally {
-            contentEl.empty();
-        }
+        const tipMd = this.getTip(tip.id, language);
+        const tipText = tipMd ?? t('setting.help.error-failed-to-load', { path: 'Help/Tips', lang: language, name: tip.id });
+        contentEl.empty();
 
         const rootPath = this.ntb.app.vault.getRoot().path;
         const component = new Component();
@@ -124,26 +121,15 @@ export default class TipView extends ItemView {
     }
 
     /**
-     * Fetches the provided tip.
+     * Returns the provided tip.
      *
-     * @param filename The name of the Tip file to fetch, without the extension.
+     * @param filename The name of the Tip to return, without the extension.
      * @returns Body of the Tip, or null.
      */
-    async getTip(filename: string, language: string = 'en'): Promise<string | null> {
-        try {
-            const res = await requestUrl(`${URLS.GHUC_TIPS}/${language}/${filename}.md`);
-            if (res.status !== 200) return null;
-            return res.text ?? '';
-        } catch (e) {
-            this.ntb.debug(`Error fetching tip for language (${language}). Falling back to English.\n${e instanceof Error ? e.message : String(e)}`);
-            try {
-                const res = await requestUrl(`${URLS.GHUC_TIPS}/en/${filename}.md`);
-                if (res.status !== 200) return null;
-                return res.text ?? '';
-            } catch {
-                return null;
-            }
-        }
+    getTip(filename: string, language: string = 'en'): string | null {
+        const lang = TIPS[language] ? language : 'en';
+        const tips = TIPS[lang];
+        return tips?.[filename] ?? TIPS.en?.[filename] ?? null;
     }
 
     /**
