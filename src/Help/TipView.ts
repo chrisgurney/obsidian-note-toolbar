@@ -3,18 +3,7 @@ import TipItems from "Help/tips.json";
 import NoteToolbarPlugin from "main";
 import { Component, ItemView, MarkdownRenderer, setIcon, setTooltip, ViewStateResult, WorkspaceLeaf } from "obsidian";
 import { t, VIEW_TYPE_GALLERY, VIEW_TYPE_TIP } from "Settings/NoteToolbarSettings";
-
-import tip_en_daily_notes from 'Help/Tips/en/daily-notes.md';
-import tip_en_getting_started from 'Help/Tips/en/getting-started.md';
-import tip_en_mobile_tips from 'Help/Tips/en/mobile-tips.md';
-
-export const TIPS: Record<string, Record<string, string>> = {
-    en: {
-        'daily-notes': tip_en_daily_notes,
-        'getting-started': tip_en_getting_started,
-        'mobile-tips': tip_en_mobile_tips
-    }
-};
+import { getTip } from "./HelpContent";
 
 interface TipViewState {
     id: string;
@@ -64,10 +53,9 @@ export default class TipView extends ItemView {
 
         const contentEl = contentDiv.createDiv();
         contentEl.addClass('markdown-preview-view', 'note-toolbar-setting-tip-content', 'is-readable-line-width');
-		this.renderSkeleton(contentEl);
 
-        // fetch and display the content
-        const tipMd = this.getTip(tip.id, language);
+        // get the content
+        const tipMd = getTip(tip.id, language);
         const tipText = tipMd ?? t('setting.help.error-failed-to-load', { path: 'Help/Tips', lang: language, name: tip.id });
         contentEl.empty();
 
@@ -121,18 +109,6 @@ export default class TipView extends ItemView {
     }
 
     /**
-     * Returns the provided tip.
-     *
-     * @param filename The name of the Tip to return, without the extension.
-     * @returns Body of the Tip, or null.
-     */
-    getTip(filename: string, language: string = 'en'): string | null {
-        const lang = TIPS[language] ? language : 'en';
-        const tips = TIPS[lang];
-        return tips?.[filename] ?? TIPS.en?.[filename] ?? null;
-    }
-
-    /**
      * Renders any `note-toolbar-gallery` callouts in the tip content, replacing a list of Gallery IDs with item cards.
      * @param contentEl HTMLDivElement to render Gallery items in.
      */
@@ -159,26 +135,6 @@ export default class TipView extends ItemView {
 			}
 		});
     }
-
-	/**
-	 * Renders a skeleton to show while the content is being fetched.
-	 * @param el HTMLDivElement to render the skeleton in.
-	 */
-	renderSkeleton(el: HTMLDivElement) {
-		const heights = ['2em', '1.5em', '1em', '1em', '1em', '1em'];
-		const widths = ['30%', '70%', '80%', '90%', '80%', '90%'];
-	
-		const placeholderTextEl = el.createEl('p');
-		placeholderTextEl.setText(t('setting.whats-new.placehoder-loading'));
-		placeholderTextEl.setAttr('style', 'color: var(--text-muted)');
-
-		for (let i = 0; i < heights.length; i++) {
-			const lineEl = el.createEl('p');
-			const lineStyle = `height: ${heights[i]};${widths[i] ? ` width: ${widths[i]};` : ''} margin-bottom: 0.5em;`;
-			lineEl.addClass('note-toolbar-setting-remote-skeleton');
-			lineEl.setAttr('style', lineStyle);
-		}
-	}
 
     /**
      * Renders any `note-toolbar-video` callouts in the tip content, replacing the URL with HTML controls to play the video.
