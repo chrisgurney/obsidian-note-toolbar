@@ -51,9 +51,11 @@ description.uk: 'Стилі для плаваючих кнопок (встано
 ```
 ### For _What's New_ notes:
 
-1. Open `RELEASE.md` from [`docs/releases/en`](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/docs/releases/en)
+1. Open `RELEASE.md` from [`src/Help/Releases/en`](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/src/Help/Releases/en)
 2. Translate
-3. Save as `docs/releases/LANGUAGECODE/RELEASE.md`
+3. Save as `src/Help/Releases/LANGUAGECODE/RELEASE.md`
+4. Update [`src/Help/HelpContent.ts`](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/src/Help/HelpContent.ts). (See how English notes are defined.)
+5. Test, including in any new languages.
 
 ### For README and/or User Guide
 
@@ -72,15 +74,16 @@ Documentation is automatically updated based on the source files for those docs.
 
 ## Tips
 
-Tips are help articles that are built-in to the plugin, and are loaded in from GitHub. Tips are accessible from the Help view, and can also be referenced from Settings `Learn more` links via a URI (see below).
+Tips are help articles that are built-in to the plugin. Tips are accessible from the Help view, and can also be referenced from Settings `Learn more` links via a URI (see below).
 
 ### Create new Tips
 
-1. Create a new markdown file in `docs/tips/en`.
-    - If you're working in a beta branch, make sure this done is in the `master` branch (or cherry picked from the branch).
-1. Write your tip.
-1. Add the Tip to `src/Help/tips.json` with the ID being the filename.
-1. Add it to the Help view `src/Help/HelpView.ts`
+1. Open `tip-id.md` from [`src/Help/Tips/en`](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/src/Help/Tips/en)
+2. Translate
+3. Save as `src/Help/Tips/LANGUAGECODE/tip-id.md`
+4. Update [`src/Help/HelpContent.ts`](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/src/Help/HelpContent.ts) to include the language code. (See how English notes are defined.)
+5. Add it to the Help view `src/Help/HelpView.ts`
+6. Test, including in any new languages.
 
 See below for instructions on adding various components to Tips.
 

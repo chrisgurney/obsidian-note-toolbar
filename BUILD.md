@@ -2,7 +2,7 @@
 
 ## For major releases
 
-- [ ] Create and update the latest _What's New_ documentation in `docs/releases/en`.
+- [ ] Create and update the latest _What's New_ documentation in `src/Help/Releases/en`.
   - If you're working in a beta branch, make sure this done is in the `master` branch (or cherry picked from the branch).
 - [ ] Update `WHATSNEW_VERSION` in `NoteToolbarSettings.ts` in order to show the latest _What's New_ doc in the plugin.
 
