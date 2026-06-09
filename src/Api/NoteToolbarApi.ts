@@ -65,6 +65,11 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
         options?: NtbFileSuggesterOptions
     ): Promise<TAbstractFile | null> {
 
+        if (!Array.isArray(files)) {
+            new Notice(t('api.ui.error-missing-property', {property: 'files'}), 5000).containerEl.addClass('mod-warning');
+            return null;
+        }
+
         const recentFiles = JSON.parse(this.ntb.app.loadLocalStorage(LocalVar.RecentFiles) as string || '[]') as string[];
 
         // filter provided files based on options
@@ -201,7 +206,7 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
         else {
             toolbarOrItems.map((item: NtbMenuItem) => {
                 const missingProp = requiredProps.find(p => !item[p]);
-                if (missingProp) new Notice(t('api.ui.error-missing-property', {property: item.type})).containerEl.addClass('mod-warning');
+                if (missingProp) new Notice(t('api.ui.error-missing-property', {property: item.type}), 5000).containerEl.addClass('mod-warning');
                 menu.addItem((menuItem: MenuItem) => {
                     menuItem
                         .setTitle(item.label)
