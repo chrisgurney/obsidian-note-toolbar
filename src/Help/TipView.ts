@@ -29,7 +29,7 @@ export default class TipView extends ItemView {
 
         if (!this.state) return; // state is not ready yet
 
-        const tip = TipItems.find(tip => tip.id.includes(this.state.id));
+        const tip = TipItems.find(tip => tip.id.includes(this.state.id)) as TipType;
         if (!tip) return; // no matching tip
         
         this.ntb.settingsUtils.addCloseToPhoneNav(this);
@@ -46,10 +46,10 @@ export default class TipView extends ItemView {
         setIcon(bannerIconEl, tip.icon);
         const bannerTitleEl = bannerEl.createDiv();
         const bannerTitleComponent = new Component();
-        await MarkdownRenderer.render(this.ntb.app, `# ${(tip as TipType).title[language]}`, bannerTitleEl, '/', bannerTitleComponent);
+        await MarkdownRenderer.render(this.ntb.app, `# ${tip.title[language] ?? tip.title['en']}`, bannerTitleEl, '/', bannerTitleComponent);
         const bannerDescEl = bannerEl.createDiv();
         const bannerDescComponent = new Component();
-        await MarkdownRenderer.render(this.ntb.app, `${(tip as TipType).description[language]}`, bannerDescEl, '/', bannerDescComponent);
+        await MarkdownRenderer.render(this.ntb.app, `${tip.description[language] ?? tip.description['en']}`, bannerDescEl, '/', bannerDescComponent);
 
         const contentEl = contentDiv.createDiv();
         contentEl.addClass('markdown-preview-view', 'note-toolbar-setting-tip-content', 'is-readable-line-width');
