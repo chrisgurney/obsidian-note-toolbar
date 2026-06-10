@@ -11,7 +11,7 @@ The [Note Toolbar plugin](https://obsidian.md/plugins?id=note-toolbar) for [Obsi
 > What's new? See the [Release Notes](https://github.com/chrisgurney/obsidian-note-toolbar/releases)
 > 
 > What's ahead? See the [Roadmap](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Roadmap)
-https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/
+
 <a href="https://www.buymeacoffee.com/cheznine"><img src="https://img.buymeacoffee.com/button-api/?text=Buy%20me%20a%20coffee&emoji=%E2%98%95&slug=cheznine&button_colour=fe9b27&font_colour=000000&font_family=Lato&outline_colour=000000&coffee_colour=FFDD00" /></a>
 
 **Jump to:**
