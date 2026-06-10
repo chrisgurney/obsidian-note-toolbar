@@ -28,8 +28,8 @@ const newVersion = process.argv[2];
 
 if (!newVersion) {
     console.error('Error: Version number required');
-    console.log('Usage: npm run version <version>');
-    console.log('Example: npm run version 1.2.3');
+    console.log('Usage: npm run release <version>');
+    console.log('Example: npm run release 1.2.3');
     process.exit(1);
 }
 
