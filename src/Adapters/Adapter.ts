@@ -44,7 +44,7 @@ export abstract class Adapter {
         // show notice
         const errorFr = createFragment();
         errorFr.append(fullMessage);
-        new Notice(errorFr, 5000).containerEl.addClass('mod-warning');
+        new Notice(errorFr, 10000).containerEl.addClass('mod-warning');
     }
     
     /**
