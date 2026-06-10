@@ -128,8 +128,9 @@ export default class ToolbarItemHandler {
                     (this.ntb.app.internalPlugins.getEnabledPluginById('file-explorer') as FileExplorerPlugin).revealInFolder(fileOrFolder);
                 }
                 else if (fileOrFolder instanceof TFile && item?.linkAttr.target === 'modal') {
-                    // this.ntb.api.modal(fileOrFolder, { editable: true });
-                    await this.ntb.api.modal(fileOrFolder);
+                    await this.ntb.api.modal(fileOrFolder, {
+                        originAsContext: item?.linkAttr?.fileContext === 'origin'
+                    });
                 }
                 else {
                     await this.ntb.app.workspace.openLinkText(linkHref, activeFilePath, getLinkUiTarget(event) ?? item?.linkAttr.target as PaneType);
@@ -283,7 +284,6 @@ export default class ToolbarItemHandler {
             const activeFilePath = this.ntb.app.workspace.getActiveFile()?.path ?? "";
             const fileOrFolder = this.ntb.app.vault.getAbstractFileByPath(linkHref);
             if (fileOrFolder instanceof TFile && item?.linkAttr.target === 'modal') {
-                // this.ntb.api.modal(fileOrFolder, { editable: true });
                 await this.ntb.api.modal(fileOrFolder);
             }
             else {

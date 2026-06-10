@@ -1040,11 +1040,35 @@ export default class ToolbarItemUi {
                         .onChange(async (value) => {
                             if (value === 'default') item.linkAttr.target = undefined
                             else item.linkAttr.target = value as PaneType | 'modal';
-                            
+
+                            const fileContextEl = fieldDiv.querySelector('#note-toolbar-file-context-setting');
+                            fileContextEl?.setAttribute('data-active', (item.linkAttr.target === 'modal').toString());
+                            targetSetting.settingEl.toggleClass('note-toolbar-setting-no-padding-bottom', item.linkAttr.target !== 'modal');
+
                             this.toolbar.updated = new Date().toISOString();
                             await this.ntb.settingsManager.save();
                         })
                     );
+                    targetSetting.settingEl.toggleClass('note-toolbar-setting-no-padding-bottom', item.linkAttr.target !== 'modal');
+        });
+
+        subSettings.addSetting((targetSetting) => {
+            targetSetting
+                .setName(t('setting.item.option-file-context'))
+                .setDesc(t('setting.item.option-file-context-description'))
+                .setClass('note-toolbar-sub-setting-item')
+                .addToggle((toggle: ToggleComponent) => {
+                    toggle
+                        .setValue(item.linkAttr.fileContext === 'origin')
+                        .onChange(async (value: boolean) => {
+                            item.linkAttr.fileContext = value ? 'origin' : 'opened';
+                            this.toolbar.updated = new Date().toISOString();
+                            await this.ntb.settingsManager.save();
+                        });
+                    fixToggleTab(toggle);
+                });
+            targetSetting.settingEl.id = 'note-toolbar-file-context-setting';
+			targetSetting.settingEl.setAttribute('data-active', (item.linkAttr.target === 'modal').toString());
         });
 
     }

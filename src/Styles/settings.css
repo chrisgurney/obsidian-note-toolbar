@@ -1070,6 +1070,12 @@ input[type="text"].note-toolbar-setting-error,
                         margin-top: 0;
                     }
                 }
+                & .setting-item[data-active="false"] {
+                    display: none;
+                }
+                & .setting-item.note-toolbar-setting-no-padding-bottom {
+                    padding-bottom: 0;
+                }
             }
         }
     }

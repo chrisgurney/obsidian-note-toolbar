@@ -512,6 +512,8 @@
             "option-command-target-description": "Some commands may override this setting.",
             "option-dataview-help": "Runs a Dataview query, evaluates an expression, or executes a script.",
             "option-file": "File",
+            "option-file-context": "Use originating file as context",
+            "option-file-context-description": "Use the file that opened the modal as context (assumes the active file). Enable for Bases that need to query the active file.",
             "option-file-error-does-not-exist": "This file or folder does not exist.",
             "option-file-help": "Opens file or highlights folder when this item is used.",
             "option-file-target": "Where to open file",

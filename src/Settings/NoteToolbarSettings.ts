@@ -494,6 +494,7 @@ export const ITEM_GALLERY_DIVIDER: ToolbarItemSettings = {
 	visibility: { ...DEFAULT_ITEM_VISIBILITY_SETTINGS }
 }
 
+export type ItemFileContextType = 'opened' | 'origin';
 export type ItemFocusType = 'editor' | 'none';
 
 /**
@@ -502,6 +503,7 @@ export type ItemFocusType = 'editor' | 'none';
 export interface ToolbarItemLinkAttr {
 	commandCheck: boolean;
 	commandId: string;
+	fileContext?: ItemFileContextType;
 	focus?: ItemFocusType;
 	/**	@deprecated use the hasVars() method instead */
 	hasVars: boolean;
