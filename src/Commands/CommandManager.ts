@@ -386,12 +386,13 @@ export default class CommandManager {
         const modal = new ToolbarSuggestModal(this.ntb, true, true, false, (toolbar: ToolbarSettings) => {
             const activeFile = this.ntb.app.workspace.getActiveFile();
             if (activeFile) {
-                void this.ntb.app.fileManager.processFrontMatter(activeFile, (frontmatter) => {
+                void this.ntb.app.fileManager.processFrontMatter(activeFile, (frontmatter: Record<string, unknown>) => {
                     if (toolbar.uuid === EMPTY_TOOLBAR_ID) {
-                        delete (frontmatter as Record<string, unknown>)[this.ntb.settings.toolbarProp];
+                        delete frontmatter[this.ntb.settings.toolbarProp];
                         return;
                     }
-                    (frontmatter as Record<string, unknown>)[this.ntb.settings.toolbarProp] = toolbar.name;
+                    frontmatter[this.ntb.settings.toolbarProp] = toolbar.name;
+                    void this.ntb.listeners.metadata.renderToolbar(activeFile, frontmatter);
                 });
             }
         });
