@@ -212,7 +212,9 @@ export default interface INoteToolbarApi<T> {
      * const f = ntb.app.vault.getAbstractFileByPath(fn);
      * if (f) { 
      *   await ntb.modal(f, {
-     *     originAsContext: true
+     *     originAsContext: true,
+     *     // ...or remove the above line and render for a completely different file:
+     *     //contextPath: "Other File.md"  
      *   });
      * }
      * 
