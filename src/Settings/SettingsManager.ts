@@ -29,12 +29,17 @@ export default class SettingsManager {
 	 * @param item ToolbarItemSettings to add
 	 * @param insertIndex optional index to insert the item at; if too large, the item is added to the end of the toolbar; if not provided, the item is added to the end of the toolbar
 	 */
-	public async addToolbarItem(toolbar: ToolbarSettings, item: ToolbarItemSettings, insertIndex?: number): Promise<void> {
+	public async addToolbarItem(
+		toolbar: ToolbarSettings,
+		items: ToolbarItemSettings | ToolbarItemSettings[],
+		insertIndex?: number
+	): Promise<void> {
+		const itemsToAdd = Array.isArray(items) ? items : [items];
 		if (insertIndex !== undefined && insertIndex >= 0) {
-			toolbar.items.splice(insertIndex, 0, item);
+			toolbar.items.splice(insertIndex, 0, ...itemsToAdd);
 		}
 		else {
-			toolbar.items.push(item);
+			toolbar.items.push(...itemsToAdd);
 		}
 		toolbar.updated = new Date().toISOString();
 		await this.save();
