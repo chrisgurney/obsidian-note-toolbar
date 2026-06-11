@@ -3,6 +3,7 @@ import { Notice, ObsidianProtocolData, Platform } from "obsidian";
 import { ExportSettings, t, ToolbarItemSettings, ToolbarSettings, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_TIP, VIEW_TYPE_WHATS_NEW } from "Settings/NoteToolbarSettings";
 import { confirmImportWithModal } from "Settings/UI/Modals/ImportConfirmModal";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
+import ToolbarSuggestModal from "Settings/UI/Modals/ToolbarSuggestModal";
 import { exportToCallout, importFromCallout } from "Utils/ImportExport";
 import { URLS } from "Utils/Urls";
 
@@ -40,23 +41,30 @@ export default class ProtocolManager {
         else if (data.import) {
             const content = decodeURIComponent(data.import);
 			// double-check provided text is a Note Toolbar Callout
-			if (data.import.includes('[!note-toolbar')) {
-				await confirmImportWithModal(
-					this.ntb, 
-					content
-				).then(async (isConfirmed: boolean) => {
-					if (isConfirmed) {
-						const importedToolbar = importFromCallout(this.ntb, content, undefined, true);
+			await confirmImportWithModal(
+				this.ntb, 
+				content
+			).then(async (isConfirmed: boolean) => {
+				if (isConfirmed) {
+					const importedToolbar = importFromCallout(this.ntb, content, undefined, true);
+					if (data.import.includes('[!note-toolbar')) {
 						await this.ntb.settingsManager.addToolbar(importedToolbar)
 							.then(res => {
 								this.ntb.commands.openToolbarSettingsForId(importedToolbar.uuid);
 							});
 					}
-				});
-			}
-			else {
-				new Notice(t('import.error-invalid-uri-content')).containerEl.addClass('mod-warning');
-			}
+					else {
+						// FIXME: show error message
+						if (importedToolbar.items.length === 0) return;
+						const toolbarSuggester = new ToolbarSuggestModal(this.ntb, true, false, true, (toolbar: ToolbarSettings) => {
+							void this.ntb.settingsManager.addToolbarItem(toolbar, importedToolbar.items).then(() => {
+								this.ntb.commands.openToolbarSettingsForId(toolbar.uuid);
+							});
+						});
+						toolbarSuggester.open();
+					}
+				}
+			});
         }
 		else if (data.menu) {
 			const activeFile = this.ntb.app.workspace.getActiveFile();

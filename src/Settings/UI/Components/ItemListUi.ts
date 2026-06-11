@@ -675,12 +675,17 @@ export default class ItemListUi {
 		itemPreviewContainer = itemPreviewContainer ? itemPreviewContainer : this.getItemRowEl(toolbarItem.uuid);
 		const itemPreview = itemPreviewContainer.querySelector('.note-toolbar-setting-item-preview') as HTMLElement;
 		itemPreview?.empty();
-        renderItemPreviewEl(this.ntb, toolbarItem, itemPreview);
+        renderItemPreviewEl(this.ntb, toolbarItem, itemPreview, true);
 	}
 
 }
 
-export function renderItemPreviewEl(ntb: NoteToolbarPlugin, toolbarItem: ToolbarItemSettings, itemPreview: HTMLElement) {
+export function renderItemPreviewEl(
+    ntb: NoteToolbarPlugin, 
+    toolbarItem: ToolbarItemSettings, 
+    itemPreview: HTMLElement, 
+    isEditable: boolean
+) {
 
     const itemPreviewContent = createSpan();
     itemPreview.setAttribute(SettingsAttr.PreviewType, toolbarItem.linkAttr.type);
@@ -688,19 +693,19 @@ export function renderItemPreviewEl(ntb: NoteToolbarPlugin, toolbarItem: Toolbar
         case ItemType.Break:
         case ItemType.Separator:
         case ItemType.Spreader:
-            setTooltip(itemPreview, t('setting.items.option-edit-item-type-tooltip', { itemType: toolbarItem.linkAttr.type }));
+            if (isEditable) setTooltip(itemPreview, t('setting.items.option-edit-item-type-tooltip', { itemType: toolbarItem.linkAttr.type }));
             itemPreviewContent.setText(toolbarItem.linkAttr.type === ItemType.Break ? t('setting.item.option-break') : toolbarItem.linkAttr.type === ItemType.Separator ? t('setting.item.option-separator') : t('setting.item.option-spreader'));
             itemPreview.append(itemPreviewContent);
             break;
         case ItemType.Group: {
             const groupToolbar = ntb.settingsManager.getToolbar(toolbarItem.link);
-            setTooltip(itemPreview, 
+            if (isEditable) setTooltip(itemPreview, 
                 t('setting.items.option-edit-item-group-tooltip', { toolbar: groupToolbar ? groupToolbar.name : '', context: groupToolbar ? '' : 'none' }));
             itemPreviewContent.appendChild(groupToolbar ? ntb.settingsUtils.createToolbarPreviewFr(groupToolbar) : ntb.settingsUtils.emptyMessageFr(t('setting.item.option-item-group-error-invalid')));
             break;
         }
         default: {
-            setTooltip(itemPreview, t('setting.items.option-edit-item-tooltip'));
+            if (isEditable) setTooltip(itemPreview, t('setting.items.option-edit-item-tooltip'));
             const itemPreviewIcon = createSpan();
             itemPreviewIcon.addClass('note-toolbar-setting-item-preview-icon');
             if (toolbarItem.icon) setIcon(itemPreviewIcon, toolbarItem.icon);
@@ -743,7 +748,7 @@ export function renderItemPreviewEl(ntb: NoteToolbarPlugin, toolbarItem: Toolbar
     // }
 
     // show hotkey
-    if (!Platform.isPhone) {
+    if (!Platform.isPhone && isEditable) {
         const itemCommand = ntb.commands.getCommandFor(toolbarItem);
         if (itemCommand) {
             const itemHotkeyEl = ntb.hotkeys.getHotkeyEl(itemCommand);
