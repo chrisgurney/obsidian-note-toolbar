@@ -21,7 +21,12 @@ document.addEventListener('DOMContentLoaded', () => {
     link.textContent = 'Open in Obsidian ↗';
     link.href = 'obsidian://note-toolbar';
 
-    container.appendChild(link);
+	const message = document.querySelector('.message');
+	if (message) {
+	    message.appendChild(document.createElement('br'));
+	    message.appendChild(link);
+	}
+	
     document.body.appendChild(container);
 
     // ignore invalid input
