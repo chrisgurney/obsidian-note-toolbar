@@ -48,8 +48,8 @@ export default class ImportConfirmModal extends Modal {
         }
         // otherwise callout is just items; preview as a list of items
         else {
-            this.setTitle("Add item(s)");
-            this.modalEl.createEl('p').append("Confirm you would like to add the following to a toolbar.");
+            this.setTitle(t('import.title-import-item'));
+            this.modalEl.createEl('p').append(t('import.label-import-item-confirmation'));
             const itemPreviewsContainerEl = createDiv({ cls: ['note-toolbar-setting-item-preview-container', 'note-toolbar-setting-import-confirm-preview-container'] });
             toolbar.items.forEach((item: ToolbarItemSettings, index) => {
                 const itemPreviewEl = itemPreviewsContainerEl.createDiv({ cls: 'note-toolbar-setting-item-preview' });
