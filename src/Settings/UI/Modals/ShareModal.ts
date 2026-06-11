@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { Modal, Platform, Setting, TextAreaComponent, ToggleComponent } from "obsidian";
-import { t, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { ItemType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { toolbarHasMenu } from "Utils/Utils";
 import { fixToggleTab, learnMoreFr } from "../Utils/SettingsUIUtils";
 
@@ -11,18 +11,27 @@ export default class ShareModal extends Modal {
 	constructor(
         private ntb: NoteToolbarPlugin, 
         private shareUri: string, 
-        private toolbar: ToolbarSettings
+        private toolbarOrItem: ToolbarSettings | ToolbarItemSettings
     ) {
         super(ntb.app);
         this.modalEl.addClass('note-toolbar-share-dialog', 'note-toolbar-setting-dialog-phonefix');
     }
 
     public onOpen() {
-        this.setTitle(t('export.title-share', { toolbar: this.toolbar.name, interpolation: { escapeValue: false } }));
+        const isToolbar = 'items' in this.toolbarOrItem;
+        if (isToolbar) {
+            this.setTitle(t('export.title-share', { toolbar: (this.toolbarOrItem as ToolbarSettings).name, interpolation: { escapeValue: false } })); 
+        }
+        else {
+            const itemText = (this.toolbarOrItem as ToolbarItemSettings).label || (this.toolbarOrItem as ToolbarItemSettings).tooltip || (this.toolbarOrItem as ToolbarItemSettings).icon;
+            this.setTitle(t('export.item-share', { item: itemText, interpolation: { escapeValue: false } }));
+        }
         this.display();
     }
 
     public display() {
+
+        const isToolbar = 'items' in this.toolbarOrItem;
 
         this.contentEl.empty();
         this.modalEl.addClass('note-toolbar-setting-modal-container');
@@ -59,7 +68,7 @@ export default class ShareModal extends Modal {
                     .setValue(this.useObsidianUri)
                     .onChange(async (value) => {
                         this.useObsidianUri = value;
-                        this.shareUri = await this.ntb.protocolManager.getShareUri(this.toolbar, this.useObsidianUri);
+                        this.shareUri = await this.ntb.protocolManager.getShareUri(this.toolbarOrItem, this.useObsidianUri);
                         this.display();
                     });
                 fixToggleTab(toggle);
@@ -70,7 +79,9 @@ export default class ShareModal extends Modal {
         //
 
         const isLongUri = this.shareUri.length > 2048;
-        const hasMenu = toolbarHasMenu(this.toolbar);
+        const hasMenu = isToolbar 
+            ? toolbarHasMenu((this.toolbarOrItem as ToolbarSettings)) 
+            : ((this.toolbarOrItem as ToolbarItemSettings).linkAttr.type === ItemType.Menu);
 
         if (isLongUri || hasMenu) {
             const disclaimers = this.contentEl.createDiv();

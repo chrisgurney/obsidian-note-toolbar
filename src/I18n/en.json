@@ -200,10 +200,11 @@
     },
     "export": {
         "item-generic": "Item{{number}}",
+        "item-share": "Share item: {{item}}",
         "label-callout": "Copy as callout",
         "label-callout-description": "Copy and paste this callout into a note. Open settings to adjust formatting.",
         "label-share": "Share...",
-        "label-share-description": "Copy and share this link with another Note Toolbar user to add your toolbar to their vault.",
+        "label-share-description": "Copy and share this link with another Note Toolbar user to add this toolbar or item to their vault.",
         "label-share-preview": "preview",
         "notice-completed": "Toolbar copied to clipboard as callout. Open settings to adjust formatting.",
         "notice-shared": "Note Toolbar link copied to clipboard",
@@ -237,6 +238,7 @@
         "button-create": "Create",
         "button-import-into-tooltip": "Add toolbar items from callout",
         "button-import-tooltip": "Create toolbar from callout",
+        "button-select-toolbar": "Select toolbar...",
         "error-invalid-uri-content": "Note Toolbar: It looks like there's an issue with this link. Check the URI is correct, or review the user guide.",
         "errorlog-command-not-recognized": "Command not recognized: {{command}}",
         "errorlog-heading": "Errors found during toolbar import:",
@@ -255,8 +257,8 @@
         "title-import": "Create toolbar from callout",
         "title-import-confirmation": "Create Note Toolbar: {{toolbar}}",
         "title-import-into": "Add callout items to toolbar: {{toolbar}}",
-        "warning-invalid-plugins": "This toolbar uses plugins you do not have installed and enabled:",
-        "warning-vars": "This toolbar uses variables, which you can modify to work with your vault."
+        "warning-invalid-plugins": "This toolbar or item uses plugins you do not have installed and enabled:",
+        "warning-vars": "This toolbar or item uses variables, which you can modify to work with your vault."
     },
     "notice": {
         "cta-click": "(click)",
@@ -494,6 +496,7 @@
             "menu-more-actions": "More actions...",
             "menu-move-item": "Move item to toolbar...",
             "menu-move-item-notice": "Moved item to toolbar: {{toolbarName}}",
+            "menu-share": "Share item...",
             "option-break": "Break",
             "option-command": "Command",
             "option-command-error-does-not-exist": "This command does not exist.",

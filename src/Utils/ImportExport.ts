@@ -27,24 +27,35 @@ export async function exportToCalloutById(ntb: NoteToolbarPlugin, toolbarId: str
 /**
  * Exports the given toolbar as a Note Toolbar Callout.
  * @param ntb NoteToolbarPlugin
- * @param toolbar ToolbarSettings for the toolbar to export
+ * @param toolbarOrItem ToolbarSettings for the toolbar to export
  * @param options ExportSettings
  * @returns Note Toolbar Callout as a string
  */
-export async function exportToCallout(ntb: NoteToolbarPlugin, toolbar: ToolbarSettings, options: ExportSettings): Promise<string> {
+export async function exportToCallout(
+    ntb: NoteToolbarPlugin, 
+    toolbarOrItem: ToolbarSettings | ToolbarItemSettings, 
+    options: ExportSettings
+): Promise<string> {
     
     // plugin.debug('exportToCallout()');
 
-    // write out callout type + styles
-    const defaultStyles = toolbar.defaultStyles.length ? toolbar.defaultStyles.join('-') : '';
-    const mobileStyles = toolbar.mobileStyles.length ? toolbar.mobileStyles.join('-') : '';
-    const styles = [defaultStyles, mobileStyles].filter(Boolean).join('-');
-    let calloutExport = `> [!note-toolbar${styles ? '|' + styles : ''}] ${toolbar.name}`;
+    let calloutExport = '';
+    const isToolbar = ('items' in toolbarOrItem);
+
+    if (isToolbar) {
+        // write out callout type + styles
+        const defaultStyles = toolbarOrItem.defaultStyles.length ? toolbarOrItem.defaultStyles.join('-') : '';
+        const mobileStyles = toolbarOrItem.mobileStyles.length ? toolbarOrItem.mobileStyles.join('-') : '';
+        const styles = [defaultStyles, mobileStyles].filter(Boolean).join('-');
+        calloutExport += `> [!note-toolbar${styles ? '|' + styles : ''}] ${toolbarOrItem.name}`;
+    }
 
     // get the active file to provide context, and to replace vars if requested
     const activeFile = ntb.app.workspace.getActiveFile();
 
-    calloutExport += await exportToCalloutList(ntb, toolbar, activeFile, options) + '\n';
+    calloutExport += isToolbar 
+        ? await exportToCalloutList(ntb, toolbarOrItem, activeFile, options) + '\n'
+        : await exportItemToCallout(ntb, toolbarOrItem, activeFile, options);
 
     return calloutExport;
 
@@ -73,113 +84,135 @@ async function exportToCalloutList(
 
     let itemsExport = '';
 
-    const BULLET = '\n> -';
     for (const [index, item] of toolbar.items.entries()) {
-
-        // if Iconize is enabled, add icons; otherwise don't output
-        let itemIcon = (options.includeIcons && item.icon) ? toIconizeFormat(item.icon) : '';
-        itemIcon = (itemIcon && item.label) ? itemIcon + ' ' : itemIcon; // trailing space if needed
-
-        let itemText = options.replaceVars 
-            ? await ntb.vars.replaceVars(item.label, activeFile) 
-            : replaceScriptDelimiters(ntb, item.label);
-        let itemLink = options.replaceVars 
-            ? await ntb.vars.replaceVars(item.link, activeFile) 
-            : replaceScriptDelimiters(ntb, item.link);
-        let itemTooltip = options.replaceVars 
-            ? await ntb.vars.replaceVars(item.tooltip, activeFile) 
-            : replaceScriptDelimiters(ntb, item.tooltip);
-
-        itemText = escapeTextForCallout(itemText);
-        itemLink = escapeLinkForCallout(itemLink);
-        itemTooltip = escapeTextForCallout(itemTooltip);
-
-        // fallback if no icon or label = tooltip; otherwise use a generic name
-        itemText = itemIcon ? itemText : (itemText ? itemText : (itemTooltip ? itemTooltip : t('export.item-generic', { number: index + 1 })));
-
         switch(item.linkAttr.type) {
-            case ItemType.Break:
-                itemsExport += `${BULLET} <br/>`;
-                break;
-            case ItemType.Command:
-                itemsExport += options.useDataEls 
-                    ? `${BULLET} [${itemIcon}${itemText}]()<data data-ntb-command="${item.linkAttr.commandId}"/>`
-                    : `${BULLET} [${itemIcon}${itemText}](<obsidian://note-toolbar?commandid=${item.linkAttr.commandId}>)`;
-                break;
-            case ItemType.Dataview:
-            case ItemType.JavaScript:
-            case ItemType.JsEngine:
-            case ItemType.Templater:
-                if (item.scriptConfig) {
-                    // write out each script data attribute separately
-                    const scriptAttributes = Object.entries(item.scriptConfig)
-                        .filter(([_, value]) => value !== undefined && value !== null)
-                        .map(([key, value]) => {
-                            if (key === 'pluginFunction') {
-                                return `data-${item.linkAttr.type}="${String(value)}"`;
-                            }
-                            else {
-                                let encodedValue = String(value);
-                                if (key === 'outputFile') {
-                                    encodedValue = replaceScriptDelimiters(ntb, encodedValue);
-                                }
-                                encodedValue = escapeAttribute(String(encodedValue));
-                                return encodedValue ? `${SCRIPT_ATTRIBUTE_MAP[key]}="${encodedValue}"` : '';
-                            }
-                        })
-                        .join(' ');
-                    itemsExport += `${BULLET} [${itemIcon}${itemText}]()<data ${scriptAttributes}/>`;
-                }
-                break;
-            case ItemType.File: {
-                // check if the provided file links to a folder, and if so replace with a folder
-                let resolvedItemLink = itemLink;
-                await ntb.vars.replaceVars(itemLink, activeFile).then((resolvedLink) => {
-                    resolvedItemLink = resolvedLink;
-                });
-                const fileOrFolder = ntb.app.vault.getAbstractFileByPath(resolvedItemLink);
-                if (fileOrFolder instanceof TFolder) {
-                    itemsExport += options.useDataEls
-                        ? `${BULLET} [${itemIcon}${itemText}]()<data data-ntb-folder="${itemLink}"/>`
-                        : `${BULLET} [${itemIcon}${itemText}](<obsidian://note-toolbar?folder=${itemLink}>)`;
-                }
-                else {
-                    itemsExport += `${BULLET} [[${itemLink}|${itemIcon}${itemText}]]`;
-                }
-                break;
-            }
             case ItemType.Group: {
                 const groupToolbar = ntb.settingsManager.getToolbar(item.link);
                 itemsExport += groupToolbar ? await exportToCalloutList(ntb, groupToolbar, activeFile, options, recursions + 1) : '';
                 // TODO: skipped/ignored message if toolbar not found
                 break;
             }
-            case ItemType.Menu: {
-                let menuLink = itemLink;
-                if (!options.useIds) {
-                    const menuToolbar = ntb.settingsManager.getToolbar(item.link);
-                    menuLink = menuToolbar ? menuToolbar.name : menuLink;
-                    // TODO: skipped/ignored message if toolbar not found?
-                }
-                itemsExport += options.useDataEls
-                    ? `${BULLET} [${itemIcon}${itemText}]()<data data-ntb-menu="${menuLink}"/>`
-                    : `${BULLET} [${itemIcon}${itemText}](<obsidian://note-toolbar?menu=${menuLink}>)`;
-                break;
-            }
-            case ItemType.Separator:
-            case ItemType.Spreader:
-                // TODO: possible to display spreaders in callouts?
-                itemsExport += `${BULLET} <hr/>`;
-                break;
-            case ItemType.Uri:
-                // item links that start with < such as Templater expressions are left alone
-                itemsExport += itemLink ? `${BULLET} [${itemIcon}${itemText}](${itemLink.startsWith('<') ? itemLink : `<${itemLink}>`})` : '';
+            default:
+                itemsExport += await exportItemToCallout(ntb, item, activeFile, options, index);
                 break;
         }
-
-        itemsExport += (itemTooltip && (itemText !== itemTooltip)) ? ` <!-- ${itemTooltip} -->` : '';
-
     }
+
+    return itemsExport;
+
+}
+
+async function exportItemToCallout(
+    ntb: NoteToolbarPlugin, 
+    item: ToolbarItemSettings,
+    activeFile: TFile | null, 
+    options: ExportSettings,
+    index: number = 0
+): Promise<string> {
+
+    let itemsExport = '';
+    const BULLET = '\n> -';
+
+    // if Iconize is enabled, add icons; otherwise don't output
+    let itemIcon = (options.includeIcons && item.icon) ? toIconizeFormat(item.icon) : '';
+    itemIcon = (itemIcon && item.label) ? itemIcon + ' ' : itemIcon; // trailing space if needed
+
+    let itemText = options.replaceVars 
+        ? await ntb.vars.replaceVars(item.label, activeFile) 
+        : replaceScriptDelimiters(ntb, item.label);
+    let itemLink = options.replaceVars 
+        ? await ntb.vars.replaceVars(item.link, activeFile) 
+        : replaceScriptDelimiters(ntb, item.link);
+    let itemTooltip = options.replaceVars 
+        ? await ntb.vars.replaceVars(item.tooltip, activeFile) 
+        : replaceScriptDelimiters(ntb, item.tooltip);
+
+    itemText = escapeTextForCallout(itemText);
+    itemLink = escapeLinkForCallout(itemLink);
+    itemTooltip = escapeTextForCallout(itemTooltip);
+
+    // fallback if no icon or label = tooltip; otherwise use a generic name
+    itemText = itemIcon ? itemText : (itemText ? itemText : (itemTooltip ? itemTooltip : t('export.item-generic', { number: index + 1 })));
+
+    switch(item.linkAttr.type) {
+        case ItemType.Break:
+            itemsExport += `${BULLET} <br/>`;
+            break;
+        case ItemType.Command:
+            itemsExport += options.useDataEls 
+                ? `${BULLET} [${itemIcon}${itemText}]()<data data-ntb-command="${item.linkAttr.commandId}"/>`
+                : `${BULLET} [${itemIcon}${itemText}](<obsidian://note-toolbar?commandid=${item.linkAttr.commandId}>)`;
+            break;
+        case ItemType.Dataview:
+        case ItemType.JavaScript:
+        case ItemType.JsEngine:
+        case ItemType.Templater:
+            if (item.scriptConfig) {
+                // write out each script data attribute separately
+                const scriptAttributes = Object.entries(item.scriptConfig)
+                    .filter(([_, value]) => value !== undefined && value !== null)
+                    .map(([key, value]) => {
+                        if (key === 'pluginFunction') {
+                            return `data-${item.linkAttr.type}="${String(value)}"`;
+                        }
+                        else {
+                            let encodedValue = String(value);
+                            if (key === 'outputFile') {
+                                encodedValue = replaceScriptDelimiters(ntb, encodedValue);
+                            }
+                            encodedValue = escapeAttribute(String(encodedValue));
+                            return encodedValue ? `${SCRIPT_ATTRIBUTE_MAP[key]}="${encodedValue}"` : '';
+                        }
+                    })
+                    .join(' ');
+                itemsExport += `${BULLET} [${itemIcon}${itemText}]()<data ${scriptAttributes}/>`;
+            }
+            break;
+        case ItemType.File: {
+            // check if the provided file links to a folder, and if so replace with a folder
+            let resolvedItemLink = itemLink;
+            await ntb.vars.replaceVars(itemLink, activeFile).then((resolvedLink) => {
+                resolvedItemLink = resolvedLink;
+            });
+            const fileOrFolder = ntb.app.vault.getAbstractFileByPath(resolvedItemLink);
+            if (fileOrFolder instanceof TFolder) {
+                itemsExport += options.useDataEls
+                    ? `${BULLET} [${itemIcon}${itemText}]()<data data-ntb-folder="${itemLink}"/>`
+                    : `${BULLET} [${itemIcon}${itemText}](<obsidian://note-toolbar?folder=${itemLink}>)`;
+            }
+            else {
+                itemsExport += `${BULLET} [[${itemLink}|${itemIcon}${itemText}]]`;
+            }
+            break;
+        }
+        case ItemType.Group:
+            // do nothing; this should be handled in exportToCalloutList()
+            break;
+        case ItemType.Menu: {
+            let menuLink = itemLink;
+            if (!options.useIds) {
+                const menuToolbar = ntb.settingsManager.getToolbar(item.link);
+                menuLink = menuToolbar ? menuToolbar.name : menuLink;
+                // TODO: skipped/ignored message if toolbar not found?
+            }
+            itemsExport += options.useDataEls
+                ? `${BULLET} [${itemIcon}${itemText}]()<data data-ntb-menu="${menuLink}"/>`
+                : `${BULLET} [${itemIcon}${itemText}](<obsidian://note-toolbar?menu=${menuLink}>)`;
+            break;
+        }
+        case ItemType.Separator:
+        case ItemType.Spreader:
+            // TODO: possible to display spreaders in callouts?
+            itemsExport += `${BULLET} <hr/>`;
+            break;
+        case ItemType.Uri:
+            // item links that start with < such as Templater expressions are left alone
+            itemsExport += itemLink ? `${BULLET} [${itemIcon}${itemText}](${itemLink.startsWith('<') ? itemLink : `<${itemLink}>`})` : '';
+            break;
+    }
+
+    // add the tooltip as a comment
+    itemsExport += (itemTooltip && (itemText !== itemTooltip)) ? ` <!-- ${itemTooltip} -->` : '';
 
     return itemsExport;
 

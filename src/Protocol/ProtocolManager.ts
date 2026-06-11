@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { Notice, ObsidianProtocolData, Platform } from "obsidian";
-import { ExportSettings, t, ToolbarSettings, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_TIP, VIEW_TYPE_WHATS_NEW } from "Settings/NoteToolbarSettings";
+import { ExportSettings, t, ToolbarItemSettings, ToolbarSettings, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_TIP, VIEW_TYPE_WHATS_NEW } from "Settings/NoteToolbarSettings";
 import { confirmImportWithModal } from "Settings/UI/Modals/ImportConfirmModal";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
 import { exportToCallout, importFromCallout } from "Utils/ImportExport";
@@ -123,19 +123,19 @@ export default class ProtocolManager {
 	}
 
     /**
-     * Returns a URI which can be shared with other users, that imports the provided toolbar's callout markdown.
-     * @param toolbar ToolbarSettings to share
+     * Returns a URI which can be shared with other users, that imports the provided Note Toolbar Callout markdown.
+     * @param toolbarOrItem ToolbarSettings or ToolbarItemSettings to share
 	 * @param useObsidianUri true if an obsidian:// URI should be generated versus an HTTP URL (default)
      * @returns URI to share as a string
      */
-    async getShareUri(toolbar: ToolbarSettings, useObsidianUri: boolean = false): Promise<string> {
+    async getShareUri(toolbarOrItem: ToolbarSettings | ToolbarItemSettings, useObsidianUri: boolean = false): Promise<string> {
 		const options = {
 			includeIcons: true,
 			replaceVars: false,
 			useDataEls: true,
 			useIds: false
 		} as ExportSettings;
-        const callout = await exportToCallout(this.ntb, toolbar, options);
+        const callout = await exportToCallout(this.ntb, toolbarOrItem, options);
 		const shareUri = useObsidianUri 
 			? `obsidian://note-toolbar?import=${encodeURIComponent(callout)}`
 			: `${URLS.GHIO_SHARE}${encodeURIComponent(`obsidian://note-toolbar?import=${callout}`)}`

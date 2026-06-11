@@ -6,6 +6,7 @@ import { addComponentVisibility, getElementPosition, removeComponentVisibility }
 import CopyTextModal from "../Modals/CopyTextModal";
 import IconSuggestModal from "../Modals/IconSuggestModal";
 import ItemModal from "../Modals/ItemModal";
+import ShareModal from "../Modals/ShareModal";
 import ToolbarSettingsModal, { SettingsAttr } from "../Modals/ToolbarSettingsModal";
 import CommandSuggester from "../Suggesters/CommandSuggester";
 import FileSuggester from "../Suggesters/FileSuggester";
@@ -516,6 +517,19 @@ export default class ToolbarItemUi {
             menu.addSeparator();
 
         }
+
+        menu.addItem((menuItem: MenuItem) => {
+            menuItem
+                .setTitle(t('setting.item.menu-share'))
+                .setIcon('share')
+                .onClick(async (menuEvent) => {
+                    const shareUri = await this.ntb.protocolManager.getShareUri(toolbarItem);
+                    const shareModal = new ShareModal(this.ntb, shareUri, toolbarItem);
+                    shareModal.open();
+                });
+        });
+
+        menu.addSeparator();
 
         menu.addItem((menuItem: MenuItem) => {
             menuItem
