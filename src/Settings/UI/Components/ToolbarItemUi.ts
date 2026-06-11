@@ -1317,7 +1317,7 @@ export default class ToolbarItemUi {
     }
 
     renderPreview(toolbarItem: ToolbarItemSettings) {
-        if (this.parent instanceof ToolbarSettingsModal) this.parent.itemListUi.renderPreview(toolbarItem);
+        if (this.parent instanceof ToolbarSettingsModal) this.parent.itemListUi.renderItemPreview(toolbarItem);
     }
 
 	/**

@@ -294,7 +294,7 @@ export default class ItemListUi {
         itemPreview.tabIndex = 0;
         itemPreviewContainer.appendChild(itemPreview);
 
-        this.renderPreview(toolbarItem, itemPreviewContainer);
+        this.renderItemPreview(toolbarItem, itemPreviewContainer);
 
         //
         // add the initial icon for the item's visibility state
@@ -671,90 +671,94 @@ export default class ItemListUi {
 	 * @param toolbarItem ToolbarItemSettings to display preview for
 	 * @param itemPreviewContainer HTMLElement container to show the preview in, if we've just created it; leave empty to use existing.
 	 */
-	renderPreview(toolbarItem: ToolbarItemSettings, itemPreviewContainer?: HTMLElement) {
-
+	renderItemPreview(toolbarItem: ToolbarItemSettings, itemPreviewContainer?: HTMLElement) {
 		itemPreviewContainer = itemPreviewContainer ? itemPreviewContainer : this.getItemRowEl(toolbarItem.uuid);
 		const itemPreview = itemPreviewContainer.querySelector('.note-toolbar-setting-item-preview') as HTMLElement;
 		itemPreview?.empty();
-		const itemPreviewContent = createSpan();
-		itemPreview.setAttribute(SettingsAttr.PreviewType, toolbarItem.linkAttr.type);
-		switch(toolbarItem.linkAttr.type) {
-			case ItemType.Break:
-            case ItemType.Separator:
-            case ItemType.Spreader:
-				setTooltip(itemPreview, t('setting.items.option-edit-item-type-tooltip', { itemType: toolbarItem.linkAttr.type }));
-				itemPreviewContent.setText(toolbarItem.linkAttr.type === ItemType.Break ? t('setting.item.option-break') : toolbarItem.linkAttr.type === ItemType.Separator ? t('setting.item.option-separator') : t('setting.item.option-spreader'));
-				itemPreview.append(itemPreviewContent);
-				break;
-			case ItemType.Group: {
-				const groupToolbar = this.ntb.settingsManager.getToolbar(toolbarItem.link);
-				setTooltip(itemPreview, 
-					t('setting.items.option-edit-item-group-tooltip', { toolbar: groupToolbar ? groupToolbar.name : '', context: groupToolbar ? '' : 'none' }));
-				itemPreviewContent.appendChild(groupToolbar ? this.ntb.settingsUtils.createToolbarPreviewFr(groupToolbar) : this.ntb.settingsUtils.emptyMessageFr(t('setting.item.option-item-group-error-invalid')));
-				break;
-			}
-			default: {
-				setTooltip(itemPreview, t('setting.items.option-edit-item-tooltip'));
-				const itemPreviewIcon = createSpan();
-				itemPreviewIcon.addClass('note-toolbar-setting-item-preview-icon');
-				if (toolbarItem.icon) setIcon(itemPreviewIcon, toolbarItem.icon);
-				itemPreview.appendChild(itemPreviewIcon);
-				itemPreviewContent.addClass('note-toolbar-setting-item-preview-label');
-				if (toolbarItem.label) {
-					itemPreviewContent.setText(toolbarItem.label);
-					if (this.ntb.vars.hasVars(toolbarItem.label)) {
-						itemPreviewContent.addClass('note-toolbar-setting-item-preview-code');
-					}
-				}
-				else if (toolbarItem.tooltip) {
-					itemPreviewContent.setText(toolbarItem.tooltip);
-					itemPreviewContent.addClass("note-toolbar-setting-item-preview-tooltip");
-					if (this.ntb.vars.hasVars(toolbarItem.tooltip)) {
-						itemPreviewContent.addClass('note-toolbar-setting-item-preview-code');
-					}
-				}
-				else {
-					itemPreviewContent.setText(t('setting.items.option-item-empty-label'));
-					itemPreviewContent.addClass("note-toolbar-setting-item-preview-empty");
-				}
-				break;
-			}
-		}
-
-		// FIXME: figure out how to add back in, with error for each preview item (which needs flex-wrap:wrap)
-		// add an icon to indicate each line is editable on mobile (as there's no hover state available)
-		// if (Platform.isMobile) {
-		// 	if (![ItemType.Break, ItemType.Separator].includes(toolbarItem.linkAttr.type)) {
-		// 		let itemPreviewLabelEditIcon = createDiv();
-		// 		itemPreviewLabelEditIcon.addClass("note-toolbar-setting-item-preview-edit-mobile");
-		// 		let itemPreviewEditIcon = createSpan();
-		// 		itemPreviewEditIcon.addClass("note-toolbar-setting-icon-button-cta");
-		// 		setIcon(itemPreviewEditIcon, 'lucide-pencil');
-		// 		itemPreviewLabelEditIcon.appendChild(itemPreviewContent);
-		// 		itemPreviewLabelEditIcon.appendChild(itemPreviewEditIcon);
-		// 		itemPreview.appendChild(itemPreviewLabelEditIcon);
-		// 	}
-		// }
-
-		// show hotkey
-		if (!Platform.isPhone) {
-			const itemCommand = this.ntb.commands.getCommandFor(toolbarItem);
-			if (itemCommand) {
-				const itemHotkeyEl = this.ntb.hotkeys.getHotkeyEl(itemCommand);
-				if (itemHotkeyEl) {
-					itemPreviewContent.appendChild(itemHotkeyEl);
-				}
-				else {
-					const commandIconEl = itemPreviewContent.createSpan();
-					commandIconEl.addClass('note-toolbar-setting-command-indicator');
-					setIcon(commandIconEl, 'terminal');
-					setTooltip(commandIconEl, t('setting.use-item-command.tooltip-command-indicator', { command: itemCommand.name, interpolation: { escapeValue: false } }));
-				}
-			}
-		}
-		
-		itemPreview.appendChild(itemPreviewContent);
-
+        renderItemPreviewEl(this.ntb, toolbarItem, itemPreview);
 	}
 
+}
+
+export function renderItemPreviewEl(ntb: NoteToolbarPlugin, toolbarItem: ToolbarItemSettings, itemPreview: HTMLElement) {
+
+    const itemPreviewContent = createSpan();
+    itemPreview.setAttribute(SettingsAttr.PreviewType, toolbarItem.linkAttr.type);
+    switch(toolbarItem.linkAttr.type) {
+        case ItemType.Break:
+        case ItemType.Separator:
+        case ItemType.Spreader:
+            setTooltip(itemPreview, t('setting.items.option-edit-item-type-tooltip', { itemType: toolbarItem.linkAttr.type }));
+            itemPreviewContent.setText(toolbarItem.linkAttr.type === ItemType.Break ? t('setting.item.option-break') : toolbarItem.linkAttr.type === ItemType.Separator ? t('setting.item.option-separator') : t('setting.item.option-spreader'));
+            itemPreview.append(itemPreviewContent);
+            break;
+        case ItemType.Group: {
+            const groupToolbar = ntb.settingsManager.getToolbar(toolbarItem.link);
+            setTooltip(itemPreview, 
+                t('setting.items.option-edit-item-group-tooltip', { toolbar: groupToolbar ? groupToolbar.name : '', context: groupToolbar ? '' : 'none' }));
+            itemPreviewContent.appendChild(groupToolbar ? ntb.settingsUtils.createToolbarPreviewFr(groupToolbar) : ntb.settingsUtils.emptyMessageFr(t('setting.item.option-item-group-error-invalid')));
+            break;
+        }
+        default: {
+            setTooltip(itemPreview, t('setting.items.option-edit-item-tooltip'));
+            const itemPreviewIcon = createSpan();
+            itemPreviewIcon.addClass('note-toolbar-setting-item-preview-icon');
+            if (toolbarItem.icon) setIcon(itemPreviewIcon, toolbarItem.icon);
+            itemPreview.appendChild(itemPreviewIcon);
+            itemPreviewContent.addClass('note-toolbar-setting-item-preview-label');
+            if (toolbarItem.label) {
+                itemPreviewContent.setText(toolbarItem.label);
+                if (ntb.vars.hasVars(toolbarItem.label)) {
+                    itemPreviewContent.addClass('note-toolbar-setting-item-preview-code');
+                }
+            }
+            else if (toolbarItem.tooltip) {
+                itemPreviewContent.setText(toolbarItem.tooltip);
+                itemPreviewContent.addClass("note-toolbar-setting-item-preview-tooltip");
+                if (ntb.vars.hasVars(toolbarItem.tooltip)) {
+                    itemPreviewContent.addClass('note-toolbar-setting-item-preview-code');
+                }
+            }
+            else {
+                itemPreviewContent.setText(t('setting.items.option-item-empty-label'));
+                itemPreviewContent.addClass("note-toolbar-setting-item-preview-empty");
+            }
+            break;
+        }
+    }
+
+    // FIXME: figure out how to add back in, with error for each preview item (which needs flex-wrap:wrap)
+    // add an icon to indicate each line is editable on mobile (as there's no hover state available)
+    // if (Platform.isMobile) {
+    // 	if (![ItemType.Break, ItemType.Separator].includes(toolbarItem.linkAttr.type)) {
+    // 		let itemPreviewLabelEditIcon = createDiv();
+    // 		itemPreviewLabelEditIcon.addClass("note-toolbar-setting-item-preview-edit-mobile");
+    // 		let itemPreviewEditIcon = createSpan();
+    // 		itemPreviewEditIcon.addClass("note-toolbar-setting-icon-button-cta");
+    // 		setIcon(itemPreviewEditIcon, 'lucide-pencil');
+    // 		itemPreviewLabelEditIcon.appendChild(itemPreviewContent);
+    // 		itemPreviewLabelEditIcon.appendChild(itemPreviewEditIcon);
+    // 		itemPreview.appendChild(itemPreviewLabelEditIcon);
+    // 	}
+    // }
+
+    // show hotkey
+    if (!Platform.isPhone) {
+        const itemCommand = ntb.commands.getCommandFor(toolbarItem);
+        if (itemCommand) {
+            const itemHotkeyEl = ntb.hotkeys.getHotkeyEl(itemCommand);
+            if (itemHotkeyEl) {
+                itemPreviewContent.appendChild(itemHotkeyEl);
+            }
+            else {
+                const commandIconEl = itemPreviewContent.createSpan();
+                commandIconEl.addClass('note-toolbar-setting-command-indicator');
+                setIcon(commandIconEl, 'terminal');
+                setTooltip(commandIconEl, t('setting.use-item-command.tooltip-command-indicator', { command: itemCommand.name, interpolation: { escapeValue: false } }));
+            }
+        }
+    }
+    
+    itemPreview.appendChild(itemPreviewContent);
+    
 }
