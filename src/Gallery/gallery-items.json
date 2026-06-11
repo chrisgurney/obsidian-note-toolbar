@@ -1059,7 +1059,7 @@
             "zh": "创建一个新的看板。",
             "uk": "Створіть нову дошку Kanban."
         },
-        "icon": "trello",
+        "icon": "square-kanban",
         "target": "tab",
         "tooltip": {
             "en": "New kanban",
