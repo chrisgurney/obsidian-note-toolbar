@@ -768,6 +768,16 @@
     }
 }
 
+.note-toolbar-setting-script-preview {
+    border-inline-start: var(--border-width) solid var(--background-modifier-border);
+    display: flex;
+    font-family: var(--font-monospace);
+    font-size: var(--font-ui-small);
+    margin-inline-start: 1.25em;
+    padding-inline-start: 1em;
+    white-space: normal;
+}
+
 .note-toolbar-setting-empty-message {
     align-items: center;
     color: var(--text-muted);
@@ -1303,6 +1313,11 @@ input[type="text"].note-toolbar-setting-error,
 
 .note-toolbar-setting-spacer {
     margin-block-start: 2em;    
+}
+
+.note-toolbar-setting-import-confirm-preview-container {
+    align-items: flex-start;
+    flex-direction: column;
 }
 
 .note-toolbar-setting-import-confirm-preview {

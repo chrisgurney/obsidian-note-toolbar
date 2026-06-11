@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { ButtonComponent, Modal } from "obsidian";
-import { t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { ScriptConfig, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { importFromCallout } from "Utils/ImportExport";
 import { learnMoreFr, pluginLinkFr } from "../Utils/SettingsUIUtils";
 import { renderItemPreviewEl } from "../Components/ItemListUi";
@@ -50,15 +50,19 @@ export default class ImportConfirmModal extends Modal {
         else {
             this.setTitle("Add item(s)");
             this.modalEl.createEl('p').append("Confirm you would like to add the following to a toolbar.");
-            const itemPreviewsContainerEl = createDiv({ cls: 'note-toolbar-setting-item-preview-container' });
+            const itemPreviewsContainerEl = createDiv({ cls: ['note-toolbar-setting-item-preview-container', 'note-toolbar-setting-import-confirm-preview-container'] });
             toolbar.items.forEach((item: ToolbarItemSettings, index) => {
-                const itemPreviewEl = createDiv({ cls: 'note-toolbar-setting-item-preview' });
+                const itemPreviewEl = itemPreviewsContainerEl.createDiv({ cls: 'note-toolbar-setting-item-preview' });
                 renderItemPreviewEl(this.ntb, item, itemPreviewEl, false);
-                itemPreviewsContainerEl.append(itemPreviewEl);
+                // show preview of script content
+                const scriptText = this.formatScriptSummary(item.scriptConfig, true);
+                if (scriptText) {
+                    const scriptPreviewEl = itemPreviewsContainerEl.createDiv({ cls: 'note-toolbar-setting-script-preview' });
+                    scriptPreviewEl.setText(scriptText);
+                }
             });
             previewFr = new DocumentFragment();
             previewFr.append(itemPreviewsContainerEl);
-            // TODO: show preview of script content (to implement)
         }
 
         if (previewFr) {
@@ -119,4 +123,13 @@ export default class ImportConfirmModal extends Modal {
 
     }
 
+    formatScriptSummary(config: ScriptConfig | undefined, verbose: boolean): string {
+        if (!config) return '';
+        const parts: string[] = [];
+        if (config.sourceFile) parts.push(`${config.sourceFile}`);
+        if (config.sourceFunction) parts.push(`${config.sourceFunction}`);
+        if (config.expression) parts.push(verbose ? config.expression : config.expression.replace(/\n/g, ' '));
+        return parts.join(' | ');
+    }
+    
 }
