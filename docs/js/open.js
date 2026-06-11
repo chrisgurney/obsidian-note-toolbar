@@ -1,5 +1,6 @@
 /**
- * This page opens links shared from Note Toolbar directly in Obsidian.
+ * This script opens links shared from Note Toolbar directly in Obsidian.
+ * Learn more: https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Sharing-toolbars
  *
  * What It Does:
  * 1. Reads a special link passed into the page (from the URL query string).
