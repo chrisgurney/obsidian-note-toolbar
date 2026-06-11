@@ -74,16 +74,17 @@ export default class ImportModal extends Modal {
         this.modalEl.createDiv().addClass('note-toolbar-setting-spacer');            
         const btnContainerEl = this.modalEl.createDiv();
         btnContainerEl.addClass('note-toolbar-setting-confirm-dialog-buttons');
+        
+        new ButtonComponent(btnContainerEl)
+            .setButtonText(t('import.button-cancel'))
+            .onClick(() => {
+                this.close();
+            });
         new ButtonComponent(btnContainerEl)
             .setButtonText(this.toolbar ? t('import.button-add-items') : t('import.button-create'))
             .setCta()
             .onClick(() => {
                 this.importedToolbar = importFromCallout(this.ntb, this.callout, this.toolbar);
-                this.close();
-            });
-        new ButtonComponent(btnContainerEl)
-            .setButtonText(t('import.button-cancel'))
-            .onClick(() => {
                 this.close();
             });
 

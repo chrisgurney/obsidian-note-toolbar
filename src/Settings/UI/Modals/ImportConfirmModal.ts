@@ -50,7 +50,7 @@ export default class ImportConfirmModal extends Modal {
         else {
             this.setTitle("Add item(s)");
             this.modalEl.createEl('p').append("Confirm you would like to add the following to a toolbar.");
-            const itemPreviewsEl = createDiv();
+            const itemPreviewsEl = createDiv({ cls: 'note-toolbar-setting-item-preview' });
             toolbar.items.forEach((item: ToolbarItemSettings, index) => {
                 renderItemPreviewEl(this.ntb, item, itemPreviewsEl, false);
             });
