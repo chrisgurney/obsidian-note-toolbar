@@ -38,5 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // update page link and attempt redirect
     link.href = finalUrl;
-	window.location.replace(finalUrl);
+	// window.location.replace(finalUrl);
+	window.location.href = finalUrl;
+	
 });
