@@ -70,6 +70,7 @@ Tools for working with files.
 | Item | Description |
 | --- | --- |
 | New note | Creates a new note. |
+| Append text | Appends the prompted text to a file you specify. *Add from: [[Additional Gallery items]]* |
 | New kanban | Create a new kanban board. |
 | New canvas | Create a new canvas file. |
 | Move file to folder | Move current file to a chosen folder. |
@@ -210,6 +211,8 @@ Get access to Note Toolbar settings and tools quickly.
 | Quick Tools | Opens a searchable window with access to all toolbar items. |
 | Toolbar settings | Opens the active Note Toolbar's settings to customize your toolbar. |
 | Note Toolbar User Guide | Access the Note Toolbar User Guide for help and tips. |
+| Export all toolbars as callouts | Writes an export file containing all toolbars as callouts. *Add from: [[Additional Gallery items]]* |
+| Backup Note Toolbar config | Copy Note Toolbar's settings (data.json) file into the vault. *Add from: [[Additional Gallery items]]* |
 
 ## Obsidian Support
 

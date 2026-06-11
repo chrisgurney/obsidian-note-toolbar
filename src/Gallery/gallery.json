@@ -83,7 +83,7 @@
                 "uk": "Інструменти роботи з файлами."
             },
             "itemIds": [
-                "file-new", "obsidian-kanban-create", "canvas-new", "file-move", "file-in-explorer", "file-in-system", "vscode-open"
+                "file-new", "file-append", "obsidian-kanban-create", "canvas-new", "file-move", "file-in-explorer", "file-in-system", "vscode-open"
             ]
         },
         {
@@ -229,7 +229,7 @@
                 "uk": "Отримайте швидкий доступ до налаштувань та інструментів Note Toolbar."
             },
             "itemIds": [
-                "note-toolbar-quick-toolbars", "note-toolbar-quick-tools", "note-toolbar-tbar-settings", "note-toolbar-user-guide"
+                "note-toolbar-quick-toolbars", "note-toolbar-quick-tools", "note-toolbar-tbar-settings", "note-toolbar-user-guide", "note-toolbar-export", "note-toolbar-backup-data"
             ]
         },
         {
