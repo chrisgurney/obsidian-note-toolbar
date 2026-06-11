@@ -20,7 +20,7 @@ Then:
 
 Here's what's currently available, grouped by category. If you're missing any of these, make sure you've updated to the latest version of Note Toolbar.
 
-See the [[Addtional Gallery items]] page for items which require access to the clipboard (such as _Copy_, _Paste_), external resources, or vault content.
+See the [[Additional Gallery items]] page for items which require access to the clipboard (such as _Copy_, _Paste_), external resources, or vault content.
 
 > [!note]
 > If you have an idea for what you would like to see in the Gallery, please use [this Google form ↗](https://forms.gle/sa75KNAQiWTtAY4P8). If you're having an issue with a particular plugin, please refer to their help documentation.
