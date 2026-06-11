@@ -21,11 +21,9 @@ document.addEventListener('DOMContentLoaded', () => {
     link.textContent = 'Open in Obsidian ↗';
     link.href = 'obsidian://note-toolbar';
 
-	const message = document.querySelector('.message');
-	if (message) {
-	    message.appendChild(document.createElement('br'));
-	    message.appendChild(link);
-	}
+    const p = document.createElement('p');
+    p.appendChild(link);
+    document.querySelector('.message')?.appendChild(p);
 	
     document.body.appendChild(container);
 
