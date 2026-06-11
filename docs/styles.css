@@ -20,7 +20,7 @@ body {
     padding: 1rem;
 }
 
-.message {
+.message, .message a {
     color: #fff;
 }
 
