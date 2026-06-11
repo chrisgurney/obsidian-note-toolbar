@@ -517,19 +517,3 @@ export function importFromCallout(
     return toolbar;
 
 }
-
-/**
- * Imports items from a callout string.
- * @param ntb NoteToolbarPlugin
- * @param callout Note Toolbar Calllout string to import
- * @param toolbar optional ToolbarSettings for existing toolbar to import into
- * @returns ToolbarSettings
- */
-export function importItemsFromCallout(
-    ntb: NoteToolbarPlugin, 
-    callout: string, 
-    fromShareUri: boolean = false
-): ToolbarItemSettings[] | undefined {
-    const importedToolbar = importFromCallout(ntb, callout, undefined, fromShareUri);
-    return importedToolbar?.items;
-}
