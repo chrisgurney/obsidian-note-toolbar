@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	const p2 = document.createElement('p');
     p2.textContent = 
-        "If you're viewing this in Obsidian Web Viewer, right-click on this link and select \"Open link in default browser\".";
+        "If you're viewing this in <i>Obsidian Web Viewer</i>, right-click on this link and select <i>Open link in default browser</i>.";
 
 	const message = document.querySelector('.message');
 	if (message) {
