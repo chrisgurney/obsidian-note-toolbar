@@ -36,6 +36,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const finalUrl = 'obsidian://note-toolbar?import=' + encodeURIComponent(param);
 
+	console.log('OPEN.HTM CONTEXT:', navigator, document, window);
+	
     // update page link and attempt redirect
     link.href = finalUrl;
 	// window.location.replace(finalUrl);
