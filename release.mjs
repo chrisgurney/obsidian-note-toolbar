@@ -53,7 +53,8 @@ try {
 
     // update versions.json with target version and minAppVersion from manifest.json
     let versions = JSON.parse(readFileSync("versions.json", "utf8"));
-    if (versions[newVersion] !== minAppVersion) {
+    const lastMinAppVersion = Object.values(versions).at(-1);
+    if (minAppVersion !== lastMinAppVersion) {
         versions[newVersion] = minAppVersion;
         writeFileSync("versions.json", JSON.stringify(versions, null, "\t"));
         console.log('\x1b[32m✓ versions.json updated\x1b[0m');
