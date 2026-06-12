@@ -57,8 +57,9 @@ export default class ImportConfirmModal extends Modal {
                 // show preview of script content
                 const scriptText = this.formatScriptSummary(item.scriptConfig, true);
                 if (scriptText) {
+                    itemPreviewsContainerEl.createEl('p', { text: t('export.label-share-script'), cls: 'note-toolbar-setting-small-heading' })
                     const scriptPreviewEl = itemPreviewsContainerEl.createDiv({ cls: 'note-toolbar-setting-script-preview' });
-                    scriptPreviewEl.setText(scriptText);
+                    scriptPreviewEl.createDiv().setText(scriptText);
                 }
             });
             previewFr = new DocumentFragment();

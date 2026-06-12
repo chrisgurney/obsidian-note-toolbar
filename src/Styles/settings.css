@@ -769,12 +769,13 @@
 }
 
 .note-toolbar-setting-script-preview {
-    border-inline-start: var(--border-width) solid var(--background-modifier-border);
+    background-color: var(--background-secondary);
     display: flex;
     font-family: var(--font-monospace);
     font-size: var(--font-ui-small);
-    margin-inline-start: 1.25em;
-    padding-inline-start: 1em;
+    max-width: 100%;
+    overflow-x: scroll;
+    padding: var(--size-4-2) var(--size-4-3);
     white-space: normal;
 }
 
