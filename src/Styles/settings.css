@@ -1100,6 +1100,7 @@ input[type="text"].note-toolbar-setting-error,
 }
 
 .note-toolbar-setting-field-help,
+.note-toolbar-setting-field-help-copy,
 .note-toolbar-setting-field-error {
     color: var(--text-muted);
     font-size: var(--font-ui-smaller);
@@ -1122,6 +1123,10 @@ input[type="text"].note-toolbar-setting-error,
     &[data-active="false"] {
         display: none;
     }
+}
+
+.note-toolbar-setting-field-help-copy {
+    margin-top: 0;
 }
 
 .note-toolbar-setting-tbar-preview {

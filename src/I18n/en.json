@@ -196,7 +196,9 @@
         "notice-command-updated": "Command updated:\n{{command}}"
     },
     "copy": {
-        "description": "Copy the text below."
+        "description": "Copy the text below.",
+        "instructions_desktop": "Use Ctrl/Cmd+C or right-click to copy",
+        "instructions_mobile": "Use Ctrl/Cmd+C or long-press to copy."
     },
     "export": {
         "item-generic": "Item{{number}}",

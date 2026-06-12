@@ -48,6 +48,11 @@ export default class CopyTextModal extends Modal {
                     }, 50);
                 });
             });
+    
+        this.contentEl.createEl('p', { 
+            cls: 'note-toolbar-setting-field-help-copy',
+            text: Platform.isDesktop ? t('copy.instructions_desktop') : t('copy.instructions_mobile')
+        });
 
         if (this.notes) {
             const disclaimers = this.contentEl.createDiv();

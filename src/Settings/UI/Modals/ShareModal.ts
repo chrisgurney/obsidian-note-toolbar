@@ -60,6 +60,11 @@ export default class ShareModal extends Modal {
                 });
             });
 
+        this.contentEl.createEl('p', { 
+            cls: 'note-toolbar-setting-field-help-copy',
+            text: Platform.isDesktop ? t('copy.instructions_desktop') : t('copy.instructions_mobile')
+        });
+
         new Setting(this.contentEl)
             .setName(t('export.option-uri'))
             .setDesc(t('export.option-uri-description'))
