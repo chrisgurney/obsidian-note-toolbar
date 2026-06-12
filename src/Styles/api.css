@@ -48,6 +48,9 @@
         & .view-header-left, .view-actions {
             display: none;
         }
+        & .modal-header-button {
+            z-index: 2; /* fix for modal content overlapping close button */
+        }
         & .modal-content {
             overflow-y: auto;
             .is-phone & {
