@@ -21,9 +21,21 @@ document.addEventListener('DOMContentLoaded', () => {
     link.textContent = 'Open in Obsidian ↗';
     link.href = 'obsidian://note-toolbar';
 
-    const p = document.createElement('p');
-    p.appendChild(link);
-    document.querySelector('.message')?.appendChild(p);
+    const p1 = document.createElement('p');
+    p1.appendChild(link);
+	const p2 = document.createElement('p');
+	p2.setText("If you're using the Obsidian Web Viewer, right-click on this link and select \"Open link in default browser\".");
+
+	const pre = document.createElement('pre');
+	pre.setText(`
+		userAgent=${navigator.userAgent}
+		referrer=${document.referrer}
+		href=${location.href}
+	`);
+	
+    document.querySelector('.message')?.appendChild(p1);
+    document.querySelector('.message')?.appendChild(p2);
+	document.querySelector('.message')?.appendChild(pre);
 	
     document.body.appendChild(container);
 
@@ -35,15 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!param) return;
 
     const finalUrl = 'obsidian://note-toolbar?import=' + encodeURIComponent(param);
-
-document.querySelector('.message')?.insertAdjacentHTML(
-    'beforeend',
-    `<pre>
-userAgent=${navigator.userAgent}
-referrer=${document.referrer}
-href=${location.href}
-    </pre>`
-);
 	
     // update page link and attempt redirect
     link.href = finalUrl;
