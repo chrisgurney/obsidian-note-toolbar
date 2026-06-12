@@ -49,7 +49,7 @@ Expand below to see what's accessed and why. Let me know (via [GitHub ↗](https
 <ul>
   <li><b>Plugin might make requests to external domains</b></li>
   <ul>
-    <li>URLs referenced by the plugin are used for: links to user guide and donation pages; a script for sharing toolbars with other users; and for loading release notes and help tips.</li>
+    <li>URLs referenced by the plugin are used for: links to user guide and donation pages; and for a page to facilitate <a href="https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Sharing-toolbars">sharing of toolbars or toolbar items</a> with other users (<a href="https://github.com/chrisgurney/obsidian-note-toolbar/tree/gh-pages/docs">source code</a>).</li>
     <li>See the documentation in <a href="https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/src/Utils/Urls.ts"><code>src/utils/Urls.ts</code></a>, which contains all external URLs referenced by the plugin.</li>
   </ul>
   <li><b>Vault Read: Reads individual vault files via the Obsidian API</b></li>
@@ -59,8 +59,7 @@ Expand below to see what's accessed and why. Let me know (via [GitHub ↗](https
   </ul>
   <li><b>Vault Enumeration: Enumerates all files in the vault. Gives the plugin access to every file path in the vault.</b></li>
   <ul>
-    <li>Used by the Settings UI to show a list of files in the vault (e.g., to select a script file).</li>
-    <li>Used in Note Toolbar's <code>fileSuggester</code> API to allow for file search and selection.</li>
+    <li>Used by the Settings UI to show a list of files or folders in the vault (e.g., to select a script file, or to select a folder for mapping).</li>
   </ul>
 </ul>
 
