@@ -25,17 +25,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	const p2 = document.createElement('p');
     p2.textContent = 
-        "If you're using the Obsidian Web Viewer, right-click on this link and select \"Open link in default browser\".";
+        "If you're viewing this in Obsidian Web Viewer, right-click on this link and select \"Open link in default browser\".";
 
-    const pre = document.createElement('pre');
-    pre.textContent = 
-        `userAgent=${navigator.userAgent}\nreferrer=${document.referrer}\nhref=${location.href}`;
-	
 	const message = document.querySelector('.message');
 	if (message) {
 	    message.appendChild(p1);
 	    message.appendChild(p2);
-	    message.appendChild(pre);
 	}
 	
     document.body.appendChild(container);
