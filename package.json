@@ -21,7 +21,7 @@
     "@typescript-eslint/eslint-plugin": "^8.53.1",
     "@typescript-eslint/parser": "^8.53.1",
     "chokidar": "^5.0.0",
-    "esbuild": "^0.27.0",
+    "esbuild": "^0.28.1",
     "eslint": "^9.38.0",
     "eslint-plugin-obsidianmd": "^0.1.9",
     "obsidian": "latest",
