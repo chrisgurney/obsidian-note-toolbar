@@ -53,9 +53,11 @@ try {
 
     // update versions.json with target version and minAppVersion from manifest.json
     let versions = JSON.parse(readFileSync("versions.json", "utf8"));
-    versions[newVersion] = minAppVersion;
-    writeFileSync("versions.json", JSON.stringify(versions, null, "\t"));
-    console.log('\x1b[32m✓ versions.json updated\x1b[0m');
+    if (versions[newVersion] !== minAppVersion) {
+        versions[newVersion] = minAppVersion;
+        writeFileSync("versions.json", JSON.stringify(versions, null, "\t"));
+        console.log('\x1b[32m✓ versions.json updated\x1b[0m');
+    }
 
     // git add the version files
     console.log('\n[release] Adding JSON files to git...');
