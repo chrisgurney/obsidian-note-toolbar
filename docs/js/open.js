@@ -16,26 +16,27 @@ document.addEventListener('DOMContentLoaded', () => {
     // show a fallback link (Obsidian web viewer doesn't seem to do redirects)
     const container = document.createElement('div');
 
-    const link = document.createElement('a');
-    link.style.display = 'block';
+    const p1 = document.createElement('p');	
+    const link = document.createElement('a');	
+	link.style.display = 'block';
     link.textContent = 'Open in Obsidian ↗';
     link.href = 'obsidian://note-toolbar';
-
-    const p1 = document.createElement('p');
     p1.appendChild(link);
-	const p2 = document.createElement('p');
-	p2.setText("If you're using the Obsidian Web Viewer, right-click on this link and select \"Open link in default browser\".");
 
-	const pre = document.createElement('pre');
-	pre.setText(`
-		userAgent=${navigator.userAgent}
-		referrer=${document.referrer}
-		href=${location.href}
-	`);
+	const p2 = document.createElement('p');
+    p2.textContent = 
+        "If you're using the Obsidian Web Viewer, right-click on this link and select \"Open link in default browser\".";
+
+    const pre = document.createElement('pre');
+    pre.textContent = 
+        `userAgent=${navigator.userAgent}\nreferrer=${document.referrer}\nhref=${location.href}`;
 	
-    document.querySelector('.message')?.appendChild(p1);
-    document.querySelector('.message')?.appendChild(p2);
-	document.querySelector('.message')?.appendChild(pre);
+	const message = document.querySelector('.message');
+	if (message) {
+	    message.appendChild(p1);
+	    message.appendChild(p2);
+	    message.appendChild(pre);
+	}
 	
     document.body.appendChild(container);
 
