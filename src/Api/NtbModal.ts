@@ -15,6 +15,7 @@ export default class NtbModal extends Modal {
     private contextPath: string;
 
     private leaf!: WorkspaceLeaf;
+    private component!: Component;
 
     /**
      * @see INoteToolbarApi.modal
@@ -53,13 +54,15 @@ export default class NtbModal extends Modal {
         if (this.class) this.modalEl.addClasses([...this.class.split(' ')]);
         this.modalEl.setAttr('data-ntb-ui-type', 'modal');
         if (!this.title) this.modalEl.setAttr('data-ntb-ui-mode', 'noheader');
+
+        this.component = new Component();
+        this.component.load();
     }
 
     async onOpen(): Promise<void> {
         if (this.title) {
             const containerEl = this.titleEl.createEl('div', {cls: 'markdown-preview-view'});
-            const component = new Component();
-            await MarkdownRenderer.render(this.ntb.app, this.title, containerEl, "", component);
+            await MarkdownRenderer.render(this.ntb.app, this.title, containerEl, "", this.component);
         }
         if (this.isEditable && this.content instanceof TFile) {
             // adapted from https://github.com/likemuuxi/obsidian-modal-opener (MIT license)
@@ -83,11 +86,14 @@ export default class NtbModal extends Modal {
     }
 
     onClose(): void {
+        this.component.unload();
         this.contentEl.empty();
         this.leaf?.detach();
     }
 
     async displayMarkdown(): Promise<void> {
+
+        this.open();
 
         const containerEl = this.contentEl.createEl('div', {cls: 'markdown-preview-view'});
 
@@ -102,8 +108,7 @@ export default class NtbModal extends Modal {
                 // only render markdown files
                 if (['md', 'markdown'].includes(ext)) {
                     const fileContent = await this.app.vault.cachedRead(this.content);
-                    const component = new Component();
-                    await MarkdownRenderer.render(this.ntb.app, fileContent, containerEl, normalizePath(this.content.path), component);
+                    await MarkdownRenderer.render(this.ntb.app, fileContent, containerEl, normalizePath(this.content.path), this.component);
 
                     // make links tabbable
                     this.modalEl.querySelectorAll<HTMLElement>('a.internal-link, a.external-link').forEach((link) => {
@@ -125,8 +130,7 @@ export default class NtbModal extends Modal {
                 // attempt to embed everything else
                 else {
                     const embedMd = `![[${this.content.path}]]`;
-                    const embedMdComponent = new Component();
-                    await MarkdownRenderer.render(this.ntb.app, embedMd, containerEl, this.contextPath, embedMdComponent);
+                    await MarkdownRenderer.render(this.ntb.app, embedMd, containerEl, this.contextPath, this.component);
                 };
             }
             catch (error) {
@@ -139,8 +143,6 @@ export default class NtbModal extends Modal {
         window.setTimeout(() => {
             this.contentEl.focus();
         }, 50);
-
-        this.open();
 
     }
 
