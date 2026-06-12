@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     p1.appendChild(link);
 
 	const p2 = document.createElement('p');
-    p2.textContent = 
+    p2.innerHTML = 
         "If you're viewing this in <i>Obsidian Web Viewer</i>, right-click on this link and select <i>Open link in default browser</i>.";
 
 	const message = document.querySelector('.message');
