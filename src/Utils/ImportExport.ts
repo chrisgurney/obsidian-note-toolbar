@@ -155,6 +155,12 @@ async function exportItemToCallout(
                         if (key === 'pluginFunction') {
                             return `data-${item.linkAttr.type}="${String(value)}"`;
                         }
+                        else if (key === 'expression') {
+                            let encodedValue = String(value);
+                            encodedValue = stripJsComments(encodedValue);
+                            encodedValue = escapeAttribute(String(encodedValue));
+                            return `${SCRIPT_ATTRIBUTE_MAP[key]}="${encodedValue}"`;
+                        }
                         else {
                             let encodedValue = String(value);
                             if (key === 'outputFile') {
@@ -282,6 +288,12 @@ function escapeTextForCallout(str: string): string {
     return str
         .replace(/\[/g, '\\[')
         .replace(/\]/g, '\\]');
+}
+
+function stripJsComments(code: string): string {
+    return code
+        .replace(/\/\*[\s\S]*?\*\//g, '') // block comments
+        .replace(/(^|\s)\/\/.*$/gm, '$1'); // line comments
 }
 
 function unescapeTextForCallout(str: string): string {
