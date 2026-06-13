@@ -4,7 +4,7 @@
 .note-toolbar-setting-ui, .note-toolbar-setting-modal-container {
     & .setting-group {
         & .setting-items {
-            padding: var(--size-4-5);
+            padding: var(--size-4-4);
             &:focus-within {
                 box-shadow: inset 0 0 0 2px var(--background-modifier-border-focus);
             }
@@ -38,7 +38,7 @@
 }
 
 .note-toolbar-setting-plugin-error {
-    padding: 1em;
+    padding: var(--size-4-4);
     border: solid 1px var(--text-error);
     border-radius: 8px;
     & .setting-item-name {
@@ -48,7 +48,7 @@
 
 .note-toolbar-setting-plugin-onboarding,
 .modal .modal-content .setting-item.note-toolbar-setting-plugin-onboarding:first-child {
-    padding: 1em;
+    padding: var(--size-4-4);
     border-radius: 8px;
     border: solid 1px var(--color-accent-1);
     position: relative;
@@ -120,9 +120,8 @@
         background-color: var(--setting-items-background);
         border-radius: var(--setting-items-radius);
         margin: 0em 0em 1em 0em;
-        padding: 1em 1em;
+        padding: var(--size-4-4);
         .is-mobile & {
-            padding: 1em;
             & .setting-item > .setting-item-control > button {
                 width: unset;
             }
@@ -552,7 +551,7 @@
     border: 1px solid var(--background-modifier-border);
     padding: 1.5em;
     .is-mobile & {
-        padding: 1em;
+        padding: var(--size-4-4);
     }
     &:focus-within {
         box-shadow: inset 0 0 0 2px var(--background-modifier-border-focus);
@@ -1299,7 +1298,7 @@ input[type="text"].note-toolbar-setting-error,
 }
 
 .is-phone .note-toolbar-setting-dialog-phonefix {
-    padding: 1em;
+    padding: var(--size-4-4);
 }
 
 .note-toolbar-setting-mini-dialog {
