@@ -1260,6 +1260,7 @@ input[type="text"].note-toolbar-setting-error,
 }
 
 .note-toolbar-setting-item-fields {
+    align-items: center;
     display: flex;
     flex-grow: 1;
     flex-wrap: wrap;
