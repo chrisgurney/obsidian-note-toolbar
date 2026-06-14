@@ -110,7 +110,7 @@ Note Toolbar's UI, and Style Settings options, are also available in:
 
 ## Installation
 
-[Click here](https://obsidian.md/plugins?id=note-toolbar) or:
+[Click here](https://community.obsidian.md/plugins/note-toolbar) or:
 
 1. Open Obsidian's settings, and click _Community plugins_
 2. Search for _Note Toolbar_ and select it
