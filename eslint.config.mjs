@@ -23,6 +23,7 @@ export default defineConfig([
     // You can add your own configuration to override or add rules
     rules: {
       "@typescript-eslint/no-deprecated": "warn",
+      "obsidianmd/no-unsupported-api": "warn",
     },
   },
 ]);
