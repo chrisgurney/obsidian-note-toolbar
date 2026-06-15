@@ -56,7 +56,7 @@ export default class ItemModal extends Modal {
                 btn.setButtonText(t('setting.item.button-close'))
                     .setCta()
                     .setTooltip(t('setting.item.button-close-description'))
-                    .onClick((event) => {
+                    .onClick(() => {
                         this.close();
                     });
             });
@@ -80,7 +80,7 @@ export default class ItemModal extends Modal {
         // TODO: set initial keyboard focus?
     }
 
-    getItemRowEl(uuid: string): HTMLElement {
+    getItemRowEl(_uuid: string): HTMLElement {
         return this.contentEl;
     }
 

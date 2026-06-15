@@ -100,13 +100,12 @@ export default class ItemListUi {
         if (this.toolbar.items.length === 0) {
 
             // display empty state
-            const emptyMsgEl = this.parent.containerEl.createEl('div', 
-                { text: this.ntb.settingsUtils.emptyMessageFr(t('setting.items.label-empty-no-items') + '\u00A0') });
+            const emptyMsgEl = this.parent.containerEl.createDiv({ text: this.ntb.settingsUtils.emptyMessageFr(t('setting.items.label-empty-no-items') + '\u00A0') });
             emptyMsgEl.addClass('note-toolbar-setting-empty-message');
 
             const galleryLinkEl = emptyMsgEl.createEl('a', { href: '#', text: t('setting.item-suggest-modal.link-search') });
             galleryLinkEl.addClass('note-toolbar-setting-focussable-link');
-            this.ntb.registerDomEvent(galleryLinkEl, 'click', (event) => this.ntb.settingsUtils.openItemSuggestModal(this.toolbar, 'New', this.parent));
+            this.ntb.registerDomEvent(galleryLinkEl, 'click', () => this.ntb.settingsUtils.openItemSuggestModal(this.toolbar, 'New', this.parent));
             this.ntb.settingsUtils.handleKeyClick(galleryLinkEl);
 
             itemsSortableContainer.append(emptyMsgEl);
@@ -115,7 +114,7 @@ export default class ItemListUi {
         else {
 
             // generate the preview + form for each item
-            this.toolbar.items.forEach((toolbarItem, index) => {
+            this.toolbar.items.forEach((toolbarItem, ) => {
 
                 const itemContainer = createDiv();
                 itemContainer.setAttribute(SettingsAttr.ItemUuid, toolbarItem.uuid);
@@ -185,8 +184,8 @@ export default class ItemListUi {
             chosenClass: 'sortable-chosen',
             ghostClass: 'sortable-ghost',
             handle: '.sortable-handle',
-            onChange: (item) => navigator.vibrate(50),
-            onChoose: (item) => navigator.vibrate(50),
+            onChange: () => navigator.vibrate(50),
+            onChoose: () => navigator.vibrate(50),
             onSort: (item) => {
                 this.ntb.debug("sortable: index: ", item.oldIndex, " -> ", item.newIndex);
                 if (item.oldIndex !== undefined && item.newIndex !== undefined) {
@@ -280,7 +279,7 @@ export default class ItemListUi {
     /**
      * Returns the preview for a given toolbar item.
      */
-    generateItemPreview(toolbarItem: ToolbarItemSettings, rowId: string): HTMLDivElement {
+    generateItemPreview(toolbarItem: ToolbarItemSettings, _rowId: string): HTMLDivElement {
 
         //
         // create the preview

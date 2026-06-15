@@ -5,7 +5,7 @@ import { importFromCallout } from "Utils/ImportExport";
 import { learnMoreFr } from "../Utils/SettingsUIUtils";
 
 export async function importFromModal(ntb: NoteToolbarPlugin, toolbar?: ToolbarSettings): Promise<ToolbarSettings> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         const modal = new ImportModal(ntb, toolbar);
         modal.onClose = () => {
             resolve(modal.importedToolbar);

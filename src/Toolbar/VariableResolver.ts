@@ -75,7 +75,7 @@ export default class VariableResolver {
 		// have to get this at run/click-time, as file or metadata may not have changed
 		const frontmatter = file ? this.ntb.app.metadataCache.getFileCache(file)?.frontmatter : undefined;
 		// replace any variable of format {{prop_KEY}} with the value of the frontmatter dictionary with key = KEY
-		s = s.replace(/{{\s*(encode:)?\s*prop_(.*?)\s*}}/g, (match, encode: string, p1: string) => {
+		s = s.replace(/{{\s*(encode:)?\s*prop_(.*?)\s*}}/g, (_match, encode: string, p1: string) => {
 			const key = p1.trim();
 			if (frontmatter && frontmatter[key] !== undefined && frontmatter[key] !== null) {
 				// regex to remove [[ and ]] and any alias (bug #75), in case an internal link was passed

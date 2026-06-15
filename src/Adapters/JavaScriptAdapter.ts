@@ -45,7 +45,7 @@ export default class JavaScriptAdapter extends Adapter {
         this.ntb = null;
     }
     
-    getSetting(settingName: string): string {
+    getSetting(_settingName: string): string {
         return '';
     }
 

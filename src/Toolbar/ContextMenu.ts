@@ -79,7 +79,7 @@ export default class ContextMenu {
 						positionMenu.addItem((item: MenuItem) => {
 							item.setTitle(t(EMPTY_VIEW_POSITIONS.titleKey))
 								.setIcon(EMPTY_VIEW_POSITIONS.icon)
-								.onClick(async (menuEvent) => {
+								.onClick(async () => {
 									await this.ntb.settingsManager.updatePosition(toolbarSettings, EMPTY_VIEW_POSITIONS.types[0]);
 									contextMenu.close();
 								});
@@ -99,7 +99,7 @@ export default class ContextMenu {
 								positionMenu.addItem((item: MenuItem) => {
 									item.setTitle(t(option.titleKey))
 										.setIcon(option.icon)
-										.onClick(async (menuEvent) => {
+										.onClick(async () => {
 											await this.ntb.settingsManager.updatePosition(toolbarSettings, option.types[0]);
 											contextMenu.close();
 										});
@@ -177,7 +177,7 @@ export default class ContextMenu {
 					contextMenu.addItem((item: MenuItem) => {
 						item.setTitle(uiHidden ? t('toolbar.menu-show-properties') : t('toolbar.menu-hide-properties'))
 							.setIcon(uiHidden ? 'captions' : 'captions-off')
-							.onClick((menuEvent) => this.ntb.commands.toggleUi('props', uiHidden ? 'show' : 'hide'));
+							.onClick(() => this.ntb.commands.toggleUi('props', uiHidden ? 'show' : 'hide'));
 					});
 				}
 			}
@@ -189,7 +189,7 @@ export default class ContextMenu {
 					contextMenu.addItem((item: MenuItem) => {
 						item.setTitle(uiHidden ? t('toolbar.menu-show-base-toolbar') : t('toolbar.menu-hide-base-toolbar'))
 							.setIcon(uiHidden ? 'panel-top-open' : 'panel-top-close')
-							.onClick((menuEvent) => this.ntb.commands.toggleUi('baseToolbar', uiHidden ? 'show' : 'hide'));
+							.onClick(() => this.ntb.commands.toggleUi('baseToolbar', uiHidden ? 'show' : 'hide'));
 					});
 				}
 			}
@@ -263,7 +263,7 @@ export default class ContextMenu {
 				item
 					.setTitle(t('toolbar.menu-edit-toolbar', { toolbar: toolbarSettings?.name, interpolation: { escapeValue: false } }))
 					.setIcon('rectangle-ellipsis')
-					.onClick((menuEvent) => {
+					.onClick(() => {
 						const modal = new ToolbarSettingsModal(this.ntb.app, this.ntb, null, toolbarSettings);
 						modal.setTitle(t('setting.title-edit-toolbar', { toolbar: toolbarSettings?.name, interpolation: { escapeValue: false } }));
 						modal.open();
@@ -308,7 +308,7 @@ export default class ContextMenu {
 				item
 					.setTitle(t('export.label-callout'))
 					.setIcon('copy')
-					.onClick(async (menuEvent) => {
+					.onClick(async () => {
 						if (toolbarSettings) {
 							const calloutExport = await exportToCallout(this.ntb, toolbarSettings, this.ntb.settings.export);
 							const copyModal = new CopyTextModal( this.ntb, calloutExport,
@@ -327,7 +327,7 @@ export default class ContextMenu {
 			item
 			  .setTitle(t('toolbar.menu-toolbar-settings'))
 			  .setIcon('gear')
-			  .onClick((menuEvent) => {
+			  .onClick(() => {
 				  this.ntb.commands.openSettings();
 			  });
 		  });

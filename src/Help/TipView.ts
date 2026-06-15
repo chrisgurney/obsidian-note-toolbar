@@ -103,7 +103,7 @@ export default class TipView extends ItemView {
      * https://liamca.in/Obsidian/API+FAQ/views/persisting+your+view+state
      * https://github.com/Vinzent03/obsidian-git/blob/3fbd59365085c3084d0b4f654db382b086367f23/src/ui/diff/diffView.ts#L49
      */
-    async setState(state: TipViewState, result: ViewStateResult): Promise<void> {
+    async setState(state: TipViewState, _result: ViewStateResult): Promise<void> {
         this.state = state;
         await this.display();
     }
@@ -157,8 +157,8 @@ export default class TipView extends ItemView {
                 src: url 
             });
 
-            const overlayEl = wrapperEl.createEl('div', 'note-toolbar-setting-help-video-overlay');
-            const playButtonEl = overlayEl.createEl('button', 'note-toolbar-setting-help-video-play');
+            const overlayEl = wrapperEl.createDiv({ cls: 'note-toolbar-setting-help-video-overlay' });
+            const playButtonEl = overlayEl.createEl('button', { cls: 'note-toolbar-setting-help-video-play' });
             setIcon(playButtonEl, 'play');
             playButtonEl.hide();
 

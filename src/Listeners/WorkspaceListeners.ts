@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { Editor, ItemView, MarkdownFileInfo, MarkdownView, MarkdownViewModeType, Menu, Platform, TAbstractFile, TFile, WorkspaceLeaf, WorkspacesPlugin } from "obsidian";
+import { Editor, ItemView, MarkdownViewModeType, Menu, Platform, TAbstractFile, TFile, WorkspaceLeaf, WorkspacesPlugin } from "obsidian";
 import { LocalVar } from "Settings/NoteToolbarSettings";
 import { getViewId } from "Utils/Utils";
 import EditorMenu from "../Toolbar/EditorMenu";
@@ -59,8 +59,8 @@ export default class WorkspaceListeners {
 	/**
 	 * On opening of the editor menu, check what was selected and add relevant menu options.
 	 */
-	onEditorMenu = async (menu: Menu, editor: Editor, view: MarkdownView | MarkdownFileInfo) => {
-		await this.editorMenu.render(menu, editor, view);
+	onEditorMenu = async (menu: Menu, editor: Editor) => {
+		await this.editorMenu.render(menu, editor);
 	}
 
 	/**
@@ -68,7 +68,7 @@ export default class WorkspaceListeners {
 	 * @param menu the file Menu
 	 * @param file TFile for link that was clicked on
 	 */
-	onFileMenu = (menu: Menu, file: TAbstractFile, source: string, leaf?: WorkspaceLeaf) => {
+	onFileMenu = (menu: Menu, file: TAbstractFile, _source: string, _leaf?: WorkspaceLeaf) => {
 		if (file && file instanceof TFile) this.fileMenu.render(menu, file);
 	}
 
@@ -161,7 +161,7 @@ export default class WorkspaceListeners {
 	/**
 	 * On leaf changes, delete, check and render toolbar if necessary. 
 	 */
-	onLeafChange = async (leaf: WorkspaceLeaf | null) => {
+	onLeafChange = async (_leaf: WorkspaceLeaf | null) => {
 		let renderToolbar = false;
 		// FIXME? what if there's more than one toolbar?
 		const toolbarEl = await this.ntb.el.getToolbarElAsync();

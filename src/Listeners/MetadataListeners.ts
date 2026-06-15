@@ -23,7 +23,7 @@ export default class WorkspaceListeners {
 	 * @param data note content on change (not used).
 	 * @param cache CachedMetadata, from which we look at the frontmatter.
 	 */
-	onMetadataChange = (file: TFile, data: string, cache: CachedMetadata) => {
+	onMetadataChange = (file: TFile, _data: string, cache: CachedMetadata) => {
 		const activeFile = this.ntb.app.workspace.getActiveFile();
 		// if the active file is the one that changed,
 		// and the file was modified after it was created (fix for a duplicate toolbar on Create new note)

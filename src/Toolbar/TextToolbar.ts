@@ -27,7 +27,7 @@ export class TextToolbarClass implements PluginValue {
     private selection: { from: number; to: number; text: string } | null = null;
 
     constructor(
-        view: EditorView, 
+        _view: EditorView, 
         private ntb: NoteToolbarPlugin
     ) {}
 

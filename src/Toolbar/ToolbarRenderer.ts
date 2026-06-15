@@ -184,7 +184,7 @@ export default class ToolbarRenderer {
 
 		// create toolbar container
         let noteToolbarElement: HTMLElement | undefined;
-        const embedBlock = activeDocument.createElement((position === PositionType.TabBar) ? 'button' : 'div');
+        const embedBlock = (position === PositionType.TabBar) ? createEl('button') : createDiv();
         embedBlock.addClass('cg-note-toolbar-container');
         if (toolbar.uuid) embedBlock.id = toolbar.uuid;
         const markdownViewMode = (view instanceof MarkdownView) ? view.getMode() : '';
@@ -231,7 +231,7 @@ export default class ToolbarRenderer {
             case PositionType.Top: {
                 noteToolbarElement = await this.renderAsCallout(toolbar, position, file, view);
                 // extra div workaround to emulate callout-in-content structure, to use same sticky css
-                const div = activeDocument.createElement("div");
+                const div = createDiv();
                 div.append(noteToolbarElement);
                 embedBlock.addClasses(['cm-embed-block', 'cm-callout', 'cg-note-toolbar-bar-container']);
 				embedBlock.setAttribute(TbarData.EmbedMeta, [...toolbar.defaultStyles, ...toolbar.mobileStyles].join('-'));
@@ -342,7 +342,7 @@ export default class ToolbarRenderer {
     async renderAsCallout(toolbar: ToolbarSettings, position: PositionType, file: TFile | null, view: ItemView): Promise<HTMLElement> {
         
         /* create the unordered list of menu items */
-        const noteToolbarUl = activeDocument.createElement("ul");
+        const noteToolbarUl = createEl("ul");
         noteToolbarUl.setAttribute("role", "menu");
 
 		// don't open the sidebars if the toolbar is not wrapping items
@@ -353,13 +353,13 @@ export default class ToolbarRenderer {
         const noteToolbarLiArray = await this.renderLItems(toolbar, file, view);
         noteToolbarUl.append(...noteToolbarLiArray);
 
-        const noteToolbarCallout = activeDocument.createElement("div");
+        const noteToolbarCallout = createDiv();
 
         // don't render content if it's empty, but keep the metadata so the toolbar commands & menu still work
         // TODO: also check if all child items are display: none - use Platform.isMobile and check the mb booleans, dk otherwise?
         if (toolbar.items.length > 0) {
 
-            const noteToolbarCalloutContent = activeDocument.createElement("div");
+            const noteToolbarCalloutContent = createDiv();
             noteToolbarCalloutContent.className = "callout-content";
             noteToolbarCalloutContent.append(noteToolbarUl);
 
@@ -436,7 +436,7 @@ export default class ToolbarRenderer {
 				case ItemType.Separator:
 				case ItemType.Spreader: {
 					if (view.getViewType() === 'empty' && this.ntb.settings.showLaunchpad) continue;
-					toolbarItem = activeDocument.createElement('data');
+					toolbarItem = createEl('data');
 					toolbarItem.setAttribute(
 						item.linkAttr.type === ItemType.Break ? 'data-break' : item.linkAttr.type === ItemType.Separator ? 'data-sep' : 'data-spread', '');
 					toolbarItem.setAttribute('role', 'separator');
@@ -454,7 +454,7 @@ export default class ToolbarRenderer {
 				}
 				default: {
 					// changed to span as temporary(?) fix (#19) for links on Android
-					toolbarItem = activeDocument.createElement('span');
+					toolbarItem = createSpan();
 					toolbarItem.className = "external-link";
 					toolbarItem.setAttrs({
 						'href': item.link,
@@ -508,7 +508,7 @@ export default class ToolbarRenderer {
 				if (item.uuid) toolbarItem.id = item.uuid;
 				toolbarItem.addClass('cg-note-toolbar-item');
 				// create its list item container 
-				const noteToolbarLi = activeDocument.createElement("li");
+				const noteToolbarLi = createEl('li');
 				noteToolbarLi.dataset.index = i.toString();
 				noteToolbarLi.setAttribute('data-ntb-type', item.linkAttr.type);
 				// set its visibility
@@ -551,14 +551,14 @@ export default class ToolbarRenderer {
 	 */
 	async renderAsFab(toolbar: ToolbarSettings, position: string): Promise<HTMLElement> {
 
-		const noteToolbarFabContainer = activeDocument.createElement('div');
+		const noteToolbarFabContainer = createDiv();
 		noteToolbarFabContainer.addClass('cg-note-toolbar-fab-container');
 		noteToolbarFabContainer.setAttrs({
 			role: 'group',
 			'data-tbar-position': position
 		});
 
-		const noteToolbarFabButton = activeDocument.createElement('button');
+		const noteToolbarFabButton = createEl('button');
 		noteToolbarFabButton.addClass('cg-note-toolbar-fab');
 		noteToolbarFabButton.setAttribute(TbarData.FabMeta, [...toolbar.defaultStyles, ...toolbar.mobileStyles].join('-'));
 
@@ -614,7 +614,7 @@ export default class ToolbarRenderer {
 				item
 					.setTitle(t('toolbar.menu-edit-toolbar', { toolbar: toolbar.name, interpolation: { escapeValue: false } }))
 					.setIcon('rectangle-ellipsis')
-					.onClick((menuEvent) => {
+					.onClick(() => {
 						const modal = new ToolbarSettingsModal(this.ntb.app, this.ntb, null, toolbar);
 						modal.setTitle(t('setting.title-edit-toolbar', { toolbar: toolbar.name, interpolation: { escapeValue: false } }));
 						modal.open();
@@ -1230,7 +1230,7 @@ export default class ToolbarRenderer {
 			positionType = PositionType.Hidden;
 		}
 
-		const toolbarContainerEl = activeDocument.createElement('div');
+		const toolbarContainerEl = createDiv();
 		toolbarContainerEl.id = toolbar.uuid;
 		toolbarContainerEl.addClasses([
 			'cg-note-toolbar-container', 'cm-embed-block', 'cm-callout', 'cg-note-toolbar-bar-container'

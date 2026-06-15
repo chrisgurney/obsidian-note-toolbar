@@ -61,7 +61,7 @@ export default class NtbModal extends Modal {
 
     async onOpen(): Promise<void> {
         if (this.title) {
-            const containerEl = this.titleEl.createEl('div', {cls: 'markdown-preview-view'});
+            const containerEl = this.titleEl.createDiv({ cls: 'markdown-preview-view' });
             await MarkdownRenderer.render(this.ntb.app, this.title, containerEl, "", this.component);
         }
         if (this.isEditable && this.content instanceof TFile) {
@@ -95,7 +95,7 @@ export default class NtbModal extends Modal {
 
         this.open();
 
-        const containerEl = this.contentEl.createEl('div', {cls: 'markdown-preview-view'});
+        const containerEl = this.contentEl.createDiv({cls: 'markdown-preview-view'});
 
         // render content as markdown
         if (typeof this.content === 'string') {

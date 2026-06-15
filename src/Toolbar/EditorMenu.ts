@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { Editor, MarkdownFileInfo, MarkdownView, Menu, MenuItem, Notice } from "obsidian";
+import { Editor, Menu, MenuItem, Notice } from "obsidian";
 import { PositionType, t } from "Settings/NoteToolbarSettings";
 import { importFromCallout } from "Utils/ImportExport";
 import { URLS } from "Utils/Urls";
@@ -11,7 +11,7 @@ export default class EditorMenu {
         private ntb: NoteToolbarPlugin
     ) {}
 
-    async render(menu: Menu, editor: Editor, view: MarkdownView | MarkdownFileInfo) {
+    async render(menu: Menu, editor: Editor) {
 
 		// replace Editor menu with the selected toolbar
 		if (this.ntb.settings.editorMenuToolbar) {

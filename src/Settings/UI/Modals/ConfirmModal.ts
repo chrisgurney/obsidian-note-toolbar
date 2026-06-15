@@ -12,7 +12,7 @@ interface UiSettings {
 };
 
 export async function confirmWithModal(app: App, uiSettings: UiSettings): Promise<boolean> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         const modal = new ConfirmModal(app, uiSettings);
         modal.onClose = () => {
             resolve(modal.isConfirmed);

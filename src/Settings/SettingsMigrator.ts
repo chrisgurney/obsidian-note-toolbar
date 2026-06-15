@@ -247,7 +247,7 @@ export default class SettingsMigrator {
             new_version = 20250313.1;
             this.ntb.debug("| - starting migration: " + old_version + " -> " + new_version);
             loaded_settings.toolbars?.forEach((tb: ToolbarSettings, index: number) => {
-                tb.items.forEach((item: ToolbarItemSettings, item_index: number) => {
+                tb.items.forEach((_item: ToolbarItemSettings, item_index: number) => {
                     this.ntb.settings.toolbars[index].items[item_index].inGallery = false;
                 });
             });
@@ -260,7 +260,7 @@ export default class SettingsMigrator {
             new_version = 20260122.1;
             this.ntb.debug("| starting migration: " + old_version + " -> " + new_version);
             loaded_settings.toolbars?.forEach((tb: ToolbarSettings, index: number) => {
-                tb.items.forEach((item: ToolbarItemSettings, item_index: number) => {
+                tb.items.forEach((_item: ToolbarItemSettings, item_index: number) => {
                     const visibility = this.ntb.settings.toolbars[index].items[item_index].visibility as unknown as Record<string, { allViews?: unknown }>;
                     const desktop = visibility.desktop?.allViews;
                     const mobile = visibility.mobile?.allViews;

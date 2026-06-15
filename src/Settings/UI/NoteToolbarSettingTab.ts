@@ -133,7 +133,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 
 		// listen to scroll changes
 		if (!this.lastScrollListenerRegistered) {
-			this.ntb.registerDomEvent(this.containerEl, 'scroll', (event) => {
+			this.ntb.registerDomEvent(this.containerEl, 'scroll', () => {
 				this.lastScrollPosition = this.containerEl.scrollTop;
 				// this.ntb.debug("this.lastScrollPosition UPDATE:", this.lastScrollPosition);
 			});
@@ -304,7 +304,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 										menuItem
 											.setTitle(t('setting.toolbars.menu-copy-id'))
 											.setIcon('code')
-											.onClick((menuEvent) => {
+											.onClick(() => {
 												const copyTextModal = new CopyTextModal( this.ntb, toolbar.uuid,
 													t('setting.toolbars.menu-copy-id-title'),
 													learnMoreFr(t('setting.toolbars.menu-copy-id-description'), 'Developer-IDs'));
@@ -675,7 +675,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 				const toolbarFolderListEl = createDiv();
 				toolbarFolderListEl.addClass('note-toolbar-sortablejs-list');
 
-				this.ntb.settings.folderMappings.forEach((mapping, index) => {
+				this.ntb.settings.folderMappings.forEach((mapping, ) => {
 					const rowId = this.itemListIdCounter.toString();
 					const toolbarFolderListItemDiv = this.generateMappingForm(mapping, rowId);
 					toolbarFolderListEl.append(toolbarFolderListItemDiv);
@@ -686,8 +686,8 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 					chosenClass: 'sortable-chosen',
 					ghostClass: 'sortable-ghost',
 					handle: '.sortable-handle',
-					onChange: (item) => navigator.vibrate(50),
-					onChoose: (item) => navigator.vibrate(50),
+					onChange: () => navigator.vibrate(50),
+					onChoose: () => navigator.vibrate(50),
 					onSort: (item) => {
 						this.ntb.debug("sortable: index: ", item.oldIndex, " -> ", item.newIndex);
 						if (item.oldIndex !== undefined && item.newIndex !== undefined) {
@@ -767,13 +767,13 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 						if (
 							newFolder &&
 							this.ntb.settings.folderMappings.some(
-								(map, mapIndex) => {
+								(map, ) => {
 									return mapping != map ? map.folder.toLowerCase() === newFolder.toLowerCase() : undefined;
 								}
 							)
 						) {
 							if (activeDocument.getElementById("note-toolbar-name-error") === null) {
-								const errorDiv = createEl("div", { 
+								const errorDiv = createDiv({ 
 									text: t('setting.mappings.error-folder-already-mapped'), 
 									attr: { id: "note-toolbar-name-error" }, cls: "note-toolbar-setting-error-message" });
 								toolbarFolderListItemDiv.insertAdjacentElement('afterend', errorDiv);
@@ -897,7 +897,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 				.addButton((button: ButtonComponent) => {
 					button
 						.setIcon(this.ntb.settings.obsidianUiVisibility?.['view-header'] === false ? 'eye-off' : 'eye')
-						.onClick(async (cb) => {
+						.onClick(async () => {
 							const currentValue = this.ntb.settings.obsidianUiVisibility['view-header'] ?? true;
 							this.ntb.settings.obsidianUiVisibility['view-header'] = !currentValue;
 							await this.ntb.settingsManager.save();
@@ -912,7 +912,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 				.setDesc(t('setting.display-navbar.bottom.description'))
 				.addButton((button: ButtonComponent) => {
 					button
-						.onClick((cb) => {
+						.onClick(() => {
 							const visibilityMenu = this.getNavbarVisibilityMenu(button);
 							visibilityMenu.showAtPosition(getElementPosition(button.buttonEl));
 						});
@@ -1668,7 +1668,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 			menuItem
 				.setTitle(allHidden ? t('setting.display-navbar.bottom.option-unhide-all') : t('setting.display-navbar.bottom.option-hide-all'))
 				.setIcon(allHidden ? 'eye' : 'eye-off')
-				.onClick(async (menuEvent) => { 
+				.onClick(async () => { 
 					allNavbarKeys.forEach((key) => {
 						this.ntb.settings.obsidianUiVisibility[key] = allHidden ? true : false;
 					});
@@ -1687,7 +1687,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 						.setTitle(uiEl.label)
 						.setIcon(uiEl.icon ? uiEl.icon : null)
 						.setChecked(obsidianUiSetting.get(uiEl.key) ?? true)
-						.onClick(async (menuEvent) => {
+						.onClick(async () => {
 							const currentValue = this.ntb.settings.obsidianUiVisibility[uiEl.key] ?? true;
 							this.ntb.settings.obsidianUiVisibility[uiEl.key] = !currentValue;
 							this.updateNavbarVisibilityButton(button);

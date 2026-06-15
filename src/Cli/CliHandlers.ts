@@ -70,7 +70,7 @@ export default class CliHandlers {
     };
 
     async handleAddBreak(args: CliData): Promise<string> {
-        return await this.addItemHelper(args, ItemType.Break, (item) => {});
+        return await this.addItemHelper(args, ItemType.Break, () => {});
     }
 
     async handleAddCommand(args: CliData): Promise<string> {
@@ -171,11 +171,11 @@ export default class CliHandlers {
     }
 
     async handleAddSep(args: CliData): Promise<string> {
-        return await this.addItemHelper(args, ItemType.Separator, (item) => {});
+        return await this.addItemHelper(args, ItemType.Separator, () => {});
     }
 
     async handleAddSpread(args: CliData): Promise<string> {
-        return await this.addItemHelper(args, ItemType.Spreader, (item) => {});
+        return await this.addItemHelper(args, ItemType.Spreader, () => {});
     }
 
     async handleAddTp(
@@ -255,14 +255,14 @@ export default class CliHandlers {
         return this.handleToolbars(args);
     }
 
-    handleGallery(args: CliData): string {
+    handleGallery(): string {
         const galleryItems = this.ntb.gallery.getItems();
         const widths = galleryItems.map(item => item.tooltip.length);
         const maxWidth = Math.max(...widths);
         return galleryItems.map(item => item.tooltip.padEnd(maxWidth) + '\t' + color(`gallery:${item.uuid}`, 'black')).join('\n');
     }
 
-    handleHelp(args: CliData): string {
+    handleHelp(): string {
         return t('cli.label-title') + '\n\n' + t('cli.label-heading-commands') + '\n' + this.cliDefinition.formatCommandList();
     }
 

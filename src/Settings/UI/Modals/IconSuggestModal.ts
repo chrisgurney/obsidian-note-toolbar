@@ -61,7 +61,7 @@ export default class IconSuggestModal extends SuggestModal<IconName> {
      * Saves the selected icon to settings, closes the modal, refreshes the parent.
      * @param selectedIcon Icon to save.
      */
-    onChooseSuggestion(selectedIcon: string, evt: MouseEvent | KeyboardEvent) {
+    onChooseSuggestion(selectedIcon: string, _event: MouseEvent | KeyboardEvent) {
         this.callback(selectedIcon);
         this.close();
     }

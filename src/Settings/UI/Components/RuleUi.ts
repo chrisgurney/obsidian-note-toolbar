@@ -58,15 +58,14 @@ export default class RuleUi {
         collapsibleContainer.addClass('note-toolbar-setting-items-list-container');
 
         if (this.ntb.settings.rules.length == 0) {
-            rulesContainer
-                .createEl("div", { text: this.ntb.settingsUtils.emptyMessageFr(t('setting.rules.label-empty')) })
+            rulesContainer.createDiv({ text: this.ntb.settingsUtils.emptyMessageFr(t('setting.rules.label-empty')) })
                 .className = "note-toolbar-setting-empty-message";
         }
         else {
             const toolbarRuleListEl = createDiv();
             toolbarRuleListEl.addClass('note-toolbar-sortablejs-list');
 
-            this.ntb.settings.rules.forEach((rule: ToolbarRule, index) => {
+            this.ntb.settings.rules.forEach((rule: ToolbarRule, ) => {
                 const toolbarFolderListItemDiv = this.renderRuleForm(rule);
                 toolbarRuleListEl.append(toolbarFolderListItemDiv);
             });
@@ -246,7 +245,7 @@ export default class RuleUi {
                             // )
                         ) {
                             if (activeDocument.getElementById("note-toolbar-name-error") === null) {
-                                const errorDiv = createEl("div", { 
+                                const errorDiv = createDiv({ 
                                     text: t('setting.mappings.error-folder-already-mapped'), 
                                     attr: { id: "note-toolbar-name-error" }, cls: "note-toolbar-setting-error-message" });
                                 conditionEl.insertAdjacentElement('afterend', errorDiv);

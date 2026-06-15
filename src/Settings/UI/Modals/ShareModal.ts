@@ -45,7 +45,7 @@ export default class ShareModal extends Modal {
                     text.inputEl.select();
                     text.inputEl.readOnly = true;
                     text.inputEl.scrollTop = 0;
-                    this.ntb.registerDomEvent(text.inputEl, 'focus', (event) => {
+                    this.ntb.registerDomEvent(text.inputEl, 'focus', () => {
                         text.inputEl.select();
                     });
                     if (Platform.isDesktop) {

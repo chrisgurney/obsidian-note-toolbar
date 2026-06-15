@@ -295,7 +295,7 @@ export default class ToolbarItemUi {
             .addButton((cb) => {
                 cb.setIcon("ellipsis")
                     .setTooltip(t('setting.item.menu-more-actions'))
-                    .onClick((event) => {
+                    .onClick(() => {
                         const menu = this.generateItemActionMenu(toolbarItem);
                         menu.showAtPosition(getElementPosition(cb.buttonEl));
                     });
@@ -435,7 +435,7 @@ export default class ToolbarItemUi {
                 menuItem
                     .setTitle(t('setting.item.button-duplicate-tooltip'))
                     .setIcon('copy-plus')
-                    .onClick(async (menuEvent) => this.handleItemDuplicate(toolbarItem));
+                    .onClick(async () => this.handleItemDuplicate(toolbarItem));
             });
         }
 
@@ -443,8 +443,8 @@ export default class ToolbarItemUi {
             menuItem
                 .setTitle(t('setting.item.menu-copy-item'))
                 .setIcon('square-arrow-right')
-                .onClick((menuEvent) => {
-                    this.ntb.settingsUtils.copyToolbarItem(this.toolbar, toolbarItem);
+                .onClick(() => {
+                    this.ntb.settingsUtils.copyToolbarItem(toolbarItem);
                 });
         });
 
@@ -452,7 +452,7 @@ export default class ToolbarItemUi {
             menuItem
                 .setTitle(t('setting.item.menu-move-item'))
                 .setIcon('arrow-right')
-                .onClick((menuEvent) => {
+                .onClick(() => {
                     this.ntb.settingsUtils.moveToolbarItem(this.toolbar, toolbarItem, () => {
                         this.parent.display();
                     });
@@ -471,7 +471,7 @@ export default class ToolbarItemUi {
                         menuItem
                             .setTitle(t('setting.use-item-command.name-copy'))
                             .setIcon('copy')
-                            .onClick((menuEvent) => {
+                            .onClick(() => {
                                 const commandText = `obsidian://note-toolbar?command=${itemCommand.id}`;
                                 const copyTextModal = new CopyTextModal( this.ntb, commandText,
                                     t('command.copy-command-title'),
@@ -487,7 +487,7 @@ export default class ToolbarItemUi {
                 menuItem
                     .setTitle(toolbarItem.hasCommand ? t('setting.use-item-command.name-remove') : t('setting.use-item-command.name-add'))
                     .setIcon('terminal')
-                    .onClick(async (menuEvent) => {
+                    .onClick(async () => {
                         toolbarItem.hasCommand = !toolbarItem.hasCommand;
                         if (toolbarItem.hasCommand) {
                             await this.ntb.commands.addItemCommand(toolbarItem, (commandName) => {
@@ -522,7 +522,7 @@ export default class ToolbarItemUi {
             menuItem
                 .setTitle(t('setting.item.menu-share'))
                 .setIcon('share')
-                .onClick(async (menuEvent) => {
+                .onClick(async () => {
                     const shareUri = await this.ntb.protocolManager.getShareUri(toolbarItem);
                     const shareModal = new ShareModal(this.ntb, shareUri, toolbarItem);
                     shareModal.open();
@@ -535,7 +535,7 @@ export default class ToolbarItemUi {
             menuItem
                 .setTitle(t('setting.item.menu-copy-id'))
                 .setIcon('code')
-                .onClick((menuEvent) => {
+                .onClick(() => {
                     const copyTextModal = new CopyTextModal( this.ntb, toolbarItem.uuid,
                         t('setting.item.menu-copy-id-title'),
                         learnMoreFr(t('setting.item.menu-copy-id-description'), 'Developer-IDs'));
@@ -551,7 +551,7 @@ export default class ToolbarItemUi {
                 menuItem
                     .setTitle(t('setting.button-delete-tooltip'))
                     .setIcon('minus-circle')
-                    .onClick(async (menuEvent) => this.handleItemDelete(toolbarItem))
+                    .onClick(async () => this.handleItemDelete(toolbarItem))
                     .setWarning(true);
             });
     
@@ -629,7 +629,7 @@ export default class ToolbarItemUi {
                 .setTitle(t('setting.item.visibility.option-item-show', { platform: platformLabel }))
                 .setIcon(visIcons[platform].visible)
                 .setChecked(visibility.components.length === 2)
-                .onClick(async (menuEvent) => handleMenuClick([ComponentType.Icon, ComponentType.Label]));
+                .onClick(async () => handleMenuClick([ComponentType.Icon, ComponentType.Label]));
         });
         // hide item
         menu.addItem((menuItem: MenuItem) => {
@@ -637,7 +637,7 @@ export default class ToolbarItemUi {
                 .setTitle(t('setting.item.visibility.option-item-hide', { platform: platformLabel }))
                 .setIcon(visIcons[platform].hidden)
                 .setChecked(visibility.components.length === 0)
-                .onClick(async (menuEvent) => handleMenuClick([]));
+                .onClick(async () => handleMenuClick([]));
         });
 
         menu.addSeparator();
@@ -649,7 +649,7 @@ export default class ToolbarItemUi {
 				.setTitle(t('setting.item.visibility.option-component-show', { component: t('setting.item.visibility.component-icon'), platform: platformLabel }))
 				.setIcon('image')
 				.setChecked(isIconOnly)
-				.onClick(async (menuEvent) => handleMenuClick([ComponentType.Icon]));
+				.onClick(async () => handleMenuClick([ComponentType.Icon]));
 		});
 		menu.addItem((menuItem: MenuItem) => {
             const isLabelOnly = visibility.components.length === 1 && visibility.components.includes(ComponentType.Label);
@@ -657,7 +657,7 @@ export default class ToolbarItemUi {
 				.setTitle(t('setting.item.visibility.option-component-show', { component: t('setting.item.visibility.component-label'), platform: platformLabel }))
 				.setIcon('text-align-start')
 				.setChecked(isLabelOnly)
-				.onClick(async (menuEvent) => handleMenuClick([ComponentType.Label]));
+				.onClick(async () => handleMenuClick([ComponentType.Label]));
 		});
 
 		return menu;
@@ -929,7 +929,7 @@ export default class ToolbarItemUi {
                                 const isNativeMenusEnabled: boolean = !!this.ntb.app.vault.getConfig('nativeMenus');
                                 if (isNativeMenusEnabled) {
                                     menuHelpFr.append(
-                                        activeDocument.createElement('br'),
+                                        createEl('br'),
                                         getDisclaimersFr(SETTINGS_DISCLAIMERS, ['nativeMenus']));
                                 }
                                 setFieldHelp(menuSetting.controlEl, menuHelpFr);
@@ -1219,7 +1219,7 @@ export default class ToolbarItemUi {
                 this.ntb.settingsUtils.handleKeyClick(button.extraSettingsEl);     
             });
         advancedSetting.settingEl.addClass('note-toolbar-setting-subfield-advanced-heading');
-        this.ntb.registerDomEvent(advancedSetting.infoEl, 'click', (event) => {
+        this.ntb.registerDomEvent(advancedSetting.infoEl, 'click', () => {
             advancedSettingsDiv.toggleAttribute('data-active');
         });
 

@@ -48,7 +48,7 @@ export default class StyleModal extends Modal {
 				btn.setButtonText(t('setting.styles.button-close'))
 					.setCta()
 					.setTooltip(t('setting.styles.button-close-description'))
-					.onClick((event) => {
+					.onClick(() => {
 						this.close();
 					});
 			});

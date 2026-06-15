@@ -6,7 +6,7 @@ import { learnMoreFr, pluginLinkFr } from "../Utils/SettingsUIUtils";
 import { renderItemPreviewEl } from "../Components/ItemListUi";
 
 export async function confirmImportWithModal(ntb: NoteToolbarPlugin, callout: string): Promise<boolean> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         const modal = new ImportConfirmModal(ntb, callout);
         modal.onClose = () => {
             resolve(modal.isConfirmed);
@@ -51,7 +51,7 @@ export default class ImportConfirmModal extends Modal {
             this.setTitle(t('import.title-import-item'));
             this.modalEl.createEl('p').append(t('import.label-import-item-confirmation'));
             const itemPreviewsContainerEl = createDiv({ cls: ['note-toolbar-setting-item-preview-container', 'note-toolbar-setting-import-confirm-preview-container'] });
-            toolbar.items.forEach((item: ToolbarItemSettings, index) => {
+            toolbar.items.forEach((item: ToolbarItemSettings, ) => {
                 const itemPreviewEl = itemPreviewsContainerEl.createDiv({ cls: 'note-toolbar-setting-item-preview' });
                 renderItemPreviewEl(this.ntb, item, itemPreviewEl, false);
                 // show preview of script content
@@ -89,7 +89,7 @@ export default class ImportConfirmModal extends Modal {
             if (importInvalidCommands.length > 0) {
                 const commandDisclaimer = disclaimersList.createEl('li', { text: t('import.warning-invalid-plugins') });
                 const commandsList = commandDisclaimer.createEl('ul');
-                importInvalidCommands.map((id, index) => {
+                importInvalidCommands.map((id, ) => {
                     const commandsListItem = commandsList.createEl('li');
                     const pluginLink = pluginLinkFr(id, id);
                     if (pluginLink) commandsListItem.appendChild(pluginLink);

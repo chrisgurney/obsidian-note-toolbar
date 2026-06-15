@@ -502,7 +502,7 @@ export default class ToolbarSettingsModal extends Modal {
 
         // listen to changes
 		if (!this.scrollListener) {
-			this.scrollListener = (event: Event) => {
+			this.scrollListener = () => {
 				this.lastScrollPosition = containerEl.scrollTop;
 			};
 			this.ntb.registerDomEvent(containerEl, 'scroll', this.scrollListener);

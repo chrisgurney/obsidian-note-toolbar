@@ -49,7 +49,7 @@ export default class ProtocolManager {
 					const importedToolbar = importFromCallout(this.ntb, content, undefined, true);
 					if (data.import.includes('[!note-toolbar')) {
 						await this.ntb.settingsManager.addToolbar(importedToolbar)
-							.then(res => {
+							.then(() => {
 								this.ntb.commands.openToolbarSettingsForId(importedToolbar.uuid);
 							});
 					}

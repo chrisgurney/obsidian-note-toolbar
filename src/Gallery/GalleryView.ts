@@ -120,13 +120,13 @@ export default class GalleryView extends ItemView {
 
 			const cssColor = cssColors[i % cssColors.length];
 			
-			const catNameEl = markdownEl.createEl('div');
+			const catNameEl = markdownEl.createDiv();
 			catNameEl.addClass('note-toolbar-gallery-view-cat-title');
 			const catName = category.name[language] || category.name['en'];
 			const catComponent = new Component();
 			await MarkdownRenderer.render(this.ntb.app, `## ${catName}`, catNameEl, '/', catComponent);
 
-			const catDescEl = markdownEl.createEl('div');
+			const catDescEl = markdownEl.createDiv();
 			catDescEl.addClass('note-toolbar-gallery-view-cat-description');
 			const catDescText = category.description[language] || category.description['en'];
 			const catDescComponent = new Component();

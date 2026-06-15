@@ -54,7 +54,7 @@ export default class DocumentListeners {
         this.isContextOpening = true;
     }
 
-    onDoubleClick = (event: MouseEvent) => {
+    onDoubleClick = () => {
         // possible issue? not always true?
         this.isMouseSelecting = true;
         // timeout is because selectionchange event is asynchronous and might not fire before mouseup
@@ -102,7 +102,7 @@ export default class DocumentListeners {
     /**
      * We listen on the document to catch mouse releases outside of the editor as well.
      */
-    onMouseUp = (event: MouseEvent) => {
+    onMouseUp = () => {
         // this.ntb.debug('onMouseUp');
         this.isMouseDown = false;
         if (this.ntb.settings.textToolbar && this.previewSelection) {
@@ -115,7 +115,7 @@ export default class DocumentListeners {
     /**
      * Track any document selections, but only for Preview mode.
      */
-    onSelectionChange = (event: Event) => {
+    onSelectionChange = () => {
         // this.ntb.debug('onSelection', event);
         this.updatePreviewSelection();
     }

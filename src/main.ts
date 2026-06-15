@@ -223,7 +223,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		}
 		// otherwise do nothing when debug functions are called
 		else {
-			this.debug = (...args: unknown[]) => {};
+			this.debug = (..._args: unknown[]) => {};
 		}
 	}
 

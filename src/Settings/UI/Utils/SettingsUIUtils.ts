@@ -31,11 +31,11 @@ export default class SettingsUIUtils {
 
 	addCloseToPhoneNav(view: ItemView) {
 		if (!Platform.isPhone) return;
-		const closeButton = activeDocument.createElement('button');
+		const closeButton = createEl('button');
 		setIcon(closeButton, 'x');
 		setTooltip(closeButton, t('setting.help.button-close'));
 		closeButton.addClasses(['clickable-icon', 'view-action']);
-		this.ntb.registerDomEvent(closeButton, 'click', (e) => view.leaf?.detach());
+		this.ntb.registerDomEvent(closeButton, 'click', () => view.leaf?.detach());
 		const viewEl = view.leaf?.containerEl as HTMLElement | null;
 		const viewActionsEl = viewEl?.querySelector('.view-actions') as HTMLElement;
 		viewActionsEl?.insertAdjacentElement('afterbegin', closeButton);
@@ -241,21 +241,21 @@ export default class SettingsUIUtils {
 			const helpDesc = new DocumentFragment();
 			helpDesc.append("v" + PLUGIN_VERSION, " • ");
 			const whatsNewLink = helpDesc.createEl("a", { href: "#", text: t('setting.button-whats-new') });
-			this.ntb.registerDomEvent(whatsNewLink, 'click', async (event) => { 
+			this.ntb.registerDomEvent(whatsNewLink, 'click', async () => { 
 				await this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_WHATS_NEW, active: true });
 				if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
 				closeCallback();
 			});
 			helpDesc.append(' • ');
 			const galleryLink = helpDesc.createEl("a", { href: "#", text: iconTextFr('layout-grid', t('setting.button-gallery')) });
-			this.ntb.registerDomEvent(galleryLink, 'click', async (event) => { 
+			this.ntb.registerDomEvent(galleryLink, 'click', async () => { 
 				await this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true });
 				if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
 				closeCallback();
 			});
 			helpDesc.append(' • ');
 			const helpLink = helpDesc.createEl("a", { href: "#", text: iconTextFr('help-circle', t('setting.button-help')) });
-			this.ntb.registerDomEvent(helpLink, 'click', async (event) => { 
+			this.ntb.registerDomEvent(helpLink, 'click', async () => { 
 				await this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_HELP, active: true });
 				if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
 				closeCallback();
@@ -267,7 +267,7 @@ export default class SettingsUIUtils {
 
 			const helpDesc = new DocumentFragment();
 			const whatsNewLink = helpDesc.createEl("a", { href: "#", text: t('setting.button-whats-new') });
-			this.ntb.registerDomEvent(whatsNewLink, 'click', async (event) => { 
+			this.ntb.registerDomEvent(whatsNewLink, 'click', async () => { 
 				await this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_WHATS_NEW, active: true });
 				if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
 				closeCallback();
@@ -310,7 +310,7 @@ export default class SettingsUIUtils {
 	emptyMessageFr(message: string, linkText?: string, linkCallback?: () => void): DocumentFragment {
 
 		const messageFr = new DocumentFragment();
-		const messageFrText = activeDocument.createElement("i");
+		const messageFrText = createEl('i');
 		messageFrText.textContent = message;
 		messageFr.append(messageFrText);
 
@@ -531,10 +531,9 @@ export default class SettingsUIUtils {
 
 	/**
 	 * Copies an item to a toolbar of the user's choice.
-	 * @param fromToolbar toolbar to copy the item from
 	 * @param item item to copy
 	 */
-	copyToolbarItem(fromToolbar: ToolbarSettings, item: ToolbarItemSettings) {
+	copyToolbarItem(item: ToolbarItemSettings) {
 		const modal = new ToolbarSuggestModal(this.ntb, false, false, false, (toToolbar: ToolbarSettings) => {
 			if (toToolbar) {
 				void this.ntb.settingsManager.duplicateToolbarItem(toToolbar, item).then(() => this.ntb.settingsManager.save());
@@ -717,7 +716,7 @@ export default class SettingsUIUtils {
 					: fieldContainerEl?.querySelector('.note-toolbar-setting-field-error') !== null;
 			if (fieldContainerEl && !hasError) {
 				if (errorText) {
-					const errorDiv = createEl('div', { cls: 'note-toolbar-setting-field-error' });
+					const errorDiv = createDiv({ cls: 'note-toolbar-setting-field-error' });
 					errorDiv.append(errorText);
 					if (errorLink) {
 						// as it's not easy to listen for plugins being enabled,
@@ -728,7 +727,7 @@ export default class SettingsUIUtils {
 							setIcon(refreshIcon, 'refresh-cw');
 							const oldLink = event.currentTarget as HTMLElement;
 							oldLink?.replaceWith(refreshLink);
-							this.ntb.registerDomEvent(refreshLink, 'click', event => {
+							this.ntb.registerDomEvent(refreshLink, 'click', () => {
 								parent.display();
 							});
 						});
@@ -1018,7 +1017,7 @@ export function getDisclaimersFr(disclaimers: {[key: string]: string}[], keysToC
 	keysToCheck.forEach(keyToCheck => {
 		const disclaimer = disclaimers.find(d => keyToCheck in d);
 		if (disclaimer) {
-			if (!first) disclaimersFr.append(activeDocument.createElement('br'));
+			if (!first) disclaimersFr.append(createEl('br'));
 			disclaimersFr.append('* ', getValueForKey(disclaimers, keyToCheck) );
 			first = false;
 		}
@@ -1069,11 +1068,11 @@ export function getValueForKey(dict: {[key: string]: string}[], key: string): st
 
 export function iconTextFr(icon: string, text: string): DocumentFragment {
 	const headingFr = new DocumentFragment();
-	const headingEl = headingFr.createEl('span');
+	const headingEl = headingFr.createSpan();
 	headingEl.addClass('note-toolbar-setting-text-with-icon');
-	const headingIcon = headingEl.createEl('span');
+	const headingIcon = headingEl.createSpan();
 	setIcon(headingIcon, 'lucide-' + icon);
-	const headingText = headingEl.createEl('span');
+	const headingText = headingEl.createSpan();
 	headingText.setText(text);
 	headingFr.append(headingEl);
 	return headingFr;
@@ -1107,7 +1106,7 @@ export function headingLearnMoreFr(title: string, desc: string, page: string, li
 	messageFr.append(title);
 
 	// description + learn more link
-	const descFr = messageFr.createEl('div', 'setting-item-description');
+	const descFr = messageFr.createDiv({ cls: 'setting-item-description' });
 	descFr.append(desc, ' ');
 	const learnMoreLink = descFr.createEl('a', { href: `${URLS.GH_USER_GUIDE}/${page}`, text: linkText });
 	learnMoreLink.addClass('note-toolbar-setting-focussable-link');
