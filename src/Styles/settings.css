@@ -131,7 +131,7 @@
         & .setting-item {
             border-radius: 0;
             border-top: var(--border-width) solid var(--background-modifier-border);
-            padding: 0.5em 0;
+            padding: 0.5em 0.5em;
             &:first-child {
                 border-top: none;
                 padding-top: 0;
@@ -158,8 +158,8 @@
                 opacity: 1;
             }
             &:focus-within {
+                border-radius: var(--radius-s);
                 outline: solid 2px var(--background-modifier-border-focus);
-                border-radius: var(--radius-m);
                 & button:first-child {
                     opacity: 1;
                 }
