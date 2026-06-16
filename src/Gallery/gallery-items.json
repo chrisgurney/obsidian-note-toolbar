@@ -906,7 +906,7 @@
         },
         "icon": "file-stack",
         "tooltip": {
-            "en": "Backup Note Toolbar config",
+            "en": "Backup Note Toolbar data",
             "ja": "Note Toolbar設定をバックアップ",
             "zh": "备份 Note Toolbar 配置",
             "uk": "Резервна копія Note Toolbar"

@@ -212,7 +212,7 @@ Get access to Note Toolbar settings and tools quickly.
 | Toolbar settings | Opens the active Note Toolbar's settings to customize your toolbar. |
 | Note Toolbar User Guide | Access the Note Toolbar User Guide for help and tips. |
 | Export all toolbars as callouts | Writes an export file containing all toolbars as callouts. *Add from: [[Additional Gallery items]]* |
-| Backup Note Toolbar config | Copy Note Toolbar's settings (data.json) file into the vault. *Add from: [[Additional Gallery items]]* |
+| Backup Note Toolbar data | Copy Note Toolbar's settings (data.json) file into the vault. *Add from: [[Additional Gallery items]]* |
 
 ## Obsidian Support
 
