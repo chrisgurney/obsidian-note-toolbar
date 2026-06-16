@@ -318,7 +318,9 @@ export function importFromCallout(
 
     ntb.debug('importFromCallout');
 
-    const lines = callout.trim().split('\n');
+    // handle escaped newlines from the command-line, as well as those from the UI 
+    const lines = callout.replace(/\\n/g, '\n').trim().split('\n');
+    
     const isToolbarProvided = toolbar ? true : false;
     let errorLog = '';
 
