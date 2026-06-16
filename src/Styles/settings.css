@@ -982,6 +982,9 @@ input[type="text"].note-toolbar-setting-error,
                 .is-mobile & {
                     margin-top: 0;
                 }
+                & select.dropdown {
+                    width: 100%;
+                }
             }
         }
     }
