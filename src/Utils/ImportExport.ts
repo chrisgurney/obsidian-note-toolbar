@@ -307,14 +307,14 @@ function unescapeTextForCallout(str: string): string {
  * @param ntb NoteToolbarPlugin
  * @param callout Note Toolbar Calllout string to import
  * @param toolbar optional ToolbarSettings for existing toolbar to import into
- * @returns ToolbarSettings
+ * @returns ToolbarSettings, errors (if any)
  */
 export function importFromCallout(
     ntb: NoteToolbarPlugin, 
     callout: string, 
     toolbar?: ToolbarSettings, 
     fromShareUri: boolean = false
-): ToolbarSettings {
+): [ ToolbarSettings, string ] {
 
     ntb.debug('importFromCallout');
 
@@ -448,7 +448,7 @@ export function importFromCallout(
                             .toLowerCase();
                         // check the Lucide set first, and then the icon's name by itself (for custom icons, like Templater's)
                         icon = getIcon('lucide-' + iconImported) ? 'lucide-' + iconImported : (getIcon(iconImported) ? iconImported : '');
-                        errorLog += icon ? '' : `${t('import.errorlog-item', { number: index + 1 })} ${t('import.errorlog-icon-not-found', { icon: iconImported })}\n`;
+                        errorLog += icon ? '' : `- ${t('import.errorlog-item', { number: index + 1 })} ${t('import.errorlog-icon-not-found', { icon: iconImported })}\n`;
                     }
                     // remove the icon from the label string
                     label = label?.replace(iconMatch[1], '').trim();
@@ -468,7 +468,7 @@ export function importFromCallout(
                             const commandName = ntb.utils.getCommandNameById(commandId);
                             // if the command name doesn't exist, show the command ID and an error
                             link = commandName ? commandName : commandId;
-                            errorLog += commandName ? '' : `${t('import.errorlog-item', { number: index + 1 })} ${t('import.errorlog-command-not-recognized', { command: commandId })}\n`;
+                            errorLog += commandName ? '' : `- ${t('import.errorlog-item', { number: index + 1 })} ${t('import.errorlog-command-not-recognized', { command: commandId })}\n`;
                             // TODO: link needs to trigger field error style somehow
                             break;
                         }
@@ -504,7 +504,7 @@ export function importFromCallout(
                             itemType = ItemType.Menu;
                             const menuToolbar = ntb.settingsManager.getToolbar(dataUriValue);
                             link = menuToolbar ? menuToolbar.uuid : dataUriValue;
-                            errorLog += menuToolbar ? '' : `${t('import.errorlog-item', { number: index + 1 })} ${t('import.errorlog-menu-not-found', { menu: dataUriValue })}\n`;
+                            errorLog += menuToolbar ? '' : `- ${t('import.errorlog-item', { number: index + 1 })} ${t('import.errorlog-menu-not-found', { menu: dataUriValue })}\n`;
                             // TODO: link needs to trigger field error style somehow
                             break;
                         }
@@ -525,7 +525,7 @@ export function importFromCallout(
         ntb.debug('| scriptConfig?', scriptConfig);
         ntb.debug(`| => ${itemType?.toUpperCase()}`);
 
-        errorLog += itemType ? '' : `${t('import.errorlog-item', { number: index + 1 })} ${t('import.errorlog-invalid-format', { line: line })}\n`;
+        errorLog += itemType ? '' : `- ${t('import.errorlog-item', { number: index + 1 })} ${t('import.errorlog-invalid-format', { line: line })}\n`;
 
         // create the toolbar item and add it to the toolbar
         if (itemType) {
@@ -561,6 +561,6 @@ export function importFromCallout(
         new Notice(errorLog, 10000).containerEl.addClass('mod-warning');
     }
 
-    return toolbar;
+    return [ toolbar, errorLog ];
 
 }
