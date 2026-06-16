@@ -47,6 +47,10 @@ Expand below to see what's accessed and why. Let me know (via [GitHub ↗](https
 <summary>See disclosures...</summary>
 <br/>
 <ul>
+  <li><b>Uses Obsidian APIs newer than the declared minAppVersion</b></li>
+  <ul>
+    <li>The plugin uses some internal Obsidian APIs. This warning is indicating that some of those APIs <i>will</i> be public in a newer release, and should go away then.</li>
+  </ul>
   <li><b>Plugin might make requests to external domains</b></li>
   <ul>
     <li>URLs referenced by the plugin are used for: links to user guide and donation pages; and for a page to facilitate <a href="https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Sharing-toolbars">sharing of toolbars or toolbar items</a> with other users (<a href="https://github.com/chrisgurney/obsidian-note-toolbar/tree/gh-pages/docs">source code</a>).</li>
