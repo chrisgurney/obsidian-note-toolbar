@@ -1,9 +1,9 @@
 import NoteToolbarPlugin from "main";
 import { ButtonComponent, Modal } from "obsidian";
-import { ScriptConfig, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { ScriptConfig, t, ToolbarItemSettings } from "Settings/NoteToolbarSettings";
 import { importFromCallout } from "Utils/ImportExport";
-import { learnMoreFr, pluginLinkFr } from "../Utils/SettingsUIUtils";
 import { renderItemPreviewEl } from "../Components/ItemListUi";
+import { learnMoreFr, pluginLinkFr } from "../Utils/SettingsUIUtils";
 
 export async function confirmImportWithModal(ntb: NoteToolbarPlugin, callout: string): Promise<boolean> {
     return new Promise((resolve) => {
@@ -37,7 +37,7 @@ export default class ImportConfirmModal extends Modal {
 
         // parse the callout to show a preview
         let previewFr: DocumentFragment | undefined;
-        const toolbar: ToolbarSettings = importFromCallout(this.ntb, this.callout, undefined, true);
+        const [ toolbar ] = importFromCallout(this.ntb, this.callout, undefined, true);
         const isToolbar = this.callout.includes('[!note-toolbar');
 
         // if callout is a toolbar, preview as a toolbar

@@ -84,7 +84,7 @@ export default class ImportModal extends Modal {
             .setButtonText(this.toolbar ? t('import.button-add-items') : t('import.button-create'))
             .setCta()
             .onClick(() => {
-                this.importedToolbar = importFromCallout(this.ntb, this.callout, this.toolbar);
+                [ this.importedToolbar ] = importFromCallout(this.ntb, this.callout, this.toolbar);
                 this.close();
             });
 

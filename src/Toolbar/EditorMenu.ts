@@ -54,7 +54,7 @@ export default class EditorMenu {
 						.setIcon('import')
 						.setTitle(t('import.option-create'))
 						.onClick(async () => {
-							const toolbar = importFromCallout(this.ntb, selection);
+							const [ toolbar ] = importFromCallout(this.ntb, selection);
 							await this.ntb.settingsManager.addToolbar(toolbar);
 							this.ntb.commands.openToolbarSettingsForId(toolbar.uuid);
 						});
