@@ -122,23 +122,21 @@
         background-color: var(--setting-items-background);
         border-radius: var(--setting-items-radius);
         margin: 0em 0em 1em 0em;
-        padding: var(--size-4-4);
         .is-mobile & {
             & .setting-item > .setting-item-control > button {
                 width: unset;
             }
         }
         & .setting-item {
-            border-radius: 0;
             border-top: var(--border-width) solid var(--background-modifier-border);
-            padding: 0.5em 0.5em;
+            margin: 0;
+            margin-bottom: 2px;
+            padding: var(--size-4-4);
+            &:not(:first-child):not(:last-child) {
+                border-radius: 0;
+            }
             &:first-child {
                 border-top: none;
-                padding-top: 0;
-            }
-            &:last-child {
-                margin-bottom: 0;
-                padding-bottom: 0;
             }
             /* options button */
             & button:first-child {
@@ -158,10 +156,15 @@
                 opacity: 1;
             }
             &:focus-within {
-                border-radius: var(--radius-s);
                 outline: solid 2px var(--background-modifier-border-focus);
                 & button:first-child {
                     opacity: 1;
+                }
+                &:first-child {
+                    border-radius: var(--setting-items-radius) var(--setting-items-radius) 0 0;
+                }
+                &:last-child {
+                    border-radius: 0 0 var(--setting-items-radius) var(--setting-items-radius);
                 }
             }
         }
