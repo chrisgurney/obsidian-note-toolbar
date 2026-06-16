@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from 'main';
-import { Component, ItemView, MarkdownRenderer, Setting, ToggleComponent, WorkspaceLeaf } from 'obsidian';
+import { Component, ItemView, MarkdownRenderer, WorkspaceLeaf } from 'obsidian';
 import { t, VIEW_TYPE_WHATS_NEW, WHATSNEW_VERSION } from 'Settings/NoteToolbarSettings';
 import { URLS } from "Utils/Urls";
 import { iconTextFr } from '../Settings/UI/Utils/SettingsUIUtils';
@@ -51,17 +51,17 @@ export default class WhatsNewView extends ItemView {
 			createDiv().createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.whats-new.button-read'), href: `${URLS.GH_USER_GUIDE}/Roadmap`, attr: { 'aria-label': t('setting.whats-new.button-read-tooltip') } })
 		);
 
-		new Setting(ctaEl)
-			.setName(iconTextFr('party-popper', t('setting.whats-new.label-show-whatsnew')))
-			.setDesc(t('setting.whats-new.label-show-whatsnew-description'))
-			.addToggle((toggle: ToggleComponent) => {
-				toggle
-					.setValue(this.ntb.settings.showWhatsNew)
-					.onChange(async (value: boolean) => {
-						this.ntb.settings.showWhatsNew = value;
-						await this.ntb.settingsManager.save();
-					});
-			});
+		// new Setting(ctaEl)
+		// 	.setName(iconTextFr('party-popper', t('setting.whats-new.label-show-whatsnew')))
+		// 	.setDesc(t('setting.whats-new.label-show-whatsnew-description'))
+		// 	.addToggle((toggle: ToggleComponent) => {
+		// 		toggle
+		// 			.setValue(this.ntb.settings.showWhatsNew)
+		// 			.onChange(async (value: boolean) => {
+		// 				this.ntb.settings.showWhatsNew = value;
+		// 				await this.ntb.settingsManager.save();
+		// 			});
+		// 	});
 
 		// get the content
 		const language = (typeof i18next.language === 'string' && i18next.language.trim()) || 'en';
