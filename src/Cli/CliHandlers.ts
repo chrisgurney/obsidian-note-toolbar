@@ -2,6 +2,7 @@ import NoteToolbarPlugin from "main";
 import { CliData, CliHandler, getIcon, ItemView, normalizePath, PaneType, TFile } from "obsidian";
 import { ItemType, ScriptConfig, t, ToolbarItemSettings } from "Settings/NoteToolbarSettings";
 import ItemModal from "Settings/UI/Modals/ItemModal";
+import { importFromCallout } from "Utils/ImportExport";
 import { importArgs } from "Utils/Utils";
 import CliDefinition from "./CliDefinition";
 import CliItemsHandler from "./CliItemsHandler";
@@ -38,6 +39,7 @@ export default class CliHandlers {
 
     /**
      * Defines the CLI command handlers, used in register().
+     * Make sure to add new commands to `cli.json`.
      */
     public cliHandlers: Record<string, CliHandler> = {
         'note-toolbar': this.handleDefault.bind(this),
@@ -59,6 +61,7 @@ export default class CliHandlers {
         'note-toolbar:copy': this.handleCopy.bind(this),
         'note-toolbar:gallery': this.handleGallery.bind(this),
         'note-toolbar:help': this.handleHelp.bind(this),
+        'note-toolbar:import': this.handleImport.bind(this),
         'note-toolbar:items': this.handleItems.bind(this),
         'note-toolbar:move': this.handleMove.bind(this),
         'note-toolbar:new': this.handleNew.bind(this),
@@ -264,6 +267,24 @@ export default class CliHandlers {
 
     handleHelp(): string {
         return t('cli.label-title') + '\n\n' + t('cli.label-heading-commands') + '\n' + this.cliDefinition.formatCommandList();
+    }
+
+    async handleImport(args: CliData): Promise<string> {
+        const toolbar = hasValue(args.toolbar) ? this.ntb.settingsManager.getToolbar(args.toolbar) : undefined;
+        const callout = hasValue(args.callout) ? args.callout : undefined;
+        if (!callout) return "Callout not provided";
+
+        let result = '';
+        const [ toolbarWithImport, errorLog ] = importFromCallout(this.ntb, callout, toolbar);
+        if (!errorLog) {
+            await this.ntb.settingsManager.addToolbar(toolbarWithImport);
+            result = `Success: Imported ${toolbarWithImport.items.length} items into toolbar: ${toolbarWithImport.name}\n\n`;
+            result += this.cliItemsHandler.formatItemList({ includeEmpty: 'true', verbose: 'true' }, toolbarWithImport);
+        }
+        else {
+            result += errorLog;
+        }
+        return result;
     }
 
     handleItems(args: CliData): string {

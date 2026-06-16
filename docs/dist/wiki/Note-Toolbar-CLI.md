@@ -367,6 +367,15 @@ format=csv|tsv  # Output format (default: tsv)
 
 ## Create toolbars
 
+### `note-toolbar:import`
+
+Adds items, or creates a toolbar from a Note Toolbar Callout.
+
+```sh
+toolbar=<name>      # Toolbar name
+callout=<markdown>  # Callout markdown
+```
+
 ### `note-toolbar:new`
 
 Creates a new toolbar.

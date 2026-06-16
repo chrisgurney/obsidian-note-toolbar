@@ -522,6 +522,31 @@
             },
             "docs": "Lists all Note Toolbar CLI actions."
         },
+        "note-toolbar:import": {
+            "category": "toolbars",
+            "description": {
+                "en": "Add items, or create a toolbar from a Note Toolbar Callout"
+            },
+            "docs": "Adds items, or creates a toolbar from a Note Toolbar Callout.",
+            "flags": {
+                "toolbar": {
+                    "description": {
+                        "en": "Toolbar name"
+                    },
+                    "value": {
+                        "en": "<name>"
+                    }
+                },
+                "callout": {
+                    "description": {
+                        "en": "Callout markdown"
+                    },
+                    "value": {
+                        "en": "<markdown>"
+                    }
+                }
+            }
+        },
         "note-toolbar:items": {
             "category": "items",
             "description": {
