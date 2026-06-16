@@ -154,16 +154,14 @@ export default class SettingsManager {
 			const renderToolbar = this.ntb.utils.hasToolbarForItemView(itemView);
 			if (!renderToolbar) return;
 			switch (itemView.getViewType()) {
-				case 'empty':
-				case 'beautitab-react-view':
-				case 'home-tab-view':
-					if (this.ntb.settings.emptyViewToolbar) {
-						return this.getToolbarById(this.ntb.settings.emptyViewToolbar);
-					}
-					break;
 				case 'webviewer':
 					if (this.ntb.settings.webviewerToolbar) {
 						return this.getToolbarById(this.ntb.settings.webviewerToolbar);
+					}
+					break;
+				default:
+					if (this.ntb.settings.emptyViewToolbar) {
+						return this.getToolbarById(this.ntb.settings.emptyViewToolbar);
 					}
 					break;
 			}
