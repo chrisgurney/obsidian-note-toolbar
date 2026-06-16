@@ -253,6 +253,9 @@
     justify-content: space-between;
     border-top: 1px solid var(--background-modifier-border);
     padding: var(--size-4-4) 0;
+    .note-toolbar-link-dialog & {
+        border-top: none;
+    }
 }
 
 .note-toolbar-setting-link:first-child {
