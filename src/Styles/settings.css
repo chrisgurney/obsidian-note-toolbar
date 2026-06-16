@@ -140,6 +140,7 @@
                 border-radius: var(--setting-items-radius) var(--setting-items-radius) 0 0;
             }
             &:last-child {
+                border-top: var(--border-width) solid var(--background-modifier-border);
                 border-radius: 0 0 var(--setting-items-radius) var(--setting-items-radius);
             }
             /* options button */
