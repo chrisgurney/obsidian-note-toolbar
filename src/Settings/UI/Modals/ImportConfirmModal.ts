@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
-import { ButtonComponent, Modal } from "obsidian";
-import { ScriptConfig, t, ToolbarItemSettings } from "Settings/NoteToolbarSettings";
+import { ButtonComponent, Component, MarkdownRenderer, Modal, Setting, TextAreaComponent } from "obsidian";
+import { ScriptConfig, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { importFromCallout } from "Utils/ImportExport";
 import { renderItemPreviewEl } from "../Components/ItemListUi";
 import { learnMoreFr, pluginLinkFr } from "../Utils/SettingsUIUtils";
@@ -18,6 +18,7 @@ export async function confirmImportWithModal(ntb: NoteToolbarPlugin, callout: st
 export default class ImportConfirmModal extends Modal {
 
     public isConfirmed: boolean = false;
+    private component!: Component;
 
 	constructor(
         private ntb: NoteToolbarPlugin, 
@@ -25,10 +26,16 @@ export default class ImportConfirmModal extends Modal {
     ) {
         super(ntb.app);
         this.modalEl.addClass('note-toolbar-setting-dialog-phonefix');
+        this.component = new Component();
+        this.component.load();
     }
 
     onOpen() {
         this.display();
+    }
+
+    onClose() {
+        this.component.unload();
     }
 
     display() {
@@ -37,11 +44,24 @@ export default class ImportConfirmModal extends Modal {
 
         // parse the callout to show a preview
         let previewFr: DocumentFragment | undefined;
-        const [ toolbar ] = importFromCallout(this.ntb, this.callout, undefined, true);
+        const [ toolbar, errorLog ] = importFromCallout(this.ntb, this.callout, undefined, false);
         const isToolbar = this.callout.includes('[!note-toolbar');
 
+        if (errorLog) {
+            this.setTitle(t('import.title-import-error'));
+            const calloutSetting = new Setting(this.modalEl)
+                .addTextArea((text: TextAreaComponent) => {
+                    text.setValue(this.callout.trim());
+                })
+                .setClass('note-toolbar-setting-import-text-area')
+                .setClass('note-toolbar-setting-error');
+
+            const errorEl = createDiv();
+            void MarkdownRenderer.render(this.ntb.app, errorLog, errorEl, '', this.component);
+            this.ntb.settingsUtils.setFieldError(null, calloutSetting.controlEl, "beforeend", errorEl);
+        }
         // if callout is a toolbar, preview as a toolbar
-        if (isToolbar) {
+        else if (isToolbar) {
             this.setTitle(t('import.title-import-confirmation', { toolbar: toolbar.name, interpolation: { escapeValue: false } }));
             this.modalEl.createEl('p').append(learnMoreFr(t('import.label-import-confirmation'), 'Defining-where-to-show-toolbars'));
             previewFr = toolbar ? this.ntb.settingsUtils.createToolbarPreviewFr(toolbar, undefined) : undefined;
@@ -71,35 +91,9 @@ export default class ImportConfirmModal extends Modal {
             previewContainerEl.addClass('note-toolbar-setting-import-confirm-preview');
             previewContainerEl.createEl('p', { text: t('export.label-share-preview'), cls: 'note-toolbar-setting-small-heading' });
             previewContainerEl.createDiv().append(previewFr);
-        }
 
-        //
-        // disclaimers, if any
-        //
-
-        const importInvalidCommands = this.ntb.utils.getInvalidCommandsForToolbar(toolbar);
-        const importHasVars = this.ntb.vars.toolbarHasVars(toolbar);
-
-        if (importInvalidCommands.length > 0 || importHasVars) {
-
-            const disclaimers = this.modalEl.createDiv();
-            disclaimers.addClass('note-toolbar-setting-field-help');
-            const disclaimersList = disclaimers.createEl('ul');
-
-            if (importInvalidCommands.length > 0) {
-                const commandDisclaimer = disclaimersList.createEl('li', { text: t('import.warning-invalid-plugins') });
-                const commandsList = commandDisclaimer.createEl('ul');
-                importInvalidCommands.map((id, ) => {
-                    const commandsListItem = commandsList.createEl('li');
-                    const pluginLink = pluginLinkFr(id, id);
-                    if (pluginLink) commandsListItem.appendChild(pluginLink);
-                });
-            }
-
-            if (importHasVars) {
-                disclaimersList.createEl('li', { text: learnMoreFr(t('import.warning-vars'), 'Variables') });
-            }
-
+            // disclaimers, if any
+            this.showDisclaimers(toolbar);
         }
 
         //
@@ -114,13 +108,15 @@ export default class ImportConfirmModal extends Modal {
             .onClick(() => {
                 this.close();
             });
-        new ButtonComponent(btnContainerEl)
-            .setButtonText(isToolbar ? t('import.button-confirm') : t('import.button-select-toolbar'))
-            .setCta()
-            .onClick(() => {
-                this.isConfirmed = true;
-                this.close();
-            });
+        if (previewFr) {
+            new ButtonComponent(btnContainerEl)
+                .setButtonText(isToolbar ? t('import.button-confirm') : t('import.button-select-toolbar'))
+                .setCta()
+                .onClick(() => {
+                    this.isConfirmed = true;
+                    this.close();
+                });
+        }
 
     }
 
@@ -133,4 +129,30 @@ export default class ImportConfirmModal extends Modal {
         return parts.join(' | ');
     }
     
+    showDisclaimers(toolbar: ToolbarSettings) {
+        const importInvalidCommands = this.ntb.utils.getInvalidCommandsForToolbar(toolbar);
+        const importHasVars = this.ntb.vars.toolbarHasVars(toolbar);
+
+        if (importInvalidCommands.length > 0 || importHasVars) {
+
+            const disclaimersEl = this.modalEl.createDiv();
+            disclaimersEl.addClass('note-toolbar-setting-field-help');
+            const disclaimersList = disclaimersEl.createEl('ul');
+
+            if (importInvalidCommands.length > 0) {
+                const commandDisclaimer = disclaimersList.createEl('li', { text: t('import.warning-invalid-plugins') });
+                const commandsList = commandDisclaimer.createEl('ul');
+                importInvalidCommands.map((id, ) => {
+                    const commandsListItem = commandsList.createEl('li');
+                    const pluginLink = pluginLinkFr(id, id);
+                    if (pluginLink) commandsListItem.appendChild(pluginLink);
+                });
+            }
+
+            if (importHasVars) {
+                disclaimersList.createEl('li', { text: learnMoreFr(t('import.warning-vars'), 'Variables') });
+            }
+        }
+    }
+
 }

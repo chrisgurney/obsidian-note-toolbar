@@ -261,6 +261,7 @@
         "placeholder-import-into": "> Note Toolbar Callout markdown...",
         "title-import": "Create toolbar from callout",
         "title-import-confirmation": "Create Note Toolbar: {{toolbar}}",
+        "title-import-error": "Error(s) importing callout or item",
         "title-import-into": "Add callout items to toolbar: {{toolbar}}",
         "title-import-item": "Add item(s) to Note Toolbar",
         "warning-invalid-plugins": "This toolbar or item uses plugins you do not have installed and enabled:",
