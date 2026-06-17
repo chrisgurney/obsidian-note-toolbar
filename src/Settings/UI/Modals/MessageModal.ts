@@ -5,7 +5,7 @@ import { t } from "Settings/NoteToolbarSettings";
 /**
  * Displays a message with an optional link to an external resource.
  */
-export default class LinkModal extends Modal {
+export default class MessageModal extends Modal {
 
 	constructor(
         private ntb: NoteToolbarPlugin,

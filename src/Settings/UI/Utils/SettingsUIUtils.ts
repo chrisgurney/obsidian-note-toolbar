@@ -8,7 +8,7 @@ import { PLUGIN_VERSION } from "version";
 import { confirmWithModal } from "../Modals/ConfirmModal";
 import ItemModal from "../Modals/ItemModal";
 import ItemSuggestModal, { ItemSuggestMode } from "../Modals/ItemSuggestModal";
-import LinkModal from "../Modals/LinkModal";
+import MessageModal from "../Modals/MessageModal";
 import ToolbarSettingsModal from "../Modals/ToolbarSettingsModal";
 import ToolbarSuggestModal from "../Modals/ToolbarSuggestModal";
 import NoteToolbarSettingTab from "../NoteToolbarSettingTab";
@@ -464,7 +464,7 @@ export default class SettingsUIUtils {
 
 					const isAdditionalItem = selectedItem.linkAttr.type === ItemType.Additional;
 					if (isAdditionalItem) {
-						const linkModal = new LinkModal(
+						const linkModal = new MessageModal(
 							this.ntb, 
 							t('gallery.label-additional-title', { item: selectedItem.tooltip }), 
 							t('gallery.label-additional-description'),
