@@ -4,11 +4,11 @@ import { t, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { importFromCallout } from "Utils/ImportExport";
 import { learnMoreFr } from "../Utils/SettingsUIUtils";
 
-export async function importFromModal(ntb: NoteToolbarPlugin, toolbar?: ToolbarSettings): Promise<ToolbarSettings> {
+export async function importFromModal(ntb: NoteToolbarPlugin, toolbar?: ToolbarSettings): Promise<[ ToolbarSettings, string ]> {
     return new Promise((resolve) => {
         const modal = new ImportModal(ntb, toolbar);
         modal.onClose = () => {
-            resolve(modal.importedToolbar);
+            resolve([modal.importedToolbar, modal.errorLog]);
         };
         modal.open();
     });
@@ -17,6 +17,7 @@ export async function importFromModal(ntb: NoteToolbarPlugin, toolbar?: ToolbarS
 export default class ImportModal extends Modal {
 
     public importedToolbar!: ToolbarSettings;
+    public errorLog!: string;
 
     callout: string = '';
 
@@ -84,7 +85,7 @@ export default class ImportModal extends Modal {
             .setButtonText(this.toolbar ? t('import.button-add-items') : t('import.button-create'))
             .setCta()
             .onClick(() => {
-                [ this.importedToolbar ] = importFromCallout(this.ntb, this.callout, this.toolbar);
+                [ this.importedToolbar, this.errorLog ] = importFromCallout(this.ntb, this.callout, this.toolbar);
                 this.close();
             });
 

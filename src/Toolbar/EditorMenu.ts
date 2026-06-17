@@ -54,9 +54,11 @@ export default class EditorMenu {
 						.setIcon('import')
 						.setTitle(t('import.option-create'))
 						.onClick(async () => {
-							const [ toolbar ] = importFromCallout(this.ntb, selection);
-							await this.ntb.settingsManager.addToolbar(toolbar);
-							this.ntb.commands.openToolbarSettingsForId(toolbar.uuid);
+							const [ toolbar, errorLog ] = importFromCallout(this.ntb, selection);
+							if (!errorLog && toolbar) {
+								await this.ntb.settingsManager.addToolbar(toolbar);
+								this.ntb.commands.openToolbarSettingsForId(toolbar.uuid);
+							}
 						});
 				});
 			}

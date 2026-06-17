@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from 'main';
 import { ButtonComponent, debounce, Menu, MenuItem, normalizePath, Platform, PluginSettingTab, setIcon, Setting, SettingGroup, setTooltip, ToggleComponent } from 'obsidian';
-import { FolderMapping, OBSIDIAN_UI_ELEMENTS, OBSIDIAN_UI_MOBILE_NAVBAR_OPTIONS, RIBBON_ACTION_OPTIONS, RibbonAction, SETTINGS_VERSION, SettingType, t, ToolbarSettings } from 'Settings/NoteToolbarSettings';
+import { FolderMapping, OBSIDIAN_UI_ELEMENTS, OBSIDIAN_UI_MOBILE_NAVBAR_OPTIONS, RIBBON_ACTION_OPTIONS, RibbonAction, SETTINGS_VERSION, SettingType, t } from 'Settings/NoteToolbarSettings';
 import IconSuggestModal from 'Settings/UI/Modals/IconSuggestModal';
 import FolderSuggester from 'Settings/UI/Suggesters/FolderSuggester';
 import ToolbarSuggester from 'Settings/UI/Suggesters/ToolbarSuggester';
@@ -191,8 +191,11 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 				cb.setIcon('import')
 				.setTooltip(t('import.button-import-tooltip'))
 				.onClick(async () => {
-					const importedToolbar = await importFromModal(this.ntb);
-					if (importedToolbar) {
+					const [ importedToolbar, errorLog ] = await importFromModal(this.ntb);
+					if (errorLog) {
+						// do nothing
+					}
+					else if (importedToolbar) {
 						await this.ntb.settingsManager.addToolbar(importedToolbar);
 						await this.ntb.settingsManager.save();
 						this.ntb.commands.openToolbarSettingsForId(importedToolbar.uuid, undefined, this);

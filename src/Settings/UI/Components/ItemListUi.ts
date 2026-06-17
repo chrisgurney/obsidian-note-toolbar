@@ -55,15 +55,14 @@ export default class ItemListUi {
                 cb.setIcon('import')
                 .setTooltip(t('import.button-import-into-tooltip'))
                 .onClick(async () => {
-                    await importFromModal(
-                        this.ntb, 
-                        this.toolbar
-                    ).then(async (importedToolbar: ToolbarSettings) => {
-                        if (importedToolbar) {
-                            await this.ntb.settingsManager.save();
-                            this.parent.display();
-                        }
-                    });
+					const [ importedToolbar, errorLog ] = await importFromModal(this.ntb, this.toolbar);
+					if (errorLog) {
+						// do nothing
+					}
+					else if (importedToolbar) {
+                        await this.ntb.settingsManager.save();
+                        this.parent.display();
+                    }
                 });
                 this.ntb.settingsUtils.handleKeyClick(cb.extraSettingsEl);
             });
