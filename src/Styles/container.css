@@ -56,7 +56,7 @@
 
         /* remove the background color for toolbars using the button style */
         & .cg-note-toolbar-callout[data-callout-metadata*="button"],
-        & .cg-note-toolbar-callout[data-callout-metadata*="mbtn"] {
+        .is-mobile & .cg-note-toolbar-callout[data-callout-metadata*="mbtn"] {
             background-color: unset;
             @media (hover: hover) {
                 & a:hover, span.external-link:hover {
@@ -111,7 +111,7 @@
     &[data-tbar-position="props"] {
         /* remove the background color for toolbars using the button style */
         & .cg-note-toolbar-callout[data-callout-metadata*="button"],
-        & .cg-note-toolbar-callout[data-callout-metadata*="mbtn"] {
+        .is-mobile & .cg-note-toolbar-callout[data-callout-metadata*="mbtn"] {
             background-color: unset;
             @media (hover: hover) {
                 & a:hover, span.external-link:hover {
