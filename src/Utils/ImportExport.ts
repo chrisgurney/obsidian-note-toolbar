@@ -324,6 +324,7 @@ export function importFromCallout(
     
     const isToolbarProvided = toolbar ? true : false;
     let errorLog = '';
+    let warningLog = '';
 
     // get the active file to provide context
     const activeFile = ntb.app.workspace.getActiveFile();
@@ -369,7 +370,7 @@ export function importFromCallout(
                 ntb.debug('| • styles?', validDefaultStyles, validMobileStyles);
                 if (invalidStyles.length > 0) {
                     ntb.debug('|   • invalid:', invalidStyles);
-                    errorLog += `${t('import.errorlog-invalid-styles', { styles: invalidStyles })}\n`;
+                    warningLog += `- ${t('import.errorlog-invalid-styles', { styles: invalidStyles })}\n`;
                 }
             
                 toolbar.name = ntb.settingsManager.getUniqueToolbarName(name ? name : t('setting.toolbars.new-tbar-name'), false);
@@ -449,7 +450,7 @@ export function importFromCallout(
                             .toLowerCase();
                         // check the Lucide set first, and then the icon's name by itself (for custom icons, like Templater's)
                         icon = getIcon('lucide-' + iconImported) ? 'lucide-' + iconImported : (getIcon(iconImported) ? iconImported : '');
-                        errorLog += icon ? '' : `- ${t('import.errorlog-item', { number: index + 1 })} ${t('import.errorlog-icon-not-found', { icon: iconImported })}\n`;
+                        warningLog += icon ? '' : `- ${t('import.errorlog-item', { number: index + 1 })} ${t('import.errorlog-icon-not-found', { icon: iconImported })}\n`;
                     }
                     // remove the icon from the label string
                     label = label?.replace(iconMatch[1], '').trim();
@@ -557,9 +558,15 @@ export function importFromCallout(
     });
 
     // show errors to the user
-    if (displayError && errorLog) {
-        errorLog = `${t('import.errorlog-heading')}\n${errorLog}`;
-        new Notice(errorLog, 10000).containerEl.addClass('mod-warning');
+    let noticeText = '';
+    if (errorLog) {
+        noticeText += `${t('import.errorlog-heading')}\n${errorLog}`;
+        if (warningLog) noticeText += '\n\n';
+    }
+    if (warningLog) noticeText += `${t('import.errorlog-warning-heading')}\n${warningLog}`;
+    if (noticeText) {
+        if (displayError) new Notice(noticeText, 10000).containerEl.addClass('mod-warning');
+        ntb.error(noticeText);
     }
 
     return [ toolbar, errorLog ];

@@ -246,6 +246,7 @@
         "error-invalid-uri-content": "Note Toolbar: It looks like there's an issue with this link. Check the URI is correct, or review the user guide.",
         "errorlog-command-not-recognized": "Command not recognized: `{{command}}`",
         "errorlog-heading": "Error: Problem(s) found during toolbar import:",
+        "errorlog-warning-heading": "Warning(s) found during toolbar import:",
         "errorlog-icon-not-found": "Icon not found: `{{icon}}`",
         "errorlog-invalid-format": "Invalid format: `{{line}}`",
         "errorlog-invalid-styles": "Invalid style(s): `{{styles}}`",
