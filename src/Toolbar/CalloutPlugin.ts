@@ -48,8 +48,8 @@ export class CalloutPluginClass implements PluginValue {
                 if (!toolbarEl) el.removeAttribute(TbarData.EmbedMeta);
                 if (metaAttr) el.setAttribute(TbarData.EmbedMeta, metaAttr);
 
-                if (toolbarEl) {
-                    const toolbarListEl = toolbarEl.querySelector('.callout-content > ul') as HTMLElement;
+                const toolbarListEl = toolbarEl?.querySelector('.callout-content > ul') as HTMLElement;
+                if (toolbarListEl) {
                     Array.from(toolbarListEl.children).forEach(el => {
                         el.removeAttribute(TbarData.LiItemType);
                         if (el.querySelector(':scope > hr, :scope > data[data-sep], :scope > a.external-link + data[data-sep]')) {
