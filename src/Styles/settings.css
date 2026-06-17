@@ -1370,6 +1370,7 @@ input[type="text"].note-toolbar-setting-error,
         flex-direction: column;
         & textarea {
             flex: 1 1 auto;
+            font-family: var(--font-monospace);
             min-height: 16em;
         }
     }
