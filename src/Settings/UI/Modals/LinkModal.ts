@@ -3,16 +3,16 @@ import { Component, MarkdownRenderer, Modal } from "obsidian";
 import { t } from "Settings/NoteToolbarSettings";
 
 /**
- * Displays a link to an external resource, with additioanl context.
+ * Displays a message with an optional link to an external resource.
  */
 export default class LinkModal extends Modal {
 
 	constructor(
         private ntb: NoteToolbarPlugin,
-        private link: string,
         private title: string,
         private desc?: string,
-        private cta?: string
+        private link?: string,
+        private cta?: string,
     ) {
         super(ntb.app);
         this.modalEl.addClass('note-toolbar-link-dialog', 'note-toolbar-setting-dialog-phonefix');

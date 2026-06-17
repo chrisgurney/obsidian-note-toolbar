@@ -466,9 +466,9 @@ export default class SettingsUIUtils {
 					if (isAdditionalItem) {
 						const linkModal = new LinkModal(
 							this.ntb, 
-							URLS.GH_USER_GUIDE + '/Additional-Gallery-items', 
 							t('gallery.label-additional-title', { item: selectedItem.tooltip }), 
 							t('gallery.label-additional-description'),
+							URLS.GH_USER_GUIDE + '/Additional-Gallery-items', 
 							t('gallery.label-additional-cta')
 						);
 						linkModal.open();

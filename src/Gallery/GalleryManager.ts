@@ -94,9 +94,9 @@ export default class GalleryManager {
 			case ItemType.Additional: {
 				const linkModal = new LinkModal(
 					this.ntb, 
-					URLS.GH_USER_GUIDE + '/Additional-Gallery-items', 
 					t('gallery.label-additional-title', { item: galleryItem.tooltip }), 
 					t('gallery.label-additional-description'),
+					URLS.GH_USER_GUIDE + '/Additional-Gallery-items', 
 					t('gallery.label-additional-cta')
 				);
 				linkModal.open();
