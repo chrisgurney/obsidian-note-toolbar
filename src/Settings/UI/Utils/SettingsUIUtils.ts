@@ -464,14 +464,14 @@ export default class SettingsUIUtils {
 
 					const isAdditionalItem = selectedItem.linkAttr.type === ItemType.Additional;
 					if (isAdditionalItem) {
-						const linkModal = new MessageModal(
+						const messageModal = new MessageModal(
 							this.ntb, 
 							t('gallery.label-additional-title', { item: selectedItem.tooltip }), 
 							t('gallery.label-additional-description'),
 							URLS.GH_USER_GUIDE + '/Additional-Gallery-items', 
 							t('gallery.label-additional-cta')
 						);
-						linkModal.open();
+						messageModal.open();
 						return;
 					}
 

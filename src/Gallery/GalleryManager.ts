@@ -92,14 +92,14 @@ export default class GalleryManager {
         // prompts for certain item types
         switch (galleryItem.linkAttr.type) {
 			case ItemType.Additional: {
-				const linkModal = new MessageModal(
+				const messageModal = new MessageModal(
 					this.ntb, 
 					t('gallery.label-additional-title', { item: galleryItem.tooltip }), 
 					t('gallery.label-additional-description'),
 					URLS.GH_USER_GUIDE + '/Additional-Gallery-items', 
 					t('gallery.label-additional-cta')
 				);
-				linkModal.open();
+				messageModal.open();
 				break;
 			}
             case ItemType.Command: {
