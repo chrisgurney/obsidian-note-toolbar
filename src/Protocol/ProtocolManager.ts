@@ -128,7 +128,7 @@ export default class ProtocolManager {
 		else {
 			new Notice(
 				t('notice.error-uri-params-not-supported', { params: Object.keys(data).join(', ')})
-			).containerEl.addClass('mod-warning');
+			, 10000).containerEl.addClass('mod-warning');
 		}
 	}
 
