@@ -43,7 +43,7 @@ export class TextToolbarClass implements PluginValue {
         };
         
         // don't show toolbar until mouse selection is complete
-        if (this.ntb.listeners.doc.isMouseDown) {
+        if (this.ntb.listeners.doc.isPointerDown) {
             // fix: in source mode the mouse up event doesn't seem to fire after selection
             const currentView = this.ntb.app.workspace.getActiveViewOfType(MarkdownView);
             const isSourceMode = currentView?.getState().source;

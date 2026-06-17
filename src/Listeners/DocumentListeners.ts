@@ -7,8 +7,8 @@ export default class DocumentListeners {
 
     public isContextOpening: boolean = false;
     public isKeyboardSelection: boolean = false;
-    public isMouseDown: boolean = false;
-    public isMouseSelecting: boolean = false;
+    public isPointerDown: boolean = false;
+    public isPointerSelecting: boolean = false;
 
 	// for tracking current pointer position, for placing UI
 	public pointerX: number = 0;
@@ -25,9 +25,10 @@ export default class DocumentListeners {
         this.ntb.registerDomEvent(activeDocument, 'contextmenu', this.onContextMenu);
         this.ntb.registerDomEvent(activeDocument, 'dblclick', this.onDoubleClick);
         this.ntb.registerDomEvent(activeDocument, 'keydown', this.onKeyDown);
-        this.ntb.registerDomEvent(activeDocument, 'mousemove', this.onMouseMove);
-        this.ntb.registerDomEvent(activeDocument, 'mouseup', this.onMouseUp);
-        this.ntb.registerDomEvent(activeDocument, 'mousedown', this.onMouseDown);
+        this.ntb.registerDomEvent(activeDocument, 'pointercancel', this.onPointerCancel);
+        this.ntb.registerDomEvent(activeDocument, 'pointerdown', this.onPointerDown);
+        this.ntb.registerDomEvent(activeDocument, 'pointermove', this.onPointerMove);
+        this.ntb.registerDomEvent(activeDocument, 'pointerup', this.onPointerUp);
         this.ntb.registerDomEvent(activeDocument, 'selectionchange', this.onSelectionChange);
 
         // track whether sidebar is open on phones, for styling purposes
@@ -56,21 +57,26 @@ export default class DocumentListeners {
 
     onDoubleClick = () => {
         // possible issue? not always true?
-        this.isMouseSelecting = true;
+        this.isPointerSelecting = true;
         // timeout is because selectionchange event is asynchronous and might not fire before mouseup
         window.setTimeout(() => void this.renderPreviewTextToolbar(), 10);
     }
 
     onKeyDown = (event: KeyboardEvent) => {
         this.isKeyboardSelection = true;
-        this.isMouseSelecting = false;
-        this.isMouseDown = false;
+        this.isPointerSelecting = false;
+        this.isPointerDown = false;
         if (event.key === 'Escape' && this.ntb.render.hasFloatingToolbar()) {
             this.ntb.render.removeFloatingToolbar();
         }
     }
     
-    onMouseDown = (event: MouseEvent) => {
+    onPointerCancel = () => {
+        this.isPointerDown = false;
+        this.isPointerSelecting = false;
+    };
+
+    onPointerDown = (event: PointerEvent) => {
         // prevent phone Navbar from appearing when tapping items, for bottom toolbars
         if (Platform.isPhone && this.ntb.render.phoneTbarPosition === PositionType.Bottom) {
             const target = event.target as HTMLElement;
@@ -78,7 +84,7 @@ export default class DocumentListeners {
             if (isToolbar) event.stopPropagation();
         }
         this.isKeyboardSelection = false;
-        this.isMouseDown = true;
+        this.isPointerDown = true;
         // TODO? dismiss floating toolbar if click is not inside a floating toolbar? (or its menus, etc?)
         // const clickTarget = event.target as Node;
         // const toolbarEl = this.ntb.render.floatingToolbarEl;
@@ -88,35 +94,35 @@ export default class DocumentListeners {
     }
 
     /**
-     * To track mouse position.
+     * To track pointer position.
      */
-    onMouseMove = (event: MouseEvent) => {
+    onPointerMove = (event: PointerEvent) => {
         this.pointerX = event.clientX;
         this.pointerY = event.clientY;
-        if (this.isMouseDown) {
+        if (this.isPointerDown) {
             this.isKeyboardSelection = false;
-            this.isMouseSelecting = true;
+            this.isPointerSelecting = true;
         }
     }
 
     /**
-     * We listen on the document to catch mouse releases outside of the editor as well.
+     * We listen on the document to catch pointer releases outside of the editor as well.
      */
-    onMouseUp = () => {
-        // this.ntb.debug('onMouseUp');
-        this.isMouseDown = false;
+    onPointerUp = () => {
+        // this.ntb.debug('onPointerUp');
+        this.isPointerDown = false;
         if (this.ntb.settings.textToolbar && this.previewSelection) {
             // timeout is because selectionchange event is asynchronous and might not fire before mouseup
-            if (this.isMouseSelecting) window.setTimeout(() => void this.renderPreviewTextToolbar(), 10);
+            if (this.isPointerSelecting) window.setTimeout(() => void this.renderPreviewTextToolbar(), 10);
         }
-        this.isMouseSelecting = false;
+        this.isPointerSelecting = false;
     }
 
     /**
      * Track any document selections, but only for Preview mode.
      */
     onSelectionChange = () => {
-        // this.ntb.debug('onSelection', event);
+        // this.ntb.debug('onSelectionChange', event);
         this.updatePreviewSelection();
     }
 
