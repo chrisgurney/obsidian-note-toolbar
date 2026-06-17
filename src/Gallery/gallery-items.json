@@ -1615,7 +1615,7 @@
             "zh": "插入选定的模板。",
             "uk": "Додайте вибраний шаблон."
         },
-        "icon": "templater-icon",
+        "icon": "chevrons-left-right-ellipsis",
         "tooltip": {
             "en": "Insert template",
             "ja": "テンプレートを挿入",
