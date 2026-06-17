@@ -701,7 +701,7 @@ export default class SettingsUIUtils {
 	 * @param errorLink Optional link to display after error text
 	 */
 	setFieldError(
-		parent: NoteToolbarSettingTab | ToolbarSettingsModal | ItemModal, 
+		parent: NoteToolbarSettingTab | ToolbarSettingsModal | ItemModal | null, 
 		fieldEl: HTMLElement | null, 
 		position: 'afterend' | 'beforeend',
 		errorText?: string | DocumentFragment, 
@@ -730,7 +730,7 @@ export default class SettingsUIUtils {
 							const oldLink = event.currentTarget as HTMLElement;
 							oldLink?.replaceWith(refreshLink);
 							this.ntb.registerDomEvent(refreshLink, 'click', () => {
-								parent.display();
+								parent?.display();
 							});
 						});
 						errorDiv.append(' ', errorLink);

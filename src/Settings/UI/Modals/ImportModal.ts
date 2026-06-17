@@ -2,7 +2,7 @@ import NoteToolbarPlugin from "main";
 import { ButtonComponent, Modal, Setting, TextAreaComponent } from "obsidian";
 import { t, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { importFromCallout } from "Utils/ImportExport";
-import { learnMoreFr } from "../Utils/SettingsUIUtils";
+import { learnMoreFr, removeFieldError } from "../Utils/SettingsUIUtils";
 
 export async function importFromModal(ntb: NoteToolbarPlugin, toolbar?: ToolbarSettings): Promise<[ ToolbarSettings, string ]> {
     return new Promise((resolve) => {
@@ -47,7 +47,7 @@ export default class ImportModal extends Modal {
         // text area
         //
 
-        new Setting(this.modalEl)
+        const calloutSetting = new Setting(this.modalEl)
             .addTextArea((textArea: TextAreaComponent) => {
                 textArea
                     .setPlaceholder(t('import.placeholder-import-into'))
@@ -86,7 +86,13 @@ export default class ImportModal extends Modal {
             .setCta()
             .onClick(() => {
                 [ this.importedToolbar, this.errorLog ] = importFromCallout(this.ntb, this.callout, this.toolbar);
-                this.close();
+                if (this.errorLog) {
+                    removeFieldError(calloutSetting.controlEl, "beforeend");
+                    this.ntb.settingsUtils.setFieldError(null, calloutSetting.controlEl, "beforeend", this.errorLog);
+                }
+                else {
+                    this.close();
+                }
             });
 
         // set focus in the textarea
