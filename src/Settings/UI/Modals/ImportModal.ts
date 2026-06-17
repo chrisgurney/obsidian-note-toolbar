@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { ButtonComponent, Modal, Setting, TextAreaComponent } from "obsidian";
+import { ButtonComponent, Component, MarkdownRenderer, Modal, Setting, TextAreaComponent } from "obsidian";
 import { t, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { importFromCallout } from "Utils/ImportExport";
 import { learnMoreFr, removeFieldError } from "../Utils/SettingsUIUtils";
@@ -18,6 +18,7 @@ export default class ImportModal extends Modal {
 
     public importedToolbar!: ToolbarSettings;
     public errorLog!: string;
+    private component: Component;
 
     callout: string = '';
 
@@ -27,6 +28,8 @@ export default class ImportModal extends Modal {
     ) {
         super(ntb.app);
         this.modalEl.addClass('note-toolbar-setting-dialog-phonefix');
+        this.component = new Component();
+        this.component.load();
     }
 
     public onOpen() {
@@ -84,11 +87,13 @@ export default class ImportModal extends Modal {
         new ButtonComponent(btnContainerEl)
             .setButtonText(this.toolbar ? t('import.button-add-items') : t('import.button-create'))
             .setCta()
-            .onClick(() => {
+            .onClick(async () => {
                 [ this.importedToolbar, this.errorLog ] = importFromCallout(this.ntb, this.callout, this.toolbar);
                 if (this.errorLog) {
                     removeFieldError(calloutSetting.controlEl, "beforeend");
-                    this.ntb.settingsUtils.setFieldError(null, calloutSetting.controlEl, "beforeend", this.errorLog);
+                    const errorEl = createDiv();
+                    await MarkdownRenderer.render(this.ntb.app, this.errorLog, errorEl, '', this.component);
+                    this.ntb.settingsUtils.setFieldError(null, calloutSetting.controlEl, "beforeend", errorEl);
                 }
                 else {
                     this.close();
@@ -101,6 +106,10 @@ export default class ImportModal extends Modal {
             textArea?.focus();
         }, 50);
 
+    }
+
+    public onClose() {
+        this.component.unload();
     }
 
 }

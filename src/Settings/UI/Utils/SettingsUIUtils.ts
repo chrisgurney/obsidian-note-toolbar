@@ -704,7 +704,7 @@ export default class SettingsUIUtils {
 		parent: NoteToolbarSettingTab | ToolbarSettingsModal | ItemModal | null, 
 		fieldEl: HTMLElement | null, 
 		position: 'afterend' | 'beforeend',
-		errorText?: string | DocumentFragment, 
+		errorText?: string | DocumentFragment | HTMLElement, 
 		errorLink?: HTMLAnchorElement
 	) {
 		if (fieldEl) {
