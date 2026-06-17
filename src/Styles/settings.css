@@ -1362,12 +1362,16 @@ input[type="text"].note-toolbar-setting-error,
 
 .note-toolbar-setting-import-text-area {
     border-top: none;
-    .setting-item-info {
+    & .setting-item-info {
         display: none;
     }
-    textarea {
-        flex: 1 1 auto;
-        min-height: 16em;
+    & .setting-item-control {
+        align-items: stretch;
+        flex-direction: column;
+        & textarea {
+            flex: 1 1 auto;
+            min-height: 16em;
+        }
     }
 }
 
