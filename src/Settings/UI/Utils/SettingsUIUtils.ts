@@ -70,12 +70,14 @@ export default class SettingsUIUtils {
 		}
 
 		// add usage note
-		warningsFr.createEl('li', { 
-			text: t('setting.delete-toolbar.label-usage-note', { 
-				propertyName: this.ntb.settings.toolbarProp, 
-				toolbarName: toolbar.name 
-			}) 
-		});
+		if (toolbar.name !== '') {
+			warningsFr.createEl('li', { 
+				text: t('setting.delete-toolbar.label-usage-note', { 
+					propertyName: this.ntb.settings.toolbarProp, 
+					toolbarName: toolbar.name 
+				}) 
+			});
+		}
 
 		// confirm and delete
 		const isConfirmed = await confirmWithModal(this.ntb.app, {
