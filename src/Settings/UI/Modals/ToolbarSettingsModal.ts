@@ -474,7 +474,10 @@ export default class ToolbarSettingsModal extends Modal {
 					.setButtonText(t('setting.delete-toolbar.button-delete'))
 					.setCta()
 					.onClick(async () => {
-						await this.ntb.settingsUtils.confirmDeleteToolbar(this.toolbar, () => this.close());
+						await this.ntb.settingsUtils.confirmDeleteToolbar(this.toolbar, () => {
+							this.parent?.render();
+							this.close();
+						});
 					});
 			});
 

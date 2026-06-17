@@ -191,16 +191,13 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 				cb.setIcon('import')
 				.setTooltip(t('import.button-import-tooltip'))
 				.onClick(async () => {
-					await importFromModal(
-						this.ntb
-					).then(async (importedToolbar: ToolbarSettings) => {
-						if (importedToolbar) {
-							await this.ntb.settingsManager.addToolbar(importedToolbar);
-							await this.ntb.settingsManager.save();
-							this.ntb.commands.openToolbarSettingsForId(importedToolbar.uuid);
-							this.render();
-						}
-					});
+					const importedToolbar = await importFromModal(this.ntb);
+					if (importedToolbar) {
+						await this.ntb.settingsManager.addToolbar(importedToolbar);
+						await this.ntb.settingsManager.save();
+						this.ntb.commands.openToolbarSettingsForId(importedToolbar.uuid, undefined, this);
+						this.render();
+					}
 				});
 				this.ntb.settingsUtils.handleKeyClick(cb.extraSettingsEl);
 			});

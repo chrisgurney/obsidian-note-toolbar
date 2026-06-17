@@ -4,6 +4,7 @@ import CopyTextModal from "Settings/UI/Modals/CopyTextModal";
 import ItemSuggestModal from "Settings/UI/Modals/ItemSuggestModal";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
 import ToolbarSuggestModal from "Settings/UI/Modals/ToolbarSuggestModal";
+import NoteToolbarSettingTab from "Settings/UI/NoteToolbarSettingTab";
 import { learnMoreFr } from "Settings/UI/Utils/SettingsUIUtils";
 import { getItemText } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
@@ -359,10 +360,10 @@ export default class CommandManager {
     /**
      * Opens settings for a particular toolbar by ID.
      */
-    openToolbarSettingsForId(uuid: string, focusItemId?: string) {
+    openToolbarSettingsForId(uuid: string, focusItemId?: string, parent?: NoteToolbarSettingTab) {
         const toolbarSettings = this.ntb.settingsManager.getToolbarById(uuid);
         if (toolbarSettings) {
-            const modal = new ToolbarSettingsModal(this.ntb.app, this.ntb, null, toolbarSettings);
+            const modal = new ToolbarSettingsModal(this.ntb.app, this.ntb, parent, toolbarSettings);
             modal.setTitle(t('setting.title-edit-toolbar', { toolbar: toolbarSettings.name, interpolation: { escapeValue: false } }));
             modal.open();
             if (focusItemId) modal.display(focusItemId);
