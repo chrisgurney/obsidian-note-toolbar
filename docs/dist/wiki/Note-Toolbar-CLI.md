@@ -373,7 +373,7 @@ Adds items, or creates a toolbar from a Note Toolbar Callout.
 
 ```sh
 toolbar=<name>      # Toolbar name
-callout=<markdown>  # Callout markdown
+callout=<markdown>  # Callout markdown (required)
 ```
 
 ### `note-toolbar:new`

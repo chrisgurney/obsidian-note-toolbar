@@ -543,7 +543,8 @@
                     },
                     "value": {
                         "en": "<markdown>"
-                    }
+                    },
+                    "required": true
                 }
             }
         },
