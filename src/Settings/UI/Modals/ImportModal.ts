@@ -88,7 +88,7 @@ export default class ImportModal extends Modal {
             .setButtonText(this.toolbar ? t('import.button-add-items') : t('import.button-create'))
             .setCta()
             .onClick(async () => {
-                [ this.importedToolbar, this.errorLog ] = importFromCallout(this.ntb, this.callout, this.toolbar);
+                [ this.importedToolbar, this.errorLog ] = importFromCallout(this.ntb, this.callout, this.toolbar, false);
                 if (this.errorLog) {
                     removeFieldError(calloutSetting.controlEl, "beforeend");
                     const errorEl = createDiv();
