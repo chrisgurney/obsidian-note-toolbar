@@ -93,7 +93,7 @@ async function exportToCalloutList(
                 break;
             }
             default:
-                itemsExport += await exportItemToCallout(ntb, item, activeFile, options, index);
+                itemsExport += '\n' + await exportItemToCallout(ntb, item, activeFile, options, index);
                 break;
         }
     }
@@ -111,7 +111,7 @@ async function exportItemToCallout(
 ): Promise<string> {
 
     let itemsExport = '';
-    const BULLET = '\n> -';
+    const BULLET = '> -';
 
     // if Iconize is enabled, add icons; otherwise don't output
     let itemIcon = (options.includeIcons && item.icon) ? toIconizeFormat(item.icon) : '';
