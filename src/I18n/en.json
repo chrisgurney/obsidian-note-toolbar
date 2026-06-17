@@ -208,6 +208,7 @@
         "label-share": "Share...",
         "label-share-description": "Copy and share this link with another Note Toolbar user to add this toolbar or item to their vault.",
         "label-share-preview": "preview",
+        "label-share-script": "script",
         "notice-completed": "Toolbar copied to clipboard as callout. Open settings to adjust formatting.",
         "notice-shared": "Note Toolbar link copied to clipboard",
         "option-uri": "Use Obsidian URI",
