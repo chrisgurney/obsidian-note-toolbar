@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { Component, MarkdownRenderer, Modal } from "obsidian";
+import { ButtonComponent, Component, MarkdownRenderer, Modal, Setting } from "obsidian";
 import { t } from "Settings/NoteToolbarSettings";
 
 /**
@@ -33,10 +33,24 @@ export default class MessageModal extends Modal {
             void MarkdownRenderer.render(this.ntb.app, this.desc, this.contentEl, '', component);
         }
 
-        this.contentEl.createDiv({ cls: 'note-toolbar-setting-link' }).append(
-            createDiv({ cls: 'note-toolbar-setting-link-text', text: '' }),
-            createEl('a', { cls: 'note-toolbar-setting-link-button', text: this.cta || t('setting.help.button-open-external'), href: this.link, attr: { 'aria-label': t('setting.help.button-open') } })
-        );
+        if (this.link) {
+            this.contentEl.createDiv({ cls: 'note-toolbar-setting-link' }).append(
+                createDiv({ cls: 'note-toolbar-setting-link-text', text: '' }),
+                createEl('a', { cls: 'note-toolbar-setting-link-button', text: this.cta || t('setting.help.button-open-external'), href: this.link, attr: { 'aria-label': t('setting.help.button-open') } })
+            );
+        }
+        // display close button
+        else {
+            const doneButton = new Setting(this.contentEl)
+                .addButton((btn: ButtonComponent) => {
+                    btn.setButtonText(t('setting.help.button-close'))
+                        .setCta()
+                        .onClick(() => {
+                            this.close();
+                        });
+                });
+            doneButton.settingEl.addClass('note-toolbar-setting-no-border');
+        }
 
     }
 
