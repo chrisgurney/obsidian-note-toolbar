@@ -272,7 +272,7 @@ export default class CliHandlers {
     async handleImport(args: CliData): Promise<string> {
         const toolbar = hasValue(args.toolbar) ? this.ntb.settingsManager.getToolbar(args.toolbar) : undefined;
         const callout = hasValue(args.callout) ? args.callout : undefined;
-        if (!callout) return "Callout not provided";
+        if (!callout) return ''; // required argument; should error before getting here
 
         let result = '';
         const [ toolbarWithImport, errorLog ] = importFromCallout(this.ntb, callout, toolbar);
