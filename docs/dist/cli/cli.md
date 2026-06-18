@@ -312,7 +312,7 @@ format=csv|tsv  # Output format (default: tsv)
 
 ### `note-toolbar:import`
 
-Adds items, or creates a toolbar from a Note Toolbar Callout.
+Adds items, or creates a toolbar from a [Note Toolbar Callout](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-Callouts). Newlines should be escaped (`\\n`).
 
 ```sh
 toolbar=<name>      # Toolbar name

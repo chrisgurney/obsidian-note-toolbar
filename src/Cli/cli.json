@@ -527,7 +527,7 @@
             "description": {
                 "en": "Add items or create toolbar from a Note Toolbar Callout"
             },
-            "docs": "Adds items, or creates a toolbar from a Note Toolbar Callout.",
+            "docs": "Adds items, or creates a toolbar from a [Note Toolbar Callout](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-Callouts). Newlines should be escaped (`\\\\n`).",
             "flags": {
                 "toolbar": {
                     "description": {
