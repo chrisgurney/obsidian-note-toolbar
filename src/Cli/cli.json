@@ -533,7 +533,7 @@
             "flags": {
                 "toolbar": {
                     "description": {
-                        "en": "Toolbar name"
+                        "en": "Toolbar name to add items to"
                     },
                     "value": {
                         "en": "<name>"

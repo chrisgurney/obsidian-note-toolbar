@@ -317,7 +317,7 @@ format=csv|tsv  # Output format (default: tsv)
 Adds items, or creates a toolbar from a [Note Toolbar Callout](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-Callouts). Newlines should be escaped (`\\n`).
 
 ```sh
-toolbar=<name>      # Toolbar name
+toolbar=<name>      # Toolbar name to add items to
 callout=<markdown>  # Callout markdown (required)
 ```
 
