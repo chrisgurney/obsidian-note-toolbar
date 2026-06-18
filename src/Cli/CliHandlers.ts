@@ -277,6 +277,8 @@ export default class CliHandlers {
         let result = '';
         const [ toolbarWithImport, errorLog ] = importFromCallout(this.ntb, callout, toolbar);
         if (!errorLog) {
+            // if a toolbar name was provided and it's not an existing toolbar, use the name for the new toolbar
+            if (hasValue(args.toolbar) && !toolbar) toolbarWithImport.name = args.toolbar;
             await this.ntb.settingsManager.addToolbar(toolbarWithImport);
             result = `Success: Imported ${toolbarWithImport.items.length} items into toolbar: ${toolbarWithImport.name}\n\n`;
             result += this.cliItemsHandler.formatItemList({ includeEmpty: 'true', verbose: 'true' }, toolbarWithImport);
