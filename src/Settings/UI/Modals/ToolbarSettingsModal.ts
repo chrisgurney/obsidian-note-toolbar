@@ -405,7 +405,6 @@ export default class ToolbarSettingsModal extends Modal {
 						}
 						// save the setting
 						await this.ntb.settingsManager.save();
-						this.display();
 					});
 				fixToggleTab(toggle);
 			});
