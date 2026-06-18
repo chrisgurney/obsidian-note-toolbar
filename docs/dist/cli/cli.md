@@ -312,6 +312,8 @@ format=csv|tsv  # Output format (default: tsv)
 
 ### `note-toolbar:import`
 
+> Available in `1.33.28`
+
 Adds items, or creates a toolbar from a [Note Toolbar Callout](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-Callouts). Newlines should be escaped (`\\n`).
 
 ```sh

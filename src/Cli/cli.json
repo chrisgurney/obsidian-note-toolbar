@@ -523,6 +523,7 @@
             "docs": "Lists all Note Toolbar CLI actions."
         },
         "note-toolbar:import": {
+            "available": "1.33.28",
             "category": "toolbars",
             "description": {
                 "en": "Add items or create toolbar from a Note Toolbar Callout"

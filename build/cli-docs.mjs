@@ -42,8 +42,10 @@ export function cliDocs(cliJsonPath, outputFile) {
         if (category.docs) markdown += `${category.docs}\n\n`;
         const commands = Object.entries(cli.commands).filter(([, c]) => c.category === categoryId);
         for (const [id, command] of commands) {
+            // ignore as it's just a container for sub-actions/commands
             if (id === 'note-toolbar:add-tp') continue;
             markdown += `### \`${id}\`\n\n`;
+            if (command.available) markdown += `> Available in \`${command.available}\`\n\n`;
             if (command.docs) markdown += `${command.docs}\n\n`;
             markdown += flagsBlock(command.flags ?? {}, cli.commonFlags ?? {});
             if (command.examples) {
