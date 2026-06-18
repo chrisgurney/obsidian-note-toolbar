@@ -135,6 +135,10 @@
             &:not(:first-child):not(:last-child) {
                 border-radius: 0;
             }
+            &:only-child {
+                border-top: none;
+                border-radius: var(--setting-items-radius);
+            }
             &:first-child {
                 border-top: none;
                 border-radius: var(--setting-items-radius) var(--setting-items-radius) 0 0;
