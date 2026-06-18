@@ -525,7 +525,7 @@
         "note-toolbar:import": {
             "category": "toolbars",
             "description": {
-                "en": "Add items, or create a toolbar from a Note Toolbar Callout"
+                "en": "Add items or create toolbar from a Note Toolbar Callout"
             },
             "docs": "Adds items, or creates a toolbar from a Note Toolbar Callout.",
             "flags": {
