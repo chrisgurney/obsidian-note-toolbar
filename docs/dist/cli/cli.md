@@ -321,6 +321,12 @@ toolbar=<name>      # Toolbar name
 callout=<markdown>  # Callout markdown (required)
 ```
 
+#### Examples
+
+```sh
+note-toolbar:import toolbar="Daily Notes" callout='> [!note-toolbar]\\n> - [:LiArrowLeft:]()<data data-ntb-command="daily-notes:goto-prev"/> <!-- Previous day -->\\n> - [:LiCalendar:]()<data data-ntb-command="daily-notes"/> <!-- Today -->\\n> - [:LiArrowRight:]()<data data-ntb-command="daily-notes:goto-next"/> <!-- Next day -->'
+```
+
 ### `note-toolbar:new`
 
 Creates a new toolbar.

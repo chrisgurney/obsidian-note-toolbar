@@ -529,6 +529,7 @@
                 "en": "Add items or create toolbar from a Note Toolbar Callout"
             },
             "docs": "Adds items, or creates a toolbar from a [Note Toolbar Callout](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-Callouts). Newlines should be escaped (`\\\\n`).",
+            "examples": "note-toolbar:import toolbar=\"Daily Notes\" callout='> [!note-toolbar]\\\\n> - [:LiArrowLeft:]()<data data-ntb-command=\"daily-notes:goto-prev\"/> <!-- Previous day -->\\\\n> - [:LiCalendar:]()<data data-ntb-command=\"daily-notes\"/> <!-- Today -->\\\\n> - [:LiArrowRight:]()<data data-ntb-command=\"daily-notes:goto-next\"/> <!-- Next day -->'",
             "flags": {
                 "toolbar": {
                     "description": {
