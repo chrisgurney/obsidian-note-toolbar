@@ -204,7 +204,7 @@ body {
 
     &.ntb-is-modal-displayed {
         /* fix: popovers appearing under modal #568 */
-        --layer-popover: 51;
+        --layer-popover: calc(var(--layer-modal) + 1);
     }
 
 }
