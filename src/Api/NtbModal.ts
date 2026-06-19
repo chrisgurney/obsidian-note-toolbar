@@ -60,6 +60,7 @@ export default class NtbModal extends Modal {
     }
 
     async onOpen(): Promise<void> {
+        activeDocument.body.toggleClass('ntb-is-modal-displayed', true);
         if (this.title) {
             const containerEl = this.titleEl.createDiv({ cls: 'markdown-preview-view' });
             await MarkdownRenderer.render(this.ntb.app, this.title, containerEl, "", this.component);
@@ -86,6 +87,7 @@ export default class NtbModal extends Modal {
     }
 
     onClose(): void {
+        activeDocument.body.toggleClass('ntb-is-modal-displayed', false);
         this.component.unload();
         this.contentEl.empty();
         this.leaf?.detach();

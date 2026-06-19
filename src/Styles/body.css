@@ -202,6 +202,11 @@ body {
         }
     }
 
+    &.ntb-is-modal-displayed {
+        /* fix: popovers appearing under modal #568 */
+        --layer-popover: 51;
+    }
+
 }
 
 .ntb-hidden {
