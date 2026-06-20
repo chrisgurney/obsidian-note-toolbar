@@ -514,7 +514,7 @@
             "option-command-check": "Disable if not available",
             "option-command-check-description": "If the command indicates that it cannot be performed in the current context, the item will be disabled in the toolbar.",
             "option-command-focus": "Focus in editor",
-            "option-command-focus-description": "Set focus in editor after the command is executed.",
+            "option-command-focus-description": "Set focus in editor before the command is executed.",
             "option-command-help": "Runs a command when this item is used.",
             "option-command-help-gallery": "Can't find what you're looking for?",
             "option-command-help-gallery-link": "Explore the Gallery...",

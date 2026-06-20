@@ -214,7 +214,7 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
                         .onClick(async () => {
                             switch (item.type) {
                                 case 'command':
-                                    await this.ntb.items.handleLinkCommand(item.value);
+                                    this.ntb.items.handleLinkCommand(item.value);
                                     break;
                                 case 'file': {
                                     const activeFile = this.ntb.app.workspace.getActiveFile();

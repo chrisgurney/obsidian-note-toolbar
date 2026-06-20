@@ -49,7 +49,7 @@ export default class CalloutHandler {
                     switch (attribute) {
                         case CalloutAttr.Command:
                         case CalloutAttr.CommandNtb:
-                            await this.ntb.items.handleLinkCommand(value);
+                            this.ntb.items.handleLinkCommand(value);
                             break;
                         case CalloutAttr.Dataview:
                         case CalloutAttr.JavaScript:

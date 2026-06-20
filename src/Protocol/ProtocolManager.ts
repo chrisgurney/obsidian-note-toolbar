@@ -22,7 +22,7 @@ export default class ProtocolManager {
 		this.ntb.debug('protocolHandler', data);
 		// supports both commandid= and command= for backwards-compatability with Advanced URI
 		if (data.commandid || data.commandId || data.command) {
-			await this.ntb.items.handleLinkCommand(decodeURIComponent(data.commandid || data.commandId || data.command));
+			this.ntb.items.handleLinkCommand(decodeURIComponent(data.commandid || data.commandId || data.command));
 		}
 		else if (data.folder) {
 			this.ntb.items.handleLinkFolder(data.folder);

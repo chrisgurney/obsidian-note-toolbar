@@ -116,7 +116,7 @@ export default class ToolbarItemHandler {
                 if (file && file !== activeFile) {
                     await this.handleLinkInSidebar(item, file);
                 } else {
-                    await this.handleLinkCommand(commandId, item?.linkAttr.focus, item?.linkAttr.target as PaneType);
+                    this.handleLinkCommand(commandId, item?.linkAttr.focus, item?.linkAttr.target as PaneType);
                 }
                 break;
             case ItemType.File: {
@@ -193,7 +193,7 @@ export default class ToolbarItemHandler {
      * @param commandId encoded command string, or null if nothing to do.
      * @param target where to execute the command.
      */
-    async handleLinkCommand(commandId: string | null, focus?: ItemFocusType, target?: PaneType  ) {
+    handleLinkCommand(commandId: string | null, focus?: ItemFocusType, target?: PaneType  ) {
         // this.debug('handleLinkCommand:', commandId);
         if (commandId) {
             if (!(commandId in this.ntb.app.commands.commands)) {
@@ -202,8 +202,8 @@ export default class ToolbarItemHandler {
             }
             try {
                 if (target) this.ntb.app.workspace.getLeaf(target);
-                await this.ntb.app.commands.executeCommandById(commandId);
                 if (focus === 'editor') this.ntb.app.workspace.activeEditor?.editor?.focus();
+                this.ntb.app.commands.executeCommandById(commandId);
             } 
             catch (error) {
                 this.ntb.error(error);
