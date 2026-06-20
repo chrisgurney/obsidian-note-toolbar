@@ -470,8 +470,7 @@ export function importFromCallout(
                             const commandName = ntb.utils.getCommandNameById(commandId);
                             // if the command name doesn't exist, show the command ID and an error
                             link = commandName ? commandName : commandId;
-                            errorLog += commandName ? '' : `- ${t('import.errorlog-item', { number: index + 1 })} ${t('import.errorlog-command-not-recognized', { command: commandId })}\n`;
-                            // TODO: link needs to trigger field error style somehow
+                            warningLog += commandName ? '' : `- ${t('import.errorlog-item', { number: index + 1 })} ${t('import.errorlog-command-not-recognized', { command: commandId })}\n`;
                             break;
                         }
                         case ItemType.Dataview:
