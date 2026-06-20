@@ -411,10 +411,13 @@ export function importFromCallout(
             // remove the data element and tooltip to ensure the whole link is included in the match
             const linkText = line.replace(/<data[\s\S]*$|<!--[\s\S]*?-->$/g, '');
             // get the components of the external or internal link
-            const linkMatch = linkText.match(/\[(.*?)\]\((.*?)\)$|\[\[(.*?)(?:\|(.*?))?\]\]/);
+            const linkMatch = linkText.trim().match(/\[(.*?)\]\(<?(.*?)>?\)$|\[\[(.*?)(?:\|(.*?))?\]\]/);
 
             ntb.debug('! ', line);
             ntb.debug('| dataMatch:', dataMatch);
+            ntb.debug('| uriMatch:', uriMatch);
+            ntb.debug('| tooltipMatch:', tooltipMatch);
+            ntb.debug('| linkText:', linkText);
             ntb.debug('| linkMatch:', linkMatch);
 
             if (linkMatch) {
