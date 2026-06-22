@@ -270,22 +270,32 @@ export default class CliHandlers {
     }
 
     async handleImport(args: CliData): Promise<string> {
-        const toolbar = hasValue(args.toolbar) ? this.ntb.settingsManager.getToolbar(args.toolbar) : undefined;
-        const callout = hasValue(args.callout) ? args.callout : undefined;
-        if (!callout) return ''; // required argument; should error before getting here
+        // get the callout text from an argument, or file/path if provided
+        let callout = hasValue(args.callout) ? args.callout : undefined;
+        const fileResult = this.resolveFileArgs(args.file, args.path);
+        if (typeof fileResult === 'string') return fileResult; // error resolving file or path
+        callout = (!callout && fileResult) ? await this.ntb?.app.vault.cachedRead(fileResult) : callout;
+        if (!callout) return t('cli.error-callout-or-file-required');
 
-        let result = '';
-        const [ toolbarWithImport, errorLog ] = importFromCallout(this.ntb, callout, toolbar);
-        if (!errorLog) {
-            // if a toolbar name was provided and it's not an existing toolbar, use the name for the new toolbar
-            if (hasValue(args.toolbar) && !toolbar) toolbarWithImport.name = args.toolbar;
+        const toolbar = hasValue(args.toolbar) ? this.ntb.settingsManager.getToolbar(args.toolbar) : undefined;
+
+        const [ toolbarWithImport, errorLog, warningLog ] = importFromCallout(this.ntb, callout, toolbar);
+        if (errorLog) return errorLog;
+
+        // if a toolbar name was provided and it's not an existing toolbar, use the name for the new toolbar
+        if (hasValue(args.toolbar) && !toolbar) toolbarWithImport.name = args.toolbar;
+        
+        if (!toolbar) {
             await this.ntb.settingsManager.addToolbar(toolbarWithImport);
-            result = `Success: Imported ${toolbarWithImport.items.length} items into toolbar: ${toolbarWithImport.name}\n\n`;
-            result += this.cliItemsHandler.formatItemList({ includeEmpty: 'true', verbose: 'true' }, toolbarWithImport);
         }
         else {
-            result += errorLog;
+            await this.ntb.settingsManager.save();
         }
+        
+        let result = '';
+        result = t('import.label-success-heading', { count: toolbarWithImport.items.length, toolbar: toolbarWithImport.name, interpolation: { escapeValue: false } } ) + '\n\n';
+        result += this.cliItemsHandler.formatItemList({ includeEmpty: 'true', verbose: 'true' }, toolbarWithImport);
+        if (warningLog) result += `\n\n${t('import.errorlog-warning-heading')}\n\n${warningLog}`;
         return result;
     }
 

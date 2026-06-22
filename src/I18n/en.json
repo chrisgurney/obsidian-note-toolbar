@@ -133,6 +133,7 @@
         }
     },
     "cli": {
+        "error-callout-or-file-required": "Error: callout or file/path is required",        
         "error-cannot-add-additional-item": "Error: This item ({{item}}) is available on the Additional Gallery items page in the User Guide, which contains optional items that require manual setup.",
         "error-dv-code-and-file-exclusive": "Error: Provide eval, query, or file/path",
         "error-dv-code-or-file-required": "Error: eval/query or file/path is required",
@@ -257,6 +258,7 @@
         "label-import-into": "Paste a Note Toolbar Callout below and its items will be added to this toolbar. Styles will be ignored if provided.",
         "label-import-into-help": "The callout heading is not needed, and will be ignored if provided.",
         "label-import-item-confirmation": "Confirm you would like to add the following to a toolbar.",
+        "label-success-heading": "Success: Imported {{count}} items into toolbar: {{toolbar}}",
         "option-create": "Create Note Toolbar from callout...",
         "option-help": "About Note Toolbar Callouts",
         "placeholder-import-into": "> Note Toolbar Callout markdown...",

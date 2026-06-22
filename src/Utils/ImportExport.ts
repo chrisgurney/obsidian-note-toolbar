@@ -308,14 +308,14 @@ function unescapeTextForCallout(str: string): string {
  * @param callout Note Toolbar Calllout string to import
  * @param toolbar optional ToolbarSettings for existing toolbar to import into
  * @param displayError set false if the error notice should not be displayed
- * @returns ToolbarSettings, errors (if any)
+ * @returns ToolbarSettings, errors (if any), warnings (if any)
  */
 export function importFromCallout(
     ntb: NoteToolbarPlugin, 
     callout: string, 
     toolbar?: ToolbarSettings, 
     displayError: boolean = true
-): [ ToolbarSettings, string ] {
+): [ ToolbarSettings, string, string ] {
 
     ntb.debug('importFromCallout');
 
@@ -571,6 +571,6 @@ export function importFromCallout(
         ntb.error(noticeText);
     }
 
-    return [ toolbar, errorLog ];
+    return [ toolbar, errorLog, warningLog ];
 
 }

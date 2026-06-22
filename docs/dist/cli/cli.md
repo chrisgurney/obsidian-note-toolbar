@@ -318,7 +318,9 @@ Adds items, or creates a toolbar from a [Note Toolbar Callout](https://github.co
 
 ```sh
 toolbar=<name>      # Toolbar name to add items to
-callout=<markdown>  # Callout markdown (required)
+callout=<markdown>  # Callout markdown (required: callout, file, or path)
+file=<name>         # Filename of callout (required: callout, file, or path)
+path=<path>         # Filename with path of callout (required: callout, file, or path)
 ```
 
 #### Examples

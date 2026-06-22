@@ -541,12 +541,27 @@
                 },
                 "callout": {
                     "description": {
-                        "en": "Callout markdown"
+                        "en": "Callout markdown (required: callout, file, or path)"
                     },
                     "value": {
                         "en": "<markdown>"
+                    }
+                },
+                "file": {
+                    "description": {
+                        "en": "Filename of callout (required: callout, file, or path)"
                     },
-                    "required": true
+                    "value": {
+                        "en": "<name>"
+                    }
+                },
+                "path": {
+                    "description": {
+                        "en": "Filename with path of callout (required: callout, file, or path)"
+                    },
+                    "value": {
+                        "en": "<path>"
+                    }
                 }
             }
         },
