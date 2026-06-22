@@ -39,7 +39,7 @@ The [Note Toolbar plugin](https://obsidian.md/plugins?id=note-toolbar) for [Obsi
 
 ## Disclosures
 
-In order for Note Toolbar to provide a built-in library of helpful tools, and scripting extensibility, the plugin needs access to read, write, and list files within a vault, as well as selective clipboard access. _The majority of these features are completely optional._
+In order for Note Toolbar to provide a built-in library of helpful tools, and scripting extensibility, the plugin needs access to read, write, and list files within a vault. _The majority of these features are completely optional._
 
 Expand below to see what's accessed and why. Let me know (via [GitHub ↗](https://github.com/chrisgurney/obsidian-note-toolbar/issues/546) or [Google form ↗](https://forms.gle/sa75KNAQiWTtAY4P8)) if you have any questions or concerns.
 
