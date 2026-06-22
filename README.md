@@ -51,11 +51,6 @@ Expand below to see what's accessed and why. Let me know (via [GitHub ↗](https
   <ul>
     <li>The plugin uses some internal Obsidian APIs. This warning is indicating that some of those APIs <i>will</i> be public in a newer release, and should go away then.</li>
   </ul>
-  <li><b>Plugin might make requests to external domains</b></li>
-  <ul>
-    <li>URLs referenced by the plugin are used for: links to user guide and donation pages; and for a page to facilitate <a href="https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Sharing-toolbars">sharing of toolbars or toolbar items</a> with other users (<a href="https://github.com/chrisgurney/obsidian-note-toolbar/tree/gh-pages/docs">source code</a>).</li>
-    <li>See the documentation in <a href="https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/src/Utils/Urls.ts"><code>src/utils/Urls.ts</code></a>, which contains all external URLs referenced by the plugin.</li>
-  </ul>
   <li><b>Vault Read: Reads individual vault files via the Obsidian API</b></li>
   <ul>
     <li>Used by script items to read in a user script to execute it (if configured to do so).</li>
@@ -64,6 +59,10 @@ Expand below to see what's accessed and why. Let me know (via [GitHub ↗](https
   <li><b>Vault Enumeration: Enumerates all files in the vault. Gives the plugin access to every file path in the vault.</b></li>
   <ul>
     <li>Used by the Settings UI to show a list of files or folders in the vault (e.g., to select a script file, or to select a folder for mapping).</li>
+  </ul>
+  <li><b>Other notes</b></li>
+  <ul>
+    <li>URLs links from the plugin are used for: the user guide, donation page, and for a page to facilitate <a href="https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Sharing-toolbars">sharing of toolbars or toolbar items</a> with other users (<a href="https://github.com/chrisgurney/obsidian-note-toolbar/tree/gh-pages/docs">source code</a>). See the documentation in <a href="https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/src/Utils/Urls.ts"><code>src/utils/Urls.ts</code></a>, which contains all external URLs referenced by the plugin.</li>
   </ul>
 </ul>
 
