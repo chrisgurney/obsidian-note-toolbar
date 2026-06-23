@@ -288,7 +288,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 										});
 										menu.addItem((menuItem: MenuItem) => {
 											menuItem
-												.setTitle(t('export.label-callout'))
+												.setTitle(t('export.menu-callout'))
 												.setIcon('copy')
 												.onClick(async () => {
 													const calloutExport = await exportToCallout(this.ntb, toolbar, this.ntb.settings.export);

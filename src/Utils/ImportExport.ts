@@ -102,7 +102,7 @@ async function exportToCalloutList(
 
 }
 
-async function exportItemToCallout(
+export async function exportItemToCallout(
     ntb: NoteToolbarPlugin, 
     item: ToolbarItemSettings,
     activeFile: TFile | null, 

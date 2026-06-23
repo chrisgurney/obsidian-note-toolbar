@@ -2,6 +2,7 @@ import { Adapter } from "Adapters/Adapter";
 import NoteToolbarPlugin from "main";
 import { ButtonComponent, debounce, DropdownComponent, ExtraButtonComponent, MarkdownViewModeType, Menu, MenuItem, normalizePath, Notice, PaneType, Platform, setIcon, Setting, SettingGroup, ToggleComponent } from "obsidian";
 import { ComponentType, ItemType, LINK_OPTIONS, SETTINGS_DISCLAIMERS, SettingType, t, TARGET_OPTIONS, ToolbarItemSettings, ToolbarSettings, ViewModeType } from "Settings/NoteToolbarSettings";
+import { exportItemToCallout } from "Utils/ImportExport";
 import { addComponentVisibility, getElementPosition, removeComponentVisibility } from "Utils/Utils";
 import CopyTextModal from "../Modals/CopyTextModal";
 import IconSuggestModal from "../Modals/IconSuggestModal";
@@ -518,25 +519,44 @@ export default class ToolbarItemUi {
 
         }
 
-        menu.addItem((menuItem: MenuItem) => {
-            menuItem
-                .setTitle(t('setting.item.menu-share'))
-                .setIcon('share')
-                .onClick(async () => {
-                    const shareUri = await this.ntb.protocolManager.getShareUri(toolbarItem);
-                    const shareModal = new ShareModal(this.ntb, shareUri, toolbarItem);
-                    shareModal.open();
-                });
-        });
+        //
+        // share, copy as callout, copy developer ID
+        //
 
-        menu.addSeparator();
+        if (![ItemType.Group].contains(toolbarItem.linkAttr.type)) {
+
+            menu.addItem((menuItem: MenuItem) => {
+                menuItem
+                    .setTitle(t('setting.item.menu-share'))
+                    .setIcon('share')
+                    .onClick(async () => {
+                        const shareUri = await this.ntb.protocolManager.getShareUri(toolbarItem);
+                        const shareModal = new ShareModal(this.ntb, shareUri, toolbarItem);
+                        shareModal.open();
+                    });
+            });
+
+            menu.addItem((menuItem: MenuItem) => {
+                menuItem
+                    .setTitle(t('export.menu-callout-item'))
+                    .setIcon('copy')
+                    .onClick(async () => {
+                        const itemCallout = await exportItemToCallout(this.ntb, toolbarItem, null, this.ntb.settings.export);
+                        const copyTextModal = new CopyTextModal( this.ntb, itemCallout,
+                            t('export.label-callout-item'),
+                            learnMoreFr(t('setting.item.label-copy-callout-description'), 'Note-Toolbar-Callouts'));
+                        copyTextModal.open();
+                    });
+            });
+
+        }
 
         menu.addItem((menuItem: MenuItem) => {
             menuItem
                 .setTitle(t('setting.item.menu-copy-id'))
                 .setIcon('code')
                 .onClick(() => {
-                    const copyTextModal = new CopyTextModal( this.ntb, toolbarItem.uuid,
+                    const copyTextModal = new CopyTextModal(this.ntb, toolbarItem.uuid,
                         t('setting.item.menu-copy-id-title'),
                         learnMoreFr(t('setting.item.menu-copy-id-description'), 'Developer-IDs'));
                     copyTextModal.open();

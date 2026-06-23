@@ -306,7 +306,7 @@ export default class ContextMenu {
 			// copy as callout
 			contextMenu.addItem((item: MenuItem) => {
 				item
-					.setTitle(t('export.label-callout'))
+					.setTitle(t('export.menu-callout'))
 					.setIcon('copy')
 					.onClick(async () => {
 						if (toolbarSettings) {
