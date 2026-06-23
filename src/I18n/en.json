@@ -795,8 +795,10 @@
             "instruction-use": "to open toolbar",
             "key-edit-macos": "hold ⌘ + shift",
             "key-edit-windows": "hold ctrl + shift",
+            "notice-none-toolbar": "Toolbar hidden in this note. To restore it, remove or change the property: {{property}}",
             "option-default": "Default (use toolbar mapping)",
             "option-new": "Create a new toolbar...",
+            "option-none": "No toolbar",
             "placeholder": "Search for a toolbar...",
             "placeholder-add": "Add item to which toolbar?"
         },

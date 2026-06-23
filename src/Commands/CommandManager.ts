@@ -1,4 +1,4 @@
-import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, EMPTY_TOOLBAR_ID, LocalVar, PositionType, t, ToggleUiStateType, ToolbarItemSettings, ToolbarSettings, ToolbarStyle, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP } from "Settings/NoteToolbarSettings";
+import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, EMPTY_TOOLBAR_ID, LocalVar, NONE_TOOLBAR_ID, PositionType, t, ToggleUiStateType, ToolbarItemSettings, ToolbarSettings, ToolbarStyle, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP } from "Settings/NoteToolbarSettings";
 import CommandSuggestModal from "Settings/UI/Modals/CommandSuggestModal";
 import CopyTextModal from "Settings/UI/Modals/CopyTextModal";
 import ItemSuggestModal from "Settings/UI/Modals/ItemSuggestModal";
@@ -382,14 +382,23 @@ export default class CommandManager {
 
     /**
      * Opens the toolbar suggester and replaces the current toolbar using the property.
+     * Does nothing if toolbar property is set to `tags`.
      */
     swapToolbar() {
+        if (this.ntb.settings.toolbarProp === 'tags') return;
         const modal = new ToolbarSuggestModal(this.ntb, true, true, false, (toolbar: ToolbarSettings) => {
             const activeFile = this.ntb.app.workspace.getActiveFile();
             if (activeFile) {
                 void this.ntb.app.fileManager.processFrontMatter(activeFile, (frontmatter: Record<string, unknown>) => {
                     if (toolbar.uuid === EMPTY_TOOLBAR_ID) {
                         delete frontmatter[this.ntb.settings.toolbarProp];
+                        return;
+                    }
+                    else if (toolbar.uuid === NONE_TOOLBAR_ID) {
+                        frontmatter[this.ntb.settings.toolbarProp] = 'none';
+                        new Notice(
+                            t('setting.toolbar-suggest-modal.notice-none-toolbar', { property: this.ntb.settings.toolbarProp })
+                        , 5000).containerEl.addClass('mod-success');
                         return;
                     }
                     frontmatter[this.ntb.settings.toolbarProp] = toolbar.name;

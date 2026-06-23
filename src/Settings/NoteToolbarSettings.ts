@@ -51,6 +51,7 @@ export const VIEW_TYPE_WHATS_NEW = 'ntb-whats-new-view';
 
 export const EMPTY_TOOLBAR_ID = 'EMPTY_TOOLBAR';
 export const GALLERY_DIVIDER_ID = 'GALLERY_DIVIDER';
+export const NONE_TOOLBAR_ID = 'NO_TOOLBAR';
 
 export const CORE_PLUGIN_IDS = ['bookmarks', 'daily-notes', 'file-explorer', 'global-search', 'workspace'];
 export const IGNORE_PLUGIN_IDS = ['app', 'bookmarks', 'editor', 'file-explorer', 'global-search', 'link', 'markdown', 'note-toolbar', 'open-with-default-app', 'theme', 'workspace'];
@@ -342,6 +343,20 @@ export interface ToolbarSettings {
 
 export const EMPTY_TOOLBAR: ToolbarSettings = {
 	uuid: EMPTY_TOOLBAR_ID,
+	name: '',
+	commandPosition: PositionType.Floating,
+	customClasses: '',
+	defaultItem: null,
+	defaultStyles: [],
+	hasCommand: false,
+	items: [], 
+	mobileStyles: [],
+	position: {},
+	updated: ''
+}
+
+export const NONE_TOOLBAR: ToolbarSettings = {
+	uuid: NONE_TOOLBAR_ID,
 	name: '',
 	commandPosition: PositionType.Floating,
 	customClasses: '',

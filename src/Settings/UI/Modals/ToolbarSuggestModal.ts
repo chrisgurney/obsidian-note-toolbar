@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { Platform, SuggestModal } from "obsidian";
-import { EMPTY_TOOLBAR, EMPTY_TOOLBAR_ID, LocalVar, t, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { EMPTY_TOOLBAR, EMPTY_TOOLBAR_ID, LocalVar, NONE_TOOLBAR, NONE_TOOLBAR_ID, t, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import ToolbarSettingsModal from "./ToolbarSettingsModal";
 
 /**
@@ -86,7 +86,9 @@ export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
         if (this.showSwapUi) {
             const emptyToolbar = { ...EMPTY_TOOLBAR };
             emptyToolbar.name = t('setting.toolbar-suggest-modal.option-default');
-            tbarSuggestions.push(emptyToolbar);
+            const noneToolbar = { ...NONE_TOOLBAR };
+            noneToolbar.name = t('setting.toolbar-suggest-modal.option-none');
+            tbarSuggestions.push(emptyToolbar, noneToolbar);
         }
         else if (this.showNewOption) {
             const newToolbar = { ...EMPTY_TOOLBAR };
@@ -142,10 +144,11 @@ export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
         el.setAttribute('id', toolbar.uuid);
         const toolbarNameEl = el.createSpan();
         toolbarNameEl.setText(toolbar.name);
-        if (toolbar.uuid === EMPTY_TOOLBAR_ID) {
+        const isSpecialToolbar = [EMPTY_TOOLBAR_ID, NONE_TOOLBAR_ID].includes(toolbar.uuid);
+        if (isSpecialToolbar) {
             el.addClass('cm-em');
         }
-        if (this.showPreviews && toolbar.uuid !== EMPTY_TOOLBAR_ID) {
+        if (this.showPreviews && !isSpecialToolbar) {
             const previewContainerEl = el.createDiv();
             previewContainerEl.addClass('setting-item-description');
             const previewEl = previewContainerEl.createDiv();
