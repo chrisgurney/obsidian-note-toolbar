@@ -1,10 +1,10 @@
-import { IconName, SuggestModal, getIconIds, setIcon } from "obsidian";
 import NoteToolbarPlugin from "main";
+import { FuzzyMatch, FuzzySuggestModal, IconName, getIconIds, setIcon } from "obsidian";
 import { t } from "Settings/NoteToolbarSettings";
 
-export default class IconSuggestModal extends SuggestModal<IconName> {
+export default class IconSuggestModal extends FuzzySuggestModal<IconName> {
 
-	constructor(
+    constructor(
         private ntb: NoteToolbarPlugin, 
         private selectedIcon: string | undefined,
         private showNoIconOption: boolean, 
@@ -20,40 +20,44 @@ export default class IconSuggestModal extends SuggestModal<IconName> {
         ]);
     }
 
-    getSuggestions(inputStr: string): IconName[] {
-        const iconIds = getIconIds();
-        const iconSuggestions: IconName[] = [];
-        const lowerCaseInputStr = inputStr.toLowerCase();
-        if (this.showNoIconOption) iconSuggestions.push(t('setting.icon-suggester.option-no-icon'));
-        iconIds.forEach((icon: IconName) => {
-            if (icon.toLowerCase().includes(lowerCaseInputStr)) {
-                iconSuggestions.push(icon);
-            }
-        });
-        return iconSuggestions;
+    getItems(): string[] {
+        const items: string[] = [];
+        if (this.showNoIconOption) {
+            items.push(t('setting.icon-suggester.option-no-icon'));
+        }
+        items.push(...getIconIds());
+        return items;
+    }
+
+    getItemText(icon: string): string {
+        if (icon === t('setting.icon-suggester.option-no-icon')) {
+            return icon;
+        }
+        return icon.startsWith('lucide-')
+            ? icon.substring(7)
+            : icon;
     }
 
     async onOpen(): Promise<void> {
+        await super.onOpen();
         if (this.selectedIcon && this.selectedIcon !== '') {
-            const iconName = this.selectedIcon.replace(/^lucide-/, '')
+            const iconName = this.selectedIcon.replace(/^lucide-/, '');
             this.inputEl.value = iconName;
             this.inputEl.trigger('input');
         }
-        else {
-            await super.onOpen();
-        }
     }
 
-    renderSuggestion(icon: IconName, el: HTMLElement): void {
+    renderSuggestion(icon: FuzzyMatch<IconName>, el: HTMLElement): void {
         el.addClass("note-toolbar-icon-suggestion");
         const iconName = el.createSpan();
-        if (icon === t('setting.icon-suggester.option-no-icon')) {
-            iconName.setText(icon);
+        if (icon.item === t('setting.icon-suggester.option-no-icon')) {
+            iconName.setText(icon.item);
+            el.addClass('cm-em');
         }
         else {
-            iconName.setText(icon.startsWith("lucide-") ? icon.substring(7) : icon);
+            iconName.setText(icon.item.startsWith("lucide-") ? icon.item.substring(7) : icon.item);
             const iconGlyph = el.createSpan();
-            setIcon(iconGlyph, icon);
+            setIcon(iconGlyph, icon.item);
         }
     }
 
@@ -61,7 +65,7 @@ export default class IconSuggestModal extends SuggestModal<IconName> {
      * Saves the selected icon to settings, closes the modal, refreshes the parent.
      * @param selectedIcon Icon to save.
      */
-    onChooseSuggestion(selectedIcon: string, _event: MouseEvent | KeyboardEvent) {
+    onChooseItem(selectedIcon: string, _event: MouseEvent | KeyboardEvent) {
         this.callback(selectedIcon);
         this.close();
     }
