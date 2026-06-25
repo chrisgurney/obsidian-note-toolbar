@@ -416,6 +416,13 @@
         }
     }
 
+    & .setting-items.note-toolbar-setting-styles-group {
+        padding: var(--size-4-4);
+        & .note-toolbar-setting-item-style .setting-item:not(.setting-item-heading)::before {
+            border-top: none;
+        }
+    }
+
     & .note-toolbar-setting-item-styles {
         & > .setting-item-info {
             align-self: flex-start;

@@ -28,6 +28,7 @@ export default class ToolbarStyleUi {
         }
 
         const styleGroup = new SettingGroup(settingsDiv);
+        styleGroup.listEl.addClass('note-toolbar-setting-styles-group');
 
         //
         // Default
