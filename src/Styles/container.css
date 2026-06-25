@@ -71,6 +71,16 @@
         .is-mobile & {
             padding-inline: var(--cg-nt-tbar-top-padding-x-mobile);
         }
+        .workspace-leaf-content[data-type="bases"] &, .workspace-leaf-content[data-type="canvas"] & {
+            &[data-ntb-meta*="wide"] {
+                padding-inline: 0;
+            }
+            &[data-ntb-meta*="mwd"] {
+                .is-mobile & {
+                    padding-inline: 0;
+                }
+            }
+        }
     }
 
     &[data-tbar-position="float"], &[data-tbar-position="text"] {
