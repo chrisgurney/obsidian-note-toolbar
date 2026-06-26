@@ -29,10 +29,21 @@
     opacity: 0.4;
 }
 
-.note-toolbar-item-suggestion-container {
+.note-toolbar-item-suggestion-container,
+.note-toolbar-tbar-suggestion-container {
     gap: 0 0.5em;
     display: flex;
     width: 100%;
+}
+
+.note-toolbar-tbar-suggestion-container {
+    flex-direction: column;
+}
+
+.note-toolbar-tbar-suggestion-name-container {
+    flex-direction: row;
+    display: flex;
+    gap: 0 0.5em;
 }
 
 .note-toolbar-item-suggestion {

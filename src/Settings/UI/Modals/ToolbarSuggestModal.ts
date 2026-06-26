@@ -158,32 +158,33 @@ export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
         el.setAttribute('id', toolbar.uuid);
         el.addClass('note-toolbar-item-suggestion');
 
-		const itemMainEl = el.createDiv();
-		itemMainEl.addClass('note-toolbar-item-suggestion-container');
+		const containerEl = el.createDiv();
+		containerEl.addClass('note-toolbar-tbar-suggestion-container');
 
+        const iconNameEl = containerEl.createDiv();
+        iconNameEl.addClass('note-toolbar-tbar-suggestion-name-container');
         if (toolbar.icon) {
-            const iconEl = itemMainEl.createSpan();
+            const iconEl = iconNameEl.createSpan();
             setIcon(iconEl, toolbar.icon);
         }
-
-        const toolbarNameEl = itemMainEl.createSpan();
+        const toolbarNameEl = iconNameEl.createSpan();
         toolbarNameEl.addClass('note-toolbar-item-suggester-name');
         toolbarNameEl.setText(toolbar.name);
 
         const isSpecialToolbar = [EMPTY_TOOLBAR_ID, NONE_TOOLBAR_ID].includes(toolbar.uuid);
         if (isSpecialToolbar) {
-            itemMainEl.addClass('cm-em');
+            containerEl.addClass('cm-em');
             return;
         }
 
         if (this.showPreviews) {
-            const previewContainerEl = itemMainEl.createDiv();
+            const previewContainerEl = containerEl.createDiv();
             previewContainerEl.addClass('setting-item-description');
             const previewEl = previewContainerEl.createDiv();
             previewEl.addClass('note-toolbar-setting-toolbar-list-preview-item');
             const previewFr = this.ntb.settingsUtils.createToolbarPreviewFr(toolbar, undefined);
             previewEl.append(previewFr);
-            itemMainEl.append(previewContainerEl);
+            containerEl.append(previewContainerEl);
         }
 
     }
