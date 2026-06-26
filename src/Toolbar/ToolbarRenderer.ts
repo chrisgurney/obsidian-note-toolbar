@@ -219,7 +219,7 @@ export default class ToolbarRenderer {
                 break;
 			}
             case PositionType.TabBar: {
-                setIcon(embedBlock, this.ntb.settings.icon);
+                setIcon(embedBlock, toolbar.icon || this.ntb.settings.icon);
                 setTooltip(embedBlock, toolbar.name);
                 embedBlock.addClasses(['clickable-icon', 'view-action']);
                 this.ntb.registerDomEvent(embedBlock, 'click', (e) => this.ntb.toolbars.onClickFab(e, noteToolbarElement!));
