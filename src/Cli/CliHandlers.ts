@@ -448,11 +448,15 @@ export default class CliHandlers {
         
         if (!toolbars.length) return t('cli.no-toolbars');
 
-        type ToolbarSchema = 'name' | 'uuid';
-        const schema: ToolbarSchema[] = verbose ? ['name', 'uuid'] : ['name'];
+        type ToolbarSchema = 'name' | 'description' | 'uuid';
+        const schema: ToolbarSchema[] = verbose ? ['name', 'description', 'uuid'] : ['name'];
 
         const rows = toolbars.map(tb => {
-            const values: Record<ToolbarSchema, string> = { name: tb.name, uuid: tb.uuid };
+            const values: Record<ToolbarSchema, string> = { 
+                name: tb.name, 
+                description: tb.description || '', 
+                uuid: tb.uuid 
+            };
             return schema.map(col => values[col]);
         });
 
