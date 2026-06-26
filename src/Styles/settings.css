@@ -149,7 +149,7 @@
             }
             & .setting-item-name {
                 align-items: center;
-                gap: 0 0.5em;
+                gap: 0 var(--size-4-2);
             }
             /* options button */
             & button:first-child {
@@ -393,6 +393,14 @@
         }  
     }
 
+}
+
+.note-toolbar-setting-ui,
+.note-toolbar-setting-item-suggester-dialog .note-toolbar-item-suggestion,
+.note-toolbar-setting-item-suggester-dialog .note-toolbar-item-suggestion.is-selected {
+    & .note-toolbar-tbar-icon-muted svg.svg-icon {
+        color: var(--text-muted);
+    }
 }
 
 .modal.note-toolbar-setting-modal-container .modal-content {

@@ -43,7 +43,7 @@
 .note-toolbar-tbar-suggestion-name-container {
     flex-direction: row;
     display: flex;
-    gap: 0 0.5em;
+    gap: 0 var(--size-4-2);
 }
 
 .note-toolbar-item-suggestion {

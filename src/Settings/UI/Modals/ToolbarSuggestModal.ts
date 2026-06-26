@@ -165,6 +165,7 @@ export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
         iconNameEl.addClass('note-toolbar-tbar-suggestion-name-container');
         if (toolbar.icon) {
             const iconEl = iconNameEl.createSpan();
+            iconEl.addClass('note-toolbar-tbar-icon-muted');
             setIcon(iconEl, toolbar.icon);
         }
         const toolbarNameEl = iconNameEl.createSpan();

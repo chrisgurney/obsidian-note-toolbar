@@ -239,6 +239,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 					const toolbarNameFr = new DocumentFragment();
 					if (toolbar.icon) {
 						const iconEl = createSpan();
+						iconEl.addClass('note-toolbar-tbar-icon-muted');
 						setIcon(iconEl, toolbar.icon);
 						toolbarNameFr.append(iconEl);
 					}
