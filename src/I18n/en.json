@@ -367,6 +367,11 @@
             "warning-text": "⚠️ Warning: This is your Selected text toolbar.",
             "warning-webviewer": "⚠️ Warning: This is your Web viewer toolbar."
         },
+        "description": {
+            "description": "Give this toolbar an optional description.",
+            "name": "Description",
+            "placeholder": "Description"
+        },
         "display-contexts": {
             "description": "Enable toolbars in canvases, PDFs, video, and other file types.",
             "name": "File types",
@@ -484,6 +489,11 @@
             "label-set": "Set hotkey",
             "label-settings": "Open hotkey settings",
             "notice-open-settings": "Open hotkey settings {{cta}} →"
+        },
+        "icon": {
+            "description": "Assign an optional icon to this toolbar.",
+            "name": "Icon",
+            "tooltip": "Select icon (optional)"
         },
         "icon-suggester": {
             "instruction-dismiss": "to dismiss",
@@ -644,7 +654,8 @@
         "name": {
             "description": "Give this toolbar a unique name.",
             "error-toolbar-already-exists": "A toolbar already exists with this name.",
-            "name": "Name"
+            "name": "Name",
+            "placeholder": "Name"
         },
         "navbar": {
             "option-back": "Back",

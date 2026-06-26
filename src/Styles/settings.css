@@ -924,36 +924,6 @@ input[type="text"].note-toolbar-setting-error,
         & .setting-item {
             border-bottom: none;
         }
-        & .note-toolbar-setting-item-icon {
-            padding-top: 0;
-            padding-bottom: 0;
-            .is-mobile & {
-                padding-bottom: 0.75em;
-            }
-            & .setting-item-info {
-                display: none;
-            }
-            & .setting-item-control {
-                margin-top: 0;
-                border: dashed 1px;
-                border-radius: var(--input-radius);
-                border-color: var(--background-modifier-border);
-                padding: var(--size-2-2);
-                & .clickable-icon[data-note-toolbar-no-icon="true"] {
-                    & svg {
-                        filter: brightness(0.5);
-                    }
-                }
-                & .clickable-icon:focus-within {
-                    box-shadow: none;
-                }
-                &:focus-within {
-                    border-radius: var(--input-radius);
-                    box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
-                    transition: box-shadow 0.15s ease-in-out, border 0.15s ease-in-out;
-                }
-            }
-        }
         & .note-toolbar-setting-item-label-tooltip {
             border-top: none;
             flex-grow: 1;
@@ -972,6 +942,49 @@ input[type="text"].note-toolbar-setting-error,
                 }
                 .is-mobile & {
                     margin-top: 0;
+                }
+            }
+        }
+    }
+
+    & .note-toolbar-setting-item,
+    & .note-toolbar-setting-tbar-icon-desc-group {
+        & .note-toolbar-setting-item-icon {
+            padding-top: 0;
+            padding-bottom: 0;
+            .is-mobile & {
+                padding-bottom: 0.75em;
+            }
+            & .setting-item-info {
+                display: none;
+            }
+        }
+        & .note-toolbar-setting-tbar-icon {
+             & .setting-item-info {
+                width: 100%;
+            }           
+        }
+        & .note-toolbar-setting-item-icon, 
+        & .note-toolbar-setting-tbar-icon {
+            & .setting-item-control {
+                margin-top: 0;
+                border: dashed 1px;
+                border-radius: var(--input-radius);
+                border-color: var(--background-modifier-border);
+                padding: var(--size-2-2);
+                & .clickable-icon[data-note-toolbar-no-icon="true"],
+                & button[data-note-toolbar-no-icon="true"] {
+                    & svg {
+                        filter: brightness(0.5);
+                    }
+                }
+                & .clickable-icon:focus-within {
+                    box-shadow: none;
+                }
+                &:focus-within {
+                    border-radius: var(--input-radius);
+                    box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
+                    transition: box-shadow 0.15s ease-in-out, border 0.15s ease-in-out;
                 }
             }
         }

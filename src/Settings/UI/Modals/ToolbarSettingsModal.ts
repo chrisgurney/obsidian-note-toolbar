@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from 'main';
-import { App, ButtonComponent, ItemView, Modal, Notice, Platform, Setting, SettingGroup, ToggleComponent, debounce } from 'obsidian';
+import { App, ButtonComponent, ItemView, Modal, Notice, Platform, Setting, SettingGroup, ToggleComponent, debounce, setIcon } from 'obsidian';
 import { COMMAND_PREFIX_TBAR, POSITION_OPTIONS, PositionType, SETTINGS_DISCLAIMERS, TOOLBAR_COMMAND_POSITION_OPTIONS, ToolbarSettings, t } from 'Settings/NoteToolbarSettings';
 import { confirmWithModal } from 'Settings/UI/Modals/ConfirmModal';
 import NoteToolbarSettingTab from 'Settings/UI/NoteToolbarSettingTab';
@@ -8,6 +8,7 @@ import ToolbarItemUi from '../Components/ToolbarItemUi';
 import ToolbarStyleUi from '../Components/ToolbarStyleUi';
 import ItemSuggester from '../Suggesters/ItemSuggester';
 import { fixToggleTab, getDisclaimersFr, iconTextFr, learnMoreFr, removeFieldError } from "../Utils/SettingsUIUtils";
+import IconSuggestModal from './IconSuggestModal';
 
 export const enum SettingsAttr {
 	Active = 'data-active',
@@ -189,7 +190,7 @@ export default class ToolbarSettingsModal extends Modal {
 			.setName(t('setting.name.name'))
 			.setDesc(t('setting.name.description'))
 			.addText(cb => cb
-				.setPlaceholder('Name')
+				.setPlaceholder(t('setting.name.placeholder'))
 				.setValue(this.toolbar.name)
 				.onChange(debounce(async (value) => {
 					// check for existing toolbar with this name
@@ -210,6 +211,21 @@ export default class ToolbarSettingsModal extends Modal {
 					}
 				}, 750)));
 
+		const descIconEl = settingsDiv.createDiv();
+		descIconEl.addClass('note-toolbar-setting-item-link-advanced');
+
+		toolbarNameSetting.controlEl.addClass('note-toolbar-setting-item-control-advanced');
+		toolbarNameSetting.addExtraButton((button) => {
+			button
+				.setIcon('gear')
+				.setTooltip(t('setting.item.button-advanced-tooltip'))
+				.onClick(() => {
+					descIconEl.toggleAttribute('data-active');
+				});
+			button.extraSettingsEl.tabIndex = 0;
+			this.ntb.settingsUtils.handleKeyClick(button.extraSettingsEl);     
+		});
+
 		// allow keyboard navigation down to first toolbar item
 		this.ntb.registerDomEvent(
 			toolbarNameSetting.controlEl, 'keydown', (e) => {
@@ -225,6 +241,62 @@ export default class ToolbarSettingsModal extends Modal {
 			}
 		)
 
+		const iconDescriptionGroup = new SettingGroup(descIconEl);
+		iconDescriptionGroup.addClass('note-toolbar-setting-tbar-icon-desc-group');
+		
+		// toolbar icon
+		iconDescriptionGroup.addSetting((iconSetting) => {
+			iconSetting
+				.setClass('note-toolbar-setting-tbar-icon')
+				.setName(t('setting.icon.name'))
+				.setDesc(t('setting.icon.description'))
+				.addButton((cb) => {
+					cb.setIcon(this.toolbar.icon ?? 'lucide-plus-square')
+						.setTooltip(t('setting.icon.tooltip'))
+						.onClick((e) => {
+							e.preventDefault();
+							const modal = new IconSuggestModal(
+								this.ntb, this.toolbar.icon, true, (icon) => this.updateToolbarIcon(cb.buttonEl, icon));
+							modal.open();
+						});
+					cb.buttonEl.setAttribute("data-note-toolbar-no-icon", !this.toolbar.icon ? "true" : "false");
+					this.ntb.registerDomEvent(
+						cb.buttonEl, 'keydown', (e) => {
+							switch (e.key) {
+								case "Enter":
+								case " ": {
+									e.preventDefault();					
+									const modal = new IconSuggestModal(
+										this.ntb, this.toolbar.icon, true, (icon) => this.updateToolbarIcon(cb.buttonEl, icon));
+									modal.open();
+								}
+							}
+						});
+				});
+		});		
+
+		// toolbar description
+		iconDescriptionGroup.addSetting((nameSetting) => {
+			nameSetting
+				.setName(t('setting.description.name'))
+				.setDesc(t('setting.description.description'))
+				.addText(cb => cb
+					.setValue(this.toolbar.description ?? '')
+					.onChange(debounce(async (value) => {
+						this.toolbar.description = value;
+						this.toolbar.updated = new Date().toISOString();
+						await this.ntb.settingsManager.save();
+					}, 750)));
+		});
+
+	}
+
+	updateToolbarIcon(settingEl: HTMLElement, selectedIcon: string) {
+		this.toolbar.icon = (selectedIcon === t('setting.icon-suggester.option-no-icon') ? "" : selectedIcon);
+		void this.ntb.settingsManager.save().then(() => {
+			setIcon(settingEl, selectedIcon === t('setting.icon-suggester.option-no-icon') ? 'lucide-plus-square' : selectedIcon);
+			settingEl.setAttribute('data-note-toolbar-no-icon', selectedIcon === t('setting.icon-suggester.option-no-icon') ? 'true' : 'false');
+		});
 	}
 
 	/**

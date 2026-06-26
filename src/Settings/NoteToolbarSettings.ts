@@ -330,7 +330,9 @@ export interface ToolbarSettings {
 	customClasses: string;
 	defaultItem: string | null;
 	defaultStyles: string[];
+	description?: string;
 	hasCommand: boolean;
+	icon?: string;
 	items: Array<ToolbarItemSettings>;
 	mobileStyles: string[];
 	/**
