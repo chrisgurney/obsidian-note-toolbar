@@ -99,6 +99,7 @@ button.cg-note-toolbar-fab {
     background-color: var(--cg-nt-fab-bg-color-desktop);
     color: var(--cg-nt-fab-icon-color-desktop);
     border-radius: var(--cg-nt-fab-border-radius-desktop);
+    corner-shape: round;
     height: auto;
     padding: var(--cg-nt-fab-padding-desktop);
     &:is(:active, :hover, :focus-visible) {
