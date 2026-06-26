@@ -785,7 +785,6 @@ export default class ToolbarItemUi {
                         .onClick(() => {
                             commandAdvancedEl.toggleAttribute('data-active');
                         });
-                    button.extraSettingsEl.tabIndex = 0;
                     this.ntb.settingsUtils.handleKeyClick(button.extraSettingsEl);     
                 });
 
@@ -890,7 +889,6 @@ export default class ToolbarItemUi {
                         .onClick(() => {
                             fileAdvancedEl.toggleAttribute('data-active');
                         });
-                    button.extraSettingsEl.tabIndex = 0;
                     this.ntb.settingsUtils.handleKeyClick(button.extraSettingsEl);      
                 });
 
@@ -991,7 +989,6 @@ export default class ToolbarItemUi {
                         .onClick(() => {
                             uriAdvancedEl.toggleAttribute('data-active');
                         });
-                    button.extraSettingsEl.tabIndex = 0;
                     this.ntb.settingsUtils.handleKeyClick(button.extraSettingsEl);
                 });
                 setFieldHelp(uriSetting.settingEl, helpTextFr);
@@ -1235,7 +1232,6 @@ export default class ToolbarItemUi {
                 .onClick(() => {
                     advancedSettingsDiv.toggleAttribute('data-active');
                 });
-                button.extraSettingsEl.tabIndex = 0;
                 this.ntb.settingsUtils.handleKeyClick(button.extraSettingsEl);     
             });
         advancedSetting.settingEl.addClass('note-toolbar-setting-subfield-advanced-heading');

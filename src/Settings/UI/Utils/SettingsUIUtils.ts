@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { ButtonComponent, getIcon, ItemView, Notice, Platform, setIcon, Setting, setTooltip, TFile, TFolder, ToggleComponent } from "obsidian";
+import { ButtonComponent, getIcon, ItemView, Notice, Platform, requireApiVersion, setIcon, Setting, setTooltip, TFile, TFolder, ToggleComponent } from "obsidian";
 import { COMMAND_DOES_NOT_EXIST, ComponentType, DEFAULT_ITEM_VISIBILITY_SETTINGS, IGNORE_PLUGIN_IDS, ItemComponentVisibility, ItemType, SettingType, t, ToolbarItemSettings, ToolbarSettings, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_WHATS_NEW, ViewModeType, Visibility, WHATSNEW_VERSION } from "Settings/NoteToolbarSettings";
 import SettingsManager from "Settings/SettingsManager";
 import { URLS } from "Utils/Urls";
@@ -419,16 +419,20 @@ export default class SettingsUIUtils {
 	}
 
 	handleKeyClick(el: HTMLElement) {
-		el.tabIndex = 0;
-		this.ntb.registerDomEvent(
-			el, 'keydown', (evt) => {
-				switch (evt.key) {
-					case 'Enter':
-					case ' ':
-						evt.preventDefault();
-						el.click();
-				}
-			});
+		// workaround no longer needed after Obsidian 1.13
+		if (!requireApiVersion('1.13.0')) {
+			el.tabIndex = 0;
+			this.ntb.registerDomEvent(
+				el, 'keydown', (evt) => {
+					this.ntb.debug('HANDLE KEY CLICK');
+					switch (evt.key) {
+						case 'Enter':
+						case ' ':
+							evt.preventDefault();
+							el.click();
+					}
+				});
+		}
 	}
 
 	/**
