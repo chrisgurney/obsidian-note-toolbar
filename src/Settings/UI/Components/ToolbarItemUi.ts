@@ -81,23 +81,13 @@ export default class ToolbarItemUi {
             // Item icon, name, and tooltip
             //
 
-            const handleIconSelected = async (icon: string) => {
-                toolbarItem.icon = (icon === t('setting.icon-suggester.option-no-icon') ? "" : icon);
-                await this.ntb.settingsManager.save();
-                const itemRow = (this.parent instanceof ToolbarSettingsModal) 
-                    ? this.parent.itemListUi.getItemRowEl(toolbarItem.uuid) 
-                    : this.parent.getItemRowEl(toolbarItem.uuid);
-                updateItemIcon(this.parent, itemRow, icon);
-                if (toolbarItem.hasCommand) await this.ntb.commands.updateItemCommand(toolbarItem, false);
-            }
-
             const iconField = new Setting(textFieldsContainer)
                 .setClass("note-toolbar-setting-item-icon")
                 .addExtraButton((btn: ExtraButtonComponent) => {
                     btn.setIcon(toolbarItem.icon ? toolbarItem.icon : "lucide-plus-square")
                         .setTooltip(t('setting.item.button-icon-tooltip'))
                         .onClick(() => {
-                            const modal = new IconSuggestModal(this.ntb, toolbarItem.icon, true, (icon) => void handleIconSelected(icon));
+                            const modal = new IconSuggestModal(this.ntb, toolbarItem.icon, true, (icon) => void this.handleIconSelected(toolbarItem, icon));
                             modal.open();
                         });
                     btn.extraSettingsEl.setAttribute("data-note-toolbar-no-icon", !toolbarItem.icon ? "true" : "false");
@@ -110,7 +100,7 @@ export default class ToolbarItemUi {
                                     const modifierPressed = (Platform.isWin || Platform.isLinux) ? e?.ctrlKey : e?.metaKey;
                                     if (!modifierPressed) {
                                         e.preventDefault();
-                                        const modal = new IconSuggestModal(this.ntb, toolbarItem.icon, true, (icon) => void handleIconSelected(icon));
+                                        const modal = new IconSuggestModal(this.ntb, toolbarItem.icon, true, (icon) => void this.handleIconSelected(toolbarItem, icon));
                                         modal.open();
                                     }
                                 }
@@ -420,6 +410,16 @@ export default class ToolbarItemUi {
 
         return itemDiv;
 
+    }
+
+    handleIconSelected = async (toolbarItem: ToolbarItemSettings, icon: string) => {
+        toolbarItem.icon = (icon === t('setting.icon-suggester.option-no-icon') ? "" : icon);
+        await this.ntb.settingsManager.save();
+        const itemRow = (this.parent instanceof ToolbarSettingsModal) 
+            ? this.parent.itemListUi.getItemRowEl(toolbarItem.uuid) 
+            : this.parent.getItemRowEl(toolbarItem.uuid);
+        updateItemIcon(this.parent, itemRow, icon);
+        if (toolbarItem.hasCommand) await this.ntb.commands.updateItemCommand(toolbarItem, false);
     }
 
     /**
@@ -939,6 +939,10 @@ export default class ToolbarItemUi {
                                 toolbarItem.linkAttr.type = type;
                                 await this.ntb.settingsManager.save();
                                 this.renderPreview(toolbarItem);
+                                // update this item's icon if it's non-empty and the selected toolbar has one
+                                if (toolbarItem.icon === '' && menuToolbar?.icon) {
+                                    void this.handleIconSelected(toolbarItem, menuToolbar.icon);
+                                }
                                 // update help text with toolbar preview or default if none selected
                                 const menuHelpFr = menuToolbar 
                                     ? this.ntb.settingsUtils.createToolbarPreviewFr(menuToolbar, undefined, true)
