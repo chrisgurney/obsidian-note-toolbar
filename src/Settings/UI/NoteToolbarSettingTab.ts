@@ -342,6 +342,8 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 						toolbarListItemSetting.descEl.append(this.ntb.settingsUtils.createToolbarPreviewFr(toolbar, this.ntb.settingsManager));
 					});
 
+					if (toolbar.description) toolbarListItemSetting.settingEl.setAttr('data-tbar-desc', toolbar.description);
+
 					toolbarListItemSetting.settingEl.setAttribute('data-tbar-uuid', toolbar.uuid);
 					if (!toolbar.name) toolbarListItemSetting.nameEl.addClass('mod-warning');
 			
@@ -436,13 +438,15 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 						.forEach((toolbarEl) => {
 							// search contents of name and item text
 							const toolbarName = toolbarEl.querySelector('.setting-item-name')?.textContent?.toLowerCase() ?? '';
-							const allItemText = Array.from(toolbarEl.querySelectorAll('*:not(svg)'))
-								.flatMap(el => Array.from(el.childNodes))
-								.filter(node => node.nodeType === Node.TEXT_NODE)
-								.map(node => node.textContent?.trim())
-								.filter(text => text)
-								.join(' ')
-								.toLowerCase();
+							const allItemText = [
+								toolbarEl.getAttribute('data-tbar-desc') ?? '',
+								Array.from(toolbarEl.querySelectorAll('*:not(svg)'))
+									.flatMap(el => Array.from(el.childNodes))
+									.filter(node => node.nodeType === Node.TEXT_NODE)
+									.map(node => node.textContent?.trim())
+									.filter(text => text)
+									.join(' ')
+							].join(' ').toLowerCase();
 							// const allItemTooltips = Array.from(toolbarEl.querySelectorAll('.note-toolbar-setting-toolbar-list-preview-item[aria-label]'))
 							// 	.map(el => el.getAttribute('aria-label')?.trim())
 							// 	.filter(label => label)
