@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { Platform, SuggestModal } from "obsidian";
+import { Platform, setIcon, SuggestModal } from "obsidian";
 import { EMPTY_TOOLBAR, EMPTY_TOOLBAR_ID, LocalVar, NONE_TOOLBAR, NONE_TOOLBAR_ID, t, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import ToolbarSettingsModal from "./ToolbarSettingsModal";
 
@@ -154,22 +154,38 @@ export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
      * @param el HTMLElement to render it in
      */
     renderSuggestion(toolbar: ToolbarSettings, el: HTMLElement): void {
+        
         el.setAttribute('id', toolbar.uuid);
-        const toolbarNameEl = el.createSpan();
+        el.addClass('note-toolbar-item-suggestion');
+
+		const itemMainEl = el.createDiv();
+		itemMainEl.addClass('note-toolbar-item-suggestion-container');
+
+        if (toolbar.icon) {
+            const iconEl = itemMainEl.createSpan();
+            setIcon(iconEl, toolbar.icon);
+        }
+
+        const toolbarNameEl = itemMainEl.createSpan();
+        toolbarNameEl.addClass('note-toolbar-item-suggester-name');
         toolbarNameEl.setText(toolbar.name);
+
         const isSpecialToolbar = [EMPTY_TOOLBAR_ID, NONE_TOOLBAR_ID].includes(toolbar.uuid);
         if (isSpecialToolbar) {
-            el.addClass('cm-em');
+            itemMainEl.addClass('cm-em');
+            return;
         }
-        if (this.showPreviews && !isSpecialToolbar) {
-            const previewContainerEl = el.createDiv();
+
+        if (this.showPreviews) {
+            const previewContainerEl = itemMainEl.createDiv();
             previewContainerEl.addClass('setting-item-description');
             const previewEl = previewContainerEl.createDiv();
             previewEl.addClass('note-toolbar-setting-toolbar-list-preview-item');
             const previewFr = this.ntb.settingsUtils.createToolbarPreviewFr(toolbar, undefined);
             previewEl.append(previewFr);
-            el.append(previewContainerEl);
+            itemMainEl.append(previewContainerEl);
         }
+
     }
 
     /**
