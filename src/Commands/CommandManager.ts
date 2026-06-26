@@ -374,7 +374,7 @@ export default class CommandManager {
      * Opens the toolbar suggester modal.
      */
     openToolbarSuggester() {
-        const modal = new ToolbarSuggestModal(this.ntb, false, false, false, (toolbar: ToolbarSettings) => {
+        const modal = new ToolbarSuggestModal(this.ntb, true, false, false, (toolbar: ToolbarSettings) => {
             this.ntb.commands.openQuickTools(toolbar.uuid);
         }, 'QuickTools');
         modal.open();
