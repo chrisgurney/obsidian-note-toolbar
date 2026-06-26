@@ -573,7 +573,7 @@ export default class ToolbarRenderer {
 		}
 		else {
 			noteToolbarFabButton.setAttribute('aria-label', toolbar.name);
-			setIcon(noteToolbarFabButton, this.ntb.settings.icon);
+			setIcon(noteToolbarFabButton, toolbar.icon || this.ntb.settings.icon);
 		}
 		
 		noteToolbarFabContainer.append(noteToolbarFabButton);
