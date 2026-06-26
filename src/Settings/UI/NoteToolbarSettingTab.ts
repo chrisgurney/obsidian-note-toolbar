@@ -237,6 +237,11 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 				(toolbar) => {
 					
 					const toolbarNameFr = new DocumentFragment();
+					if (toolbar.icon) {
+						const iconEl = createSpan();
+						setIcon(iconEl, toolbar.icon);
+						toolbarNameFr.append(iconEl);
+					}
 					toolbarNameFr.append(toolbar.name ? toolbar.name : t('setting.toolbars.label-tbar-name-not-set'));
 					// show hotkey
 					if (!Platform.isPhone) {

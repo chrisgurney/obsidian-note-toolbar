@@ -147,6 +147,10 @@
                 border-top: var(--border-width) solid var(--background-modifier-border);
                 border-radius: 0 0 var(--setting-items-radius) var(--setting-items-radius);
             }
+            & .setting-item-name {
+                align-items: center;
+                gap: 0 0.5em;
+            }
             /* options button */
             & button:first-child {
                 opacity: 0;
