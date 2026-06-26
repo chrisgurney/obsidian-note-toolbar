@@ -314,6 +314,7 @@
             margin-bottom: 0;
             &:not(.is-mobile &) {
                 padding-bottom: unset;
+                padding-inline: unset;
             }
             & .setting-item-info {
                 display: none;
