@@ -251,7 +251,7 @@ export default class ToolbarSettingsModal extends Modal {
 				.setName(t('setting.icon.name'))
 				.setDesc(t('setting.icon.description'))
 				.addButton((cb) => {
-					cb.setIcon(this.toolbar.icon ?? 'lucide-plus-square')
+					cb.setIcon(this.toolbar.icon || 'lucide-plus-square')
 						.setTooltip(t('setting.icon.tooltip'))
 						.onClick((e) => {
 							e.preventDefault();
