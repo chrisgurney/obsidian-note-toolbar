@@ -334,6 +334,8 @@ note-toolbar:import toolbar="Daily Notes" callout='> [!note-toolbar]\\n> - [:LiA
 Creates a new toolbar.
 
 ```sh
-name=<name>  # Toolbar name
+name=<name>         # Toolbar name
+desc=<description>  # Toolbar description
+icon=<iconName>     # Toolbar icon, from Lucide's icon set
 ```
 

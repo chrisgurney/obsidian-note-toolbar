@@ -621,6 +621,22 @@
                     "value": {
                         "en": "<name>"
                     }
+                },
+                "desc": {
+                    "description": {
+                        "en": "Toolbar description"
+                    },
+                    "value": {
+                        "en": "<description>"
+                    }
+                },
+                "icon": {
+                    "description": {
+                        "en": "Toolbar icon, from Lucide's icon set"
+                    },
+                    "value": {
+                        "en": "<iconName>"
+                    }
                 }
             }
         },
