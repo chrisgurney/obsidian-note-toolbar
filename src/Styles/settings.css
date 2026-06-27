@@ -310,12 +310,8 @@
             }
         }
         & #tbar-search {
-            padding-top: 0;
             margin-bottom: 0;
-            &:not(.is-mobile &) {
-                padding-bottom: unset;
-                padding-inline: unset;
-            }
+            padding: unset;
             & .setting-item-info {
                 display: none;
             }
@@ -401,6 +397,7 @@
 .note-toolbar-setting-item-suggester-dialog .note-toolbar-item-suggestion.is-selected {
     & .note-toolbar-tbar-icon-muted svg.svg-icon {
         color: var(--text-muted);
+        height: var(--icon-size);
     }
 }
 
