@@ -623,6 +623,7 @@
                     }
                 },
                 "desc": {
+                    "available": "1.34",
                     "description": {
                         "en": "Toolbar description"
                     },
@@ -631,6 +632,7 @@
                     }
                 },
                 "icon": {
+                    "available": "1.34",
                     "description": {
                         "en": "Toolbar icon, from Lucide's icon set"
                     },

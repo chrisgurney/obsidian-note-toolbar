@@ -335,7 +335,7 @@ Creates a new toolbar.
 
 ```sh
 name=<name>         # Toolbar name
-desc=<description>  # Toolbar description
-icon=<iconName>     # Toolbar icon, from Lucide's icon set
+desc=<description>  # Toolbar description (1.34)
+icon=<iconName>     # Toolbar icon, from Lucide's icon set (1.34)
 ```
 
