@@ -403,6 +403,7 @@
     }
     & .note-toolbar-tbar-desc {
         color: var(--text-muted);
+        font-size: var(--font-ui-smaller);
         font-style: italic;
         font-weight: normal;
         overflow: hidden;
