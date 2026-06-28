@@ -149,7 +149,8 @@
             }
             & .setting-item-name {
                 align-items: center;
-                gap: 0 var(--size-4-2);
+                flex-wrap: wrap;
+                gap: 2px var(--size-4-2);
             }
             /* options button */
             & button:first-child {
@@ -398,6 +399,14 @@
     & .note-toolbar-tbar-icon-muted svg.svg-icon {
         color: var(--text-muted);
         height: var(--icon-size);
+    }
+    & .note-toolbar-tbar-desc {
+        color: var(--text-muted);
+        font-style: italic;
+        font-weight: normal;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 }
 

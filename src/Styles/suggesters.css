@@ -2,12 +2,17 @@
  * Suggesters
  */
 
-.note-toolbar-item-suggester-name {
+.note-toolbar-item-suggester-name,
+.note-toolbar-tbar-suggester-name {
     align-items: center;
     justify-content: space-between;
     display: flex;
     gap: 0 1em;
     width: 100%;
+}
+
+.note-toolbar-tbar-suggester-name {
+    width: auto;
 }
 
 .note-toolbar-item-suggester-note {
@@ -42,8 +47,9 @@
 
 .note-toolbar-tbar-suggestion-name-container {
     flex-direction: row;
+    flex-wrap: Wrap;
     display: flex;
-    gap: 0 var(--size-4-2);
+    gap: 2px var(--size-4-2);
 }
 
 .note-toolbar-item-suggestion {

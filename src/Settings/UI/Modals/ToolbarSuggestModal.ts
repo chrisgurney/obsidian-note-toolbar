@@ -169,8 +169,13 @@ export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
             setIcon(iconEl, toolbar.icon);
         }
         const toolbarNameEl = iconNameEl.createSpan();
-        toolbarNameEl.addClass('note-toolbar-item-suggester-name');
+        toolbarNameEl.addClass('note-toolbar-tbar-suggester-name');
         toolbarNameEl.setText(toolbar.name);
+        if (toolbar.description) {
+            const descEl = iconNameEl.createSpan();
+            descEl.addClass('note-toolbar-tbar-desc');
+            descEl.setText(toolbar.description);
+        }
 
         const isSpecialToolbar = [EMPTY_TOOLBAR_ID, NONE_TOOLBAR_ID].includes(toolbar.uuid);
         if (isSpecialToolbar) {

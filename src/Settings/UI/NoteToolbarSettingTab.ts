@@ -261,6 +261,12 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 							}
 						}
 					}
+					if (toolbar.description) {
+						const descEl = createSpan();
+						descEl.addClass('note-toolbar-tbar-desc');
+						descEl.setText(toolbar.description);
+						toolbarNameFr.append(descEl);
+					}
 
 					const toolbarListItemSetting = new Setting(toolbarListDiv)
 						.setName(toolbarNameFr)
