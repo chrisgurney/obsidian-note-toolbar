@@ -265,6 +265,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 						const descEl = createSpan();
 						descEl.addClass('note-toolbar-tbar-desc');
 						descEl.setText(toolbar.description);
+						setTooltip(descEl, toolbar.description);
 						toolbarNameFr.append(descEl);
 					}
 

@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { Platform, setIcon, SuggestModal } from "obsidian";
+import { Platform, setIcon, setTooltip, SuggestModal } from "obsidian";
 import { EMPTY_TOOLBAR, EMPTY_TOOLBAR_ID, LocalVar, NONE_TOOLBAR, NONE_TOOLBAR_ID, t, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import ToolbarSettingsModal from "./ToolbarSettingsModal";
 
@@ -175,6 +175,7 @@ export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
             const descEl = iconNameEl.createSpan();
             descEl.addClass('note-toolbar-tbar-desc');
             descEl.setText(toolbar.description);
+            setTooltip(descEl, toolbar.description);
         }
 
         const isSpecialToolbar = [EMPTY_TOOLBAR_ID, NONE_TOOLBAR_ID].includes(toolbar.uuid);
