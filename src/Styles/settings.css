@@ -314,6 +314,9 @@
         & #tbar-search {
             margin-bottom: 0;
             padding: unset;
+            .is-phone & {
+                padding-bottom: var(--size-4-4);
+            }
             & .setting-item-info {
                 display: none;
             }
