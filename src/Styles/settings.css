@@ -150,6 +150,7 @@
             & .setting-item-name {
                 align-items: center;
                 flex-wrap: wrap;
+                font-weight: 500;
                 gap: 2px var(--size-4-2);
             }
             /* options button */
