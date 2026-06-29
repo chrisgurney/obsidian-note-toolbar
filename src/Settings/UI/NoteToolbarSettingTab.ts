@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from 'main';
-import { ButtonComponent, debounce, Menu, MenuItem, normalizePath, Platform, PluginSettingTab, setIcon, Setting, SettingGroup, setTooltip, ToggleComponent } from 'obsidian';
+import { ButtonComponent, debounce, Menu, MenuItem, normalizePath, Platform, PluginSettingTab, setIcon, Setting, SettingGroup, ToggleComponent } from 'obsidian';
 import { FolderMapping, OBSIDIAN_UI_ELEMENTS, OBSIDIAN_UI_MOBILE_NAVBAR_OPTIONS, RIBBON_ACTION_OPTIONS, RibbonAction, SETTINGS_VERSION, SettingType, t } from 'Settings/NoteToolbarSettings';
 import IconSuggestModal from 'Settings/UI/Modals/IconSuggestModal';
 import FolderSuggester from 'Settings/UI/Suggesters/FolderSuggester';
@@ -237,37 +237,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 				(toolbar) => {
 					
 					const toolbarNameFr = new DocumentFragment();
-					if (toolbar.icon) {
-						const iconEl = createSpan();
-						iconEl.addClass('note-toolbar-tbar-icon-muted');
-						setIcon(iconEl, toolbar.icon);
-						toolbarNameFr.append(iconEl);
-					}
-					toolbarNameFr.append(toolbar.name ? toolbar.name : t('setting.toolbars.label-tbar-name-not-set'));
-					// show hotkey
-					if (!Platform.isPhone) {
-						const tbarCommand = this.ntb.commands.getCommandFor(toolbar);
-						if (tbarCommand) {
-							const hotkeyEl = this.ntb.hotkeys.getHotkeyEl(tbarCommand);
-							if (hotkeyEl) {
-								toolbarNameFr.appendChild(hotkeyEl);
-								setTooltip(hotkeyEl, t('setting.use-item-command.tooltip-command-indicator', { command: tbarCommand.name, interpolation: { escapeValue: false } }));
-							}
-							else {
-								const commandIconEl = toolbarNameFr.createSpan();
-								commandIconEl.addClass('note-toolbar-setting-command-indicator');
-								setIcon(commandIconEl, 'terminal');
-								setTooltip(commandIconEl, t('setting.use-item-command.tooltip-command-indicator', { command: tbarCommand.name, interpolation: { escapeValue: false } }));
-							}
-						}
-					}
-					if (toolbar.description) {
-						const descEl = createSpan();
-						descEl.addClass('note-toolbar-tbar-desc');
-						descEl.setText(toolbar.description);
-						setTooltip(descEl, toolbar.description);
-						toolbarNameFr.append(descEl);
-					}
+					this.ntb.settingsUtils.renderToolbarName(toolbar, toolbarNameFr, true, true);
 
 					const toolbarListItemSetting = new Setting(toolbarListDiv)
 						.setName(toolbarNameFr)
