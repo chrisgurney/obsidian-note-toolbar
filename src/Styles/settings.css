@@ -422,6 +422,14 @@
     }
 }
 
+.note-toolbar-tbar-name-container {
+    flex-direction: row;
+    flex-wrap: Wrap;
+    display: flex;
+    gap: 2px var(--size-4-2);
+    overflow: hidden;
+}
+
 .modal.note-toolbar-setting-modal-container .modal-content {
 
     & .note-toolbar-setting-item-controls {

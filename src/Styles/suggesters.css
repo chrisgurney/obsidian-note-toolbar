@@ -46,13 +46,6 @@
     flex-direction: column;
 }
 
-.note-toolbar-tbar-suggestion-name-container {
-    flex-direction: row;
-    flex-wrap: Wrap;
-    display: flex;
-    gap: 2px var(--size-4-2);
-}
-
 .note-toolbar-item-suggestion {
     align-items: center;
     display: flex;

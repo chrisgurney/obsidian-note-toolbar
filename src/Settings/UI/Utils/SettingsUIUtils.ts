@@ -685,7 +685,7 @@ export default class SettingsUIUtils {
 
 	renderToolbarName(toolbar: ToolbarSettings, el: HTMLElement | DocumentFragment, showDescription: boolean = false, showHotkey: boolean = false) {
         const nameContainerEl = el.createDiv();
-        nameContainerEl.addClass('note-toolbar-tbar-suggestion-name-container');
+        nameContainerEl.addClass('note-toolbar-tbar-name-container');
 
         if (toolbar.icon) {
             const iconEl = nameContainerEl.createSpan();
