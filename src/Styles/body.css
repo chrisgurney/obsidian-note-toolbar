@@ -160,8 +160,13 @@ body {
                 display: none;
             }
          }
+
+         /* animate the top header's vertical position so it doesn't just pop into place when the toolbar adjusts */
+         & .mod-root .view-header {
+            transition: margin-top 100ms ease, padding-top 100ms ease;
+         }
     }
-    
+
     /*
      * Android styles
      */
