@@ -488,23 +488,21 @@ export default class ToolbarSettingsModal extends Modal {
 		const commandOptionsGroup = new SettingGroup(commandOptionsGroupEl);
 
 		const toolbarCommand = this.ntb.commands.getCommandFor(this.toolbar);
-		if (toolbarCommand) {
-			const hotkey = this.ntb.hotkeys.getHotkeyText(toolbarCommand);
-			commandOptionsGroup.addSetting((hotkeySetting) => {
-				hotkeySetting
-					.setName(t('setting.open-command.option-hotkey'))
-					.setDesc(t('setting.open-command.option-hotkey-description'))
-					.addButton((btn) => {
-						btn
-							.setTooltip(t('setting.hotkeys.label-settings'))
-							.onClick(() => {
-								this.close();
-								this.ntb.commands.openHotkeySettings(toolbarCommand.name);
-							});
-						btn.buttonEl.setText(hotkey ?? iconTextFr('keyboard', t('setting.open-command.label-hotkey')));
-					});
-			});
-		}
+		const hotkey = this.ntb.hotkeys.getHotkeyText(toolbarCommand);
+		commandOptionsGroup.addSetting((hotkeySetting) => {
+			hotkeySetting
+				.setName(t('setting.open-command.option-hotkey'))
+				.setDesc(t('setting.open-command.option-hotkey-description'))
+				.addButton((btn) => {
+					btn
+						.setTooltip(t('setting.hotkeys.label-settings'))
+						.onClick(() => {
+							this.close();
+							if (toolbarCommand) this.ntb.commands.openHotkeySettings(toolbarCommand.name);
+						});
+					btn.buttonEl.setText(hotkey ?? iconTextFr('keyboard', t('setting.open-command.label-hotkey')));
+				});
+		});
 		
 		commandOptionsGroup.addSetting((commandPositionSetting) => {
 			const initialCommandPosition = this.toolbar.commandPosition || PositionType.Floating;
