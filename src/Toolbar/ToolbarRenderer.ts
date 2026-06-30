@@ -69,7 +69,7 @@ export default class ToolbarRenderer {
 	 * @returns true if a floating toolbar is in focus; false otherwise.
 	 */
 	isFloatingToolbarFocussed(): boolean {
-		return this.ntb.render.floatingToolbarEl?.contains(activeDocument.activeElement) ?? false;
+		return this.floatingToolbarEl?.contains(activeDocument.activeElement) ?? false;
 	}
 
 	/**
@@ -888,6 +888,121 @@ export default class ToolbarRenderer {
 				menu.showAtPosition( { x: activeWindow.innerWidth, y: position.y, overlap: true, left: true } );
 			}
 		}
+	}
+
+    async showToolbarAtPosition(toolbar: ToolbarSettings, position: PositionType) {
+        // if no cursor position (or editor not in focus), fall back to mouse position
+        // TODO: fall back to Quick Tools necessary, for tablets?
+        const showAtPosition = this.ntb.utils.getPosition('cursor');
+        switch (position) {
+            case PositionType.Menu: {
+                if (!showAtPosition) break;
+                const activeFile = this.ntb.app.workspace.getActiveFile();
+                await this.renderAsMenu(toolbar, activeFile).then(menu => {
+                    menu.showAtPosition({x: showAtPosition.left, y: showAtPosition.top});
+                });
+                // TODO? is there a need to put the focus in the menu? test on tablet
+                break;
+            }
+            case PositionType.QuickTools: {
+                this.ntb.commands.openQuickTools(toolbar.uuid);
+                break;
+            }
+            case PositionType.Floating:
+            default: {
+                if (!showAtPosition) break;
+                await this.renderFloatingToolbar(toolbar, showAtPosition, PositionType.Floating);
+                await this.focus(true);
+                break;
+            }
+        }
+    }
+
+	/**
+	 * Sets the keyboard's focus on the first visible item in the toolbar.
+	 * @param isFloatingToolbar set to true if this is for the floating toolbar.
+	 */
+	async focus(isFloatingToolbar: boolean = false): Promise<void> {
+
+		this.ntb.debug("focus");
+
+		// display the text toolbar at the current cursor position, if it's not already rendered
+		if (isFloatingToolbar && !this.hasFloatingToolbar()) {
+			// FIXME? remove this check because of Reading/Preview mode?
+			const editor = this.ntb.app.workspace.activeEditor?.editor;
+			if (!editor) {
+				this.ntb.debug('| editor not available - exiting');
+				return;
+			};
+			const toolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.textToolbar);
+			const showAtPosition = this.ntb.utils.getPosition('cursor');
+			await this.renderFloatingToolbar(toolbar, showAtPosition, PositionType.Text);
+		}
+
+		// need to get the type of toolbar first
+		const toolbarEl = this.ntb.el.getToolbarEl(undefined, isFloatingToolbar);
+		const toolbarPosition = toolbarEl?.getAttribute('data-tbar-position');
+		switch (toolbarPosition) {
+			case PositionType.FabRight:
+			case PositionType.FabLeft: {
+				// trigger the menu
+				const toolbarFabEl = toolbarEl?.querySelector('button.cg-note-toolbar-fab') as HTMLButtonElement;
+				this.ntb.debug("| button: ", toolbarFabEl);
+				if (toolbarEl) {
+					const toolbar = this.ntb.settingsManager.getToolbarById(toolbarEl.id);
+					// show the toolbar's menu if it has a default item set
+					if (toolbar?.defaultItem) {
+						// TODO: this is a copy of toolbarFabHandler() -- put in a function?
+						const activeFile = this.ntb.app.workspace.getActiveFile();
+						await this.renderAsMenu(toolbar, activeFile, this.ntb.settings.showEditInFabMenu).then(menu => { 
+							const fabPos = toolbarFabEl.getAttribute('data-tbar-position');
+							// determine menu orientation based on button position
+							const elemRect = toolbarFabEl.getBoundingClientRect();
+							const menuPos = { 
+								x: (fabPos === PositionType.FabLeft ? elemRect.x : elemRect.x + elemRect.width), 
+								y: (elemRect.top - 4),
+								overlap: true,
+								left: (fabPos === PositionType.FabLeft ? false : true)
+							};
+							// store menu position for sub-menu positioning
+							this.ntb.app.saveLocalStorage(LocalVar.MenuPos, JSON.stringify(menuPos));
+							menu.showAtPosition(menuPos);
+						});
+					}
+					else {
+						toolbarFabEl.click();
+					}
+				}
+				break;
+			}
+			case PositionType.Bottom:
+			case PositionType.Floating:
+			case PositionType.Props:
+			case PositionType.Text:
+			case PositionType.Top: {
+				// get the list and set focus on the first visible item
+				const itemsUl: HTMLElement | null = this.ntb.el.getToolbarListEl(isFloatingToolbar);
+				if (itemsUl) {
+					// this.ntb.debug("| toolbar: ", itemsUl);
+					const items = Array.from(itemsUl.children);
+					const visibleItems = items.filter(item => {
+						const hasSpan = item.querySelector('span') !== null; // to filter out separators
+						const isVisible = window.getComputedStyle(item).getPropertyValue('display') !== 'none';
+						return hasSpan && isVisible;
+					});
+					const linkEl = visibleItems[0] ? visibleItems[0].querySelector('span') : null;
+					// this.ntb.debug("| focussed item: ", linkEl);
+					visibleItems[0]?.addClass(ToolbarStyle.ItemFocused);
+					linkEl?.focus();
+				}
+				break;
+			}
+			case PositionType.Hidden:
+			default:
+				// do nothing
+				break;
+		}
+
 	}
 
 	/**
