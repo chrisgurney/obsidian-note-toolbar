@@ -675,7 +675,7 @@
             "option-hotkey": "Hotkey",
             "option-hotkey-description": "Display toolbar when this key combination is pressed.",
             "option-position": "How to display toolbar",
-            "option-position-description": "By default the toolbar displays as a floating toolbar at the cursor position."
+            "option-position-description": "Choose how the toolbar should be displayed when opened from the command."
         },
         "option-platform-desktop": "Desktop",
         "option-platform-mobile": "Mobile",
@@ -737,6 +737,14 @@
             "option-quicktools": "Quick Tools window",
             "option-tabbar": "Top navigation bar",
             "option-top": "Top (fixed)"
+        },
+        "ribbon": {
+            "description": "Access this toolbar from the ribbon.",
+            "name": "Add to ribbon",
+            "notice-ribbon-added": "Added to ribbon. Use Obsidian settings to organize ribbon items.",
+            "notice-ribbon-removed": "Removed from ribbon. Restart Obsidian to update.",
+            "option-position": "How to display toolbar",
+            "option-position-description": "Choose how the toolbar should be displayed when accessed from the ribbon."
         },
         "rules": {
             "button-collapse-tooltip": "Collapse all rules",

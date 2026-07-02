@@ -98,6 +98,12 @@ declare module "obsidian" {
         setSubmenu: () => Menu;
     }
 
+    // allows access to ribbon to remove items
+    interface WorkspaceRibbon {
+        ribbonItemsEl: HTMLElement;
+        removeRibbonAction(id: string): void;
+    }
+
     interface SettingTab {
         /** allows setting the search query for the settings tab (e.g., hotkeys) */
         setQuery?: (query: string) => void;

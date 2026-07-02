@@ -431,21 +431,13 @@ export default class ToolbarSettingsModal extends Modal {
 	 */
 	displayRibbonButton(settingsDiv: HTMLElement) {
 
-		const getRibbonItem = (uuid: string) => {
-			return this.ntb.settings.ribbon.find(item => item.uuid === uuid);
-		}
-
-		const removeRibbonItem = (uuid: string) => {
-			this.ntb.settings.ribbon = this.ntb.settings.ribbon.filter(item => item.uuid !== uuid);
-		}
-
 		const SUB_OPTIONS_ID = 'ribbon-options-group';
-		const initialRibbonItem = getRibbonItem(this.toolbar.uuid);
+		const initialRibbonItem = this.ntb.settings.ribbon.find(item => item.uuid === this.toolbar.uuid);
 
 		new Setting(settingsDiv)
-			.setName("Add to ribbon")
+			.setName(t('setting.ribbon.name'))
 			.setHeading()
-			.setDesc(learnMoreFr("Access this toolbar from the ribbon.", 'Quick-Tools'))
+			.setDesc(learnMoreFr(t('setting.ribbon.description'), 'Ribbon'))
 			.addToggle((toggle: ToggleComponent) => {
 				toggle
 					.setValue(initialRibbonItem !== undefined)
@@ -456,37 +448,15 @@ export default class ToolbarSettingsModal extends Modal {
 						// add or remove
 						if (isInRibbon) {
 							const ribbonItem: RibbonItem = { uuid: this.toolbar.uuid, showAt: PositionType.Menu };
-							// TODO: add to settings in manager?
 							this.ntb.settings.ribbon.push(ribbonItem);
 							this.ntb.ribbon.add(ribbonItem);
 							await this.ntb.settingsManager.save();
-							new Notice("Added to ribbon. Use Obsidian settings to organize ribbon items.");
-							// TODO: do below in manager?
-							// const message = 
-							// 	t('setting.open-command.notice-command-added', { command: commandName, interpolation: { escapeValue: false } }) +
-							// 	(Platform.isPhone ? '' : '\n' + t('setting.hotkeys.notice-open-settings', { cta: Platform.isDesktop ? t('notice.cta-click') : t('notice.cta-tap') }));
-							// const notice = new Notice(message, 10000);
-							// notice.containerEl.addClass('mod-success');
-							// const noticeEl = notice.messageEl;
-							// noticeEl.addClass('note-toolbar-notice-pointer');
-							// this.ntb.registerDomEvent(noticeEl, 'click', () => {
-							// 	notice.hide();
-							// 	this.close();
-							// 	this.ntb.commands.openHotkeySettings(commandName);
-							// });
+							new Notice(t('setting.ribbon.notice-ribbon-added'), 10000).containerEl.addClass('mod-success');
 						}
 						else {
-							// TODO: remove in ribbon manager?
-							removeRibbonItem(this.toolbar.uuid);
-							// this.ntb.settings.ribbon = this.ntb.settings.ribbon.filter(item => item.uuid !== this.toolbar.uuid);
-							// this.ntb.ribbon.remove(this.toolbar.uuid);
+							this.ntb.ribbon.remove(this.toolbar.uuid);
 							await this.ntb.settingsManager.save();
-							// TODO: localize strings
-							new Notice("Removed from ribbon. Restart Obsidian.");
-							// new Notice(t(
-							// 	'setting.open-command.notice-command-removed', 
-							// 	{ command: t('command.name-open-toolbar', {toolbar: this.toolbar.name}) }
-							// )).containerEl.addClass('mod-success');
+							new Notice(t('setting.ribbon.notice-ribbon-removed')).containerEl.addClass('mod-success');
 						}
 					});
 				fixToggleTab(toggle);
@@ -501,8 +471,8 @@ export default class ToolbarSettingsModal extends Modal {
 		ribbonOptionsGroup.addSetting((commandPositionSetting) => {
 			const initialCommandPosition = initialRibbonItem?.showAt || PositionType.Menu;
 			commandPositionSetting
-				.setName(t('setting.open-command.option-position'))
-				.setDesc(t('setting.open-command.option-position-description'))
+				.setName(t('setting.ribbon.option-position'))
+				.setDesc(t('setting.ribbon.option-position-description'))
 				.addDropdown((dropdown) => {
 					dropdown
 						.addOptions(TOOLBAR_SHOW_POSITION_OPTIONS)

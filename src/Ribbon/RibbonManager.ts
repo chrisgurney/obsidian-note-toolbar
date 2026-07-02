@@ -14,7 +14,7 @@ export class RibbonManager {
 	add(item: RibbonItem) {
 		const { icon, label, callback, contextCallback } = this.resolveAction(item);
 		const ribbonEl = this.ntb.addRibbonIcon(icon, label, (event) => callback(event));
-        ribbonEl.setAttribute('id', item.uuid);
+        ribbonEl.setAttribute('id', `ntb-${item.uuid}`);
 		this.ntb.register(() => ribbonEl.remove());
         this.ntb.registerDomEvent(ribbonEl, 'contextmenu', (event: MouseEvent) => {
             contextCallback(event);
@@ -38,16 +38,14 @@ export class RibbonManager {
 
     // removes a ribbon icon by its internal id, including the registry entry;
     // uses internal API as there's no public equivalent
-    // remove(uuid: string): void {
-    //     this.ntb.debug(this.ntb.app);
-    //     const removeId = 'note-toolbar:Main Navigation';
-    //     const found = this.ntb.app.workspace.leftRibbon.items.find(item => item.id === removeId);
-    //     this.ntb.debug(this.ntb.app.workspace.leftRibbon);
-    //     this.ntb.debug(this.ntb.app.workspace.leftRibbon.items);
-    //     if (found) this.ntb.app.workspace.leftRibbon.items.remove(found);
-    //     this.ntb.debug(this.ntb.app.workspace.leftRibbon.items);
-    //     this.ntb.app.workspace.leftRibbon.updateRibbonDisplay();
-    // }
+    remove(uuid: string): void {
+        this.ntb.settings.ribbon = this.ntb.settings.ribbon.filter(item => item.uuid !== uuid);
+        const ribbon = this.ntb.app.workspace.leftRibbon;
+        const ribbonEl = ribbon.ribbonItemsEl.querySelector(`#ntb-${uuid}`);
+        if (!ribbonEl) return; // TODO: error
+        ribbonEl.remove();
+        ribbon.removeRibbonAction(uuid);
+    }
 
 	/**
      * Maps a RibbonItem to the icon/label/callback addRibbonIcon needs.
