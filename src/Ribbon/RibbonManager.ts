@@ -1,0 +1,118 @@
+import NoteToolbarPlugin from 'main';
+import { Menu, MenuItem } from 'obsidian';
+import { RibbonItem, t } from 'Settings/NoteToolbarSettings';
+import ItemModal from 'Settings/UI/Modals/ItemModal';
+import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
+
+export class RibbonManager {
+
+    constructor(private ntb: NoteToolbarPlugin) {}
+
+	/** 
+     * Creates the ribbon icon for a single item and tracks it for removal.
+     */
+	add(item: RibbonItem) {
+		const { icon, label, callback, contextCallback } = this.resolveAction(item);
+		const ribbonEl = this.ntb.addRibbonIcon(icon, label, (event) => callback(event));
+        ribbonEl.setAttribute('id', item.uuid);
+		this.ntb.register(() => ribbonEl.remove());
+        this.ntb.registerDomEvent(ribbonEl, 'contextmenu', (event: MouseEvent) => {
+            contextCallback(event);
+        });
+	}
+
+	/** 
+     * Adds all ribbon items from settings; called on plugin load.
+     */
+	load() {
+		this.ntb.settings.ribbon.forEach(item => this.add(item));
+	}
+
+	/**
+     * Removes all tracked ribbon icons.
+     */
+	unload() {
+        // TODO: call remove() for all IDs in this.ntb.settings.ribbon
+        // this.ntb.settings.ribbon.forEach(item => this.remove(item.uuid));
+	}
+
+    // removes a ribbon icon by its internal id, including the registry entry;
+    // uses internal API as there's no public equivalent
+    // remove(uuid: string): void {
+    //     this.ntb.debug(this.ntb.app);
+    //     const removeId = 'note-toolbar:Main Navigation';
+    //     const found = this.ntb.app.workspace.leftRibbon.items.find(item => item.id === removeId);
+    //     this.ntb.debug(this.ntb.app.workspace.leftRibbon);
+    //     this.ntb.debug(this.ntb.app.workspace.leftRibbon.items);
+    //     if (found) this.ntb.app.workspace.leftRibbon.items.remove(found);
+    //     this.ntb.debug(this.ntb.app.workspace.leftRibbon.items);
+    //     this.ntb.app.workspace.leftRibbon.updateRibbonDisplay();
+    // }
+
+	/**
+     * Maps a RibbonItem to the icon/label/callback addRibbonIcon needs.
+     */
+	private resolveAction(item: RibbonItem): {
+        icon: string; label: string; callback: (event: MouseEvent) => Promise<void>; contextCallback: (event: MouseEvent) => void } 
+    {
+        const resolvedToolbar = this.ntb.settingsManager.getToolbarById(item.uuid);
+        if (resolvedToolbar) {
+            return { 
+                icon: resolvedToolbar.icon || this.ntb.settings.icon, 
+                label: resolvedToolbar.name || t('plugin.note-toolbar'), 
+                callback: async (event: MouseEvent) => { 
+                    if (event.button !== 0) return; // let right-clicks go to the context menu handler
+                    await this.ntb.render.showToolbarAtPosition(resolvedToolbar, item.showAt, 'pointer');
+                },
+                contextCallback: (event: MouseEvent) => {
+                    const contextMenu = new Menu();
+                    contextMenu.addItem((item: MenuItem) => {
+                        item
+                            .setIcon('lucide-pen-box')
+                            .setTitle(t('toolbar.menu-edit-toolbar', { toolbar: resolvedToolbar.name, interpolation: { escapeValue: false } }))
+                            .onClick(() => {
+                                const modal = new ToolbarSettingsModal(this.ntb.app, this.ntb, undefined, resolvedToolbar);
+                                modal.setTitle(t('setting.title-edit-toolbar', { toolbar: resolvedToolbar.name, interpolation: { escapeValue: false } }));
+                                modal.open();
+                            });
+                    });
+                    contextMenu.showAtMouseEvent(event);
+                }
+            }
+        }
+        const resolvedItem = this.ntb.settingsManager.getToolbarItemById(item.uuid);
+        if (resolvedItem) {
+            const itemText = resolvedItem.label || resolvedItem.tooltip || 'Note Toolbar: Item label or tooltip not set.';
+            return {
+                icon: resolvedItem.icon || this.ntb.settings.icon,
+                label: itemText,
+                callback: async (event: MouseEvent) => {
+                    if (event.button !== 0) return; // let right-clicks go to the context menu handler 
+                    const activeFile = this.ntb.app.workspace.getActiveFile();
+                    await this.ntb.items.handleItemLink(resolvedItem, undefined, activeFile);
+                },
+                contextCallback: (event: MouseEvent) => {
+                    const contextMenu = new Menu();
+                    contextMenu.addItem((item: MenuItem) => {
+                        item
+                            .setIcon('lucide-pen-box')
+                            .setTitle(itemText 
+                                ? t('toolbar.menu-edit-item', { text: itemText, interpolation: { escapeValue: false } }) 
+                                : t('toolbar.menu-edit-item_none'))
+                            .onClick(() => {
+                                if (resolvedToolbar) {
+                                    const itemToolbar = this.ntb.settingsManager.getToolbarByItemId(resolvedItem.uuid);
+                                    if (!itemToolbar) return;
+                                    const itemModal = new ItemModal(this.ntb, itemToolbar, resolvedItem);
+                                    itemModal.open();
+                                }
+                            });
+					});
+                    contextMenu.showAtMouseEvent(event);                
+                }
+            }
+        }
+        throw new Error(`Note Toolbar: Ribbon toolbar or item not found: ${item.uuid}`);
+	}
+
+}

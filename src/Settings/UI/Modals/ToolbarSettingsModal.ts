@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from 'main';
 import { App, ButtonComponent, ItemView, Modal, Notice, Platform, Setting, SettingGroup, ToggleComponent, debounce, setIcon } from 'obsidian';
-import { COMMAND_PREFIX_TBAR, POSITION_OPTIONS, PositionType, SETTINGS_DISCLAIMERS, TOOLBAR_COMMAND_POSITION_OPTIONS, ToolbarSettings, t } from 'Settings/NoteToolbarSettings';
+import { COMMAND_PREFIX_TBAR, POSITION_OPTIONS, PositionType, RibbonItem, SETTINGS_DISCLAIMERS, TOOLBAR_SHOW_POSITION_OPTIONS, ToolbarSettings, t } from 'Settings/NoteToolbarSettings';
 import { confirmWithModal } from 'Settings/UI/Modals/ConfirmModal';
 import NoteToolbarSettingTab from 'Settings/UI/NoteToolbarSettingTab';
 import ItemListUi from '../Components/ItemListUi';
@@ -143,6 +143,7 @@ export default class ToolbarSettingsModal extends Modal {
 		this.displayPositionSetting(settingsDiv);
 		const toolbarStyle = new ToolbarStyleUi(this.ntb, this, this.toolbar);
 		toolbarStyle.displayStyleSetting(settingsDiv);
+		this.displayRibbonButton(settingsDiv);
 		this.displayCommandButton(settingsDiv);
 		this.displayDeleteButton(settingsDiv);
 
@@ -425,6 +426,104 @@ export default class ToolbarSettingsModal extends Modal {
 	}
 
 	/**
+	 * Displays option to add this toolbar to the ribbon.
+	 * @param settingsDiv HTMLElement to add the setting to.
+	 */
+	displayRibbonButton(settingsDiv: HTMLElement) {
+
+		const getRibbonItem = (uuid: string) => {
+			return this.ntb.settings.ribbon.find(item => item.uuid === uuid);
+		}
+
+		const removeRibbonItem = (uuid: string) => {
+			this.ntb.settings.ribbon = this.ntb.settings.ribbon.filter(item => item.uuid !== uuid);
+		}
+
+		const SUB_OPTIONS_ID = 'ribbon-options-group';
+		const initialRibbonItem = getRibbonItem(this.toolbar.uuid);
+
+		new Setting(settingsDiv)
+			.setName("Add to ribbon")
+			.setHeading()
+			.setDesc(learnMoreFr("Access this toolbar from the ribbon.", 'Quick-Tools'))
+			.addToggle((toggle: ToggleComponent) => {
+				toggle
+					.setValue(initialRibbonItem !== undefined)
+					.onChange(async (isInRibbon) => {
+						// toggle display of the position setting
+						const commandGroupEl = this.contentEl.querySelector(`#${SUB_OPTIONS_ID}`);
+						commandGroupEl?.setAttribute('data-active', isInRibbon.toString());
+						// add or remove
+						if (isInRibbon) {
+							const ribbonItem: RibbonItem = { uuid: this.toolbar.uuid, showAt: PositionType.Menu };
+							// TODO: add to settings in manager?
+							this.ntb.settings.ribbon.push(ribbonItem);
+							this.ntb.ribbon.add(ribbonItem);
+							await this.ntb.settingsManager.save();
+							new Notice("Added to ribbon. Use Obsidian settings to organize ribbon items.");
+							// TODO: do below in manager?
+							// const message = 
+							// 	t('setting.open-command.notice-command-added', { command: commandName, interpolation: { escapeValue: false } }) +
+							// 	(Platform.isPhone ? '' : '\n' + t('setting.hotkeys.notice-open-settings', { cta: Platform.isDesktop ? t('notice.cta-click') : t('notice.cta-tap') }));
+							// const notice = new Notice(message, 10000);
+							// notice.containerEl.addClass('mod-success');
+							// const noticeEl = notice.messageEl;
+							// noticeEl.addClass('note-toolbar-notice-pointer');
+							// this.ntb.registerDomEvent(noticeEl, 'click', () => {
+							// 	notice.hide();
+							// 	this.close();
+							// 	this.ntb.commands.openHotkeySettings(commandName);
+							// });
+						}
+						else {
+							// TODO: remove in ribbon manager?
+							removeRibbonItem(this.toolbar.uuid);
+							// this.ntb.settings.ribbon = this.ntb.settings.ribbon.filter(item => item.uuid !== this.toolbar.uuid);
+							// this.ntb.ribbon.remove(this.toolbar.uuid);
+							await this.ntb.settingsManager.save();
+							// TODO: localize strings
+							new Notice("Removed from ribbon. Restart Obsidian.");
+							// new Notice(t(
+							// 	'setting.open-command.notice-command-removed', 
+							// 	{ command: t('command.name-open-toolbar', {toolbar: this.toolbar.name}) }
+							// )).containerEl.addClass('mod-success');
+						}
+					});
+				fixToggleTab(toggle);
+			});
+
+		// command options: hot key + position
+		const ribbonOptionsGroupEl = settingsDiv.createDiv('note-toolbar-setting-group-container');
+		ribbonOptionsGroupEl.id = SUB_OPTIONS_ID;
+		ribbonOptionsGroupEl.setAttribute('data-active', (initialRibbonItem !== undefined).toString());
+		const ribbonOptionsGroup = new SettingGroup(ribbonOptionsGroupEl);
+		
+		ribbonOptionsGroup.addSetting((commandPositionSetting) => {
+			const initialCommandPosition = initialRibbonItem?.showAt || PositionType.Menu;
+			commandPositionSetting
+				.setName(t('setting.open-command.option-position'))
+				.setDesc(t('setting.open-command.option-position-description'))
+				.addDropdown((dropdown) => {
+					dropdown
+						.addOptions(TOOLBAR_SHOW_POSITION_OPTIONS)
+						.setValue(initialCommandPosition)
+						.onChange(async (val: string) => {
+							const ribbonItemToUpdate = this.ntb.settings.ribbon.find(item => item.uuid === this.toolbar.uuid);
+							this.ntb.debug('update ribbon action:', ribbonItemToUpdate);
+							if (ribbonItemToUpdate) {
+								ribbonItemToUpdate.showAt = val as PositionType;
+								await this.ntb.settingsManager.save();
+							}
+							else {
+								this.ntb.error('Ribbon item not found for:', this.toolbar.uuid);
+							}
+						});
+					});
+		});
+
+	}
+
+	/**
 	 * Displays option to add a command for this toolbar.
 	 * @param settingsDiv HTMLElement to add the setting to.
 	 */
@@ -511,7 +610,7 @@ export default class ToolbarSettingsModal extends Modal {
 				.setDesc(t('setting.open-command.option-position-description'))
 				.addDropdown((dropdown) => {
 					dropdown
-						.addOptions(TOOLBAR_COMMAND_POSITION_OPTIONS)
+						.addOptions(TOOLBAR_SHOW_POSITION_OPTIONS)
 						.setValue(initialCommandPosition)
 						.onChange(async (val: string) => {
 							this.toolbar.commandPosition = val as PositionType;

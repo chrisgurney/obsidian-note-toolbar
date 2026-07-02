@@ -252,6 +252,7 @@ export interface NoteToolbarSettings {
 	lockCallouts: boolean;
 	obsidianUiVisibility: Record<string, boolean>;
 	onboarding: OnboardingState;
+	ribbon: Array<RibbonItem>;
 	ribbonAction: RibbonAction;
 	ribbonToolbar: string | null;
 	rules: Array<ToolbarRule>;
@@ -289,6 +290,7 @@ export const DEFAULT_SETTINGS: NoteToolbarSettings = {
 	lockCallouts: false,
 	obsidianUiVisibility: {},
 	onboarding: {},
+	ribbon: [],
 	ribbonAction: RibbonAction.Toolbar,
 	ribbonToolbar: null,
 	rules: [],
@@ -341,6 +343,11 @@ export interface ToolbarSettings {
 	positions?: Array<Position>;
 	position: Position;
 	updated: string;
+}
+
+export interface RibbonItem {
+	uuid: string;
+	showAt: PositionType;
 }
 
 export const EMPTY_TOOLBAR: ToolbarSettings = {
@@ -602,7 +609,7 @@ export const TARGET_OPTIONS = {
 	'split': t('setting.item.option-target-split')
 }
 
-export const TOOLBAR_COMMAND_POSITION_OPTIONS = {
+export const TOOLBAR_SHOW_POSITION_OPTIONS = {
 	[PositionType.Floating]: t('setting.position.option-floating'),
 	[PositionType.Menu]: t('setting.position.option-menu'),
 	[PositionType.QuickTools]: t('setting.position.option-quicktools')

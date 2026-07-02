@@ -889,10 +889,14 @@ export default class ToolbarRenderer {
 		}
 	}
 
-    async showToolbarAtPosition(toolbar: ToolbarSettings, position: PositionType) {
+    async showToolbarAtPosition(
+		toolbar: ToolbarSettings, 
+		position: PositionType, 
+		userPosition: 'cursor' | 'pointer' | 'toolbar' = 'cursor'
+	) {
         // if no cursor position (or editor not in focus), fall back to mouse position
         // TODO: fall back to Quick Tools necessary, for tablets?
-        const showAtPosition = this.ntb.utils.getPosition('cursor');
+        const showAtPosition = this.ntb.utils.getPosition(userPosition);
         switch (position) {
             case PositionType.Menu: {
                 if (!showAtPosition) break;

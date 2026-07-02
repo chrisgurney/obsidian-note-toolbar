@@ -18,7 +18,8 @@ import WindowListeners from 'Listeners/WindowListeners';
 import WorkspaceListeners from 'Listeners/WorkspaceListeners';
 import { Platform, Plugin, WorkspaceLeaf, WorkspacesPlugin } from 'obsidian';
 import ProtocolManager from 'Protocol/ProtocolManager';
-import { NoteToolbarSettings, t, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_TIP, VIEW_TYPE_WHATS_NEW } from 'Settings/NoteToolbarSettings';
+import { RibbonManager } from 'Ribbon/RibbonManager';
+import { NoteToolbarSettings, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_TIP, VIEW_TYPE_WHATS_NEW } from 'Settings/NoteToolbarSettings';
 import SettingsIcons from 'Settings/SettingsIcons';
 import SettingsManager from 'Settings/SettingsManager';
 import NoteToolbarSettingTab from 'Settings/UI/NoteToolbarSettingTab';
@@ -43,6 +44,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	hotkeys!: HotkeyHelper;
 	gallery!: GalleryManager;
 	protocolManager!: ProtocolManager;
+	ribbon!: RibbonManager;
 	settings!: NoteToolbarSettings;	
 	settingsManager!: SettingsManager;
 	settingsUtils!: SettingsUIUtils;
@@ -83,6 +85,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.el = new ToolbarElementHelper(this);
 		this.items = new ToolbarItemHandler(this);
 		this.render = new ToolbarRenderer(this);
+		this.ribbon = new RibbonManager(this);
 		this.settingsUtils = new SettingsUIUtils(this);
 		this.toolbars = new ToolbarHandler(this);
 		this.utils = new PluginUtils(this);
@@ -103,10 +106,8 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.settingsManager = new SettingsManager(this);
 		await this.settingsManager.load();
 
-		// add the ribbon icon, on phone only (seems redundant to add on desktop + tablet)
-		if (Platform.isPhone) {
-			this.addRibbonIcon(this.settings.icon, t('plugin.note-toolbar'), (event: MouseEvent) => this.listeners.workspace.onRibbonMenu(event));
-		}
+		// add ribbon items
+		this.ribbon.load();
 
 		// initialize managers + helpers that require settings to be loaded
 		this.api = new NoteToolbarApi(this);
