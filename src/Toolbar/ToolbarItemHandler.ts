@@ -194,7 +194,7 @@ export default class ToolbarItemHandler {
      * @param target where to execute the command.
      */
     handleLinkCommand(commandId: string | null, focus?: ItemFocusType, target?: PaneType  ) {
-        // this.debug('handleLinkCommand:', commandId);
+        // this.ntb.debug('handleLinkCommand:', commandId);
         if (commandId) {
             if (!(commandId in this.ntb.app.commands.commands)) {
                 new Notice(t('notice.error-command-not-found', { command: commandId })).containerEl.addClass('mod-warning');

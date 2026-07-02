@@ -748,7 +748,6 @@ export default class ToolbarRenderer {
 									// fixes issue where focus sticks on executing commands
 									if (toolbarItem.linkAttr.type !== ItemType.Menu) {
 										this.removeFocusStyle();
-										this.ntb.app.workspace.activeEditor?.editor?.focus();
 									}
 								});
 							// disable item if it's not available
