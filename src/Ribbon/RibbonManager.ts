@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from 'main';
-import { Menu, MenuItem } from 'obsidian';
-import { RibbonItem, t } from 'Settings/NoteToolbarSettings';
+import { Menu, MenuItem, Notice } from 'obsidian';
+import { PositionType, RibbonItem, t } from 'Settings/NoteToolbarSettings';
 import ItemModal from 'Settings/UI/Modals/ItemModal';
 import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
 
@@ -25,7 +25,22 @@ export class RibbonManager {
      * Adds all ribbon items from settings; called on plugin load.
      */
 	load() {
-		this.ntb.settings.ribbon.forEach(item => this.add(item));
+        let dneCount = 0;
+		this.ntb.settings.ribbon.forEach((ribbonItem: RibbonItem) => {
+            const toolbar = this.ntb.settingsManager.getToolbarById(ribbonItem.uuid);
+            const item = this.ntb.settingsManager.getToolbarItemById(ribbonItem.uuid);
+            const doesRibbonItemExist = toolbar || item;
+            if (doesRibbonItemExist) {
+                this.add(ribbonItem);
+            }
+            else {
+                this.ntb.error('Ribbon item for toolbar or item not found:', ribbonItem.uuid);
+                dneCount++;
+            }
+        });
+        if (dneCount > 0) {
+            new Notice(t('setting.ribbon.error-not-found'), 10000).containerEl.addClass('mod-warning');
+        }
 	}
 
 	/**
