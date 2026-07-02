@@ -1,7 +1,7 @@
 import { Adapter } from "Adapters/Adapter";
 import NoteToolbarPlugin from "main";
 import { ButtonComponent, debounce, DropdownComponent, ExtraButtonComponent, MarkdownViewModeType, Menu, MenuItem, normalizePath, Notice, PaneType, Platform, setIcon, Setting, SettingGroup, ToggleComponent } from "obsidian";
-import { ComponentType, ItemType, LINK_OPTIONS, SETTINGS_DISCLAIMERS, SettingType, t, TARGET_OPTIONS, ToolbarItemSettings, ToolbarSettings, ViewModeType } from "Settings/NoteToolbarSettings";
+import { ComponentType, ItemType, LINK_OPTIONS, RibbonItem, SETTINGS_DISCLAIMERS, SettingType, t, TARGET_OPTIONS, ToolbarItemSettings, ToolbarSettings, ViewModeType } from "Settings/NoteToolbarSettings";
 import { exportItemToCallout } from "Utils/ImportExport";
 import { addComponentVisibility, getElementPosition, removeComponentVisibility } from "Utils/Utils";
 import CopyTextModal from "../Modals/CopyTextModal";
@@ -464,6 +464,30 @@ export default class ToolbarItemUi {
 
         if (![ItemType.Break, ItemType.Group, ItemType.Separator, ItemType.Spreader].contains(toolbarItem.linkAttr.type)) {
 
+            // add to ribbon / remove from ribbon
+            const initialRibbonItem = this.ntb.settings.ribbon.find(ribbonItem => ribbonItem.uuid === toolbarItem.uuid);
+            menu.addItem((menuItem: MenuItem) => {
+                menuItem
+                    .setTitle(initialRibbonItem ? t('setting.ribbon.name-remove') : t('setting.ribbon.name'))
+                    .setIcon('panel-left')
+                    .onClick(async () => {
+                        // add or remove
+                        if (initialRibbonItem) {
+                            this.ntb.ribbon.remove(toolbarItem.uuid);
+                            await this.ntb.settingsManager.save();
+                            new Notice(t('setting.ribbon.notice-ribbon-removed')).containerEl.addClass('mod-success');
+                        }
+                        else {
+                            const ribbonItem: RibbonItem = { uuid: toolbarItem.uuid };
+                            this.ntb.settings.ribbon.push(ribbonItem);
+                            this.ntb.ribbon.add(ribbonItem);
+                            await this.ntb.settingsManager.save();
+                            new Notice(t('setting.ribbon.notice-ribbon-added'), 10000).containerEl.addClass('mod-success');
+                        }
+                        this.parent.display();
+                    });
+            });
+
             // copy item command URI
             if (toolbarItem.hasCommand) {
                 const itemCommand = this.ntb.commands.getCommandFor(toolbarItem);
@@ -483,7 +507,7 @@ export default class ToolbarItemUi {
                 }
             }
 
-            // add/remove item command
+            // add command / remove command
             menu.addItem((menuItem: MenuItem) => {
                 menuItem
                     .setTitle(toolbarItem.hasCommand ? t('setting.use-item-command.name-remove') : t('setting.use-item-command.name-add'))

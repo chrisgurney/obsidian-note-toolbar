@@ -35,6 +35,7 @@ export class RibbonManager {
             }
             else {
                 this.ntb.error('Ribbon item for toolbar or item not found:', ribbonItem.uuid);
+                this.removeFromSettings(ribbonItem.uuid);
                 dneCount++;
             }
         });
@@ -54,12 +55,17 @@ export class RibbonManager {
     // removes a ribbon icon by its internal id, including the registry entry;
     // uses internal API as there's no public equivalent
     remove(uuid: string): void {
-        this.ntb.settings.ribbon = this.ntb.settings.ribbon.filter(item => item.uuid !== uuid);
+        this.removeFromSettings(uuid);
         const ribbon = this.ntb.app.workspace.leftRibbon;
         const ribbonEl = ribbon.ribbonItemsEl.querySelector(`#ntb-${uuid}`);
         if (!ribbonEl) return; // TODO: error
         ribbonEl.remove();
         ribbon.removeRibbonAction(uuid);
+    }
+
+    private removeFromSettings(uuid: string): void {
+        this.ntb.settings.ribbon = this.ntb.settings.ribbon.filter(ribbonItem => ribbonItem.uuid !== uuid);
+        void this.ntb.settingsManager.save();
     }
 
 	/**
@@ -75,7 +81,7 @@ export class RibbonManager {
                 label: resolvedToolbar.name || t('plugin.note-toolbar'), 
                 callback: async (event: MouseEvent) => { 
                     if (event.button !== 0) return; // let right-clicks go to the context menu handler
-                    await this.ntb.render.showToolbarAtPosition(resolvedToolbar, item.showAt, 'pointer');
+                    await this.ntb.render.showToolbarAtPosition(resolvedToolbar, item.showAt ?? PositionType.Menu, 'pointer');
                 },
                 contextCallback: (event: MouseEvent) => {
                     const contextMenu = new Menu();
@@ -113,7 +119,7 @@ export class RibbonManager {
                                 ? t('toolbar.menu-edit-item', { text: itemText, interpolation: { escapeValue: false } }) 
                                 : t('toolbar.menu-edit-item_none'))
                             .onClick(() => {
-                                if (resolvedToolbar) {
+                                if (resolvedItem) {
                                     const itemToolbar = this.ntb.settingsManager.getToolbarByItemId(resolvedItem.uuid);
                                     if (!itemToolbar) return;
                                     const itemModal = new ItemModal(this.ntb, itemToolbar, resolvedItem);

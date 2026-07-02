@@ -347,7 +347,7 @@ export interface ToolbarSettings {
 
 export interface RibbonItem {
 	uuid: string;
-	showAt: PositionType;
+	showAt?: PositionType;
 }
 
 export const EMPTY_TOOLBAR: ToolbarSettings = {
