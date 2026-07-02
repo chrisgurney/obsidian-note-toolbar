@@ -740,6 +740,7 @@
         },
         "ribbon": {
             "description": "Access this toolbar from the ribbon.",
+            "error-not-found": "Note Toolbar: Some toolbars or items could not be added to the ribbon. See console for errors.",
             "name": "Add to ribbon",
             "notice-ribbon-added": "Added to ribbon. Use Obsidian settings to organize ribbon items.",
             "notice-ribbon-removed": "Removed from ribbon. Restart Obsidian to update.",
