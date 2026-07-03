@@ -31,7 +31,7 @@ export class RibbonManager {
             const item = this.ntb.settingsManager.getToolbarItemById(ribbonItem.uuid);
             const doesRibbonItemExist = toolbar || item;
             if (doesRibbonItemExist) {
-                this.add(ribbonItem);
+                this.addRibbonItem(ribbonItem);
             }
             else {
                 this.ntb.error('Ribbon item for toolbar or item not found:', ribbonItem.uuid);
