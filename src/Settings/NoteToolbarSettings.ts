@@ -294,8 +294,6 @@ export const DEFAULT_SETTINGS: NoteToolbarSettings = {
 	obsidianUiVisibility: {},
 	onboarding: {},
 	ribbon: [],
-	ribbonAction: RibbonAction.Toolbar,
-	ribbonToolbar: null,
 	rules: [],
 	scriptingEnabled: false,
 	showEditInFabMenu: false,
