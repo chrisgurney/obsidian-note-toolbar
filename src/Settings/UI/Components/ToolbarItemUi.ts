@@ -465,7 +465,7 @@ export default class ToolbarItemUi {
         if (![ItemType.Break, ItemType.Group, ItemType.Separator, ItemType.Spreader].contains(toolbarItem.linkAttr.type)) {
 
             // add to ribbon / remove from ribbon
-            const initialRibbonItem = this.ntb.settings.ribbon.find(ribbonItem => ribbonItem.uuid === toolbarItem.uuid);
+            const initialRibbonItem = this.ntb.ribbon.get(toolbarItem.uuid);
             menu.addItem((menuItem: MenuItem) => {
                 menuItem
                     .setTitle(initialRibbonItem ? t('setting.ribbon.name-remove') : t('setting.ribbon.name'))
@@ -479,7 +479,6 @@ export default class ToolbarItemUi {
                         }
                         else {
                             const ribbonItem: RibbonItem = { uuid: toolbarItem.uuid };
-                            this.ntb.settings.ribbon.push(ribbonItem);
                             this.ntb.ribbon.add(ribbonItem);
                             await this.ntb.settingsManager.save();
                             new Notice(t('setting.ribbon.notice-ribbon-added'), 10000).containerEl.addClass('mod-success');

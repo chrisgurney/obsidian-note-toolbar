@@ -740,7 +740,11 @@
         },
         "ribbon": {
             "description": "Access this toolbar from the ribbon.",
-            "error-not-found": "Note Toolbar: Some toolbars or items could not be added to the ribbon. See console for errors.",
+            "error-item-not-found": "Note Toolbar: Item not found.",
+            "error-item-toolbar-not-found": "Note Toolbar: Toolbar for item not found.",
+            "error-not-added": "Note Toolbar: Some toolbars or items could not be added to the ribbon. See console for errors.",
+            "error-not-added-duplicate-label": "Note Toolbar: Item not added to ribbon. Make sure toolbar name or item label/tooltip is unique: {{label}}",
+            "error-toolbar-not-found": "Note Toolbar: Toolbar not found.",
             "name": "Add to ribbon",
             "name-remove": "Remove from ribbon",
             "notice-ribbon-added": "Added to ribbon. Use Obsidian settings to organize ribbon items.",

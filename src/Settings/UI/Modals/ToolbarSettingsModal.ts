@@ -448,7 +448,6 @@ export default class ToolbarSettingsModal extends Modal {
 						// add or remove
 						if (isInRibbon) {
 							const ribbonItem: RibbonItem = { uuid: this.toolbar.uuid, showAt: PositionType.Menu };
-							this.ntb.settings.ribbon.push(ribbonItem);
 							this.ntb.ribbon.add(ribbonItem);
 							await this.ntb.settingsManager.save();
 							new Notice(t('setting.ribbon.notice-ribbon-added'), 10000).containerEl.addClass('mod-success');

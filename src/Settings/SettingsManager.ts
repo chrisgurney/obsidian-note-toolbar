@@ -51,10 +51,12 @@ export default class SettingsManager {
 	 */
 	public async deleteToolbar(id: string): Promise<void> {
 		const toolbarToDelete = this.ntb.settingsManager.getToolbarById(id);
-		toolbarToDelete?.items.forEach((item) => {
+		if (!toolbarToDelete) return;
+		toolbarToDelete.items.forEach((item) => {
 			if (item.hasCommand) this.ntb.removeCommand(COMMAND_PREFIX_ITEM + item.uuid);
 		});
 		this.ntb.removeCommand(COMMAND_PREFIX_TBAR + id);
+		this.ntb.ribbon.remove(toolbarToDelete.uuid);
 		this.ntb.settings.toolbars = this.ntb.settings.toolbars.filter(tbar => tbar.uuid !== id);
 		(['defaultToolbar', 'editorMenuToolbar', 'emptyViewToolbar', 'ribbonToolbar', 'textToolbar', 'webviewerToolbar'] as const).forEach(key => {
 			if (this.ntb.settings[key] === id) this.ntb.settings[key] = null;
@@ -67,6 +69,7 @@ export default class SettingsManager {
 	 */
 	public deleteToolbarItemById(uuid: string): void {
 		this.ntb.removeCommand(COMMAND_PREFIX_ITEM + uuid);
+		this.ntb.ribbon.remove(uuid);
 		for (const toolbar of this.ntb.settings.toolbars) {
 			const index = toolbar.items.findIndex(item => item.uuid === uuid);
 			if (index !== -1) {
