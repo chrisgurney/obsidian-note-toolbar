@@ -24,6 +24,7 @@ export class RibbonManager {
         this.ntb.registerDomEvent(ribbonEl, 'contextmenu', (event: MouseEvent) => {
             contextCallback(event);
         });
+        this.ntb.settings.ribbon.push(item);
 	}
 
     get(uuid: string): RibbonItem | undefined {
