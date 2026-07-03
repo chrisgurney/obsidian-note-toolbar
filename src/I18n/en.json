@@ -740,6 +740,7 @@
         },
         "ribbon": {
             "description": "Access this toolbar from the ribbon.",
+            "description-migration": "New in 1.34: Use toolbar and item settings to access each from the ribbon.",
             "error-item-not-found": "Note Toolbar: Item not found.",
             "error-item-toolbar-not-found": "Note Toolbar: Toolbar for item not found.",
             "error-not-added": "Note Toolbar: Some toolbars or items could not be added to the ribbon. See console for errors.",

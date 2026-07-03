@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from 'main';
 import { ButtonComponent, debounce, Menu, MenuItem, normalizePath, Platform, PluginSettingTab, setIcon, Setting, SettingGroup, ToggleComponent } from 'obsidian';
-import { FolderMapping, OBSIDIAN_UI_ELEMENTS, OBSIDIAN_UI_MOBILE_NAVBAR_OPTIONS, RIBBON_ACTION_OPTIONS, RibbonAction, SETTINGS_VERSION, SettingType, t } from 'Settings/NoteToolbarSettings';
+import { FolderMapping, OBSIDIAN_UI_ELEMENTS, OBSIDIAN_UI_MOBILE_NAVBAR_OPTIONS, SETTINGS_VERSION, SettingType, t } from 'Settings/NoteToolbarSettings';
 import IconSuggestModal from 'Settings/UI/Modals/IconSuggestModal';
 import FolderSuggester from 'Settings/UI/Suggesters/FolderSuggester';
 import ToolbarSuggester from 'Settings/UI/Suggesters/ToolbarSuggester';
@@ -913,49 +913,8 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 
 		navbarGroup.addSetting((ribbonActionSetting) => {
 			ribbonActionSetting
-				.setName(t('setting.display-navbar.ribbon-action.name'))
-				.setDesc(learnMoreFr(t('setting.display-navbar.ribbon-action.description'), 'Toolbars-within-the-app#Ribbon-'))
-				.addDropdown((dropdown) => 
-					dropdown
-						.addOptions(RIBBON_ACTION_OPTIONS)
-						.setValue(this.ntb.settings.ribbonAction)
-						.onChange(async (value: string) => {
-							this.ntb.settings.ribbonAction = value as RibbonAction;
-							// toggle toolbar setting, if necessary
-							const hasRibbonToolbar = (this.ntb.settings.ribbonAction === RibbonAction.ToolbarSelected);
-							const ribbonToolbarEl = this.containerEl.querySelector('#note-toolbar-ribbon-toolbar-setting');
-							ribbonToolbarEl?.setAttribute('data-active', hasRibbonToolbar.toString());
-							await this.ntb.settingsManager.save();
-						})
-					);
-		});
-
-		navbarGroup.addSetting((ribbonToolbarSetting) => {
-			const existingRibbonToolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.ribbonToolbar);
-			ribbonToolbarSetting
-				.setName(t('setting.display-navbar.ribbon-action.option-toolbar-selected-name'))
-				.setDesc(t('setting.display-navbar.ribbon-action.option-toolbar-selected-description'))
-				.setClass('note-toolbar-sub-setting-item')
-				.setClass('note-toolbar-setting-item-control-std-with-help')
-				.addSearch(async (cb) => {
-					new ToolbarSuggester(this.ntb, cb.inputEl);
-					cb.setPlaceholder(t('setting.display-navbar.ribbon-action.option-toolbar-selected-placeholder'))
-					.setValue(existingRibbonToolbar ? existingRibbonToolbar.name : '')
-					.onChange(debounce(async (name) => {
-						const isValid = await this.ntb.settingsUtils.updateItemComponentStatus(this, name, SettingType.Toolbar, ribbonToolbarSetting.controlEl, undefined, 'beforeend');
-						const newToolbar = isValid ? this.ntb.settingsManager.getToolbarByName(name) : undefined;
-						this.ntb.settings.ribbonToolbar = newToolbar?.uuid ?? null;
-						this.ntb.settingsUtils.setFieldPreview(ribbonToolbarSetting, newToolbar);
-						await this.ntb.settingsManager.save();
-					}, 250));
-					await this.ntb.settingsUtils.updateItemComponentStatus(this, existingRibbonToolbar ? existingRibbonToolbar.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend');
-				});
-			// show the sub-setting if needed
-			ribbonToolbarSetting.settingEl.id = 'note-toolbar-ribbon-toolbar-setting';
-			const hasRibbonToolbar = (this.ntb.settings.ribbonAction === RibbonAction.ToolbarSelected);
-			ribbonToolbarSetting.settingEl.setAttribute('data-active', hasRibbonToolbar.toString());
-			// show toolbar preview
-			this.ntb.settingsUtils.setFieldPreview(ribbonToolbarSetting, existingRibbonToolbar);
+				.setName(t('setting.ribbon.name'))
+				.setDesc(learnMoreFr(t('setting.ribbon.description-migration'), 'Ribbon'))
 		});
 
 		collapsibleEl.appendChild(collapsibleContainerEl);
