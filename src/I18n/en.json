@@ -423,17 +423,6 @@
             },
             "description": "Override Obsidian's phone navigation bars.",
             "name": "Navigation bars",
-            "ribbon-action": {
-                "description": "Set the action to take when the ribbon button in the bottom navigation bar is used.",
-                "name": "Ribbon button",
-                "option-item-suggester": "Show all tools",
-                "option-toolbar": "Show current toolbar",
-                "option-toolbar-selected": "Show selected toolbar",
-                "option-toolbar-selected-name": "Ribbon button toolbar",
-                "option-toolbar-selected-description": "Show this toolbar when using the ribbon button.",
-                "option-toolbar-selected-placeholder":  "Select toolbar...",
-                "option-toolbar-suggester": "Show all toolbars"
-            },
             "top": {
                 "description": "Hides Obsidian's top phone navigation bar.",
                 "name": "Top navigation bar visibility"

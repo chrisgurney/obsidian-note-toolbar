@@ -594,13 +594,6 @@ export const POSITION_OPTIONS = {
 	]
 }
 
-export const RIBBON_ACTION_OPTIONS = {
-	[RibbonAction.Toolbar]: (t('setting.display-navbar.ribbon-action.option-toolbar')),
-	[RibbonAction.ToolbarSelected]: t('setting.display-navbar.ribbon-action.option-toolbar-selected'),
-	[RibbonAction.ItemSuggester]: t('setting.display-navbar.ribbon-action.option-item-suggester'),
-	[RibbonAction.ToolbarSuggester]: t('setting.display-navbar.ribbon-action.option-toolbar-suggester'),
-}
-
 export const TARGET_OPTIONS = {
 	'default': t('setting.item.option-target-default'),
 	'modal': t('setting.item.option-target-modal'),
