@@ -11,21 +11,11 @@ export class RibbonManager {
 	/** 
      * Creates the ribbon icon for a single item and tracks it for removal.
      */
-	add(item: RibbonItem) {
-        const { icon, label, callback, contextCallback } = this.resolveAction(item);
-        // const existingLabel = this.ntb.settings.ribbon.find(ribbonItem => ribbonItem.label === label);
-        // if (existingLabel) {
-        //     new Notice(t('setting.ribbon.error-not-added-duplicate-label', { label: label }), 10000).containerEl.addClass('mod-warning');
-        //     return;
-        // }
-		const ribbonEl = this.ntb.addRibbonIcon(icon, label, (event) => callback(event));
-        ribbonEl.setAttribute('id', `ntb-${item.uuid}`);
-		this.ntb.register(() => ribbonEl.remove());
-        this.ntb.registerDomEvent(ribbonEl, 'contextmenu', (event: MouseEvent) => {
-            contextCallback(event);
-        });
+    add(item: RibbonItem): void {
+        this.addRibbonItem(item);
         this.ntb.settings.ribbon.push(item);
-	}
+        void this.ntb.settingsManager.save();
+    }
 
     get(uuid: string): RibbonItem | undefined {
         return this.ntb.settings.ribbon.find(ribbonItem => ribbonItem.uuid === uuid);
@@ -62,8 +52,19 @@ export class RibbonManager {
         // this.ntb.settings.ribbon.forEach(item => this.remove(item.uuid));
 	}
 
-    // removes a ribbon icon by its internal id, including the registry entry;
-    // uses internal API as there's no public equivalent
+    update(item: RibbonItem): void {
+        const index = this.ntb.settings.ribbon.findIndex(r => r.uuid === item.uuid);
+        if (index === -1) return;
+
+        this.remove(item.uuid);
+        this.ntb.settings.ribbon.splice(index, 0, item);
+        this.addRibbonItem(item);
+        void this.ntb.settingsManager.save();
+    }
+
+    /**
+     * Removes a ribbon item by its internal id, including the registry entry.
+     */
     remove(uuid: string): void {
         if (this.get(uuid) === undefined) return;
         this.removeFromSettings(uuid);
@@ -74,6 +75,18 @@ export class RibbonManager {
         // note: this may remove more than one item if multiple items have the same label
         ribbon.removeRibbonAction(`note-toolbar:${ribbonLabel}`);
         ribbonEl.remove();
+    }
+
+    private addRibbonItem(item: RibbonItem): void {
+        const { icon, label, callback, contextCallback } = this.resolveAction(item);
+
+        const ribbonEl = this.ntb.addRibbonIcon(icon, label, (event) => callback(event));
+        ribbonEl.setAttribute('id', `ntb-${item.uuid}`);
+
+        this.ntb.register(() => ribbonEl.remove());
+        this.ntb.registerDomEvent(ribbonEl, 'contextmenu', (event: MouseEvent) => {
+            contextCallback(event);
+        });
     }
 
     private removeFromSettings(uuid: string): void {

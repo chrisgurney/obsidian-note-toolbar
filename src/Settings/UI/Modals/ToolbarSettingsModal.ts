@@ -298,6 +298,12 @@ export default class ToolbarSettingsModal extends Modal {
 			setIcon(settingEl, selectedIcon === t('setting.icon-suggester.option-no-icon') ? 'lucide-plus-square' : selectedIcon);
 			settingEl.setAttribute('data-note-toolbar-no-icon', selectedIcon === t('setting.icon-suggester.option-no-icon') ? 'true' : 'false');
 		});
+        // update ribbon item if it exists
+        const ribbonItem = this.ntb.ribbon.get(this.toolbar.uuid);
+        if (ribbonItem !== undefined) {
+            const updatedRibbonItem = { ...ribbonItem, icon: this.toolbar.icon || this.ntb.settings.icon };
+            this.ntb.ribbon.update(updatedRibbonItem);
+        }
 	}
 
 	/**

@@ -420,6 +420,12 @@ export default class ToolbarItemUi {
             : this.parent.getItemRowEl(toolbarItem.uuid);
         updateItemIcon(this.parent, itemRow, icon);
         if (toolbarItem.hasCommand) await this.ntb.commands.updateItemCommand(toolbarItem, false);
+        // update ribbon item if it exists
+        const ribbonItem = this.ntb.ribbon.get(toolbarItem.uuid);
+        if (ribbonItem !== undefined) {
+            const updatedRibbonItem = { ...ribbonItem, icon: toolbarItem.icon || this.ntb.settings.icon };
+            this.ntb.ribbon.update(updatedRibbonItem);
+        }
     }
 
     /**
