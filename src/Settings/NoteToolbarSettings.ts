@@ -119,6 +119,7 @@ export const enum PositionType {
 	Text = 'text',
 	Top = 'top'
 }
+/** @deprecated 1.34 replaced with ribbon settings for toolbars and toolbar items */
 export const enum RibbonAction {
 	ItemSuggester = 'item-suggester',
 	ToolbarSelected = 'toolbar-selected',
@@ -253,8 +254,10 @@ export interface NoteToolbarSettings {
 	obsidianUiVisibility: Record<string, boolean>;
 	onboarding: OnboardingState;
 	ribbon: Array<RibbonItem>;
-	ribbonAction: RibbonAction;
-	ribbonToolbar: string | null;
+	/** @deprecated 1.34 replaced with ribbon settings for toolbars and toolbar items */
+	ribbonAction?: RibbonAction;
+	/** @deprecated 1.34 replaced with ribbon settings for toolbars and toolbar items */
+	ribbonToolbar?: string | null;
 	rules: Array<ToolbarRule>;
 	scriptingEnabled: boolean;
 	showEditInFabMenu: boolean;
