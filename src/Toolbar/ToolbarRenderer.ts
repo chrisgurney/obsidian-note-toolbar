@@ -748,6 +748,7 @@ export default class ToolbarRenderer {
 									// fixes issue where focus sticks on executing commands
 									if (toolbarItem.linkAttr.type !== ItemType.Menu) {
 										this.removeFocusStyle();
+										// note: was previously also focussing in the editor here, but this was removing focus from command items (like find/replace) used from the menu #575
 									}
 								});
 							// disable item if it's not available
