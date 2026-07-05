@@ -213,7 +213,6 @@ body .workspace .callout[data-callout="note-toolbar"] {
             text-decoration: none;
             font-size: var(--cg-nt-item-font-size);
             border-radius: var(--cg-nt-item-border-radius);
-            height: 100%;
             &.cg-note-toolbar-item-label,
             & .cg-note-toolbar-item-label {
                 white-space: nowrap;
@@ -373,6 +372,7 @@ body .workspace .callout[data-callout="note-toolbar"] {
                     align-items: start;
                     border-radius: var(--radius-m);
                     color: var(--cg-nt-item-text-color);
+                    height: 100%;
                     margin-top: 48px;
                     width: 100%;
                     text-wrap: wrap;
