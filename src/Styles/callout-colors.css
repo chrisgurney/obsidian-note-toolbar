@@ -1,12 +1,12 @@
-.cm-embed-block > div > .callout[data-callout="note-toolbar"] {
+.callout[data-callout="note-toolbar"] {
 
     &[data-callout-metadata*="red"] {
-        a.internal-link, a.external-link {
+        & .callout-content a.internal-link, .callout-content a.external-link {
             color: var(--color-red);
         }
     }
     &[data-callout-metadata*="red-icon"], &[data-callout-metadata*="icon-red"] {
-        a.internal-link,  a.external-link {
+        & .callout-content a.internal-link, .callout-content a.external-link {
             color: inherit;
             & > .cm-iconize-icon svg {
                 color: var(--color-red);
@@ -15,12 +15,12 @@
     }
 
     &[data-callout-metadata*="orange"] {
-        a.internal-link, a.external-link {
+        & .callout-content a.internal-link, .callout-content a.external-link {
             color: var(--color-orange);
         }
     }
     &[data-callout-metadata*="orange-icon"], &[data-callout-metadata*="icon-orange"] {
-        a.internal-link, a.external-link {
+        & .callout-content a.internal-link, .callout-content a.external-link {
             color: inherit;
             & > .cm-iconize-icon svg {
                 color: var(--color-orange);
@@ -29,12 +29,12 @@
     }
 
     &[data-callout-metadata*="yellow"] {
-        a.internal-link, a.external-link {
+        & .callout-content a.internal-link, .callout-content a.external-link {
             color: var(--color-yellow);
         }
     }
     &[data-callout-metadata*="yellow-icon"], &[data-callout-metadata*="icon-yellow"] {
-        a.internal-link, a.external-link {
+        & .callout-content a.internal-link, .callout-content a.external-link {
             color: inherit;
             & > .cm-iconize-icon svg {
                 color: var(--color-yellow);
@@ -43,12 +43,12 @@
     }
 
     &[data-callout-metadata*="green"] {
-        a.internal-link, a.external-link {
+        & .callout-content a.internal-link, .callout-content a.external-link {
             color: var(--color-green);
         }
     }
     &[data-callout-metadata*="green-icon"], &[data-callout-metadata*="icon-green"] {
-        a.internal-link, a.external-link {
+        & .callout-content a.internal-link, .callout-content a.external-link {
             color: inherit;
             & > .cm-iconize-icon svg {
                 color: var(--color-green);
@@ -57,12 +57,12 @@
     }
 
     &[data-callout-metadata*="cyan"] {
-        a.internal-link, a.external-link {
+        & .callout-content a.internal-link, .callout-content a.external-link {
             color: var(--color-cyan);
         }
     }
     &[data-callout-metadata*="cyan-icon"], &[data-callout-metadata*="icon-cyan"] {
-        a.internal-link, a.external-link {
+        & .callout-content a.internal-link, .callout-content a.external-link {
             color: inherit;
             & > .cm-iconize-icon svg {
                 color: var(--color-cyan);
@@ -71,12 +71,12 @@
     }
 
     &[data-callout-metadata*="blue"] {
-        a.internal-link, a.external-link {
+        & .callout-content a.internal-link, .callout-content a.external-link {
             color: var(--color-blue);
         }
     }
     &[data-callout-metadata*="blue-icon"], &[data-callout-metadata*="icon-blue"] {
-        a.internal-link, a.external-link {
+        & .callout-content a.internal-link, .callout-content a.external-link {
             color: inherit;
             & > .cm-iconize-icon svg {
                 color: var(--color-blue);
@@ -85,12 +85,12 @@
     }
 
     &[data-callout-metadata*="purple"] {
-        a.internal-link, a.external-link {
+        & .callout-content a.internal-link, .callout-content a.external-link {
             color: var(--color-purple);
         }
     }
     &[data-callout-metadata*="purple-icon"], &[data-callout-metadata*="icon-purple"] {
-        a.internal-link, a.external-link {
+        & .callout-content a.internal-link, .callout-content a.external-link {
             color: inherit;
             & > .cm-iconize-icon svg {
                 color: var(--color-purple);
@@ -99,12 +99,12 @@
     }
 
     &[data-callout-metadata*="pink"] {
-        a.internal-link, a.external-link {
+        & .callout-content a.internal-link, .callout-content a.external-link {
             color: var(--color-pink);
         }
     }
     &[data-callout-metadata*="pink-icon"], &[data-callout-metadata*="icon-pink"] {
-        a.internal-link, a.external-link {
+        & .callout-content a.internal-link, .callout-content a.external-link {
             color: inherit;
             & > .cm-iconize-icon svg {
                 color: var(--color-pink);
