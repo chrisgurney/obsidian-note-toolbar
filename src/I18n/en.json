@@ -364,6 +364,8 @@
             "warning-empty-view": "⚠️ Warning: This is your New tab view toolbar.",
             "warning-permanent": "This action cannot be undone.",
             "warning-ribbon": "⚠️ Warning: This is your Ribbon button toolbar.",
+            "warning-ribbon-items": "⚠️ Warning: This toolbar has one or more items in the ribbon. They will be removed",
+            "warning-ribbon-toolbar": "⚠️ Warning: This toolbar is in the ribbon.",
             "warning-text": "⚠️ Warning: This is your Selected text toolbar.",
             "warning-webviewer": "⚠️ Warning: This is your Web viewer toolbar."
         },

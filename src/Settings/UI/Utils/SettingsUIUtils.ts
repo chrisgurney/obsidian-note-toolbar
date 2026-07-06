@@ -63,6 +63,20 @@ export default class SettingsUIUtils {
 			}
 		});
 
+		// warnings if this toolbar is in use in the ribbon
+		if (this.ntb.settings.ribbon.some(ribbonItem => ribbonItem.uuid === toolbar.uuid)) {
+			warningsFr
+				.createEl('li', { text: t('setting.delete-toolbar.warning-ribbon-toolbar') })
+				.addClass('mod-warning');
+		}
+		// check if any toolbar items are in use in the ribbon
+		const toolbarItemIds = new Set(toolbar.items.map(item => item.uuid));
+		if (this.ntb.settings.ribbon.some(ribbonItem => toolbarItemIds.has(ribbonItem.uuid))) {
+			warningsFr
+				.createEl('li', { text: t('setting.delete-toolbar.warning-ribbon-items') })
+				.addClass('mod-warning');
+		}
+
 		// check usage stats
 		const usageStats = this.ntb.settingsUtils.getToolbarUsageText(toolbar);
 		if (usageStats) {
