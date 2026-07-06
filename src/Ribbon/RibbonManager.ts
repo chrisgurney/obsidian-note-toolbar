@@ -48,8 +48,7 @@ export class RibbonManager {
      * Removes all tracked ribbon icons.
      */
 	unload() {
-        // TODO: call remove() for all IDs in this.ntb.settings.ribbon
-        // this.ntb.settings.ribbon.forEach(item => this.remove(item.uuid));
+        this.ntb.settings.ribbon.forEach(item => this.removeFromRibbon(item.uuid));
 	}
 
     update(item: RibbonItem): void {
@@ -68,16 +67,7 @@ export class RibbonManager {
     remove(uuid: string): void {
         if (this.get(uuid) === undefined) return;
         this.removeFromSettings(uuid);
-        const ribbon = this.ntb.app.workspace.leftRibbon;
-        const ribbonEl = ribbon.ribbonItemsEl.querySelector(`#ntb-${uuid}`);
-        if (!ribbonEl) {
-            this.ntb.error('Ribbon element not found for removal:', uuid);
-            return;
-        }
-        const ribbonLabel = ribbonEl.getAttribute('aria-label');
-        // note: this may remove more than one item if multiple items have the same label
-        ribbon.removeRibbonAction(`note-toolbar:${ribbonLabel}`);
-        ribbonEl.remove();
+        this.removeFromRibbon(uuid);
     }
 
     private addRibbonItem(item: RibbonItem): void {
@@ -90,6 +80,19 @@ export class RibbonManager {
         this.ntb.registerDomEvent(ribbonEl, 'contextmenu', (event: MouseEvent) => {
             contextCallback(event);
         });
+    }
+
+    private removeFromRibbon(uuid: string): void {
+        const ribbon = this.ntb.app.workspace.leftRibbon;
+        const ribbonEl = ribbon.ribbonItemsEl.querySelector(`#ntb-${uuid}`);
+        if (!ribbonEl) {
+            this.ntb.error('Ribbon element not found for removal:', uuid);
+            return;
+        }
+        const ribbonLabel = ribbonEl.getAttribute('aria-label');
+        // note: this may remove more than one item if multiple items have the same label
+        ribbon.removeRibbonAction(`note-toolbar:${ribbonLabel}`);
+        ribbonEl.remove();
     }
 
     private removeFromSettings(uuid: string): void {

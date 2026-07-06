@@ -185,6 +185,14 @@ export default class CommandManager {
         });
     }
 
+    unload() {
+        this.ntb.settings.toolbars.forEach(toolbar => {
+            if (toolbar.hasCommand && toolbar.name) {
+                this.ntb.removeCommand(COMMAND_PREFIX_TBAR + toolbar.uuid);
+            }
+        });
+    }
+
     // *****************************************************************************
     // #region COMMANDS
     // *****************************************************************************

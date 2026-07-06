@@ -204,6 +204,9 @@ export default class NoteToolbarPlugin extends Plugin {
 		// cleanup listeners
 		this.listeners.doc.cleanup();
 
+		this.commands.unload();
+		this.ribbon.unload();
+
 		this.debug('UNLOADED');
 
 	}
