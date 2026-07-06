@@ -339,7 +339,7 @@ export default class ToolbarRenderer {
      * @param view ItemView to render toolbar in, just used for context
      * @returns HTMLElement cg-note-toolbar-callout
      */
-    async renderAsCallout(toolbar: ToolbarSettings, position: PositionType, file: TFile | null, view: ItemView): Promise<HTMLElement> {
+    async renderAsCallout(toolbar: ToolbarSettings, position: PositionType, file: TFile | null, view?: ItemView): Promise<HTMLElement> {
         
         /* create the unordered list of menu items */
         const noteToolbarUl = createEl("ul");
@@ -407,7 +407,7 @@ export default class ToolbarRenderer {
 	 * @param recursions tracks how deep we are to stop recursion
 	 * @returns Array of HTMLLIElements
 	 */
-	async renderLItems(toolbar: ToolbarSettings, file: TFile | null, view: ItemView, recursions: number = 0): Promise<HTMLLIElement[]> {
+	async renderLItems(toolbar: ToolbarSettings, file: TFile | null, view?: ItemView, recursions: number = 0): Promise<HTMLLIElement[]> {
 
 		if (recursions >= 2) {
 			return []; // stop recursion
@@ -435,7 +435,7 @@ export default class ToolbarRenderer {
 				case ItemType.Break:
 				case ItemType.Separator:
 				case ItemType.Spreader: {
-					if (view.getViewType() === 'empty' && this.ntb.settings.showLaunchpad) continue;
+					if (view?.getViewType() === 'empty' && this.ntb.settings.showLaunchpad) continue;
 					toolbarItem = createEl('data');
 					toolbarItem.setAttribute(
 						item.linkAttr.type === ItemType.Break ? 'data-break' : item.linkAttr.type === ItemType.Separator ? 'data-sep' : 'data-spread', '');
@@ -519,7 +519,7 @@ export default class ToolbarRenderer {
 				if (isLinkEmpty) noteToolbarLi.addClass('hide');
 				// disable if it's a command that's not available
 				if (item.linkAttr.type === ItemType.Command) {
-					const isCommandAvailable = this.ntb.items.isCommandItemAvailable(item, view);
+					const isCommandAvailable = view ? this.ntb.items.isCommandItemAvailable(item, view) : true;
 					if (!isCommandAvailable) {
 						noteToolbarLi.ariaDisabled = 'true';
 						setTooltip(
@@ -1340,7 +1340,6 @@ export default class ToolbarRenderer {
 
 		const activeFile = this.ntb.app.workspace.getActiveFile();
 		const activeView = this.ntb.app.workspace.getActiveViewOfType(MarkdownView) ?? undefined;
-		if (!activeFile || !activeView) return;
 
 		// remove the existing toolbar because we're likely in a new position
 		if (this.floatingToolbarEl) {
