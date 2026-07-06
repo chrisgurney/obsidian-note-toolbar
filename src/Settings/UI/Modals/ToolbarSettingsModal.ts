@@ -461,7 +461,7 @@ export default class ToolbarSettingsModal extends Modal {
 						else {
 							this.ntb.ribbon.remove(this.toolbar.uuid);
 							await this.ntb.settingsManager.save();
-							new Notice(t('setting.ribbon.notice-ribbon-removed')).containerEl.addClass('mod-success');
+							new Notice(t('setting.ribbon.notice-ribbon-removed'), 10000).containerEl.addClass('mod-success');
 						}
 					});
 				fixToggleTab(toggle);

@@ -738,7 +738,7 @@
             "name": "Add to ribbon",
             "name-remove": "Remove from ribbon",
             "notice-ribbon-added": "Added to ribbon. Use Obsidian settings to organize ribbon items.",
-            "notice-ribbon-removed": "Removed from ribbon.",
+            "notice-ribbon-removed": "Removed from ribbon. Restart Obsidian to remove from settings.",
             "option-position": "How to display toolbar",
             "option-position-description": "Choose how the toolbar should be displayed when accessed from the ribbon."
         },

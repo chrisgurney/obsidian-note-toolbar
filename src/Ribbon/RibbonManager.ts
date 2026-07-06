@@ -70,7 +70,10 @@ export class RibbonManager {
         this.removeFromSettings(uuid);
         const ribbon = this.ntb.app.workspace.leftRibbon;
         const ribbonEl = ribbon.ribbonItemsEl.querySelector(`#ntb-${uuid}`);
-        if (!ribbonEl) return;
+        if (!ribbonEl) {
+            this.ntb.error('Ribbon element not found for removal:', uuid);
+            return;
+        }
         const ribbonLabel = ribbonEl.getAttribute('aria-label');
         // note: this may remove more than one item if multiple items have the same label
         ribbon.removeRibbonAction(`note-toolbar:${ribbonLabel}`);

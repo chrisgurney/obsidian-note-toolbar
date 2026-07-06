@@ -481,7 +481,7 @@ export default class ToolbarItemUi {
                         if (initialRibbonItem) {
                             this.ntb.ribbon.remove(toolbarItem.uuid);
                             await this.ntb.settingsManager.save();
-                            new Notice(t('setting.ribbon.notice-ribbon-removed')).containerEl.addClass('mod-success');
+                            new Notice(t('setting.ribbon.notice-ribbon-removed'), 10000).containerEl.addClass('mod-success');
                         }
                         else {
                             const ribbonItem: RibbonItem = { uuid: toolbarItem.uuid };
