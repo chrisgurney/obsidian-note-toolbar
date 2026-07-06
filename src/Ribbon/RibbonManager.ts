@@ -132,7 +132,7 @@ export class RibbonManager {
                     if (event.button !== 0) return; // let right-clicks go to the context menu handler
                     // sanity check: in case toolbar was deleted but still exists in ribbon settings
                     if (!checkToolbarExists(resolvedToolbar.uuid)) return;
-                    await this.ntb.render.showToolbarAtPosition(resolvedToolbar, item.showAt ?? PositionType.Menu, 'pointer');
+                    await this.ntb.render.showToolbarAtPosition(resolvedToolbar, item.showAt ?? PositionType.Menu, 'pointer', event);
                 },
                 contextCallback: (event: MouseEvent) => {
                     const contextMenu = new Menu();
@@ -163,7 +163,7 @@ export class RibbonManager {
                     // sanity check: in case toolbar was deleted but still exists in ribbon settings
                     if (!checkItemExists(resolvedItem.uuid)) return;
                     const activeFile = this.ntb.app.workspace.getActiveFile();
-                    await this.ntb.items.handleItemLink(resolvedItem, undefined, activeFile);
+                    await this.ntb.items.handleItemLink(resolvedItem, event, activeFile);
                 },
                 contextCallback: (event: MouseEvent) => {
                     const contextMenu = new Menu();

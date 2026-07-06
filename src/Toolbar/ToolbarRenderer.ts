@@ -890,20 +890,28 @@ export default class ToolbarRenderer {
 		}
 	}
 
+	/**
+	 * Displays the provided toolbar at the given position, or at the user's cursor/mouse position if not provided.
+	 * @param toolbar toolbar to show
+	 * @param position type of toolbar to show
+	 * @param userPosition where the user expects the toolbar to appear; defaults to `cursor`
+	 * @param userEvent MouseEvent: if provided, userPosition is ignored
+	 */
     async showToolbarAtPosition(
 		toolbar: ToolbarSettings, 
 		position: PositionType, 
-		userPosition: 'cursor' | 'pointer' | 'toolbar' = 'cursor'
+		userPosition: 'cursor' | 'pointer' | 'toolbar' = 'cursor',
+		userEvent: MouseEvent | undefined = undefined
 	) {
         // if no cursor position (or editor not in focus), fall back to mouse position
         // TODO: fall back to Quick Tools necessary, for tablets?
-        const showAtPosition = this.ntb.utils.getPosition(userPosition);
+        const showAt = userEvent ? this.ntb.utils.getEventPosition(userEvent) : this.ntb.utils.getPosition(userPosition);
         switch (position) {
             case PositionType.Menu: {
-                if (!showAtPosition) break;
+                if (!showAt) break;
                 const activeFile = this.ntb.app.workspace.getActiveFile();
                 await this.renderAsMenu(toolbar, activeFile).then(menu => {
-                    menu.showAtPosition({x: showAtPosition.left, y: showAtPosition.top});
+                    menu.showAtPosition({x: showAt.left, y: showAt.top});
                 });
                 // TODO? is there a need to put the focus in the menu? test on tablet
                 break;
@@ -914,8 +922,8 @@ export default class ToolbarRenderer {
             }
             case PositionType.Floating:
             default: {
-                if (!showAtPosition) break;
-                await this.renderFloatingToolbar(toolbar, showAtPosition, PositionType.Floating);
+                if (!showAt) break;
+                await this.renderFloatingToolbar(toolbar, showAt, PositionType.Floating);
                 await this.focus(true);
                 break;
             }
