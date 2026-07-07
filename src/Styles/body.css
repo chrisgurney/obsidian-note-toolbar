@@ -179,10 +179,10 @@ body {
      */
      --cg-nt-settings-link-focus-box-shadow: 0 0 0 2px;
 
+     --ntb-callout-card-max-width: none;
+     --ntb-callout-card-max-width-mobile: none;
      --ntb-callout-card-width: 150px;
      --ntb-callout-card-width-mobile: 125px;
-     --ntb-callout-card-width-max: none;
-     --ntb-callout-card-width-max-mobile: none;
      --ntb-callout-card-flex: 1 1 var(--ntb-callout-card-width);
      --ntb-callout-card-flex-mobile: 1 1 var(--ntb-callout-card-width-mobile);
 

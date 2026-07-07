@@ -360,13 +360,13 @@ body .workspace .callout[data-callout="note-toolbar"] {
                 min-height: 140px;
                 position: relative;
                 text-align: unset;
-                max-width: var(--ntb-callout-card-width-max);
+                max-width: var(--ntb-callout-card-max-width);
                 min-width: var(--ntb-callout-card-width);
                 width: auto;
                 .is-mobile & {
                     box-shadow: inset 0 0 0 var(--border-width) var(--background-modifier-border);
                     flex: var(--ntb-callout-card-flex-mobile);
-                    max-width: var(--ntb-callout-card-width-max-mobile);
+                    max-width: var(--ntb-callout-card-max-width-mobile);
                     min-width: var(--ntb-callout-card-width-mobile);
                 }
                 & a, span.external-link {
