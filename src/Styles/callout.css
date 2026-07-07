@@ -401,6 +401,9 @@ body .workspace .callout[data-callout="note-toolbar"] {
                         display: none; /* fix for Border theme */
                     }
                 }
+                &[data-ntb-type="break"], &[data-ntb-type="separator"] {
+                    display: none;
+                }
                 [data-callout-metadata*="glass"] &, [data-callout-metadata*="mgls"] & {
                     background-color: var(--ntb-liquid-glass-background);
                     backdrop-filter: var(--raised-blur);
