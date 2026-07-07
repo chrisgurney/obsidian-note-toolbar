@@ -401,7 +401,10 @@ body .workspace .callout[data-callout="note-toolbar"] {
                         display: none; /* fix for Border theme */
                     }
                 }
-                &[data-ntb-type="break"], &[data-ntb-type="separator"] {
+                &[data-ntb-type="break"] {
+                    min-height: 0;
+                }
+                &[data-ntb-type="separator"] {
                     display: none;
                 }
                 [data-callout-metadata*="glass"] &, [data-callout-metadata*="mgls"] & {
