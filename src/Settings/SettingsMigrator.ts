@@ -292,9 +292,7 @@ export default class SettingsMigrator {
         if (old_version === 20260428.1) {
             new_version = 20260703.1;
             this.ntb.debug("| starting migration: " + old_version + " -> " + new_version);
-            //@ts-expect-warning: property may not exist
             delete this.ntb.settings.ribbonAction;
-            //@ts-expect-warning: property may not exist
             delete this.ntb.settings.ribbonToolbar;
             // for the next migration to run
             old_version = new_version;
