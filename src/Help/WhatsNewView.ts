@@ -66,12 +66,11 @@ export default class WhatsNewView extends ItemView {
 		// get the content
 		const language = (typeof i18next.language === 'string' && i18next.language.trim()) || 'en';
 		const releaseMd = getRelease(WHATSNEW_VERSION, language);
-		const releaseText = releaseMd ?? t('setting.help.error-failed-to-load', { path: 'Help/Releases', lang: language, name: WHATSNEW_VERSION });
 		markdownEl.empty();
 
 		const rootPath = this.ntb.app.vault.getRoot().path;
 		const component = new Component();
-		await MarkdownRenderer.render(this.ntb.app, releaseText, markdownEl, rootPath, component);
+		await MarkdownRenderer.render(this.ntb.app, releaseMd, markdownEl, rootPath, component);
 
     }
 

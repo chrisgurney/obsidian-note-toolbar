@@ -4,7 +4,6 @@ import { LocalVar } from "Settings/NoteToolbarSettings";
 import { getViewId } from "Utils/Utils";
 import EditorMenu from "../Toolbar/EditorMenu";
 import FileMenu from "../Toolbar/FileMenu";
-import RibbonMenu from "../Toolbar/RibbonMenu";
 import { TbarData } from "../Toolbar/ToolbarRenderer";
 
 /**
@@ -14,7 +13,6 @@ export default class WorkspaceListeners {
 
 	private editorMenu: EditorMenu;
 	private fileMenu: FileMenu;
-	private ribbonMenu: RibbonMenu;
 
 	workspacesPlugin!: WorkspacesPlugin;
     
@@ -33,7 +31,6 @@ export default class WorkspaceListeners {
     ) {
 		this.editorMenu = new EditorMenu(ntb);
 		this.fileMenu = new FileMenu(ntb);
-		this.ribbonMenu = new RibbonMenu(ntb);
 	}
 
 	register() {
@@ -202,14 +199,6 @@ export default class WorkspaceListeners {
 			// don't seem to need a delay before rendering for leaf changes
 			await this.ntb.render.renderForView();
 		}
-	}
-
-	/**
-	 * Handles what happens when the ribbon icon is used.
-	 * @param event MouseEvent
-	 */
-	onRibbonMenu = async (event: MouseEvent) => {
-		await this.ribbonMenu.render(event);
 	}
 
 }

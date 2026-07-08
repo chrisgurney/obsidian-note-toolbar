@@ -217,6 +217,16 @@ export default class PluginUtils {
 		return result;
 	}
 
+	getEventPosition(event: MouseEvent): Rect | undefined {
+		if (!event) return;
+		return {
+			top: event.clientY,
+			bottom: event.clientY,
+			left: event.clientX,
+			right: event.clientX
+		};
+	}
+
 	/**
 	 * Returns a list of plugin IDs for any commands not recognized in the given toolbar.
 	 * @param toolbar ToolbarSettings to check for command usage
@@ -229,7 +239,6 @@ export default class PluginUtils {
 			)
 			.map(item => item.linkAttr.commandId.split(':')[0].trim());
 	}
-
 
 	/**
 	 * Gets the view mode of the most recent leaf.

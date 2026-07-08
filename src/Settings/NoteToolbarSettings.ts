@@ -1,10 +1,10 @@
 import { getLanguage, PaneType } from "obsidian";
 
 /* updates link to plugin's release notes and displays What's New view */
-export const WHATSNEW_VERSION = '1.33';
+export const WHATSNEW_VERSION = '1.34';
 
 /* only update when settings structure changes to trigger migrations */
-export const SETTINGS_VERSION = 20260428.1;
+export const SETTINGS_VERSION = 20260703.1;
 
 // *****************************************************************************
 // #region TRANSLATIONS
@@ -119,6 +119,7 @@ export const enum PositionType {
 	Text = 'text',
 	Top = 'top'
 }
+/** @deprecated In 1.34 replaced with ribbon settings for toolbars and toolbar items */
 export const enum RibbonAction {
 	ItemSuggester = 'item-suggester',
 	ToolbarSelected = 'toolbar-selected',
@@ -252,8 +253,11 @@ export interface NoteToolbarSettings {
 	lockCallouts: boolean;
 	obsidianUiVisibility: Record<string, boolean>;
 	onboarding: OnboardingState;
-	ribbonAction: RibbonAction;
-	ribbonToolbar: string | null;
+	ribbon: Array<RibbonItem>;
+	/** @deprecated In 1.34 replaced with ribbon settings for toolbars and toolbar items */
+	ribbonAction?: RibbonAction;
+	/** @deprecated In 1.34 replaced with ribbon settings for toolbars and toolbar items */
+	ribbonToolbar?: string | null;
 	rules: Array<ToolbarRule>;
 	scriptingEnabled: boolean;
 	showEditInFabMenu: boolean;
@@ -289,8 +293,7 @@ export const DEFAULT_SETTINGS: NoteToolbarSettings = {
 	lockCallouts: false,
 	obsidianUiVisibility: {},
 	onboarding: {},
-	ribbonAction: RibbonAction.Toolbar,
-	ribbonToolbar: null,
+	ribbon: [],
 	rules: [],
 	scriptingEnabled: false,
 	showEditInFabMenu: false,
@@ -330,7 +333,9 @@ export interface ToolbarSettings {
 	customClasses: string;
 	defaultItem: string | null;
 	defaultStyles: string[];
+	description?: string;
 	hasCommand: boolean;
+	icon?: string;
 	items: Array<ToolbarItemSettings>;
 	mobileStyles: string[];
 	/**
@@ -339,6 +344,11 @@ export interface ToolbarSettings {
 	positions?: Array<Position>;
 	position: Position;
 	updated: string;
+}
+
+export interface RibbonItem {
+	uuid: string;
+	showAt?: PositionType;
 }
 
 export const EMPTY_TOOLBAR: ToolbarSettings = {
@@ -585,13 +595,6 @@ export const POSITION_OPTIONS = {
 	]
 }
 
-export const RIBBON_ACTION_OPTIONS = {
-	[RibbonAction.Toolbar]: (t('setting.display-navbar.ribbon-action.option-toolbar')),
-	[RibbonAction.ToolbarSelected]: t('setting.display-navbar.ribbon-action.option-toolbar-selected'),
-	[RibbonAction.ItemSuggester]: t('setting.display-navbar.ribbon-action.option-item-suggester'),
-	[RibbonAction.ToolbarSuggester]: t('setting.display-navbar.ribbon-action.option-toolbar-suggester'),
-}
-
 export const TARGET_OPTIONS = {
 	'default': t('setting.item.option-target-default'),
 	'modal': t('setting.item.option-target-modal'),
@@ -600,7 +603,7 @@ export const TARGET_OPTIONS = {
 	'split': t('setting.item.option-target-split')
 }
 
-export const TOOLBAR_COMMAND_POSITION_OPTIONS = {
+export const TOOLBAR_SHOW_POSITION_OPTIONS = {
 	[PositionType.Floating]: t('setting.position.option-floating'),
 	[PositionType.Menu]: t('setting.position.option-menu'),
 	[PositionType.QuickTools]: t('setting.position.option-quicktools')

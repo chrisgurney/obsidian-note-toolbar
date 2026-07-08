@@ -63,6 +63,20 @@ export default class SettingsUIUtils {
 			}
 		});
 
+		// warnings if this toolbar is in use in the ribbon
+		if (this.ntb.settings.ribbon.some(ribbonItem => ribbonItem.uuid === toolbar.uuid)) {
+			warningsFr
+				.createEl('li', { text: t('setting.delete-toolbar.warning-ribbon-toolbar') })
+				.addClass('mod-warning');
+		}
+		// check if any toolbar items are in use in the ribbon
+		const toolbarItemIds = new Set(toolbar.items.map(item => item.uuid));
+		if (this.ntb.settings.ribbon.some(ribbonItem => toolbarItemIds.has(ribbonItem.uuid))) {
+			warningsFr
+				.createEl('li', { text: t('setting.delete-toolbar.warning-ribbon-items') })
+				.addClass('mod-warning');
+		}
+
 		// check usage stats
 		const usageStats = this.ntb.settingsUtils.getToolbarUsageText(toolbar);
 		if (usageStats) {
@@ -680,6 +694,45 @@ export default class SettingsUIUtils {
 					pluginDescEl.createSpan().setText(t('gallery.label-requires-plugin', { plugin: itemPluginText }));
 				}
 			}
+		}
+	}
+
+	renderToolbarName(toolbar: ToolbarSettings, el: HTMLElement | DocumentFragment, showDescription: boolean = false, showHotkey: boolean = false) {
+        const nameContainerEl = el.createDiv();
+        nameContainerEl.addClass('note-toolbar-tbar-name-container');
+
+        if (toolbar.icon) {
+            const iconEl = nameContainerEl.createSpan();
+            iconEl.addClass('note-toolbar-tbar-icon-muted');
+            setIcon(iconEl, toolbar.icon);
+        }
+
+        const toolbarNameEl = nameContainerEl.createSpan();
+        toolbarNameEl.addClass('note-toolbar-tbar-suggester-name');
+        toolbarNameEl.setText(toolbar.name || t('setting.toolbars.label-tbar-name-not-set'));
+
+		if (showHotkey && !Platform.isPhone) {
+			const tbarCommand = this.ntb.commands.getCommandFor(toolbar);
+			if (tbarCommand) {
+				const hotkeyEl = this.ntb.hotkeys.getHotkeyEl(tbarCommand);
+				if (hotkeyEl) {
+					nameContainerEl.appendChild(hotkeyEl);
+					setTooltip(hotkeyEl, t('setting.use-item-command.tooltip-command-indicator', { command: tbarCommand.name, interpolation: { escapeValue: false } }));
+				}
+				else {
+					const commandIconEl = nameContainerEl.createSpan();
+					commandIconEl.addClass('note-toolbar-setting-command-indicator');
+					setIcon(commandIconEl, 'terminal');
+					setTooltip(commandIconEl, t('setting.use-item-command.tooltip-command-indicator', { command: tbarCommand.name, interpolation: { escapeValue: false } }));
+				}
+			}
+		}
+
+		if (showDescription && toolbar.description) {
+			const descEl = nameContainerEl.createSpan();
+			descEl.addClass('note-toolbar-tbar-desc');
+			descEl.setText(toolbar.description);
+			setTooltip(descEl, toolbar.description);
 		}
 	}
 

@@ -22,9 +22,10 @@ export default defineConfig([
 
     // You can add your own configuration to override or add rules
     rules: {
-      "@typescript-eslint/no-deprecated": "warn",
+      "@typescript-eslint/no-deprecated": "off",
       // temporary: currently using custom types to use some internal APIs
-      "obsidianmd/no-unsupported-api": "warn",
+      "obsidianmd/no-unsupported-api": "off",
+      "obsidianmd/settings-tab/prefer-setting-definitions": "off",
     },
   },
 ]);

@@ -318,7 +318,11 @@ export default class CliHandlers {
     async handleNew(args: CliData): Promise<string> {
         const toolbar = this.ntb.settingsManager.getToolbar(args.name);
         if (toolbar) return t('cli.error-toolbar-already-exists', { toolbar: args.name });
-        const newToolbar = await this.ntb.settingsManager.newToolbar(args.name);
+        if (args.icon) {
+            const icon = getIcon(args.icon);
+            if (!icon) return t('cli.error-invalid-icon', { iconId: args.icon });
+        }
+        const newToolbar = await this.ntb.settingsManager.newToolbar(args.name, args.desc, args.icon);
         return t('cli.success-toolbar-created', { toolbar: newToolbar.name });
     }
 
@@ -448,11 +452,15 @@ export default class CliHandlers {
         
         if (!toolbars.length) return t('cli.no-toolbars');
 
-        type ToolbarSchema = 'name' | 'uuid';
-        const schema: ToolbarSchema[] = verbose ? ['name', 'uuid'] : ['name'];
+        type ToolbarSchema = 'name' | 'description' | 'uuid';
+        const schema: ToolbarSchema[] = verbose ? ['name', 'description', 'uuid'] : ['name'];
 
         const rows = toolbars.map(tb => {
-            const values: Record<ToolbarSchema, string> = { name: tb.name, uuid: tb.uuid };
+            const values: Record<ToolbarSchema, string> = { 
+                name: tb.name, 
+                description: tb.description || '', 
+                uuid: tb.uuid 
+            };
             return schema.map(col => values[col]);
         });
 

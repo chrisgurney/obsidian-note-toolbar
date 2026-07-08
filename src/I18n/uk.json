@@ -393,17 +393,6 @@
             },
             "description": "Змінити навігаційну панель Обсидіу.",
             "name": "Навігаційні панелі",
-            "ribbon-action": {
-                "description": "Дія натискання у стрічковому меню (мобільний).",
-                "name": "Іконка Стрічкового меню",
-                "option-item-suggester": "Показати всі елементи",
-                "option-toolbar": "Показати поточну панель",
-                "option-toolbar-selected": "Показати вибрану панель інструментів",
-                "option-toolbar-selected-name": "Панель інструментів кнопок стрічки",
-                "option-toolbar-selected-description": "Показувати панель інструментів під час використання кнопки Стрічка.",
-                "option-toolbar-selected-placeholder": "Виберіть панель...",
-                "option-toolbar-suggester": "Показати всі панелі"
-            },
             "top": {
                 "description": "Приховує верхню панель навігації Обсидії.",
                 "name": "Верхня видимість панелі навігації"

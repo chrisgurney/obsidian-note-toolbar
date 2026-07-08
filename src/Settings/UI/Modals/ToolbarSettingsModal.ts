@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from 'main';
-import { App, ButtonComponent, ItemView, Modal, Notice, Platform, Setting, SettingGroup, ToggleComponent, debounce } from 'obsidian';
-import { COMMAND_PREFIX_TBAR, POSITION_OPTIONS, PositionType, SETTINGS_DISCLAIMERS, TOOLBAR_COMMAND_POSITION_OPTIONS, ToolbarSettings, t } from 'Settings/NoteToolbarSettings';
+import { App, ButtonComponent, ItemView, Modal, Notice, Platform, Setting, SettingGroup, ToggleComponent, debounce, setIcon } from 'obsidian';
+import { COMMAND_PREFIX_TBAR, POSITION_OPTIONS, PositionType, RibbonItem, SETTINGS_DISCLAIMERS, TOOLBAR_SHOW_POSITION_OPTIONS, ToolbarSettings, t } from 'Settings/NoteToolbarSettings';
 import { confirmWithModal } from 'Settings/UI/Modals/ConfirmModal';
 import NoteToolbarSettingTab from 'Settings/UI/NoteToolbarSettingTab';
 import ItemListUi from '../Components/ItemListUi';
@@ -8,6 +8,7 @@ import ToolbarItemUi from '../Components/ToolbarItemUi';
 import ToolbarStyleUi from '../Components/ToolbarStyleUi';
 import ItemSuggester from '../Suggesters/ItemSuggester';
 import { fixToggleTab, getDisclaimersFr, iconTextFr, learnMoreFr, removeFieldError } from "../Utils/SettingsUIUtils";
+import IconSuggestModal from './IconSuggestModal';
 
 export const enum SettingsAttr {
 	Active = 'data-active',
@@ -142,6 +143,7 @@ export default class ToolbarSettingsModal extends Modal {
 		this.displayPositionSetting(settingsDiv);
 		const toolbarStyle = new ToolbarStyleUi(this.ntb, this, this.toolbar);
 		toolbarStyle.displayStyleSetting(settingsDiv);
+		this.displayRibbonButton(settingsDiv);
 		this.displayCommandButton(settingsDiv);
 		this.displayDeleteButton(settingsDiv);
 
@@ -185,20 +187,24 @@ export default class ToolbarSettingsModal extends Modal {
 	 */
 	displayNameSetting(settingsDiv: HTMLElement) {
 
-		const toolbarNameSetting = new Setting(settingsDiv)
+		const tbarNameSetting = new Setting(settingsDiv)
 			.setName(t('setting.name.name'))
+			.setClass('note-toolbar-setting-item-tbar-name')
 			.setDesc(t('setting.name.description'))
 			.addText(cb => cb
-				.setPlaceholder('Name')
+				.setPlaceholder(t('setting.name.placeholder'))
 				.setValue(this.toolbar.name)
 				.onChange(debounce(async (value) => {
 					// check for existing toolbar with this name
 					const existingToolbar = this.ntb.settingsManager.getToolbarByName(value);
-					if (existingToolbar && existingToolbar !== this.toolbar) {
-						this.ntb.settingsUtils.setFieldError(this, cb.inputEl, 'beforeend', t('setting.name.error-toolbar-already-exists'));
+					removeFieldError(tbarNameSetting.controlEl, 'beforeend');
+					if (value === '') {
+						this.ntb.settingsUtils.setFieldError(this, tbarNameSetting.controlEl, 'beforeend', t('setting.name.error-name-empty'));
+					}
+					else if (existingToolbar && existingToolbar !== this.toolbar) {
+						this.ntb.settingsUtils.setFieldError(this, tbarNameSetting.controlEl, 'beforeend', t('setting.name.error-toolbar-already-exists'));
 					}
 					else {
-						removeFieldError(cb.inputEl, 'beforeend');
 						this.toolbar.name = value;
 						this.toolbar.updated = new Date().toISOString();
 						this.ntb.settings.toolbars.sort((a, b) => a.name.localeCompare(b.name));
@@ -210,9 +216,24 @@ export default class ToolbarSettingsModal extends Modal {
 					}
 				}, 750)));
 
+		const descIconEl = settingsDiv.createDiv();
+		descIconEl.addClass('note-toolbar-setting-item-link-advanced');
+
+		tbarNameSetting.controlEl.addClass('note-toolbar-setting-item-control-advanced');
+		tbarNameSetting.addExtraButton((button) => {
+			button
+				.setIcon('gear')
+				.setTooltip(t('setting.item.button-advanced-tooltip'))
+				.onClick(() => {
+					descIconEl.toggleAttribute('data-active');
+				});
+			button.extraSettingsEl.tabIndex = 0;
+			this.ntb.settingsUtils.handleKeyClick(button.extraSettingsEl);     
+		});
+
 		// allow keyboard navigation down to first toolbar item
 		this.ntb.registerDomEvent(
-			toolbarNameSetting.controlEl, 'keydown', (e) => {
+			tbarNameSetting.controlEl, 'keydown', (e) => {
 				switch (e.key) {
 					case 'ArrowDown': {
 						const selector = '.note-toolbar-setting-items-container .note-toolbar-setting-item-preview';
@@ -225,6 +246,68 @@ export default class ToolbarSettingsModal extends Modal {
 			}
 		)
 
+		const iconDescriptionGroup = new SettingGroup(descIconEl);
+		iconDescriptionGroup.addClass('note-toolbar-setting-tbar-icon-desc-group');
+		
+		// toolbar icon
+		iconDescriptionGroup.addSetting((iconSetting) => {
+			iconSetting
+				.setClass('note-toolbar-setting-tbar-icon')
+				.setName(t('setting.icon.name'))
+				.setDesc(t('setting.icon.description'))
+				.addButton((cb) => {
+					cb.setIcon(this.toolbar.icon || 'lucide-plus-square')
+						.setTooltip(t('setting.icon.tooltip'))
+						.onClick((e) => {
+							e.preventDefault();
+							const modal = new IconSuggestModal(
+								this.ntb, this.toolbar.icon, true, (icon) => this.updateToolbarIcon(cb.buttonEl, icon));
+							modal.open();
+						});
+					cb.buttonEl.setAttribute("data-note-toolbar-no-icon", !this.toolbar.icon ? "true" : "false");
+					this.ntb.registerDomEvent(
+						cb.buttonEl, 'keydown', (e) => {
+							switch (e.key) {
+								case "Enter":
+								case " ": {
+									e.preventDefault();					
+									const modal = new IconSuggestModal(
+										this.ntb, this.toolbar.icon, true, (icon) => this.updateToolbarIcon(cb.buttonEl, icon));
+									modal.open();
+								}
+							}
+						});
+				});
+		});		
+
+		// toolbar description
+		iconDescriptionGroup.addSetting((nameSetting) => {
+			nameSetting
+				.setName(t('setting.description.name'))
+				.setDesc(t('setting.description.description'))
+				.addText(cb => cb
+					.setValue(this.toolbar.description ?? '')
+					.onChange(debounce(async (value) => {
+						this.toolbar.description = value;
+						this.toolbar.updated = new Date().toISOString();
+						await this.ntb.settingsManager.save();
+					}, 750)));
+		});
+
+	}
+
+	updateToolbarIcon(settingEl: HTMLElement, selectedIcon: string) {
+		this.toolbar.icon = (selectedIcon === t('setting.icon-suggester.option-no-icon') ? "" : selectedIcon);
+		void this.ntb.settingsManager.save().then(() => {
+			setIcon(settingEl, selectedIcon === t('setting.icon-suggester.option-no-icon') ? 'lucide-plus-square' : selectedIcon);
+			settingEl.setAttribute('data-note-toolbar-no-icon', selectedIcon === t('setting.icon-suggester.option-no-icon') ? 'true' : 'false');
+		});
+        // update ribbon item if it exists
+        const ribbonItem = this.ntb.ribbon.get(this.toolbar.uuid);
+        if (ribbonItem !== undefined) {
+            const updatedRibbonItem = { ...ribbonItem, icon: this.toolbar.icon || this.ntb.settings.icon };
+            this.ntb.ribbon.update(updatedRibbonItem);
+        }
 	}
 
 	/**
@@ -353,6 +436,73 @@ export default class ToolbarSettingsModal extends Modal {
 	}
 
 	/**
+	 * Displays option to add this toolbar to the ribbon.
+	 * @param settingsDiv HTMLElement to add the setting to.
+	 */
+	displayRibbonButton(settingsDiv: HTMLElement) {
+
+		const SUB_OPTIONS_ID = 'ribbon-options-group';
+		const initialRibbonItem = this.ntb.settings.ribbon.find(item => item.uuid === this.toolbar.uuid);
+
+		new Setting(settingsDiv)
+			.setName(t('setting.ribbon.name'))
+			.setHeading()
+			.setDesc(learnMoreFr(t('setting.ribbon.description'), 'Ribbon'))
+			.addToggle((toggle: ToggleComponent) => {
+				toggle
+					.setValue(initialRibbonItem !== undefined)
+					.onChange(async (isInRibbon) => {
+						// toggle display of the position setting
+						const commandGroupEl = this.contentEl.querySelector(`#${SUB_OPTIONS_ID}`);
+						commandGroupEl?.setAttribute('data-active', isInRibbon.toString());
+						// add or remove
+						if (isInRibbon) {
+							const ribbonItem: RibbonItem = { uuid: this.toolbar.uuid, showAt: PositionType.Menu };
+							this.ntb.ribbon.add(ribbonItem);
+							await this.ntb.settingsManager.save();
+							new Notice(t('setting.ribbon.notice-ribbon-added'), 10000).containerEl.addClass('mod-success');
+						}
+						else {
+							this.ntb.ribbon.remove(this.toolbar.uuid);
+							await this.ntb.settingsManager.save();
+							new Notice(t('setting.ribbon.notice-ribbon-removed'), 10000).containerEl.addClass('mod-success');
+						}
+					});
+				fixToggleTab(toggle);
+			});
+
+		// command options: hot key + position
+		const ribbonOptionsGroupEl = settingsDiv.createDiv('note-toolbar-setting-group-container');
+		ribbonOptionsGroupEl.id = SUB_OPTIONS_ID;
+		ribbonOptionsGroupEl.setAttribute('data-active', (initialRibbonItem !== undefined).toString());
+		const ribbonOptionsGroup = new SettingGroup(ribbonOptionsGroupEl);
+		
+		ribbonOptionsGroup.addSetting((commandPositionSetting) => {
+			const initialCommandPosition = initialRibbonItem?.showAt || PositionType.Menu;
+			commandPositionSetting
+				.setName(t('setting.ribbon.option-position'))
+				.setDesc(t('setting.ribbon.option-position-description'))
+				.addDropdown((dropdown) => {
+					dropdown
+						.addOptions(TOOLBAR_SHOW_POSITION_OPTIONS)
+						.setValue(initialCommandPosition)
+						.onChange(async (val: string) => {
+							const ribbonItemToUpdate = this.ntb.settings.ribbon.find(item => item.uuid === this.toolbar.uuid);
+							this.ntb.debug('update ribbon action:', ribbonItemToUpdate);
+							if (ribbonItemToUpdate) {
+								ribbonItemToUpdate.showAt = val as PositionType;
+								await this.ntb.settingsManager.save();
+							}
+							else {
+								this.ntb.error('Ribbon item not found for:', this.toolbar.uuid);
+							}
+						});
+					});
+		});
+
+	}
+
+	/**
 	 * Displays option to add a command for this toolbar.
 	 * @param settingsDiv HTMLElement to add the setting to.
 	 */
@@ -439,7 +589,7 @@ export default class ToolbarSettingsModal extends Modal {
 				.setDesc(t('setting.open-command.option-position-description'))
 				.addDropdown((dropdown) => {
 					dropdown
-						.addOptions(TOOLBAR_COMMAND_POSITION_OPTIONS)
+						.addOptions(TOOLBAR_SHOW_POSITION_OPTIONS)
 						.setValue(initialCommandPosition)
 						.onChange(async (val: string) => {
 							this.toolbar.commandPosition = val as PositionType;

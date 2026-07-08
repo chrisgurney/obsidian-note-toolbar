@@ -1,7 +1,7 @@
 import { Rect } from "@codemirror/view";
 import NoteToolbarPlugin from "main";
 import { FrontMatterCache, getIcon, ItemView, MarkdownView, Menu, MenuItem, MenuPositionDef, Notice, Platform, setIcon, setTooltip, TFile, TFolder } from "obsidian";
-import { DefaultStyleType, ItemType, LocalVar, MobileStyleType, OBSIDIAN_UI_ELEMENTS, PositionType, t, ToggleUiStateType, ToolbarSettings, ToolbarStyle } from "Settings/NoteToolbarSettings";
+import { DefaultStyleType, ItemType, LocalVar, MobileStyleType, OBSIDIAN_UI_ELEMENTS, PositionType, t, ToggleUiStateType, ToolbarItemSettings, ToolbarSettings, ToolbarStyle } from "Settings/NoteToolbarSettings";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
 import { calcComponentVisToggles, getViewId, hasStyle, isValidUri, putFocusInMenu } from "Utils/Utils";
 
@@ -69,7 +69,7 @@ export default class ToolbarRenderer {
 	 * @returns true if a floating toolbar is in focus; false otherwise.
 	 */
 	isFloatingToolbarFocussed(): boolean {
-		return this.ntb.render.floatingToolbarEl?.contains(activeDocument.activeElement) ?? false;
+		return this.floatingToolbarEl?.contains(activeDocument.activeElement) ?? false;
 	}
 
 	/**
@@ -219,7 +219,7 @@ export default class ToolbarRenderer {
                 break;
 			}
             case PositionType.TabBar: {
-                setIcon(embedBlock, this.ntb.settings.icon);
+                setIcon(embedBlock, toolbar.icon || this.ntb.settings.icon);
                 setTooltip(embedBlock, toolbar.name);
                 embedBlock.addClasses(['clickable-icon', 'view-action']);
                 this.ntb.registerDomEvent(embedBlock, 'click', (e) => this.ntb.toolbars.onClickFab(e, noteToolbarElement!));
@@ -339,7 +339,7 @@ export default class ToolbarRenderer {
      * @param view ItemView to render toolbar in, just used for context
      * @returns HTMLElement cg-note-toolbar-callout
      */
-    async renderAsCallout(toolbar: ToolbarSettings, position: PositionType, file: TFile | null, view: ItemView): Promise<HTMLElement> {
+    async renderAsCallout(toolbar: ToolbarSettings, position: PositionType, file: TFile | null, view?: ItemView): Promise<HTMLElement> {
         
         /* create the unordered list of menu items */
         const noteToolbarUl = createEl("ul");
@@ -407,7 +407,7 @@ export default class ToolbarRenderer {
 	 * @param recursions tracks how deep we are to stop recursion
 	 * @returns Array of HTMLLIElements
 	 */
-	async renderLItems(toolbar: ToolbarSettings, file: TFile | null, view: ItemView, recursions: number = 0): Promise<HTMLLIElement[]> {
+	async renderLItems(toolbar: ToolbarSettings, file: TFile | null, view?: ItemView, recursions: number = 0): Promise<HTMLLIElement[]> {
 
 		if (recursions >= 2) {
 			return []; // stop recursion
@@ -431,82 +431,22 @@ export default class ToolbarRenderer {
 			let toolbarItem: HTMLElement | undefined = undefined;
 			const [showOnDesktop, showOnMobile, , showInMode] = this.ntb.utils.calcItemVisToggles(item.visibility);
 			
-			switch (item.linkAttr.type) {
-				case ItemType.Break:
-				case ItemType.Separator:
-				case ItemType.Spreader: {
-					if (view.getViewType() === 'empty' && this.ntb.settings.showLaunchpad) continue;
-					toolbarItem = createEl('data');
-					toolbarItem.setAttribute(
-						item.linkAttr.type === ItemType.Break ? 'data-break' : item.linkAttr.type === ItemType.Separator ? 'data-sep' : 'data-spread', '');
-					toolbarItem.setAttribute('role', 'separator');
-					break;
+			if (item.linkAttr.type === ItemType.Group) {
+				// recurse into group toolbar items
+				const groupToolbar = this.ntb.settingsManager.getToolbar(item.link);
+				if (groupToolbar) {
+					if (showInMode && (Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
+						const groupLItems = await this.renderLItems(groupToolbar, file, view, recursions + 1);
+						noteToolbarLiArray.push(...groupLItems);
+					}
 				}
-				case ItemType.Group: {
-					const groupToolbar = this.ntb.settingsManager.getToolbar(item.link);
-					if (groupToolbar) {
-						if (showInMode && (Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
-							const groupLItems = await this.renderLItems(groupToolbar, file, view, recursions + 1);
-							noteToolbarLiArray.push(...groupLItems);
-						}
-					}
-					break;
-				}
-				default: {
-					// changed to span as temporary(?) fix (#19) for links on Android
-					toolbarItem = createSpan();
-					toolbarItem.className = "external-link";
-					toolbarItem.setAttrs({
-						'href': item.link,
-						'role': 'link',
-						'rel': 'noopener'
-					});
-					toolbarItem.tabIndex = 0;
-					Object.entries(item.linkAttr).forEach(([key, value]) => {
-						toolbarItem?.setAttribute(`data-toolbar-link-attr-${key}`, value as string);
-					});
-
-					if (!Platform.isPhone) {
-						const itemCommand = this.ntb.commands.getCommandFor(item);
-						const hotkeyText = itemCommand ? this.ntb.hotkeys.getHotkeyText(itemCommand) : undefined;
-						const tooltipText = resolvedTooltips[i] ? resolvedTooltips[i] + (hotkeyText ? ` (${hotkeyText})` : '') : hotkeyText || '';
-						if (tooltipText) setTooltip(toolbarItem, tooltipText, { placement: "top" });
-					}
-
-					this.ntb.registerDomEvent(toolbarItem, 'click', (e) => this.ntb.items.onItemClick(e));
-					this.ntb.registerDomEvent(toolbarItem, 'auxclick', (e) => this.ntb.items.onItemClick(e));
-		
-					const [dkHasIcon, dkHasLabel, mbHasIcon, mbHasLabel, , ] = calcComponentVisToggles(item.visibility);
-					if (item.label) {
-						if (item.icon) {
-							const itemIcon = toolbarItem.createSpan();
-							this.setComponentDisplayClass(itemIcon, dkHasIcon, mbHasIcon);
-							setIcon(itemIcon, item.icon);
-		
-							const itemLabelEl = toolbarItem.createSpan();
-							this.setComponentDisplayClass(itemLabelEl, dkHasLabel, mbHasLabel);
-							itemLabelEl.innerText = resolvedLabels[i];
-							itemLabelEl.addClass('cg-note-toolbar-item-label');
-						}
-						else {
-							this.setComponentDisplayClass(toolbarItem, dkHasLabel, mbHasLabel);
-							toolbarItem.innerText = resolvedLabels[i];
-							toolbarItem.addClass('cg-note-toolbar-item-label');
-						}
-					}
-					else {
-						this.setComponentDisplayClass(toolbarItem, dkHasIcon, mbHasIcon);
-						setIcon(toolbarItem, item.icon);
-					}
-					break;
-				}
+			}
+			else {
+				toolbarItem = this.renderItem(item, view, resolvedLabels, resolvedTooltips);
 			}
 
 			// we have a valid item element setup...
 			if (toolbarItem) {
-				// set the element's ID
-				if (item.uuid) toolbarItem.id = item.uuid;
-				toolbarItem.addClass('cg-note-toolbar-item');
 				// create its list item container 
 				const noteToolbarLi = createEl('li');
 				noteToolbarLi.dataset.index = i.toString();
@@ -519,7 +459,7 @@ export default class ToolbarRenderer {
 				if (isLinkEmpty) noteToolbarLi.addClass('hide');
 				// disable if it's a command that's not available
 				if (item.linkAttr.type === ItemType.Command) {
-					const isCommandAvailable = this.ntb.items.isCommandItemAvailable(item, view);
+					const isCommandAvailable = view ? this.ntb.items.isCommandItemAvailable(item, view) : true;
 					if (!isCommandAvailable) {
 						noteToolbarLi.ariaDisabled = 'true';
 						setTooltip(
@@ -541,6 +481,106 @@ export default class ToolbarRenderer {
 		}
 
 		return noteToolbarLiArray;
+
+	}
+
+	/**
+	 * Renders a single toolbar item and returns it as an HTMLElement.
+	 * @param item ToolbarItemSettings to render
+	 * @param view ItemView, to confirm if we're in an empty view or not
+	 * @param resolvedLabels map of resolved labels for the toolbar items, keyed by item UUID
+	 * @param resolvedTooltips map of resolved tooltips for the toolbar items, keyed by item UUID
+	 * @returns HTMLElement for the toolbar item, or undefined if the item should not be rendered
+	 */
+	renderItem(
+		item: ToolbarItemSettings,
+		view?: ItemView,
+		resolvedLabels?: Record<string, string>,
+		resolvedTooltips?: Record<string, string>
+	): HTMLElement | undefined {
+
+		// TODO: use calcItemVisToggles for the relevant platform here instead?
+		// filter out empty items on display
+		if ((item.label === "" && item.icon === "") 
+			&& ![ItemType.Break, ItemType.Group, ItemType.Separator, ItemType.Spreader].includes(item.linkAttr.type)) {
+			return undefined;
+		}
+
+		let toolbarItem: HTMLElement | undefined = undefined;
+		// const [showOnDesktop, showOnMobile, , showInMode] = this.ntb.utils.calcItemVisToggles(item.visibility);
+		
+		switch (item.linkAttr.type) {
+			case ItemType.Break:
+			case ItemType.Separator:
+			case ItemType.Spreader: {
+				if (view?.getViewType() === 'empty' && this.ntb.settings.showLaunchpad) return undefined;
+				toolbarItem = createEl('data');
+				toolbarItem.setAttribute(
+					item.linkAttr.type === ItemType.Break ? 'data-break' : item.linkAttr.type === ItemType.Separator ? 'data-sep' : 'data-spread', '');
+				toolbarItem.setAttribute('role', 'separator');
+				break;
+			}
+			case ItemType.Group: {
+				// ignore here, as groups are handled in renderLItems() to avoid recursion issues
+				break;
+			}
+			default: {
+				// changed to span as temporary(?) fix (#19) for links on Android
+				toolbarItem = createSpan();
+				toolbarItem.className = "external-link";
+				toolbarItem.setAttrs({
+					'href': item.link,
+					'role': 'link',
+					'rel': 'noopener'
+				});
+				toolbarItem.tabIndex = 0;
+				Object.entries(item.linkAttr).forEach(([key, value]) => {
+					toolbarItem?.setAttribute(`data-toolbar-link-attr-${key}`, value as string);
+				});
+
+				if (!Platform.isPhone) {
+					const itemCommand = this.ntb.commands.getCommandFor(item);
+					const hotkeyText = itemCommand ? this.ntb.hotkeys.getHotkeyText(itemCommand) : undefined;
+					const tooltipText = resolvedTooltips ? (resolvedTooltips[item.uuid] ? resolvedTooltips[item.uuid] + (hotkeyText ? ` (${hotkeyText})` : '') : hotkeyText || '') : '';
+					if (tooltipText) setTooltip(toolbarItem, tooltipText, { placement: "top" });
+				}
+
+				this.ntb.registerDomEvent(toolbarItem, 'click', (e) => this.ntb.items.onItemClick(e));
+				this.ntb.registerDomEvent(toolbarItem, 'auxclick', (e) => this.ntb.items.onItemClick(e));
+	
+				const [dkHasIcon, dkHasLabel, mbHasIcon, mbHasLabel, , ] = calcComponentVisToggles(item.visibility);
+				if (item.label) {
+					if (item.icon) {
+						const itemIcon = toolbarItem.createSpan();
+						this.setComponentDisplayClass(itemIcon, dkHasIcon, mbHasIcon);
+						setIcon(itemIcon, item.icon);
+	
+						const itemLabelEl = toolbarItem.createSpan();
+						this.setComponentDisplayClass(itemLabelEl, dkHasLabel, mbHasLabel);
+						itemLabelEl.innerText = resolvedLabels ? resolvedLabels[item.uuid] : item.label;
+						itemLabelEl.addClass('cg-note-toolbar-item-label');
+					}
+					else {
+						this.setComponentDisplayClass(toolbarItem, dkHasLabel, mbHasLabel);
+						toolbarItem.innerText = resolvedLabels ? resolvedLabels[item.uuid] : item.label;
+						toolbarItem.addClass('cg-note-toolbar-item-label');
+					}
+				}
+				else {
+					this.setComponentDisplayClass(toolbarItem, dkHasIcon, mbHasIcon);
+					setIcon(toolbarItem, item.icon);
+				}
+				break;
+			}
+		}
+
+		if (toolbarItem) {
+			// set the element's ID
+			toolbarItem.id = item.uuid;
+			toolbarItem.addClass('cg-note-toolbar-item');
+		}
+
+		return toolbarItem;
 
 	}
 
@@ -573,7 +613,7 @@ export default class ToolbarRenderer {
 		}
 		else {
 			noteToolbarFabButton.setAttribute('aria-label', toolbar.name);
-			setIcon(noteToolbarFabButton, this.ntb.settings.icon);
+			setIcon(noteToolbarFabButton, toolbar.icon || this.ntb.settings.icon);
 		}
 		
 		noteToolbarFabContainer.append(noteToolbarFabButton);
@@ -748,6 +788,7 @@ export default class ToolbarRenderer {
 									// fixes issue where focus sticks on executing commands
 									if (toolbarItem.linkAttr.type !== ItemType.Menu) {
 										this.removeFocusStyle();
+										// note: was previously also focussing in the editor here, but this was removing focus from command items (like find/replace) used from the menu #575
 									}
 								});
 							// disable item if it's not available
@@ -887,6 +928,133 @@ export default class ToolbarRenderer {
 				menu.showAtPosition( { x: activeWindow.innerWidth, y: position.y, overlap: true, left: true } );
 			}
 		}
+	}
+
+	/**
+	 * Displays the provided toolbar at the given position, or at the user's cursor/mouse position if not provided.
+	 * @param toolbar toolbar to show
+	 * @param position type of toolbar to show
+	 * @param userPosition where the user expects the toolbar to appear; defaults to `cursor`
+	 * @param userEvent MouseEvent: if provided, userPosition is ignored
+	 */
+    async showToolbarAtPosition(
+		toolbar: ToolbarSettings, 
+		position: PositionType, 
+		userPosition: 'cursor' | 'pointer' | 'toolbar' = 'cursor',
+		userEvent: MouseEvent | undefined = undefined
+	) {
+        // if no cursor position (or editor not in focus), fall back to mouse position
+        // TODO: fall back to Quick Tools necessary, for tablets?
+        const showAt = userEvent ? this.ntb.utils.getEventPosition(userEvent) : this.ntb.utils.getPosition(userPosition);
+        switch (position) {
+            case PositionType.Menu: {
+                if (!showAt) break;
+                const activeFile = this.ntb.app.workspace.getActiveFile();
+                await this.renderAsMenu(toolbar, activeFile).then(menu => {
+                    menu.showAtPosition({x: showAt.left, y: showAt.top});
+                });
+                // TODO? is there a need to put the focus in the menu? test on tablet
+                break;
+            }
+            case PositionType.QuickTools: {
+                this.ntb.commands.openQuickTools(toolbar.uuid);
+                break;
+            }
+            case PositionType.Floating:
+            default: {
+                if (!showAt) break;
+                await this.renderFloatingToolbar(toolbar, showAt, PositionType.Floating);
+                await this.focus(true);
+                break;
+            }
+        }
+    }
+
+	/**
+	 * Sets the keyboard's focus on the first visible item in the toolbar.
+	 * @param isFloatingToolbar set to true if this is for the floating toolbar.
+	 */
+	async focus(isFloatingToolbar: boolean = false): Promise<void> {
+
+		this.ntb.debug("focus");
+
+		// display the text toolbar at the current cursor position, if it's not already rendered
+		if (isFloatingToolbar && !this.hasFloatingToolbar()) {
+			// FIXME? remove this check because of Reading/Preview mode?
+			const editor = this.ntb.app.workspace.activeEditor?.editor;
+			if (!editor) {
+				this.ntb.debug('| editor not available - exiting');
+				return;
+			};
+			const toolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.textToolbar);
+			const showAtPosition = this.ntb.utils.getPosition('cursor');
+			await this.renderFloatingToolbar(toolbar, showAtPosition, PositionType.Text);
+		}
+
+		// need to get the type of toolbar first
+		const toolbarEl = this.ntb.el.getToolbarEl(undefined, isFloatingToolbar);
+		const toolbarPosition = toolbarEl?.getAttribute('data-tbar-position');
+		switch (toolbarPosition) {
+			case PositionType.FabRight:
+			case PositionType.FabLeft: {
+				// trigger the menu
+				const toolbarFabEl = toolbarEl?.querySelector('button.cg-note-toolbar-fab') as HTMLButtonElement;
+				this.ntb.debug("| button: ", toolbarFabEl);
+				if (toolbarEl) {
+					const toolbar = this.ntb.settingsManager.getToolbarById(toolbarEl.id);
+					// show the toolbar's menu if it has a default item set
+					if (toolbar?.defaultItem) {
+						// TODO: this is a copy of toolbarFabHandler() -- put in a function?
+						const activeFile = this.ntb.app.workspace.getActiveFile();
+						await this.renderAsMenu(toolbar, activeFile, this.ntb.settings.showEditInFabMenu).then(menu => { 
+							const fabPos = toolbarFabEl.getAttribute('data-tbar-position');
+							// determine menu orientation based on button position
+							const elemRect = toolbarFabEl.getBoundingClientRect();
+							const menuPos = { 
+								x: (fabPos === PositionType.FabLeft ? elemRect.x : elemRect.x + elemRect.width), 
+								y: (elemRect.top - 4),
+								overlap: true,
+								left: (fabPos === PositionType.FabLeft ? false : true)
+							};
+							// store menu position for sub-menu positioning
+							this.ntb.app.saveLocalStorage(LocalVar.MenuPos, JSON.stringify(menuPos));
+							menu.showAtPosition(menuPos);
+						});
+					}
+					else {
+						toolbarFabEl.click();
+					}
+				}
+				break;
+			}
+			case PositionType.Bottom:
+			case PositionType.Floating:
+			case PositionType.Props:
+			case PositionType.Text:
+			case PositionType.Top: {
+				// get the list and set focus on the first visible item
+				const itemsUl: HTMLElement | null = this.ntb.el.getToolbarListEl(isFloatingToolbar);
+				if (itemsUl) {
+					// this.ntb.debug("| toolbar: ", itemsUl);
+					const items = Array.from(itemsUl.children);
+					const visibleItems = items.filter(item => {
+						const hasSpan = item.querySelector('span') !== null; // to filter out separators
+						const isVisible = window.getComputedStyle(item).getPropertyValue('display') !== 'none';
+						return hasSpan && isVisible;
+					});
+					const linkEl = visibleItems[0] ? visibleItems[0].querySelector('span') : null;
+					// this.ntb.debug("| focussed item: ", linkEl);
+					visibleItems[0]?.addClass(ToolbarStyle.ItemFocused);
+					linkEl?.focus();
+				}
+				break;
+			}
+			case PositionType.Hidden:
+			default:
+				// do nothing
+				break;
+		}
+
 	}
 
 	/**
@@ -1212,7 +1380,6 @@ export default class ToolbarRenderer {
 
 		const activeFile = this.ntb.app.workspace.getActiveFile();
 		const activeView = this.ntb.app.workspace.getActiveViewOfType(MarkdownView) ?? undefined;
-		if (!activeFile || !activeView) return;
 
 		// remove the existing toolbar because we're likely in a new position
 		if (this.floatingToolbarEl) {

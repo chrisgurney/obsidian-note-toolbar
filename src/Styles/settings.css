@@ -147,6 +147,12 @@
                 border-top: var(--border-width) solid var(--background-modifier-border);
                 border-radius: 0 0 var(--setting-items-radius) var(--setting-items-radius);
             }
+            & .setting-item-name {
+                align-items: center;
+                flex-wrap: wrap;
+                font-weight: 500;
+                gap: 2px var(--size-4-2);
+            }
             /* options button */
             & button:first-child {
                 opacity: 0;
@@ -248,6 +254,20 @@
 
     }
 
+    & .note-toolbar-setting-item-tbar-name {
+        & .setting-item-control {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--size-4-2);
+            & input[type="text"] {
+                width: unset;
+            }
+        }
+        & .setting-item-control .setting-error {
+            flex-basis: 100%;
+        }
+    }
+
     & .note-toolbar-setting-no-background {
         background-color: transparent;
     }
@@ -306,10 +326,10 @@
             }
         }
         & #tbar-search {
-            padding-top: 0;
             margin-bottom: 0;
-            &:not(.is-mobile &) {
-                padding-bottom: unset;
+            padding: unset;
+            .is-phone & {
+                padding-bottom: var(--size-4-4);
             }
             & .setting-item-info {
                 display: none;
@@ -389,6 +409,39 @@
         }  
     }
 
+}
+
+.note-toolbar-setting-ui,
+.note-toolbar-setting-item-suggester-dialog .note-toolbar-item-suggestion,
+.note-toolbar-setting-item-suggester-dialog .note-toolbar-item-suggestion.is-selected,
+.note-toolbar-tbar-suggestion-container {
+    & .note-toolbar-tbar-icon-muted {
+        height: var(--icon-size);
+        width: var(--icon-size);
+        & svg.svg-icon {
+            color: var(--text-muted);
+            height: var(--icon-size);
+            width: var(--icon-size);
+        }
+    }
+    & .note-toolbar-tbar-desc {
+        color: var(--text-muted);
+        font-size: var(--font-ui-smaller);
+        font-style: italic;
+        font-weight: normal;
+        flex: 0 0 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+.note-toolbar-tbar-name-container {
+    flex-direction: row;
+    flex-wrap: Wrap;
+    display: flex;
+    gap: 2px var(--size-4-2);
+    overflow: hidden;
 }
 
 .modal.note-toolbar-setting-modal-container .modal-content {
@@ -924,36 +977,6 @@ input[type="text"].note-toolbar-setting-error,
         & .setting-item {
             border-bottom: none;
         }
-        & .note-toolbar-setting-item-icon {
-            padding-top: 0;
-            padding-bottom: 0;
-            .is-mobile & {
-                padding-bottom: 0.75em;
-            }
-            & .setting-item-info {
-                display: none;
-            }
-            & .setting-item-control {
-                margin-top: 0;
-                border: dashed 1px;
-                border-radius: var(--input-radius);
-                border-color: var(--background-modifier-border);
-                padding: var(--size-2-2);
-                & .clickable-icon[data-note-toolbar-no-icon="true"] {
-                    & svg {
-                        filter: brightness(0.5);
-                    }
-                }
-                & .clickable-icon:focus-within {
-                    box-shadow: none;
-                }
-                &:focus-within {
-                    border-radius: var(--input-radius);
-                    box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
-                    transition: box-shadow 0.15s ease-in-out, border 0.15s ease-in-out;
-                }
-            }
-        }
         & .note-toolbar-setting-item-label-tooltip {
             border-top: none;
             flex-grow: 1;
@@ -972,6 +995,49 @@ input[type="text"].note-toolbar-setting-error,
                 }
                 .is-mobile & {
                     margin-top: 0;
+                }
+            }
+        }
+    }
+
+    & .note-toolbar-setting-item,
+    & .note-toolbar-setting-tbar-icon-desc-group {
+        & .note-toolbar-setting-item-icon {
+            padding-top: 0;
+            padding-bottom: 0;
+            .is-mobile & {
+                padding-bottom: 0.75em;
+            }
+            & .setting-item-info {
+                display: none;
+            }
+        }
+        & .note-toolbar-setting-tbar-icon {
+             & .setting-item-info {
+                width: 100%;
+            }           
+        }
+        & .note-toolbar-setting-item-icon, 
+        & .note-toolbar-setting-tbar-icon {
+            & .setting-item-control {
+                margin-top: 0;
+                border: dashed 1px;
+                border-radius: var(--input-radius);
+                border-color: var(--background-modifier-border);
+                padding: var(--size-2-2);
+                & .clickable-icon[data-note-toolbar-no-icon="true"],
+                & button[data-note-toolbar-no-icon="true"] {
+                    & svg {
+                        filter: brightness(0.5);
+                    }
+                }
+                & .clickable-icon:focus-within {
+                    box-shadow: none;
+                }
+                &:focus-within {
+                    border-radius: var(--input-radius);
+                    box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
+                    transition: box-shadow 0.15s ease-in-out, border 0.15s ease-in-out;
                 }
             }
         }

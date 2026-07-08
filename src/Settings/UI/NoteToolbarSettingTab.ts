@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from 'main';
-import { ButtonComponent, debounce, Menu, MenuItem, normalizePath, Platform, PluginSettingTab, setIcon, Setting, SettingGroup, setTooltip, ToggleComponent } from 'obsidian';
-import { FolderMapping, OBSIDIAN_UI_ELEMENTS, OBSIDIAN_UI_MOBILE_NAVBAR_OPTIONS, RIBBON_ACTION_OPTIONS, RibbonAction, SETTINGS_VERSION, SettingType, t } from 'Settings/NoteToolbarSettings';
+import { ButtonComponent, debounce, Menu, MenuItem, normalizePath, Platform, PluginSettingTab, setIcon, Setting, SettingGroup, ToggleComponent } from 'obsidian';
+import { FolderMapping, OBSIDIAN_UI_ELEMENTS, OBSIDIAN_UI_MOBILE_NAVBAR_OPTIONS, SETTINGS_VERSION, SettingType, t } from 'Settings/NoteToolbarSettings';
 import IconSuggestModal from 'Settings/UI/Modals/IconSuggestModal';
 import FolderSuggester from 'Settings/UI/Suggesters/FolderSuggester';
 import ToolbarSuggester from 'Settings/UI/Suggesters/ToolbarSuggester';
@@ -237,24 +237,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 				(toolbar) => {
 					
 					const toolbarNameFr = new DocumentFragment();
-					toolbarNameFr.append(toolbar.name ? toolbar.name : t('setting.toolbars.label-tbar-name-not-set'));
-					// show hotkey
-					if (!Platform.isPhone) {
-						const tbarCommand = this.ntb.commands.getCommandFor(toolbar);
-						if (tbarCommand) {
-							const hotkeyEl = this.ntb.hotkeys.getHotkeyEl(tbarCommand);
-							if (hotkeyEl) {
-								toolbarNameFr.appendChild(hotkeyEl);
-								setTooltip(hotkeyEl, t('setting.use-item-command.tooltip-command-indicator', { command: tbarCommand.name, interpolation: { escapeValue: false } }));
-							}
-							else {
-								const commandIconEl = toolbarNameFr.createSpan();
-								commandIconEl.addClass('note-toolbar-setting-command-indicator');
-								setIcon(commandIconEl, 'terminal');
-								setTooltip(commandIconEl, t('setting.use-item-command.tooltip-command-indicator', { command: tbarCommand.name, interpolation: { escapeValue: false } }));
-							}
-						}
-					}
+					this.ntb.settingsUtils.renderToolbarName(toolbar, toolbarNameFr, true, true);
 
 					const toolbarListItemSetting = new Setting(toolbarListDiv)
 						.setName(toolbarNameFr)
@@ -341,6 +324,8 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 					window.requestAnimationFrame(() => {
 						toolbarListItemSetting.descEl.append(this.ntb.settingsUtils.createToolbarPreviewFr(toolbar, this.ntb.settingsManager));
 					});
+
+					if (toolbar.description) toolbarListItemSetting.settingEl.setAttr('data-tbar-desc', toolbar.description);
 
 					toolbarListItemSetting.settingEl.setAttribute('data-tbar-uuid', toolbar.uuid);
 					if (!toolbar.name) toolbarListItemSetting.nameEl.addClass('mod-warning');
@@ -436,13 +421,15 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 						.forEach((toolbarEl) => {
 							// search contents of name and item text
 							const toolbarName = toolbarEl.querySelector('.setting-item-name')?.textContent?.toLowerCase() ?? '';
-							const allItemText = Array.from(toolbarEl.querySelectorAll('*:not(svg)'))
-								.flatMap(el => Array.from(el.childNodes))
-								.filter(node => node.nodeType === Node.TEXT_NODE)
-								.map(node => node.textContent?.trim())
-								.filter(text => text)
-								.join(' ')
-								.toLowerCase();
+							const allItemText = [
+								toolbarEl.getAttribute('data-tbar-desc') ?? '',
+								Array.from(toolbarEl.querySelectorAll('*:not(svg)'))
+									.flatMap(el => Array.from(el.childNodes))
+									.filter(node => node.nodeType === Node.TEXT_NODE)
+									.map(node => node.textContent?.trim())
+									.filter(text => text)
+									.join(' ')
+							].join(' ').toLowerCase();
 							// const allItemTooltips = Array.from(toolbarEl.querySelectorAll('.note-toolbar-setting-toolbar-list-preview-item[aria-label]'))
 							// 	.map(el => el.getAttribute('aria-label')?.trim())
 							// 	.filter(label => label)
@@ -926,49 +913,8 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 
 		navbarGroup.addSetting((ribbonActionSetting) => {
 			ribbonActionSetting
-				.setName(t('setting.display-navbar.ribbon-action.name'))
-				.setDesc(learnMoreFr(t('setting.display-navbar.ribbon-action.description'), 'Toolbars-within-the-app#Ribbon-'))
-				.addDropdown((dropdown) => 
-					dropdown
-						.addOptions(RIBBON_ACTION_OPTIONS)
-						.setValue(this.ntb.settings.ribbonAction)
-						.onChange(async (value: string) => {
-							this.ntb.settings.ribbonAction = value as RibbonAction;
-							// toggle toolbar setting, if necessary
-							const hasRibbonToolbar = (this.ntb.settings.ribbonAction === RibbonAction.ToolbarSelected);
-							const ribbonToolbarEl = this.containerEl.querySelector('#note-toolbar-ribbon-toolbar-setting');
-							ribbonToolbarEl?.setAttribute('data-active', hasRibbonToolbar.toString());
-							await this.ntb.settingsManager.save();
-						})
-					);
-		});
-
-		navbarGroup.addSetting((ribbonToolbarSetting) => {
-			const existingRibbonToolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.ribbonToolbar);
-			ribbonToolbarSetting
-				.setName(t('setting.display-navbar.ribbon-action.option-toolbar-selected-name'))
-				.setDesc(t('setting.display-navbar.ribbon-action.option-toolbar-selected-description'))
-				.setClass('note-toolbar-sub-setting-item')
-				.setClass('note-toolbar-setting-item-control-std-with-help')
-				.addSearch(async (cb) => {
-					new ToolbarSuggester(this.ntb, cb.inputEl);
-					cb.setPlaceholder(t('setting.display-navbar.ribbon-action.option-toolbar-selected-placeholder'))
-					.setValue(existingRibbonToolbar ? existingRibbonToolbar.name : '')
-					.onChange(debounce(async (name) => {
-						const isValid = await this.ntb.settingsUtils.updateItemComponentStatus(this, name, SettingType.Toolbar, ribbonToolbarSetting.controlEl, undefined, 'beforeend');
-						const newToolbar = isValid ? this.ntb.settingsManager.getToolbarByName(name) : undefined;
-						this.ntb.settings.ribbonToolbar = newToolbar?.uuid ?? null;
-						this.ntb.settingsUtils.setFieldPreview(ribbonToolbarSetting, newToolbar);
-						await this.ntb.settingsManager.save();
-					}, 250));
-					await this.ntb.settingsUtils.updateItemComponentStatus(this, existingRibbonToolbar ? existingRibbonToolbar.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend');
-				});
-			// show the sub-setting if needed
-			ribbonToolbarSetting.settingEl.id = 'note-toolbar-ribbon-toolbar-setting';
-			const hasRibbonToolbar = (this.ntb.settings.ribbonAction === RibbonAction.ToolbarSelected);
-			ribbonToolbarSetting.settingEl.setAttribute('data-active', hasRibbonToolbar.toString());
-			// show toolbar preview
-			this.ntb.settingsUtils.setFieldPreview(ribbonToolbarSetting, existingRibbonToolbar);
+				.setName(t('setting.ribbon.name'))
+				.setDesc(learnMoreFr(t('setting.ribbon.description-migration'), 'Ribbon'))
 		});
 
 		collapsibleEl.appendChild(collapsibleContainerEl);

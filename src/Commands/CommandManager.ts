@@ -1,4 +1,4 @@
-import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, EMPTY_TOOLBAR_ID, LocalVar, NONE_TOOLBAR_ID, PositionType, t, ToggleUiStateType, ToolbarItemSettings, ToolbarSettings, ToolbarStyle, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP } from "Settings/NoteToolbarSettings";
+import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, EMPTY_TOOLBAR_ID, LocalVar, NONE_TOOLBAR_ID, t, ToggleUiStateType, ToolbarItemSettings, ToolbarSettings, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP } from "Settings/NoteToolbarSettings";
 import CommandSuggestModal from "Settings/UI/Modals/CommandSuggestModal";
 import CopyTextModal from "Settings/UI/Modals/CopyTextModal";
 import ItemSuggestModal from "Settings/UI/Modals/ItemSuggestModal";
@@ -23,8 +23,8 @@ export default class CommandManager {
 
         this.ntb.addCommand({ id: 'copy-cmd-uri', name: t('command.name-copy-cmd-uri'), callback: () => this.copy(false) });
         this.ntb.addCommand({ id: 'copy-cmd-as-data-element', name: t('command.name-copy-cmd-as-data-element'), callback: () => this.copy(true) });
-        this.ntb.addCommand({ id: 'focus', name: t('command.name-focus'), callback: async () => this.focus() });
-        this.ntb.addCommand({ id: 'focus-text-toolbar', name: t('command.name-focus-text-toolbar'), callback: async () => this.focus(true) });
+        this.ntb.addCommand({ id: 'focus', name: t('command.name-focus'), callback: async () => this.ntb.render.focus() });
+        this.ntb.addCommand({ id: 'focus-text-toolbar', name: t('command.name-focus-text-toolbar'), callback: async () => this.ntb.render.focus(true) });
         this.ntb.addCommand({ id: 'open-gallery', name: t('command.name-open-gallery'), callback: async () => this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true }) });
         this.ntb.addCommand({ id: 'open-help', name: t('command.name-open-help'), callback: async () => this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_HELP, active: true }) });
 
@@ -179,34 +179,16 @@ export default class CommandManager {
                     id: COMMAND_PREFIX_TBAR + toolbar.uuid,
                     name: t('command.name-open-toolbar', { toolbar: toolbar.name, interpolation: { escapeValue: false } }),
                     icon: this.ntb.settings.icon,
-                    callback: async () => {
-                        // if no cursor position (or editor not in focus), fall back to mouse position
-                        // TODO: fall back to Quick Tools necessary, for tablets?
-                        const showAtPosition = this.ntb.utils.getPosition('cursor');
-                        switch (toolbar.commandPosition) {
-                            case PositionType.Menu: {
-                                if (!showAtPosition) break;
-                                const activeFile = this.ntb.app.workspace.getActiveFile();
-                                await this.ntb.render.renderAsMenu(toolbar, activeFile).then(menu => {
-                                    menu.showAtPosition({x: showAtPosition.left, y: showAtPosition.top});
-                                });
-                                // TODO? is there a need to put the focus in the menu? test on tablet
-                                break;
-                            }
-                            case PositionType.QuickTools: {
-                                this.ntb.commands.openQuickTools(toolbar.uuid);
-                                break;
-                            }
-                            case PositionType.Floating:
-                            default: {
-                                if (!showAtPosition) break;
-                                await this.ntb.render.renderFloatingToolbar(toolbar, showAtPosition, PositionType.Floating);
-                                await this.focus(true);
-                                break;
-                            }
-                        }
-                    }}
-                );
+                    callback: async () => await this.ntb.render.showToolbarAtPosition(toolbar, toolbar.commandPosition)
+                });
+            }
+        });
+    }
+
+    unload() {
+        this.ntb.settings.toolbars.forEach(toolbar => {
+            if (toolbar.hasCommand && toolbar.name) {
+                this.ntb.removeCommand(COMMAND_PREFIX_TBAR + toolbar.uuid);
             }
         });
     }
@@ -214,93 +196,6 @@ export default class CommandManager {
     // *****************************************************************************
     // #region COMMANDS
     // *****************************************************************************
-
-    /**
-     * Sets the keyboard's focus on the first visible item in the toolbar.
-     * @param isFloatingToolbar set to true if this is for the floating toolbar.
-     */
-    async focus(isFloatingToolbar: boolean = false): Promise<void> {
-
-        this.ntb.debug("focus");
-
-        // display the text toolbar at the current cursor position, if it's not already rendered
-        if (isFloatingToolbar && !this.ntb.render.hasFloatingToolbar()) {
-            // FIXME? remove this check because of Reading/Preview mode?
-            const editor = this.ntb.app.workspace.activeEditor?.editor;
-            if (!editor) {
-                this.ntb.debug('| editor not available - exiting');
-                return;
-            };
-            const toolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.textToolbar);
-            const showAtPosition = this.ntb.utils.getPosition('cursor');
-            await this.ntb.render.renderFloatingToolbar(toolbar, showAtPosition, PositionType.Text);
-        }
-
-        // need to get the type of toolbar first
-        const toolbarEl = this.ntb.el.getToolbarEl(undefined, isFloatingToolbar);
-        const toolbarPosition = toolbarEl?.getAttribute('data-tbar-position');
-        switch (toolbarPosition) {
-            case PositionType.FabRight:
-            case PositionType.FabLeft: {
-                // trigger the menu
-                const toolbarFabEl = toolbarEl?.querySelector('button.cg-note-toolbar-fab') as HTMLButtonElement;
-                this.ntb.debug("| button: ", toolbarFabEl);
-                if (toolbarEl) {
-                    const toolbar = this.ntb.settingsManager.getToolbarById(toolbarEl.id);
-                    // show the toolbar's menu if it has a default item set
-                    if (toolbar?.defaultItem) {
-                        // TODO: this is a copy of toolbarFabHandler() -- put in a function?
-                        const activeFile = this.ntb.app.workspace.getActiveFile();
-                        await this.ntb.render.renderAsMenu(toolbar, activeFile, this.ntb.settings.showEditInFabMenu).then(menu => { 
-                            const fabPos = toolbarFabEl.getAttribute('data-tbar-position');
-                            // determine menu orientation based on button position
-                            const elemRect = toolbarFabEl.getBoundingClientRect();
-                            const menuPos = { 
-                                x: (fabPos === PositionType.FabLeft ? elemRect.x : elemRect.x + elemRect.width), 
-                                y: (elemRect.top - 4),
-                                overlap: true,
-                                left: (fabPos === PositionType.FabLeft ? false : true)
-                            };
-                            // store menu position for sub-menu positioning
-                            this.ntb.app.saveLocalStorage(LocalVar.MenuPos, JSON.stringify(menuPos));
-                            menu.showAtPosition(menuPos);
-                        });
-                    }
-                    else {
-                        toolbarFabEl.click();
-                    }
-                }
-                break;
-            }
-            case PositionType.Bottom:
-            case PositionType.Floating:
-            case PositionType.Props:
-            case PositionType.Text:
-            case PositionType.Top: {
-                // get the list and set focus on the first visible item
-                const itemsUl: HTMLElement | null = this.ntb.el.getToolbarListEl(isFloatingToolbar);
-                if (itemsUl) {
-                    // this.ntb.debug("| toolbar: ", itemsUl);
-                    const items = Array.from(itemsUl.children);
-                    const visibleItems = items.filter(item => {
-                        const hasSpan = item.querySelector('span') !== null; // to filter out separators
-                        const isVisible = window.getComputedStyle(item).getPropertyValue('display') !== 'none';
-                        return hasSpan && isVisible;
-                    });
-                    const linkEl = visibleItems[0] ? visibleItems[0].querySelector('span') : null;
-                    // this.ntb.debug("| focussed item: ", linkEl);
-                    visibleItems[0]?.addClass(ToolbarStyle.ItemFocused);
-                    linkEl?.focus();
-                }
-                break;
-            }
-            case PositionType.Hidden:
-            default:
-                // do nothing
-                break;
-        }
-
-    }
 
     /**
      * Provides the selected command as a NTB URI or callout data element.
@@ -374,7 +269,7 @@ export default class CommandManager {
      * Opens the toolbar suggester modal.
      */
     openToolbarSuggester() {
-        const modal = new ToolbarSuggestModal(this.ntb, false, false, false, (toolbar: ToolbarSettings) => {
+        const modal = new ToolbarSuggestModal(this.ntb, true, false, false, (toolbar: ToolbarSettings) => {
             this.ntb.commands.openQuickTools(toolbar.uuid);
         }, 'QuickTools');
         modal.open();

@@ -332,13 +332,6 @@
             "bottom": {
                 "description": "Hides actions in Obsidian's mobile navigation bar.",
                 "name": "Navbar item visibility"
-            },
-            "ribbon-action": {
-                "description": "リボンアイコン（スマートフォン）を使用したときのアクションを設定します。",
-                "name": "リボン",
-                "option-item-suggester": "すべてのツールを表示",
-                "option-toolbar": "現在のツールバーを表示",
-                "option-toolbar-suggester": "すべてのツールバーを表示"
             }
         },
         "display-rules": {

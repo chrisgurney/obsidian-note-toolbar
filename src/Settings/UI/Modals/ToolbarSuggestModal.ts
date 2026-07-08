@@ -97,7 +97,9 @@ export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
         }
 
         pluginToolbars.forEach((toolbar: ToolbarSettings) => {
-            if (toolbar.name !== '' && toolbar.name.toLowerCase().includes(lowerCaseInputStr)) {
+            const name = toolbar.name.toLowerCase();
+            const desc = (toolbar.description ?? '').toLowerCase();
+            if (toolbar.name !== '' && (name.includes(lowerCaseInputStr) || desc.includes(lowerCaseInputStr))) {
                 sortedSuggestions.push(toolbar);
             }
         });
@@ -106,8 +108,12 @@ export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
         const recentToolbars = JSON.parse(this.ntb.app.loadLocalStorage(LocalVar.RecentToolbars) as string || '[]') as string[];
         sortedSuggestions.sort((a, b) => {
             const query = lowerCaseInputStr;
+
             const aName = a.name.toLowerCase();
             const bName = b.name.toLowerCase();
+
+            const aDesc = (a.description ?? '').toLowerCase();
+            const bDesc = (b.description ?? '').toLowerCase();
 
             const aStartsWith = aName.startsWith(query);
             const bStartsWith = bName.startsWith(query);
@@ -129,6 +135,13 @@ export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
             if (aIncludes && !bIncludes) return -1;
             if (!aIncludes && bIncludes) return 1;
 
+            const aDescIncludes = aDesc.includes(query);
+            const bDescIncludes = bDesc.includes(query);
+
+            // prioritize items whose description contains the search string
+            if (aDescIncludes && !bDescIncludes) return -1;
+            if (!aDescIncludes && bDescIncludes) return 1;
+
             return aName.localeCompare(bName);
         });
 
@@ -141,22 +154,30 @@ export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
      * @param el HTMLElement to render it in
      */
     renderSuggestion(toolbar: ToolbarSettings, el: HTMLElement): void {
+        
         el.setAttribute('id', toolbar.uuid);
-        const toolbarNameEl = el.createSpan();
-        toolbarNameEl.setText(toolbar.name);
+        el.addClass('note-toolbar-item-suggestion');
+
+		const containerEl = el.createDiv();
+		containerEl.addClass('note-toolbar-tbar-suggestion-container');
+        this.ntb.settingsUtils.renderToolbarName(toolbar, containerEl, true);
+
         const isSpecialToolbar = [EMPTY_TOOLBAR_ID, NONE_TOOLBAR_ID].includes(toolbar.uuid);
         if (isSpecialToolbar) {
-            el.addClass('cm-em');
+            containerEl.addClass('cm-em');
+            return;
         }
-        if (this.showPreviews && !isSpecialToolbar) {
-            const previewContainerEl = el.createDiv();
+
+        if (this.showPreviews) {
+            const previewContainerEl = containerEl.createDiv();
             previewContainerEl.addClass('setting-item-description');
             const previewEl = previewContainerEl.createDiv();
             previewEl.addClass('note-toolbar-setting-toolbar-list-preview-item');
             const previewFr = this.ntb.settingsUtils.createToolbarPreviewFr(toolbar, undefined);
             previewEl.append(previewFr);
-            el.append(previewContainerEl);
+            containerEl.append(previewContainerEl);
         }
+
     }
 
     /**

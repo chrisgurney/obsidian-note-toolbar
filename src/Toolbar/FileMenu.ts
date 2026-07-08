@@ -25,7 +25,7 @@ export default class FileMenu {
 						else {
 							menu.addItem((item: MenuItem) => {
 								item
-									.setIcon(this.ntb.settings.icon)
+									.setIcon(toolbar.icon || this.ntb.settings.icon)
 									.setTitle(toolbar ? toolbar.name : '');
 								const subMenu = item.setSubmenu();
 								if (toolbar) void this.ntb.render.renderMenuItems(subMenu, toolbar, file);

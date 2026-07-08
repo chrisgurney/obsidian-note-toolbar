@@ -1,7 +1,7 @@
 import { Adapter } from "Adapters/Adapter";
 import NoteToolbarPlugin from "main";
 import { ButtonComponent, debounce, DropdownComponent, ExtraButtonComponent, MarkdownViewModeType, Menu, MenuItem, normalizePath, Notice, PaneType, Platform, setIcon, Setting, SettingGroup, ToggleComponent } from "obsidian";
-import { ComponentType, ItemType, LINK_OPTIONS, SETTINGS_DISCLAIMERS, SettingType, t, TARGET_OPTIONS, ToolbarItemSettings, ToolbarSettings, ViewModeType } from "Settings/NoteToolbarSettings";
+import { ComponentType, ItemType, LINK_OPTIONS, RibbonItem, SETTINGS_DISCLAIMERS, SettingType, t, TARGET_OPTIONS, ToolbarItemSettings, ToolbarSettings, ViewModeType } from "Settings/NoteToolbarSettings";
 import { exportItemToCallout } from "Utils/ImportExport";
 import { addComponentVisibility, getElementPosition, removeComponentVisibility } from "Utils/Utils";
 import CopyTextModal from "../Modals/CopyTextModal";
@@ -81,23 +81,13 @@ export default class ToolbarItemUi {
             // Item icon, name, and tooltip
             //
 
-            const handleIconSelected = async (icon: string) => {
-                toolbarItem.icon = (icon === t('setting.icon-suggester.option-no-icon') ? "" : icon);
-                await this.ntb.settingsManager.save();
-                const itemRow = (this.parent instanceof ToolbarSettingsModal) 
-                    ? this.parent.itemListUi.getItemRowEl(toolbarItem.uuid) 
-                    : this.parent.getItemRowEl(toolbarItem.uuid);
-                updateItemIcon(this.parent, itemRow, icon);
-                if (toolbarItem.hasCommand) await this.ntb.commands.updateItemCommand(toolbarItem, false);
-            }
-
             const iconField = new Setting(textFieldsContainer)
                 .setClass("note-toolbar-setting-item-icon")
                 .addExtraButton((btn: ExtraButtonComponent) => {
                     btn.setIcon(toolbarItem.icon ? toolbarItem.icon : "lucide-plus-square")
                         .setTooltip(t('setting.item.button-icon-tooltip'))
                         .onClick(() => {
-                            const modal = new IconSuggestModal(this.ntb, toolbarItem.icon, true, (icon) => void handleIconSelected(icon));
+                            const modal = new IconSuggestModal(this.ntb, toolbarItem.icon, true, (icon) => void this.handleIconSelected(toolbarItem, icon));
                             modal.open();
                         });
                     btn.extraSettingsEl.setAttribute("data-note-toolbar-no-icon", !toolbarItem.icon ? "true" : "false");
@@ -110,7 +100,7 @@ export default class ToolbarItemUi {
                                     const modifierPressed = (Platform.isWin || Platform.isLinux) ? e?.ctrlKey : e?.metaKey;
                                     if (!modifierPressed) {
                                         e.preventDefault();
-                                        const modal = new IconSuggestModal(this.ntb, toolbarItem.icon, true, (icon) => void handleIconSelected(icon));
+                                        const modal = new IconSuggestModal(this.ntb, toolbarItem.icon, true, (icon) => void this.handleIconSelected(toolbarItem, icon));
                                         modal.open();
                                     }
                                 }
@@ -422,6 +412,22 @@ export default class ToolbarItemUi {
 
     }
 
+    handleIconSelected = async (toolbarItem: ToolbarItemSettings, icon: string) => {
+        toolbarItem.icon = (icon === t('setting.icon-suggester.option-no-icon') ? "" : icon);
+        await this.ntb.settingsManager.save();
+        const itemRow = (this.parent instanceof ToolbarSettingsModal) 
+            ? this.parent.itemListUi.getItemRowEl(toolbarItem.uuid) 
+            : this.parent.getItemRowEl(toolbarItem.uuid);
+        updateItemIcon(this.parent, itemRow, icon);
+        if (toolbarItem.hasCommand) await this.ntb.commands.updateItemCommand(toolbarItem, false);
+        // update ribbon item if it exists
+        const ribbonItem = this.ntb.ribbon.get(toolbarItem.uuid);
+        if (ribbonItem !== undefined) {
+            const updatedRibbonItem = { ...ribbonItem, icon: toolbarItem.icon || this.ntb.settings.icon };
+            this.ntb.ribbon.update(updatedRibbonItem);
+        }
+    }
+
     /**
      * Creates the actions menu for the item.
      * @param toolbarItem Item to generate a menu for.
@@ -464,6 +470,29 @@ export default class ToolbarItemUi {
 
         if (![ItemType.Break, ItemType.Group, ItemType.Separator, ItemType.Spreader].contains(toolbarItem.linkAttr.type)) {
 
+            // add to ribbon / remove from ribbon
+            const initialRibbonItem = this.ntb.ribbon.get(toolbarItem.uuid);
+            menu.addItem((menuItem: MenuItem) => {
+                menuItem
+                    .setTitle(initialRibbonItem ? t('setting.ribbon.name-remove') : t('setting.ribbon.name'))
+                    .setIcon('panel-left')
+                    .onClick(async () => {
+                        // add or remove
+                        if (initialRibbonItem) {
+                            this.ntb.ribbon.remove(toolbarItem.uuid);
+                            await this.ntb.settingsManager.save();
+                            new Notice(t('setting.ribbon.notice-ribbon-removed'), 10000).containerEl.addClass('mod-success');
+                        }
+                        else {
+                            const ribbonItem: RibbonItem = { uuid: toolbarItem.uuid };
+                            this.ntb.ribbon.add(ribbonItem);
+                            await this.ntb.settingsManager.save();
+                            new Notice(t('setting.ribbon.notice-ribbon-added'), 10000).containerEl.addClass('mod-success');
+                        }
+                        this.parent.display();
+                    });
+            });
+
             // copy item command URI
             if (toolbarItem.hasCommand) {
                 const itemCommand = this.ntb.commands.getCommandFor(toolbarItem);
@@ -483,7 +512,7 @@ export default class ToolbarItemUi {
                 }
             }
 
-            // add/remove item command
+            // add command / remove command
             menu.addItem((menuItem: MenuItem) => {
                 menuItem
                     .setTitle(toolbarItem.hasCommand ? t('setting.use-item-command.name-remove') : t('setting.use-item-command.name-add'))
@@ -939,6 +968,10 @@ export default class ToolbarItemUi {
                                 toolbarItem.linkAttr.type = type;
                                 await this.ntb.settingsManager.save();
                                 this.renderPreview(toolbarItem);
+                                // update this item's icon if it's non-empty and the selected toolbar has one
+                                if (toolbarItem.icon === '' && menuToolbar?.icon) {
+                                    void this.handleIconSelected(toolbarItem, menuToolbar.icon);
+                                }
                                 // update help text with toolbar preview or default if none selected
                                 const menuHelpFr = menuToolbar 
                                     ? this.ntb.settingsUtils.createToolbarPreviewFr(menuToolbar, undefined, true)
