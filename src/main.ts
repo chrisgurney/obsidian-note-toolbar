@@ -117,6 +117,14 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.gallery = new GalleryManager(this);
 		this.protocolManager = new ProtocolManager(this);
 
+		// this.registerBasesView(NoteToolbarViewType, {
+		// 	name: 'Note Toolbar',
+		// 	icon: 'lucide-graduation-cap',
+		// 	factory: (controller, containerEl) => {
+		// 		return new BasesToolbar(controller, containerEl)
+		// 	},
+		// });
+
 		this.app.workspace.onLayoutReady(async () => {
 
 			// make API available
