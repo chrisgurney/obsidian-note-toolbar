@@ -1,7 +1,7 @@
 import { Rect } from "@codemirror/view";
 import NoteToolbarPlugin from "main";
 import { FrontMatterCache, getIcon, ItemView, MarkdownView, Menu, MenuItem, MenuPositionDef, Notice, Platform, setIcon, setTooltip, TFile, TFolder } from "obsidian";
-import { DefaultStyleType, ItemType, LocalVar, MobileStyleType, OBSIDIAN_UI_ELEMENTS, PositionType, t, ToggleUiStateType, ToolbarSettings, ToolbarStyle } from "Settings/NoteToolbarSettings";
+import { DefaultStyleType, ItemType, LocalVar, MobileStyleType, OBSIDIAN_UI_ELEMENTS, PositionType, t, ToggleUiStateType, ToolbarItemSettings, ToolbarSettings, ToolbarStyle } from "Settings/NoteToolbarSettings";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
 import { calcComponentVisToggles, getViewId, hasStyle, isValidUri, putFocusInMenu } from "Utils/Utils";
 
@@ -431,82 +431,22 @@ export default class ToolbarRenderer {
 			let toolbarItem: HTMLElement | undefined = undefined;
 			const [showOnDesktop, showOnMobile, , showInMode] = this.ntb.utils.calcItemVisToggles(item.visibility);
 			
-			switch (item.linkAttr.type) {
-				case ItemType.Break:
-				case ItemType.Separator:
-				case ItemType.Spreader: {
-					if (view?.getViewType() === 'empty' && this.ntb.settings.showLaunchpad) continue;
-					toolbarItem = createEl('data');
-					toolbarItem.setAttribute(
-						item.linkAttr.type === ItemType.Break ? 'data-break' : item.linkAttr.type === ItemType.Separator ? 'data-sep' : 'data-spread', '');
-					toolbarItem.setAttribute('role', 'separator');
-					break;
+			if (item.linkAttr.type === ItemType.Group) {
+				// recurse into group toolbar items
+				const groupToolbar = this.ntb.settingsManager.getToolbar(item.link);
+				if (groupToolbar) {
+					if (showInMode && (Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
+						const groupLItems = await this.renderLItems(groupToolbar, file, view, recursions + 1);
+						noteToolbarLiArray.push(...groupLItems);
+					}
 				}
-				case ItemType.Group: {
-					const groupToolbar = this.ntb.settingsManager.getToolbar(item.link);
-					if (groupToolbar) {
-						if (showInMode && (Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop)) {
-							const groupLItems = await this.renderLItems(groupToolbar, file, view, recursions + 1);
-							noteToolbarLiArray.push(...groupLItems);
-						}
-					}
-					break;
-				}
-				default: {
-					// changed to span as temporary(?) fix (#19) for links on Android
-					toolbarItem = createSpan();
-					toolbarItem.className = "external-link";
-					toolbarItem.setAttrs({
-						'href': item.link,
-						'role': 'link',
-						'rel': 'noopener'
-					});
-					toolbarItem.tabIndex = 0;
-					Object.entries(item.linkAttr).forEach(([key, value]) => {
-						toolbarItem?.setAttribute(`data-toolbar-link-attr-${key}`, value as string);
-					});
-
-					if (!Platform.isPhone) {
-						const itemCommand = this.ntb.commands.getCommandFor(item);
-						const hotkeyText = itemCommand ? this.ntb.hotkeys.getHotkeyText(itemCommand) : undefined;
-						const tooltipText = resolvedTooltips[i] ? resolvedTooltips[i] + (hotkeyText ? ` (${hotkeyText})` : '') : hotkeyText || '';
-						if (tooltipText) setTooltip(toolbarItem, tooltipText, { placement: "top" });
-					}
-
-					this.ntb.registerDomEvent(toolbarItem, 'click', (e) => this.ntb.items.onItemClick(e));
-					this.ntb.registerDomEvent(toolbarItem, 'auxclick', (e) => this.ntb.items.onItemClick(e));
-		
-					const [dkHasIcon, dkHasLabel, mbHasIcon, mbHasLabel, , ] = calcComponentVisToggles(item.visibility);
-					if (item.label) {
-						if (item.icon) {
-							const itemIcon = toolbarItem.createSpan();
-							this.setComponentDisplayClass(itemIcon, dkHasIcon, mbHasIcon);
-							setIcon(itemIcon, item.icon);
-		
-							const itemLabelEl = toolbarItem.createSpan();
-							this.setComponentDisplayClass(itemLabelEl, dkHasLabel, mbHasLabel);
-							itemLabelEl.innerText = resolvedLabels[i];
-							itemLabelEl.addClass('cg-note-toolbar-item-label');
-						}
-						else {
-							this.setComponentDisplayClass(toolbarItem, dkHasLabel, mbHasLabel);
-							toolbarItem.innerText = resolvedLabels[i];
-							toolbarItem.addClass('cg-note-toolbar-item-label');
-						}
-					}
-					else {
-						this.setComponentDisplayClass(toolbarItem, dkHasIcon, mbHasIcon);
-						setIcon(toolbarItem, item.icon);
-					}
-					break;
-				}
+			}
+			else {
+				toolbarItem = this.renderItem(item, view, resolvedLabels, resolvedTooltips);
 			}
 
 			// we have a valid item element setup...
 			if (toolbarItem) {
-				// set the element's ID
-				if (item.uuid) toolbarItem.id = item.uuid;
-				toolbarItem.addClass('cg-note-toolbar-item');
 				// create its list item container 
 				const noteToolbarLi = createEl('li');
 				noteToolbarLi.dataset.index = i.toString();
@@ -541,6 +481,106 @@ export default class ToolbarRenderer {
 		}
 
 		return noteToolbarLiArray;
+
+	}
+
+	/**
+	 * Renders a single toolbar item and returns it as an HTMLElement.
+	 * @param item ToolbarItemSettings to render
+	 * @param view ItemView, to confirm if we're in an empty view or not
+	 * @param resolvedLabels map of resolved labels for the toolbar items, keyed by item UUID
+	 * @param resolvedTooltips map of resolved tooltips for the toolbar items, keyed by item UUID
+	 * @returns HTMLElement for the toolbar item, or undefined if the item should not be rendered
+	 */
+	renderItem(
+		item: ToolbarItemSettings,
+		view?: ItemView,
+		resolvedLabels?: Record<string, string>,
+		resolvedTooltips?: Record<string, string>
+	): HTMLElement | undefined {
+
+		// TODO: use calcItemVisToggles for the relevant platform here instead?
+		// filter out empty items on display
+		if ((item.label === "" && item.icon === "") 
+			&& ![ItemType.Break, ItemType.Group, ItemType.Separator, ItemType.Spreader].includes(item.linkAttr.type)) {
+			return undefined;
+		}
+
+		let toolbarItem: HTMLElement | undefined = undefined;
+		// const [showOnDesktop, showOnMobile, , showInMode] = this.ntb.utils.calcItemVisToggles(item.visibility);
+		
+		switch (item.linkAttr.type) {
+			case ItemType.Break:
+			case ItemType.Separator:
+			case ItemType.Spreader: {
+				if (view?.getViewType() === 'empty' && this.ntb.settings.showLaunchpad) return undefined;
+				toolbarItem = createEl('data');
+				toolbarItem.setAttribute(
+					item.linkAttr.type === ItemType.Break ? 'data-break' : item.linkAttr.type === ItemType.Separator ? 'data-sep' : 'data-spread', '');
+				toolbarItem.setAttribute('role', 'separator');
+				break;
+			}
+			case ItemType.Group: {
+				// ignore here, as groups are handled in renderLItems() to avoid recursion issues
+				break;
+			}
+			default: {
+				// changed to span as temporary(?) fix (#19) for links on Android
+				toolbarItem = createSpan();
+				toolbarItem.className = "external-link";
+				toolbarItem.setAttrs({
+					'href': item.link,
+					'role': 'link',
+					'rel': 'noopener'
+				});
+				toolbarItem.tabIndex = 0;
+				Object.entries(item.linkAttr).forEach(([key, value]) => {
+					toolbarItem?.setAttribute(`data-toolbar-link-attr-${key}`, value as string);
+				});
+
+				if (!Platform.isPhone) {
+					const itemCommand = this.ntb.commands.getCommandFor(item);
+					const hotkeyText = itemCommand ? this.ntb.hotkeys.getHotkeyText(itemCommand) : undefined;
+					const tooltipText = resolvedTooltips ? (resolvedTooltips[item.uuid] ? resolvedTooltips[item.uuid] + (hotkeyText ? ` (${hotkeyText})` : '') : hotkeyText || '') : '';
+					if (tooltipText) setTooltip(toolbarItem, tooltipText, { placement: "top" });
+				}
+
+				this.ntb.registerDomEvent(toolbarItem, 'click', (e) => this.ntb.items.onItemClick(e));
+				this.ntb.registerDomEvent(toolbarItem, 'auxclick', (e) => this.ntb.items.onItemClick(e));
+	
+				const [dkHasIcon, dkHasLabel, mbHasIcon, mbHasLabel, , ] = calcComponentVisToggles(item.visibility);
+				if (item.label) {
+					if (item.icon) {
+						const itemIcon = toolbarItem.createSpan();
+						this.setComponentDisplayClass(itemIcon, dkHasIcon, mbHasIcon);
+						setIcon(itemIcon, item.icon);
+	
+						const itemLabelEl = toolbarItem.createSpan();
+						this.setComponentDisplayClass(itemLabelEl, dkHasLabel, mbHasLabel);
+						itemLabelEl.innerText = resolvedLabels ? resolvedLabels[item.uuid] : item.label;
+						itemLabelEl.addClass('cg-note-toolbar-item-label');
+					}
+					else {
+						this.setComponentDisplayClass(toolbarItem, dkHasLabel, mbHasLabel);
+						toolbarItem.innerText = resolvedLabels ? resolvedLabels[item.uuid] : item.label;
+						toolbarItem.addClass('cg-note-toolbar-item-label');
+					}
+				}
+				else {
+					this.setComponentDisplayClass(toolbarItem, dkHasIcon, mbHasIcon);
+					setIcon(toolbarItem, item.icon);
+				}
+				break;
+			}
+		}
+
+		if (toolbarItem) {
+			// set the element's ID
+			toolbarItem.id = item.uuid;
+			toolbarItem.addClass('cg-note-toolbar-item');
+		}
+
+		return toolbarItem;
 
 	}
 
