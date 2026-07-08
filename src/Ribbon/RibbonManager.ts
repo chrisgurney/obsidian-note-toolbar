@@ -131,9 +131,14 @@ export class RibbonManager {
 
         const resolvedToolbar = this.ntb.settingsManager.getToolbarById(item.uuid);
         if (resolvedToolbar) {
+            const ribbonLabel = resolvedToolbar.name;
+            if (!ribbonLabel) {
+                new Notice(t('setting.ribbon.error-toolbar-name-empty'), 10000).containerEl.addClass('mod-warning');
+                throw new Error(`Note Toolbar: Ribbon item label or tooltip not set: ${resolvedToolbar.uuid}`);
+            }
             return { 
                 icon: resolvedToolbar.icon || this.ntb.settings.icon, 
-                label: resolvedToolbar.name || t('plugin.note-toolbar'),
+                label: ribbonLabel,
                 callback: async (event: MouseEvent) => { 
                     if (event.button !== 0) return; // let right-clicks go to the context menu handler
                     // sanity check: in case toolbar was deleted but still exists in ribbon settings
@@ -160,10 +165,14 @@ export class RibbonManager {
         }
         const resolvedItem = this.ntb.settingsManager.getToolbarItemById(item.uuid);
         if (resolvedItem) {
-            const itemText = resolvedItem.label || resolvedItem.tooltip || 'Note Toolbar: Item label or tooltip not set.';
+            const ribbonLabel = resolvedItem.label || resolvedItem.tooltip;
+            if (!ribbonLabel) {
+                new Notice(t('setting.ribbon.error-item-text-empty'), 10000).containerEl.addClass('mod-warning');
+                throw new Error(`Note Toolbar: Ribbon item label or tooltip not set: ${resolvedItem.uuid}`);
+            }
             return {
                 icon: resolvedItem.icon || this.ntb.settings.icon,
-                label: itemText,
+                label: ribbonLabel,
                 callback: async (event: MouseEvent) => {
                     if (event.button !== 0) return; // let right-clicks go to the context menu handler 
                     // sanity check: in case toolbar was deleted but still exists in ribbon settings
@@ -176,8 +185,8 @@ export class RibbonManager {
                     contextMenu.addItem((item: MenuItem) => {
                         item
                             .setIcon('lucide-pen-box')
-                            .setTitle(itemText 
-                                ? t('toolbar.menu-edit-item', { text: itemText, interpolation: { escapeValue: false } }) 
+                            .setTitle(ribbonLabel 
+                                ? t('toolbar.menu-edit-item', { text: ribbonLabel, interpolation: { escapeValue: false } }) 
                                 : t('toolbar.menu-edit-item_none'))
                             .onClick(() => {
                                 // sanity check: in case item was deleted but still exists in ribbon settings
