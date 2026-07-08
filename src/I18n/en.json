@@ -645,6 +645,7 @@
         },
         "name": {
             "description": "Give this toolbar a unique name.",
+            "error-name-empty": "Toolbar name cannot be empty.",
             "error-toolbar-already-exists": "A toolbar already exists with this name.",
             "name": "Name",
             "placeholder": "Name"

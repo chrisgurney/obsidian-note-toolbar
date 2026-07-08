@@ -254,6 +254,20 @@
 
     }
 
+    & .note-toolbar-setting-item-tbar-name {
+        & .setting-item-control {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--size-4-2);
+            & input[type="text"] {
+                width: unset;
+            }
+        }
+        & .setting-item-control .setting-error {
+            flex-basis: 100%;
+        }
+    }
+
     & .note-toolbar-setting-no-background {
         background-color: transparent;
     }

@@ -187,8 +187,9 @@ export default class ToolbarSettingsModal extends Modal {
 	 */
 	displayNameSetting(settingsDiv: HTMLElement) {
 
-		const toolbarNameSetting = new Setting(settingsDiv)
+		const tbarNameSetting = new Setting(settingsDiv)
 			.setName(t('setting.name.name'))
+			.setClass('note-toolbar-setting-item-tbar-name')
 			.setDesc(t('setting.name.description'))
 			.addText(cb => cb
 				.setPlaceholder(t('setting.name.placeholder'))
@@ -196,11 +197,14 @@ export default class ToolbarSettingsModal extends Modal {
 				.onChange(debounce(async (value) => {
 					// check for existing toolbar with this name
 					const existingToolbar = this.ntb.settingsManager.getToolbarByName(value);
-					if (existingToolbar && existingToolbar !== this.toolbar) {
-						this.ntb.settingsUtils.setFieldError(this, cb.inputEl, 'beforeend', t('setting.name.error-toolbar-already-exists'));
+					removeFieldError(tbarNameSetting.controlEl, 'beforeend');
+					if (value === '') {
+						this.ntb.settingsUtils.setFieldError(this, tbarNameSetting.controlEl, 'beforeend', t('setting.name.error-name-empty'));
+					}
+					else if (existingToolbar && existingToolbar !== this.toolbar) {
+						this.ntb.settingsUtils.setFieldError(this, tbarNameSetting.controlEl, 'beforeend', t('setting.name.error-toolbar-already-exists'));
 					}
 					else {
-						removeFieldError(cb.inputEl, 'beforeend');
 						this.toolbar.name = value;
 						this.toolbar.updated = new Date().toISOString();
 						this.ntb.settings.toolbars.sort((a, b) => a.name.localeCompare(b.name));
@@ -215,8 +219,8 @@ export default class ToolbarSettingsModal extends Modal {
 		const descIconEl = settingsDiv.createDiv();
 		descIconEl.addClass('note-toolbar-setting-item-link-advanced');
 
-		toolbarNameSetting.controlEl.addClass('note-toolbar-setting-item-control-advanced');
-		toolbarNameSetting.addExtraButton((button) => {
+		tbarNameSetting.controlEl.addClass('note-toolbar-setting-item-control-advanced');
+		tbarNameSetting.addExtraButton((button) => {
 			button
 				.setIcon('gear')
 				.setTooltip(t('setting.item.button-advanced-tooltip'))
@@ -229,7 +233,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		// allow keyboard navigation down to first toolbar item
 		this.ntb.registerDomEvent(
-			toolbarNameSetting.controlEl, 'keydown', (e) => {
+			tbarNameSetting.controlEl, 'keydown', (e) => {
 				switch (e.key) {
 					case 'ArrowDown': {
 						const selector = '.note-toolbar-setting-items-container .note-toolbar-setting-item-preview';
