@@ -286,6 +286,7 @@
         "warning-no-matching-toolbar": "Note Toolbar: No matching toolbar: {{toolbar}}\nClick/Tap here to create it."
     },
     "onboarding": {
+        "tooltip-dismiss": "Dismiss",
         "new-toolbar-mapping-content": "To see this toolbar in your note, add a property ({{property}}) with the name of this toolbar. Or, map this toolbar to the folder the note is in (Note Toolbar Settings → Folder mappings).",
         "new-toolbar-mapping-title": "How to use this toolbar",
         "swap-toolbar-content": "Selecting an option below will update this note by changing or removing the value of a property ({{property}}).",

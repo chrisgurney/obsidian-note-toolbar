@@ -128,7 +128,7 @@ export default class SettingsUIUtils {
 			.addExtraButton((button) => {
 				button
 					.setIcon('cross')
-					.setTooltip("Dismiss") // FIXME: localize string
+					.setTooltip(t('onboarding.tooltip-dismiss'))
 					.onClick(async () => {
 						setting.settingEl.remove();
 						this.ntb.settings.onboarding[messageId] = true;
