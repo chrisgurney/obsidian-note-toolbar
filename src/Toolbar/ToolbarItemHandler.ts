@@ -141,7 +141,7 @@ export default class ToolbarItemHandler {
                 const toolbar = this.ntb.settingsManager.getToolbar(linkHref);
                 if (toolbar) {
                     await this.ntb.render.renderAsMenu(toolbar, activeFile).then(menu => {
-                        const position = (!event || event instanceof KeyboardEvent) ? this.ntb.utils.getPosition('cursor') : this.ntb.render.lastClickedPos; 
+                        const position = !event ? this.ntb.utils.getPosition('cursor') : this.ntb.render.lastClickedPos; 
                         if (position) {
                             this.ntb.render.showMenuAtPosition(menu,
                                 { x: position.left, y: position.bottom, overlap: true, left: false }
