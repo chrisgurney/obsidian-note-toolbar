@@ -188,10 +188,6 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
         );
     }
 
-    onClose(): void {
-        if (!this.submitted) this.reject(new Error(t('api.ui.error-cancelled')));
-    }
-
     selectSuggestion(value: FuzzyMatch<T>, evt: MouseEvent | KeyboardEvent): void {
         if (this.activePrefix !== undefined && this.activePrefixStart !== undefined) {
             // replace just the prefix segment with the selected item
