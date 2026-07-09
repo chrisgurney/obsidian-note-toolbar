@@ -4,6 +4,9 @@ import { PositionType, RibbonItem, t } from 'Settings/NoteToolbarSettings';
 import ItemModal from 'Settings/UI/Modals/ItemModal';
 import ToolbarSettingsModal from 'Settings/UI/Modals/ToolbarSettingsModal';
 
+/**
+ * Manages the ribbon icons for toolbars and items, including adding, removing, and updating them.
+ */
 export class RibbonManager {
 
     constructor(private ntb: NoteToolbarPlugin) {}
@@ -17,6 +20,11 @@ export class RibbonManager {
         void this.ntb.settingsManager.save();
     }
 
+    /**
+     * Gets a ribbon item (plugin setting) by its toolbar or item UUID.
+     * @param uuid UUID for a toolbar or item.
+     * @returns RibbonItem
+     */
     get(uuid: string): RibbonItem | undefined {
         return this.ntb.settings.ribbon.find(ribbonItem => ribbonItem.uuid === uuid);
     }
@@ -45,12 +53,17 @@ export class RibbonManager {
 	}
 
 	/**
-     * Removes all tracked ribbon icons.
+     * Removes all ribbon icons.
      */
 	unload() {
         this.ntb.settings.ribbon.forEach(item => this.removeFromRibbon(item.uuid));
 	}
 
+    /**
+     * Updates a ribbon item by removing the old one and adding the new one in its place, preserving order.
+     * @param item the updated ribbon item
+     * @returns nothing
+     */
     update(item: RibbonItem): void {
         const index = this.ntb.settings.ribbon.findIndex(r => r.uuid === item.uuid);
         if (index === -1) return;
@@ -62,7 +75,7 @@ export class RibbonManager {
     }
 
     /**
-     * Removes a ribbon item by its internal id, including the registry entry.
+     * Removes a ribbon item by the toolbar or item id, including the registry entry.
      */
     remove(uuid: string): void {
         if (this.get(uuid) === undefined) return;
@@ -82,6 +95,11 @@ export class RibbonManager {
         });
     }
 
+    /**
+     * Removes a ribbon item from the Obsidian ribbon by its toolbar or item UUID.
+     * @param uuid UUID for a toolbar or item
+     * @returns nothing
+     */
     private removeFromRibbon(uuid: string): void {
         const ribbon = this.ntb.app.workspace.leftRibbon;
         const ribbonEl = ribbon.ribbonItemsEl.querySelector(`#ntb-${uuid}`);
@@ -102,6 +120,7 @@ export class RibbonManager {
 
 	/**
      * Maps a RibbonItem to the icon/label/callback addRibbonIcon needs.
+     * @param item RibbonItem to resolve
      */
 	private resolveAction(item: RibbonItem): {
         icon: string; label: string; callback: (event: MouseEvent) => Promise<void>; contextCallback: (event: MouseEvent) => void } 
