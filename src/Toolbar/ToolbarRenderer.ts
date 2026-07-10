@@ -989,6 +989,8 @@ export default class ToolbarRenderer {
 			const toolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.textToolbar);
 			const showAtPosition = this.ntb.utils.getPosition('cursor');
 			await this.renderFloatingToolbar(toolbar, showAtPosition, PositionType.Text);
+			// fix: focus in text toolbar command: toolbar disappears immediately
+			this.ntb.listeners.doc.isKeyboardSelection = false;
 		}
 
 		// need to get the type of toolbar first
