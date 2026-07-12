@@ -259,7 +259,7 @@ export default class PluginUtils {
 	 * @param position The type of position to retrieve. Defaults to `pointer`.
      * `cursor`: editor cursor or selection position (falls back to pointer position, e.g., if editor is not in focus);
 	 * `pointer`: mouse/pointer position;
-	 * `toolbar`: last clicked toolbar element position (falls back to pointer position)
+	 * `toolbar`: last clicked toolbar element position (falls back to pointer or cursor position)
 	 * @returns A Rect object with the position coordinates, or undefined if unable to determine
 	 */
 	getPosition(position: 'cursor' | 'pointer' | 'toolbar' = 'pointer'): Rect | undefined {
@@ -271,14 +271,17 @@ export default class PluginUtils {
 		if (position === 'pointer') return pointerPos;
 
 		// 'cursor' position, with fallback to 'pointer'
+		const cursorPos = this.getCursorPosition();
 		if (position === 'cursor') {
-			const cursorPos = this.getCursorPosition();
-			if (!position) this.ntb.debug('getPosition: cursor not found, falling back to pointer position');
+			const cursorIsZero = cursorPos && cursorPos.left === 0 && cursorPos.top === 0;
+			if (cursorIsZero) this.ntb.debug('getPosition: cursor not found, falling back to pointer position');
 			return cursorPos ?? pointerPos;
 		};
-
-		// 'toolbar' position (i.e., last clicked element), with fallback to 'pointer'
-		return this.ntb.render.lastClickedPos ?? pointerPos;
+		
+		// 'toolbar' position (i.e., last clicked element), with fallback to 'pointer' or `cursor` (if pointer is zero)
+		const pointerIsZero = pointerPos.left === 0 && pointerPos.top === 0;
+		// this.ntb.debug('lastClickPos:', this.ntb.render.lastClickedPos, 'pointerPos:', pointerPos, 'cursorPos:', cursorPos);
+		return this.ntb.render.lastClickedPos ?? (!pointerIsZero ? pointerPos : cursorPos);
 	}
 
     /**
