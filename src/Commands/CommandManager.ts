@@ -282,23 +282,17 @@ export default class CommandManager {
     swapToolbar() {
         if (this.ntb.settings.toolbarProp === 'tags') return;
         const modal = new ToolbarSuggestModal(this.ntb, true, true, false, (toolbar: ToolbarSettings) => {
-            const activeFile = this.ntb.app.workspace.getActiveFile();
-            if (activeFile) {
-                void this.ntb.app.fileManager.processFrontMatter(activeFile, (frontmatter: Record<string, unknown>) => {
-                    if (toolbar.uuid === EMPTY_TOOLBAR_ID) {
-                        delete frontmatter[this.ntb.settings.toolbarProp];
-                        return;
-                    }
-                    else if (toolbar.uuid === NONE_TOOLBAR_ID) {
-                        frontmatter[this.ntb.settings.toolbarProp] = 'none';
-                        new Notice(
-                            t('setting.toolbar-suggest-modal.notice-none-toolbar', { property: this.ntb.settings.toolbarProp })
-                        , 5000).containerEl.addClass('mod-success');
-                        return;
-                    }
-                    frontmatter[this.ntb.settings.toolbarProp] = toolbar.name;
-                    void this.ntb.listeners.metadata.renderToolbar(activeFile, frontmatter);
-                });
+            if (toolbar.uuid === EMPTY_TOOLBAR_ID) {
+                void this.ntb.api.setProperty(this.ntb.settings.toolbarProp, null);
+            }
+            else if (toolbar.uuid === NONE_TOOLBAR_ID) {
+                void this.ntb.api.setProperty(this.ntb.settings.toolbarProp, 'none');
+                new Notice(
+                    t('setting.toolbar-suggest-modal.notice-none-toolbar', { property: this.ntb.settings.toolbarProp })
+                , 5000).containerEl.addClass('mod-success');
+            }
+            else {
+                void this.ntb.api.setProperty(this.ntb.settings.toolbarProp, toolbar.name);
             }
         });
         modal.open();
