@@ -45,6 +45,7 @@ export default class GalleryManager {
         const added: ToolbarItemSettings[] = [];
         let currentPosition = position;
         for (const item of items) {
+            if (item.linkAttr.type === ItemType.Additional) continue;
             const newItem = await this.ntb.settingsManager.duplicateToolbarItem(toolbar, item, currentPosition);
             const isResolved = await this.ntb.settingsManager.resolveGalleryItem(newItem);
             if (!isResolved) continue;
