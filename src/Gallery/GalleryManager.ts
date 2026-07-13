@@ -164,7 +164,7 @@ export default class GalleryManager {
         if (!newItems) return;
         this.ntb.commands.openToolbarSettingsForId(toolbar.uuid);
         new Notice(
-            t('setting.add-item.notice-item-added', { toolbarName: toolbar.name, interpolation: { escapeValue: false } })
+            t('setting.add-item.notice-item-added_plural', { toolbarName: toolbar.name, interpolation: { escapeValue: false } })
         ).containerEl.addClass('mod-success');
     }
 
