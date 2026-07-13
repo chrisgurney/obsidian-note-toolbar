@@ -58,7 +58,7 @@ The selected text, or the word at the current cursor position. Otherwise returns
 
 > **setProperty**: (`property`, `value`) => `Promise`\<`void`\>
 
-Sets the given property's value in the active note.
+Sets the given property's value in the active note. Set the property to `null` to remove it.
 
 #### Parameters
 
@@ -79,6 +79,7 @@ await ntb.setProperty('cssclasses', 'myclass');
 await ntb.setProperty('A Link', '[[Some Note]]');
 await ntb.setProperty('A Number', 1234);
 await ntb.setProperty('A List', ['asdf', 'asdf2']);
+await ntb.setProperty('Delete Me', null);
 ```
 
 ***

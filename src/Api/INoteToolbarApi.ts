@@ -264,7 +264,7 @@ export default interface INoteToolbarApi<T> {
     prompt: (options?: NtbPromptOptions) => Promise<string | null>;
 
     /**
-     * Sets the given property's value in the active note.
+     * Sets the given property's value in the active note. Set the property to `null` to remove it.
      * 
      * @param property Propety to set in the frontmatter.
      * @param value Value to set for the property.
@@ -275,6 +275,7 @@ export default interface INoteToolbarApi<T> {
      * await ntb.setProperty('A Link', '[[Some Note]]');
      * await ntb.setProperty('A Number', 1234);
      * await ntb.setProperty('A List', ['asdf', 'asdf2']);
+     * await ntb.setProperty('Delete Me', null);
      * 
      * @group Note Manipulation
      */

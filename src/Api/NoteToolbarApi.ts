@@ -326,7 +326,7 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
         const activeFile = this.ntb.app.workspace.getActiveFile();
         if (activeFile) {
             await this.ntb.app.fileManager.processFrontMatter(activeFile, (frontmatter: Record<string, unknown>) => {
-                frontmatter[property] = value;
+                (value === null) ? delete frontmatter[property] : frontmatter[property] = value;
                 // update the toolbar immediately
                 if (property === this.ntb.settings.toolbarProp) {
                     void this.ntb.listeners.metadata.renderToolbar(activeFile, frontmatter);
