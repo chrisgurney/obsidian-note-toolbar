@@ -149,8 +149,31 @@ export default class GalleryManager {
 
 	}
 
+    async addItems(galleryItems: ToolbarItemSettings[]): Promise<void> {
+        if (galleryItems.find((item) => item.linkAttr.type === ItemType.Additional)) {
+            const notice = new Notice(t('gallery.warning-additional-items'), 10000);
+            notice.containerEl.addClass('mod-warning');
+            notice.messageEl.addClass('note-toolbar-notice-pointer');
+            this.ntb.registerDomEvent(notice.messageEl, 'click', async () => {
+                
+            });
+        }
+        const toolbar = await this.ntb.settingsManager.newToolbar();
+        const [newItems] = await this.addItemToToolbar(toolbar, galleryItems);
+        if (!newItems) return;
+        this.ntb.commands.openToolbarSettingsForId(toolbar.uuid);
+        new Notice(
+            t('setting.add-item.notice-item-added', { toolbarName: toolbar.name, interpolation: { escapeValue: false } })
+        ).containerEl.addClass('mod-success');
+    }
+
     getItemById(id: string): ToolbarItemSettings | undefined {
         return this.getItems().find((item) => item.uuid === id);
+    }
+
+    getItemsById(ids: string[]): ToolbarItemSettings[] {
+        const idSet = new Set(ids);
+        return this.getItems().filter((item) => idSet.has(item.uuid));
     }
 
     private loadItems() {
