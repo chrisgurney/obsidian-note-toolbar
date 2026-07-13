@@ -61,7 +61,10 @@ export default class ToolbarSettingsModal extends Modal {
 		contentEl.empty();
 		// refresh the parent window, so we see the new toolbar
 		this.parent?.render();
-		
+		void this.promptForDefault();
+	}
+
+	async promptForDefault(): Promise<void> {
 		// if this is the only toolbar, prompt once to make this the Default
 		const onboardingId = `default-${this.toolbar.uuid}`;
 		const promptForDefault = this.ntb.settings.toolbars.length === 1 
@@ -69,7 +72,7 @@ export default class ToolbarSettingsModal extends Modal {
 			&& !this.ntb.settings.onboarding[onboardingId];
 		if (promptForDefault) {
 			this.ntb.settings.onboarding[onboardingId] = true;
-			void this.ntb.settingsManager.save().then(() => {
+			await this.ntb.settingsManager.save().then(() => {
 				void confirmWithModal(this.ntb.app, { 
 					title: t('setting.toolbars.label-set-default', { toolbar: this.toolbar.name, interpolation: { escapeValue: false } }),
 					questionLabel: t('setting.toolbars.label-set-default-confirm'),
