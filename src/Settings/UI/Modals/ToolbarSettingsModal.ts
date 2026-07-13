@@ -32,12 +32,14 @@ export default class ToolbarSettingsModal extends Modal {
 	 * @param ntb reference to the plugin
 	 * @param parent NoteToolbarSettingTab if coming from settings UI; null if coming from editor 
 	 * @param toolbar ToolbarSettings to edit
+	 * @param isFromCommand if using command to create toolbar, set `true` to prompt user to set note property; default is `false`
 	 */
 	constructor(
 		app: App, 
 		private ntb: NoteToolbarPlugin, 
 		private parent: NoteToolbarSettingTab | null = null, 
-		private toolbar: ToolbarSettings
+		private toolbar: ToolbarSettings,
+		private isFromCommand = false
 	) {
 		super(app);
 		this.itemUi = new ToolbarItemUi(this.ntb, this, toolbar);
@@ -60,7 +62,9 @@ export default class ToolbarSettingsModal extends Modal {
 		contentEl.empty();
 		// refresh the parent window, so we see the new toolbar
 		this.parent?.render();
-		void this.promptForDefault();
+		void this.promptForDefault().then(() => {
+			if (this.isFromCommand) this.promptForProp();
+		});
 	}
 
 	async promptForDefault(): Promise<void> {
@@ -72,12 +76,12 @@ export default class ToolbarSettingsModal extends Modal {
 		if (promptForDefault) {
 			this.ntb.settings.onboarding[onboardingId] = true;
 			await this.ntb.settingsManager.save().then(() => {
-				void confirmWithModal(this.ntb.app, { 
+				return confirmWithModal(this.ntb.app, { 
 					title: t('setting.toolbars.label-set-default', { toolbar: this.toolbar.name, interpolation: { escapeValue: false } }),
 					questionLabel: t('setting.toolbars.label-set-default-confirm'),
 					notes: t('setting.toolbars.label-set-default-notes'),
 					approveLabel: t('setting.toolbars.button-set-default'),
-					denyLabel: t('setting.toolbars.button-no-default')
+					denyLabel: t('setting.toolbars.button-no')
 				}).then((setAsDefault) => {
 					if (setAsDefault) {
 						this.ntb.settings.defaultToolbar = this.toolbar.uuid;
@@ -89,6 +93,19 @@ export default class ToolbarSettingsModal extends Modal {
 				});
 			});
 		}
+	}
+
+	promptForProp(): void {
+		void confirmWithModal(this.ntb.app, { 
+			title: t('setting.toolbars.label-set-as-prop', { toolbar: this.toolbar.name, interpolation: { escapeValue: false } }),
+			questionLabel: t('setting.toolbars.label-set-as-prop_confirm'),
+			approveLabel: t('setting.toolbars.button-set-prop'),
+			denyLabel: t('setting.toolbars.button-no')
+		}).then((setProp) => {
+			if (setProp) {
+				void this.ntb.api.setProperty(this.ntb.settings.toolbarProp, this.toolbar.name);
+			}
+		});
 	}
 
 	/**

@@ -413,9 +413,14 @@ export default class SettingsManager {
 	 * Opens the toolbar settings modal for the provided toolbar.
 	 * @param toolbar ToolbarSettings to open
 	 * @param parent provide the NoteToolbarSettingTab if coming from settings UI; null if coming from editor 
+	 * @param isFromCommand if using command to create toolbar, set `true` to prompt user to set note property; default is `false`
 	 */
-    public openToolbarSettings(toolbar: ToolbarSettings, parent: NoteToolbarSettingTab | null | undefined = null) {
-        const modal = new ToolbarSettingsModal(this.ntb.app, this.ntb, parent, toolbar);
+    public openToolbarSettings(
+		toolbar: ToolbarSettings, 
+		parent: NoteToolbarSettingTab | null | undefined = null, 
+		isFromCommand = false
+	) {
+        const modal = new ToolbarSettingsModal(this.ntb.app, this.ntb, parent, toolbar, isFromCommand);
 		modal.setTitle( toolbar.name 
 			? t('setting.title-edit-toolbar', { toolbar: toolbar.name, interpolation: { escapeValue: false } }) 
 			: t('setting.title-edit-toolbar_none'));

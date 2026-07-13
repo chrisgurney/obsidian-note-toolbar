@@ -21,6 +21,8 @@ export default class CommandManager {
      */
     addCommands(): void {
 
+        this.ntb.addCommand({ id: 'create-toolbar', name: t('command.name-create-toolbar'), callback: async () => this.createToolbar() });
+
         this.ntb.addCommand({ id: 'copy-cmd-uri', name: t('command.name-copy-cmd-uri'), callback: () => this.copy(false) });
         this.ntb.addCommand({ id: 'copy-cmd-as-data-element', name: t('command.name-copy-cmd-as-data-element'), callback: () => this.copy(true) });
         this.ntb.addCommand({ id: 'focus', name: t('command.name-focus'), callback: async () => this.ntb.render.focus() });
@@ -211,6 +213,14 @@ export default class CommandManager {
             copyTextModal.open();
         });
         modal.open();
+    }
+
+    /**
+     * Create a new toolbar, with prompt to use it in the current note.
+     */
+    async createToolbar(): Promise<void> {
+        const newToolbar = await this.ntb.settingsManager.newToolbar();
+        this.ntb.settingsManager.openToolbarSettings(newToolbar, null, true);
     }
 
     /**
