@@ -197,7 +197,7 @@ export default class GalleryManager {
         this.items.sort((a, b) => a.tooltip.localeCompare(b.tooltip));
 
         const endTime = performance.now();
-        this.ntb.debug(`Gallery loaded in ${endTime - startTime} ms`);
+        this.ntb.debug(`Gallery loaded in ${(endTime - startTime).toFixed(3)}s`);
     }
 
 }
