@@ -288,7 +288,7 @@
     },
     "onboarding": {
         "tooltip-dismiss": "Dismiss",
-        "new-toolbar-mapping-content": "To see this toolbar in your note, add a property ({{property}}) with the name of this toolbar. Or, map this toolbar to the folder the note is in (Note Toolbar Settings → Folder mappings).",
+        "new-toolbar-mapping-content": "To use this toolbar in a note, set a property ({{property}}) with the name of this toolbar. To use this toolbar across your vault, see: Note Toolbar Settings → Display rules",
         "new-toolbar-mapping-title": "How to use this toolbar",
         "swap-toolbar-content": "Selecting an option below will update this note by changing or removing the value of a property ({{property}}).",
         "swap-toolbar-title": "This note will be changed"

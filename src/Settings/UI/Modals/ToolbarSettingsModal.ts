@@ -147,7 +147,7 @@ export default class ToolbarSettingsModal extends Modal {
 		const settingsDiv = createDiv();
 		settingsDiv.className = "vertical-tab-content note-toolbar-setting-modal note-toolbar-setting-ui";
 
-		// show warning message about properties being changed
+		// show onboarding message
 		const onboardingId = 'new-toolbar-mapping';
 		if (!this.ntb.settings.onboarding[onboardingId]) {
 			const messageEl = this.ntb.settingsUtils.createOnboardingMessageEl( 
