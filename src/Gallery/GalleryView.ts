@@ -1,7 +1,7 @@
 import gallery from 'Gallery/gallery.json';
 import NoteToolbarPlugin from 'main';
 import { Component, ItemView, MarkdownRenderer, Scope, setIcon, Setting, setTooltip, WorkspaceLeaf } from 'obsidian';
-import { t, ToolbarItemSettings, VIEW_TYPE_GALLERY } from 'Settings/NoteToolbarSettings';
+import { ItemType, t, ToolbarItemSettings, VIEW_TYPE_GALLERY } from 'Settings/NoteToolbarSettings';
 import ItemSuggester from 'Settings/UI/Suggesters/ItemSuggester';
 import { iconTextFr } from 'Settings/UI/Utils/SettingsUIUtils';
 import { URLS } from "Utils/Urls";
@@ -186,10 +186,11 @@ export function renderGalleryItems(ntb: NoteToolbarPlugin, containerEl: HTMLDivE
 			itemEl.id = galleryItem.uuid;
 			itemEl.addClass('note-toolbar-card-item');
 			itemEl.setAttribute('data-ignore-swipe', 'true');
-			setTooltip(itemEl, t('gallery.tooltip-add-item', { name: galleryItem.tooltip }));
 
-			const plusEl = itemEl.createDiv('note-toolbar-card-item-plus');
-			setIcon(plusEl, 'circle-plus');
+			const isAdditionalItem = galleryItem.linkAttr.type === ItemType.Additional;
+			setTooltip(itemEl, isAdditionalItem ? t('gallery.tooltip-add-additional-item') : t('gallery.tooltip-add-item'));
+			const addIconEl = itemEl.createDiv('note-toolbar-card-item-plus');
+			setIcon(addIconEl, isAdditionalItem ? 'external-link' : 'circle-plus');
 
 			itemEl.createDiv('note-toolbar-card-item-title').setText(galleryItem.tooltip);
 			if (galleryItem.description) {

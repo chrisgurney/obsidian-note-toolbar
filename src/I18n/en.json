@@ -237,6 +237,7 @@
         "select-plugin-suggestion": "{{plugin}}",
         "select-plugin-suggestion-not-enabled": "{{plugin}} ⚠️ Not enabled or installed",
         "title": "Note Toolbar Gallery",
+        "tooltip-add-additional-item": "Learn more to add to a toolbar",
         "tooltip-add-item": "Add this item to a toolbar"
     },
     "import": {
