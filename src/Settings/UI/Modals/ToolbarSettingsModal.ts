@@ -18,12 +18,9 @@ export const enum SettingsAttr {
 
 export default class ToolbarSettingsModal extends Modal {
 
-	public ntb: NoteToolbarPlugin;
-	public toolbar: ToolbarSettings;
 	public itemUi: ToolbarItemUi;
 	public itemListUi: ItemListUi;
 
-	private parent: NoteToolbarSettingTab | null;
 	private scrollListener: ((event: Event) => void) | null = null;
 
 	private hasDesktopFabPosition: boolean = false;
@@ -36,11 +33,13 @@ export default class ToolbarSettingsModal extends Modal {
 	 * @param parent NoteToolbarSettingTab if coming from settings UI; null if coming from editor 
 	 * @param toolbar ToolbarSettings to edit
 	 */
-	constructor(app: App, ntb: NoteToolbarPlugin, parent: NoteToolbarSettingTab | null = null, toolbar: ToolbarSettings) {
+	constructor(
+		app: App, 
+		private ntb: NoteToolbarPlugin, 
+		private parent: NoteToolbarSettingTab | null = null, 
+		private toolbar: ToolbarSettings
+	) {
 		super(app);
-		this.parent = parent;
-		this.ntb = ntb;
-		this.toolbar = toolbar;
 		this.itemUi = new ToolbarItemUi(this.ntb, this, toolbar);
 		this.itemListUi = new ItemListUi(this.ntb, this, this.toolbar);
 	}
