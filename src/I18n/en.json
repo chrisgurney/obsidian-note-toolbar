@@ -228,7 +228,7 @@
         "error-missing-property": "Missing plugin or script property in Gallery data.",
         "label-add-item": "Click or tap to add any of these to a toolbar:",
         "label-additional-cta": "Open Additional Gallery items ↗",
-        "label-additional-description": "This item is not included in the default Gallery.\n\nFollow the instructions on the **Additional Gallery items** page, which contains optional items that require manual setup.",
+        "label-additional-description": "This item is not included in the default Gallery, because is uses the clipboard or reads/writes files within your vault.\n\nFollow the instructions on the **Additional Gallery items** page.",
         "label-additional-title": "How to add: {{item}}",
         "label-plugin": "{{plugin}}",
         "label-requires-plugin": "Requires plugin: {{plugin}}",
