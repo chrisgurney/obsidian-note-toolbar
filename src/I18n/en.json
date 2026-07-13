@@ -233,12 +233,14 @@
         "label-plugin": "{{plugin}}",
         "label-requires-plugin": "Requires plugin: {{plugin}}",
         "label-suggestions": "SUGGESTIONS FROM ITEM GALLERY",
+        "notice-toolbar-created": "Toolbar created: {{toolbar}}",
         "select-plugin-placeholder": "Select plugin to use...",
         "select-plugin-suggestion": "{{plugin}}",
         "select-plugin-suggestion-not-enabled": "{{plugin}} ⚠️ Not enabled or installed",
         "title": "Note Toolbar Gallery",
         "tooltip-add-additional-item": "Learn more to add to a toolbar",
-        "tooltip-add-item": "Add this item to a toolbar"
+        "tooltip-add-item": "Add this item to a toolbar",
+        "warning-additional-items": "Some items were not added to the toolbar because require access to the clipboard or may read/write files in your vault. See Additional Gallery items in the user guide."
     },
     "import": {
         "button-add-items": "Add items",

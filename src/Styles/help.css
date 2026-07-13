@@ -2,6 +2,13 @@
  * Help
  */
 
+.note-toolbar-gallery-add-toolbar {
+    margin-top: 16px;
+    &:hover {
+        cursor: pointer;
+    }
+}
+
 .note-toolbar-gallery-item-divider {
     margin-top: 0.5em;
     margin-bottom: 0.5em;

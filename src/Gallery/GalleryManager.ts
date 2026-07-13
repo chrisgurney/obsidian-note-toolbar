@@ -150,21 +150,20 @@ export default class GalleryManager {
 
 	}
 
-    async addItems(galleryItems: ToolbarItemSettings[]): Promise<void> {
+    async addItems(galleryItems: ToolbarItemSettings[], toolbarName: string): Promise<void> {
         if (galleryItems.find((item) => item.linkAttr.type === ItemType.Additional)) {
             const notice = new Notice(t('gallery.warning-additional-items'), 10000);
             notice.containerEl.addClass('mod-warning');
-            notice.messageEl.addClass('note-toolbar-notice-pointer');
-            this.ntb.registerDomEvent(notice.messageEl, 'click', async () => {
-                
-            });
+            // notice.messageEl.addClass('note-toolbar-notice-pointer');
+            // this.ntb.registerDomEvent(notice.messageEl, 'click', async () => {
+            // });
         }
-        const toolbar = await this.ntb.settingsManager.newToolbar();
+        const toolbar = await this.ntb.settingsManager.newToolbar(toolbarName);
         const [newItems] = await this.addItemToToolbar(toolbar, galleryItems);
         if (!newItems) return;
         this.ntb.commands.openToolbarSettingsForId(toolbar.uuid);
         new Notice(
-            t('setting.add-item.notice-item-added_plural', { toolbarName: toolbar.name, interpolation: { escapeValue: false } })
+            t('gallery.notice-toolbar-created', { toolbar: toolbar.name, interpolation: { escapeValue: false } })
         ).containerEl.addClass('mod-success');
     }
 

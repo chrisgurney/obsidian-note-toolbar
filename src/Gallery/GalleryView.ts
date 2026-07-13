@@ -135,6 +135,7 @@ export default class GalleryView extends ItemView {
 			const galleryItemContainerEl = markdownEl.createDiv();
 			galleryItemContainerEl.addClass('note-toolbar-gallery-card-items');
 			renderGalleryItems(this.ntb, galleryItemContainerEl, category.itemIds, cssColor);
+			renderAddAsToolbar(galleryItemContainerEl, category.itemIds, catName);
 
 		};
 
@@ -152,6 +153,21 @@ export default class GalleryView extends ItemView {
 			if (galleryItemEl && galleryItemEl.id) {
 				const galleryItem = this.ntb.gallery.getItemById(galleryItemEl.id);
 				if (galleryItem) await this.ntb.gallery.addItemWithPrompt(galleryItem);
+				return;
+			}
+			const addToolbarEl = (evt.target as HTMLElement).closest('.note-toolbar-gallery-add-toolbar');
+			if (addToolbarEl) {
+				const addToolbarItemIds = addToolbarEl.getAttr('data-tbar-items');
+				const addToolbarName = addToolbarEl.getAttr('data-tbar-name');
+				if (!addToolbarItemIds || !addToolbarName) {
+					this.ntb.error('Invalid toolbar IDs or toolbar name:', addToolbarItemIds, addToolbarName);
+					return;
+				}
+				const itemIds: string[] = JSON.parse(addToolbarItemIds) as string[];
+				this.ntb.debug('itemIds', itemIds);
+				const galleryItems = this.ntb.gallery.getItemsById(itemIds);
+				if (galleryItems) await this.ntb.gallery.addItems(galleryItems, addToolbarName);
+				return;
 			}
 		});
 
@@ -211,5 +227,15 @@ export function renderGalleryItems(ntb: NoteToolbarPlugin, containerEl: HTMLDivE
 		}
 
 	});
+
+}
+
+export function renderAddAsToolbar(containerEl: HTMLDivElement, itemIds: string[], toolbarName: string) {
+
+	const addButtonEl = containerEl.createEl('button');
+	addButtonEl.addClass('note-toolbar-gallery-add-toolbar');
+	addButtonEl.setText("Add as toolbar");
+	addButtonEl.setAttr('data-tbar-items', JSON.stringify(itemIds));
+	addButtonEl.setAttr('data-tbar-name', toolbarName);
 
 }
