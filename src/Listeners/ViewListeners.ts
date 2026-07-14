@@ -38,7 +38,7 @@ export default class ViewListeners {
     }
 
     /**
-     * Listens to changes on scroll using {@link onScroll}.
+     * Listens to changes on scroll using {@link onScroll}, to reposition the floating toolbar.
      */
     private setupScrollListener(view: ItemView): void {
         // remove existing
@@ -50,7 +50,7 @@ export default class ViewListeners {
         // get the scrollable container based on view type
         this.scrollContainer = this.getScrollContainer(view);
         if (!this.scrollContainer) {
-            this.ntb.debug('⚠️ No scroll container found for this view type');
+            this.ntb.debug('setupScrollListener: No scroll container found for this view type');
             return;
         }
 
