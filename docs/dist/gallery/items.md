@@ -1,3 +1,16 @@
+## Clipboard
+
+Items that use the clipboard. Learn how to add these to Obsidian on the [Additional Gallery items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Additional-Gallery-items) page.
+
+| Item | Description |
+| --- | --- |
+| Copy | Copies the selected text to the clipboard. *Add from: [[Additional Gallery items]]* |
+| Cut | Cuts the selected text to the clipboard. *Add from: [[Additional Gallery items]]* |
+| Paste | Pastes the text from the clipboard. *Add from: [[Additional Gallery items]]* |
+| Copy link to block | Copies a link to the current block to the clipboard. *Add from: [[Additional Gallery items]]* |
+| Copy note content | Copy body of the note to the clipboard, ignoring frontmatter. *Add from: [[Additional Gallery items]]* |
+| Paste external embed | Pastes an embedded external link. *Add from: [[Additional Gallery items]]* |
+
 ## Daily Notes
 
 Quickly navigate between daily notes. Requires the _Daily Notes_ core plugin.
@@ -8,31 +21,18 @@ Quickly navigate between daily notes. Requires the _Daily Notes_ core plugin.
 | Today's daily note | Go to today's daily note. |
 | Next daily note | Go to the next daily note. |
 
-## Basic Actions
-
-For quick text editing and history control.
-
-| Item | Description |
-| --- | --- |
-| Copy | Copies the selected text to the clipboard. *Add from: [[Additional Gallery items]]* |
-| Cut | Cuts the selected text to the clipboard. *Add from: [[Additional Gallery items]]* |
-| Paste | Pastes the text from the clipboard. *Add from: [[Additional Gallery items]]* |
-| Undo | Reverts the latest action. |
-| Redo | Reapplies the last undone action. |
-| Clear formatting | Remove all text formatting. |
-| Copy note content | Copy body of the note to the clipboard, ignoring frontmatter. *Add from: [[Additional Gallery items]]* |
-
 ## Editing
 
 Adjust the order and arrangement of content.
 
 | Item | Description |
 | --- | --- |
+| Undo | Reverts the latest action. |
+| Redo | Reapplies the last undone action. |
 | Move line up | Move the current line up. |
 | Move line down | Move the current line down. |
 | Toggle comment | Add or remove comments. |
 | Toggle inline math | Apply or remove inline math formatting. |
-| Copy link to block | Copies a link to the current block to the clipboard. *Add from: [[Additional Gallery items]]* |
 
 ## Files
 
@@ -41,7 +41,6 @@ Tools for working with files.
 | Item | Description |
 | --- | --- |
 | New note | Creates a new note. |
-| Append text | Appends the prompted text to a file you specify. *Add from: [[Additional Gallery items]]* |
 | New kanban | Create a new kanban board. |
 | New canvas | Create a new canvas file. |
 | Move file to folder | Move current file to a chosen folder. |
@@ -67,6 +66,7 @@ Change how text looks.
 | Toggle highlight | Apply or remove text highlighting. |
 | Toggle italic | Apply or remove italic formatting. |
 | Toggle strikethrough | Apply or remove strikethrough formatting. |
+| Clear formatting | Remove all text formatting. |
 
 ## Lists & Indentation
 
@@ -95,7 +95,6 @@ Add various types of content like links or media.
 | Add internal link | Add an internal link. |
 | Insert table | Insert a table. |
 | Add embed | Add an embedded file or note. |
-| Paste external embed | Pastes an embedded external link. *Add from: [[Additional Gallery items]]* |
 | Insert attachment | Insert a file attachment. |
 | Insert math block | Insert a math block. |
 
@@ -135,7 +134,6 @@ Navigate between notes and files.
 | Navigate forward | Go forwards. |
 | Previous file | Open previous file in the folder, sorted A-Z. Loops to the last file. |
 | Next file | Open next file in the folder, sorted A-Z. Loops to the first file. |
-| Open file in new tab | Opens the selected file in a new tab. *Add from: [[Additional Gallery items]]* |
 | File switcher | Open the file switcher. |
 | Previous tab | Go to the previous tab. |
 | Next tab | Go to the next tab. |
@@ -156,7 +154,6 @@ Replace the new tab view with a toolbar. [Learn more](https://github.com/chrisgu
 | Home | Go to your home note. (Enter your home note in the URL.) |
 | Today's daily note | Go to today's daily note. |
 | New note | Creates a new note. |
-| Open file in new tab | Opens the selected file in a new tab. *Add from: [[Additional Gallery items]]* |
 | New from template | Create a new note from a template you select. |
 | Show bookmarks | Opens the bookmarks sidebar. |
 
@@ -182,8 +179,6 @@ Get access to Note Toolbar settings and tools quickly.
 | Quick Tools | Opens a searchable window with access to all toolbar items. |
 | Toolbar settings | Opens the active Note Toolbar's settings to customize your toolbar. |
 | Note Toolbar User Guide | Access the Note Toolbar User Guide for help and tips. |
-| Export all toolbars as callouts | Writes an export file containing all toolbars as callouts. *Add from: [[Additional Gallery items]]* |
-| Backup Note Toolbar data | Copy Note Toolbar's settings (data.json) file into the vault. *Add from: [[Additional Gallery items]]* |
 
 ## Obsidian Support
 
@@ -204,6 +199,17 @@ Search in notes and across your vault.
 | Find & Replace | Open the find/replace panel in the current note. |
 | Search all files | Opens the search sidebar. |
 | Search folder | Search in the current folder, or all files if currently in the root. |
+
+## Vault files
+
+Items that require access to vault files. Learn how to add these to Obsidian on the [Additional Gallery items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Additional-Gallery-items) page.
+
+| Item | Description |
+| --- | --- |
+| Open file in new tab | Opens the selected file in a new tab. *Add from: [[Additional Gallery items]]* |
+| Append text | Appends the prompted text to a file you specify. *Add from: [[Additional Gallery items]]* |
+| Export all toolbars as callouts | Writes an export file containing all toolbars as callouts. *Add from: [[Additional Gallery items]]* |
+| Backup Note Toolbar data | Copy Note Toolbar's settings (data.json) file into the vault. *Add from: [[Additional Gallery items]]* |
 
 ## Views and Themes
 

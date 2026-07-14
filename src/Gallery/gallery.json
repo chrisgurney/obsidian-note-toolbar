@@ -18,6 +18,17 @@
         "uk": "Деякі елементи потребують наявність додатків для більш функціональної обробки. "
     },
     "categories": [
+        { 
+            "name": { 
+                "en": "Clipboard"
+            },
+            "description": { 
+                "en": "Items that use the clipboard. Learn how to add these to Obsidian on the [Additional Gallery items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Additional-Gallery-items) page."
+            },
+            "itemIds": [
+                "copy", "cut", "paste", "copy-block-link", "copy-note-content", "paste-external-embed"
+            ]
+        },
         {
             "name": { 
                 "en": "Daily Notes",
@@ -37,23 +48,6 @@
         },
         {
             "name": { 
-                "en": "Basic Actions",
-                "ja": "基本操作",
-                "zh": "基本操作",
-                "uk": "Основні дії"
-            },
-            "description": { 
-                "en": "For quick text editing and history control.",
-                "ja": "テキストの簡易編集と履歴の操作に。",
-                "zh": "用于快速文本编辑和操作历史。",
-                "uk": "Для швидкого редагування тексту та керування історією."
-            },
-            "itemIds": [
-                "copy", "cut", "paste", "undo", "redo", "clear-formatting", "copy-note-content"
-            ]
-        },
-        {
-            "name": { 
                 "en": "Editing",
                 "ja": "編集",
                 "zh": "编辑",
@@ -66,7 +60,7 @@
                 "uk": "Працюйте швидше з текстовим редактором."
             },
             "itemIds": [
-                "swap-line-up", "swap-line-down", "toggle-comments", "toggle-inline-math", "copy-block-link"
+                "undo", "redo", "swap-line-up", "swap-line-down", "toggle-comments", "toggle-inline-math"
             ]
         },
         {
@@ -83,7 +77,7 @@
                 "uk": "Інструменти роботи з файлами."
             },
             "itemIds": [
-                "file-new", "file-append", "obsidian-kanban-create", "canvas-new", "file-move", "file-in-explorer", "file-in-system", "vscode-open"
+                "file-new", "obsidian-kanban-create", "canvas-new", "file-move", "file-in-explorer", "file-in-system", "vscode-open"
             ]
         },
         {
@@ -100,7 +94,7 @@
                 "uk": "Змініть вигляд тексту."
             },
             "itemIds": [
-                "toggle-blockquote", "toggle-bold", "toggle-code", "set-heading-1", "set-heading-2", "set-heading-3", "set-heading-4", "set-heading-5", "set-heading-6", "toggle-highlight", "toggle-italics", "toggle-strikethrough"
+                "toggle-blockquote", "toggle-bold", "toggle-code", "set-heading-1", "set-heading-2", "set-heading-3", "set-heading-4", "set-heading-5", "set-heading-6", "toggle-highlight", "toggle-italics", "toggle-strikethrough", "clear-formatting"
             ]
         },
         {
@@ -134,7 +128,7 @@
                 "uk": "Додайте різні типи вмісту, такі як посилання, або медіа."
             },
             "itemIds": [
-                "insert-codeblock", "insert-callout", "insert-link", "insert-tag", "insert-horizontal-rule", "insert-wikilink", "insert-table", "insert-embed", "paste-external-embed", "attach-file", "insert-mathblock"
+                "insert-codeblock", "insert-callout", "insert-link", "insert-tag", "insert-horizontal-rule", "insert-wikilink", "insert-table", "insert-embed", "attach-file", "insert-mathblock"
             ]
         },
         {
@@ -180,7 +174,7 @@
                 "uk": "Переміщуйтесь між файлами та каталогами."
             },
             "itemIds": [
-                "go-back", "go-forward","file-prev", "file-next", "file-new-tab", "file-switcher-open", "tab-prev", "tab-next", "tab-switcher-open", "tab-new", "tab-close", "go-home", "go-up", "bookmarks-open", "system-vault-open"
+                "go-back", "go-forward","file-prev", "file-next", "file-switcher-open", "tab-prev", "tab-next", "tab-switcher-open", "tab-new", "tab-close", "go-home", "go-up", "bookmarks-open", "system-vault-open"
             ]
         },
         {
@@ -196,7 +190,7 @@
                 "zh": "使用工具栏替换新标签页视图。  [了解更多](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/New-tab-view)"
             },
             "itemIds": [
-                "go-home", "daily-notes-today", "file-new", "file-new-tab", "templater-new-note-from-template", "bookmarks-open"
+                "go-home", "daily-notes-today", "file-new", "templater-new-note-from-template", "bookmarks-open"
             ]
         },
         {
@@ -229,7 +223,7 @@
                 "uk": "Отримайте швидкий доступ до налаштувань та інструментів Note Toolbar."
             },
             "itemIds": [
-                "note-toolbar-quick-toolbars", "note-toolbar-quick-tools", "note-toolbar-tbar-settings", "note-toolbar-user-guide", "note-toolbar-export", "note-toolbar-backup-data"
+                "note-toolbar-quick-toolbars", "note-toolbar-quick-tools", "note-toolbar-tbar-settings", "note-toolbar-user-guide"
             ]
         },
         {
@@ -264,6 +258,17 @@
             },
             "itemIds": [
                 "search-selection", "search-replace-open", "global-search-open", "folder-search"
+            ]
+        },
+        {
+            "name": { 
+                "en": "Vault files"
+            },
+            "description": { 
+                "en": "Items that require access to vault files. Learn how to add these to Obsidian on the [Additional Gallery items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Additional-Gallery-items) page."
+            },
+            "itemIds": [
+                "file-new-tab", "file-append", "note-toolbar-export", "note-toolbar-backup-data"
             ]
         },
         {
