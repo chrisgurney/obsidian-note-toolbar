@@ -33,6 +33,8 @@ Adjust the order and arrangement of content.
 | Move line down | Move the current line down. |
 | Toggle comment | Add or remove comments. |
 | Toggle inline math | Apply or remove inline math formatting. |
+| Add cursor above | Add another cursor above the current cursor. |
+| Add cursor below | Add another cursor below the current cursor. |
 
 ## Editor Navigation
 
@@ -94,6 +96,8 @@ Change how text looks.
 | Toggle blockquote | Apply or remove blockquote formatting. |
 | Toggle bold | Apply or remove bold formatting. |
 | Toggle code | Apply or remove inline code formatting. |
+| Toggle heading | Toggle the heading level on the current line. |
+| Remove heading | Remove the heading from the current line. |
 | Heading 1 | Set as heading 1 |
 | Heading 2 | Set as heading 2 |
 | Heading 3 | Set as heading 3 |
@@ -126,6 +130,7 @@ Add various types of content like links or media.
 | --- | --- |
 | Insert code block | Insert a code block. |
 | Insert callout | Insert a callout block. |
+| Insert footnote | Insert a footnote. |
 | Insert Markdown link | Insert a Markdown link. |
 | Insert tag | Insert a tag in the note. |
 | Insert horizontal rule | Insert a horizontal rule to separate sections. |
@@ -137,7 +142,7 @@ Add various types of content like links or media.
 
 ## Mobile Navigation
 
-Use these after hiding Obsidian's Navigation actions (on phones).
+Helpful for navigating within the app and around the editor on mobile.
 
 | Item | Description |
 | --- | --- |
@@ -147,6 +152,10 @@ Use these after hiding Obsidian's Navigation actions (on phones).
 | New tab | Opens a new empty tab. |
 | Tab switcher | Open the mobile tab switcher. *Not supported on: desktop* |
 | Toggle keyboard | Toggles the keyboard *Not supported on: desktop, tablet* |
+| Move caret up | Move the caret up. *Not supported on: desktop* |
+| Move caret down | Move the caret down. *Not supported on: desktop* |
+| Move caret left | Move the caret left. *Not supported on: desktop* |
+| Move caret right | Move the caret right. *Not supported on: desktop* |
 
 ## New Tab View
 

@@ -1,5 +1,33 @@
 [
     {
+        "id": "add-cursor-above",
+        "commandCheck": true,
+        "commandId": "editor:add-cursor-above",
+        "description": {
+            "en": "Add another cursor above the current cursor."
+        },
+        "focus": "editor",
+        "icon": "mouse-pointer-click",
+        "tooltip": {
+            "en": "Add cursor above"
+        },
+        "type": "command"
+    },
+    {
+        "id": "add-cursor-below",
+        "commandCheck": true,
+        "commandId": "editor:add-cursor-below",
+        "description": {
+            "en": "Add another cursor below the current cursor."
+        },
+        "focus": "editor",
+        "icon": "mouse-pointer-click",
+        "tooltip": {
+            "en": "Add cursor below"
+        },
+        "type": "command"
+    },
+    {
         "id": "attach-file",
         "commandCheck": true,
         "commandId": "editor:attach-file",
@@ -269,6 +297,20 @@
             "ja": "次のデイリーノート",
             "zh": "下一条每日笔记",
             "uk": "Наступна щоденна нотатка"
+        },
+        "type": "command"
+    },
+    {
+        "id": "delete-paragraph",
+        "commandCheck": true,
+        "commandId": "editor:delete-paragraph",
+        "description": {
+            "en": "Delete the current paragraph."
+        },
+        "focus": "editor",
+        "icon": "pilcrow",
+        "tooltip": {
+            "en": "Delete paragraph"
         },
         "type": "command"
     },
@@ -709,6 +751,20 @@
         "type": "command"
     },
     {
+        "id": "insert-footnote",
+        "commandCheck": true,
+        "commandId": "editor:insert-footnote",
+        "description": {
+            "en": "Insert a footnote."
+        },
+        "focus": "editor",
+        "icon": "file-signature",
+        "tooltip": {
+            "en": "Insert footnote"
+        },
+        "type": "command"
+    },
+    {
         "id": "insert-embed",
         "commandCheck": true,
         "commandId": "editor:insert-embed",
@@ -875,6 +931,66 @@
             "ja": "ワークスペースを読み込み",
             "zh": "加载工作区",
             "uk": "Завантажити простір"
+        },
+        "type": "command"
+    },
+    {
+        "id": "move-caret-up",
+        "commandCheck": true,
+        "commandId": "editor:move-caret-up",
+        "description": {
+            "en": "Move the caret up."
+        },
+        "excludeOn": "desktop",
+        "focus": "editor",
+        "icon": "chevron-up",
+        "tooltip": {
+            "en": "Move caret up"
+        },
+        "type": "command"
+    },
+    {
+        "id": "move-caret-down",
+        "commandCheck": true,
+        "commandId": "editor:move-caret-down",
+        "description": {
+            "en": "Move the caret down."
+        },
+        "excludeOn": "desktop",
+        "focus": "editor",
+        "icon": "chevron-down",
+        "tooltip": {
+            "en": "Move caret down"
+        },
+        "type": "command"
+    },
+    {
+        "id": "move-caret-left",
+        "commandCheck": true,
+        "commandId": "editor:move-caret-left",
+        "description": {
+            "en": "Move the caret left."
+        },
+        "excludeOn": "desktop",
+        "focus": "editor",
+        "icon": "chevron-left",
+        "tooltip": {
+            "en": "Move caret left"
+        },
+        "type": "command"
+    },
+    {
+        "id": "move-caret-right",
+        "commandCheck": true,
+        "commandId": "editor:move-caret-right",
+        "description": {
+            "en": "Move the caret right."
+        },
+        "excludeOn": "desktop",
+        "focus": "editor",
+        "icon": "chevron-right",
+        "tooltip": {
+            "en": "Move caret right"
         },
         "type": "command"
     },
@@ -1566,7 +1682,7 @@
             "zh": "转到下一个标签页。",
             "uk": "Перейдіть до наступної вкладки."
         },
-        "icon": "chevron-right",
+        "icon": "square-chevron-right",
         "tooltip": {
             "en": "Next tab",
             "ja": "次のタブ",
@@ -1584,7 +1700,7 @@
             "zh": "转到上一个标签页。",
             "uk": "Перейдіть до попередньої вкладки."
         },
-        "icon": "chevron-left",
+        "icon": "square-chevron-left",
         "tooltip": {
             "en": "Previous tab",
             "ja": "前のタブ",
@@ -1659,6 +1775,20 @@
             "uk": "Повторити"
         },
         "type": "javascript"
+    },
+    {
+        "id": "remove-heading",
+        "commandCheck": true,
+        "commandId": "editor:set-heading-0",
+        "description": {
+            "en": "Remove the heading from the current line."
+        },
+        "focus": "editor",
+        "icon": "heading",
+        "tooltip": {
+            "en": "Remove heading"
+        },
+        "type": "command"
     },
     {
         "id": "swap-line-down",
@@ -2070,6 +2200,20 @@
         "icon": "keyboard-toggle",
         "tooltip": {
             "en": "Toggle keyboard"
+        },
+        "type": "command"
+    },
+    {
+        "id": "toggle-heading",
+        "commandCheck": true,
+        "commandId": "editor:set-heading",
+        "description": {
+            "en": "Toggle the heading level on the current line."
+        },
+        "focus": "editor",
+        "icon": "heading",
+        "tooltip": {
+            "en": "Toggle heading"
         },
         "type": "command"
     },

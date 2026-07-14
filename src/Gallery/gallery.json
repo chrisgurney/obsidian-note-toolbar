@@ -60,7 +60,7 @@
                 "uk": "Працюйте швидше з текстовим редактором."
             },
             "itemIds": [
-                "undo", "redo", "swap-line-up", "swap-line-down", "toggle-comments", "toggle-inline-math"
+                "undo", "redo", "swap-line-up", "swap-line-down", "toggle-comments", "toggle-inline-math", "add-cursor-above", "add-cursor-below"
             ]
         },
         {
@@ -130,7 +130,7 @@
                 "uk": "Змініть вигляд тексту."
             },
             "itemIds": [
-                "toggle-blockquote", "toggle-bold", "toggle-code", "set-heading-1", "set-heading-2", "set-heading-3", "set-heading-4", "set-heading-5", "set-heading-6", "toggle-highlight", "toggle-italics", "toggle-strikethrough", "clear-formatting"
+                "toggle-blockquote", "toggle-bold", "toggle-code", "toggle-heading", "remove-heading", "set-heading-1", "set-heading-2", "set-heading-3", "set-heading-4", "set-heading-5", "set-heading-6", "toggle-highlight", "toggle-italics", "toggle-strikethrough", "clear-formatting"
             ]
         },
         {
@@ -164,7 +164,7 @@
                 "uk": "Додайте різні типи вмісту, такі як посилання, або медіа."
             },
             "itemIds": [
-                "insert-codeblock", "insert-callout", "insert-link", "insert-tag", "insert-horizontal-rule", "insert-wikilink", "insert-table", "insert-embed", "attach-file", "insert-mathblock"
+                "insert-codeblock", "insert-callout", "insert-footnote", "insert-link", "insert-tag", "insert-horizontal-rule", "insert-wikilink", "insert-table", "insert-embed", "attach-file", "insert-mathblock"
             ]
         },
         {
@@ -172,10 +172,10 @@
                 "en": "Mobile Navigation"
             },
             "description": { 
-                "en": "Use these after hiding Obsidian's Navigation actions (on phones)."
+                "en": "Helpful for navigating within the app and around the editor on mobile."
             },
             "itemIds": [
-                "tab-prev", "tab-next", "file-switcher-open", "tab-new", "tab-switcher-open", "toggle-keyboard"
+                "tab-prev", "tab-next", "file-switcher-open", "tab-new", "tab-switcher-open", "toggle-keyboard", "move-caret-up", "move-caret-down", "move-caret-left", "move-caret-right"
             ]
         },
         {
