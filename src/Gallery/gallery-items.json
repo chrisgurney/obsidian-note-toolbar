@@ -918,7 +918,7 @@
         "description": {
             "en": "Writes an export file containing all toolbars as callouts."
         },
-        "icon": "form",
+        "icon": "file-spreadsheet",
         "tooltip": {
             "en": "Export all toolbars as callouts"
         },
