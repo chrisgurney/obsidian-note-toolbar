@@ -79,6 +79,10 @@ const item = ntb.getActiveItem();
 item.setIcon('circle-alert');
 ```
 
+#### See
+
+Obsidian's [Icons documentation](https://docs.obsidian.md/Plugins/User+interface/Icons).
+
 ***
 
 ### setLabel()
