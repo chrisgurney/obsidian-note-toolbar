@@ -39,8 +39,10 @@ export function galleryDocs(itemsFile, galleryFile, outputFile) {
             }
 
             const exclusionNote = getExclusionNote(item);
-            description += `${exclusionNote ? ` *${exclusionNote}*` : ''}`;
+            description += exclusionNote ? ` *${exclusionNote}*` : '';
             
+            description += item.since ? ` *Since ${item.since}*` : '';
+
             let line = `| ${item.tooltip.en} | ${description} |`;
             markdown += line + '\n';
         }
