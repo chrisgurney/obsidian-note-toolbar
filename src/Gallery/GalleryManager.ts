@@ -209,7 +209,7 @@ export default class GalleryManager {
             const hasIcon = getIcon(item.icon);
             if (!hasIcon) {
                 // non-fatal error, can display item anyway
-                debugLog += `• ${item.id}: Item icon does not exist: ${item.icon}\n`;
+                debugLog += `• ${item.id}: ⚠️ Icon does not exist: ${item.icon}\n`;
             }
 
             this.items.push({
