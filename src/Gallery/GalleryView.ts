@@ -8,6 +8,7 @@ import { URLS } from "Utils/Urls";
 
 interface Category {
 	name: { [key: string]: string };
+	addAsToolbar?: boolean;
 	description: { [key: string]: string };
 	itemIds: string[];
 }
@@ -140,7 +141,10 @@ export default class GalleryView extends ItemView {
 			const galleryItemContainerEl = markdownEl.createDiv();
 			galleryItemContainerEl.addClass('note-toolbar-gallery-card-items');
 			renderGalleryItems(this.ntb, galleryItemContainerEl, category.itemIds, cssColor);
-			renderAddAsToolbar(galleryItemContainerEl, category.itemIds, catName);
+
+			if (category.addAsToolbar !== false) {
+				renderAddAsToolbar(galleryItemContainerEl, category.itemIds, catName);
+			}
 
 		};
 

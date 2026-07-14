@@ -22,6 +22,7 @@
             "name": { 
                 "en": "Clipboard"
             },
+            "addAsToolbar": false,
             "description": { 
                 "en": "Items that use the clipboard. Learn how to add these to Obsidian on the [Additional Gallery items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Additional-Gallery-items) page."
             },
@@ -248,6 +249,7 @@
             "name": { 
                 "en": "Vault Files"
             },
+            "addAsToolbar": false,
             "description": { 
                 "en": "Items that require access to vault files. Learn how to add these to Obsidian on the [Additional Gallery items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Additional-Gallery-items) page."
             },
