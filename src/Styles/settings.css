@@ -135,10 +135,6 @@
             &:not(:first-child):not(:last-child) {
                 border-radius: 0;
             }
-            &:only-child {
-                border-top: none;
-                border-radius: var(--setting-items-radius);
-            }
             &:first-child {
                 border-top: none;
                 border-radius: var(--setting-items-radius) var(--setting-items-radius) 0 0;
@@ -146,6 +142,10 @@
             &:last-child {
                 border-top: var(--border-width) solid var(--background-modifier-border);
                 border-radius: 0 0 var(--setting-items-radius) var(--setting-items-radius);
+            }
+            &:only-child {
+                border-top: none;
+                border-radius: var(--setting-items-radius);
             }
             & .setting-item-name {
                 align-items: center;
@@ -180,6 +180,9 @@
                 }
                 &:last-child {
                     border-radius: 0 0 var(--setting-items-radius) var(--setting-items-radius);
+                }
+                &:only-child {
+                    border-radius: var(--setting-items-radius);
                 }
             }
         }
