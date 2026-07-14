@@ -853,6 +853,7 @@
             "label-set-default-notes": "This can be changed later.",
             "label-tbar-name-not-set": "Toolbar name not set",
             "link-create": "Create a toolbar",
+            "link-gallery": "Browse the Gallery",
             "menu-copy-id": "Copy developer ID...",
             "menu-copy-id-description": "Copy this ID to reference this toolbar from the API.",
             "menu-copy-id-title": "Toolbar developer ID",

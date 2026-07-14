@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from 'main';
 import { ButtonComponent, debounce, Menu, MenuItem, normalizePath, Platform, PluginSettingTab, setIcon, Setting, SettingGroup, ToggleComponent } from 'obsidian';
-import { FolderMapping, OBSIDIAN_UI_ELEMENTS, OBSIDIAN_UI_MOBILE_NAVBAR_OPTIONS, SETTINGS_VERSION, SettingType, t } from 'Settings/NoteToolbarSettings';
+import { FolderMapping, OBSIDIAN_UI_ELEMENTS, OBSIDIAN_UI_MOBILE_NAVBAR_OPTIONS, SETTINGS_VERSION, SettingType, t, VIEW_TYPE_GALLERY } from 'Settings/NoteToolbarSettings';
 import IconSuggestModal from 'Settings/UI/Modals/IconSuggestModal';
 import FolderSuggester from 'Settings/UI/Suggesters/FolderSuggester';
 import ToolbarSuggester from 'Settings/UI/Suggesters/ToolbarSuggester';
@@ -221,18 +221,27 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		const toolbarListDiv = createDiv();
 		toolbarListDiv.addClass("note-toolbar-setting-toolbar-list");
 		if (this.ntb.settings.toolbars.length == 0) {
+			toolbarListDiv.toggleClass('note-toolbar-setting-empty-toolbars-message', true);
 
-			const emptyMsgEl = createDiv({ text: 
+			const emptyMsgEl = createSpan({ text: 
 				this.ntb.settingsUtils.emptyMessageFr(t('setting.toolbars.label-empty-create-tbar'), t('setting.toolbars.link-create'), () => {
 					void this.ntb.settingsManager.newToolbar().then((newToolbar) => {
 						this.ntb.settingsManager.openToolbarSettings(newToolbar, this);
-					});
-				}) });
-			emptyMsgEl.addClass('note-toolbar-setting-empty-message');
+					}) })
+			});
 			toolbarListDiv.append(emptyMsgEl);
+
+			const galleryCtaEl = createSpan({ text:
+				this.ntb.settingsUtils.emptyMessageFr('', t('setting.toolbars.link-gallery'), () => {
+					void this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true });
+					if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
+				})
+			});
+			toolbarListDiv.append(galleryCtaEl);
 
 		}
 		else {
+			toolbarListDiv.toggleClass('note-toolbar-setting-empty-message', false);
 			this.ntb.settings.toolbars.forEach(
 				(toolbar) => {
 					

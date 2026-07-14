@@ -860,12 +860,12 @@
     white-space: normal;
 }
 
-.note-toolbar-setting-empty-message {
+.note-toolbar-setting-empty-message,
+.note-toolbar-setting-empty-toolbars-message {
     align-items: center;
     color: var(--text-muted);
     display: flex;
     font-style: italic;
-    height: var(--input-height);
     justify-content: center;
     .note-toolbar-setting-item-styles & {
         padding-bottom: 0;    
@@ -882,6 +882,13 @@
 .note-toolbar-setting-error-message {
     color: var(--text-error);
     padding-bottom: 1em;
+}
+
+.note-toolbar-setting-empty-toolbars-message {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    padding: var(--setting-items-padding);
 }
 
 input[type="search"].note-toolbar-setting-error,
