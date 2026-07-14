@@ -241,7 +241,7 @@
         "title": "Note Toolbar Gallery",
         "tooltip-add-additional-item": "Learn more to add to a toolbar",
         "tooltip-add-item": "Add this item to a toolbar",
-        "warning-additional-items": "Some items were not added to the toolbar because require access to the clipboard or may read/write files in your vault. See Additional Gallery items in the user guide."
+        "warning-additional-items": "Some or all of these items are not available because they require access to the clipboard, or read/write files in your vault. See Additional Gallery items in the user guide."
     },
     "import": {
         "button-add-items": "Add items",
