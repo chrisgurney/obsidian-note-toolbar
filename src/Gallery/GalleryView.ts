@@ -196,7 +196,7 @@ export function renderGalleryItems(ntb: NoteToolbarPlugin, containerEl: HTMLDivE
 
 	itemIds.forEach(itemId => {
 
-		const galleryItem = galleryItems.find(item => item.uuid.includes(itemId));
+		const galleryItem = galleryItems.find(item => item.uuid === itemId);
 		if (galleryItem) {
 
 			const itemEl = itemsEl.createEl('button');
@@ -225,6 +225,9 @@ export function renderGalleryItems(ntb: NoteToolbarPlugin, containerEl: HTMLDivE
 			if (cssColor) iconEl.style.color = cssColor;
 			setIcon(iconEl, galleryItem.icon);
 
+		}
+		else {
+			ntb.error('renderGalleryItems: Gallery item not found:', itemId);
 		}
 
 	});
