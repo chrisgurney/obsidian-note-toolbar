@@ -191,25 +191,25 @@ export default class GalleryManager {
                 (excludeOn.includes('desktop') && Platform.isDesktop) ||
                 (excludeOn.includes('phone') && Platform.isPhone)
             ) {
-                debugLog += `• ${item.id}: SKIPPED item not available on platform\n`;
+                debugLog += `| ${item.id}: SKIPPED item not available on platform\n`;
                 continue;
             }
 
             if (item.type === ItemType.Command) {
                 if (!item.commandId) {
-                    debugLog += `• ${item.id}: ⚠️ Command not defined for item\n`;
+                    debugLog += `⚠️ ${item.id}: Command not defined for item\n`;
                     continue;
                 }
                 if (!(item.commandId in this.ntb.app.commands.commands)) {
                      // non-fatal error, as it may be for plugin that's not installed/enabled
-                    debugLog += `• ${item.id}: Command does not exist: ${item.commandId}\n`;
+                    debugLog += `| ${item.id}: No such command: ${item.commandId}\n`;
                 }
             }
 
             const hasIcon = getIcon(item.icon);
             if (!hasIcon) {
                 // non-fatal error, can display item anyway
-                debugLog += `• ${item.id}: ⚠️ Icon does not exist: ${item.icon}\n`;
+                debugLog += `⚠️ ${item.id}: No such icon: ${item.icon}\n`;
             }
 
             this.items.push({
