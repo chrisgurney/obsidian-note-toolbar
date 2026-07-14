@@ -154,9 +154,6 @@ export default class GalleryManager {
         if (galleryItems.find((item) => item.linkAttr.type === ItemType.Additional)) {
             const notice = new Notice(t('gallery.warning-additional-items'), 10000);
             notice.containerEl.addClass('mod-warning');
-            // notice.messageEl.addClass('note-toolbar-notice-pointer');
-            // this.ntb.registerDomEvent(notice.messageEl, 'click', async () => {
-            // });
         }
         const toolbar = await this.ntb.settingsManager.newToolbar(toolbarName);
         const [newItems] = await this.addItemToToolbar(toolbar, galleryItems);
