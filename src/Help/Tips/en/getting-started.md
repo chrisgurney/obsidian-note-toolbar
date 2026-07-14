@@ -3,7 +3,7 @@
 To get started, do any of the following:
 
 - Use the `Note Toolbar: Create toolbar` command
-- Use the `Note Toolbar: Open Gallery` command (and choose an item)
+- Use the `Note Toolbar: Open Gallery` command
 - in settings go to [**Note Toolbar → + New toolbar**](obsidian://note-toolbar?new=toolbar)
 
 <img src="https://raw.githubusercontent.com/chrisgurney/obsidian-note-toolbar/master/docs/images/settings_edit_toolbar_empty.png" title="Edit Toolbar dialog, showing name, items, styles, and a delete button" width="800"/>
