@@ -118,6 +118,11 @@ export default class GalleryView extends ItemView {
 		
 		for (const [i, category] of sortedCategories.entries()) {
 
+			if (category.itemIds.length === 0) {
+				this.ntb.debug('GalleryManager: SKIPPING No items defined for category:', category.name.en);
+				continue;
+			}
+
 			const cssColor = cssColors[i % cssColors.length];
 			
 			const catNameEl = markdownEl.createDiv();
