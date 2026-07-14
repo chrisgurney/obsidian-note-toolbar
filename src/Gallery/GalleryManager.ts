@@ -1,6 +1,6 @@
 import galleryItems from "Gallery/gallery-items.json";
 import NoteToolbarPlugin from "main";
-import { Notice, PaneType, Platform } from "obsidian";
+import { getIcon, Notice, PaneType, Platform } from "obsidian";
 import { DEFAULT_ITEM_VISIBILITY_SETTINGS, EMPTY_TOOLBAR, EMPTY_TOOLBAR_ID, ItemFocusType, ItemType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { confirmWithModal } from "Settings/UI/Modals/ConfirmModal";
 import MessageModal from "Settings/UI/Modals/MessageModal";
@@ -174,24 +174,49 @@ export default class GalleryManager {
     }
 
     private loadItems() {
-        const startTime = performance.now();
+        const loadStartTime = performance.now();
         
         const language = (typeof i18next.language === 'string' && i18next.language.trim()) || 'en';
         const typedGalleryItems = galleryItems as GalleryItemSettings[];
-        this.items = typedGalleryItems
-            .filter((item) => {
-                const excludeOn = item.excludeOn
-                    ? (Array.isArray(item.excludeOn) ? item.excludeOn : [item.excludeOn])
-                    : [];
-                return !(
-                    (excludeOn.includes('mobile') && Platform.isMobile) ||
-                    (excludeOn.includes('desktop') && Platform.isDesktop) ||
-                    (excludeOn.includes('phone') && Platform.isPhone)
-                );
-            })
-            .map((item) => ({
+
+        let debugLog = '';
+        this.items = [];
+        for (const item of typedGalleryItems) {
+
+            const excludeOn = item.excludeOn
+                ? (Array.isArray(item.excludeOn) ? item.excludeOn : [item.excludeOn])
+                : [];
+            if (
+                (excludeOn.includes('mobile') && Platform.isMobile) ||
+                (excludeOn.includes('desktop') && Platform.isDesktop) ||
+                (excludeOn.includes('phone') && Platform.isPhone)
+            ) {
+                debugLog += `• ${item.id}: SKIPPED item not available on platform\n`;
+                continue;
+            }
+
+            if (item.type === ItemType.Command) {
+                if (!item.commandId) {
+                    debugLog += `• ${item.id}: ⚠️ Command not defined for item\n`;
+                    continue;
+                }
+                if (!(item.commandId in this.ntb.app.commands.commands)) {
+                     // non-fatal error, as it may be for plugin that's not installed/enabled
+                    debugLog += `• ${item.id}: Command does not exist: ${item.commandId}\n`;
+                }
+            }
+
+            const hasIcon = getIcon(item.icon);
+            if (!hasIcon) {
+                // non-fatal error, can display item anyway
+                debugLog += `• ${item.id}: Item icon does not exist: ${item.icon}\n`;
+            }
+
+            this.items.push({
                 uuid: item.id ?? '',
-                description: item.description ? (item.description[language] || item.description['en']) : '',
+                description: item.description
+                    ? (item.description[language] || item.description['en'])
+                    : '',
                 hasCommand: false,
                 icon: item.icon ?? '',
                 inGallery: true,
@@ -206,18 +231,28 @@ export default class GalleryManager {
                     type: item.type
                 },
                 plugin: item.plugin ?? '',
-                scriptConfig: item.script ? {
-                    expression: item.script ?? '',
-                    pluginFunction: 'TBD'
-                } : undefined,
-                tooltip: item.tooltip ? (item.tooltip[language] || item.tooltip['en']) : '',
+                scriptConfig: item.script
+                    ? {
+                        expression: item.script,
+                        pluginFunction: 'TBD'
+                    }
+                    : undefined,
+                tooltip: item.tooltip
+                    ? (item.tooltip[language] || item.tooltip['en'])
+                    : '',
                 visibility: { ...DEFAULT_ITEM_VISIBILITY_SETTINGS }
-            }));
+            });
+        }
         
         this.items.sort((a, b) => a.tooltip.localeCompare(b.tooltip));
 
-        const endTime = performance.now();
-        this.ntb.debug(`Gallery loaded in ${(endTime - startTime).toFixed(3)}s`);
+        const loadEndTime = performance.now();
+
+        if (debugLog) {
+            this.ntb.debug(`GalleryManager: Warnings/Errors while loading Gallery:\n${debugLog}`);
+        }
+        this.ntb.debug(`Gallery loaded in ${(loadEndTime - loadStartTime).toFixed(3)}s`);
+
     }
 
 }

@@ -227,7 +227,7 @@ export function renderGalleryItems(ntb: NoteToolbarPlugin, containerEl: HTMLDivE
 
 		}
 		else {
-			ntb.error('renderGalleryItems: Gallery item not found:', itemId);
+			ntb.debug(`renderGalleryItems: ${itemId}: SKIPPED Gallery item not available`);
 		}
 
 	});
