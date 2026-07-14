@@ -147,14 +147,15 @@ export default class GalleryView extends ItemView {
             createDiv().createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.help.label-feedback'), href: URLS.GH_USER_GUIDE + '/Feedback', attr: { 'aria-label': t('setting.help.button-open-github') } })
         );
 
-		// on clicking an item, prompt for toolbar and add it
 		this.ntb.registerDomEvent(markdownEl, 'click', async (evt) => {
+			// on clicking an item, prompt for toolbar and add it
 			const galleryItemEl = (evt.target as HTMLElement).closest('.note-toolbar-card-item');
 			if (galleryItemEl && galleryItemEl.id) {
 				const galleryItem = this.ntb.gallery.getItemById(galleryItemEl.id);
 				if (galleryItem) await this.ntb.gallery.addItemWithPrompt(galleryItem);
 				return;
 			}
+			// on clicking the "Add as toolbar" button, add it as a toolbar
 			const addToolbarEl = (evt.target as HTMLElement).closest('.note-toolbar-gallery-add-toolbar');
 			if (addToolbarEl) {
 				const addToolbarItemIds = addToolbarEl.getAttr('data-tbar-items');
@@ -234,7 +235,7 @@ export function renderAddAsToolbar(containerEl: HTMLDivElement, itemIds: string[
 
 	const addButtonEl = containerEl.createEl('button');
 	addButtonEl.addClass('note-toolbar-gallery-add-toolbar');
-	addButtonEl.setText("Add as toolbar");
+	addButtonEl.setText(iconTextFr('plus', t('gallery.button-add-as-toolbar')));
 	addButtonEl.setAttr('data-tbar-items', JSON.stringify(itemIds));
 	addButtonEl.setAttr('data-tbar-name', toolbarName);
 
