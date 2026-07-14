@@ -63,6 +63,19 @@ Adjust the order and arrangement of content.
 | Toggle comment | Add or remove comments. |
 | Toggle inline math | Apply or remove inline math formatting. |
 
+## Editor Navigation
+
+Get around the text editor faster.
+
+| Item | Description |
+| --- | --- |
+| Next heading | Moves the cursor to the next heading in the note. |
+| Previous heading | Moves the cursor to the previous heading in the note. |
+| Jump to top | Moves the cursor to the top of the current note. |
+| Jump to bottom | Moves the cursor to the bottom of the current note. |
+| Next callout | Moves the cursor to the next callout in the note. |
+| Toggle Vim mode | Turns Vim mode on and off. |
+
 ## Files
 
 Tools for working with files.
@@ -76,6 +89,18 @@ Tools for working with files.
 | Show file in navigation | Reveal the active file in navigation. |
 | Show file in system | Reveal the active file in the system's file explorer. *Not supported on: mobile* |
 | Open in VS Code | Opens the current file in VS Code. *Not supported on: mobile* |
+
+## Focus
+
+Remove Obsidian's UI and focus on your writing.
+
+| Item | Description |
+| --- | --- |
+| Toggle Properties | Toggle the visibility of note properties. |
+| Toggle status bar | Shows or hides Obsidian's status bar. *Not supported on: mobile* |
+| Toggle UI | Shows or hides Obsidian's status bar, note properties, sidebar, and view header. *Not supported on: mobile* |
+| Load workspace | Select and load a configured workspace. |
+| Toggle keyboard | Toggles the keyboard *Not supported on: desktop, tablet* |
 
 ## Formatting
 
@@ -127,20 +152,7 @@ Add various types of content like links or media.
 | Insert attachment | Insert a file attachment. |
 | Insert math block | Insert a math block. |
 
-## Navigating the Editor
-
-Get around the text editor faster.
-
-| Item | Description |
-| --- | --- |
-| Next heading | Moves the cursor to the next heading in the note. |
-| Previous heading | Moves the cursor to the previous heading in the note. |
-| Jump to top | Moves the cursor to the top of the current note. |
-| Jump to bottom | Moves the cursor to the bottom of the current note. |
-| Next callout | Moves the cursor to the next callout in the note. |
-| Toggle Vim mode | Turns Vim mode on and off. |
-
-## Navigating on Mobile
+## Mobile Navigation
 
 Use these after hiding Obsidian's Navigation actions (on phones).
 
@@ -153,27 +165,6 @@ Use these after hiding Obsidian's Navigation actions (on phones).
 | Tab switcher | Open the mobile tab switcher. *Not supported on: desktop* |
 | Toggle keyboard | Toggles the keyboard *Not supported on: desktop, tablet* |
 
-## Navigating the Vault
-
-Navigate between notes and files.
-
-| Item | Description |
-| --- | --- |
-| Navigate back | Go backwards. |
-| Navigate forward | Go forwards. |
-| Previous file | Open previous file in the folder, sorted A-Z. Loops to the last file. |
-| Next file | Open next file in the folder, sorted A-Z. Loops to the first file. |
-| File switcher | Open the file switcher. |
-| Previous tab | Go to the previous tab. |
-| Next tab | Go to the next tab. |
-| Tab switcher | Open the mobile tab switcher. *Not supported on: desktop* |
-| New tab | Opens a new empty tab. |
-| Close tab | Close the current tab. |
-| Home | Go to your home note. (Enter your home note in the URL.) |
-| Go up | Uses your note's "up" property to link to a parent note. |
-| Show bookmarks | Opens the bookmarks sidebar. |
-| Show vault in system | Opens the vault's folder in the system's file explorer. |
-
 ## New Tab View
 
 Replace the new tab view with a toolbar. [Learn more](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/New-tab-view)
@@ -185,18 +176,6 @@ Replace the new tab view with a toolbar. [Learn more](https://github.com/chrisgu
 | New note | Creates a new note. |
 | New from template | Create a new note from a template you select. |
 | Show bookmarks | Opens the bookmarks sidebar. |
-
-## Reduce Distractions
-
-Remove Obsidian's UI and focus on your writing.
-
-| Item | Description |
-| --- | --- |
-| Toggle Properties | Toggle the visibility of note properties. |
-| Toggle status bar | Shows or hides Obsidian's status bar. *Not supported on: mobile* |
-| Toggle UI | Shows or hides Obsidian's status bar, note properties, sidebar, and view header. *Not supported on: mobile* |
-| Load workspace | Select and load a configured workspace. |
-| Toggle keyboard | Toggles the keyboard *Not supported on: desktop, tablet* |
 
 ## Note Toolbar
 
@@ -229,7 +208,7 @@ Search in notes and across your vault.
 | Search all files | Opens the search sidebar. |
 | Search folder | Search in the current folder, or all files if currently in the root. |
 
-## Vault files
+## Vault Files
 
 Items that require access to vault files. Learn how to add these to Obsidian on the [Additional Gallery items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Additional-Gallery-items) page.
 
@@ -239,6 +218,27 @@ Items that require access to vault files. Learn how to add these to Obsidian on 
 | Append text | Appends the prompted text to a file you specify. *Add from: [[Additional Gallery items]]* |
 | Export all toolbars as callouts | Writes an export file containing all toolbars as callouts. *Add from: [[Additional Gallery items]]* |
 | Backup Note Toolbar data | Copy Note Toolbar's settings (data.json) file into the vault. *Add from: [[Additional Gallery items]]* |
+
+## Vault Navigation
+
+Navigate between notes and files.
+
+| Item | Description |
+| --- | --- |
+| Navigate back | Go backwards. |
+| Navigate forward | Go forwards. |
+| Previous file | Open previous file in the folder, sorted A-Z. Loops to the last file. |
+| Next file | Open next file in the folder, sorted A-Z. Loops to the first file. |
+| File switcher | Open the file switcher. |
+| Previous tab | Go to the previous tab. |
+| Next tab | Go to the next tab. |
+| Tab switcher | Open the mobile tab switcher. *Not supported on: desktop* |
+| New tab | Opens a new empty tab. |
+| Close tab | Close the current tab. |
+| Home | Go to your home note. (Enter your home note in the URL.) |
+| Go up | Uses your note's "up" property to link to a parent note. |
+| Show bookmarks | Opens the bookmarks sidebar. |
+| Show vault in system | Opens the vault's folder in the system's file explorer. |
 
 ## Views and Themes
 

@@ -65,6 +65,20 @@
         },
         {
             "name": { 
+                "en": "Editor Navigation"
+            },
+            "description": { 
+                "en": "Get around the text editor faster.",
+                "ja": "テキストエディター内を素早く移動します。",
+                "zh": "更快地在文本编辑器中导航。",
+                "uk": "Швидше працюйте з текстовим редактором."
+            },
+            "itemIds": [
+                "go-next-heading", "go-prev-heading", "go-top", "go-bottom", "go-next-callout", "toggle-vim-mode"
+            ]
+        },
+        {
+            "name": { 
                 "en": "Files",
                 "ja": "ファイル",
                 "zh": "文件",
@@ -78,6 +92,17 @@
             },
             "itemIds": [
                 "file-new", "obsidian-kanban-create", "canvas-new", "file-move", "file-in-explorer", "file-in-system", "vscode-open"
+            ]
+        },
+        {
+            "name": {
+                "en": "Focus"
+            },
+            "description": {
+                "en": "Remove Obsidian's UI and focus on your writing."
+            },
+            "itemIds": [
+                "note-toolbar-toggle-properties", "toggle-status-bar", "toggle-ui", "load-workspace", "toggle-keyboard"
             ]
         },
         {
@@ -133,48 +158,13 @@
         },
         {
             "name": { 
-                "en": "Navigating the Editor",
-                "ja": "エディターのナビゲーション",
-                "zh": "编辑器导航",
-                "uk": "Навігація редактора"
-            },
-            "description": { 
-                "en": "Get around the text editor faster.",
-                "ja": "テキストエディター内を素早く移動します。",
-                "zh": "更快地在文本编辑器中导航。",
-                "uk": "Швидше працюйте з текстовим редактором."
-            },
-            "itemIds": [
-                "go-next-heading", "go-prev-heading", "go-top", "go-bottom", "go-next-callout", "toggle-vim-mode"
-            ]
-        },
-        {
-            "name": { 
-                "en": "Navigating on Mobile",
-                "uk": "Навігація на мобільном"
+                "en": "Mobile Navigation"
             },
             "description": { 
                 "en": "Use these after hiding Obsidian's Navigation actions (on phones)."
             },
             "itemIds": [
                 "tab-prev", "tab-next", "file-switcher-open", "tab-new", "tab-switcher-open", "toggle-keyboard"
-            ]
-        },
-        {
-            "name": { 
-                "en": "Navigating the Vault",
-                "ja": "ボールトのナビゲーション",
-                "zh": "库导航",
-                "uk": "Навігація по сховищу"
-            },
-            "description": { 
-                "en": "Navigate between notes and files.",
-                "ja": "ファイルやディレクトリ間を移動します。",
-                "zh": "在不同的文件和目录之间导航。",
-                "uk": "Переміщуйтесь між файлами та каталогами."
-            },
-            "itemIds": [
-                "go-back", "go-forward","file-prev", "file-next", "file-switcher-open", "tab-prev", "tab-next", "tab-switcher-open", "tab-new", "tab-close", "go-home", "go-up", "bookmarks-open", "system-vault-open"
             ]
         },
         {
@@ -191,23 +181,6 @@
             },
             "itemIds": [
                 "go-home", "daily-notes-today", "file-new", "templater-new-note-from-template", "bookmarks-open"
-            ]
-        },
-        {
-            "name": {
-                "en": "Reduce Distractions",
-                "ja": "集中モード",
-                "zh": "减少干扰",
-                "uk": "Зменшити відволікання"
-            },
-            "description": {
-                "en": "Remove Obsidian's UI and focus on your writing.",
-                "ja": "Obsidian の UI を非表示にして執筆に集中します。",
-                "zh": "隐藏 Obsidian 的 UI 元素，专注于写作。",
-                "uk": "Сховати зайві елементи інтерфейсу та зосередитися на написанні."
-            },
-            "itemIds": [
-                "note-toolbar-toggle-properties", "toggle-status-bar", "toggle-ui", "load-workspace", "toggle-keyboard"
             ]
         },
         {
@@ -262,13 +235,30 @@
         },
         {
             "name": { 
-                "en": "Vault files"
+                "en": "Vault Files"
             },
             "description": { 
                 "en": "Items that require access to vault files. Learn how to add these to Obsidian on the [Additional Gallery items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Additional-Gallery-items) page."
             },
             "itemIds": [
                 "file-new-tab", "file-append", "note-toolbar-export", "note-toolbar-backup-data"
+            ]
+        },
+        {
+            "name": { 
+                "en": "Vault Navigation",
+                "ja": "ボールトのナビゲーション",
+                "zh": "库导航",
+                "uk": "Навігація по сховищу"
+            },
+            "description": { 
+                "en": "Navigate between notes and files.",
+                "ja": "ファイルやディレクトリ間を移動します。",
+                "zh": "在不同的文件和目录之间导航。",
+                "uk": "Переміщуйтесь між файлами та каталогами."
+            },
+            "itemIds": [
+                "go-back", "go-forward","file-prev", "file-next", "file-switcher-open", "tab-prev", "tab-next", "tab-switcher-open", "tab-new", "tab-close", "go-home", "go-up", "bookmarks-open", "system-vault-open"
             ]
         },
         {
