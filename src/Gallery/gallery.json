@@ -105,6 +105,17 @@
                 "note-toolbar-toggle-properties", "toggle-status-bar", "toggle-ui", "load-workspace", "toggle-keyboard"
             ]
         },
+        { 
+            "name": { 
+                "en": "Folding"
+            },
+            "description": { 
+                "en": "Collapse and expand sections of your note for easier navigation."
+            },
+            "itemIds": [
+                "toggle-fold", "fold-all", "unfold-all", "fold-less", "fold-more"
+            ]
+        },
         {
             "name": { 
                 "en": "Formatting",

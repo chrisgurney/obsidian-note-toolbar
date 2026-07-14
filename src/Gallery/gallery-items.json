@@ -1912,6 +1912,76 @@
         "type": "javascript"
     },
     {
+        "id": "toggle-fold",
+        "commandCheck": true,
+        "commandId": "editor:toggle-fold",
+        "description": {
+            "en": "Toggle folding on the current line."
+        },
+        "focus": "editor",
+        "icon": "fold-vertical",
+        "tooltip": {
+            "en": "Toggle fold"
+        },
+        "type": "command"
+    },
+    {
+        "id": "fold-all",
+        "commandCheck": true,
+        "commandId": "editor:fold-all",
+        "description": {
+            "en": "Fold all headings and lists."
+        },
+        "focus": "editor",
+        "icon": "chevrons-up",
+        "tooltip": {
+            "en": "Fold all"
+        },
+        "type": "command"
+    },
+    {
+        "id": "fold-less",
+        "commandCheck": true,
+        "commandId": "editor:fold-less",
+        "description": {
+            "en": "Fold one level less."
+        },
+        "focus": "editor",
+        "icon": "minus",
+        "tooltip": {
+            "en": "Fold less"
+        },
+        "type": "command"
+    },
+    {
+        "id": "fold-more",
+        "commandCheck": true,
+        "commandId": "editor:fold-more",
+        "description": {
+            "en": "Fold one level more."
+        },
+        "focus": "editor",
+        "icon": "plus",
+        "tooltip": {
+            "en": "Fold more"
+        },
+        "type": "command"
+    },
+    {
+        "id": "unfold-all",
+        "commandCheck": true,
+        "commandId": "editor:unfold-all",
+        "description": {
+            "en": "Unfold all headings and lists."
+        },
+        "focus": "editor",
+        "icon": "chevrons-down",
+        "tooltip": {
+            "en": "Unfold all"
+        },
+        "type": "command"
+    },
+    {
         "id": "toggle-highlight",
         "commandCheck": true,
         "commandId": "editor:toggle-highlight",

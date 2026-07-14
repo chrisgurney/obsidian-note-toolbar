@@ -102,6 +102,18 @@ Remove Obsidian's UI and focus on your writing.
 | Load workspace | Select and load a configured workspace. |
 | Toggle keyboard | Toggles the keyboard *Not supported on: desktop, tablet* |
 
+## Folding
+
+Collapse and expand sections of your note for easier navigation.
+
+| Item | Description |
+| --- | --- |
+| Toggle fold | Toggle folding on the current line. |
+| Fold all | Fold all headings and lists. |
+| Unfold all | Unfold all headings and lists. |
+| Fold less | Fold one level less. |
+| Fold more | Fold one level more. |
+
 ## Formatting
 
 Change how text looks.
