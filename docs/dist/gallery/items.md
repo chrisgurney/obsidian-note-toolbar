@@ -211,7 +211,7 @@ Navigate between notes and files.
 | Show bookmarks | Opens the bookmarks sidebar. |
 | Show vault in system | Opens the vault's folder in the system's file explorer. |
 
-## Views and Themes
+## Views & Themes
 
 Switch themes and toggle views.
 
