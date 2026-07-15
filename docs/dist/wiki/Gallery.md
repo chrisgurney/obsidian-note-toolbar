@@ -181,10 +181,6 @@ Helpful for navigating within the app and around the editor on mobile.
 | New tab | Opens a new empty tab. |
 | Tab switcher | Open the mobile tab switcher. *Not supported on: desktop* |
 | Toggle keyboard | Toggles the keyboard *Not supported on: desktop, tablet* |
-| Move caret up | Move the caret up. *Not supported on: desktop* |
-| Move caret down | Move the caret down. *Not supported on: desktop* |
-| Move caret left | Move the caret left. *Not supported on: desktop* |
-| Move caret right | Move the caret right. *Not supported on: desktop* |
 
 ## New Tab View
 

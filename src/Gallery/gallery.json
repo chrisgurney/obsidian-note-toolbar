@@ -176,7 +176,7 @@
                 "en": "Helpful for navigating within the app and around the editor on mobile."
             },
             "itemIds": [
-                "tab-prev", "tab-next", "file-switcher-open", "tab-new", "tab-switcher-open", "toggle-keyboard", "move-caret-up", "move-caret-down", "move-caret-left", "move-caret-right"
+                "tab-prev", "tab-next", "file-switcher-open", "tab-new", "tab-switcher-open", "toggle-keyboard"
             ]
         },
         {
