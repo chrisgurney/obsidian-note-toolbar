@@ -318,7 +318,7 @@
             "label-confirm-command": "Command is not supported or was not found:\n\n`{{commandId}}`\n\nWould you still like to add this item to a toolbar? You can install/enable the plugin that provides this command later.",
             "label-confirm-mobile-uri": "This item uses a file URI which may not be supported on mobile.\n\nWould you still like to add this item to a toolbar?",
             "label-confirm-plugin": "Plugin not installed and enabled:\n\n**{{plugin}}**\n\nWould you still like to add this item to a toolbar? You can install/enable this plugin later.",
-            "label-confirm-scripting": "In order to use this item, the _Scripting_ setting in Note Toolbar's settings must be enabled.\n\n- This setting allows your toolbar to execute JavaScript, and to use Dataview, Templater, and JS Engine (assuming you have those plugins installed and enabled).\n\nWould you like to enable this setting now?",
+            "label-confirm-scripting": "In order to use this item, the _Scripting_ setting in Note Toolbar's settings must be enabled.\n\n- This setting allows your toolbar to execute JavaScript, and to use Dataview, Templater, and JS Engine (if those plugins are installed and enabled).\n\nWould you like to enable this setting now?",
             "notice-item-added": "Item added to {{toolbarName}}",
             "notice-item-added_plural": "Items added to {{toolbarName}}",
             "title-confirm-scripting": "Scripting required for item",
