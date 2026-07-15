@@ -219,29 +219,46 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		}
 
 		const toolbarListDiv = createDiv();
-		toolbarListDiv.addClass("note-toolbar-setting-toolbar-list");
-		if (this.ntb.settings.toolbars.length == 0) {
-			toolbarListDiv.toggleClass('note-toolbar-setting-empty-toolbars-message', true);
+		const hasNoToolbars = this.ntb.settings.toolbars.length == 0;
+		if (hasNoToolbars) {
+			toolbarListDiv.toggleClass('note-toolbar-setting-toolbar-list-empty', true);
 
-			const emptyMsgEl = createSpan({ text: 
-				this.ntb.settingsUtils.emptyMessageFr(t('setting.toolbars.label-empty-create-tbar'), t('setting.toolbars.link-create'), () => {
-					void this.ntb.settingsManager.newToolbar().then((newToolbar) => {
-						this.ntb.settingsManager.openToolbarSettings(newToolbar, this);
-					}) })
+			toolbarListDiv.createSpan({ 
+				text: this.ntb.settingsUtils.emptyMessageFr(t('setting.toolbars.label-empty-create-tbar'))
 			});
-			toolbarListDiv.append(emptyMsgEl);
 
-			const galleryCtaEl = createSpan({ text:
-				this.ntb.settingsUtils.emptyMessageFr('', t('setting.toolbars.link-gallery'), () => {
-					void this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true });
-					if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
-				})
-			});
-			toolbarListDiv.append(galleryCtaEl);
+			new Setting(toolbarListDiv)
+				.setClass('note-toolbar-setting-button')
+				.setClass('note-toolbar-setting-no-background')
+				.addButton((button: ButtonComponent) => {
+					button
+						.setCta()
+						.setTooltip(t('setting.toolbars.button-new-tbar-tooltip'))
+						.onClick(async () => {
+							const newToolbar = await this.ntb.settingsManager.newToolbar();
+							this.ntb.settingsManager.openToolbarSettings(newToolbar, this);
+						})
+						.buttonEl.setText(iconTextFr('plus', t('setting.toolbars.button-new-tbar')));
+				});
+
+			new Setting(toolbarListDiv)
+				.setClass('note-toolbar-setting-button')
+				.setClass('note-toolbar-setting-no-background')
+				.addButton((button: ButtonComponent) => {
+					button
+						.setCta()
+						.setTooltip(t('setting.button-gallery-tooltip'))
+						.onClick(async () => {
+							await this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true });
+							if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
+						})
+						.buttonEl.setText(iconTextFr('layout-grid', t('setting.button-gallery')));
+				});
 
 		}
 		else {
-			toolbarListDiv.toggleClass('note-toolbar-setting-empty-message', false);
+			toolbarListDiv.addClass("note-toolbar-setting-toolbar-list");
+			toolbarListDiv.toggleClass('note-toolbar-setting-toolbar-list-empty', false);
 			this.ntb.settings.toolbars.forEach(
 				(toolbar) => {
 					
@@ -388,19 +405,21 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		itemsContainer.appendChild(itemsListContainer);
 
 		// add toolbar
-		new Setting(itemsContainer)
-			.setClass('note-toolbar-setting-button')
-			.setClass('note-toolbar-setting-no-background')
-			.addButton((button: ButtonComponent) => {
-				button
-					.setTooltip(t('setting.toolbars.button-new-tbar-tooltip'))
-					.setCta()
-					.onClick(async () => {
-						const newToolbar = await this.ntb.settingsManager.newToolbar();
-						this.ntb.settingsManager.openToolbarSettings(newToolbar, this);
-					});
-				button.buttonEl.setText(iconTextFr('plus', t('setting.toolbars.button-new-tbar')));
-			});
+		if (!hasNoToolbars) {
+			new Setting(itemsContainer)
+				.setClass('note-toolbar-setting-button')
+				.setClass('note-toolbar-setting-no-background')
+				.addButton((button: ButtonComponent) => {
+					button
+						.setTooltip(t('setting.toolbars.button-new-tbar-tooltip'))
+						.setCta()
+						.onClick(async () => {
+							const newToolbar = await this.ntb.settingsManager.newToolbar();
+							this.ntb.settingsManager.openToolbarSettings(newToolbar, this);
+						});
+					button.buttonEl.setText(iconTextFr('plus', t('setting.toolbars.button-new-tbar')));
+				});
+		}
 
 		containerEl.append(itemsContainer);
 
@@ -653,17 +672,9 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 
 			if (this.ntb.settings.folderMappings.length == 0) {
 
-				const emptyMsgEl = createDiv({ text: 
-					this.ntb.settingsUtils.emptyMessageFr(
-						t('setting.mappings.label-empty'), t('setting.mappings.link-create'), () => {
-						const newMapping = { folder: "", toolbar: "" };
-						this.ntb.settings.folderMappings.push(newMapping);
-						void this.ntb.settingsManager.save().then(() => {
-							this.render('.note-toolbar-sortablejs-list > div:last-child input[type="search"]', true);
-						});
-					}) });
-				emptyMsgEl.addClass('note-toolbar-setting-empty-message');
-				
+				const emptyMsgEl = createDiv({ 
+					text: this.ntb.settingsUtils.emptyMessageFr(t('setting.mappings.label-empty')),
+					cls: 'note-toolbar-setting-empty-message' });
 				itemsContainerEl.append(emptyMsgEl);
 
 			}

@@ -210,6 +210,26 @@
         }
     }
 
+    & .note-toolbar-setting-toolbar-list-empty {
+        background-color: var(--setting-items-background);
+        border-radius: var(--setting-items-radius);
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5em;
+        margin: 0 0 var(--size-4-4);
+        padding: var(--setting-items-padding-y) var(--setting-items-padding-x);
+        & > span {
+            .is-phone & {
+                flex: 0 0 100%;
+                text-align: center;
+            }
+        }
+        & .setting-item.note-toolbar-setting-button {
+            padding: 0;
+            margin: 0;
+        }
+    }
+
     & .note-toolbar-setting-folder-mapping-container {
         padding: 0 var(--setting-items-padding-x);
     }
@@ -864,7 +884,7 @@
 }
 
 .note-toolbar-setting-empty-message,
-.note-toolbar-setting-empty-toolbars-message {
+.note-toolbar-setting-toolbar-list-empty {
     align-items: center;
     color: var(--text-muted);
     display: flex;
@@ -885,13 +905,6 @@
 .note-toolbar-setting-error-message {
     color: var(--text-error);
     padding-bottom: 1em;
-}
-
-.note-toolbar-setting-empty-toolbars-message {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5em;
-    padding: var(--setting-items-padding);
 }
 
 input[type="search"].note-toolbar-setting-error,
