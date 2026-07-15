@@ -239,11 +239,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 							this.ntb.settingsManager.openToolbarSettings(newToolbar, this);
 						})
 						.buttonEl.setText(iconTextFr('plus', t('setting.toolbars.button-new-tbar')));
-				});
-
-			new Setting(toolbarListDiv)
-				.setClass('note-toolbar-setting-button')
-				.setClass('note-toolbar-setting-no-background')
+				})
 				.addButton((button: ButtonComponent) => {
 					button
 						.setCta()
