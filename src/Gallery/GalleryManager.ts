@@ -164,13 +164,28 @@ export default class GalleryManager {
         ).containerEl.addClass('mod-success');
     }
 
+    /**
+     * Returns an item based on the ID requested.
+     * @param id UUID of the item
+     * @returns ToolbarItemSettings or undefined
+     */
     getItemById(id: string): ToolbarItemSettings | undefined {
         return this.getItems().find((item) => item.uuid === id);
     }
 
+    /**
+     * Returns corresponding items in the order of the IDs requested.
+     * @param ids UUIDs of the items
+     * @returns ToolbarItemsSettings array of items requested
+     */
     getItemsById(ids: string[]): ToolbarItemSettings[] {
-        const idSet = new Set(ids);
-        return this.getItems().filter((item) => idSet.has(item.uuid));
+        const items = new Map(
+            this.getItems().map(item => [item.uuid, item])
+        );
+
+        return ids
+            .map(id => items.get(id))
+            .filter((item): item is ToolbarItemSettings => item !== undefined);
     }
 
     private loadItems() {

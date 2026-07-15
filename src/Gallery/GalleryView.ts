@@ -174,7 +174,6 @@ export default class GalleryView extends ItemView {
 					return;
 				}
 				const itemIds: string[] = JSON.parse(addToolbarItemIds) as string[];
-				this.ntb.debug('itemIds', itemIds);
 				const galleryItems = this.ntb.gallery.getItemsById(itemIds);
 				if (galleryItems) await this.ntb.gallery.addItems(galleryItems, addToolbarName);
 				return;
