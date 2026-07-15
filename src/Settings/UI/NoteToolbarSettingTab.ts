@@ -221,12 +221,12 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		const toolbarListDiv = createDiv();
 		const hasNoToolbars = this.ntb.settings.toolbars.length == 0;
 		if (hasNoToolbars) {
+			
+			// empty state
 			toolbarListDiv.toggleClass('note-toolbar-setting-toolbar-list-empty', true);
-
 			toolbarListDiv.createSpan({ 
 				text: this.ntb.settingsUtils.emptyMessageFr(t('setting.toolbars.label-empty-create-tbar'))
 			});
-
 			new Setting(toolbarListDiv)
 				.setClass('note-toolbar-setting-button')
 				.setClass('note-toolbar-setting-no-background')
