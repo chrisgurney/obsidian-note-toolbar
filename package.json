@@ -18,8 +18,6 @@
   "devDependencies": {
     "@types/node": "^26.1.1",
     "@types/sortablejs": "^1.15.8",
-    "@typescript-eslint/eslint-plugin": "^8.64.0",
-    "@typescript-eslint/parser": "^8.64.0",
     "chokidar": "^5.0.0",
     "esbuild": "^0.28.1",
     "eslint": "^10.7.0",
@@ -29,7 +27,8 @@
     "stylelint-config-standard": "^40.0.0",
     "typedoc": "^0.28.14",
     "typedoc-plugin-markdown": "^4.9.0",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.64.0"
   },
   "dependencies": {
     "@codemirror/view": "6.38.6",
