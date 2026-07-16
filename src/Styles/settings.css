@@ -237,7 +237,7 @@
         flex-wrap: wrap;
         gap: 0.5em;
         margin: 0 0 var(--size-4-4);
-        padding: var(--setting-items-padding-y) var(--setting-items-padding-x);
+        padding: var(--size-4-4);
         & > span {
             .is-phone & {
                 flex: 0 0 100%;
