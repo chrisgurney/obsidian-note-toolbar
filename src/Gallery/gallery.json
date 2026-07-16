@@ -49,6 +49,17 @@
         },
         {
             "name": { 
+                "en": "Default"
+            },
+            "description": { 
+                "en": "Items from Obsidian's built-in mobile toolbar."
+            },
+            "itemIds": [
+                "insert-wikilink", "insert-embed", "insert-tag", "attach-file", "toggle-heading", "toggle-bold", "toggle-italic", "toggle-strikethrough", "toggle-highlight", "toggle-code", "toggle-blockquote", "insert-link", "toggle-bullet-list", "toggle-numbered-list", "toggle-checklist-status", "indent", "unindent", "undo", "redo"
+            ]
+        },
+        {
+            "name": { 
                 "en": "Editing",
                 "ja": "編集",
                 "zh": "编辑",

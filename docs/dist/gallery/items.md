@@ -21,6 +21,31 @@ Quickly navigate between daily notes. Requires the _Daily Notes_ core plugin.
 | Today's daily note | Go to today's daily note. |
 | Next daily note | Go to the next daily note. |
 
+## Default
+
+Items from Obsidian's built-in mobile toolbar.
+
+| Item | Description |
+| --- | --- |
+| Add internal link | Add an internal link. |
+| Add embed | Add an embedded file or note. |
+| Insert tag | Insert a tag in the note. |
+| Insert attachment | Insert a file attachment. |
+| Toggle heading | Toggle the heading level on the current line. |
+| Toggle bold | Apply or remove bold formatting. |
+| Toggle strikethrough | Apply or remove strikethrough formatting. |
+| Toggle highlight | Apply or remove text highlighting. |
+| Toggle code | Apply or remove inline code formatting. |
+| Toggle blockquote | Apply or remove blockquote formatting. |
+| Insert Markdown link | Insert a Markdown link. |
+| Toggle bullet list | Apply or remove bullet list formatting. |
+| Toggle numbered list | Apply or remove numbered list formatting. |
+| Toggle checkbox status | Toggle the status of checklist items. |
+| Indent list item | Increases indentation on the current line. |
+| Unindent list item | Decreases indentation on the current line. |
+| Undo | Reverts the latest action. |
+| Redo | Reapplies the last undone action. |
+
 ## Editing
 
 Adjust the order and arrangement of content.
