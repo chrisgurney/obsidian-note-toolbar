@@ -247,6 +247,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 						.onClick(async () => {
 							await this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true });
 							if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
+							this.ntb.app.setting.close();
 						})
 						.buttonEl.setText(iconTextFr('layout-grid', t('setting.button-gallery')));
 				});
