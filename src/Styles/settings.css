@@ -210,6 +210,25 @@
         }
     }
 
+    & .note-toolbar-setting-item-list-empty {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5em;
+        & > span {
+            .is-phone & {
+                flex: 0 0 100%;
+                text-align: center;
+            }
+        }
+        & .setting-item {
+            border: none;
+            padding: 0;
+            & .setting-item-info {
+                display: none;
+            }
+        }
+    }
+
     & .note-toolbar-setting-toolbar-list-empty {
         background-color: var(--setting-items-background);
         border-radius: var(--setting-items-radius);
@@ -430,6 +449,9 @@
                 }
             }
         }  
+        & [data-active="false"] {
+            display: none;
+        }
     }
 
 }
@@ -884,6 +906,7 @@
 }
 
 .note-toolbar-setting-empty-message,
+.note-toolbar-setting-item-list-empty,
 .note-toolbar-setting-toolbar-list-empty {
     align-items: center;
     color: var(--text-muted);

@@ -96,18 +96,35 @@ export default class ItemListUi {
         const itemsSortableContainer = createDiv();
         itemsSortableContainer.addClass('note-toolbar-sortablejs-list');
 
-        if (this.toolbar.items.length === 0) {
+        const hasNoItems = this.toolbar.items.length === 0;
+        if (hasNoItems) {
 
-            // display empty state
-            const emptyMsgEl = this.parent.containerEl.createDiv({ text: this.ntb.settingsUtils.emptyMessageFr(t('setting.items.label-empty-no-items') + '\u00A0') });
-            emptyMsgEl.addClass('note-toolbar-setting-empty-message');
+            // empty state: new item + search item
+            const emptyItemListContainer = itemsListContainer.createDiv({
+                cls: 'note-toolbar-setting-item-list-empty'
+            });
 
-            const galleryLinkEl = emptyMsgEl.createEl('a', { href: '#', text: t('setting.item-suggest-modal.link-search') });
-            galleryLinkEl.addClass('note-toolbar-setting-focussable-link');
-            this.ntb.registerDomEvent(galleryLinkEl, 'click', () => this.ntb.settingsUtils.openItemSuggestModal(this.toolbar, 'New', this.parent));
-            this.ntb.settingsUtils.handleKeyClick(galleryLinkEl);
+            emptyItemListContainer.createSpan({ 
+                text: this.ntb.settingsUtils.emptyMessageFr(t('setting.items.label-empty-no-items')) 
+            });
 
-            itemsSortableContainer.append(emptyMsgEl);
+            new Setting(emptyItemListContainer)
+                .setClass('note-toolbar-setting-no-border')
+                // .setClass('note-toolbar-setting-item-full-control-phone')
+                .addButton((btn) => {
+                    btn.setTooltip(t('setting.items.button-find-item-tooltip'))
+                        .setCta()
+                        .onClick(() => this.ntb.settingsUtils.openItemSuggestModal(this.toolbar, 'New', this.parent));
+                    btn.buttonEl.setText(iconTextFr('zoom-in', t('setting.items.button-find-item')));
+                })
+                .addButton((btn) => {
+                    btn.setTooltip(t('setting.items.button-new-item-tooltip'))
+                        .setCta()
+                        .onClick(async () => this.addItemHandler(ItemType.Command, itemsSortableContainer));
+                    btn.buttonEl.setText(iconTextFr('plus', t('setting.items.button-new-item')));
+                });
+
+            itemsSortableContainer.append(emptyItemListContainer);
 
         }
         else {
@@ -227,7 +244,8 @@ export default class ItemListUi {
             });
         itemsListButtonContainer.appendChild(formattingButtons);
 
-        new Setting(itemsListButtonContainer)
+        // new item + search item
+        const newSearchBtns = new Setting(itemsListButtonContainer)
             .setClass('note-toolbar-setting-no-border')
             .setClass('note-toolbar-setting-item-full-control-phone')
             .addButton((btn) => {
@@ -241,6 +259,8 @@ export default class ItemListUi {
                     .onClick(async () => this.addItemHandler(ItemType.Command, itemsSortableContainer));
                 btn.buttonEl.setText(iconTextFr('plus', t('setting.items.button-new-item')));
             });
+        newSearchBtns.controlEl.setAttribute('data-active', (!hasNoItems).toString());
+        newSearchBtns.controlEl.id = 'ntb-item-add-buttons';
 
         itemsListContainer.appendChild(itemsListButtonContainer);
         itemsContainer.appendChild(itemsListContainer);
@@ -526,6 +546,8 @@ export default class ItemListUi {
         // removes the item list empty state message before we add anything to it
         if (itemContainer && (this.toolbar.items.length === 0)) {
             itemContainer.empty();
+            const addButtons = itemContainer.parentElement?.querySelector('#ntb-item-add-buttons');
+            if (addButtons) addButtons.setAttr('data-active', 'true');
         }
 
         // create the new item, with the given type
