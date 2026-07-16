@@ -506,6 +506,9 @@
                 display: none;
             }
         }
+        & .note-toolbar-setting-item-visibility-and-controls {
+            border: none;
+        }
         &.note-toolbar-item-visibility-indicator {
             padding-inline: var(--size-4-2);
             & svg {
@@ -1023,7 +1026,7 @@ input[type="text"].note-toolbar-setting-error,
         & .setting-item {
             border-bottom: none;
         }
-        & .note-toolbar-setting-item-label-tooltip {
+        & .note-toolbar-setting-item-fields .note-toolbar-setting-item-label-tooltip {
             border-top: none;
             flex-grow: 1;
             padding-top: 0;
@@ -1047,7 +1050,8 @@ input[type="text"].note-toolbar-setting-error,
     }
 
     & .note-toolbar-setting-item,
-    & .note-toolbar-setting-tbar-icon-desc-group {
+    & .note-toolbar-setting-tbar-icon-desc-group,
+    & .note-toolbar-setting-item-top-container .note-toolbar-setting-item-fields {
         & .note-toolbar-setting-item-icon {
             padding-top: 0;
             padding-bottom: 0;
