@@ -1,7 +1,6 @@
 [
     {
         "id": "add-cursor-above",
-        "commandCheck": true,
         "commandId": "editor:add-cursor-above",
         "description": {
             "en": "Add another cursor above the current cursor."
@@ -15,7 +14,6 @@
     },
     {
         "id": "add-cursor-below",
-        "commandCheck": true,
         "commandId": "editor:add-cursor-below",
         "description": {
             "en": "Add another cursor below the current cursor."
@@ -29,7 +27,6 @@
     },
     {
         "id": "attach-file",
-        "commandCheck": true,
         "commandId": "editor:attach-file",
         "description": {
             "en": "Insert a file attachment.",
@@ -86,7 +83,6 @@
     },
     {
         "id": "clear-formatting",
-        "commandCheck": true,
         "commandId": "editor:clear-formatting",
         "description": {
             "en": "Remove all text formatting.",
@@ -192,7 +188,6 @@
     },
     {
         "id": "cycle-list-checklist",
-        "commandCheck": true,
         "commandId": "editor:cycle-list-checklist",
         "description": {
             "en": "Changes to bullet, checkbox, or unchecked.",
@@ -302,7 +297,6 @@
     },
     {
         "id": "delete-paragraph",
-        "commandCheck": true,
         "commandId": "editor:delete-paragraph",
         "description": {
             "en": "Delete the current paragraph."
@@ -334,7 +328,6 @@
     },
     {
         "id": "editor-toggle-source",
-        "commandCheck": true,
         "commandId": "editor:toggle-source",
         "description": {
             "en": "Turn Source mode on and off.",
@@ -712,7 +705,6 @@
     },
     {
         "id": "insert-callout",
-        "commandCheck": true,
         "commandId": "editor:insert-callout",
         "description": {
             "en": "Insert a callout block.",
@@ -732,7 +724,6 @@
     },
     {
         "id": "insert-codeblock",
-        "commandCheck": true,
         "commandId": "editor:insert-codeblock",
         "description": {
             "en": "Insert a code block.",
@@ -752,7 +743,6 @@
     },
     {
         "id": "insert-footnote",
-        "commandCheck": true,
         "commandId": "editor:insert-footnote",
         "description": {
             "en": "Insert a footnote."
@@ -766,7 +756,6 @@
     },
     {
         "id": "insert-embed",
-        "commandCheck": true,
         "commandId": "editor:insert-embed",
         "description": {
             "en": "Add an embedded file or note.",
@@ -798,7 +787,6 @@
     },
     {
         "id": "insert-horizontal-rule",
-        "commandCheck": true,
         "commandId": "editor:insert-horizontal-rule",
         "description": {
             "en": "Insert a horizontal rule to separate sections.",
@@ -818,7 +806,6 @@
     },
     {
         "id": "insert-link",
-        "commandCheck": true,
         "commandId": "editor:insert-link",
         "description": {
             "en": "Insert a Markdown link.",
@@ -838,7 +825,6 @@
     },
     {
         "id": "insert-mathblock",
-        "commandCheck": true,
         "commandId": "editor:insert-mathblock",
         "description": {
             "en": "Insert a math block.",
@@ -858,7 +844,6 @@
     },
     {
         "id": "insert-table",
-        "commandCheck": true,
         "commandId": "editor:insert-table",
         "description": {
             "en": "Insert a table.",
@@ -878,7 +863,6 @@
     },
     {
         "id": "insert-tag",
-        "commandCheck": true,
         "commandId": "editor:insert-tag",
         "description": {
             "en": "Insert a tag in the note.",
@@ -898,7 +882,6 @@
     },
     {
         "id": "insert-wikilink",
-        "commandCheck": true,
         "commandId": "editor:insert-wikilink",
         "description": {
             "en": "Add an internal link.",
@@ -936,7 +919,6 @@
     },
     {
         "id": "move-caret-up",
-        "commandCheck": true,
         "commandId": "editor:move-caret-up",
         "description": {
             "en": "Move the caret up."
@@ -951,7 +933,6 @@
     },
     {
         "id": "move-caret-down",
-        "commandCheck": true,
         "commandId": "editor:move-caret-down",
         "description": {
             "en": "Move the caret down."
@@ -966,7 +947,6 @@
     },
     {
         "id": "move-caret-left",
-        "commandCheck": true,
         "commandId": "editor:move-caret-left",
         "description": {
             "en": "Move the caret left."
@@ -981,7 +961,6 @@
     },
     {
         "id": "move-caret-right",
-        "commandCheck": true,
         "commandId": "editor:move-caret-right",
         "description": {
             "en": "Move the caret right."
@@ -1476,7 +1455,6 @@
     },
     {
         "id": "search-replace-open",
-        "commandCheck": true,
         "commandId": "editor:open-search-replace",
         "description": {
             "en": "Open the find/replace panel in the current note.",
@@ -1507,7 +1485,6 @@
     },
     {
         "id": "set-heading-1",
-        "commandCheck": true,
         "commandId": "editor:set-heading-1",
         "description": {
             "en": "Set as heading 1",
@@ -1523,7 +1500,6 @@
     },
     {
         "id": "set-heading-2",
-        "commandCheck": true,
         "commandId": "editor:set-heading-2",
         "description": {
             "en": "Set as heading 2",
@@ -1539,7 +1515,6 @@
     },
     {
         "id": "set-heading-3",
-        "commandCheck": true,
         "commandId": "editor:set-heading-3",
         "description": {
             "en": "Set as heading 3",
@@ -1555,7 +1530,6 @@
     },
     {
         "id": "set-heading-4",
-        "commandCheck": true,
         "commandId": "editor:set-heading-4",
         "description": {
             "en": "Set as heading 4",
@@ -1571,7 +1545,6 @@
     },
     {
         "id": "set-heading-5",
-        "commandCheck": true,
         "commandId": "editor:set-heading-5",
         "description": {
             "en": "Set as heading 5",
@@ -1587,7 +1560,6 @@
     },
     {
         "id": "set-heading-6",
-        "commandCheck": true,
         "commandId": "editor:set-heading-6",
         "description": {
             "en": "Set as heading 6",
@@ -1778,7 +1750,6 @@
     },
     {
         "id": "remove-heading",
-        "commandCheck": true,
         "commandId": "editor:set-heading-0",
         "description": {
             "en": "Remove the heading from the current line."
@@ -1792,7 +1763,6 @@
     },
     {
         "id": "swap-line-down",
-        "commandCheck": true,
         "commandId": "editor:swap-line-down",
         "description": {
             "en": "Move the current line down.",
@@ -1812,7 +1782,6 @@
     },
     {
         "id": "swap-line-up",
-        "commandCheck": true,
         "commandId": "editor:swap-line-up",
         "description": {
             "en": "Move the current line up.",
@@ -1905,7 +1874,6 @@
     },
     {
         "id": "toggle-blockquote",
-        "commandCheck": true,
         "commandId": "editor:toggle-blockquote",
         "description": {
             "en": "Apply or remove blockquote formatting.",
@@ -1925,7 +1893,6 @@
     },
     {
         "id": "toggle-bold",
-        "commandCheck": true,
         "commandId": "editor:toggle-bold",
         "description": {
             "en": "Apply or remove bold formatting.",
@@ -1945,7 +1912,6 @@
     },
     {
         "id": "toggle-bullet-list",
-        "commandCheck": true,
         "commandId": "editor:toggle-bullet-list",
         "description": {
             "en": "Apply or remove bullet list formatting.",
@@ -1965,7 +1931,6 @@
     },
     {
         "id": "toggle-checklist-status",
-        "commandCheck": true,
         "commandId": "editor:toggle-checklist-status",
         "description": {
             "en": "Toggle the status of checklist items.",
@@ -1985,7 +1950,6 @@
     },
     {
         "id": "toggle-code",
-        "commandCheck": true,
         "commandId": "editor:toggle-code",
         "description": {
             "en": "Apply or remove inline code formatting.",
@@ -2005,7 +1969,6 @@
     },
     {
         "id": "toggle-comments",
-        "commandCheck": true,
         "commandId": "editor:toggle-comments",
         "description": {
             "en": "Add or remove comments.",
@@ -2043,7 +2006,6 @@
     },
     {
         "id": "toggle-fold",
-        "commandCheck": true,
         "commandId": "editor:toggle-fold",
         "description": {
             "en": "Toggle folding on the current line."
@@ -2057,7 +2019,6 @@
     },
     {
         "id": "fold-all",
-        "commandCheck": true,
         "commandId": "editor:fold-all",
         "description": {
             "en": "Fold all headings and lists."
@@ -2071,7 +2032,6 @@
     },
     {
         "id": "fold-less",
-        "commandCheck": true,
         "commandId": "editor:fold-less",
         "description": {
             "en": "Fold one level less."
@@ -2085,7 +2045,6 @@
     },
     {
         "id": "fold-more",
-        "commandCheck": true,
         "commandId": "editor:fold-more",
         "description": {
             "en": "Fold one level more."
@@ -2099,7 +2058,6 @@
     },
     {
         "id": "unfold-all",
-        "commandCheck": true,
         "commandId": "editor:unfold-all",
         "description": {
             "en": "Unfold all headings and lists."
@@ -2113,7 +2071,6 @@
     },
     {
         "id": "toggle-highlight",
-        "commandCheck": true,
         "commandId": "editor:toggle-highlight",
         "description": {
             "en": "Apply or remove text highlighting.",
@@ -2133,7 +2090,6 @@
     },
     {
         "id": "toggle-inline-math",
-        "commandCheck": true,
         "commandId": "editor:toggle-inline-math",
         "description": {
             "en": "Apply or remove inline math formatting.",
@@ -2153,7 +2109,6 @@
     },
     {
         "id": "toggle-italics",
-        "commandCheck": true,
         "commandId": "editor:toggle-italics",
         "description": {
             "en": "Apply or remove italic formatting.",
@@ -2172,7 +2127,6 @@
     },
     {
         "id": "toggle-numbered-list",
-        "commandCheck": true,
         "commandId": "editor:toggle-numbered-list",
         "description": {
             "en": "Apply or remove numbered list formatting.",
@@ -2205,7 +2159,6 @@
     },
     {
         "id": "toggle-heading",
-        "commandCheck": true,
         "commandId": "editor:set-heading",
         "description": {
             "en": "Toggle the heading level on the current line."
@@ -2257,7 +2210,6 @@
     },
     {
         "id": "toggle-strikethrough",
-        "commandCheck": true,
         "commandId": "editor:toggle-strikethrough",
         "description": {
             "en": "Apply or remove strikethrough formatting.",
