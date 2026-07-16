@@ -324,13 +324,20 @@
 
     & .note-toolbar-setting-position-group {
         & .setting-items {
+            padding: var(--size-4-4);
             & .setting-item {
                 align-items: center;
+            }
+            & > .setting-item:first-child {
+                padding-top: 0;
             }
             & > .setting-item:nth-last-child(2) {
                 padding-bottom: 0;
             }
             & > .setting-item:last-child {
+                border-top: none;
+            }
+            & #note-toolbar-default-item::before {
                 border-top: none;
             }
         }
