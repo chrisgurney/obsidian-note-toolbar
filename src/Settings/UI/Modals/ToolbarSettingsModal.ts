@@ -584,8 +584,8 @@ export default class ToolbarSettingsModal extends Modal {
 		commandOptionsGroupEl.setAttribute('data-active', (this.toolbar.hasCommand ?? false).toString());
 		const commandOptionsGroup = new SettingGroup(commandOptionsGroupEl);
 
-		const toolbarCommand = this.ntb.commands.getCommandFor(this.toolbar);
-		const hotkey = this.ntb.hotkeys.getHotkeyText(toolbarCommand);
+		const initialToolbarCommand = this.ntb.commands.getCommandFor(this.toolbar);
+		const hotkey = this.ntb.hotkeys.getHotkeyText(initialToolbarCommand);
 		commandOptionsGroup.addSetting((hotkeySetting) => {
 			hotkeySetting
 				.setName(t('setting.open-command.option-hotkey'))
@@ -595,6 +595,7 @@ export default class ToolbarSettingsModal extends Modal {
 						.setTooltip(t('setting.hotkeys.label-settings'))
 						.onClick(() => {
 							this.close();
+							const toolbarCommand = this.ntb.commands.getCommandFor(this.toolbar);
 							if (toolbarCommand) this.ntb.commands.openHotkeySettings(toolbarCommand.name);
 						});
 					btn.buttonEl.setText(hotkey ?? iconTextFr('keyboard', t('setting.open-command.label-hotkey')));
