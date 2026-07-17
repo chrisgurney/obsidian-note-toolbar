@@ -1128,6 +1128,19 @@
         "type": "command"
     },
     {
+        "id": "obsidian-hotkeys",
+        "description": {
+            "en": "Opens Obsidian's hotkeys settings."
+        },
+        "icon": "keyboard",
+        "script": "ntb.ntb.commands.openHotkeySettings()",
+        "tooltip": {
+            "en": "Obsidian hotkeys"
+        },
+        "uri": "https://help.obsidian.md/",
+        "type": "javascript"
+    },
+    {
         "id": "obsidian-help-site",
         "description": {
             "en": "Opens the official Obsidian Help site.",

@@ -226,11 +226,11 @@ export default class CommandManager {
     /**
      * Convenience command to open hotkey settings, with the given query set.
      */
-    openHotkeySettings(query: string) {
+    openHotkeySettings(query?: string) {
         const settings = this.ntb.app.setting;
         settings.open();
         const tab = settings.openTabById('hotkeys');
-        if (tab?.setQuery) tab.setQuery(query);
+        if (query && tab?.setQuery) tab.setQuery(query);
     }
 
     /**
