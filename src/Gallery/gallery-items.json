@@ -1059,12 +1059,12 @@
         "id": "note-toolbar-tbar-settings",
         "commandId": "note-toolbar:open-toolbar-settings",
         "description": {
-            "en": "Opens the active Note Toolbar's settings to customize your toolbar.",
+            "en": "Opens the active toolbar's settings.",
             "ja": "アクティブなNote Toolbarの設定を開いてツールバーをカスタマイズします。",
             "zh": "打开活动的笔记工具栏设置，以自定义您的工具栏。",
             "uk": "Відкрийте налаштування активної панелі Note Toolbar для персоналізації."
         },
-        "icon": "settings-2",
+        "icon": "wrench",
         "tooltip": {
             "en": "Toolbar settings",
             "ja": "ツールバー設定",

@@ -74,6 +74,7 @@ Items from Obsidian's built-in mobile toolbar.
 | Unindent list item | Decreases indentation on the current line. |
 | Undo | Reverts the latest action. |
 | Redo | Reapplies the last undone action. |
+| Toolbar settings | Opens the active toolbar's settings. |
 
 ## Editing
 
@@ -227,7 +228,7 @@ Get access to Note Toolbar settings and tools quickly.
 | --- | --- |
 | Quick Toolbars | Opens a window with access to all of your Note Toolbars. |
 | Quick Tools | Opens a searchable window with access to all toolbar items. |
-| Toolbar settings | Opens the active Note Toolbar's settings to customize your toolbar. |
+| Toolbar settings | Opens the active toolbar's settings. |
 | Note Toolbar User Guide | Access the Note Toolbar User Guide for help and tips. |
 
 ## Obsidian Support
