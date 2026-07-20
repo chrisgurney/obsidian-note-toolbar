@@ -10,6 +10,7 @@ interface Category {
 	name: { [key: string]: string };
 	addAsToolbar?: boolean;
 	description: { [key: string]: string };
+	featured?: boolean;
 	itemIds: string[];
 }
 
@@ -112,6 +113,8 @@ export default class GalleryView extends ItemView {
 
 		let sortedCategories: Category[] = [] as Category[];
 		sortedCategories = (gallery as Gallery).categories.sort((a, b) => {
+			// featured categories first
+			if (!!a.featured !== !!b.featured) return a.featured ? -1 : 1;
 			const nameA = (a.name[language] || a.name['en']).toLowerCase();
 			const nameB = (b.name[language] || b.name['en']).toLowerCase();
 			return nameA.localeCompare(nameB);
@@ -124,21 +127,26 @@ export default class GalleryView extends ItemView {
 				continue;
 			}
 
-			const cssColor = cssColors[i % cssColors.length];
+			const isFeatured = !!category.featured;
+
+			const cssColor = isFeatured ? 'var(--color-purple)' : cssColors[i % cssColors.length];
 			
-			const catNameEl = markdownEl.createDiv();
+			const catEl = markdownEl.createDiv();
+			catEl.toggleClass('note-toolbar-gallery-cat-featured', isFeatured);
+
+			const catNameEl = catEl.createDiv();
 			catNameEl.addClass('note-toolbar-gallery-view-cat-title');
 			const catName = category.name[language] || category.name['en'];
 			const catComponent = new Component();
 			await MarkdownRenderer.render(this.ntb.app, `## ${catName}`, catNameEl, '/', catComponent);
 
-			const catDescEl = markdownEl.createDiv();
+			const catDescEl = catEl.createDiv();
 			catDescEl.addClass('note-toolbar-gallery-view-cat-description');
 			const catDescText = category.description[language] || category.description['en'];
 			const catDescComponent = new Component();
 			await MarkdownRenderer.render(this.ntb.app, catDescText, catDescEl, '/', catDescComponent);
 
-			const galleryItemContainerEl = markdownEl.createDiv();
+			const galleryItemContainerEl = catEl.createDiv();
 			galleryItemContainerEl.addClass('note-toolbar-gallery-card-items');
 			renderGalleryItems(this.ntb, galleryItemContainerEl, category.itemIds, cssColor);
 

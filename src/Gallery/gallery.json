@@ -25,6 +25,7 @@
             "description": { 
                 "en": "Obsidian's built-in editor toolbar."
             },
+            "featured": true,
             "itemIds": [
                 "undo", "redo", "insert-wikilink", "insert-embed", "insert-tag", "attach-file", "toggle-heading", "toggle-bold", "toggle-italic", "toggle-strikethrough", "toggle-highlight", "toggle-code", "toggle-blockquote", "insert-link", "toggle-bullet-list", "toggle-numbered-list", "toggle-checklist-status", "indent", "unindent", "note-toolbar-tbar-settings"
             ]

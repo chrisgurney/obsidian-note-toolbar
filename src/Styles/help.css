@@ -38,6 +38,39 @@
     }
 }
 
+.note-toolbar-gallery-cat-featured {
+    border-radius: var(--radius-m);
+    position: relative;
+    margin-block: 2em;
+    padding: var(--size-4-4);
+    & > .note-toolbar-gallery-view-cat-title > h2 {
+        margin-block-start: 0;
+    }
+    & > .note-toolbar-gallery-card-items {
+        border-block-end: none;
+        padding-bottom: 0;
+    }
+}
+
+.note-toolbar-gallery-cat-featured::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    padding: 2px;
+    border-radius: inherit;
+
+    background:
+        linear-gradient(45deg, var(--color-purple) 50%, var(--color-pink) 100%),
+        linear-gradient(0deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.2) 100%);
+    opacity: 0.6;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+
+    pointer-events: none;
+}
+
 .note-toolbar-card-items {
     align-items: stretch;
     display: flex;
