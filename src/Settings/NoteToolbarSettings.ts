@@ -145,6 +145,7 @@ export const enum DefaultStyleType {
 	Inactive = 'inactive',
 	Wide = 'wide',
 	Left = 'left',
+	NoWrap = 'nowrap',
 	Right = 'right',
 	Between = 'between',
 	Even = 'even',
@@ -169,7 +170,8 @@ export const enum MobileStyleType {
 	Sticky = 'mstcky',
 	NoSticky = 'mnstcky',
 	Tab = 'mtb',
-	NoTab = 'mntb'
+	NoTab = 'mntb',
+	Wrap = 'mwrp'
 }
 export const MOBILE_STYLE_COMPLIMENTS: MobileStyleType[][] = [
 	[MobileStyleType.Left, MobileStyleType.Center, MobileStyleType.Right],
@@ -621,6 +623,7 @@ export const DEFAULT_STYLE_OPTIONS: { [key: string]: string }[] = [
 	{ [DefaultStyleType.Glass]: t('setting.styles.option-glass') },
 	{ [DefaultStyleType.Inactive]: t('setting.styles.option-inactive') },
     { [DefaultStyleType.Left]: t('setting.styles.option-left') },
+	{ [DefaultStyleType.NoWrap]: t('setting.styles.option-nowrap') },
     { [DefaultStyleType.Right]: t('setting.styles.option-right') },
 	{ [DefaultStyleType.Between]: t('setting.styles.option-between') },
     { [DefaultStyleType.Even]: t('setting.styles.option-even') },
@@ -630,6 +633,7 @@ export const DEFAULT_STYLE_OPTIONS: { [key: string]: string }[] = [
 
 export const DEFAULT_STYLE_DISCLAIMERS: { [key: string]: string }[] = [
 	{ [DefaultStyleType.Autohide]: t('setting.styles.option-autohide-disclaimer') },
+	{ [DefaultStyleType.NoWrap]: t('setting.styles.option-nowrap-disclaimer') },
 	{ [DefaultStyleType.Sticky]: t('setting.styles.option-sticky-disclaimer') },
 ];
 
@@ -654,7 +658,8 @@ export const MOBILE_STYLE_OPTIONS: { [key: string]: string }[] = [
 	{ [MobileStyleType.Between]: t('setting.styles.option-between') },
     { [MobileStyleType.Even]: t('setting.styles.option-even') },
     { [MobileStyleType.Sticky]: t('setting.styles.option-sticky') },
-	{ [MobileStyleType.Tab ]: t('setting.styles.option-tab') }
+	{ [MobileStyleType.Tab ]: t('setting.styles.option-tab') },
+	{ [MobileStyleType.Wrap]: t('setting.styles.option-wrap') },
 ];
 
 export const MOBILE_STYLE_DISCLAIMERS: { [key: string]: string }[] = [

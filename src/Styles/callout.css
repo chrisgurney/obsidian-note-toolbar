@@ -312,6 +312,10 @@ body .workspace .callout[data-callout="note-toolbar"] {
         border: inherit;
     }
 
+    &[data-callout-metadata*="nowrap"] ul {
+        flex-wrap: nowrap;
+    }
+
     &[data-callout-metadata*="mnbrder"] {
         .is-mobile & {
             border: inherit;
@@ -524,6 +528,12 @@ body .workspace .callout[data-callout="note-toolbar"] {
             flex-wrap: nowrap;
             overflow-x: auto;
             scrollbar-width: none;
+        }
+    }
+
+    &[data-callout-metadata*="mwrp"] ul {
+        .is-mobile & {
+            flex-wrap: wrap;
         }
     }
 
