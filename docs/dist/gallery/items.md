@@ -1,3 +1,29 @@
+## Editor Tools
+
+Obsidian's built-in editor toolbar.
+
+| Item | Description |
+| --- | --- |
+| Undo | Reverts the latest action. |
+| Redo | Reapplies the last undone action. |
+| Add internal link | Add an internal link. |
+| Add embed | Add an embedded file or note. |
+| Insert tag | Insert a tag in the note. |
+| Insert attachment | Insert a file attachment. |
+| Toggle heading | Toggle the heading level on the current line. |
+| Toggle bold | Apply or remove bold formatting. |
+| Toggle strikethrough | Apply or remove strikethrough formatting. |
+| Toggle highlight | Apply or remove text highlighting. |
+| Toggle code | Apply or remove inline code formatting. |
+| Toggle blockquote | Apply or remove blockquote formatting. |
+| Insert Markdown link | Insert a Markdown link. |
+| Toggle bullet list | Apply or remove bullet list formatting. |
+| Toggle numbered list | Apply or remove numbered list formatting. |
+| Toggle checkbox status | Toggle the status of checklist items. |
+| Indent list item | Increases indentation on the current line. |
+| Unindent list item | Decreases indentation on the current line. |
+| Toolbar settings | Opens the active toolbar's settings. |
+
 ## Clipboard
 
 Items that use the clipboard. Learn how to add these to Obsidian on the [Additional Gallery items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Additional-Gallery-items) page.
@@ -21,40 +47,12 @@ Quickly navigate between daily notes. Requires the _Daily Notes_ core plugin.
 | Today's daily note | Go to today's daily note. |
 | Next daily note | Go to the next daily note. |
 
-## Default
-
-Items from Obsidian's built-in mobile toolbar.
-
-| Item | Description |
-| --- | --- |
-| Add internal link | Add an internal link. |
-| Add embed | Add an embedded file or note. |
-| Insert tag | Insert a tag in the note. |
-| Insert attachment | Insert a file attachment. |
-| Toggle heading | Toggle the heading level on the current line. |
-| Toggle bold | Apply or remove bold formatting. |
-| Toggle strikethrough | Apply or remove strikethrough formatting. |
-| Toggle highlight | Apply or remove text highlighting. |
-| Toggle code | Apply or remove inline code formatting. |
-| Toggle blockquote | Apply or remove blockquote formatting. |
-| Insert Markdown link | Insert a Markdown link. |
-| Toggle bullet list | Apply or remove bullet list formatting. |
-| Toggle numbered list | Apply or remove numbered list formatting. |
-| Toggle checkbox status | Toggle the status of checklist items. |
-| Indent list item | Increases indentation on the current line. |
-| Unindent list item | Decreases indentation on the current line. |
-| Undo | Reverts the latest action. |
-| Redo | Reapplies the last undone action. |
-| Toolbar settings | Opens the active toolbar's settings. |
-
 ## Editing
 
 Adjust the order and arrangement of content.
 
 | Item | Description |
 | --- | --- |
-| Undo | Reverts the latest action. |
-| Redo | Reapplies the last undone action. |
 | Move line up | Move the current line up. |
 | Move line down | Move the current line down. |
 | Toggle comment | Add or remove comments. |
