@@ -83,16 +83,17 @@ _🏆 Runner up in the Obsidian Gems of the Year 2024: New plugins category._
   - Right-click (or long press) toolbars to swap with others, quickly change their position, style, or to access configuration.
 - Use Obsidian's built-in icons, labels (which can include emojis), or a mix of both.
   - Show items specifically on mobile, desktop, or both.
-  - Choose whether the icon, label, or both are displayed. Set optional tooltips for each item.
-- Use [variables](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Variables) or script expressions to sub in the note's title or properties and more into toolbar item labels, tooltips, and URIs.
-- [Note Toolbar Callouts](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-Callouts) let you create and place toolbars anywhere within your notes.
-- [Share toolbars](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Sharing-toolbars) with other users with a link, or [as callouts](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-callouts-from-toolbars).
+  - Choose whether the icon, label, or both are displayed.
+  - Set optional tooltips for each item.
 - [Style toolbars](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Styling-toolbars) by adding borders, sticking to the top of your note on scroll, auto-hiding, choosing whether or not the toolbar should wrap (on mobile), making items look like buttons or act like tabs, and aligning items (left, right, centered, evenly spaced).
-  - Change or override these styles on mobile (i.e, phone and tablet).
+  - Change or override toolbar styles on mobile (i.e, phone and tablet).
   - Or use the [Style Settings plugin](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Style-Settings-plugin-support) for even more options (colors, positioning, sizing, etc.).
+- [Note Toolbar Callouts](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-Callouts) let you create and place toolbars anywhere within your notes.
 - Add [commands](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Commands) to open any toolbar, or to execute any item. Built-in commands _completely_ hide note properties, quickly access toolbars with [Quick Tools](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Quick-Tools), get command URIs, and more.
+- Use [variables](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Variables) or script expressions to sub in the note's title or properties and more into toolbar item labels, tooltips, and URIs.
 - [Note Toolbar URIs](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-URIs) let you execute commands, focus on folders, open menus (within Note Toolbar Callouts), and open toolbar settings, from mostly anywhere within your notes.
 - [Keyboard controls](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Accessibility) available via the _Note Toolbar: Focus_ command
+- [Share toolbars](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Sharing-toolbars) with other users with a link, or [as callouts](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-callouts-from-toolbars).
 - The [Note Toolbar CLI](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-CLI) provides command-line access to create Note Toolbar toolbars and items, using Obsidian's CLI.
 - The [Note Toolbar API](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API) provides toolbar access, and the ability to show UI (suggesters, prompts, menus, and modals). The latter enables Dataview JS, JS Engine, or Templater scripts to ask for information, or to show helpful text.
 
