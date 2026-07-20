@@ -31,7 +31,7 @@
     "typescript-eslint": "^8.64.0"
   },
   "dependencies": {
-    "@codemirror/view": "6.38.6",
+    "@codemirror/view": "6.43.6",
     "sortablejs": "^1.15.2"
   }
 }
