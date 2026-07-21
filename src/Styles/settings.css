@@ -526,6 +526,7 @@
     }
 
     & .setting-items.note-toolbar-setting-styles-group {
+        background-color: transparent;
         & .note-toolbar-setting-item-style .setting-item:not(.setting-item-heading)::before {
             border-top: none;
         }
