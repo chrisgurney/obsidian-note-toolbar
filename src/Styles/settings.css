@@ -1227,6 +1227,9 @@ input[type="text"].note-toolbar-setting-error,
             & .setting-items {
                 background-color: unset;
                 border: 1px solid var(--background-modifier-border);
+                & .setting-item {
+                    padding: var(--size-4-5);
+                }
                 & .setting-item-info {
                     display: initial;
                     & .setting-item-name {
