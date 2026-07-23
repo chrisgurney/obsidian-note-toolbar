@@ -2,6 +2,7 @@ import { EditorView, Rect } from "@codemirror/view";
 import NoteToolbarPlugin from "main";
 import { App, Command, Editor, FileView, ItemView, MarkdownView, MarkdownViewModeType, PaneType, Platform } from "obsidian";
 import { COMMAND_DOES_NOT_EXIST, ComponentType, DefaultStyleType, ItemType, MOBILE_STYLE_COMPLIMENTS, MobileStyleType, ToolbarItemSettings, ToolbarSettings, ViewModeType, Visibility } from "Settings/NoteToolbarSettings";
+import { ScriptArgsParser } from "./ScriptArgsParser";
 
 export default class PluginUtils {
 
@@ -541,80 +542,11 @@ export function hasStyle(toolbar: ToolbarSettings, defaultStyle: DefaultStyleTyp
  */
 export function importArgs(ntb: NoteToolbarPlugin, args: string): Record<string, unknown> | null {
     try {
-        const result: Record<string, unknown> = {};
-        let i = 0;
-        const s = args.trim();
-
-        const readToken = (start_i: number, terminators: string[]): { token: string | null, i: number } => {
-            let i = start_i;
-            if (s[i] === '"') {
-                i++; // skip opening quote
-                let str = '';
-                while (i < s.length && s[i] !== '"') {
-                    if (s[i] === '\\' && s[i + 1] === '"') {
-                        str += '"';
-                        i += 2;
-                    } else {
-                        str += s[i++];
-                    }
-                }
-                if (i >= s.length) return { token: null, i };
-                i++; // skip closing quote
-                return { token: str, i };
-            } else {
-                const start = i;
-                while (i < s.length && !terminators.includes(s[i])) i++;
-                return { token: s.slice(start, i).trim(), i };
-            }
-        };
-
-        // skip optional leading brace
-        if (s[i] === '{') i++;
-
-        while (i < s.length) {
-            // skip whitespace and commas
-            while (i < s.length && (s[i] === ' ' || s[i] === ',' || s[i] === '\n')) i++;
-            if (s[i] === '}' || i >= s.length) break;
-
-            const keyResult = readToken(i, [':']);
-            i = keyResult.i;
-            const key = keyResult.token;
-            if (key === null || key === '') return null;
-
-            // skip colon
-            while (i < s.length && s[i] === ' ') i++;
-            if (s[i] !== ':') return null;
-            i++;
-            while (i < s.length && s[i] === ' ') i++;
-
-            const wasQuoted = s[i] === '"';
-            const valueResult = readToken(i, [',', '}']);
-            i = valueResult.i;
-            const raw = valueResult.token;
-            if (raw === null) return null;
-
-            if (wasQuoted) {
-                result[key] = raw;
-            } else if (raw === '') {
-                result[key] = null;
-            } else if (raw === 'true') {
-                result[key] = true;
-            } else if (raw === 'false') {
-                result[key] = false;
-            } else if (raw === 'null') {
-                result[key] = null;
-            } else if (!isNaN(Number(raw))) {
-                result[key] = Number(raw);
-            } else {
-                result[key] = raw;
-            }
-        }
-
-        return result;
-    }
-    catch {
-        return null;
-    }
+        return new ScriptArgsParser(args).parseObject();
+	} catch (error) {
+		ntb.error("importArgs:", error);
+		return null;
+	}
 }
 
 /**
