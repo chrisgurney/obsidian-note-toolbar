@@ -46,7 +46,7 @@
 }
 
 .note-toolbar-setting-plugin-onboarding,
-.modal .modal-content .setting-item.note-toolbar-setting-plugin-onboarding:first-child {
+.modal.note-toolbar-setting-modal-container .modal-content .setting-item.note-toolbar-setting-plugin-onboarding:first-child {
     padding: var(--size-4-4);
     border-radius: 8px;
     border: solid 1px var(--color-accent-1);
@@ -297,7 +297,8 @@
 
     }
 
-    & .note-toolbar-setting-item-tbar-name {
+    & .setting-item.note-toolbar-setting-item-tbar-name {
+        border-top: none;
         & .setting-item-control {
             display: flex;
             flex-wrap: wrap;
