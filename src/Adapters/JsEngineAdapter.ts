@@ -102,7 +102,6 @@ export default class JsEngineAdapter extends Adapter {
     }
 
     disable() {
-        this.ntb = null;
         this.adapterApi = null;
         this.adapterPlugin = null;;
     }
@@ -119,7 +118,7 @@ export default class JsEngineAdapter extends Adapter {
         
         let containerEl;
         if (config.outputContainer) {
-            containerEl = this.ntb?.el.getOutputEl(config.outputContainer);
+            containerEl = this.ntb.el.getOutputEl(config.outputContainer);
             if (!containerEl) {
                 this.displayScriptError(t('adapter.error.callout-not-found', { id: config.outputContainer }));
                 return;
@@ -181,7 +180,7 @@ export default class JsEngineAdapter extends Adapter {
         let result = '';
         const resultEl = containerEl || createSpan();
 
-        const activeFile = this.ntb?.app.workspace.getActiveFile();
+        const activeFile = this.ntb.app.workspace.getActiveFile();
 
         const component = new Component();
 		component.load();
@@ -250,7 +249,7 @@ export default class JsEngineAdapter extends Adapter {
 
         let args;
         try {
-            args = argsJson ? importArgs(argsJson) : {};
+            args = argsJson ? importArgs(this.ntb, argsJson) : {};
         }
         catch (error) {
             this.displayScriptError(error, t('adapter.error.args-parsing', { filename: filename }));
@@ -269,7 +268,7 @@ export default class JsEngineAdapter extends Adapter {
                         else {
                             result = (module[functionName] as (...args: unknown[]) => unknown)(this.adapterApi);
                         }
-                        this.ntb?.debug('importExec() result:', result);
+                        this.ntb.debug('importExec() result:', result);
                     }
                     catch (error) {
                         this.displayScriptError(error, t('adapter.error.exec-failed', { filename: filename }));
@@ -295,7 +294,7 @@ export default class JsEngineAdapter extends Adapter {
         let result = '';
         const resultEl = containerEl || createSpan();
 
-        const activeFile = this.ntb?.app.workspace.getActiveFile();
+        const activeFile = this.ntb.app.workspace.getActiveFile();
         const activeFilePath = activeFile?.path ?? '';
 
         const component = new Component();
@@ -306,7 +305,7 @@ export default class JsEngineAdapter extends Adapter {
                 container: resultEl,
                 component: component,
             });
-            this.ntb?.debug('exec() result:', execution?.result);
+            this.ntb.debug('exec() result:', execution?.result);
             if (containerEl) {
                 const renderer = this.adapterApi?.internal.createRenderer(resultEl, activeFilePath, component);
                 await renderer?.render(execution?.result);

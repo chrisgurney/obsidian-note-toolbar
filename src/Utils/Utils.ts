@@ -539,7 +539,7 @@ export function hasStyle(toolbar: ToolbarSettings, defaultStyle: DefaultStyleTyp
  * @param args JSON-like formatted string
  * @returns parsed arguments, or null if parsing fails
  */
-export function importArgs(args: string): Record<string, unknown> | null {
+export function importArgs(ntb: NoteToolbarPlugin, args: string): Record<string, unknown> | null {
     try {
         const result: Record<string, unknown> = {};
         let i = 0;

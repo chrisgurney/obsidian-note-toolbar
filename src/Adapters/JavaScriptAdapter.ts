@@ -42,7 +42,6 @@ export default class JavaScriptAdapter extends Adapter {
     }
 
     disable() {
-        this.ntb = null;
     }
     
     getSetting(_settingName: string): string {
@@ -58,7 +57,7 @@ export default class JavaScriptAdapter extends Adapter {
 
         let containerEl;
         if (config.outputContainer) {
-            containerEl = this.ntb?.el.getOutputEl(config.outputContainer);
+            containerEl = this.ntb.el.getOutputEl(config.outputContainer);
             if (!containerEl) {
                 this.displayScriptError(t('adapter.error.callout-not-found', { id: config.outputContainer }));
                 return;
@@ -118,15 +117,15 @@ export default class JavaScriptAdapter extends Adapter {
             return;
         }
         
-        const activeFilePath = this.ntb?.app.workspace.getActiveFile()?.path || '';
+        const activeFilePath = this.ntb.app.workspace.getActiveFile()?.path || '';
 
-        const viewFile = this.ntb?.app.metadataCache.getFirstLinkpathDest(filename, activeFilePath);
+        const viewFile = this.ntb.app.metadataCache.getFirstLinkpathDest(filename, activeFilePath);
         if (!viewFile) {
             this.displayScriptError(t('adapter.error.file-not-found', { filename: filename }));
             return;
         }
 
-        const contents = await this.ntb?.app.vault.cachedRead(viewFile);
+        const contents = await this.ntb.app.vault.cachedRead(viewFile);
         if (contents) {
             return await this.evaluate(contents, argsJson, containerEl, ErrorBehavior.Report);
         }
@@ -153,14 +152,14 @@ export default class JavaScriptAdapter extends Adapter {
 
         let args;
         try {
-            args = argsJson ? importArgs(argsJson) : {};
+            args = argsJson ? importArgs(this.ntb, argsJson) : {};
         }
         catch (error) {
             this.displayScriptError(t('adapter.error.args-parsing'));
             return t('adapter.error.args-parsing-error', { error: error });
         }
 
-        const activeFile = this.ntb?.app.workspace.getActiveFile();
+        const activeFile = this.ntb.app.workspace.getActiveFile();
         const activeFilePath = activeFile?.path || '';
 
         if (expression) {
@@ -169,7 +168,7 @@ export default class JavaScriptAdapter extends Adapter {
             component.load();
             try {
                 resultEl.empty();
-                this.ntb?.debug(expression);
+                this.ntb.debug(expression);
                 // may directly render, in which case it will likely return undefined or null
                 result = await Promise.resolve((func as (...args: unknown[]) => unknown)(args));
                 if (containerEl && result && this.ntb) {

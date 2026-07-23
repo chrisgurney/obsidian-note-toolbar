@@ -108,7 +108,7 @@ export default class CliHandlers {
                 sourceFile: file?.path
             };
             if (hasValue(args.args)) {
-                const parsedArgs = importArgs(args.args);
+                const parsedArgs = importArgs(this.ntb, args.args);
                 if (!parsedArgs) return t('cli.error-script-invalid-args', { args: args.args });
                 scriptConfig.sourceArgs = args.args;
             }
@@ -153,7 +153,7 @@ export default class CliHandlers {
                     sourceFile: file?.path
                 };
                 if (hasValue(args.args)) {
-                    const parsedArgs = importArgs(args.args);
+                    const parsedArgs = importArgs(this.ntb, args.args);
                     if (!parsedArgs) return t('cli.error-script-invalid-args', { args: args.args });
                     scriptConfig.sourceArgs = args.args;
                 }

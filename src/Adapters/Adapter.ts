@@ -7,8 +7,6 @@ export abstract class Adapter {
     
     abstract readonly FUNCTIONS: AdapterFunction[];
 
-    ntb: NoteToolbarPlugin | null;
-
     /** used to create async functions from strings at runtime */
     protected static readonly AsyncFunction = (Object.getPrototypeOf(async function(){}) as { constructor: typeof Function }).constructor;
 
@@ -16,9 +14,9 @@ export abstract class Adapter {
      * Creates a new Adapter for the given plugin.
      * @param notetoolbar reference to the NoteToolbar plugin.
      */
-    constructor(notetoolbar: NoteToolbarPlugin) {
-        this.ntb = notetoolbar;
-    }
+    constructor(
+        public ntb: NoteToolbarPlugin
+    ) {}
 
     /**
      * Cleans up the adapter when it's no longer needed.

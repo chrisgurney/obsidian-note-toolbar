@@ -86,7 +86,6 @@ export default class DataviewAdapter extends Adapter {
     }
 
     disable() {
-        this.ntb = null;
         this.adapterApi = null;
         this.adapterPlugin = null;;
     }
@@ -104,7 +103,7 @@ export default class DataviewAdapter extends Adapter {
 
         let containerEl;
         if (config.outputContainer) {
-            containerEl = this.ntb?.el.getOutputEl(config.outputContainer);
+            containerEl = this.ntb.el.getOutputEl(config.outputContainer);
             if (!containerEl) {
                 this.displayScriptError(t('adapter.error.callout-not-found', { id: config.outputContainer }));
                 return;
@@ -177,7 +176,7 @@ export default class DataviewAdapter extends Adapter {
 
         let result = '';
         
-        const activeFile = this.ntb?.app.workspace.getActiveFile();
+        const activeFile = this.ntb.app.workspace.getActiveFile();
         const activeFilePath = activeFile?.path;
 
         const component = new Component();
@@ -242,7 +241,7 @@ export default class DataviewAdapter extends Adapter {
 
         let args;
         try {
-            args = argsJson ? importArgs(argsJson) : {};
+            args = argsJson ? importArgs(this.ntb, argsJson) : {};
         }
         catch (error) {
             this.displayScriptError(error, t('adapter.error.args-parsing', { filename: filename }), containerEl);
@@ -252,17 +251,17 @@ export default class DataviewAdapter extends Adapter {
         // TODO: this works if the script doesn't need a container... but where does this span go?
         containerEl = containerEl || createSpan();
 
-        const activeFile = this.ntb?.app.workspace.getActiveFile();
+        const activeFile = this.ntb.app.workspace.getActiveFile();
         const activeFilePath = activeFile?.path || '';
 
-        const viewFile = this.ntb?.app.metadataCache.getFirstLinkpathDest(filename, activeFilePath);
+        const viewFile = this.ntb.app.metadataCache.getFirstLinkpathDest(filename, activeFilePath);
         if (!viewFile) {
             // TODO: render messages into the container, if provided
             this.displayScriptError(t('adapter.error.file-not-found', { filename: filename }));
             return;
         }
 
-        let contents = await this.ntb?.app.vault.cachedRead(viewFile);
+        let contents = await this.ntb.app.vault.cachedRead(viewFile);
         if (contents) {
             // if (contents.includes("await")) contents = "(async () => { " + contents + " })()";
             contents += `\n//# sourceURL=${viewFile.path}`;
@@ -314,7 +313,7 @@ export default class DataviewAdapter extends Adapter {
         let result = '';
         const resultEl = containerEl || createSpan();
 
-        const activeFile = this.ntb?.app.workspace.getActiveFile();
+        const activeFile = this.ntb.app.workspace.getActiveFile();
         const activeFilePath = activeFile?.path || '';
 
         const component = new Component();
@@ -363,7 +362,7 @@ export default class DataviewAdapter extends Adapter {
     private query = async (expression: string, containerEl?: HTMLElement): Promise<string> => {
 
         let result = '';
-        const activeFile = this.ntb?.app.workspace.getActiveFile();
+        const activeFile = this.ntb.app.workspace.getActiveFile();
 
         if (!activeFile) {
             this.displayScriptError(t('adapter.error.query-note-not-open'));
@@ -376,10 +375,10 @@ export default class DataviewAdapter extends Adapter {
         component.load();
         try {
             if (this.adapterApi) {
-                this.ntb?.debug("query() " + expression);
+                this.ntb.debug("query() " + expression);
                 // returns a Promise<Result<QueryResult, string>>
                 const dvResult = await this.adapterApi.queryMarkdown(expression, activeFilePath);
-                this.ntb?.debug("query() result: ", dvResult);
+                this.ntb.debug("query() result: ", dvResult);
                 if (containerEl) {
                     containerEl.empty();
                     if (this.ntb) {

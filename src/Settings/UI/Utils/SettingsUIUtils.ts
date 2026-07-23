@@ -882,7 +882,7 @@ export default class SettingsUIUtils {
 		if (itemValue) {
 			switch(fieldType) {
 				case SettingType.Args: {
-					const parsedArgs = importArgs(itemValue);
+					const parsedArgs = importArgs(this.ntb, itemValue);
 					this.ntb.debug('validating args:', itemValue, parsedArgs);
 					if (!parsedArgs) {
 						status = Status.Invalid;
