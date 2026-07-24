@@ -328,6 +328,11 @@
             padding: var(--size-4-4);
             & .setting-item {
                 align-items: center;
+                padding-left: 0;
+                padding-right: 0;
+                &::before {
+                    display: none;
+                }
             }
             & > .setting-item:first-child {
                 padding-top: 0;
