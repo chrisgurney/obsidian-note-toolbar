@@ -150,14 +150,12 @@ export default class JavaScriptAdapter extends Adapter {
         let result;
         const resultEl = containerEl || createSpan();
 
-        let args;
-        try {
-            args = argsJson ? importArgs(this.ntb, argsJson) : {};
+        const importedArgs = argsJson ? importArgs(argsJson) : { value: {} };
+        if (importedArgs.value === null) {
+            this.displayScriptError(importedArgs.error, t('adapter.error.args-parsing'), containerEl);
+            return '';
         }
-        catch (error) {
-            this.displayScriptError(t('adapter.error.args-parsing'));
-            return t('adapter.error.args-parsing-error', { error: error });
-        }
+        const args = importedArgs.value;
 
         const activeFile = this.ntb.app.workspace.getActiveFile();
         const activeFilePath = activeFile?.path || '';

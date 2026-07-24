@@ -1311,6 +1311,13 @@ input[type="text"].note-toolbar-setting-error,
 
 .note-toolbar-setting-field-error {
     color: var(--text-error);
+    & button.copy-code-button {
+        display: none;
+    }
+    & p {
+        margin-block-start: 0;
+        margin-block-end: 0;
+    }
 }
 
 .note-toolbar-sortablejs-list {

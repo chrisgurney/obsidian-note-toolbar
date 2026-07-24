@@ -239,14 +239,12 @@ export default class DataviewAdapter extends Adapter {
             return;
         }
 
-        let args;
-        try {
-            args = argsJson ? importArgs(this.ntb, argsJson) : {};
-        }
-        catch (error) {
-            this.displayScriptError(error, t('adapter.error.args-parsing', { filename: filename }), containerEl);
+        const importedArgs = argsJson ? importArgs(argsJson) : { value: {} };
+        if (importedArgs.value === null) {
+            this.displayScriptError(importedArgs.error, t('adapter.error.args-parsing', { filename }), containerEl);
             return;
         }
+        const args = importedArgs.value;
         
         // TODO: this works if the script doesn't need a container... but where does this span go?
         containerEl = containerEl || createSpan();

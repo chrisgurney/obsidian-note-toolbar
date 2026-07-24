@@ -23,9 +23,9 @@
         "error": {
             "args-format": "引数の形式が無効です。",
             "args-parsing": "引数の解析に失敗しました",
-            "args-parsing-error": "引数の解析に失敗しました\n```\n{{error}}\n```",
-            "args-parsing-script": "スクリプトの引数の解析に失敗しました: {{filename}}",
-            "args-parsing-script-error": "スクリプトの引数の解析に失敗しました: {{filename}}\n```\n{{error}}\n```",
+            "args-parsing-error": "引数の解析に失敗しました\n```\n{{- error}}\n```",
+            "args-parsing-field-error": "```\n{{- error}}\n```",
+            "args-parsing-script-error": "スクリプトの引数の解析に失敗しました: {{filename}}\n```\n{{- error}}\n```",
             "callout-not-found": "エラー: 現在のノートにID: {{id}}のnote-toolbar-outputコールアウトが見つかりません",
             "exec-failed": "スクリプトの実行に失敗しました: {{filename}}",
             "expr-failed": "式の評価に失敗しました: {{expression}}",

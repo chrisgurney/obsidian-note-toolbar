@@ -23,7 +23,7 @@ export class ScriptArgsParser {
         this.s = input.trim();
     }
 
-    parseObject(): Record<string, unknown> {
+    parse(): Record<string, unknown> {
         const result: Record<string, unknown> = {};
 
         if (this.peek() === '{') {

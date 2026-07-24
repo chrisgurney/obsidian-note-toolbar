@@ -23,9 +23,9 @@
         "error": {
             "args-format": "Ungültiges Argumentformat.",
             "args-parsing": "Argumente konnten nicht geparsed werden",
-            "args-parsing-error": "Argumente konnten nicht geparsed werden\n```\n{{error}}\n```",
-            "args-parsing-script": "Argumente für Skript konnten nicht geparsed werden: {{filename}}",
-            "args-parsing-script-error": "Argumente für Skript konnten nicht geparsed werden: {{filename}}\n```\n{{error}}\n```",
+            "args-parsing-error": "Argumente konnten nicht geparsed werden\n```\n{{- error}}\n```",
+            "args-parsing-field-error": "```\n{{- error}}\n```",
+            "args-parsing-script-error": "Argumente für Skript konnten nicht geparsed werden: {{filename}}\n```\n{{- error}}\n```",
             "callout-not-found": "Fehler: Note-Toolbar-Ausgabe-Callout konnte in der aktuellen Notiz mit der ID {{id}} nicht gefunden werden.",
             "exec-failed": "Skript konnte nicht ausgeführt werden: {{filename}}",
             "expr-failed": "Ausdruck konnte nicht ausgewertet werden: {{expression}}",

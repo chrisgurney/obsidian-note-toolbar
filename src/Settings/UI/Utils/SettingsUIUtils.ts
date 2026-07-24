@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { ButtonComponent, getIcon, ItemView, Notice, Platform, requireApiVersion, setIcon, Setting, setTooltip, TFile, TFolder, ToggleComponent } from "obsidian";
+import { ButtonComponent, Component, getIcon, ItemView, MarkdownRenderer, Notice, Platform, requireApiVersion, setIcon, Setting, setTooltip, TFile, TFolder, ToggleComponent } from "obsidian";
 import { COMMAND_DOES_NOT_EXIST, ComponentType, DEFAULT_ITEM_VISIBILITY_SETTINGS, IGNORE_PLUGIN_IDS, ItemComponentVisibility, ItemType, SettingType, t, ToolbarItemSettings, ToolbarSettings, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_WHATS_NEW, ViewModeType, Visibility, WHATSNEW_VERSION } from "Settings/NoteToolbarSettings";
 import SettingsManager from "Settings/SettingsManager";
 import { URLS } from "Utils/Urls";
@@ -776,7 +776,16 @@ export default class SettingsUIUtils {
 			if (fieldContainerEl && !hasError) {
 				if (errorText) {
 					const errorDiv = createDiv({ cls: 'note-toolbar-setting-field-error' });
-					errorDiv.append(errorText);
+					if (typeof errorText === "string") {
+						const component = new Component();
+						component.load();
+						void MarkdownRenderer
+							.render(this.ntb.app, errorText, errorDiv, '', component)
+							.finally(() => component.unload());
+					}
+					else {
+						errorDiv.append(errorText);
+					}
 					if (errorLink) {
 						// as it's not easy to listen for plugins being enabled,
 						// user will have to click a refresh link to dismiss the error
@@ -882,11 +891,11 @@ export default class SettingsUIUtils {
 		if (itemValue) {
 			switch(fieldType) {
 				case SettingType.Args: {
-					const parsedArgs = importArgs(this.ntb, itemValue);
+					const parsedArgs = importArgs(itemValue);
 					this.ntb.debug('validating args:', itemValue, parsedArgs);
-					if (!parsedArgs) {
+					if (parsedArgs.value === null) {
 						status = Status.Invalid;
-						statusMessage = t('adapter.error.args-format');
+						statusMessage = t('adapter.error.args-parsing-field-error', { error: parsedArgs.error });
 					}
 					break;
 				}

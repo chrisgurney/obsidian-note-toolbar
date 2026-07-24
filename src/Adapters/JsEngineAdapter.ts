@@ -247,15 +247,13 @@ export default class JsEngineAdapter extends Adapter {
 
         let result;
 
-        let args;
-        try {
-            args = argsJson ? importArgs(this.ntb, argsJson) : {};
+        const importedArgs = argsJson ? importArgs(argsJson) : { value: {} };
+        if (importedArgs.value === null) {
+            this.displayScriptError(importedArgs.error, t('adapter.error.args-parsing', { filename }) );
+            return t('adapter.error.args-parsing-script-error', { filename: filename, error: importedArgs.error });
         }
-        catch (error) {
-            this.displayScriptError(error, t('adapter.error.args-parsing', { filename: filename }));
-            return t('adapter.error.args-parsing-error', { filename: filename, error: error });
-        }
-        
+        const args = importedArgs.value;
+
         if (this.adapterApi) {
             // const module = await this.adapterApi.importJs(filename);
             const module = await this.adapterApi.importJs(filename) as Record<string, unknown>;

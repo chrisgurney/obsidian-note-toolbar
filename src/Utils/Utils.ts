@@ -540,13 +540,21 @@ export function hasStyle(toolbar: ToolbarSettings, defaultStyle: DefaultStyleTyp
  * @param args JSON-like formatted string
  * @returns parsed arguments, or null if parsing fails
  */
-export function importArgs(ntb: NoteToolbarPlugin, args: string): Record<string, unknown> | null {
+export function importArgs(args: string): {
+    value: Record<string, unknown> | null;
+    error?: string;
+} {
     try {
-        return new ScriptArgsParser(args).parseObject();
-	} catch (error) {
-		ntb.error("importArgs:", error);
-		return null;
-	}
+        return {
+            value: new ScriptArgsParser(args).parse()
+        };
+    } catch (error) {
+        console.error('importArgs:', error);
+        return {
+            value: null,
+            error: error instanceof Error ? error.message : String(error)
+        };
+    }
 }
 
 /**
