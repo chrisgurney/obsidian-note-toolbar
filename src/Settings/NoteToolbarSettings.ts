@@ -7,7 +7,7 @@ export const WHATSNEW_VERSION = '1.34';
 export const SETTINGS_VERSION = 20260703.1;
 
 // *****************************************************************************
-// #region TRANSLATIONS
+// TRANSLATIONS
 // 
 // Language codes used by Obsidian per:
 // https://github.com/obsidianmd/obsidian-translations?tab=readme-ov-file#existing-languages
@@ -36,10 +36,8 @@ void Locales.init();
 
 export const t: (key: string, ...args: unknown[]) => string = Locales.getFixedT(null, 'plugin-note-toolbar', null); // string translation function
 
-//#endregion
-
 // *****************************************************************************
-// #region CONSTANTS
+// CONSTANTS
 //******************************************************************************
 
 export const COMMAND_PREFIX_TBAR = 'open-toolbar-';
@@ -56,10 +54,8 @@ export const NONE_TOOLBAR_ID = 'NO_TOOLBAR';
 export const CORE_PLUGIN_IDS = ['bookmarks', 'daily-notes', 'file-explorer', 'global-search', 'workspace'];
 export const IGNORE_PLUGIN_IDS = ['app', 'bookmarks', 'editor', 'file-explorer', 'global-search', 'link', 'markdown', 'note-toolbar', 'open-with-default-app', 'theme', 'workspace'];
 
-// #endregion
-
 // *****************************************************************************
-// #region TYPES
+// TYPES
 // *****************************************************************************
 
 export const enum ComponentType {
@@ -728,5 +724,3 @@ export const OBSIDIAN_UI_MOBILE_NAVBAR_OPTIONS = [
 	'mobile.navbar.tabs',
 	'mobile.navbar.menu'
 ];
-
-// #endregion
