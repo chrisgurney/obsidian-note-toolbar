@@ -432,10 +432,15 @@ export interface ItemViewContext extends ViewContext {
 	component: ComponentType;
 }
 
+// TODO: deprecate and replace with Rules
 export interface FolderMapping {
 	folder: string;
 	toolbar: string;
 }
+
+// *****************************************************************************
+// RULES
+//******************************************************************************
 
 export const enum RuleConjunctionType {
 	And = 'and',
@@ -464,6 +469,10 @@ export interface ToolbarRuleCondition {
 	operator: RuleOperatorType;
 	value: string;
 }
+
+// *****************************************************************************
+// TOOLBAR SETTINGS
+//******************************************************************************
 
 export interface ToolbarItemSettings {
 	uuid: string;
