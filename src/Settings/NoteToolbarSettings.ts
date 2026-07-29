@@ -455,11 +455,13 @@ export const enum RuleConjunction {
  * Note: This can't be const as it's used in Object.entries()
  */
 export enum RuleField {
-    Folder = 'folder',
+	EditorMode = 'editormode',
     Filename = 'filename',
-    Tag = 'tag',
+    Filetype = 'filetype',
+    Folder = 'folder',
+    Platform = 'platform',
     Property = 'property',
-    Platform = 'platform'
+    Tag = 'tag',
 }
 
 /**
@@ -475,8 +477,8 @@ export const enum RuleOperator {
     StartsWith = 'startsWith',
     EndsWith = 'endsWith',
 
-    Exists = 'exists',
-    DoesNotExist = 'doesNotExist'
+    IsEmpty = 'empty',
+    IsNotEmpty = 'notEmpty',
 }
 
 /**
@@ -488,10 +490,11 @@ export type RuleValue = string | string[] | number | boolean;
  * Editor used to enter a value.
  */
 export type RuleValueEditor =
-    | 'string'
+	| 'boolean'
+	| 'editormode'
     | 'number'
-    | 'boolean'
-    | 'platform';
+    | 'platform'
+    | 'string';
 
 /**
  * A single ordered rule. The first matching rule determines the toolbar.
@@ -532,6 +535,16 @@ export interface RuleOperand {
 
 export const RULE_OPERANDS: RuleOperand[] = [
     {
+        id: 'editormode',
+        field: RuleField.EditorMode,
+        label: 'Editor mode',
+        valueEditor: 'editormode',
+        operators: [
+            RuleOperator.Is,
+            RuleOperator.IsNot,
+        ]
+    },
+    {
         id: 'folder',
         field: RuleField.Folder,
         label: 'Folder',
@@ -539,7 +552,9 @@ export const RULE_OPERANDS: RuleOperand[] = [
         operators: [
             RuleOperator.Is,
             RuleOperator.IsNot,
-            RuleOperator.StartsWith
+            RuleOperator.Contains,
+            RuleOperator.StartsWith,
+            RuleOperator.EndsWith,
         ]
     },
     {
@@ -552,18 +567,27 @@ export const RULE_OPERANDS: RuleOperand[] = [
             RuleOperator.IsNot,
             RuleOperator.Contains,
             RuleOperator.StartsWith,
-            RuleOperator.EndsWith
+            RuleOperator.EndsWith,
         ]
     },
     {
-        id: 'tag',
-        field: RuleField.Tag,
-        label: 'Tag',
+        id: 'filetype',
+        field: RuleField.Platform,
+        label: 'File type',
         valueEditor: 'string',
         operators: [
             RuleOperator.Is,
             RuleOperator.IsNot,
-            RuleOperator.Contains
+        ]
+    },
+    {
+        id: 'tags',
+        field: RuleField.Tag,
+        label: 'Tags',
+        valueEditor: 'string',
+        operators: [
+            RuleOperator.Contains,
+			RuleOperator.DoesNotContain,
         ]
     },
     {
@@ -573,7 +597,7 @@ export const RULE_OPERANDS: RuleOperand[] = [
         valueEditor: 'platform',
         operators: [
             RuleOperator.Is,
-            RuleOperator.IsNot
+            RuleOperator.IsNot,
         ]
     }
 ];

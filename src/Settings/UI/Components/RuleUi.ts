@@ -238,10 +238,7 @@ export default class RuleUi {
                         const operand = RULE_OPERANDS.find(
                             (operand) => operand.id === id
                         );
-
-                        if (!operand) {
-                            return;
-                        }
+                        if (!operand) return;
 
                         condition.field = operand.field;
                         condition.key = operand.key;
