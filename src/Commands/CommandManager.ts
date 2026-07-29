@@ -2,6 +2,7 @@ import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, EMPTY_TOOLBAR_ID, LocalVar, N
 import CommandSuggestModal from "Settings/UI/Modals/CommandSuggestModal";
 import CopyTextModal from "Settings/UI/Modals/CopyTextModal";
 import ItemSuggestModal from "Settings/UI/Modals/ItemSuggestModal";
+import RulesModal from "Settings/UI/Modals/RulesModal";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
 import ToolbarSuggestModal from "Settings/UI/Modals/ToolbarSuggestModal";
 import NoteToolbarSettingTab from "Settings/UI/NoteToolbarSettingTab";
@@ -35,6 +36,8 @@ export default class CommandManager {
             const currentToolbar = this.ntb.settingsManager.getCurrentToolbar();
             if (currentToolbar) void this.openQuickTools(currentToolbar.uuid);
         }) });
+
+        this.ntb.addCommand({ id: 'open-rules', name: t('command.name-open-rules'), callback: () => this.openRules() })
         this.ntb.addCommand({ id: 'open-toolbar-suggester', name: (t('command.name-toolbar-suggester')), callback: () => this.openToolbarSuggester() });
         this.ntb.addCommand({ id: 'open-settings', name: t('command.name-settings'), callback: () => this.openSettings() });
         this.ntb.addCommand({ id: 'open-toolbar-settings', name: t('command.name-toolbar-settings'), checkCallback: this.checkHasToolbarAndRun(() => { void this.openToolbarSettings(); }) });
@@ -240,6 +243,14 @@ export default class CommandManager {
     openQuickTools(toolbarId?: string) {
         const modal = new ItemSuggestModal(this.ntb, toolbarId, undefined, 'QuickTools');
         modal.open();
+    }
+
+    /**
+     * Opesn the toolbar rules modal.
+     */
+    openRules() {
+        const rulesModal = new RulesModal(this.ntb);
+        rulesModal.open();
     }
 
     /**

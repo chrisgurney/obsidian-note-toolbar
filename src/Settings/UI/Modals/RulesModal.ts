@@ -1,25 +1,28 @@
 import { RuleField, RuleConjunction, RuleOperator, t, Rule, RuleCondition, RULE_OPERANDS } from "Settings/NoteToolbarSettings";
-import { getUUID } from "Utils/Utils";
+import { arraymove, getUUID } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
-import { ButtonComponent, debounce, Setting } from "obsidian";
-import NoteToolbarSettingTab from "../NoteToolbarSettingTab";
+import { ButtonComponent, debounce, Modal, Setting } from "obsidian";
 import ToolbarSuggester from "../Suggesters/ToolbarSuggester";
 import { iconTextFr } from "../Utils/SettingsUIUtils";
 
-export default class RuleUi {
+export default class RulesModal extends Modal {
 
     constructor(
-        private ntb: NoteToolbarPlugin, 
-        private parent: NoteToolbarSettingTab
-    ) {}
+        private ntb: NoteToolbarPlugin
+    ) {
+        super(ntb.app);
+    }
 
+    public onOpen() {
+        this.display();
+    }
+    
     /**
      * Displays rules for displaying toolbars.
-     * @param containerEl HTMLElement to add the settings to.
      */
-    displayRules(containerEl: HTMLElement): void {
-        
-        const rulesContainerEl = containerEl.createDiv();
+    public display() {
+
+        const rulesContainerEl = this.contentEl.createDiv();
         rulesContainerEl.addClasses(['note-toolbar-setting-rules-container', 'note-toolbar-setting-top-border']);
 
         new Setting(rulesContainerEl)
@@ -114,9 +117,9 @@ export default class RuleUi {
                     .setTooltip(t('setting.button-delete-tooltip'))
                     .onClick(async () => {
                         const rowId = cb.buttonEl.getAttribute('data-row-id');
-                        if (rowId) await this.parent.listMoveHandlerById(null, rowId, 'delete');
+                        if (rowId) await this.listMoveHandlerById(null, rowId, 'delete');
                     });
-                // cb.buttonEl.setAttribute('data-row-id', rule.id);
+                cb.buttonEl.setAttribute('data-row-id', rule.id);
             });
 
         //
@@ -194,7 +197,7 @@ export default class RuleUi {
         //                 const currentEl = e.target as HTMLElement;
         //                 const rowId = currentEl.getAttribute('data-row-id');
         //                 // this.plugin.debug("rowId", rowId);
-        //                 if (rowId) await this.parent.listMoveHandlerById(e, rowId);
+        //                 if (rowId) await this.listMoveHandlerById(e, rowId);
         //             });
         //     });
         // conditionEl.append(sortableHandleEl);
@@ -254,5 +257,75 @@ export default class RuleUi {
         return conditionEl;
 
     }
+
+	/*************************************************************************
+	 * UTILITIES
+	 *************************************************************************/
+
+	getIndexByRowId(rowId: string): number {
+		const list = this.getItemListEls();
+		return Array.prototype.findIndex.call(list, (el: Element) => el.getAttribute('data-row-id') === rowId);
+	}
+
+	getItemListEls(): NodeListOf<HTMLElement> {
+		return this.containerEl.querySelectorAll('.note-toolbar-sortablejs-list > div[data-row-id]');
+	}
+
+    /**
+     * Handles moving mappings up and down the list, and deletion, based on click or keyboard event.
+     * @param keyEvent KeyboardEvent, if the keyboard is triggering this handler.
+     * @param index Number of the item in the list we're moving/deleting.
+     * @param action Direction of the move, "delete", or don't provided if just checking the keyboard for the action
+     */
+    async listMoveHandler(keyEvent: KeyboardEvent | null, index: number, action?: 'up' | 'down' | 'delete'): Promise<void> {
+        if (keyEvent) {
+            switch (keyEvent.key) {
+                case 'ArrowUp':
+                    keyEvent.preventDefault();
+                    action = 'up';
+                    break;
+                case 'ArrowDown':
+                    keyEvent.preventDefault();
+                    action = 'down';
+                    break;
+                case 'Delete':
+                case 'Backspace':
+                    keyEvent.preventDefault();
+                    action = 'delete';	
+                    break;
+                case 'Enter':
+                case ' ':
+                    keyEvent.preventDefault();
+                    break;
+                default:
+                    return;
+            }
+        }
+        switch (action) {
+            case 'up':
+                arraymove(this.ntb.settings.rules, index, index - 1);
+                break;
+            case 'down':
+                arraymove(this.ntb.settings.rules, index, index + 1);
+                keyEvent?.preventDefault();
+                break;
+            case 'delete':
+                this.ntb.settings.rules.splice(index, 1);
+                keyEvent?.preventDefault();
+                break;
+        }
+        await this.ntb.settingsManager.save();
+        // TODO: this.render();
+    }
+
+	async listMoveHandlerById(
+		keyEvent: KeyboardEvent | null, 
+		rowId: string,
+		action?: 'up' | 'down' | 'delete'
+	): Promise<void> {	
+		const itemIndex = this.getIndexByRowId(rowId);
+		// this.plugin.debug("listMoveHandlerById: moving index:", itemIndex);
+		await this.listMoveHandler(keyEvent, itemIndex, action);
+	}
 
 }

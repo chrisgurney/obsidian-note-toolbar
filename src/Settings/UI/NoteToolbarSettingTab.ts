@@ -10,9 +10,9 @@ import { exportToCallout } from 'Utils/ImportExport';
 import { arraymove, getElementPosition, moveElement } from 'Utils/Utils';
 import CopyTextModal from './Modals/CopyTextModal';
 import { importFromModal } from './Modals/ImportModal';
+import RulesModal from './Modals/RulesModal';
 import ShareModal from './Modals/ShareModal';
 import { fixToggleTab, iconTextFr, learnMoreFr } from "./Utils/SettingsUIUtils";
-import RuleUi from './Components/RuleUi';
 
 type SettingsSectionType = 'appToolbars' | 'callouts' | 'contexts' | 'displayRules' | 'itemList' | 'navbar';
 
@@ -77,9 +77,6 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 
 		// display rules
 		this.displayRules(containerEl);
-
-		const ruleUi = new RuleUi(this.ntb, this);
-		ruleUi.displayRules(containerEl);
 
 		this.displayNavbarSettings(containerEl);
 		this.displayAppToolbarSettings(containerEl);
@@ -609,6 +606,19 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 
 		settingsContainerEl.appendChild(collapsibleContainerEl);
 		containerEl.append(settingsContainerEl);
+
+		// open toolbar rules button
+		new Setting(settingsContainerEl)
+			.addButton((button: ButtonComponent) => {
+				button
+					.setButtonText('Open rules')
+					.setTooltip('Open rules')
+					.setCta()
+					.onClick(() => {
+						const rulesModal = new RulesModal(this.ntb);
+						rulesModal.open();
+					})
+			});
 
 	}
 
