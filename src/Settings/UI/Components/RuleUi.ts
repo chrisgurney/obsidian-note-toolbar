@@ -143,7 +143,10 @@ export default class RuleUi {
         // show existing conditions
         //
 
-        // TODO: loop over conditions and use renderConditionForm
+        for (const condition of rule.conditions) {
+            const conditionEl = this.renderConditionForm(condition);
+            ruleEl.append(conditionEl);
+        }
 
         //
         // add condition button

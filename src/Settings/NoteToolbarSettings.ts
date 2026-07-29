@@ -513,9 +513,6 @@ export interface RuleCondition {
 
     // property name when field === Property
     key?: string;
-
-    // optional field-specific settings (e.g. includeSubfolders)
-    options?: Record<string, RuleValue>;
 }
 
 /**
@@ -531,17 +528,6 @@ export interface RuleOperand {
 
     // property name when field === Property
     key?: string;
-
-    options?: RuleOption[];
-}
-
-/**
- * Optional UI setting for an operand.
- */
-export interface RuleOption {
-    key: string;
-    label: string;
-    type: 'boolean' | 'select';
 }
 
 export const RULE_OPERANDS: RuleOperand[] = [
@@ -585,31 +571,6 @@ export const RULE_OPERANDS: RuleOperand[] = [
         field: RuleField.Platform,
         label: 'Platform',
         valueEditor: 'platform',
-        operators: [
-            RuleOperator.Is,
-            RuleOperator.IsNot
-        ]
-    },
-
-    // dynamically generated from frontmatter properties
-    {
-        id: 'property:status',
-        field: RuleField.Property,
-        key: 'status',
-        label: 'Status',
-        valueEditor: 'string',
-        operators: [
-            RuleOperator.Is,
-            RuleOperator.IsNot,
-            RuleOperator.Contains
-        ]
-    },
-    {
-        id: 'property:stage',
-        field: RuleField.Property,
-        key: 'stage',
-        label: 'Stage',
-        valueEditor: 'string',
         operators: [
             RuleOperator.Is,
             RuleOperator.IsNot
