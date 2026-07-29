@@ -12,7 +12,7 @@ import CopyTextModal from './Modals/CopyTextModal';
 import { importFromModal } from './Modals/ImportModal';
 import ShareModal from './Modals/ShareModal';
 import { fixToggleTab, iconTextFr, learnMoreFr } from "./Utils/SettingsUIUtils";
-// import RuleUi from './RuleUi';
+import RuleUi from './Components/RuleUi';
 
 type SettingsSectionType = 'appToolbars' | 'callouts' | 'contexts' | 'displayRules' | 'itemList' | 'navbar';
 
@@ -77,7 +77,9 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 
 		// display rules
 		this.displayRules(containerEl);
-		// this.ruleUi.displayRules(containerEl);
+
+		const ruleUi = new RuleUi(this.ntb, this);
+		ruleUi.displayRules(containerEl);
 
 		this.displayNavbarSettings(containerEl);
 		this.displayAppToolbarSettings(containerEl);

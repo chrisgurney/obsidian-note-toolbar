@@ -256,7 +256,7 @@ export interface NoteToolbarSettings {
 	ribbonAction?: RibbonAction;
 	/** @deprecated In 1.34 replaced with ribbon settings for toolbars and toolbar items */
 	ribbonToolbar?: string | null;
-	rules: Array<ToolbarRule>;
+	rules: Array<Rule>;
 	scriptingEnabled: boolean;
 	showEditInFabMenu: boolean;
 	showLaunchpad: boolean;
@@ -442,33 +442,180 @@ export interface FolderMapping {
 // RULES
 //******************************************************************************
 
-export const enum RuleConjunctionType {
-	And = 'and',
-	Or = 'or'
-}
-// note: can't make this a constant as it's used in Object.entries()
-export enum RuleConditionType {
-	Folder = 'folder'
-}
-export const enum RuleOperatorType {
-	Is = 'is',
-	IsNot = 'isNot',
-	StartsWith = 'startsWith'
+/**
+ * Logical operator used to combine all conditions in a rule.
+ */
+export const enum RuleConjunction {
+    And = 'and',
+    Or = 'or'
 }
 
-export interface ToolbarRule {
-	toolbar: string;
-	conjunction: RuleConjunctionType;
-	conditions: Array<ToolbarRuleCondition>;
+/**
+ * The underlying field being evaluated.
+ * Note: This can't be const as it's used in Object.entries()
+ */
+export enum RuleField {
+    Folder = 'folder',
+    Filename = 'filename',
+    Tag = 'tag',
+    Property = 'property',
+    Platform = 'platform'
 }
 
-export interface ToolbarRuleCondition {
+/**
+ * Comparison operation available for a selected operand.
+ */
+export const enum RuleOperator {
+    Is = 'is',
+    IsNot = 'isNot',
+
+    Contains = 'contains',
+    DoesNotContain = 'doesNotContain',
+
+    StartsWith = 'startsWith',
+    EndsWith = 'endsWith',
+
+    Exists = 'exists',
+    DoesNotExist = 'doesNotExist'
+}
+
+/**
+ * Value stored by a condition.
+ */
+export type RuleValue = string | string[] | number | boolean;
+
+/**
+ * Editor used to enter a value.
+ */
+export type RuleValueEditor =
+    | 'string'
+    | 'number'
+    | 'boolean'
+    | 'platform';
+
+/**
+ * A single ordered rule. The first matching rule determines the toolbar.
+ */
+export interface Rule {
+    id: string;
+    toolbar: string;
+    conjunction: RuleConjunction;
+    conditions: RuleCondition[];
+}
+
+/**
+ * A persisted condition within a rule.
+ */
+export interface RuleCondition {
+    field: RuleField;
+    operator: RuleOperator;
+    value: RuleValue;
+
+    // property name when field === Property
+    key?: string;
+
+    // optional field-specific settings (e.g. includeSubfolders)
+    options?: Record<string, RuleValue>;
+}
+
+/**
+ * A selectable operand returned by the first suggester.
+ * May represent either a built-in field or a specific property.
+ */
+export interface RuleOperand {
 	id: string;
-	type: RuleConditionType;
-	key: string;
-	operator: RuleOperatorType;
-	value: string;
+    field: RuleField;
+    label: string;
+    valueEditor: RuleValueEditor;
+    operators: RuleOperator[];
+
+    // property name when field === Property
+    key?: string;
+
+    options?: RuleOption[];
 }
+
+/**
+ * Optional UI setting for an operand.
+ */
+export interface RuleOption {
+    key: string;
+    label: string;
+    type: 'boolean' | 'select';
+}
+
+export const RULE_OPERANDS: RuleOperand[] = [
+    {
+        id: 'folder',
+        field: RuleField.Folder,
+        label: 'Folder',
+        valueEditor: 'string',
+        operators: [
+            RuleOperator.Is,
+            RuleOperator.IsNot,
+            RuleOperator.StartsWith
+        ]
+    },
+    {
+        id: 'filename',
+        field: RuleField.Filename,
+        label: 'File name',
+        valueEditor: 'string',
+        operators: [
+            RuleOperator.Is,
+            RuleOperator.IsNot,
+            RuleOperator.Contains,
+            RuleOperator.StartsWith,
+            RuleOperator.EndsWith
+        ]
+    },
+    {
+        id: 'tag',
+        field: RuleField.Tag,
+        label: 'Tag',
+        valueEditor: 'string',
+        operators: [
+            RuleOperator.Is,
+            RuleOperator.IsNot,
+            RuleOperator.Contains
+        ]
+    },
+    {
+        id: 'platform',
+        field: RuleField.Platform,
+        label: 'Platform',
+        valueEditor: 'platform',
+        operators: [
+            RuleOperator.Is,
+            RuleOperator.IsNot
+        ]
+    },
+
+    // dynamically generated from frontmatter properties
+    {
+        id: 'property:status',
+        field: RuleField.Property,
+        key: 'status',
+        label: 'Status',
+        valueEditor: 'string',
+        operators: [
+            RuleOperator.Is,
+            RuleOperator.IsNot,
+            RuleOperator.Contains
+        ]
+    },
+    {
+        id: 'property:stage',
+        field: RuleField.Property,
+        key: 'stage',
+        label: 'Stage',
+        valueEditor: 'string',
+        operators: [
+            RuleOperator.Is,
+            RuleOperator.IsNot
+        ]
+    }
+];
 
 // *****************************************************************************
 // TOOLBAR SETTINGS

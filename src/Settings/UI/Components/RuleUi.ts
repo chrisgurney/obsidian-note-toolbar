@@ -1,4 +1,4 @@
-import { RuleConditionType, RuleConjunctionType, RuleOperatorType, t, ToolbarRule, ToolbarRuleCondition } from "Settings/NoteToolbarSettings";
+import { RuleField, RuleConjunction, RuleOperator, t, Rule, RuleCondition, RULE_OPERANDS } from "Settings/NoteToolbarSettings";
 import { getUUID } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
 import { ButtonComponent, debounce, Setting } from "obsidian";
@@ -21,12 +21,12 @@ export default class RuleUi {
      */
     displayRules(containerEl: HTMLElement): void {
 
-        const rulesContainer = createDiv();
-        rulesContainer.addClasses(['note-toolbar-setting-rules-container', 'note-toolbar-setting-top-border']);
-        if (this.rulesListOpen) rulesContainer.show()
-            else rulesContainer.hide();
+        const rulesContainerEl = createDiv();
+        rulesContainerEl.addClasses(['note-toolbar-setting-rules-container', 'note-toolbar-setting-top-border']);
+        if (this.rulesListOpen) rulesContainerEl.show()
+            else rulesContainerEl.hide();
 
-        const toolbarRulesSetting = new Setting(rulesContainer)
+        const toolbarRulesSetting = new Setting(rulesContainerEl)
             .setName(t('setting.rules.name'))
             .setDesc(t('setting.rules.description'));
 
@@ -58,19 +58,19 @@ export default class RuleUi {
         collapsibleContainer.addClass('note-toolbar-setting-items-list-container');
 
         if (this.ntb.settings.rules.length == 0) {
-            rulesContainer.createDiv({ text: this.ntb.settingsUtils.emptyMessageFr(t('setting.rules.label-empty')) })
+            rulesContainerEl.createDiv({ text: this.ntb.settingsUtils.emptyMessageFr(t('setting.rules.label-empty')) })
                 .className = "note-toolbar-setting-empty-message";
         }
         else {
-            const toolbarRuleListEl = createDiv();
-            toolbarRuleListEl.addClass('note-toolbar-sortablejs-list');
+            const ruleListEl = createDiv();
+            ruleListEl.addClass('note-toolbar-sortablejs-list');
 
-            this.ntb.settings.rules.forEach((rule: ToolbarRule, ) => {
-                const toolbarFolderListItemDiv = this.renderRuleForm(rule);
-                toolbarRuleListEl.append(toolbarFolderListItemDiv);
+            this.ntb.settings.rules.forEach((rule: Rule, ) => {
+                const ruleEl = this.renderRuleForm(rule);
+                ruleListEl.append(ruleEl);
             });
 
-            // const sortable = Sortable.create(toolbarRuleListEl, {
+            // const sortable = Sortable.create(ruleListEl, {
             //     chosenClass: 'sortable-chosen',
             //     ghostClass: 'sortable-ghost',
             //     handle: '.sortable-handle',
@@ -85,7 +85,7 @@ export default class RuleUi {
             //     }
             // });
 
-            collapsibleContainer.appendChild(toolbarRuleListEl)
+            collapsibleContainer.appendChild(ruleListEl)
 
         }
 
@@ -103,15 +103,16 @@ export default class RuleUi {
                     .setTooltip(t('setting.rules.button-new-tooltip'))
                     .setCta()
                     .onClick(async () => {
-                        const newRule: ToolbarRule = {
-                            conjunction: RuleConjunctionType.And,
+                        const newRule: Rule = {
+                            id: getUUID(),
+                            conjunction: RuleConjunction.And,
                             conditions: [],
                             toolbar: ''
                         };
                         this.ntb.settings.rules.push(newRule);
                         await this.ntb.settingsManager.save();
                         // TODO: add a form item to the existing list
-                        // renderRuleForm(newRule);
+                        this.renderRuleForm(newRule);
                             // TODO: put the existing code in a function
                         // TODO: set the focus in the form
                         // this.parent.display('.note-toolbar-sortablejs-list > div:last-child input[type="search"]', true);
@@ -119,8 +120,8 @@ export default class RuleUi {
                 button.buttonEl.setText(iconTextFr('plus', t('setting.rules.button-new')));
             });
 
-        rulesContainer.appendChild(collapsibleContainer);
-        containerEl.append(rulesContainer);
+        rulesContainerEl.appendChild(collapsibleContainer);
+        containerEl.append(rulesContainerEl);
 
     }
 
@@ -129,11 +130,13 @@ export default class RuleUi {
      * @param rule ToolbarRule to return the form for
      * @returns the form element as a div
      */
-    renderRuleForm(rule: ToolbarRule): HTMLDivElement {
+    renderRuleForm(rule: Rule): HTMLDivElement {
 
-        const ruleEl = createDiv();
-        ruleEl.className = "note-toolbar-setting-folder-list-item-container";
+        const ruleContainerEl = createDiv();
+        ruleContainerEl.className = "note-toolbar-setting-folder-list-item-container";
         // toolbarFolderListItemDiv.setAttribute('data-row-id', rule.id);
+
+        const ruleEl = ruleContainerEl.createDiv();
 
         //
         // delete button
@@ -190,25 +193,22 @@ export default class RuleUi {
                     .setTooltip(t('setting.rules.button-newcondition-tooltip'))
                     .setCta()
                     .onClick(async () => {
-                        const newCondition: ToolbarRuleCondition = {
-                            id: getUUID(),
-                            key: '',
-                            type: RuleConditionType.Folder,
-                            value: '',
-                            operator: RuleOperatorType.Is
+                        const newCondition: RuleCondition = {
+                            field: RuleField.Folder,
+                            operator: RuleOperator.Contains,
+                            value: 'TODO: condition value goes here'
                         };
                         rule.conditions.push(newCondition);
                         await this.ntb.settingsManager.save();
                         // TODO: add a form item to the existing list
-                        // renderRuleForm(newRule);
-                            // TODO: put the existing code in a function
+                        this.renderConditionForm(ruleContainerEl, newCondition);
                         // TODO: set the focus in the form
                         // this.parent.display('.note-toolbar-sortablejs-list > div:last-child input[type="search"]', true);
                     });
-                button.buttonEl.setText(iconTextFr('plus', t('setting.rules.button-new')));
+                button.buttonEl.setText(iconTextFr('plus', t('setting.rules.button-newcondition')));
             });
 
-        return ruleEl;
+        return ruleContainerEl;
 
     }
 
@@ -217,70 +217,112 @@ export default class RuleUi {
      * @param condition ToolbarRuleCondition to return the form for
      * @returns the form element as a div
      */
-    renderConditionForm(condition: ToolbarRuleCondition): HTMLDivElement {
+    renderConditionForm(containerEl: HTMLDivElement, condition: RuleCondition): HTMLDivElement {
         
-        const conditionEl = createDiv();
+        const conditionEl = containerEl.createDiv();
         conditionEl.className = "note-toolbar-setting-item-fields";
 
-        const ruleTypeOptions: Record<string, string> = {
-            '': "Select a type",
-            ...Object.entries(RuleConditionType).reduce((acc, [k, v]) => {
-                acc[v] = k;
-                return acc;
-            }, {} as Record<string, string>)
-        };
+        const ruleOperandOptions = Object.fromEntries(
+            RULE_OPERANDS.map((operand) => [
+                operand.id,
+                operand.label
+            ])
+        );
+
         new Setting(conditionEl)
-            .setClass("note-toolbar-setting-mapping-field")
+            .setClass('note-toolbar-setting-mapping-field')
             .addDropdown((cb) => {
                 cb
-                    .addOptions(ruleTypeOptions)
-                    .setValue(condition.type)
-                    .onChange(debounce(async (newRule) => {
-                        if (
-                            newRule
-                            // && this.plugin.settings.rules.some(
-                            //     (map, mapIndex) => {
-                            //         return mapping != map ? map.folder.toLowerCase() === newRule.toLowerCase() : undefined;
-                            //     }
-                            // )
-                        ) {
-                            if (activeDocument.getElementById("note-toolbar-name-error") === null) {
-                                const errorDiv = createDiv({ 
-                                    text: t('setting.mappings.error-folder-already-mapped'), 
-                                    attr: { id: "note-toolbar-name-error" }, cls: "note-toolbar-setting-error-message" });
-                                conditionEl.insertAdjacentElement('afterend', errorDiv);
-                            }
+                    .addOptions({
+                        '': 'Select a field',
+                        ...ruleOperandOptions
+                    })
+                    .setValue(
+                        RULE_OPERANDS.find((operand) =>
+                            operand.field === condition.field &&
+                            operand.key === condition.key
+                        )?.id ?? ''
+                    )
+                    .onChange(debounce(async (id) => {
+                        const operand = RULE_OPERANDS.find(
+                            (operand) => operand.id === id
+                        );
+
+                        if (!operand) {
+                            return;
                         }
-                        else {
-                            activeDocument.getElementById("note-toolbar-name-error")?.remove();
-                            // rule.folder = newRule ? normalizePath(newRule) : "";
-                            await this.ntb.settingsManager.save();
-                        }
+
+                        condition.field = operand.field;
+                        condition.key = operand.key;
+                        condition.operator = RuleOperator.Is;
+                        condition.value = 'TODO value goes here';
+
+                        await this.ntb.settingsManager.save();
+
+                        // TODO: re-render operator/value controls
                     }, 250));
             });
 
+        // const ruleTypeOptions: Record<string, string> = {
+        //     '': "Select a type",
+        //     ...Object.entries(RuleField).reduce((acc, [k, v]) => {
+        //         acc[v] = k;
+        //         return acc;
+        //     }, {} as Record<string, string>)
+        // };
+        // new Setting(conditionEl)
+        //     .setClass("note-toolbar-setting-mapping-field")
+        //     .addDropdown((cb) => {
+        //         cb
+        //             .addOptions(ruleTypeOptions)
+        //             .setValue(condition.type)
+        //             .onChange(debounce(async (newRule) => {
+        //                 if (
+        //                     newRule
+        //                     // && this.plugin.settings.rules.some(
+        //                     //     (map, mapIndex) => {
+        //                     //         return mapping != map ? map.folder.toLowerCase() === newRule.toLowerCase() : undefined;
+        //                     //     }
+        //                     // )
+        //                 ) {
+        //                     if (activeDocument.getElementById("note-toolbar-name-error") === null) {
+        //                         const errorDiv = createDiv({ 
+        //                             text: t('setting.mappings.error-folder-already-mapped'), 
+        //                             attr: { id: "note-toolbar-name-error" }, cls: "note-toolbar-setting-error-message" });
+        //                         conditionEl.insertAdjacentElement('afterend', errorDiv);
+        //                     }
+        //                 }
+        //                 else {
+        //                     activeDocument.getElementById("note-toolbar-name-error")?.remove();
+        //                     // rule.folder = newRule ? normalizePath(newRule) : "";
+        //                     await this.ntb.settingsManager.save();
+        //                 }
+        //             }, 250));
+        //     });
+
+        
         //
-        // drag handle
+        // rule drag handle
         //
 
-        const sortableHandleEl = createDiv();
-        sortableHandleEl.addClass("note-toolbar-setting-item-controls");
-        new Setting(sortableHandleEl)
-            .addExtraButton((cb) => {
-                cb.setIcon('grip-horizontal')
-                    .setTooltip(t('setting.button-drag-tooltip'))
-                    .extraSettingsEl.addClass('sortable-handle');
-                cb.extraSettingsEl.setAttribute('data-row-id', condition.id);
-                cb.extraSettingsEl.tabIndex = 0;
-                this.ntb.registerDomEvent(
-                    cb.extraSettingsEl,	'keydown', async (e) => {
-                        const currentEl = e.target as HTMLElement;
-                        const rowId = currentEl.getAttribute('data-row-id');
-                        // this.plugin.debug("rowId", rowId);
-                        if (rowId) await this.parent.listMoveHandlerById(e, rowId);
-                    });
-            });
-        conditionEl.append(sortableHandleEl);
+        // const sortableHandleEl = createDiv();
+        // sortableHandleEl.addClass("note-toolbar-setting-item-controls");
+        // new Setting(sortableHandleEl)
+        //     .addExtraButton((cb) => {
+        //         cb.setIcon('grip-horizontal')
+        //             .setTooltip(t('setting.button-drag-tooltip'))
+        //             .extraSettingsEl.addClass('sortable-handle');
+        //         cb.extraSettingsEl.setAttribute('data-row-id', rule.id);
+        //         cb.extraSettingsEl.tabIndex = 0;
+        //         this.ntb.registerDomEvent(
+        //             cb.extraSettingsEl,	'keydown', async (e) => {
+        //                 const currentEl = e.target as HTMLElement;
+        //                 const rowId = currentEl.getAttribute('data-row-id');
+        //                 // this.plugin.debug("rowId", rowId);
+        //                 if (rowId) await this.parent.listMoveHandlerById(e, rowId);
+        //             });
+        //     });
+        // conditionEl.append(sortableHandleEl);
 
         return conditionEl;
 
