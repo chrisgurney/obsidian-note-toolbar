@@ -20,7 +20,7 @@
     "@types/sortablejs": "^1.15.8",
     "chokidar": "^5.0.0",
     "esbuild": "^0.28.1",
-    "eslint": "^10.7.0",
+    "eslint": "^10.8.0",
     "eslint-plugin-obsidianmd": "latest",
     "obsidian": "latest",
     "stylelint": "^17.12.1",
@@ -28,7 +28,7 @@
     "typedoc": "^0.28.14",
     "typedoc-plugin-markdown": "^4.9.0",
     "typescript": "^5.8.3",
-    "typescript-eslint": "^8.64.0"
+    "typescript-eslint": "^8.65.0"
   },
   "dependencies": {
     "@codemirror/view": "6.38.6",
