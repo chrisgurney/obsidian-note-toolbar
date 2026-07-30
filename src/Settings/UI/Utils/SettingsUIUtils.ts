@@ -12,6 +12,7 @@ import MessageModal from "../Modals/MessageModal";
 import ToolbarSettingsModal from "../Modals/ToolbarSettingsModal";
 import ToolbarSuggestModal from "../Modals/ToolbarSuggestModal";
 import NoteToolbarSettingTab from "../NoteToolbarSettingTab";
+import RulesModal from "../Modals/RulesModal";
 
 // warnings if this toolbar is assigned to any app locations
 const APP_TOOLBAR_WARNINGS = [
@@ -758,7 +759,7 @@ export default class SettingsUIUtils {
 	 * @param errorLink Optional link to display after error text
 	 */
 	setFieldError(
-		parent: NoteToolbarSettingTab | ToolbarSettingsModal | ItemModal | null, 
+		parent: NoteToolbarSettingTab | ToolbarSettingsModal | ItemModal | RulesModal | null, 
 		fieldEl: HTMLElement | null, 
 		position: 'afterend' | 'beforeend',
 		errorText?: string | DocumentFragment | HTMLElement, 
@@ -859,7 +860,7 @@ export default class SettingsUIUtils {
 	 * @returns true if the item is valid; false otherwise
 	 */
 	async updateItemComponentStatus(
-		parent: NoteToolbarSettingTab | ToolbarSettingsModal | ItemModal,
+		parent: NoteToolbarSettingTab | ToolbarSettingsModal | ItemModal | RulesModal,
 		itemValue: string, 
 		fieldType: SettingType, 
 		componentEl: HTMLElement | null, 

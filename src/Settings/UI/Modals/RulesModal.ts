@@ -1,9 +1,10 @@
-import { RuleField, RuleConjunction, RuleOperator, t, Rule, RuleCondition, RULE_OPERANDS } from "Settings/NoteToolbarSettings";
-import { arraymove, getUUID } from "Utils/Utils";
+import { RuleField, RuleConjunction, RuleOperator, t, Rule, RuleCondition, RULE_OPERANDS, SettingType } from "Settings/NoteToolbarSettings";
+import { arraymove, getUUID, moveElement } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
 import { ButtonComponent, debounce, Modal, Setting } from "obsidian";
 import ToolbarSuggester from "../Suggesters/ToolbarSuggester";
 import { iconTextFr, learnMoreFr } from "../Utils/SettingsUIUtils";
+import Sortable from "sortablejs";
 
 export default class RulesModal extends Modal {
 
@@ -15,6 +16,7 @@ export default class RulesModal extends Modal {
 
     public onOpen() {
         this.setTitle(t('setting.rules.name'));
+		this.modalEl.addClass('note-toolbar-setting-modal-container');
         this.display();
     }
     
@@ -29,39 +31,41 @@ export default class RulesModal extends Modal {
             .setDesc(learnMoreFr(t('setting.rules.description'), 'Defining-where-to-show-toolbars'));
 
         const rulesContainerEl = this.contentEl.createDiv();
-        rulesContainerEl.addClasses(['note-toolbar-setting-rules-container', 'note-toolbar-setting-top-border']);
+        rulesContainerEl.addClasses(['note-toolbar-setting-rules-container', 'note-toolbar-setting-top-border', 'note-toolbar-setting-ui']);
 
         const ruleListEl = rulesContainerEl.createDiv();
         ruleListEl.addClass('note-toolbar-sortablejs-list');
 
         if (this.ntb.settings.rules.length == 0) {
+            // empty state
             rulesContainerEl.createDiv({ text: this.ntb.settingsUtils.emptyMessageFr(t('setting.rules.label-empty')) })
                 .className = "note-toolbar-setting-empty-message";
         }
         else {
+
+            // add all the rules
             this.ntb.settings.rules.forEach((rule: Rule, ) => {
                 const ruleEl = this.renderRuleForm(rule);
                 ruleListEl.append(ruleEl);
             });
 
-            // const sortable = Sortable.create(ruleListEl, {
-            //     chosenClass: 'sortable-chosen',
-            //     ghostClass: 'sortable-ghost',
-            //     handle: '.sortable-handle',
-            //     onChange: (item) => navigator.vibrate(50),
-            //     onChoose: (item) => navigator.vibrate(50),
-            //     onSort: async (item) => {
-            //         this.plugin.debug("sortable: index: ", item.oldIndex, " -> ", item.newIndex);
-            //         if (item.oldIndex !== undefined && item.newIndex !== undefined) {
-            //             moveElement(this.plugin.settings.folderMappings, item.oldIndex, item.newIndex);
-            //             await this.plugin.settingsManager.save();
-            //         }
-            //     }
-            // });
+            // make the list sortable
+            Sortable.create(ruleListEl, {
+                chosenClass: 'sortable-chosen',
+                ghostClass: 'sortable-ghost',
+                handle: '.sortable-handle',
+                onChange: (item) => navigator.vibrate(50),
+                onChoose: (item) => navigator.vibrate(50),
+                onSort: (item) => {
+                    this.ntb.debug("sortable: index: ", item.oldIndex, " -> ", item.newIndex);
+                    if (item.oldIndex !== undefined && item.newIndex !== undefined) {
+                        moveElement(this.ntb.settings.rules, item.oldIndex, item.newIndex);
+                        void this.ntb.settingsManager.save();
+                    }
+                }
+            });
 
         }
-
-        // TODO: loop over rules and renderRuleForm
 
         //
         // add rule button
@@ -102,7 +106,7 @@ export default class RulesModal extends Modal {
     renderRuleForm(rule: Rule): HTMLDivElement {
 
         const ruleContainerEl = createDiv();
-        ruleContainerEl.className = "note-toolbar-setting-folder-list-item-container";
+        ruleContainerEl.className = "note-toolbar-setting-rules-list-item-container";
         ruleContainerEl.setAttribute('data-row-id', rule.id);
 
         const ruleEl = ruleContainerEl.createDiv();
@@ -127,21 +131,26 @@ export default class RulesModal extends Modal {
         // toolbar name field
         //
 
-        new Setting(ruleEl)
-            .setClass("note-toolbar-setting-mapping-field")
-            .addSearch((cb) => {
+        const existingToolbarSetting = this.ntb.settingsManager.getToolbarById(rule.toolbar);
+        const toolbarSetting = new Setting(ruleEl)
+            .setClass('note-toolbar-setting-mapping-field')
+            .setClass('note-toolbar-setting-item-control-std-with-help')
+            .addSearch(async (cb) => {
                 new ToolbarSuggester(this.ntb, cb.inputEl);
                 cb.setPlaceholder(t('setting.mappings.placeholder-toolbar'))
-                    .setValue(this.ntb.settingsManager.getToolbarName(rule.toolbar))
+                    .setValue(existingToolbarSetting ? existingToolbarSetting.name : '')
                     .onChange(debounce(async (name) => {
-                        const mappedToolbar = this.ntb.settingsManager.getToolbarByName(name);
-                        if (mappedToolbar) {
-                            rule.toolbar = mappedToolbar.uuid;
-                            await this.ntb.settingsManager.save();
-                        }
-                        // TODO: if toolbar is not valid show error/warning
+                        const isValid = await this.ntb.settingsUtils.updateItemComponentStatus(this, name, SettingType.Toolbar, toolbarSetting.controlEl, undefined, 'beforeend');
+                        const mappedToolbar = isValid ? this.ntb.settingsManager.getToolbarByName(name) : undefined;
+                        rule.toolbar = mappedToolbar?.uuid ?? '';
+                        this.ntb.settingsUtils.setFieldPreview(toolbarSetting, mappedToolbar);
+                        await this.ntb.settingsManager.save();
                     }, 250));
+                await this.ntb.settingsUtils.updateItemComponentStatus(
+                    this, existingToolbarSetting ? existingToolbarSetting.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend'
+                );
             });
+        this.ntb.settingsUtils.setFieldPreview(toolbarSetting, existingToolbarSetting);
 
         //
         // show existing conditions
@@ -184,24 +193,23 @@ export default class RulesModal extends Modal {
         // rule drag handle
         //
 
-        // const sortableHandleEl = createDiv();
-        // sortableHandleEl.addClass("note-toolbar-setting-item-controls");
-        // new Setting(sortableHandleEl)
-        //     .addExtraButton((cb) => {
-        //         cb.setIcon('grip-horizontal')
-        //             .setTooltip(t('setting.button-drag-tooltip'))
-        //             .extraSettingsEl.addClass('sortable-handle');
-        //         cb.extraSettingsEl.setAttribute('data-row-id', rule.id);
-        //         cb.extraSettingsEl.tabIndex = 0;
-        //         this.ntb.registerDomEvent(
-        //             cb.extraSettingsEl,	'keydown', async (e) => {
-        //                 const currentEl = e.target as HTMLElement;
-        //                 const rowId = currentEl.getAttribute('data-row-id');
-        //                 // this.plugin.debug("rowId", rowId);
-        //                 if (rowId) await this.listMoveHandlerById(e, rowId);
-        //             });
-        //     });
-        // conditionEl.append(sortableHandleEl);
+        const sortableHandleEl = ruleEl.createDiv();
+        sortableHandleEl.addClass("note-toolbar-setting-item-controls");
+        new Setting(sortableHandleEl)
+            .addExtraButton((cb) => {
+                cb.setIcon('grip-horizontal')
+                    .setTooltip(t('setting.button-drag-tooltip'))
+                    .extraSettingsEl.addClass('sortable-handle');
+                cb.extraSettingsEl.setAttribute('data-row-id', rule.id);
+                cb.extraSettingsEl.tabIndex = 0;
+                this.ntb.registerDomEvent(
+                    cb.extraSettingsEl,	'keydown', async (e) => {
+                        const currentEl = e.target as HTMLElement;
+                        const rowId = currentEl.getAttribute('data-row-id');
+                        // this.plugin.debug("rowId", rowId);
+                        if (rowId) await this.listMoveHandlerById(e, rowId);
+                    });
+            });
 
         return ruleContainerEl;
 
