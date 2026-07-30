@@ -3,7 +3,7 @@ import { arraymove, getUUID } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
 import { ButtonComponent, debounce, Modal, Setting } from "obsidian";
 import ToolbarSuggester from "../Suggesters/ToolbarSuggester";
-import { iconTextFr } from "../Utils/SettingsUIUtils";
+import { iconTextFr, learnMoreFr } from "../Utils/SettingsUIUtils";
 
 export default class RulesModal extends Modal {
 
@@ -14,6 +14,7 @@ export default class RulesModal extends Modal {
     }
 
     public onOpen() {
+        this.setTitle(t('setting.rules.name'));
         this.display();
     }
     
@@ -22,12 +23,13 @@ export default class RulesModal extends Modal {
      */
     public display() {
 
+        this.contentEl.empty();
+
+        new Setting(this.contentEl)
+            .setDesc(learnMoreFr(t('setting.rules.description'), 'Defining-where-to-show-toolbars'));
+
         const rulesContainerEl = this.contentEl.createDiv();
         rulesContainerEl.addClasses(['note-toolbar-setting-rules-container', 'note-toolbar-setting-top-border']);
-
-        new Setting(rulesContainerEl)
-            .setName(t('setting.rules.name'))
-            .setDesc(t('setting.rules.description'));
 
         if (this.ntb.settings.rules.length == 0) {
             rulesContainerEl.createDiv({ text: this.ntb.settingsUtils.emptyMessageFr(t('setting.rules.label-empty')) })
@@ -102,7 +104,7 @@ export default class RulesModal extends Modal {
 
         const ruleContainerEl = createDiv();
         ruleContainerEl.className = "note-toolbar-setting-folder-list-item-container";
-        // toolbarFolderListItemDiv.setAttribute('data-row-id', rule.id);
+        ruleContainerEl.setAttribute('data-row-id', rule.id);
 
         const ruleEl = ruleContainerEl.createDiv();
 
@@ -114,7 +116,7 @@ export default class RulesModal extends Modal {
             .setClass("note-toolbar-setting-item-delete")
             .addButton((cb) => {
                 cb.setIcon("minus-circle")
-                    .setTooltip(t('setting.button-delete-tooltip'))
+                    .setTooltip(t('setting.rules.button-delete-rule-tooltip'))
                     .onClick(async () => {
                         const rowId = cb.buttonEl.getAttribute('data-row-id');
                         if (rowId) await this.listMoveHandlerById(null, rowId, 'delete');
@@ -315,7 +317,7 @@ export default class RulesModal extends Modal {
                 break;
         }
         await this.ntb.settingsManager.save();
-        // TODO: this.render();
+        this.display();
     }
 
 	async listMoveHandlerById(

@@ -757,6 +757,7 @@
         },
         "rules": {
             "button-collapse-tooltip": "Collapse all rules",
+            "button-delete-rule-tooltip": "Delete rule",
             "button-expand-tooltip": "Expand all rules",
             "button-new": "New rule",
             "button-new-tooltip": "Add a new rule",
