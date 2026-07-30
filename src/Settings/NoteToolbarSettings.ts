@@ -510,6 +510,7 @@ export interface Rule {
  * A persisted condition within a rule.
  */
 export interface RuleCondition {
+	id: string;
     field: RuleField;
     operator: RuleOperator;
     value: RuleValue;

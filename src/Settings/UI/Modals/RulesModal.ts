@@ -174,6 +174,7 @@ export default class RulesModal extends Modal {
                     .setCta()
                     .onClick(async () => {
                         const newCondition: RuleCondition = {
+                            id: getUUID(),
                             field: RuleField.Folder,
                             operator: RuleOperator.Contains,
                             value: 'TODO: condition value goes here'
@@ -225,6 +226,26 @@ export default class RulesModal extends Modal {
         const conditionEl = createDiv();
         conditionEl.className = "note-toolbar-setting-item-fields";
 
+        // delete condition button
+
+        new Setting(conditionEl)
+            .setClass("note-toolbar-setting-item-delete")
+            .addButton((cb) => {
+                cb.setIcon("minus-circle")
+                    .setTooltip(t('setting.rules.button-delete-condition-tooltip'))
+                    .onClick(async () => {
+                        const rowId = cb.buttonEl.getAttribute('data-row-id');
+                        if (rowId) {
+                            this.removeConditionById(rowId);
+                            await this.ntb.settingsManager.save();
+                            this.display();
+                        }
+                    });
+                cb.buttonEl.setAttribute('data-row-id', condition.id);
+            });
+
+        // operands
+
         const ruleOperandOptions = Object.fromEntries(
             RULE_OPERANDS.map((operand) => [
                 operand.id,
@@ -270,6 +291,17 @@ export default class RulesModal extends Modal {
 	/*************************************************************************
 	 * UTILITIES
 	 *************************************************************************/
+
+    removeConditionById(conditionId: string): boolean {
+        for (const rule of this.ntb.settings.rules) {
+            const index = rule.conditions.findIndex((condition) => condition.id === conditionId);
+            if (index !== -1) {
+                rule.conditions.splice(index, 1);
+                return true;
+            }
+        }
+        return false;
+    }
 
 	getIndexByRowId(rowId: string): number {
 		const list = this.getItemListEls();
