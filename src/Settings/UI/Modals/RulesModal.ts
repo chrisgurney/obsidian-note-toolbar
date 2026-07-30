@@ -31,14 +31,14 @@ export default class RulesModal extends Modal {
         const rulesContainerEl = this.contentEl.createDiv();
         rulesContainerEl.addClasses(['note-toolbar-setting-rules-container', 'note-toolbar-setting-top-border']);
 
+        const ruleListEl = rulesContainerEl.createDiv();
+        ruleListEl.addClass('note-toolbar-sortablejs-list');
+
         if (this.ntb.settings.rules.length == 0) {
             rulesContainerEl.createDiv({ text: this.ntb.settingsUtils.emptyMessageFr(t('setting.rules.label-empty')) })
                 .className = "note-toolbar-setting-empty-message";
         }
         else {
-            const ruleListEl = rulesContainerEl.createDiv();
-            ruleListEl.addClass('note-toolbar-sortablejs-list');
-
             this.ntb.settings.rules.forEach((rule: Rule, ) => {
                 const ruleEl = this.renderRuleForm(rule);
                 ruleListEl.append(ruleEl);
@@ -82,13 +82,12 @@ export default class RulesModal extends Modal {
                             toolbar: ''
                         };
                         this.ntb.settings.rules.push(newRule);
-                        await this.ntb.settingsManager.save();
-                        // TODO: add a form item to the existing list
                         const ruleFormEl = this.renderRuleForm(newRule);
-                        rulesContainerEl.appendChild(ruleFormEl);
-                            // TODO: put the existing code in a function
+                        ruleListEl.appendChild(ruleFormEl);
+                        await this.ntb.settingsManager.save();
                         // TODO: set the focus in the form
-                        // this.parent.display('.note-toolbar-sortablejs-list > div:last-child input[type="search"]', true);
+                        this.display();
+                        //this.display('.note-toolbar-sortablejs-list > div:last-child input[type="search"]', true);
                     });
                 button.buttonEl.setText(iconTextFr('plus', t('setting.rules.button-new')));
             });
