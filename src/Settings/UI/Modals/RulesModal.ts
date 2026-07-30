@@ -109,7 +109,8 @@ export default class RulesModal extends Modal {
         ruleContainerEl.className = "note-toolbar-setting-rules-list-item-container";
         ruleContainerEl.setAttribute('data-row-id', rule.id);
 
-        const ruleEl = ruleContainerEl.createDiv();
+        const ruleEl = ruleContainerEl.createDiv({ cls: 'note-toolbar-setting-rule' });
+        const conditionContainerEl = ruleContainerEl.createDiv({ cls: 'note-toolbar-setting-condition-container' });
 
         //
         // delete button
@@ -153,44 +154,6 @@ export default class RulesModal extends Modal {
         this.ntb.settingsUtils.setFieldPreview(toolbarSetting, existingToolbarSetting);
 
         //
-        // show existing conditions
-        //
-
-        for (const condition of rule.conditions) {
-            const conditionEl = this.renderConditionForm(condition);
-            ruleEl.append(conditionEl);
-        }
-
-        //
-        // add condition button
-        //
-
-        new Setting(ruleEl)
-            .setClass("note-toolbar-setting-button")
-            .addButton((button: ButtonComponent) => {
-                button
-                    .setButtonText(t('setting.rules.button-newcondition'))
-                    .setTooltip(t('setting.rules.button-newcondition-tooltip'))
-                    .setCta()
-                    .onClick(async () => {
-                        const newCondition: RuleCondition = {
-                            id: getUUID(),
-                            field: RuleField.Folder,
-                            operator: RuleOperator.Contains,
-                            value: 'TODO: condition value goes here'
-                        };
-                        rule.conditions.push(newCondition);
-                        await this.ntb.settingsManager.save();
-                        // TODO: add a form item to the existing list
-                        const ruleConditionEl = this.renderConditionForm(newCondition);
-                        ruleContainerEl.appendChild(ruleConditionEl);
-                        // TODO: set the focus in the form
-                        // this.parent.display('.note-toolbar-sortablejs-list > div:last-child input[type="search"]', true);
-                    });
-                button.buttonEl.setText(iconTextFr('plus', t('setting.rules.button-newcondition')));
-            });
-
-        //
         // rule drag handle
         //
 
@@ -212,6 +175,44 @@ export default class RulesModal extends Modal {
                     });
             });
 
+        //
+        // show existing conditions
+        //
+
+        for (const condition of rule.conditions) {
+            const conditionEl = this.renderConditionForm(condition);
+            conditionContainerEl.append(conditionEl);
+        }
+
+        //
+        // add condition button
+        //
+
+        new Setting(ruleContainerEl)
+            .setClass("note-toolbar-setting-button")
+            .addButton((button: ButtonComponent) => {
+                button
+                    .setButtonText(t('setting.rules.button-newcondition'))
+                    .setTooltip(t('setting.rules.button-newcondition-tooltip'))
+                    .setCta()
+                    .onClick(async () => {
+                        const newCondition: RuleCondition = {
+                            id: getUUID(),
+                            field: RuleField.Folder,
+                            operator: RuleOperator.Contains,
+                            value: 'TODO: condition value goes here'
+                        };
+                        rule.conditions.push(newCondition);
+                        await this.ntb.settingsManager.save();
+                        // TODO: add a form item to the existing list
+                        const ruleConditionEl = this.renderConditionForm(newCondition);
+                        conditionContainerEl.appendChild(ruleConditionEl);
+                        // TODO: set the focus in the form
+                        // this.parent.display('.note-toolbar-sortablejs-list > div:last-child input[type="search"]', true);
+                    });
+                button.buttonEl.setText(iconTextFr('plus', t('setting.rules.button-newcondition')));
+            });
+
         return ruleContainerEl;
 
     }
@@ -225,24 +226,6 @@ export default class RulesModal extends Modal {
         
         const conditionEl = createDiv();
         conditionEl.className = "note-toolbar-setting-item-fields";
-
-        // delete condition button
-
-        new Setting(conditionEl)
-            .setClass("note-toolbar-setting-item-delete")
-            .addButton((cb) => {
-                cb.setIcon("minus-circle")
-                    .setTooltip(t('setting.rules.button-delete-condition-tooltip'))
-                    .onClick(async () => {
-                        const rowId = cb.buttonEl.getAttribute('data-row-id');
-                        if (rowId) {
-                            this.removeConditionById(rowId);
-                            await this.ntb.settingsManager.save();
-                            this.display();
-                        }
-                    });
-                cb.buttonEl.setAttribute('data-row-id', condition.id);
-            });
 
         // operands
 
@@ -282,6 +265,24 @@ export default class RulesModal extends Modal {
 
                         // TODO: re-render operator/value controls
                     }, 250));
+            });
+
+        // delete condition button
+
+        new Setting(conditionEl)
+            .setClass("note-toolbar-setting-item-delete")
+            .addButton((cb) => {
+                cb.setIcon("minus-circle")
+                    .setTooltip(t('setting.rules.button-delete-condition-tooltip'))
+                    .onClick(async () => {
+                        const rowId = cb.buttonEl.getAttribute('data-row-id');
+                        if (rowId) {
+                            this.removeConditionById(rowId);
+                            await this.ntb.settingsManager.save();
+                            this.display();
+                        }
+                    });
+                cb.buttonEl.setAttribute('data-row-id', condition.id);
             });
 
         return conditionEl;
