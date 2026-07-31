@@ -28,7 +28,7 @@ export default class RulesModal extends Modal {
         this.contentEl.empty();
 
         new Setting(this.contentEl)
-            .setDesc(learnMoreFr(t('setting.rules.description'), 'Defining-where-to-show-toolbars'));
+            .setDesc(learnMoreFr(t('setting.rules.description-modal'), 'Defining-where-to-show-toolbars'));
 
         const rulesContainerEl = this.contentEl.createDiv();
         rulesContainerEl.addClasses(['note-toolbar-setting-rules-container', 'note-toolbar-setting-top-border', 'note-toolbar-setting-ui']);
@@ -154,6 +154,25 @@ export default class RulesModal extends Modal {
         this.ntb.settingsUtils.setFieldPreview(toolbarSetting, existingToolbarSetting);
 
         //
+        // rule conjunction
+        //
+
+        const conjunctionOptions: Record<string, string> = {
+            [RuleConjunction.And]: "All of the following are true",
+            [RuleConjunction.Or]: "Any of the following are true",
+        };
+
+        new Setting(ruleEl)
+            .addDropdown((cb) => {
+                cb.addOptions(conjunctionOptions)
+                    .setValue(rule.conjunction)
+                    .onChange(debounce(async (value) => {
+                        rule.conjunction = value as RuleConjunction;
+                        await this.ntb.settingsManager.save();
+                    }, 250));
+            });
+
+        //
         // rule drag handle
         //
 
@@ -189,12 +208,11 @@ export default class RulesModal extends Modal {
         //
 
         new Setting(ruleContainerEl)
-            .setClass("note-toolbar-setting-button")
+            .setClass("note-toolbar-setting-text-button")
             .addButton((button: ButtonComponent) => {
                 button
                     .setButtonText(t('setting.rules.button-newcondition'))
                     .setTooltip(t('setting.rules.button-newcondition-tooltip'))
-                    .setCta()
                     .onClick(async () => {
                         const newCondition: RuleCondition = {
                             id: getUUID(),
@@ -225,7 +243,7 @@ export default class RulesModal extends Modal {
     renderConditionForm(condition: RuleCondition): HTMLDivElement {
         
         const conditionEl = createDiv();
-        conditionEl.className = "note-toolbar-setting-item-fields";
+        conditionEl.className = "note-toolbar-setting-condition";
 
         // operands
 
@@ -272,7 +290,7 @@ export default class RulesModal extends Modal {
         new Setting(conditionEl)
             .setClass("note-toolbar-setting-item-delete")
             .addButton((cb) => {
-                cb.setIcon("minus-circle")
+                cb.setIcon("trash")
                     .setTooltip(t('setting.rules.button-delete-condition-tooltip'))
                     .onClick(async () => {
                         const rowId = cb.buttonEl.getAttribute('data-row-id');

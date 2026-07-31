@@ -765,6 +765,7 @@
             "button-newcondition": "New condition",
             "button-newcondition-tooltip": "Add a new condition to this rule",
             "description": "Rules that define which notes to display toolbars on.",
+            "description-modal": "Select a toolbar, then specify the conditions for when the toolbar will be displayed. Precedence is top to bottom.",
             "error-folder-already-mapped": "This folder already has a toolbar associated with it. Precedence is top to bottom.",
             "label-empty": "Use the button to create a rule.",
             "name": "Rules",
