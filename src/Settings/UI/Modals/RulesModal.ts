@@ -321,6 +321,56 @@ export default class RulesModal extends Modal {
         }
 
         //
+        // value
+        //
+
+        // const VALUE_EDITORS: Record<RuleValueEditor, ValueEditorRenderer> = {
+        //     string: renderStringEditor,
+        //     folder: renderFolderEditor,
+        //     tag: renderTagEditor,
+        //     platform: renderPlatformEditor,
+        //     editormode: renderEditorModeEditor
+        // };
+
+        const operatorDefinition = operand?.operators.find(
+            (definition) => definition.op === condition.operator
+        );
+
+        if (operatorDefinition) {
+            switch (operatorDefinition.editor) {
+                case 'string':
+                    new Setting(conditionEl)
+                        .setClass('note-toolbar-setting-mapping-value')
+                        .addText((cb) => {
+                            cb
+                                .setPlaceholder('Enter a value')
+                                .setValue((condition.value as string) ?? '')
+                                .onChange(debounce(async (value) => {
+                                    condition.value = value;
+                                    await this.ntb.settingsManager.save();
+                                }, 250));
+                        });
+                    break;
+
+                case 'folder':
+                    // TODO: FolderSuggest
+                    break;
+
+                case 'tags':
+                    // TODO: TagSuggest
+                    break;
+
+                case 'platform':
+                    // TODO: Platform dropdown
+                    break;
+
+                case 'editormode':
+                    // TODO: Editor mode dropdown
+                    break;
+            }
+        }
+
+        //
         // delete condition button
         //
 
