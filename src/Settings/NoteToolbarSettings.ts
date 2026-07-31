@@ -456,8 +456,8 @@ export const enum RuleConjunction {
  */
 export enum RuleField {
 	EditorMode = 'editormode',
-    Filename = 'filename',
-    Filetype = 'filetype',
+    FileName = 'filename',
+    FileType = 'filetype',
     Folder = 'folder',
     Platform = 'platform',
     Property = 'property',
@@ -481,6 +481,11 @@ export const enum RuleOperator {
     IsNotEmpty = 'notEmpty',
 }
 
+export interface RuleOperatorDefinition {
+    op: RuleOperator;
+    editor: RuleValueEditor;
+}
+
 /**
  * Value stored by a condition.
  */
@@ -492,9 +497,11 @@ export type RuleValue = string | string[] | number | boolean;
 export type RuleValueEditor =
 	| 'boolean'
 	| 'editormode'
+	| 'folder'
     | 'number'
     | 'platform'
-    | 'string';
+    | 'string'
+	| 'tags';
 
 /**
  * A single ordered rule. The first matching rule determines the toolbar.
@@ -527,8 +534,7 @@ export interface RuleOperand {
 	id: string;
     field: RuleField;
     label: string;
-    valueEditor: RuleValueEditor;
-    operators: RuleOperator[];
+    operators: RuleOperatorDefinition[];
 
     // property name when field === Property
     key?: string;
@@ -539,66 +545,60 @@ export const RULE_OPERANDS: RuleOperand[] = [
         id: 'editormode',
         field: RuleField.EditorMode,
         label: 'Editor mode',
-        valueEditor: 'editormode',
         operators: [
-            RuleOperator.Is,
-            RuleOperator.IsNot,
+            { op: RuleOperator.Is, editor: 'editormode' },
+            { op: RuleOperator.IsNot, editor: 'editormode' },
         ]
     },
     {
         id: 'folder',
         field: RuleField.Folder,
         label: 'Folder',
-        valueEditor: 'string',
         operators: [
-            RuleOperator.Is,
-            RuleOperator.IsNot,
-            RuleOperator.Contains,
-            RuleOperator.StartsWith,
-            RuleOperator.EndsWith,
+            { op: RuleOperator.Is, editor: 'folder' },
+            { op: RuleOperator.IsNot, editor: 'folder' },
+            { op: RuleOperator.Contains, editor: 'string' },
+            { op: RuleOperator.StartsWith, editor: 'string' },
+            { op: RuleOperator.EndsWith, editor: 'string' },
         ]
     },
     {
         id: 'filename',
-        field: RuleField.Filename,
+        field: RuleField.FileName,
         label: 'File name',
-        valueEditor: 'string',
         operators: [
-            RuleOperator.Is,
-            RuleOperator.IsNot,
-            RuleOperator.Contains,
-            RuleOperator.StartsWith,
-            RuleOperator.EndsWith,
+            { op: RuleOperator.Is, editor: 'string' },
+            { op: RuleOperator.IsNot, editor: 'string' },
+            { op: RuleOperator.Contains, editor: 'string' },
+            { op: RuleOperator.StartsWith, editor: 'string' },
+            { op: RuleOperator.EndsWith, editor: 'string' },
         ]
     },
     {
         id: 'filetype',
-        field: RuleField.Platform,
+        field: RuleField.FileType,
         label: 'File type',
-        valueEditor: 'string',
         operators: [
-            RuleOperator.Is,
-            RuleOperator.IsNot,
+            { op: RuleOperator.Is, editor: 'string' },
+            { op: RuleOperator.IsNot, editor: 'string' },
         ]
     },
     {
         id: 'tags',
         field: RuleField.Tag,
         label: 'Tags',
-        valueEditor: 'string',
         operators: [
-            RuleOperator.Contains,
-			RuleOperator.DoesNotContain,
+            { op: RuleOperator.Contains, editor: 'tags' },
+            { op: RuleOperator.DoesNotContain, editor: 'tags' },
         ]
     },
     {
         id: 'platform',
         field: RuleField.Platform,
         label: 'Platform',
-        valueEditor: 'platform',
         operators: [
-            RuleOperator.Is,
-            RuleOperator.IsNot,
+            { op: RuleOperator.Is, editor: 'platform' },
+            { op: RuleOperator.IsNot, editor: 'platform' },
         ]
     }
 ];
