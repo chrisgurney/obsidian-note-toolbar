@@ -163,8 +163,8 @@ export default class RulesModal extends Modal {
         //
 
         const CONJUNCTION_OPTIONS: Record<string, string> = {
-            [RuleConjunction.And]: "All of the following are true",
-            [RuleConjunction.Or]: "Any of the following are true",
+            [RuleConjunction.And]: t('setting.rules.option-conjunction-and'),
+            [RuleConjunction.Or]: t('setting.rules.option-conjunction-or'),
         };
 
         new Setting(ruleEl)
@@ -257,11 +257,11 @@ export default class RulesModal extends Modal {
         );
 
         new Setting(conditionEl)
-            .setName('where')
+            .setName(t('setting.rules.condition-field-prefix'))
             .setClass('note-toolbar-setting-mapping-field')
             .addDropdown((cb) => {
                 cb
-                    .addOptions({ '' : 'Select a field', ...ruleOperandOptions })
+                    .addOptions({ '' : t("setting.rules.condition-field-placeholder"), ...ruleOperandOptions })
                     .setValue(
                         RULE_OPERANDS.find((operand) =>
                             operand.field === condition.field &&
@@ -306,7 +306,7 @@ export default class RulesModal extends Modal {
                 .addDropdown((cb) => {
                     cb
                         .addOptions({
-                            '': 'Select an operator',
+                            '': t('setting.rules.condition-operator-placeholder'),
                             ...operatorOptions
                         })
                         .setValue(condition.operator ?? '')
@@ -344,7 +344,7 @@ export default class RulesModal extends Modal {
                         .setClass('note-toolbar-setting-mapping-value')
                         .addText((cb) => {
                             cb
-                                .setPlaceholder('Enter a value')
+                                .setPlaceholder(t('setting.rules.condition-value-string-placeholder'))
                                 .setValue((condition.value as string) ?? '')
                                 .onChange(debounce(async (value) => {
                                     condition.value = value;
