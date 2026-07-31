@@ -15,7 +15,7 @@ export default class RulesModal extends Modal {
     }
 
     public onOpen() {
-        this.setTitle(t('setting.rules.name'));
+        this.setTitle(t('setting.rules.name-modal'));
 		this.modalEl.addClass('note-toolbar-setting-modal-container');
         this.display();
     }
@@ -88,9 +88,17 @@ export default class RulesModal extends Modal {
                         this.ntb.settings.rules.push(newRule);
                         const ruleFormEl = this.renderRuleForm(newRule);
                         ruleListEl.appendChild(ruleFormEl);
+                        // create the first condition
+                        const newCondition: RuleCondition = {
+                            id: getUUID(),
+                            field: RuleField.Folder,
+                            operator: RuleOperator.Contains,
+                            value: 'TODO: condition value goes here'
+                        };
+                        newRule.conditions.push(newCondition);
                         await this.ntb.settingsManager.save();
-                        // TODO: set the focus in the form
                         this.display();
+                        // TODO: set the focus in the condition form
                         //this.display('.note-toolbar-sortablejs-list > div:last-child input[type="search"]', true);
                     });
                 button.buttonEl.setText(iconTextFr('plus', t('setting.rules.button-new')));
@@ -157,14 +165,14 @@ export default class RulesModal extends Modal {
         // rule conjunction
         //
 
-        const conjunctionOptions: Record<string, string> = {
+        const CONJUNCTION_OPTIONS: Record<string, string> = {
             [RuleConjunction.And]: "All of the following are true",
             [RuleConjunction.Or]: "Any of the following are true",
         };
 
         new Setting(ruleEl)
             .addDropdown((cb) => {
-                cb.addOptions(conjunctionOptions)
+                cb.addOptions(CONJUNCTION_OPTIONS)
                     .setValue(rule.conjunction)
                     .onChange(debounce(async (value) => {
                         rule.conjunction = value as RuleConjunction;

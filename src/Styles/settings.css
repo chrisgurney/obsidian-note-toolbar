@@ -286,6 +286,7 @@
             & .note-toolbar-setting-text-button {
                 border: none;
                 padding: 0;
+                margin-left: var(--size-4-4);
                 & .setting-item-info {
                     display: none;
                 }
@@ -302,16 +303,22 @@
                             color: var(--text-normal);
                         }
                     }
-                }                
+                }
             }
         }
         & .note-toolbar-setting-condition-container {
             align-items: center;
             & .note-toolbar-setting-condition {
+                border-left: var(--border-width) solid var(--background-modifier-border);
                 display: flex;
+                padding-left: var(--size-4-4);
+                margin-left: var(--size-4-4);
                 & .note-toolbar-setting-item-delete {
                     border-top: none;
                     padding: 0;
+                }
+                & .setting-item-info {
+                    display: none;
                 }
             }
         }
