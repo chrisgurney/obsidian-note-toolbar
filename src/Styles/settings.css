@@ -285,7 +285,7 @@
             }
             & .note-toolbar-setting-text-button {
                 border: none;
-                padding: 0;
+                padding: var(--size-2-2);
                 margin-left: var(--size-4-4);
                 & .setting-item-info {
                     display: none;
@@ -312,19 +312,32 @@
             flex-direction: column;
             row-gap: var(--size-2-2);
             & .note-toolbar-setting-condition {
-                column-gap: var(--size-2-2);
+                /* column-gap: var(--size-2-2); */
                 display: flex;
                 padding-left: var(--size-4-4);
                 margin-left: var(--size-4-4);
+                & .note-toolbar-setting-mapping-field {
+                    align-items: center;
+                    border-top: none;
+                    padding: 0;
+                    & .setting-item-info {
+                        margin-inline-end: var(--size-2-2);
+                    }
+                    & select, & input {
+                        background-color: transparent;
+                    }
+                }
                 & .note-toolbar-setting-item-delete,
-                & .note-toolbar-setting-mapping-field,
                 & .note-toolbar-setting-mapping-operator,
                 & .note-toolbar-setting-mapping-value {
                     border-top: none;
                     padding: 0;
-                }
-                & .setting-item-info {
-                    display: none;
+                    & .setting-item-info {
+                        display: none;
+                    }
+                    & select, & input {
+                        background-color: transparent;
+                    }
                 }
             }
         }

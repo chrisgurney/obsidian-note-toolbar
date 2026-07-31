@@ -257,6 +257,7 @@ export default class RulesModal extends Modal {
         );
 
         new Setting(conditionEl)
+            .setName('where')
             .setClass('note-toolbar-setting-mapping-field')
             .addDropdown((cb) => {
                 cb
