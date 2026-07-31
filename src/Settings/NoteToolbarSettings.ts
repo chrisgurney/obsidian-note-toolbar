@@ -544,7 +544,7 @@ export const RULE_OPERANDS: RuleOperand[] = [
     {
         id: 'editormode',
         field: RuleField.EditorMode,
-        label: 'Editor mode',
+        label: t('setting.rules.option-field-editormode'),
         operators: [
             { op: RuleOperator.Is, editor: 'editormode' },
             { op: RuleOperator.IsNot, editor: 'editormode' },
@@ -553,7 +553,7 @@ export const RULE_OPERANDS: RuleOperand[] = [
     {
         id: 'folder',
         field: RuleField.Folder,
-        label: 'Folder',
+        label: t('setting.rules.option-field-folder'),
         operators: [
             { op: RuleOperator.Is, editor: 'folder' },
             { op: RuleOperator.IsNot, editor: 'folder' },
@@ -565,7 +565,7 @@ export const RULE_OPERANDS: RuleOperand[] = [
     {
         id: 'filename',
         field: RuleField.FileName,
-        label: 'File name',
+        label: t('setting.rules.option-field-filename'),
         operators: [
             { op: RuleOperator.Is, editor: 'string' },
             { op: RuleOperator.IsNot, editor: 'string' },
@@ -577,28 +577,28 @@ export const RULE_OPERANDS: RuleOperand[] = [
     {
         id: 'filetype',
         field: RuleField.FileType,
-        label: 'File type',
+        label: t('setting.rules.option-field-filetype'),
         operators: [
             { op: RuleOperator.Is, editor: 'string' },
             { op: RuleOperator.IsNot, editor: 'string' },
         ]
     },
     {
-        id: 'tags',
-        field: RuleField.Tag,
-        label: 'Tags',
-        operators: [
-            { op: RuleOperator.Contains, editor: 'tags' },
-            { op: RuleOperator.DoesNotContain, editor: 'tags' },
-        ]
-    },
-    {
         id: 'platform',
         field: RuleField.Platform,
-        label: 'Platform',
+        label: t('setting.rules.option-field-platform'),
         operators: [
             { op: RuleOperator.Is, editor: 'platform' },
             { op: RuleOperator.IsNot, editor: 'platform' },
+        ]
+    },
+    {
+        id: 'tags',
+        field: RuleField.Tag,
+        label: t('setting.rules.option-field-tags'),
+        operators: [
+            { op: RuleOperator.Contains, editor: 'tags' },
+            { op: RuleOperator.DoesNotContain, editor: 'tags' },
         ]
     }
 ];
