@@ -1,10 +1,10 @@
-import { RuleField, RuleConjunction, RuleOperator, t, Rule, RuleCondition, RULE_OPERANDS, SettingType } from "Settings/NoteToolbarSettings";
+import { Rule, RULE_OPERANDS, RuleCondition, RuleConjunction, RuleOperator, SettingType, t } from "Settings/NoteToolbarSettings";
 import { arraymove, getUUID, moveElement } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
 import { ButtonComponent, debounce, Modal, Setting } from "obsidian";
+import Sortable from "sortablejs";
 import ToolbarSuggester from "../Suggesters/ToolbarSuggester";
 import { iconTextFr, learnMoreFr } from "../Utils/SettingsUIUtils";
-import Sortable from "sortablejs";
 
 export default class RulesModal extends Modal {
 
@@ -90,10 +90,7 @@ export default class RulesModal extends Modal {
                         ruleListEl.appendChild(ruleFormEl);
                         // create the first condition
                         const newCondition: RuleCondition = {
-                            id: getUUID(),
-                            field: RuleField.Folder,
-                            operator: RuleOperator.Contains,
-                            value: 'TODO: condition value goes here'
+                            id: getUUID()
                         };
                         newRule.conditions.push(newCondition);
                         await this.ntb.settingsManager.save();
@@ -223,10 +220,7 @@ export default class RulesModal extends Modal {
                     .setTooltip(t('setting.rules.button-newcondition-tooltip'))
                     .onClick(async () => {
                         const newCondition: RuleCondition = {
-                            id: getUUID(),
-                            field: RuleField.Folder,
-                            operator: RuleOperator.Contains,
-                            value: 'TODO: condition value goes here'
+                            id: getUUID()
                         };
                         rule.conditions.push(newCondition);
                         await this.ntb.settingsManager.save();
@@ -266,10 +260,7 @@ export default class RulesModal extends Modal {
             .setClass('note-toolbar-setting-mapping-field')
             .addDropdown((cb) => {
                 cb
-                    .addOptions({
-                        '': 'Select a field',
-                        ...ruleOperandOptions
-                    })
+                    .addOptions({ '' : 'Select a field', ...ruleOperandOptions })
                     .setValue(
                         RULE_OPERANDS.find((operand) =>
                             operand.field === condition.field &&
@@ -277,23 +268,61 @@ export default class RulesModal extends Modal {
                         )?.id ?? ''
                     )
                     .onChange(debounce(async (id) => {
-                        const operand = RULE_OPERANDS.find(
-                            (operand) => operand.id === id
-                        );
+                        const operand = RULE_OPERANDS.find( (operand) => operand.id === id );
                         if (!operand) return;
-
+                        // TODO: set condition based on id selected
                         condition.field = operand.field;
                         condition.key = operand.key;
-                        condition.operator = RuleOperator.Is;
-                        condition.value = 'TODO value goes here';
-
+                        condition.operator = undefined;
+                        condition.value = undefined;
                         await this.ntb.settingsManager.save();
-
-                        // TODO: re-render operator/value controls
+                        // re-render the condition so the operator/value controls
+                        // reflect the newly selected operand
+                        conditionEl.replaceWith(this.renderConditionForm(condition));
                     }, 250));
             });
 
+        //
+        // operator
+        //
+
+        const operand = RULE_OPERANDS.find((operand) =>
+            operand.field === condition.field &&
+            operand.key === condition.key
+        );
+
+        if (operand) {
+            const operatorOptions = operand.operators.reduce<Record<string, string>>(
+                (acc, definition) => {
+                    acc[definition.op] = definition.op;
+                    return acc;
+                },
+                {}
+            );
+
+            new Setting(conditionEl)
+                .setClass('note-toolbar-setting-mapping-operator')
+                .addDropdown((cb) => {
+                    cb
+                        .addOptions({
+                            '': 'Select an operator',
+                            ...operatorOptions
+                        })
+                        .setValue(condition.operator ?? '')
+                        .onChange(debounce(async (value) => {
+                            condition.operator = value as RuleOperator;
+                            condition.value = undefined;
+
+                            await this.ntb.settingsManager.save();
+
+                            conditionEl.replaceWith(this.renderConditionForm(condition));
+                        }, 250));
+                });
+        }
+
+        //
         // delete condition button
+        //
 
         new Setting(conditionEl)
             .setClass("note-toolbar-setting-item-delete")

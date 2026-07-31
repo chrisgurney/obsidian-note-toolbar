@@ -307,13 +307,18 @@
             }
         }
         & .note-toolbar-setting-condition-container {
-            align-items: center;
+            align-items: flex-start;
+            display: flex;
+            flex-direction: column;
+            row-gap: var(--size-2-2);
             & .note-toolbar-setting-condition {
-                border-left: var(--border-width) solid var(--background-modifier-border);
+                column-gap: var(--size-2-2);
                 display: flex;
                 padding-left: var(--size-4-4);
                 margin-left: var(--size-4-4);
-                & .note-toolbar-setting-item-delete {
+                & .note-toolbar-setting-item-delete,
+                & .note-toolbar-setting-mapping-field,
+                & .note-toolbar-setting-mapping-operator {
                     border-top: none;
                     padding: 0;
                 }

@@ -518,9 +518,9 @@ export interface Rule {
  */
 export interface RuleCondition {
 	id: string;
-    field: RuleField;
-    operator: RuleOperator;
-    value: RuleValue;
+    field?: RuleField;
+    operator?: RuleOperator;
+    value?: RuleValue;
 
     // property name when field === Property
     key?: string;
