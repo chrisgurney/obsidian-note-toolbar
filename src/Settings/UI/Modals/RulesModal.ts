@@ -1,7 +1,7 @@
 import { Rule, RULE_OPERANDS, RuleCondition, RuleConjunction, RuleField, RuleOperator, SettingType, t } from "Settings/NoteToolbarSettings";
-import { arraymove, getUUID, moveElement } from "Utils/Utils";
+import { arraymove, getElementPosition, getUUID, moveElement } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
-import { ButtonComponent, debounce, Modal, Notice, Setting } from "obsidian";
+import { ButtonComponent, debounce, Menu, MenuItem, Modal, Notice, Setting } from "obsidian";
 import Sortable from "sortablejs";
 import ToolbarSuggester from "../Suggesters/ToolbarSuggester";
 import { iconTextFr, learnMoreFr } from "../Utils/SettingsUIUtils";
@@ -122,24 +122,6 @@ export default class RulesModal extends Modal {
         const conditionContainerEl = ruleContainerEl.createDiv({ cls: 'note-toolbar-setting-condition-container' });
 
         //
-        // delete button
-        //
-
-        new Setting(ruleEl)
-            .setClass("note-toolbar-setting-item-delete")
-            .addButton((cb) => {
-                cb.setIcon("minus-circle")
-                    .setTooltip(t('setting.rules.button-delete-rule-tooltip'))
-                    .onClick(async () => {
-                        const rowId = cb.buttonEl.getAttribute('data-row-id');
-                        if (rowId) await this.listMoveHandlerById(null, rowId, 'delete');
-                        const ruleEl = this.contentEl.querySelector(`.note-toolbar-setting-rules-list-item-container[data-row-id="${rowId}"]`);
-                        if (ruleEl) ruleEl.remove();
-                    });
-                cb.buttonEl.setAttribute('data-row-id', rule.id);
-            });
-
-        //
         // toolbar name field
         //
 
@@ -206,9 +188,31 @@ export default class RulesModal extends Modal {
         // rule drag handle
         //
 
-        const sortableHandleEl = ruleEl.createDiv();
-        sortableHandleEl.addClass("note-toolbar-setting-item-controls");
-        new Setting(sortableHandleEl)
+        const ruleControlsEl = ruleEl.createDiv();
+        ruleControlsEl.addClass("note-toolbar-setting-item-controls");
+
+        new Setting(ruleControlsEl)
+            .addExtraButton((cb) => {
+                cb.setIcon('ellipsis')
+                    .setTooltip(t("Options"))
+                    .onClick(() => {
+                        const menu = new Menu();
+                        menu.addItem((item: MenuItem) => {
+                            item
+                                .setTitle(t('setting.rules.button-delete-rule-tooltip'))
+                                .setWarning(true)
+                                .setIcon('trash')
+                                .onClick(async () => {
+                                    const rowId = cb.extraSettingsEl.getAttribute('data-row-id');
+                                    if (rowId) await this.listMoveHandlerById(null, rowId, 'delete');
+                                    const ruleEl = this.contentEl.querySelector(`.note-toolbar-setting-rules-list-item-container[data-row-id="${rowId}"]`);
+                                    if (ruleEl) ruleEl.remove();
+                                });
+                        });
+                        menu.showAtPosition(getElementPosition(cb.extraSettingsEl));
+                    });
+                cb.extraSettingsEl.setAttribute('data-row-id', rule.id);
+            })
             .addExtraButton((cb) => {
                 cb.setIcon('grip-horizontal')
                     .setTooltip(t('setting.button-drag-tooltip'))
