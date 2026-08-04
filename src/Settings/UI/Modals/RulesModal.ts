@@ -88,13 +88,6 @@ export default class RulesModal extends Modal {
                         this.ntb.settings.rules.push(newRule);
                         const ruleFormEl = this.renderRuleForm(newRule);
                         ruleListEl.appendChild(ruleFormEl);
-                        // create the first condition
-                        const newCondition: RuleCondition = {
-                            id: getUUID(),
-                            field: RuleField.FileName,
-                            operator: RuleOperator.Contains
-                        };
-                        newRule.conditions.push(newCondition);
                         await this.ntb.settingsManager.save();
                     });
                 button.buttonEl.setText(iconTextFr('plus', t('setting.rules.button-new')));
@@ -144,13 +137,24 @@ export default class RulesModal extends Modal {
             .setClass('note-toolbar-setting-item-control-std-with-help')
             .addSearch(async (cb) => {
                 new ToolbarSuggester(this.ntb, cb.inputEl);
-                cb.setPlaceholder(t('setting.mappings.placeholder-toolbar'))
+                cb.setPlaceholder(t('setting.rules.placeholder-toolbar'))
                     .setValue(existingToolbarSetting ? existingToolbarSetting.name : '')
                     .onChange(debounce(async (name) => {
                         const isValid = await this.ntb.settingsUtils.updateItemComponentStatus(this, name, SettingType.Toolbar, toolbarSetting.controlEl, undefined, 'beforeend');
                         const mappedToolbar = isValid ? this.ntb.settingsManager.getToolbarByName(name) : undefined;
                         rule.toolbar = mappedToolbar?.uuid ?? '';
                         this.ntb.settingsUtils.setFieldPreview(toolbarSetting, mappedToolbar);
+                        // add the initial condition
+                        if (isValid && rule.conditions.length === 0) {
+                            const newCondition: RuleCondition = {
+                                id: getUUID(),
+                                field: RuleField.FileName,
+                                operator: RuleOperator.Contains
+                            };
+                            rule.conditions.push(newCondition);
+                            const ruleConditionEl = this.renderConditionForm(rule, newCondition);
+                            conditionContainerEl.appendChild(ruleConditionEl);
+                        }
                         await this.ntb.settingsManager.save();
                     }, 250));
                 await this.ntb.settingsUtils.updateItemComponentStatus(
@@ -176,6 +180,7 @@ export default class RulesModal extends Modal {
                     .onChange(debounce(async (value) => {
                         rule.conjunction = value as RuleConjunction;
                         await this.ntb.settingsManager.save();
+                        this.display();
                     }, 250));
             });
 
@@ -205,10 +210,10 @@ export default class RulesModal extends Modal {
         // show existing conditions
         //
 
-        for (const condition of rule.conditions) {
-            const conditionEl = this.renderConditionForm(condition);
+        rule.conditions.forEach((condition, index) => {
+            const conditionEl = this.renderConditionForm(rule, condition);
             conditionContainerEl.append(conditionEl);
-        }
+        });
 
         //
         // add condition button
@@ -227,11 +232,10 @@ export default class RulesModal extends Modal {
                             operator: RuleOperator.Contains
                         };
                         rule.conditions.push(newCondition);
-                        await this.ntb.settingsManager.save();
-                        // TODO: add a form item to the existing list
-                        const ruleConditionEl = this.renderConditionForm(newCondition);
+                        // add the condition UI
+                        const ruleConditionEl = this.renderConditionForm(rule, newCondition);
                         conditionContainerEl.appendChild(ruleConditionEl);
-                        // TODO: set the focus in the form
+                        await this.ntb.settingsManager.save();
                         // this.parent.display('.note-toolbar-sortablejs-list > div:last-child input[type="search"]', true);
                     });
                 button.buttonEl.setText(iconTextFr('plus', t('setting.rules.button-newcondition')));
@@ -246,7 +250,7 @@ export default class RulesModal extends Modal {
      * @param condition ToolbarRuleCondition to return the form for
      * @returns the form element as a div
      */
-    renderConditionForm(condition: RuleCondition): HTMLDivElement {
+    renderConditionForm(rule: Rule, condition: RuleCondition): HTMLDivElement {
         
         const conditionEl = createDiv();
         conditionEl.className = "note-toolbar-setting-condition";
@@ -262,7 +266,7 @@ export default class RulesModal extends Modal {
         );
 
         new Setting(conditionEl)
-            .setName(t('setting.rules.condition-field-prefix'))
+            .setName(rule.conjunction === RuleConjunction.And ? t('setting.rules.condition-field-prefix-and') : t('setting.rules.condition-field-prefix-or'))
             .setClass('note-toolbar-setting-mapping-field')
             .setClass('note-toolbar-setting-item-text-style')
             .addDropdown((cb) => {
@@ -285,7 +289,7 @@ export default class RulesModal extends Modal {
                         await this.ntb.settingsManager.save();
                         // re-render the condition so the operator/value controls
                         // reflect the newly selected operand
-                        conditionEl.replaceWith(this.renderConditionForm(condition));
+                        conditionEl.replaceWith(this.renderConditionForm(rule, condition));
                     }, 250));
             });
 
@@ -319,7 +323,7 @@ export default class RulesModal extends Modal {
 
                             await this.ntb.settingsManager.save();
 
-                            conditionEl.replaceWith(this.renderConditionForm(condition));
+                            conditionEl.replaceWith(this.renderConditionForm(rule, condition));
                         }, 250));
                 });
         }

@@ -348,6 +348,10 @@
                 display: flex;
                 padding-left: var(--size-4-4);
                 margin-left: var(--size-4-4);
+                /* hides the first conjunction for the first operator in the list */
+                &:first-child > .note-toolbar-setting-mapping-field > .setting-item-info {
+                    display: none;
+                }
                 & .note-toolbar-setting-item-delete,
                 & .note-toolbar-setting-mapping-operator,
                 & .note-toolbar-setting-mapping-value {
