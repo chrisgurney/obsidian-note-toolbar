@@ -172,6 +172,7 @@ export default class RulesModal extends Modal {
         };
 
         new Setting(ruleEl)
+            .setClass('note-toolbar-setting-item-text-style')
             .addDropdown((cb) => {
                 cb.addOptions(CONJUNCTION_OPTIONS)
                     .setValue(rule.conjunction)
@@ -266,6 +267,7 @@ export default class RulesModal extends Modal {
         new Setting(conditionEl)
             .setName(t('setting.rules.condition-field-prefix'))
             .setClass('note-toolbar-setting-mapping-field')
+            .setClass('note-toolbar-setting-item-text-style')
             .addDropdown((cb) => {
                 cb
                     .addOptions(ruleOperandOptions)

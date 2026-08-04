@@ -36,6 +36,38 @@
     } */
 }
 
+
+.note-toolbar-setting-item-delete {
+    padding: 0 8px 0 0;
+    & .setting-item-info {
+        display: none;
+    }
+    & .setting-item-control {
+        .is-mobile & {
+            margin-top: 0;
+        }
+        & button {
+            background: none;
+            box-shadow: none;
+            color: var(--icon-color);
+            gap: var(--size-4-2);
+            padding: var(--size-4-2);
+            &:hover {
+                opacity: var(--icon-opacity-hover);
+                color: var(--icon-color-hover);
+                background-color: var(--background-modifier-hover);
+            }
+            &:focus-visible {
+                border-radius: var(--input-radius);
+                box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
+            }
+        }
+    }
+    & svg {
+        color: var(--text-error);
+    }
+}
+
 .note-toolbar-setting-plugin-error {
     padding: var(--size-4-4);
     border: solid 1px var(--text-error);
@@ -285,7 +317,7 @@
             }
             & .note-toolbar-setting-text-button {
                 border: none;
-                padding: var(--size-2-2);
+                padding-top: var(--size-4-4);
                 margin-left: var(--size-4-4);
                 & .setting-item-info {
                     display: none;
@@ -307,7 +339,7 @@
             }
         }
         & .note-toolbar-setting-condition-container {
-            align-items: flex-start;
+            align-items: flex-end;
             display: flex;
             flex-direction: column;
             row-gap: var(--size-2-2);
@@ -316,17 +348,6 @@
                 display: flex;
                 padding-left: var(--size-4-4);
                 margin-left: var(--size-4-4);
-                & .note-toolbar-setting-mapping-field {
-                    align-items: center;
-                    border-top: none;
-                    padding: 0;
-                    & .setting-item-info {
-                        margin-inline-end: var(--size-2-2);
-                    }
-                    & select, & input {
-                        background-color: transparent;
-                    }
-                }
                 & .note-toolbar-setting-item-delete,
                 & .note-toolbar-setting-mapping-operator,
                 & .note-toolbar-setting-mapping-value {
@@ -339,6 +360,22 @@
                         background-color: transparent;
                     }
                 }
+                & .note-toolbar-setting-item-delete {
+                    & svg {
+                        color: var(--text-muted);
+                    }
+                }
+            }
+        }
+        & .note-toolbar-setting-item-text-style {
+            align-items: center;
+            border-top: none;
+            padding: 0;
+            & .setting-item-info {
+                margin-inline-end: var(--size-2-2);
+            }
+            & select, & input {
+                background-color: transparent;
             }
         }
     }
@@ -1439,37 +1476,6 @@ input[type="text"].note-toolbar-setting-error,
     }
     & .sortable-handle:active {
         cursor: grabbing;
-    }
-}
-
-.note-toolbar-setting-item-delete {
-    padding: 0 8px 0 0;
-    & .setting-item-info {
-        display: none;
-    }
-    & .setting-item-control {
-        .is-mobile & {
-            margin-top: 0;
-        }
-        & button {
-            background: none;
-            box-shadow: none;
-            color: var(--icon-color);
-            gap: var(--size-4-2);
-            padding: var(--size-4-2);
-            &:hover {
-                opacity: var(--icon-opacity-hover);
-                color: var(--icon-color-hover);
-                background-color: var(--background-modifier-hover);
-            }
-            &:focus-visible {
-                border-radius: var(--input-radius);
-                box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
-            }
-        }
-    }
-    & svg {
-        color: var(--text-error);
     }
 }
 
