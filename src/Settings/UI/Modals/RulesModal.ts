@@ -1,4 +1,4 @@
-import { Rule, RULE_OPERANDS, RuleCondition, RuleConjunction, RuleOperator, SettingType, t } from "Settings/NoteToolbarSettings";
+import { Rule, RULE_OPERANDS, RuleCondition, RuleConjunction, RuleField, RuleOperator, SettingType, t } from "Settings/NoteToolbarSettings";
 import { arraymove, getUUID, moveElement } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
 import { ButtonComponent, debounce, Modal, Setting } from "obsidian";
@@ -90,7 +90,9 @@ export default class RulesModal extends Modal {
                         ruleListEl.appendChild(ruleFormEl);
                         // create the first condition
                         const newCondition: RuleCondition = {
-                            id: getUUID()
+                            id: getUUID(),
+                            field: RuleField.FileName,
+                            operator: RuleOperator.Contains
                         };
                         newRule.conditions.push(newCondition);
                         await this.ntb.settingsManager.save();
@@ -222,7 +224,9 @@ export default class RulesModal extends Modal {
                     .setTooltip(t('setting.rules.button-newcondition-tooltip'))
                     .onClick(async () => {
                         const newCondition: RuleCondition = {
-                            id: getUUID()
+                            id: getUUID(),
+                            field: RuleField.FileName,
+                            operator: RuleOperator.Contains
                         };
                         rule.conditions.push(newCondition);
                         await this.ntb.settingsManager.save();
@@ -264,7 +268,7 @@ export default class RulesModal extends Modal {
             .setClass('note-toolbar-setting-mapping-field')
             .addDropdown((cb) => {
                 cb
-                    .addOptions({ '' : t("setting.rules.condition-field-placeholder"), ...ruleOperandOptions })
+                    .addOptions(ruleOperandOptions)
                     .setValue(
                         RULE_OPERANDS.find((operand) =>
                             operand.field === condition.field &&
@@ -277,7 +281,7 @@ export default class RulesModal extends Modal {
                         // TODO: set condition based on id selected
                         condition.field = operand.field;
                         condition.key = operand.key;
-                        condition.operator = undefined;
+                        condition.operator = operand.operators[0].op;
                         condition.value = undefined;
                         await this.ntb.settingsManager.save();
                         // re-render the condition so the operator/value controls
@@ -308,10 +312,7 @@ export default class RulesModal extends Modal {
                 .setClass('note-toolbar-setting-mapping-operator')
                 .addDropdown((cb) => {
                     cb
-                        .addOptions({
-                            '': t('setting.rules.condition-operator-placeholder'),
-                            ...operatorOptions
-                        })
+                        .addOptions(operatorOptions)
                         .setValue(condition.operator ?? '')
                         .onChange(debounce(async (value) => {
                             condition.operator = value as RuleOperator;
