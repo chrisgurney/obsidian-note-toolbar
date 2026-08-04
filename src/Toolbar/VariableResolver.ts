@@ -51,46 +51,6 @@ export default class VariableResolver {
 
 		const hasVar = (varKey: string) => new RegExp(`\\{\\{\\s*(?:encode:)?\\s*${varKey}\\s*\\}\\}`).test(s);
 
-		// SELECTION
-		if (hasVar('selection')) {
-			const selection = this.ntb.api.getSelection();
-			if (selection) s = this.replaceVar(s, 'selection', selection);
-		}
-
-		// NOTE_TITLE
-		const noteTitle = file?.basename;
-		if (noteTitle) s = this.replaceVar(s, 'note_title', noteTitle);
-	
-		// FILE_PATH
-		const filePath = file?.path;
-		if (filePath) s = this.replaceVar(s, 'file_path', filePath);
-		
-		// VAULT_PATH
-		if (this.ntb.app.vault.adapter instanceof FileSystemAdapter) {
-			const vaultPath = this.ntb.app.vault.adapter.getBasePath();
-			s = this.replaceVar(s, 'vault_path', vaultPath);
-		}
-
-		// PROP_ VARIABLES
-		// have to get this at run/click-time, as file or metadata may not have changed
-		const frontmatter = file ? this.ntb.app.metadataCache.getFileCache(file)?.frontmatter : undefined;
-		// replace any variable of format {{prop_KEY}} with the value of the frontmatter dictionary with key = KEY
-		s = s.replace(/{{\s*(encode:)?\s*prop_(.*?)\s*}}/g, (_match, encode: string, p1: string) => {
-			const key = p1.trim();
-			if (frontmatter && frontmatter[key] !== undefined && frontmatter[key] !== null) {
-				// regex to remove [[ and ]] and any alias (bug #75), in case an internal link was passed
-				const linkWrap = /\[\[([^|\]]+)(?:\|[^\]]*)?\]\]/g;
-				// handle the case where the prop might be a list, and convert numbers to strings
-				let fm = Array.isArray(frontmatter[key]) ? frontmatter[key].join(',') : String(frontmatter[key]);
-				fm = fm ? fm.replace(linkWrap, '$1') : '';
-				// FIXME: should this be returning here? or just updating the string?
-				return encode ? encodeURIComponent(fm) : fm;
-			}
-			else {
-				return '';
-			}
-		});
-
 		if (this.ntb.settings.scriptingEnabled) {
 
 			// JAVASCRIPT
@@ -154,6 +114,46 @@ export default class VariableResolver {
 			}
 
 		}
+
+		// SELECTION
+		if (hasVar('selection')) {
+			const selection = this.ntb.api.getSelection();
+			if (selection) s = this.replaceVar(s, 'selection', selection);
+		}
+
+		// NOTE_TITLE
+		const noteTitle = file?.basename;
+		if (noteTitle) s = this.replaceVar(s, 'note_title', noteTitle);
+	
+		// FILE_PATH
+		const filePath = file?.path;
+		if (filePath) s = this.replaceVar(s, 'file_path', filePath);
+		
+		// VAULT_PATH
+		if (this.ntb.app.vault.adapter instanceof FileSystemAdapter) {
+			const vaultPath = this.ntb.app.vault.adapter.getBasePath();
+			s = this.replaceVar(s, 'vault_path', vaultPath);
+		}
+
+		// PROP_ VARIABLES
+		// have to get this at run/click-time, as file or metadata may not have changed
+		const frontmatter = file ? this.ntb.app.metadataCache.getFileCache(file)?.frontmatter : undefined;
+		// replace any variable of format {{prop_KEY}} with the value of the frontmatter dictionary with key = KEY
+		s = s.replace(/{{\s*(encode:)?\s*prop_(.*?)\s*}}/g, (_match, encode: string, p1: string) => {
+			const key = p1.trim();
+			if (frontmatter && frontmatter[key] !== undefined && frontmatter[key] !== null) {
+				// regex to remove [[ and ]] and any alias (bug #75), in case an internal link was passed
+				const linkWrap = /\[\[([^|\]]+)(?:\|[^\]]*)?\]\]/g;
+				// handle the case where the prop might be a list, and convert numbers to strings
+				let fm = Array.isArray(frontmatter[key]) ? frontmatter[key].join(',') : String(frontmatter[key]);
+				fm = fm ? fm.replace(linkWrap, '$1') : '';
+				// FIXME: should this be returning here? or just updating the string?
+				return encode ? encodeURIComponent(fm) : fm;
+			}
+			else {
+				return '';
+			}
+		});
 
 		return s;
 
