@@ -6,23 +6,22 @@ export default class ToolbarSuggester extends AbstractInputSuggest<ToolbarSettin
 
     constructor(
         private ntb: NoteToolbarPlugin, 
-        private inputEl: HTMLInputElement
+        private inputEl: HTMLInputElement,
+        private filter?: (toolbar: ToolbarSettings) => boolean
     ) {
         super(ntb.app, inputEl);
     }
 
     getSuggestions(inputStr: string): ToolbarSettings[] {
-        const pluginToolbars = this.ntb.settings.toolbars;
-        const toolbarSuggestions: ToolbarSettings[] = [];
         const lowerCaseInputStr = inputStr.toLowerCase();
 
-        pluginToolbars.forEach((toolbar: ToolbarSettings) => {
-            if (toolbar.name !== '' && toolbar.name.toLowerCase().includes(lowerCaseInputStr)) {
-                toolbarSuggestions.push(toolbar);
-            }
+        return this.ntb.settings.toolbars.filter((toolbar) => {
+            return (
+                toolbar.name !== '' &&
+                toolbar.name.toLowerCase().includes(lowerCaseInputStr) &&
+                (!this.filter || this.filter(toolbar))
+            );
         });
-
-        return toolbarSuggestions;
     }
 
     renderSuggestion(toolbar: ToolbarSettings, el: HTMLElement): void {

@@ -136,7 +136,9 @@ export default class RulesModal extends Modal {
             .setClass('note-toolbar-setting-mapping-field')
             .setClass('note-toolbar-setting-item-control-std-with-help')
             .addSearch(async (cb) => {
-                new ToolbarSuggester(this.ntb, cb.inputEl);
+                // do not show toolbars already used in other rules
+                const toolbarsWithRules = new Set<string>(this.ntb.settings.rules.map((rule) => rule.toolbar));
+                new ToolbarSuggester(this.ntb, cb.inputEl, (toolbar) => !toolbarsWithRules.has(toolbar.uuid));
                 cb.setPlaceholder(t('setting.rules.placeholder-toolbar'))
                     .setValue(existingToolbarSetting ? existingToolbarSetting.name : '')
                     .onChange(debounce(async (name) => {
