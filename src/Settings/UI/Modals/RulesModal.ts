@@ -96,9 +96,6 @@ export default class RulesModal extends Modal {
                         };
                         newRule.conditions.push(newCondition);
                         await this.ntb.settingsManager.save();
-                        this.display();
-                        // TODO: set the focus in the condition form
-                        //this.display('.note-toolbar-sortablejs-list > div:last-child input[type="search"]', true);
                     });
                 button.buttonEl.setText(iconTextFr('plus', t('setting.rules.button-new')));
             });
