@@ -607,19 +607,6 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		settingsContainerEl.appendChild(collapsibleContainerEl);
 		containerEl.append(settingsContainerEl);
 
-		// open toolbar rules button
-		new Setting(settingsContainerEl)
-			.addButton((button: ButtonComponent) => {
-				button
-					.setButtonText('Open rules')
-					.setTooltip('Open rules')
-					.setCta()
-					.onClick(() => {
-						const rulesModal = new RulesModal(this.ntb);
-						rulesModal.open();
-					})
-			});
-
 	}
 
 	/**
@@ -665,6 +652,23 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 						// this.plugin.settings.toolbars.updated = new Date().toISOString();
 						await this.ntb.settingsManager.save();	
 					}, 750)));
+		});
+
+		// open toolbar rules button
+		mappingsGroup.addSetting((rulesSetting) => {
+			rulesSetting
+				.setName('Advanced rules')
+				.setDesc('Define more detailed conditions for when toolbars are displayed.')
+				.addButton((button: ButtonComponent) => {
+					button
+						.setButtonText('Edit')
+						.setTooltip('Open toolbar rules')
+						.setCta()
+						.onClick(() => {
+							const rulesModal = new RulesModal(this.ntb);
+							rulesModal.open();
+						})
+				});
 		});
 
 		mappingsGroup.addSetting((folderMappingSetting) => {

@@ -28,7 +28,7 @@ export default class RulesModal extends Modal {
         this.contentEl.empty();
 
         new Setting(this.contentEl)
-            .setDesc(learnMoreFr(t('setting.rules.description-modal'), 'Defining-where-to-show-toolbars'));
+            .setDesc(learnMoreFr(t('setting.rules.description-modal', { property: this.ntb.settings.toolbarProp }), 'Defining-where-to-show-toolbars'));
 
         const rulesContainerEl = this.contentEl.createDiv();
         rulesContainerEl.addClasses(['note-toolbar-setting-rules-container', 'note-toolbar-setting-top-border', 'note-toolbar-setting-ui']);
@@ -38,8 +38,8 @@ export default class RulesModal extends Modal {
 
         if (this.ntb.settings.rules.length == 0) {
             // empty state
-            rulesContainerEl.createDiv({ text: this.ntb.settingsUtils.emptyMessageFr(t('setting.rules.label-empty')) })
-                .className = "note-toolbar-setting-empty-message";
+            // rulesContainerEl.createDiv({ text: this.ntb.settingsUtils.emptyMessageFr(t('setting.rules.label-empty')) })
+            //     .className = "note-toolbar-setting-empty-message";
         }
         else {
 
