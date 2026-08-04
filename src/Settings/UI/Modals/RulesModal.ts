@@ -143,9 +143,12 @@ export default class RulesModal extends Modal {
         // toolbar name field
         //
 
+        const nameConjunctionContainerEl = ruleEl.createDiv({ cls: 'note-toolbar-setting-rule-name-conjunction' });
+
         const existingToolbarSetting = this.ntb.settingsManager.getToolbarById(rule.toolbar);
-        const toolbarSetting = new Setting(ruleEl)
+        const toolbarSetting = new Setting(nameConjunctionContainerEl)
             .setClass('note-toolbar-setting-mapping-field')
+            .setClass('note-toolbar-setting-mapping-toolbar')
             .setClass('note-toolbar-setting-item-control-std-with-help')
             .addSearch(async (cb) => {
                 // do not show toolbars already used in other rules
@@ -186,7 +189,8 @@ export default class RulesModal extends Modal {
             [RuleConjunction.Or]: t('setting.rules.option-conjunction-or'),
         };
 
-        new Setting(ruleEl)
+        new Setting(nameConjunctionContainerEl)
+            .setClass('note-toolbar-setting-mapping-conjunction')
             .setClass('note-toolbar-setting-item-text-style')
             .addDropdown((cb) => {
                 cb.addOptions(CONJUNCTION_OPTIONS)
@@ -311,6 +315,9 @@ export default class RulesModal extends Modal {
         // operator
         //
 
+        const operatorValueContainerEl = conditionEl.createDiv();
+        operatorValueContainerEl.addClass('note-toolbar-setting-mapping-operator-value');
+        
         const operand = RULE_OPERANDS.find((operand) =>
             operand.field === condition.field &&
             operand.key === condition.key
@@ -325,7 +332,7 @@ export default class RulesModal extends Modal {
                 {}
             );
 
-            new Setting(conditionEl)
+            new Setting(operatorValueContainerEl)
                 .setClass('note-toolbar-setting-mapping-operator')
                 .addDropdown((cb) => {
                     cb
@@ -361,7 +368,7 @@ export default class RulesModal extends Modal {
         if (operatorDefinition) {
             switch (operatorDefinition.editor) {
                 case 'string':
-                    new Setting(conditionEl)
+                    new Setting(operatorValueContainerEl)
                         .setClass('note-toolbar-setting-mapping-value')
                         .addText((cb) => {
                             cb
@@ -396,7 +403,7 @@ export default class RulesModal extends Modal {
         // delete condition button
         //
 
-        new Setting(conditionEl)
+        new Setting(operatorValueContainerEl)
             .setClass("note-toolbar-setting-item-delete")
             .addButton((cb) => {
                 cb.setIcon("trash")

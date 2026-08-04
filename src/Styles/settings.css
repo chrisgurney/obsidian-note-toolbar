@@ -295,6 +295,12 @@
                 display: flex;
                 column-gap: var(--size-2-2);
                 padding-top: var(--size-4-4);
+                & .note-toolbar-setting-rule-name-conjunction {
+                    align-items: flex-start;
+                    display: flex;
+                    flex-wrap: wrap;
+                    flex-basis: 100%;
+                }
                 & .note-toolbar-setting-item-delete {
                     padding: 0;
                 }
@@ -314,11 +320,25 @@
                         max-width: unset;
                     }
                 }
+                & .note-toolbar-setting-mapping-toolbar {
+                    .is-mobile & {
+                        width: 100%;
+                        & .search-input-container {
+                            width: 100%;
+                        }
+                        & .note-toolbar-setting-field-help {
+                            max-width: 175px;
+                        }
+                    }
+                }
             }
             & .note-toolbar-setting-text-button {
                 border: none;
                 padding-top: var(--size-4-4);
                 margin-left: var(--size-4-4);
+                .is-phone & {
+                    margin-left: 0;
+                }
                 & .setting-item-info {
                     display: none;
                 }
@@ -343,14 +363,35 @@
             display: flex;
             flex-direction: column;
             row-gap: var(--size-2-2);
+            .is-phone & {
+                align-items: stretch;
+            }
             & .note-toolbar-setting-condition {
                 /* column-gap: var(--size-2-2); */
                 display: flex;
-                padding-left: var(--size-4-4);
                 margin-left: var(--size-4-4);
+                padding-left: var(--size-4-4);
+                .is-phone & {
+                    border: var(--background-modifier-border) solid 1px;
+                    flex-direction: column;
+                    margin-left: 0;
+                    & .note-toolbar-setting-mapping-field .dropdown,
+                    & .note-toolbar-setting-mapping-operator .dropdown {
+                        padding: 0;
+                    }
+                }
                 /* hides the first conjunction for the first operator in the list */
                 &:first-child > .note-toolbar-setting-mapping-field > .setting-item-info {
                     display: none;
+                }
+                & .note-toolbar-setting-mapping-field {
+                    & .setting-item-info .setting-item-name {
+                        overflow: visible;
+                    }
+                    .is-phone & {
+                        flex-direction: row;
+                        flex-grow: 1;
+                    }
                 }
                 & .note-toolbar-setting-item-delete,
                 & .note-toolbar-setting-mapping-operator,
@@ -369,6 +410,9 @@
                         color: var(--text-muted);
                     }
                 }
+                & .note-toolbar-setting-mapping-operator-value {
+                    display: flex;
+                }
             }
         }
         & .note-toolbar-setting-item-text-style {
@@ -383,7 +427,6 @@
             }
         }
     }
-
 
     & .note-toolbar-setting-folder-list-item-container {
         align-items: center;
