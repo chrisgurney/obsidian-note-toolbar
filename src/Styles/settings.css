@@ -1499,11 +1499,6 @@ input[type="text"].note-toolbar-setting-error,
                 .is-mobile & {
                     max-width: inherit;
                 }
-                & .note-toolbar-setting-toolbar-list-preview-item {
-                    & .note-toolbar-setting-item-preview-code {
-                        align-self: flex-start;
-                    }
-                }
             }
         }
     }
