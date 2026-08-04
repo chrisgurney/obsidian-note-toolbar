@@ -776,6 +776,7 @@
             "name": "Rules",
             "name-modal": "Toolbar rules",
             "name-with-count": "Rules ({{count}})",
+            "notice-all-toolbars-used": "All toolbars already have rules assigned.",
             "option-conjunction-and": "if all of the following are true",
             "option-conjunction-or": "if any of the following are true",
             "option-field-editormode": "editor mode",

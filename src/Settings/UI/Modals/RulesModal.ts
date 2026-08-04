@@ -1,7 +1,7 @@
 import { Rule, RULE_OPERANDS, RuleCondition, RuleConjunction, RuleField, RuleOperator, SettingType, t } from "Settings/NoteToolbarSettings";
 import { arraymove, getUUID, moveElement } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
-import { ButtonComponent, debounce, Modal, Setting } from "obsidian";
+import { ButtonComponent, debounce, Modal, Notice, Setting } from "obsidian";
 import Sortable from "sortablejs";
 import ToolbarSuggester from "../Suggesters/ToolbarSuggester";
 import { iconTextFr, learnMoreFr } from "../Utils/SettingsUIUtils";
@@ -79,6 +79,18 @@ export default class RulesModal extends Modal {
                     .setTooltip(t('setting.rules.button-new-tooltip'))
                     .setCta()
                     .onClick(async () => {
+                        // show a message if all toolbars have rules assigned
+                        const toolbarsWithRules = new Set(
+                            this.ntb.settings.rules.map((rule) => rule.toolbar)
+                        );
+                        const availableToolbars = this.ntb.settings.toolbars.filter(
+                            (toolbar) => !toolbarsWithRules.has(toolbar.uuid)
+                        );
+                        if (availableToolbars.length === 0) {
+                            new Notice(t('setting.rules.notice-all-toolbars-used')).containerEl.addClass('mod-warning');
+                            return;
+                        }
+                        // create the rule
                         const newRule: Rule = {
                             id: getUUID(),
                             conjunction: RuleConjunction.And,
