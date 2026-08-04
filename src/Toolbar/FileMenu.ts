@@ -16,7 +16,7 @@ export default class FileMenu {
 			if (activeFile && file !== activeFile) {
 				const cache = this.ntb.app.metadataCache.getFileCache(file);
 				if (cache) {
-					const toolbar = this.ntb.settingsManager.getMappedToolbar(cache.frontmatter, file);
+					const toolbar = this.ntb.rules.getMappedToolbar(cache.frontmatter, file);
 					if (toolbar) {
 						// the submenu UI doesn't appear to work on mobile, render items in menu
 						if (Platform.isMobile) {

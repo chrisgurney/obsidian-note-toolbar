@@ -1,7 +1,7 @@
-import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, DEFAULT_ITEM_SETTINGS, DEFAULT_SETTINGS, FolderMapping, ItemType, NoteToolbarSettings, Position, PositionType, SETTINGS_VERSION, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, DEFAULT_ITEM_SETTINGS, DEFAULT_SETTINGS, ItemType, NoteToolbarSettings, Position, PositionType, SETTINGS_VERSION, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { getUUID } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
-import { FrontMatterCache, ItemView, Platform, TFile } from "obsidian";
+import { Platform } from "obsidian";
 import { PLUGIN_VERSION } from "version";
 import SettingsMigrator from "./SettingsMigrator";
 import ToolbarSettingsModal from "./UI/Modals/ToolbarSettingsModal";
@@ -148,88 +148,6 @@ export default class SettingsManager {
 	}
 
 	/**
-	 * Gets the toolbar configured for the empty view, assuming we're actively in an empty view.
-	 * @returns ToolbarSettings or undefined, if we're not in the empty view or there is no toolbar set
-	 */
-	public getEmptyViewToolbar(): ToolbarSettings | undefined {
-		const itemView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
-		if (itemView) {
-			const renderToolbar = this.ntb.utils.hasToolbarForItemView(itemView);
-			if (!renderToolbar) return;
-			switch (itemView.getViewType()) {
-				case 'webviewer':
-					if (this.ntb.settings.webviewerToolbar) {
-						return this.getToolbarById(this.ntb.settings.webviewerToolbar);
-					}
-					break;
-				default:
-					if (this.ntb.settings.emptyViewToolbar) {
-						return this.getToolbarById(this.ntb.settings.emptyViewToolbar);
-					}
-					break;
-			}
-		}
-		return undefined;
-	}
-
-	/**
-	 * Get toolbar for the given frontmatter (based on a toolbar prop), and failing that the file (based on folder mappings).
-	 * @param frontmatter FrontMatterCache to check if there's a prop for the toolbar.
-	 * @param file The note to check if we have a toolbar for.
-	 * @returns ToolbarSettings or undefined, if there is no matching toolbar.
-	 */
-	public getMappedToolbar(frontmatter: FrontMatterCache | undefined, file: TFile): ToolbarSettings | undefined {
-
-		// this.debug('getMappedToolbar');
-
-		let matchingToolbar: ToolbarSettings | undefined = undefined;
-
-		// this.debug('- frontmatter: ', frontmatter);
-		// const propName = this.ntb.settings.toolbarProp;
-		let ignoreToolbar = false;
-
-		const notetoolbarProp = this.getToolbarNameFromProps(frontmatter);
-		if (notetoolbarProp) {
-			// if any prop = 'none' then don't return a toolbar
-			ignoreToolbar = notetoolbarProp.includes('none') ? true : false;
-			// is it valid? (i.e., is there a matching toolbar?)
-			if (!ignoreToolbar) matchingToolbar = this.getToolbarByName(notetoolbarProp);
-		}
-
-		// we still don't have a matching toolbar
-		if (!matchingToolbar && !ignoreToolbar) {
-
-			// check if the note is in a folder that's mapped, and if the mapping is valid
-			let mapping: FolderMapping;
-			let filePath: string;
-			for (let index = 0; index < this.ntb.settings.folderMappings.length; index++) {
-				mapping = this.ntb.settings.folderMappings[index];
-				filePath = file.parent?.path === '/' ? '/' : file.path.toLowerCase();
-				// this.debug('getMatchingToolbar: checking folder mappings: ', filePath, ' startsWith? ', mapping.folder.toLowerCase());
-				if (['*'].includes(mapping.folder) || filePath.toLowerCase().startsWith(mapping.folder.toLowerCase())) {
-					// continue until we get a matching toolbar
-					matchingToolbar = this.getToolbarById(mapping.toolbar);
-					if (matchingToolbar) {
-						// this.debug('  - matched toolbar:', matchingToolbar);
-						break;
-					}
-				}
-			}
-
-		}
-
-		// use the configured default
-		if (!matchingToolbar && !ignoreToolbar) {
-			if (this.ntb.settings.defaultToolbar) {
-				matchingToolbar = this.getToolbarById(this.ntb.settings.defaultToolbar);
-			}
-		}
-
-		return matchingToolbar;
-
-	}
-
-	/**
 	 * Gets the toolbar from settings, using the provided value, checking both names and UUIDs.
 	 */
 	public getToolbar(nameOrUuid: string | null): ToolbarSettings | undefined {
@@ -238,26 +156,6 @@ export default class SettingsManager {
 		return this.ntb.settings.toolbars.find(tbar => 
 			isUuid ? tbar.uuid === nameOrUuid : tbar.name.toLowerCase() === nameOrUuid.toLowerCase()
 		);
-	}
-	
-	/**
-	 * Gets the name of the toolbar from the props, if it exists.
-	 * @param frontmatter props to check.
-	 * @returns property value (the first value if it's a list type) or undefined.
-	 */
-	public getToolbarNameFromProps(frontmatter: FrontMatterCache | undefined): string | undefined {
-		const propValue = frontmatter?.[this.ntb.settings.toolbarProp] as string | string[];
-		if (Array.isArray(propValue)) {
-			// if we're checking tags, make sure what's returned is a toolbar
-			if (this.ntb.settings.toolbarProp === 'tags') {
-				return propValue.find(tag =>
-					this.ntb.settings.toolbars.some(tbar => tbar.name === tag)
-				);
-			}
-			// otherwise, return the first value
-			return propValue[0];
-		}
-		return typeof propValue === 'string' ? propValue : undefined;
 	}
 
 	private isUuid(value: string): boolean {

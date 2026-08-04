@@ -46,7 +46,7 @@ export default class WorkspaceListeners {
 		await this.ntb.render.checkAndRender(file, cachedFrontmatter, toolbarView);
 
 		// prompt to create a toolbar if it doesn't exist in the Note Toolbar property
-		const ntbPropValue = this.ntb.settingsManager.getToolbarNameFromProps(cachedFrontmatter);
+		const ntbPropValue = this.ntb.rules.getToolbarNameFromProps(cachedFrontmatter);
 		if (ntbPropValue && this.ntb.settings.toolbarProp !== 'tags') {
 			// make sure just the relevant property changed in the open file
 			if (this.lastFileOpenedOnCacheChange !== file) this.lastNtbPropValue = undefined;
