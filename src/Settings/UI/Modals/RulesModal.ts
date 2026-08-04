@@ -129,6 +129,8 @@ export default class RulesModal extends Modal {
                     .onClick(async () => {
                         const rowId = cb.buttonEl.getAttribute('data-row-id');
                         if (rowId) await this.listMoveHandlerById(null, rowId, 'delete');
+                        const ruleEl = this.contentEl.querySelector(`.note-toolbar-setting-rules-list-item-container[data-row-id="${rowId}"]`);
+                        if (ruleEl) ruleEl.remove();
                     });
                 cb.buttonEl.setAttribute('data-row-id', rule.id);
             });
@@ -246,6 +248,7 @@ export default class RulesModal extends Modal {
         
         const conditionEl = createDiv();
         conditionEl.className = "note-toolbar-setting-condition";
+        conditionEl.setAttribute('data-row-id', condition.id);
 
         // operands
 
@@ -385,7 +388,8 @@ export default class RulesModal extends Modal {
                         if (rowId) {
                             this.removeConditionById(rowId);
                             await this.ntb.settingsManager.save();
-                            this.display();
+                            const conditionEl = this.contentEl.querySelector(`.note-toolbar-setting-condition[data-row-id="${rowId}"]`);
+                            if (conditionEl) conditionEl.remove();
                         }
                     });
                 cb.buttonEl.setAttribute('data-row-id', condition.id);
@@ -463,7 +467,6 @@ export default class RulesModal extends Modal {
                 break;
         }
         await this.ntb.settingsManager.save();
-        this.display();
     }
 
 	async listMoveHandlerById(
