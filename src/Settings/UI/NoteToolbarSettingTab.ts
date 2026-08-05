@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from 'main';
 import { ButtonComponent, debounce, Menu, MenuItem, normalizePath, Platform, PluginSettingTab, setIcon, Setting, SettingGroup, ToggleComponent } from 'obsidian';
-import { FolderMapping, OBSIDIAN_UI_ELEMENTS, OBSIDIAN_UI_MOBILE_NAVBAR_OPTIONS, SETTINGS_VERSION, SettingType, t, VIEW_TYPE_GALLERY } from 'Settings/NoteToolbarSettings';
+import { FILE_TYPE_OPTIONS, FolderMapping, OBSIDIAN_UI_ELEMENTS, OBSIDIAN_UI_MOBILE_NAVBAR_OPTIONS, SETTINGS_VERSION, SettingType, t, VIEW_TYPE_GALLERY } from 'Settings/NoteToolbarSettings';
 import IconSuggestModal from 'Settings/UI/Modals/IconSuggestModal';
 import FolderSuggester from 'Settings/UI/Suggesters/FolderSuggester';
 import ToolbarSuggester from 'Settings/UI/Suggesters/ToolbarSuggester';
@@ -1208,104 +1208,24 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 
 		const fileTypeGroup = new SettingGroup(collapsibleContainerEl);
 
-		fileTypeGroup.addSetting((audioSetting) => {
-			audioSetting
-				.setName(t('setting.display-contexts.option-audio'))
-				.addToggle((toggle: ToggleComponent) => {
-					toggle
-						.setValue(this.ntb.settings.showToolbarIn.audio)
-						.onChange(async (value: boolean) => {
-							this.ntb.settings.showToolbarIn.audio = value;
-							await this.ntb.settingsManager.save();
-						});
-					fixToggleTab(toggle);
-				});
-		});
+		for (const fileType of FILE_TYPE_OPTIONS) {
+			fileTypeGroup.addSetting((setting) => {
+				setting
+					.setName(fileType.label)
+					.addToggle((toggle: ToggleComponent) => {
+						toggle
+							.setValue(this.ntb.settings.showToolbarIn[fileType.type])
+							.onChange(async (value: boolean) => {
+								this.ntb.settings.showToolbarIn[fileType.type] = value;
+								await this.ntb.settingsManager.save();
+							});
 
-		fileTypeGroup.addSetting((basesSetting) => {
-			basesSetting
-				.setName(t('setting.display-contexts.option-bases'))
-				.addToggle((toggle: ToggleComponent) => {
-					toggle
-						.setValue(this.ntb.settings.showToolbarIn.bases)
-						.onChange(async (value: boolean) => {
-							this.ntb.settings.showToolbarIn.bases = value;
-							await this.ntb.settingsManager.save();
-						});
-					fixToggleTab(toggle);
-				});
-		});
+						fixToggleTab(toggle);
+					});
+			});
+		}
 
-		fileTypeGroup.addSetting((canvasSetting) => {
-			canvasSetting
-				.setName(t('setting.display-contexts.option-canvas'))
-				.addToggle((toggle: ToggleComponent) => {
-					toggle
-						.setValue(this.ntb.settings.showToolbarIn.canvas)
-						.onChange(async (value: boolean) => {
-							this.ntb.settings.showToolbarIn.canvas = value;
-							await this.ntb.settingsManager.save();
-						});
-					fixToggleTab(toggle);
-				});
-		});
-
-		fileTypeGroup.addSetting((imageSetting) => {
-			imageSetting
-				.setName(t('setting.display-contexts.option-image'))
-				.addToggle((toggle: ToggleComponent) => {
-					toggle
-						.setValue(this.ntb.settings.showToolbarIn.image)
-						.onChange(async (value: boolean) => {
-							this.ntb.settings.showToolbarIn.image = value;
-							await this.ntb.settingsManager.save();
-						});
-					fixToggleTab(toggle);
-				});
-		});
-
-		fileTypeGroup.addSetting((kanbanSetting) => {
-			kanbanSetting
-				.setName(t('setting.display-contexts.option-kanban'))
-				.addToggle((toggle: ToggleComponent) => {
-					toggle
-						.setValue(this.ntb.settings.showToolbarIn.kanban)
-						.onChange(async (value: boolean) => {
-							this.ntb.settings.showToolbarIn.kanban = value;
-							await this.ntb.settingsManager.save();
-						});
-					fixToggleTab(toggle);
-				});
-		});
-
-		fileTypeGroup.addSetting((pdfSetting) => {
-			pdfSetting
-				.setName(t('setting.display-contexts.option-pdf'))
-				.addToggle((toggle: ToggleComponent) => {
-					toggle
-						.setValue(this.ntb.settings.showToolbarIn.pdf)
-						.onChange(async (value: boolean) => {
-							this.ntb.settings.showToolbarIn.pdf = value;
-							await this.ntb.settingsManager.save();
-						});
-					fixToggleTab(toggle);
-				});
-		});
-
-		fileTypeGroup.addSetting((videoSetting) => {
-			videoSetting
-				.setName(t('setting.display-contexts.option-video'))
-				.addToggle((toggle: ToggleComponent) => {
-					toggle
-						.setValue(this.ntb.settings.showToolbarIn.video)
-						.onChange(async (value: boolean) => {
-							this.ntb.settings.showToolbarIn.video = value;
-							await this.ntb.settingsManager.save();
-						});
-					fixToggleTab(toggle);
-				});
-		});
-
+		// other file types
 		fileTypeGroup.addSetting((showToolbarInOtherSetting) => {
 			showToolbarInOtherSetting
 				.setName(t('setting.display-contexts.option-other'))

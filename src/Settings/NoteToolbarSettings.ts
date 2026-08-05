@@ -703,6 +703,21 @@ export const SCRIPT_ATTRIBUTE_MAP: Record<string, string> = {
     'outputFile': 'data-dest'
 };
 
+export interface FileTypeDefinition {
+    type: FileType;
+    label: string;
+}
+
+export const FILE_TYPE_OPTIONS: FileTypeDefinition[] = [
+    { type: FileType.Audio, label: t('setting.display-contexts.option-audio') },
+    { type: FileType.Bases, label: t('setting.display-contexts.option-bases') },
+    { type: FileType.Canvas, label: t('setting.display-contexts.option-canvas') },
+    { type: FileType.Image, label: t('setting.display-contexts.option-image') },
+    { type: FileType.Kanban, label: t('setting.display-contexts.option-kanban') },
+    { type: FileType.Pdf, label: t('setting.display-contexts.option-pdf') },
+    { type: FileType.Video, label: t('setting.display-contexts.option-video') }
+];
+
 export const LINK_OPTIONS = {
 	[ItemType.Command]: t('setting.item.option-command'),
 	[ItemType.Dataview]: "Dataview",
