@@ -278,12 +278,13 @@ export default class RulesModal extends Modal {
         conditionEl.setAttribute('data-row-id', condition.id);
 
         // operands
-
         const ruleOperandOptions = Object.fromEntries(
-            RULE_OPERANDS.map((operand) => [
-                operand.id,
-                operand.label
-            ])
+            [...RULE_OPERANDS]
+                .sort((a, b) => a.label.localeCompare(b.label))
+                .map((operand) => [
+                    operand.id,
+                    operand.label
+                ])
         );
 
         new Setting(conditionEl)
@@ -326,12 +327,13 @@ export default class RulesModal extends Modal {
         );
 
         if (operand) {
-            const operatorOptions = operand.operators.reduce<Record<string, string>>(
-                (acc, definition) => {
-                    acc[definition.op] = definition.label;
-                    return acc;
-                },
-                {}
+            const operatorOptions = Object.fromEntries(
+                [...operand.operators]
+                    .sort((a, b) => a.label.localeCompare(b.label))
+                    .map((definition) => [
+                        definition.op,
+                        definition.label
+                    ])
             );
 
             new Setting(operatorValueContainerEl)
