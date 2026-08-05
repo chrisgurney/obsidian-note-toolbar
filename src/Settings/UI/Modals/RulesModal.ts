@@ -375,6 +375,10 @@ export default class RulesModal extends Modal {
                     // TODO: Editor mode dropdown
                     break;
 
+                case 'filetype':
+                    // TODO: file type dropdown
+                    break;
+
                 case 'folder':
                     new Setting(operatorValueContainerEl)
                         .setClass('note-toolbar-setting-mapping-value')
@@ -390,6 +394,14 @@ export default class RulesModal extends Modal {
                         });
                     break;
 
+                case 'none':
+                    // do nothing: no value needed for this operator
+                    break;
+
+                case 'platform':
+                    // TODO: Platform dropdown
+                    break;
+
                 case 'tags':
                     new Setting(operatorValueContainerEl)
                         .setClass('note-toolbar-setting-mapping-value')
@@ -403,10 +415,6 @@ export default class RulesModal extends Modal {
                                     await this.ntb.settingsManager.save();
                                 }, 250));
                         });
-                    break;
-
-                case 'platform':
-                    // TODO: Platform dropdown
                     break;
 
                 case 'string':

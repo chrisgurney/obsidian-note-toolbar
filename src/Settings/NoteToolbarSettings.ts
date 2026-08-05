@@ -498,8 +498,10 @@ export type RuleValue = string | string[] | number | boolean;
 export type RuleValueEditor =
 	| 'boolean'
 	| 'editormode'
+	| 'filetype'
 	| 'folder'
     | 'number'
+	| 'none'
     | 'platform'
     | 'string'
 	| 'tags';
@@ -580,8 +582,8 @@ export const RULE_OPERANDS: RuleOperand[] = [
         field: RuleField.FileType,
         label: t('setting.rules.option-field-filetype'),
         operators: [
-            { op: RuleOperator.Is, label: t('setting.rules.operator-is'), editor: 'string' },
-            { op: RuleOperator.IsNot, label: t('setting.rules.operator-isNot'), editor: 'string' },
+            { op: RuleOperator.Is, label: t('setting.rules.operator-is'), editor: 'filetype' },
+            { op: RuleOperator.IsNot, label: t('setting.rules.operator-isNot'), editor: 'filetype' },
         ]
     },
     {
@@ -600,6 +602,8 @@ export const RULE_OPERANDS: RuleOperand[] = [
         operators: [
             { op: RuleOperator.Contains, label: t('setting.rules.operator-contains'), editor: 'tags' },
             { op: RuleOperator.DoesNotContain, label: t('setting.rules.operator-doesNotContain'), editor: 'tags' },
+            { op: RuleOperator.IsEmpty, label: t('setting.rules.operator-isEmpty'), editor: 'none' },
+            { op: RuleOperator.IsNotEmpty, label: t('setting.rules.operator-isNotEmpty'), editor: 'none' },
         ]
     }
 ];
