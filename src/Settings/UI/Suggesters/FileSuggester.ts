@@ -8,8 +8,9 @@ export default class FileSuggester extends AbstractInputSuggest<TAbstractFile> {
         private ntb: NoteToolbarPlugin,
         private inputEl: HTMLInputElement, 
         private showFilesOnly: boolean = false, 
+        private showFileNamesOnly: boolean = false,
         private fileExtension?: string, 
-        private folderPath?: string
+        private inFolderPath?: string,
     ) {
         super(ntb.app, inputEl);
     }
@@ -28,7 +29,7 @@ export default class FileSuggester extends AbstractInputSuggest<TAbstractFile> {
             if (!matchesInput) return false;
             if (this.showFilesOnly && !isFile) return false;
             if (this.fileExtension && isFile && !lowerCaseFilePath.endsWith(this.fileExtension.toLowerCase())) return false;
-            const lowerCaseFolder = this.folderPath?.toLowerCase();
+            const lowerCaseFolder = this.inFolderPath?.toLowerCase();
             if (lowerCaseFolder && !lowerCaseFilePath.startsWith(lowerCaseFolder + '/')) return false;
             return true;
         })
@@ -46,13 +47,17 @@ export default class FileSuggester extends AbstractInputSuggest<TAbstractFile> {
     }
 
     renderSuggestion(file: TAbstractFile, el: HTMLElement): void {
-        el.setText(file.path);
+        el.setText(this.getDisplayName(file));
     }
 
     selectSuggestion(file: TAbstractFile): void {
-        this.inputEl.value = file.path;
+        this.inputEl.value = this.getDisplayName(file);
         this.inputEl.trigger("input");
         this.inputEl.blur();
         this.close();
+    }
+
+    private getDisplayName(file: TAbstractFile): string {
+        return this.showFileNamesOnly ? file.name : file.path;
     }
 }

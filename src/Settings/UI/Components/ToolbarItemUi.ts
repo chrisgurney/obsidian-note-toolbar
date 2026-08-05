@@ -1183,7 +1183,7 @@ export default class ToolbarItemUi {
                                     fileSuggesterFolder = this.ntb.adapters.tp?.getSetting('templates_folder');
                                     fileSuggesterExt = undefined;
                                 }
-                                new FileSuggester(this.ntb, cb.inputEl, true, fileSuggesterExt, fileSuggesterFolder);
+                                new FileSuggester(this.ntb, cb.inputEl, true, false, fileSuggesterExt, fileSuggesterFolder);
                                 cb.setPlaceholder(param.label)
                                     .setValue(initialValue ? initialValue : '')
                                     .onChange(debounce(async (value) => {

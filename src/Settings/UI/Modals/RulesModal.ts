@@ -390,7 +390,7 @@ export default class RulesModal extends Modal {
                     new Setting(operatorValueContainerEl)
                         .setClass('note-toolbar-setting-mapping-value')
                         .addSearch((cb) => {
-                            new FileSuggester(this.ntb, cb.inputEl, true);
+                            new FileSuggester(this.ntb, cb.inputEl, true, true);
                             cb
                                 .setPlaceholder(t('setting.rules.condition-value-file-placeholder'))
                                 .setValue((condition.value as string) ?? '')
