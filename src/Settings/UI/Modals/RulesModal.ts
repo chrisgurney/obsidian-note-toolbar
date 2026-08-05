@@ -3,6 +3,8 @@ import { arraymove, getElementPosition, getUUID, moveElement } from "Utils/Utils
 import NoteToolbarPlugin from "main";
 import { ButtonComponent, debounce, Menu, MenuItem, Modal, Notice, Setting } from "obsidian";
 import Sortable from "sortablejs";
+import FolderSuggester from "../Suggesters/FolderSuggester";
+import TagSuggester from "../Suggesters/TagSuggester";
 import ToolbarSuggester from "../Suggesters/ToolbarSuggester";
 import { iconTextFr, learnMoreFr } from "../Utils/SettingsUIUtils";
 
@@ -390,11 +392,33 @@ export default class RulesModal extends Modal {
                     break;
 
                 case 'folder':
-                    // TODO: FolderSuggest
+                    new Setting(operatorValueContainerEl)
+                        .setClass('note-toolbar-setting-mapping-value')
+                        .addSearch((cb) => {
+                            new FolderSuggester(this.ntb.app, cb.inputEl);
+                            cb
+                                .setPlaceholder(t('setting.rules.condition-value-folder-placeholder'))
+                                .setValue((condition.value as string) ?? '')
+                                .onChange(debounce(async (value) => {
+                                    condition.value = value;
+                                    await this.ntb.settingsManager.save();
+                                }, 250));
+                        });
                     break;
 
                 case 'tags':
-                    // TODO: TagSuggest
+                    new Setting(operatorValueContainerEl)
+                        .setClass('note-toolbar-setting-mapping-value')
+                        .addSearch((cb) => {
+                            new TagSuggester(this.ntb.app, cb.inputEl);
+                            cb
+                                .setPlaceholder(t('setting.rules.condition-value-tags-placeholder'))
+                                .setValue((condition.value as string) ?? '')
+                                .onChange(debounce(async (value) => {
+                                    condition.value = value;
+                                    await this.ntb.settingsManager.save();
+                                }, 250));
+                        });
                     break;
 
                 case 'platform':

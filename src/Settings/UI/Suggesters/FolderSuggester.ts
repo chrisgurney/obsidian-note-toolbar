@@ -11,7 +11,7 @@ export default class FolderSuggester extends AbstractInputSuggest<string> {
 
     private inputEl: HTMLInputElement;
 
-    private PATTERN_ALL_FILES: FolderSuggesterPattern = { pattern: '*', label: '*', desc: t('setting.mappings.option-folder-all') };
+    // private PATTERN_ALL_FILES: FolderSuggesterPattern = { pattern: '*', label: '*', desc: t('setting.mappings.option-folder-all') };
     private PATTERN_ROOT_ONLY: FolderSuggesterPattern = { pattern: '/', label: '/', desc: t('setting.mappings.option-folder-root') };
 
     constructor(app: App, inputEl: HTMLInputElement) {
@@ -24,7 +24,7 @@ export default class FolderSuggester extends AbstractInputSuggest<string> {
         const folders: string[] = [];
         const lowerCaseInputStr = inputStr.toLowerCase();
 
-        folders.push(this.PATTERN_ALL_FILES.pattern);
+        // folders.push(this.PATTERN_ALL_FILES.pattern);
         // no need to add PATTERN_ROOT as it's included below
 
         abstractFiles.forEach((folder: TAbstractFile) => {
@@ -37,10 +37,10 @@ export default class FolderSuggester extends AbstractInputSuggest<string> {
     }
 
     renderSuggestion(folder: string, el: HTMLElement): void {
-        if (folder === this.PATTERN_ALL_FILES.pattern) {
-            this.renderPattern(el, this.PATTERN_ALL_FILES);
-        } 
-        else if (folder === this.PATTERN_ROOT_ONLY.pattern) {
+        // if (folder === this.PATTERN_ALL_FILES.pattern) {
+        //     this.renderPattern(el, this.PATTERN_ALL_FILES);
+        // } 
+        if (folder === this.PATTERN_ROOT_ONLY.pattern) {
             this.renderPattern(el, this.PATTERN_ROOT_ONLY);
         }
         else {

@@ -84,6 +84,10 @@ declare module "obsidian" {
         }
     }
 
+    interface MetadataCache {
+        getTags(): Record<string, string[]>;
+    }
+
 	interface Menu {
         // allows access to Menu DOM, to add a class for styling
 		dom: HTMLDivElement
