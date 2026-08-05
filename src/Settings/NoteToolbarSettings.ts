@@ -461,7 +461,6 @@ export enum RuleField {
     FileType = 'filetype',
     Folder = 'folder',
     Platform = 'platform',
-    Property = 'property',
     Tag = 'tag',
 }
 
@@ -556,18 +555,6 @@ export const RULE_OPERANDS: RuleOperand[] = [
         ]
     },
     {
-        id: 'folder',
-        field: RuleField.Folder,
-        label: t('setting.rules.option-field-folder'),
-        operators: [
-            { op: RuleOperator.Is, label: t('setting.rules.operator-is'), editor: 'folder' },
-            { op: RuleOperator.IsNot, label: t('setting.rules.operator-isNot'), editor: 'folder' },
-            { op: RuleOperator.Contains, label: t('setting.rules.operator-contains'), editor: 'string' },
-            { op: RuleOperator.StartsWith, label: t('setting.rules.operator-startsWith'), editor: 'string' },
-            { op: RuleOperator.EndsWith, label: t('setting.rules.operator-endsWith'), editor: 'string' },
-        ]
-    },
-    {
         id: 'filename',
         field: RuleField.FileName,
         label: t('setting.rules.option-field-filename'),
@@ -575,6 +562,20 @@ export const RULE_OPERANDS: RuleOperand[] = [
             { op: RuleOperator.Is, label: t('setting.rules.operator-is'), editor: 'file' },
             { op: RuleOperator.IsNot, label: t('setting.rules.operator-isNot'), editor: 'file' },
             { op: RuleOperator.Contains, label: t('setting.rules.operator-contains'), editor: 'string' },
+            { op: RuleOperator.DoesNotContain, label: t('setting.rules.operator-doesNotContain'), editor: 'string' },
+            { op: RuleOperator.StartsWith, label: t('setting.rules.operator-startsWith'), editor: 'string' },
+            { op: RuleOperator.EndsWith, label: t('setting.rules.operator-endsWith'), editor: 'string' },
+        ]
+    },
+    {
+        id: 'folder',
+        field: RuleField.Folder,
+        label: t('setting.rules.option-field-folder'),
+        operators: [
+            { op: RuleOperator.Is, label: t('setting.rules.operator-is'), editor: 'folder' },
+            { op: RuleOperator.IsNot, label: t('setting.rules.operator-isNot'), editor: 'folder' },
+            { op: RuleOperator.Contains, label: t('setting.rules.operator-contains'), editor: 'string' },
+            { op: RuleOperator.DoesNotContain, label: t('setting.rules.operator-doesNotContain'), editor: 'string' },
             { op: RuleOperator.StartsWith, label: t('setting.rules.operator-startsWith'), editor: 'string' },
             { op: RuleOperator.EndsWith, label: t('setting.rules.operator-endsWith'), editor: 'string' },
         ]

@@ -257,12 +257,6 @@ export default class RulesManager {
             case RuleOperator.EndsWith:
                 return path.endsWith(value);
 
-            case RuleOperator.IsEmpty:
-                return path.length === 0;
-
-            case RuleOperator.IsNotEmpty:
-                return path.length > 0;
-
             default:
                 return false;
         }
