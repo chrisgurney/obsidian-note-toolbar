@@ -499,6 +499,7 @@ export type RuleValue = string | string[] | number | boolean;
 export type RuleValueEditor =
 	| 'boolean'
 	| 'editormode'
+	| 'file'
 	| 'filetype'
 	| 'folder'
     | 'number'
@@ -571,8 +572,8 @@ export const RULE_OPERANDS: RuleOperand[] = [
         field: RuleField.FileName,
         label: t('setting.rules.option-field-filename'),
         operators: [
-            { op: RuleOperator.Is, label: t('setting.rules.operator-is'), editor: 'string' },
-            { op: RuleOperator.IsNot, label: t('setting.rules.operator-isNot'),editor: 'string' },
+            { op: RuleOperator.Is, label: t('setting.rules.operator-is'), editor: 'file' },
+            { op: RuleOperator.IsNot, label: t('setting.rules.operator-isNot'), editor: 'file' },
             { op: RuleOperator.Contains, label: t('setting.rules.operator-contains'), editor: 'string' },
             { op: RuleOperator.StartsWith, label: t('setting.rules.operator-startsWith'), editor: 'string' },
             { op: RuleOperator.EndsWith, label: t('setting.rules.operator-endsWith'), editor: 'string' },

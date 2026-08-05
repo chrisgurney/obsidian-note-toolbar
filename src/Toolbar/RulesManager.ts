@@ -130,6 +130,9 @@ export default class RulesManager {
     }
 
     private matchesRule(rule: Rule, file: TFile): boolean {
+        // there has to be conditions defined in order to match
+        if (rule.conditions.length === 0) return false;
+
         const results = rule.conditions.map((condition) =>
             this.matchesCondition(condition, file)
         );

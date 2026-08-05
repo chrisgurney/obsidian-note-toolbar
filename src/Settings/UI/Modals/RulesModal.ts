@@ -3,6 +3,7 @@ import { arraymove, getElementPosition, getUUID, moveElement } from "Utils/Utils
 import NoteToolbarPlugin from "main";
 import { ButtonComponent, debounce, Menu, MenuItem, Modal, Notice, Setting } from "obsidian";
 import Sortable from "sortablejs";
+import FileSuggester from "../Suggesters/FileSuggester";
 import FolderSuggester from "../Suggesters/FolderSuggester";
 import TagSuggester from "../Suggesters/TagSuggester";
 import ToolbarSuggester from "../Suggesters/ToolbarSuggester";
@@ -381,6 +382,21 @@ export default class RulesModal extends Modal {
                                 .onChange((value) => {
                                     condition.value = value;
                                 });
+                        });
+                    break;
+
+                case 'file':
+                    new Setting(operatorValueContainerEl)
+                        .setClass('note-toolbar-setting-mapping-value')
+                        .addSearch((cb) => {
+                            new FileSuggester(this.ntb, cb.inputEl, true);
+                            cb
+                                .setPlaceholder(t('setting.rules.condition-value-file-placeholder'))
+                                .setValue((condition.value as string) ?? '')
+                                .onChange(debounce(async (value) => {
+                                    condition.value = value;
+                                    await this.ntb.settingsManager.save();
+                                }, 250));
                         });
                     break;
 
