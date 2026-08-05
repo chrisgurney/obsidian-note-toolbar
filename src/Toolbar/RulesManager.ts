@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { FrontMatterCache, ItemView, TFile } from "obsidian";
-import { FolderMapping, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { Rule, RuleCondition, RuleConjunction, RuleField, RuleOperator, ToolbarSettings } from "Settings/NoteToolbarSettings";
 
 export default class RulesManager {
     
@@ -60,22 +60,24 @@ export default class RulesManager {
         // we still don't have a matching toolbar
         if (!matchingToolbar && !ignoreToolbar) {
 
+            matchingToolbar = this.getRuleToolbar(file);
+
             // check if the note is in a folder that's mapped, and if the mapping is valid
-            let mapping: FolderMapping;
-            let filePath: string;
-            for (let index = 0; index < this.ntb.settings.folderMappings.length; index++) {
-                mapping = this.ntb.settings.folderMappings[index];
-                filePath = file.parent?.path === '/' ? '/' : file.path.toLowerCase();
-                // this.debug('getMatchingToolbar: checking folder mappings: ', filePath, ' startsWith? ', mapping.folder.toLowerCase());
-                if (['*'].includes(mapping.folder) || filePath.toLowerCase().startsWith(mapping.folder.toLowerCase())) {
-                    // continue until we get a matching toolbar
-                    matchingToolbar = this.ntb.settingsManager.getToolbarById(mapping.toolbar);
-                    if (matchingToolbar) {
-                        // this.debug('  - matched toolbar:', matchingToolbar);
-                        break;
-                    }
-                }
-            }
+            // let mapping: FolderMapping;
+            // let filePath: string;
+            // for (let index = 0; index < this.ntb.settings.folderMappings.length; index++) {
+            //     mapping = this.ntb.settings.folderMappings[index];
+            //     filePath = file.parent?.path === '/' ? '/' : file.path.toLowerCase();
+            //     // this.debug('getMatchingToolbar: checking folder mappings: ', filePath, ' startsWith? ', mapping.folder.toLowerCase());
+            //     if (['*'].includes(mapping.folder) || filePath.toLowerCase().startsWith(mapping.folder.toLowerCase())) {
+            //         // continue until we get a matching toolbar
+            //         matchingToolbar = this.ntb.settingsManager.getToolbarById(mapping.toolbar);
+            //         if (matchingToolbar) {
+            //             // this.debug('  - matched toolbar:', matchingToolbar);
+            //             break;
+            //         }
+            //     }
+            // }
 
         }
 
@@ -109,5 +111,89 @@ export default class RulesManager {
 		}
 		return typeof propValue === 'string' ? propValue : undefined;
 	}
+
+
+    // *****************************************************************************
+    // RULES
+    //******************************************************************************
+
+    private getRuleToolbar(file: TFile): ToolbarSettings | undefined {
+        // iterate rules in order, returning the first toolbar that matches
+        for (const rule of this.ntb.settings.rules) {
+            if (this.matchesRule(rule, file)) {
+                const toolbar = this.ntb.settingsManager.getToolbarById(rule.toolbar);
+                if (toolbar) return toolbar;
+            }
+        }
+
+        return undefined;
+    }
+
+    private matchesRule(rule: Rule, file: TFile): boolean {
+        const results = rule.conditions.map((condition) =>
+            this.matchesCondition(condition, file)
+        );
+
+        return rule.conjunction === RuleConjunction.And
+            ? results.every(Boolean)
+            : results.some(Boolean);
+    }
+
+    private matchesCondition(condition: RuleCondition, file: TFile): boolean {
+        if (!condition.field) return false;
+
+        // check condition based on type
+        switch (condition.field) {
+            case RuleField.Folder:
+                return this.matchesFolderCondition(condition, file);
+
+            default:
+                return false;
+        }
+    }
+
+    // *****************************************************************************
+    // CONDITION TYPES
+    //******************************************************************************
+
+    private matchesFolderCondition(condition: RuleCondition, file: TFile): boolean {
+        if (typeof condition.value !== 'string') {
+            return false;
+        }
+
+        const folder = file.parent?.path ?? '/';
+        const path = folder.toLowerCase();
+        const value = condition.value.toLowerCase();
+
+        switch (condition.operator) {
+            case RuleOperator.Is:
+                return path === value;
+
+            case RuleOperator.IsNot:
+                return path !== value;
+
+            case RuleOperator.Contains:
+                return path.includes(value);
+
+            case RuleOperator.DoesNotContain:
+                return !path.includes(value);
+
+            case RuleOperator.StartsWith:
+                return path === value || path.startsWith(`${value}/`);
+
+            case RuleOperator.EndsWith:
+                return path.endsWith(value);
+
+            case RuleOperator.IsEmpty:
+                return path.length === 0;
+
+            case RuleOperator.IsNotEmpty:
+                return path.length > 0;
+
+            default:
+                return false;
+        }
+    }
+
 
 }

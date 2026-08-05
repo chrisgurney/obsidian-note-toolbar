@@ -404,7 +404,7 @@ export default class RulesModal extends Modal {
                             new FolderSuggester(this.ntb.app, cb.inputEl);
                             cb
                                 .setPlaceholder(t('setting.rules.condition-value-folder-placeholder'))
-                                .setValue((condition.value as string) ?? PlatformType.All)
+                                .setValue((condition.value as string) ?? '')
                                 .onChange(debounce(async (value) => {
                                     condition.value = value;
                                     await this.ntb.settingsManager.save();
