@@ -336,7 +336,7 @@ export default class RulesModal extends Modal {
         if (operand) {
             const operatorOptions = operand.operators.reduce<Record<string, string>>(
                 (acc, definition) => {
-                    acc[definition.op] = definition.op;
+                    acc[definition.op] = definition.label;
                     return acc;
                 },
                 {}

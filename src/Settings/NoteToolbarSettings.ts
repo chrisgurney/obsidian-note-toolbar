@@ -483,6 +483,7 @@ export const enum RuleOperator {
 
 export interface RuleOperatorDefinition {
     op: RuleOperator;
+	label: string;
     editor: RuleValueEditor;
 }
 
@@ -546,8 +547,8 @@ export const RULE_OPERANDS: RuleOperand[] = [
         field: RuleField.EditorMode,
         label: t('setting.rules.option-field-editormode'),
         operators: [
-            { op: RuleOperator.Is, editor: 'editormode' },
-            { op: RuleOperator.IsNot, editor: 'editormode' },
+            { op: RuleOperator.Is, label: t('setting.rules.operator-is'), editor: 'editormode' },
+            { op: RuleOperator.IsNot, label: t('setting.rules.operator-isNot'), editor: 'editormode' },
         ]
     },
     {
@@ -555,11 +556,11 @@ export const RULE_OPERANDS: RuleOperand[] = [
         field: RuleField.Folder,
         label: t('setting.rules.option-field-folder'),
         operators: [
-            { op: RuleOperator.Is, editor: 'folder' },
-            { op: RuleOperator.IsNot, editor: 'folder' },
-            { op: RuleOperator.Contains, editor: 'string' },
-            { op: RuleOperator.StartsWith, editor: 'string' },
-            { op: RuleOperator.EndsWith, editor: 'string' },
+            { op: RuleOperator.Is, label: t('setting.rules.operator-is'), editor: 'folder' },
+            { op: RuleOperator.IsNot, label: t('setting.rules.operator-isNot'), editor: 'folder' },
+            { op: RuleOperator.Contains, label: t('setting.rules.operator-contains'), editor: 'string' },
+            { op: RuleOperator.StartsWith, label: t('setting.rules.operator-startsWith'), editor: 'string' },
+            { op: RuleOperator.EndsWith, label: t('setting.rules.operator-endsWith'), editor: 'string' },
         ]
     },
     {
@@ -567,11 +568,11 @@ export const RULE_OPERANDS: RuleOperand[] = [
         field: RuleField.FileName,
         label: t('setting.rules.option-field-filename'),
         operators: [
-            { op: RuleOperator.Is, editor: 'string' },
-            { op: RuleOperator.IsNot, editor: 'string' },
-            { op: RuleOperator.Contains, editor: 'string' },
-            { op: RuleOperator.StartsWith, editor: 'string' },
-            { op: RuleOperator.EndsWith, editor: 'string' },
+            { op: RuleOperator.Is, label: t('setting.rules.operator-is'), editor: 'string' },
+            { op: RuleOperator.IsNot, label: t('setting.rules.operator-isNot'),editor: 'string' },
+            { op: RuleOperator.Contains, label: t('setting.rules.operator-contains'), editor: 'string' },
+            { op: RuleOperator.StartsWith, label: t('setting.rules.operator-startsWith'), editor: 'string' },
+            { op: RuleOperator.EndsWith, label: t('setting.rules.operator-endsWith'), editor: 'string' },
         ]
     },
     {
@@ -579,8 +580,8 @@ export const RULE_OPERANDS: RuleOperand[] = [
         field: RuleField.FileType,
         label: t('setting.rules.option-field-filetype'),
         operators: [
-            { op: RuleOperator.Is, editor: 'string' },
-            { op: RuleOperator.IsNot, editor: 'string' },
+            { op: RuleOperator.Is, label: t('setting.rules.operator-is'), editor: 'string' },
+            { op: RuleOperator.IsNot, label: t('setting.rules.operator-isNot'), editor: 'string' },
         ]
     },
     {
@@ -588,8 +589,8 @@ export const RULE_OPERANDS: RuleOperand[] = [
         field: RuleField.Platform,
         label: t('setting.rules.option-field-platform'),
         operators: [
-            { op: RuleOperator.Is, editor: 'platform' },
-            { op: RuleOperator.IsNot, editor: 'platform' },
+            { op: RuleOperator.Is, label: t('setting.rules.operator-is'), editor: 'platform' },
+            { op: RuleOperator.IsNot, label: t('setting.rules.operator-isNot'), editor: 'platform' },
         ]
     },
     {
@@ -597,8 +598,8 @@ export const RULE_OPERANDS: RuleOperand[] = [
         field: RuleField.Tag,
         label: t('setting.rules.option-field-tags'),
         operators: [
-            { op: RuleOperator.Contains, editor: 'tags' },
-            { op: RuleOperator.DoesNotContain, editor: 'tags' },
+            { op: RuleOperator.Contains, label: t('setting.rules.operator-contains'), editor: 'tags' },
+            { op: RuleOperator.DoesNotContain, label: t('setting.rules.operator-doesNotContain'), editor: 'tags' },
         ]
     }
 ];
