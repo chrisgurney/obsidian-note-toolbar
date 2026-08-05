@@ -737,7 +737,6 @@ export const LINK_OPTIONS = {
 }
 
 export const PLATFORM_OPTIONS: UiSelectOption<PlatformType>[] = [
-    { type: PlatformType.All, label: t('setting.rules.option-platform-all') },
     { type: PlatformType.Desktop, label: t('setting.rules.option-platform-desktop') },
     { type: PlatformType.Tablet, label: t('setting.rules.option-platform-tablet') },
     { type: PlatformType.Mobile, label: t('setting.rules.option-platform-mobile') },

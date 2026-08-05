@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { FrontMatterCache, ItemView, MarkdownView, TFile } from "obsidian";
+import { FrontMatterCache, ItemView, MarkdownView, Platform, TFile } from "obsidian";
 import { Rule, RuleCondition, RuleConjunction, RuleField, RuleOperator, ToolbarSettings } from "Settings/NoteToolbarSettings";
 
 export default class RulesManager {
@@ -158,6 +158,9 @@ export default class RulesManager {
             case RuleField.Folder:
                 return this.matchesFolderCondition(condition, file);
 
+            case RuleField.Platform:
+                return this.matchesPlatformCondition(condition);
+
             default:
                 return false;
         }
@@ -259,6 +262,29 @@ export default class RulesManager {
 
             case RuleOperator.IsNotEmpty:
                 return path.length > 0;
+
+            default:
+                return false;
+        }
+    }
+
+    private matchesPlatformCondition(condition: RuleCondition): boolean {
+        if (typeof condition.value !== 'string' || condition.value.length === 0) {
+            return false;
+        }
+
+        const platform = !Platform.isMobile ? 'desktop' : (Platform.isTablet ? 'tablet' : 'phone');
+
+        switch (condition.operator) {
+            case RuleOperator.Is:
+                return condition.value === 'mobile'
+                    ? Platform.isMobile
+                    : platform === condition.value;
+
+            case RuleOperator.IsNot:
+                return condition.value === 'mobile'
+                    ? !Platform.isMobile
+                    : platform !== condition.value;
 
             default:
                 return false;
