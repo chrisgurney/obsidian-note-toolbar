@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { FrontMatterCache, ItemView, TFile } from "obsidian";
+import { FrontMatterCache, ItemView, MarkdownView, TFile } from "obsidian";
 import { Rule, RuleCondition, RuleConjunction, RuleField, RuleOperator, ToolbarSettings } from "Settings/NoteToolbarSettings";
 
 export default class RulesManager {
@@ -144,9 +144,12 @@ export default class RulesManager {
 
     private matchesCondition(condition: RuleCondition, file: TFile): boolean {
         if (!condition.field) return false;
-
+        // this.ntb.debug('matchesCondition: ', condition, ' for file: ', file.path);
         // check condition based on type
         switch (condition.field) {
+            case RuleField.EditorMode:
+                return this.matchesEditorModeCondition(condition);
+
             case RuleField.Folder:
                 return this.matchesFolderCondition(condition, file);
 
@@ -158,6 +161,23 @@ export default class RulesManager {
     // *****************************************************************************
     // CONDITION TYPES
     //******************************************************************************
+
+    private matchesEditorModeCondition(condition: RuleCondition): boolean {
+        if (typeof condition.value !== 'string') return false;
+
+        const mode = this.getEditorMode();
+
+        switch (condition.operator) {
+            case RuleOperator.Is:
+                return mode === condition.value;
+
+            case RuleOperator.IsNot:
+                return mode !== condition.value;
+
+            default:
+                return false;
+        }
+    }
 
     private matchesFolderCondition(condition: RuleCondition, file: TFile): boolean {
         if (typeof condition.value !== 'string') {
@@ -198,5 +218,15 @@ export default class RulesManager {
         }
     }
 
+    // *****************************************************************************
+    // UTILITIES
+    //******************************************************************************
+
+    private getEditorMode(): string | undefined {
+        const activeView = this.ntb.app.workspace.getActiveViewOfType(MarkdownView);
+        if (!activeView) return undefined;
+        // const isSourceMode = activeView?.getState().source;
+        return activeView.getMode();
+    }
 
 }

@@ -379,8 +379,9 @@ export default class RulesModal extends Modal {
                             dropdown
                                 .addOptions(this.toDropdownOptions(VIEW_MODE_OPTIONS))
                                 .setValue((condition.value as string) ?? ViewType.Preview)
-                                .onChange((value) => {
+                                .onChange(async (value) => {
                                     condition.value = value;
+                                    await this.ntb.settingsManager.save();
                                 });
                         });
                     break;
@@ -407,8 +408,9 @@ export default class RulesModal extends Modal {
                             dropdown
                                 .addOptions(this.toDropdownOptions(FILE_TYPE_OPTIONS))
                                 .setValue((condition.value as string) ?? FileType.Bases)
-                                .onChange((value) => {
+                                .onChange(async (value) => {
                                     condition.value = value;
+                                    await this.ntb.settingsManager.save();
                                 });
                         });
                     break;
@@ -439,8 +441,9 @@ export default class RulesModal extends Modal {
                             dropdown
                                 .addOptions(this.toDropdownOptions(PLATFORM_OPTIONS))
                                 .setValue((condition.value as string) ?? PlatformType.Mobile)
-                                .onChange((value) => {
+                                .onChange(async (value) => {
                                     condition.value = value;
+                                    await this.ntb.settingsManager.save();
                                 });
                         });
                     break;
