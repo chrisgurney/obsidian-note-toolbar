@@ -100,7 +100,8 @@ export const enum PlatformType {
 	Desktop = 'desktop',
 	Tablet = 'tablet',
 	Mobile = 'mobile',
-	None = 'none'
+	None = 'none',
+	Phone = 'phone'
 }
 export const enum PositionType {
 	Bottom = 'bottom',
@@ -707,12 +708,12 @@ export const SCRIPT_ATTRIBUTE_MAP: Record<string, string> = {
     'outputFile': 'data-dest'
 };
 
-export interface FileTypeDefinition {
-    type: FileType;
+export interface UiSelectOption<T extends string> {
+    type: T;
     label: string;
 }
 
-export const FILE_TYPE_OPTIONS: FileTypeDefinition[] = [
+export const FILE_TYPE_OPTIONS: UiSelectOption<FileType>[] = [
     { type: FileType.Audio, label: t('setting.display-contexts.option-audio') },
     { type: FileType.Bases, label: t('setting.display-contexts.option-bases') },
     { type: FileType.Canvas, label: t('setting.display-contexts.option-canvas') },
@@ -720,7 +721,7 @@ export const FILE_TYPE_OPTIONS: FileTypeDefinition[] = [
     { type: FileType.Kanban, label: t('setting.display-contexts.option-kanban') },
     { type: FileType.Pdf, label: t('setting.display-contexts.option-pdf') },
     { type: FileType.Video, label: t('setting.display-contexts.option-video') }
-];
+].sort((a, b) => a.label.localeCompare(b.label));
 
 export const LINK_OPTIONS = {
 	[ItemType.Command]: t('setting.item.option-command'),
@@ -733,6 +734,14 @@ export const LINK_OPTIONS = {
 	[ItemType.Templater]: "Templater",
 	[ItemType.Uri]: t('setting.item.option-uri')
 }
+
+export const PLATFORM_OPTIONS: UiSelectOption<PlatformType>[] = [
+    { type: PlatformType.All, label: t('setting.rules.option-platform-all') },
+    { type: PlatformType.Desktop, label: t('setting.rules.option-platform-desktop') },
+    { type: PlatformType.Tablet, label: t('setting.rules.option-platform-tablet') },
+    { type: PlatformType.Mobile, label: t('setting.rules.option-platform-mobile') },
+    { type: PlatformType.Phone, label: t('setting.rules.option-platform-phone') }
+].sort((a, b) => a.label.localeCompare(b.label));
 
 export const POSITION_OPTIONS = {
 	desktop: [
@@ -768,6 +777,11 @@ export const TOOLBAR_SHOW_POSITION_OPTIONS = {
 	[PositionType.Menu]: t('setting.position.option-menu'),
 	[PositionType.QuickTools]: t('setting.position.option-quicktools')
 }
+
+export const VIEW_MODE_OPTIONS: UiSelectOption<ViewModeType>[] = [
+    { type: ViewModeType.Editing, label: t('setting.rules.option-editormode-editing') },
+    { type: ViewModeType.Reading, label: t('setting.rules.option-editormode-reading') }
+].sort((a, b) => a.label.localeCompare(b.label));
 
 /**
  * Each of these correlates to (style) metatdata that's matched in styles.css.

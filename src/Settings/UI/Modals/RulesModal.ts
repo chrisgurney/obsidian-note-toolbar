@@ -1,4 +1,4 @@
-import { Rule, RULE_OPERANDS, RuleCondition, RuleConjunction, RuleField, RuleOperator, SettingType, t } from "Settings/NoteToolbarSettings";
+import { FILE_TYPE_OPTIONS, FileType, PLATFORM_OPTIONS, PlatformType, Rule, RULE_OPERANDS, RuleCondition, RuleConjunction, RuleField, RuleOperator, SettingType, t, UiSelectOption, VIEW_MODE_OPTIONS, ViewType } from "Settings/NoteToolbarSettings";
 import { arraymove, getElementPosition, getUUID, moveElement } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
 import { ButtonComponent, debounce, Menu, MenuItem, Modal, Notice, Setting } from "obsidian";
@@ -195,7 +195,7 @@ export default class RulesModal extends Modal {
         new Setting(ruleControlsEl)
             .addExtraButton((cb) => {
                 cb.setIcon('ellipsis')
-                    .setTooltip(t("Options"))
+                    .setTooltip(t('setting.rules.tooltip-options'))
                     .onClick(() => {
                         const menu = new Menu();
                         menu.addItem((item: MenuItem) => {
@@ -372,11 +372,29 @@ export default class RulesModal extends Modal {
         if (operatorDefinition) {
             switch (operatorDefinition.editor) {
                 case 'editormode':
-                    // TODO: Editor mode dropdown
+                    new Setting(operatorValueContainerEl)
+                        .setClass('note-toolbar-setting-mapping-value')
+                        .addDropdown((dropdown) => {
+                            dropdown
+                                .addOptions(this.toDropdownOptions(VIEW_MODE_OPTIONS))
+                                .setValue((condition.value as string) ?? ViewType.Preview)
+                                .onChange((value) => {
+                                    condition.value = value;
+                                });
+                        });
                     break;
 
                 case 'filetype':
-                    // TODO: file type dropdown
+                    new Setting(operatorValueContainerEl)
+                        .setClass('note-toolbar-setting-mapping-value')
+                        .addDropdown((dropdown) => {
+                            dropdown
+                                .addOptions(this.toDropdownOptions(FILE_TYPE_OPTIONS))
+                                .setValue((condition.value as string) ?? FileType.Bases)
+                                .onChange((value) => {
+                                    condition.value = value;
+                                });
+                        });
                     break;
 
                 case 'folder':
@@ -386,7 +404,7 @@ export default class RulesModal extends Modal {
                             new FolderSuggester(this.ntb.app, cb.inputEl);
                             cb
                                 .setPlaceholder(t('setting.rules.condition-value-folder-placeholder'))
-                                .setValue((condition.value as string) ?? '')
+                                .setValue((condition.value as string) ?? PlatformType.All)
                                 .onChange(debounce(async (value) => {
                                     condition.value = value;
                                     await this.ntb.settingsManager.save();
@@ -399,7 +417,16 @@ export default class RulesModal extends Modal {
                     break;
 
                 case 'platform':
-                    // TODO: Platform dropdown
+                    new Setting(operatorValueContainerEl)
+                        .setClass('note-toolbar-setting-mapping-value')
+                        .addDropdown((dropdown) => {
+                            dropdown
+                                .addOptions(this.toDropdownOptions(PLATFORM_OPTIONS))
+                                .setValue((condition.value as string) ?? PlatformType.Mobile)
+                                .onChange((value) => {
+                                    condition.value = value;
+                                });
+                        });
                     break;
 
                 case 'tags':
@@ -537,5 +564,14 @@ export default class RulesModal extends Modal {
 		// this.plugin.debug("listMoveHandlerById: moving index:", itemIndex);
 		await this.listMoveHandler(keyEvent, itemIndex, action);
 	}
+
+    toDropdownOptions<T extends string>(options: UiSelectOption<T>[]): Record<string, string> {
+        return Object.fromEntries(
+            options.map((option) => [
+                option.type,
+                option.label
+            ])
+        );
+    }
 
 }

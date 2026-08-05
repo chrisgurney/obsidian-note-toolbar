@@ -789,6 +789,8 @@
             "operator-startsWith": "starts with",
             "option-conjunction-and": "if all of these are true",
             "option-conjunction-or": "if any of these are true",
+            "option-editormode-editing": "editing",
+            "option-editormode-reading": "reading",
             "option-field-editormode": "editor mode",
             "option-field-filename": "file name",
             "option-field-filetype": "file type",
@@ -797,8 +799,14 @@
             "option-field-tags": "tags",
             "option-folder-all": "all folders",
             "option-folder-root": "root folder only",
+            "option-platform-all": "all platforms",
+            "option-platform-desktop": "desktop",
+            "option-platform-mobile": "mobile",
+            "option-platform-phone": "phone",
+            "option-platform-tablet": "tablet",
             "placeholder-folder": "Folder",
-            "placeholder-toolbar": "Toolbar to show"
+            "placeholder-toolbar": "Toolbar to show",
+            "tooltip-options": "Options"
         },
         "search": {
             "button-tooltip": "Search toolbars",
