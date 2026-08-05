@@ -143,12 +143,17 @@ export default class RulesManager {
     }
 
     private matchesCondition(condition: RuleCondition, file: TFile): boolean {
-        if (!condition.field) return false;
         // this.ntb.debug('matchesCondition: ', condition, ' for file: ', file.path);
+
+        if (!condition.field) return false;
+
         // check condition based on type
         switch (condition.field) {
             case RuleField.EditorMode:
                 return this.matchesEditorModeCondition(condition);
+
+            case RuleField.FileName:
+                return this.matchesFileNameCondition(condition, file);
 
             case RuleField.Folder:
                 return this.matchesFolderCondition(condition, file);
@@ -173,6 +178,48 @@ export default class RulesManager {
 
             case RuleOperator.IsNot:
                 return mode !== condition.value;
+
+            default:
+                return false;
+        }
+    }
+
+    private matchesFileNameCondition(condition: RuleCondition, file: TFile): boolean {
+        const value = condition.value;
+
+        switch (condition.operator) {
+            case RuleOperator.IsEmpty:
+                return file.basename.length === 0;
+
+            case RuleOperator.IsNotEmpty:
+                return file.basename.length > 0;
+        }
+
+        if (typeof value !== 'string' || value.length === 0) {
+            return false;
+        }
+
+        const fileName = file.name.toLowerCase();
+        const searchValue = value.toLowerCase();
+
+        switch (condition.operator) {
+            case RuleOperator.Is:
+                return fileName === searchValue;
+
+            case RuleOperator.IsNot:
+                return fileName !== searchValue;
+
+            case RuleOperator.Contains:
+                return fileName.includes(searchValue);
+
+            case RuleOperator.DoesNotContain:
+                return !fileName.includes(searchValue);
+
+            case RuleOperator.StartsWith:
+                return fileName.startsWith(searchValue);
+
+            case RuleOperator.EndsWith:
+                return fileName.endsWith(searchValue);
 
             default:
                 return false;
