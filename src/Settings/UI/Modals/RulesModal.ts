@@ -38,12 +38,7 @@ export default class RulesModal extends Modal {
         const ruleListEl = rulesContainerEl.createDiv();
         ruleListEl.addClass('note-toolbar-sortablejs-list');
 
-        if (this.ntb.settings.rules.length == 0) {
-            // empty state
-            // rulesContainerEl.createDiv({ text: this.ntb.settingsUtils.emptyMessageFr(t('setting.rules.label-empty')) })
-            //     .className = "note-toolbar-setting-empty-message";
-        }
-        else {
+        if (this.ntb.settings.rules.length > 0) {
 
             // add all the rules
             this.ntb.settings.rules.forEach((rule: Rule, ) => {
@@ -229,7 +224,6 @@ export default class RulesModal extends Modal {
                     cb.extraSettingsEl,	'keydown', async (e) => {
                         const currentEl = e.target as HTMLElement;
                         const rowId = currentEl.getAttribute('data-row-id');
-                        // this.plugin.debug("rowId", rowId);
                         if (rowId) await this.listMoveHandlerById(e, rowId);
                     });
             });
@@ -264,7 +258,6 @@ export default class RulesModal extends Modal {
                         const ruleConditionEl = this.renderConditionForm(rule, newCondition);
                         conditionContainerEl.appendChild(ruleConditionEl);
                         await this.ntb.settingsManager.save();
-                        // this.parent.display('.note-toolbar-sortablejs-list > div:last-child input[type="search"]', true);
                     });
                 button.buttonEl.setText(iconTextFr('plus', t('setting.rules.button-newcondition')));
             });
@@ -309,14 +302,13 @@ export default class RulesModal extends Modal {
                     .onChange(debounce(async (id) => {
                         const operand = RULE_OPERANDS.find( (operand) => operand.id === id );
                         if (!operand) return;
-                        // TODO: set condition based on id selected
+                        // set condition based on id selected
                         condition.field = operand.field;
                         condition.key = operand.key;
                         condition.operator = operand.operators[0].op;
                         condition.value = undefined;
                         await this.ntb.settingsManager.save();
-                        // re-render the condition so the operator/value controls
-                        // reflect the newly selected operand
+                        // re-render the condition for the selected operand
                         conditionEl.replaceWith(this.renderConditionForm(rule, condition));
                     }, 250));
             });
@@ -377,18 +369,8 @@ export default class RulesModal extends Modal {
 
         if (operatorDefinition) {
             switch (operatorDefinition.editor) {
-                case 'string':
-                    new Setting(operatorValueContainerEl)
-                        .setClass('note-toolbar-setting-mapping-value')
-                        .addText((cb) => {
-                            cb
-                                .setPlaceholder(t('setting.rules.condition-value-string-placeholder'))
-                                .setValue((condition.value as string) ?? '')
-                                .onChange(debounce(async (value) => {
-                                    condition.value = value;
-                                    await this.ntb.settingsManager.save();
-                                }, 250));
-                        });
+                case 'editormode':
+                    // TODO: Editor mode dropdown
                     break;
 
                 case 'folder':
@@ -425,8 +407,18 @@ export default class RulesModal extends Modal {
                     // TODO: Platform dropdown
                     break;
 
-                case 'editormode':
-                    // TODO: Editor mode dropdown
+                case 'string':
+                    new Setting(operatorValueContainerEl)
+                        .setClass('note-toolbar-setting-mapping-value')
+                        .addText((cb) => {
+                            cb
+                                .setPlaceholder(t('setting.rules.condition-value-string-placeholder'))
+                                .setValue((condition.value as string) ?? '')
+                                .onChange(debounce(async (value) => {
+                                    condition.value = value;
+                                    await this.ntb.settingsManager.save();
+                                }, 250));
+                        });
                     break;
             }
         }

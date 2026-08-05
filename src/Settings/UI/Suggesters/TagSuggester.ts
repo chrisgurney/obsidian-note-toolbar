@@ -20,7 +20,7 @@ export default class TagSuggester extends AbstractInputSuggest<string> {
             }
         }
 
-        return tags;
+        return tags.sort((a, b) => a.localeCompare(b));
     }
 
     renderSuggestion(tag: string, el: HTMLElement): void {
