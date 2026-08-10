@@ -161,6 +161,9 @@ export default class RulesManager {
             case RuleField.Platform:
                 return this.matchesPlatformCondition(condition);
 
+            case RuleField.Tag:
+                return this.matchesTagsCondition(condition, file);
+
             default:
                 return false;
         }
@@ -279,6 +282,40 @@ export default class RulesManager {
                 return condition.value === 'mobile'
                     ? !Platform.isMobile
                     : platform !== condition.value;
+
+            default:
+                return false;
+        }
+    }
+
+    private matchesTagsCondition(condition: RuleCondition, file: TFile): boolean {
+        const fileCache = this.ntb.app.metadataCache.getFileCache(file);
+        if (!fileCache) return false;
+        const fileTags = fileCache.frontmatter?.tags as string[] | undefined;
+        if (!fileTags) return false;
+
+        switch (condition.operator) {
+            case RuleOperator.IsEmpty:
+                return fileTags.length === 0;
+
+            case RuleOperator.IsNotEmpty:
+                return fileTags.length > 0;
+        }
+
+        if (typeof condition.value !== 'string' || condition.value.length === 0) {
+            return false;
+        }
+
+        const normalizeTag = (tag: string): string => tag.replace(/^#/, '').toLowerCase();
+
+        const normalizedValue = normalizeTag(condition.value);
+
+        switch (condition.operator) {
+            case RuleOperator.Contains:
+                return fileTags.some((tag) => normalizeTag(tag).includes(normalizedValue));
+
+            case RuleOperator.DoesNotContain:
+                return fileTags.every((tag) => !normalizeTag(tag).includes(normalizedValue));
 
             default:
                 return false;

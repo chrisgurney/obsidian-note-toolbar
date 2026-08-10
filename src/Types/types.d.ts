@@ -85,7 +85,7 @@ declare module "obsidian" {
     }
 
     interface MetadataCache {
-        getTags(): Record<string, string[]>;
+        getTags: () => { [key: string]: number };
     }
 
 	interface Menu {
