@@ -42,10 +42,11 @@ export default class RulesModal extends Modal {
         if (this.ntb.settings.rules.length > 0) {
 
             // add all the rules
-            this.ntb.settings.rules.forEach((rule: Rule, ) => {
-                const ruleEl = this.renderRuleForm(rule);
-                ruleListEl.append(ruleEl);
-            });
+            for (const rule of this.ntb.settings.rules) {
+                void this.renderRuleForm(rule).then((el) => {
+                    ruleListEl.append(el);
+                });
+            }
 
             // make the list sortable
             Sortable.create(ruleListEl, {
@@ -96,7 +97,7 @@ export default class RulesModal extends Modal {
                             toolbar: ''
                         };
                         this.ntb.settings.rules.push(newRule);
-                        const ruleFormEl = this.renderRuleForm(newRule);
+                        const ruleFormEl = await this.renderRuleForm(newRule);
                         ruleListEl.appendChild(ruleFormEl);
                         await this.ntb.settingsManager.save();
                     });
@@ -110,7 +111,7 @@ export default class RulesModal extends Modal {
      * @param rule ToolbarRule to return the form for
      * @returns the form element as a div
      */
-    renderRuleForm(rule: Rule): HTMLDivElement {
+    async renderRuleForm(rule: Rule): Promise<HTMLDivElement> {
 
         const ruleContainerEl = createDiv();
         ruleContainerEl.className = "note-toolbar-setting-rules-list-item-container";
@@ -153,7 +154,7 @@ export default class RulesModal extends Modal {
                                 operator: RuleOperator.Contains
                             };
                             rule.conditions.push(newCondition);
-                            const ruleConditionEl = this.renderConditionForm(rule, newCondition);
+                            const ruleConditionEl = await this.renderConditionForm(rule, newCondition);
                             conditionContainerEl.appendChild(ruleConditionEl);
                         }
                         await this.ntb.settingsManager.save();
@@ -233,10 +234,10 @@ export default class RulesModal extends Modal {
         // show existing conditions
         //
 
-        rule.conditions.forEach((condition, index) => {
-            const conditionEl = this.renderConditionForm(rule, condition);
+        for (const condition of rule.conditions) {
+            const conditionEl = await this.renderConditionForm(rule, condition);
             conditionContainerEl.append(conditionEl);
-        });
+        }
 
         //
         // add condition button
@@ -256,7 +257,7 @@ export default class RulesModal extends Modal {
                         };
                         rule.conditions.push(newCondition);
                         // add the condition UI
-                        const ruleConditionEl = this.renderConditionForm(rule, newCondition);
+                        const ruleConditionEl = await this.renderConditionForm(rule, newCondition);
                         conditionContainerEl.appendChild(ruleConditionEl);
                         await this.ntb.settingsManager.save();
                     });
@@ -272,7 +273,7 @@ export default class RulesModal extends Modal {
      * @param condition ToolbarRuleCondition to return the form for
      * @returns the form element as a div
      */
-    renderConditionForm(rule: Rule, condition: RuleCondition): HTMLDivElement {
+    async renderConditionForm(rule: Rule, condition: RuleCondition): Promise<HTMLDivElement> {
         
         const conditionEl = createDiv();
         conditionEl.className = "note-toolbar-setting-condition";
@@ -311,7 +312,7 @@ export default class RulesModal extends Modal {
                         condition.value = undefined;
                         await this.ntb.settingsManager.save();
                         // re-render the condition for the selected operand
-                        conditionEl.replaceWith(this.renderConditionForm(rule, condition));
+                        conditionEl.replaceWith(await this.renderConditionForm(rule, condition));
                     }, 250));
             });
 
@@ -349,7 +350,7 @@ export default class RulesModal extends Modal {
 
                             await this.ntb.settingsManager.save();
 
-                            conditionEl.replaceWith(this.renderConditionForm(rule, condition));
+                            conditionEl.replaceWith(await this.renderConditionForm(rule, condition));
                         }, 250));
                 });
         }
@@ -373,12 +374,13 @@ export default class RulesModal extends Modal {
         if (operatorDefinition) {
             switch (operatorDefinition.editor) {
                 case 'editormode':
+                    if (!condition.value) condition.value ??= ViewType.Preview;
                     new Setting(operatorValueContainerEl)
                         .setClass('note-toolbar-setting-mapping-value')
                         .addDropdown((dropdown) => {
                             dropdown
                                 .addOptions(this.toDropdownOptions(VIEW_MODE_OPTIONS))
-                                .setValue((condition.value as string) ?? ViewType.Preview)
+                                .setValue(condition.value as string)
                                 .onChange(async (value) => {
                                     condition.value = value;
                                     await this.ntb.settingsManager.save();
@@ -402,7 +404,7 @@ export default class RulesModal extends Modal {
                     break;
 
                 case 'filetype':
-                    if (!condition.value) condition.value = FileType.Bases;
+                    if (!condition.value) condition.value ??= FileType.Bases;
                     new Setting(operatorValueContainerEl)
                         .setClass('note-toolbar-setting-mapping-value')
                         .addDropdown((dropdown) => {
@@ -414,6 +416,9 @@ export default class RulesModal extends Modal {
                                 .setValue(condition.value as string)
                                 .onChange(async (value) => {
                                     condition.value = value;
+                                    if (value !== RULE_VALUE_TYPE_OTHER) {
+                                        condition.otherValue = '';
+                                    }
                                     await this.ntb.settingsManager.save();
                                     conditionEl.replaceWith(
                                         await this.renderConditionForm(rule, condition)
@@ -446,12 +451,13 @@ export default class RulesModal extends Modal {
                     break;
 
                 case 'platform':
+                    if (!condition.value) condition.value ??= PlatformType.Mobile;
                     new Setting(operatorValueContainerEl)
                         .setClass('note-toolbar-setting-mapping-value')
                         .addDropdown((dropdown) => {
                             dropdown
                                 .addOptions(this.toDropdownOptions(PLATFORM_OPTIONS))
-                                .setValue((condition.value as string) ?? PlatformType.Mobile)
+                                .setValue(condition.value as string)
                                 .onChange(async (value) => {
                                     condition.value = value;
                                     await this.ntb.settingsManager.save();
@@ -511,6 +517,7 @@ export default class RulesModal extends Modal {
                 cb.buttonEl.setAttribute('data-row-id', condition.id);
             });
 
+        await this.ntb.settingsManager.save();
         return conditionEl;
 
     }
