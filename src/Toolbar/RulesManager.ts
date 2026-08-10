@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { FrontMatterCache, ItemView, MarkdownView, Platform, TFile } from "obsidian";
-import { Rule, RuleCondition, RuleConjunction, RuleField, RuleOperator, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { RULE_VALUE_TYPE_OTHER, Rule, RuleCondition, RuleConjunction, RuleField, RuleOperator, ToolbarSettings } from "Settings/NoteToolbarSettings";
 
 export default class RulesManager {
     
@@ -155,6 +155,9 @@ export default class RulesManager {
             case RuleField.FileName:
                 return this.matchesFileNameCondition(condition, file);
 
+            case RuleField.FileType:
+                return this.matchesFileTypeCondition(condition);
+
             case RuleField.Folder:
                 return this.matchesFolderCondition(condition, file);
 
@@ -201,9 +204,9 @@ export default class RulesManager {
                 return file.basename.length > 0;
         }
 
-        if (typeof value !== 'string' || value.length === 0) {
-            return false;
-        }
+            if (typeof value !== 'string' || value.length === 0) {
+                return false;
+            }
 
         const fileName = file.name.toLowerCase();
         const searchValue = value.toLowerCase();
@@ -226,6 +229,34 @@ export default class RulesManager {
 
             case RuleOperator.EndsWith:
                 return fileName.endsWith(searchValue);
+
+            default:
+                return false;
+        }
+    }
+
+    private matchesFileTypeCondition(
+        condition: RuleCondition
+    ): boolean {
+        const activeView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
+        const viewType = activeView?.getViewType();
+
+        const value = condition.value === RULE_VALUE_TYPE_OTHER
+            ? condition.otherValue
+            : condition.value;
+
+        this.ntb.debug(condition, value, viewType);
+
+        if (typeof value !== 'string' || value.length === 0) {
+            return false;
+        }
+
+        switch (condition.operator) {
+            case RuleOperator.Is:
+                return viewType === value;
+
+            case RuleOperator.IsNot:
+                return viewType !== value;
 
             default:
                 return false;

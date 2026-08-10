@@ -1,4 +1,4 @@
-import { FILE_TYPE_OPTIONS, FileType, PLATFORM_OPTIONS, PlatformType, Rule, RULE_OPERANDS, RuleCondition, RuleConjunction, RuleField, RuleOperator, SettingType, t, UiSelectOption, VIEW_MODE_OPTIONS, ViewType } from "Settings/NoteToolbarSettings";
+import { FILE_TYPE_OPTIONS, FileType, RULE_VALUE_TYPE_OTHER, PLATFORM_OPTIONS, PlatformType, Rule, RULE_OPERANDS, RuleCondition, RuleConjunction, RuleField, RuleOperator, SettingType, t, UiSelectOption, VIEW_MODE_OPTIONS, ViewType } from "Settings/NoteToolbarSettings";
 import { arraymove, getElementPosition, getUUID, moveElement } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
 import { ButtonComponent, debounce, Menu, MenuItem, Modal, Notice, Setting } from "obsidian";
@@ -402,17 +402,28 @@ export default class RulesModal extends Modal {
                     break;
 
                 case 'filetype':
+                    if (!condition.value) condition.value = FileType.Bases;
                     new Setting(operatorValueContainerEl)
                         .setClass('note-toolbar-setting-mapping-value')
                         .addDropdown((dropdown) => {
                             dropdown
-                                .addOptions(this.toDropdownOptions(FILE_TYPE_OPTIONS))
-                                .setValue((condition.value as string) ?? FileType.Bases)
+                                .addOptions({
+                                    ...this.toDropdownOptions(FILE_TYPE_OPTIONS),
+                                    [RULE_VALUE_TYPE_OTHER]: t('setting.rules.option-other'),
+                                })
+                                .setValue(condition.value as string)
                                 .onChange(async (value) => {
                                     condition.value = value;
                                     await this.ntb.settingsManager.save();
+                                    conditionEl.replaceWith(
+                                        await this.renderConditionForm(rule, condition)
+                                    );
                                 });
                         });
+
+                    if (condition.value === RULE_VALUE_TYPE_OTHER) {
+                        this.renderOtherValueSetting(operatorValueContainerEl, condition);
+                    }
                     break;
 
                 case 'folder':
@@ -502,6 +513,24 @@ export default class RulesModal extends Modal {
 
         return conditionEl;
 
+    }
+
+    private renderOtherValueSetting(
+        containerEl: HTMLElement,
+        condition: RuleCondition
+    ): HTMLElement {
+        return new Setting(containerEl)
+            .setClass('note-toolbar-setting-mapping-value')
+            .addText((text) => {
+                text
+                    .setPlaceholder(t('setting.rules.placeholder-other-filetype'))
+                    .setValue(condition.otherValue ?? '')
+                    .onChange(async (value) => {
+                        condition.otherValue = value;
+                        await this.ntb.settingsManager.save();
+                    });
+            })
+            .settingEl;
     }
 
 	/*************************************************************************

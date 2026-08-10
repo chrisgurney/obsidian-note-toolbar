@@ -525,10 +525,13 @@ export interface RuleCondition {
     field?: RuleField;
     operator?: RuleOperator;
     value?: RuleValue;
+	otherValue?: string;
 
     // property name when field === Property
     key?: string;
 }
+
+export const RULE_VALUE_TYPE_OTHER = 'ntb-other';
 
 /**
  * A selectable operand returned by the first suggester.
