@@ -34,6 +34,30 @@ export default class RulesModal extends Modal {
             .setDesc(learnMoreFr(t('setting.rules.description-modal', { property: this.ntb.settings.toolbarProp }), 'Defining-where-to-show-toolbars'));
 
         //
+        // property
+        //
+
+        const propertySetting = new Setting(this.contentEl)
+            .setName(t('setting.display-rules.option-property'))
+            .setDesc(t('setting.display-rules.option-property-description'))
+            .addText(text => text
+                .setPlaceholder(t('setting.display-rules.option-property-placeholder'))
+                .setValue(this.ntb.settings.toolbarProp)
+                .onChange(debounce(async (value) => {
+                    this.ntb.settings.toolbarProp = value;
+                    // FIXME? set all toolbars to updated?
+                    // this.plugin.settings.toolbars.updated = new Date().toISOString();
+                    await this.saveAndUpdateActiveRule();	
+                }, 750)));
+        propertySetting.controlEl.setAttr('data-ntb-field-prop', '');
+
+        //
+        // rules
+        //
+
+        this.renderRules();
+
+        //
         // default toolbar
         //
 
@@ -57,30 +81,6 @@ export default class RulesModal extends Modal {
             });
         this.ntb.settingsUtils.setFieldPreview(defaultToolbarSetting, existingDefaultToolbar);
         defaultToolbarSetting.controlEl.setAttr('data-ntb-field-default', '');
-
-        //
-        // property
-        //
-
-        const propertySetting = new Setting(this.contentEl)
-            .setName(t('setting.display-rules.option-property'))
-            .setDesc(t('setting.display-rules.option-property-description'))
-            .addText(text => text
-                .setPlaceholder(t('setting.display-rules.option-property-placeholder'))
-                .setValue(this.ntb.settings.toolbarProp)
-                .onChange(debounce(async (value) => {
-                    this.ntb.settings.toolbarProp = value;
-                    // FIXME? set all toolbars to updated?
-                    // this.plugin.settings.toolbars.updated = new Date().toISOString();
-                    await this.saveAndUpdateActiveRule();	
-                }, 750)));
-        propertySetting.controlEl.setAttr('data-ntb-field-prop', '');
-
-        //
-        // rules
-        //
-
-        this.renderRules();
 
     }
 
@@ -619,8 +619,8 @@ export default class RulesModal extends Modal {
         const frontmatterCache = this.ntb.app.metadataCache.getFileCache(activeFile)?.frontmatter;
         if (!frontmatterCache) return;
         
-        const [mappedToolbar, matchType] = this.ntb.rules.getMappedToolbar(frontmatterCache, activeFile);
-        this.ntb.debug('getActiveRule: toolbar', mappedToolbar, '⭐️ matches:', matchType);
+        const [, matchType] = this.ntb.rules.getMappedToolbar(frontmatterCache, activeFile);
+        // this.ntb.debug('getActiveRule: toolbar', mappedToolbar, '⭐️ matches:', matchType);
 
         let cssSelector;
         switch (matchType) {

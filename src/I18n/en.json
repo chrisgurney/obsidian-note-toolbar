@@ -442,10 +442,10 @@
             "description": "Define which notes to display toolbars on.",
             "name": "Display rules",
             "option-default": "Default toolbar",
-            "option-default-description": "Show this toolbar on all notes, unless one of the rules below is satisfied.",
+            "option-default-description": "Show this toolbar on all notes, unless one of the rules above is satisfied.",
             "option-default-placeholder": "Select toolbar...",
             "option-property": "Property",
-            "option-property-description": "If a toolbar name is found in this property, the toolbar will be displayed on the note. This takes precedence over the default or any folder mappings. In a note, set this property to 'none' to hide the toolbar.",
+            "option-property-description": "If a toolbar name is found in this property, the toolbar will be displayed on the note. This takes precedence over any of the below rules. In a note, set this property to 'none' to hide the toolbar.",
             "option-property-placeholder": "Property"
         },
         "error-old-settings-description": "Old settings file loaded ({{oldVersion}}) but latest is {{currentVersion}}",
