@@ -39,8 +39,11 @@ export default class RulesManager {
      * @param file The note to check if we have a toolbar for.
      * @returns ToolbarSettings or undefined, if there is no matching toolbar.
      */
-    public getMappedToolbar(frontmatter: FrontMatterCache | undefined, file: TFile): ToolbarSettings | undefined {
+    public getMappedToolbar(frontmatter: FrontMatterCache | undefined, file: TFile): 
+        [toolbar: ToolbarSettings | undefined, matches: string] 
+    {
 
+        let matches = '';
         // this.debug('getMappedToolbar');
 
         let matchingToolbar: ToolbarSettings | undefined = undefined;
@@ -54,13 +57,21 @@ export default class RulesManager {
             // if any prop = 'none' then don't return a toolbar
             ignoreToolbar = notetoolbarProp.includes('none') ? true : false;
             // is it valid? (i.e., is there a matching toolbar?)
-            if (!ignoreToolbar) matchingToolbar = this.ntb.settingsManager.getToolbarByName(notetoolbarProp);
+            if (ignoreToolbar) {
+                matches = 'ignored';
+            }
+            else {
+                matchingToolbar = this.ntb.settingsManager.getToolbarByName(notetoolbarProp);
+                if (matchingToolbar) matches = 'prop';
+            }
         }
 
         // we still don't have a matching toolbar
         if (!matchingToolbar && !ignoreToolbar) {
 
-            matchingToolbar = this.getRuleToolbar(file);
+            let ruleId = '';
+            [matchingToolbar, ruleId] = this.getRuleToolbar(file);
+            if (matchingToolbar) matches = ruleId;
 
             // check if the note is in a folder that's mapped, and if the mapping is valid
             // let mapping: FolderMapping;
@@ -85,10 +96,11 @@ export default class RulesManager {
         if (!matchingToolbar && !ignoreToolbar) {
             if (this.ntb.settings.defaultToolbar) {
                 matchingToolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.defaultToolbar);
+                if (matchingToolbar) matches = 'default';
             }
         }
 
-        return matchingToolbar;
+        return [matchingToolbar, matches];
 
     }
 
@@ -117,16 +129,16 @@ export default class RulesManager {
     // RULES
     //******************************************************************************
 
-    private getRuleToolbar(file: TFile): ToolbarSettings | undefined {
+    private getRuleToolbar(file: TFile): [toolbar: ToolbarSettings | undefined, ruleId: string] {
         // iterate rules in order, returning the first toolbar that matches
         for (const rule of this.ntb.settings.rules) {
             if (this.matchesRule(rule, file)) {
                 const toolbar = this.ntb.settingsManager.getToolbarById(rule.toolbar);
-                if (toolbar) return toolbar;
+                if (toolbar) return [toolbar, rule.id];
             }
         }
 
-        return undefined;
+        return [undefined, ''];
     }
 
     private matchesRule(rule: Rule, file: TFile): boolean {

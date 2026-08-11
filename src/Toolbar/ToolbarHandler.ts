@@ -32,7 +32,7 @@ export default class ToolbarHandler {
 		// get toolbar to show
 		if (activeFile) {
 			const frontmatter = activeFile ? this.ntb.app.metadataCache.getFileCache(activeFile)?.frontmatter : undefined;
-			toolbar = this.ntb.rules.getMappedToolbar(frontmatter, activeFile);
+			[toolbar] = this.ntb.rules.getMappedToolbar(frontmatter, activeFile);
 		}
 		else {
 			toolbar = this.ntb.rules.getEmptyViewToolbar();

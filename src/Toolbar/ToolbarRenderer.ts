@@ -1183,7 +1183,7 @@ export default class ToolbarRenderer {
 		const activeFile = this.ntb.app.workspace.getActiveFile();
 		if (activeFile) {
 			const frontmatter = this.ntb.app.metadataCache.getFileCache(activeFile)?.frontmatter;
-			const toolbar: ToolbarSettings | undefined = this.ntb.rules.getMappedToolbar(frontmatter, activeFile);
+			const [toolbar] = this.ntb.rules.getMappedToolbar(frontmatter, activeFile);
 			if (toolbar) await this.update(toolbar, activeFile);
 		}
 	}
@@ -1281,7 +1281,7 @@ export default class ToolbarRenderer {
 
 		try {
 			// get matching toolbar for this note, if there is one		
-			const matchingToolbar: ToolbarSettings | undefined = this.ntb.rules.getMappedToolbar(frontmatter, file);
+			const [matchingToolbar] = this.ntb.rules.getMappedToolbar(frontmatter, file);
 			
 			// remove existing toolbar if needed
 			const toolbarRemoved: boolean = this.removeIfNeeded(matchingToolbar, view);
