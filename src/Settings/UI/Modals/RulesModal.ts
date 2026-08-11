@@ -33,43 +33,97 @@ export default class RulesModal extends Modal {
         new Setting(this.contentEl)
             .setDesc(learnMoreFr(t('setting.rules.description-modal', { property: this.ntb.settings.toolbarProp }), 'Defining-where-to-show-toolbars'));
 
+        //
+        // default toolbar
+        //
+
+        const existingDefaultToolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.defaultToolbar);
+        const defaultToolbarSetting = new Setting(this.contentEl)
+            .setName(t('setting.display-rules.option-default'))
+            .setDesc(t('setting.display-rules.option-default-description'))
+            .setClass('note-toolbar-setting-item-control-std-with-help')
+            .addSearch(async (cb) => {
+                new ToolbarSuggester(this.ntb, cb.inputEl);
+                cb.setPlaceholder(t('setting.display-rules.option-default-placeholder'))
+                    .setValue(existingDefaultToolbar ? existingDefaultToolbar.name : '')
+                    .onChange(debounce(async (name) => {
+                        const isValid = await this.ntb.settingsUtils.updateItemComponentStatus(this, name, SettingType.Toolbar, defaultToolbarSetting.controlEl, undefined, 'beforeend');
+                        const newToolbar = isValid ? this.ntb.settingsManager.getToolbarByName(name) : undefined;
+                        this.ntb.settings.defaultToolbar = newToolbar?.uuid ?? null;
+                        this.ntb.settingsUtils.setFieldPreview(defaultToolbarSetting, newToolbar);
+                        await this.saveAndUpdateActiveRule();
+                    }, 250));
+                await this.ntb.settingsUtils.updateItemComponentStatus(this, existingDefaultToolbar ? existingDefaultToolbar.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend');
+            });
+        this.ntb.settingsUtils.setFieldPreview(defaultToolbarSetting, existingDefaultToolbar);	
+
+        //
+        // property
+        //
+
+        new Setting(this.contentEl)
+            .setName(t('setting.display-rules.option-property'))
+            .setDesc(t('setting.display-rules.option-property-description'))
+            .addText(text => text
+                .setPlaceholder(t('setting.display-rules.option-property-placeholder'))
+                .setValue(this.ntb.settings.toolbarProp)
+                .onChange(debounce(async (value) => {
+                    this.ntb.settings.toolbarProp = value;
+                    // FIXME? set all toolbars to updated?
+                    // this.plugin.settings.toolbars.updated = new Date().toISOString();
+                    await this.saveAndUpdateActiveRule();	
+                }, 750)));
+
+        //
+        // rules
+        //
+
+        this.renderRules();
+
+    }
+
+    /**
+     * Renders the rules section.
+     */
+    private renderRules() {
+
+        new Setting(this.contentEl)
+            .setName(t('setting.rules.name'))
+            .setDesc(t('setting.rules.description'));
+
         const rulesContainerEl = this.contentEl.createDiv();
         rulesContainerEl.addClasses(['note-toolbar-setting-rules-container', 'note-toolbar-setting-top-border', 'note-toolbar-setting-ui']);
 
         const ruleListEl = rulesContainerEl.createDiv();
         ruleListEl.addClass('note-toolbar-sortablejs-list');
-
+        
+        // add all the rules
         if (this.ntb.settings.rules.length > 0) {
-
-            // add all the rules
             void Promise.all(
                 this.ntb.settings.rules.map((rule) => this.renderRuleForm(rule))
             ).then((elements) => {
                 ruleListEl.append(...elements);
                 this.updateActiveRule();
             });
-
-            // make the list sortable
-            Sortable.create(ruleListEl, {
-                chosenClass: 'sortable-chosen',
-                ghostClass: 'sortable-ghost',
-                handle: '.sortable-handle',
-                onChange: (item) => navigator.vibrate(50),
-                onChoose: (item) => navigator.vibrate(50),
-                onSort: (item) => {
-                    this.ntb.debug("sortable: index: ", item.oldIndex, " -> ", item.newIndex);
-                    if (item.oldIndex !== undefined && item.newIndex !== undefined) {
-                        moveElement(this.ntb.settings.rules, item.oldIndex, item.newIndex);
-                        void this.saveAndUpdateActiveRule();
-                    }
-                }
-            });
-
         }
 
-        //
+        // make the list sortable
+        Sortable.create(ruleListEl, {
+            chosenClass: 'sortable-chosen',
+            ghostClass: 'sortable-ghost',
+            handle: '.sortable-handle',
+            onChange: (item) => navigator.vibrate(50),
+            onChoose: (item) => navigator.vibrate(50),
+            onSort: (item) => {
+                this.ntb.debug("sortable: index: ", item.oldIndex, " -> ", item.newIndex);
+                if (item.oldIndex !== undefined && item.newIndex !== undefined) {
+                    moveElement(this.ntb.settings.rules, item.oldIndex, item.newIndex);
+                    void this.saveAndUpdateActiveRule();
+                }
+            }
+        });
+
         // add rule button
-        //
 
         new Setting(rulesContainerEl)
             .setClass("note-toolbar-setting-button")

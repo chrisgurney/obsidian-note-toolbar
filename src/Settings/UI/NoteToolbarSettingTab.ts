@@ -617,43 +617,6 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 
 		const mappingsGroup = new SettingGroup(containerEl);
 
-		mappingsGroup.addSetting((defaultToolbarSetting) => {
-			const existingDefaultToolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.defaultToolbar);
-			defaultToolbarSetting
-				.setName(t('setting.display-rules.option-default'))
-				.setDesc(t('setting.display-rules.option-default-description'))
-				.setClass('note-toolbar-setting-item-control-std-with-help')
-				.addSearch(async (cb) => {
-					new ToolbarSuggester(this.ntb, cb.inputEl);
-					cb.setPlaceholder(t('setting.display-rules.option-default-placeholder'))
-						.setValue(existingDefaultToolbar ? existingDefaultToolbar.name : '')
-						.onChange(debounce(async (name) => {
-							const isValid = await this.ntb.settingsUtils.updateItemComponentStatus(this, name, SettingType.Toolbar, defaultToolbarSetting.controlEl, undefined, 'beforeend');
-							const newToolbar = isValid ? this.ntb.settingsManager.getToolbarByName(name) : undefined;
-							this.ntb.settings.defaultToolbar = newToolbar?.uuid ?? null;
-							this.ntb.settingsUtils.setFieldPreview(defaultToolbarSetting, newToolbar);
-							await this.ntb.settingsManager.save();
-						}, 250));
-					await this.ntb.settingsUtils.updateItemComponentStatus(this, existingDefaultToolbar ? existingDefaultToolbar.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend');
-				});
-			this.ntb.settingsUtils.setFieldPreview(defaultToolbarSetting, existingDefaultToolbar);						
-		});
-
-		mappingsGroup.addSetting((propertySetting) => {
-			propertySetting
-				.setName(t('setting.display-rules.option-property'))
-				.setDesc(t('setting.display-rules.option-property-description'))
-				.addText(text => text
-					.setPlaceholder(t('setting.display-rules.option-property-placeholder'))
-					.setValue(this.ntb.settings.toolbarProp)
-					.onChange(debounce(async (value) => {
-						this.ntb.settings.toolbarProp = value;
-						// FIXME? set all toolbars to updated?
-						// this.plugin.settings.toolbars.updated = new Date().toISOString();
-						await this.ntb.settingsManager.save();	
-					}, 750)));
-		});
-
 		// open toolbar rules button
 		mappingsGroup.addSetting((rulesSetting) => {
 			rulesSetting
