@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { FrontMatterCache, ItemView, MarkdownView, Platform, TFile } from "obsidian";
-import { RULE_VALUE_TYPE_OTHER, Rule, RuleCondition, RuleConjunction, RuleField, RuleOperator, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { RULE_VALUE_TYPE_OTHER, Rule, RuleCondition, RuleConjunction, RuleField, RuleMatchType, RuleOperator, ToolbarSettings } from "Settings/NoteToolbarSettings";
 
 export default class RulesManager {
     
@@ -40,10 +40,10 @@ export default class RulesManager {
      * @returns ToolbarSettings or undefined, if there is no matching toolbar.
      */
     public getMappedToolbar(frontmatter: FrontMatterCache | undefined, file: TFile): 
-        [toolbar: ToolbarSettings | undefined, matches: string] 
+        [toolbar: ToolbarSettings | undefined, matchType: RuleMatchType] 
     {
 
-        let matches = '';
+        let matchType: RuleMatchType;
         // this.debug('getMappedToolbar');
 
         let matchingToolbar: ToolbarSettings | undefined = undefined;
@@ -57,21 +57,16 @@ export default class RulesManager {
             // if any prop = 'none' then don't return a toolbar
             ignoreToolbar = notetoolbarProp.includes('none') ? true : false;
             // is it valid? (i.e., is there a matching toolbar?)
-            if (ignoreToolbar) {
-                matches = 'ignored';
-            }
-            else {
-                matchingToolbar = this.ntb.settingsManager.getToolbarByName(notetoolbarProp);
-                if (matchingToolbar) matches = 'prop';
-            }
+            if (!ignoreToolbar) matchingToolbar = this.ntb.settingsManager.getToolbarByName(notetoolbarProp);
+            if (ignoreToolbar || matchingToolbar) matchType = 'prop';
         }
 
         // we still don't have a matching toolbar
         if (!matchingToolbar && !ignoreToolbar) {
 
-            let ruleId = '';
-            [matchingToolbar, ruleId] = this.getRuleToolbar(file);
-            if (matchingToolbar) matches = ruleId;
+            let rule: Rule | undefined;
+            [matchingToolbar, rule] = this.getRuleToolbar(file);
+            if (matchingToolbar) matchType = rule;
 
             // check if the note is in a folder that's mapped, and if the mapping is valid
             // let mapping: FolderMapping;
@@ -96,11 +91,11 @@ export default class RulesManager {
         if (!matchingToolbar && !ignoreToolbar) {
             if (this.ntb.settings.defaultToolbar) {
                 matchingToolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.defaultToolbar);
-                if (matchingToolbar) matches = 'default';
+                if (matchingToolbar) matchType = 'default';
             }
         }
 
-        return [matchingToolbar, matches];
+        return [matchingToolbar, matchType];
 
     }
 
@@ -129,16 +124,16 @@ export default class RulesManager {
     // RULES
     //******************************************************************************
 
-    private getRuleToolbar(file: TFile): [toolbar: ToolbarSettings | undefined, ruleId: string] {
+    private getRuleToolbar(file: TFile): [toolbar: ToolbarSettings | undefined, Rule: Rule | undefined] {
         // iterate rules in order, returning the first toolbar that matches
         for (const rule of this.ntb.settings.rules) {
             if (this.matchesRule(rule, file)) {
                 const toolbar = this.ntb.settingsManager.getToolbarById(rule.toolbar);
-                if (toolbar) return [toolbar, rule.id];
+                if (toolbar) return [toolbar, rule];
             }
         }
 
-        return [undefined, ''];
+        return [undefined, undefined];
     }
 
     private matchesRule(rule: Rule, file: TFile): boolean {

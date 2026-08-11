@@ -1,4 +1,4 @@
-import { FILE_TYPE_OPTIONS, FileType, RULE_VALUE_TYPE_OTHER, PLATFORM_OPTIONS, PlatformType, Rule, RULE_OPERANDS, RuleCondition, RuleConjunction, RuleField, RuleOperator, SettingType, t, UiSelectOption, VIEW_MODE_OPTIONS, ViewType } from "Settings/NoteToolbarSettings";
+import { FILE_TYPE_OPTIONS, FileType, PLATFORM_OPTIONS, PlatformType, Rule, RULE_OPERANDS, RULE_VALUE_TYPE_OTHER, RuleCondition, RuleConjunction, RuleField, RuleOperator, SettingType, t, UiSelectOption, VIEW_MODE_OPTIONS, ViewType } from "Settings/NoteToolbarSettings";
 import { arraymove, getElementPosition, getUUID, moveElement } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
 import { ButtonComponent, debounce, Menu, MenuItem, Modal, Notice, Setting } from "obsidian";
@@ -42,11 +42,12 @@ export default class RulesModal extends Modal {
         if (this.ntb.settings.rules.length > 0) {
 
             // add all the rules
-            for (const rule of this.ntb.settings.rules) {
-                void this.renderRuleForm(rule).then((el) => {
-                    ruleListEl.append(el);
-                });
-            }
+            void Promise.all(
+                this.ntb.settings.rules.map((rule) => this.renderRuleForm(rule))
+            ).then((elements) => {
+                ruleListEl.append(...elements);
+                this.updateActiveRule();
+            });
 
             // make the list sortable
             Sortable.create(ruleListEl, {
@@ -59,7 +60,7 @@ export default class RulesModal extends Modal {
                     this.ntb.debug("sortable: index: ", item.oldIndex, " -> ", item.newIndex);
                     if (item.oldIndex !== undefined && item.newIndex !== undefined) {
                         moveElement(this.ntb.settings.rules, item.oldIndex, item.newIndex);
-                        void this.ntb.settingsManager.save();
+                        void this.saveAndUpdateActiveRule();
                     }
                 }
             });
@@ -157,7 +158,7 @@ export default class RulesModal extends Modal {
                             const ruleConditionEl = await this.renderConditionForm(rule, newCondition);
                             conditionContainerEl.appendChild(ruleConditionEl);
                         }
-                        await this.ntb.settingsManager.save();
+                        await this.saveAndUpdateActiveRule();
                     }, 250));
                 await this.ntb.settingsUtils.updateItemComponentStatus(
                     this, existingToolbarSetting ? existingToolbarSetting.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend'
@@ -182,7 +183,7 @@ export default class RulesModal extends Modal {
                     .setValue(rule.conjunction)
                     .onChange(debounce(async (value) => {
                         rule.conjunction = value as RuleConjunction;
-                        await this.ntb.settingsManager.save();
+                        await this.saveAndUpdateActiveRule();
                         this.display();
                     }, 250));
             });
@@ -310,7 +311,7 @@ export default class RulesModal extends Modal {
                         condition.key = operand.key;
                         condition.operator = operand.operators[0].op;
                         condition.value = undefined;
-                        await this.ntb.settingsManager.save();
+                        await this.saveAndUpdateActiveRule();
                         // re-render the condition for the selected operand
                         conditionEl.replaceWith(await this.renderConditionForm(rule, condition));
                     }, 250));
@@ -348,7 +349,7 @@ export default class RulesModal extends Modal {
                             condition.operator = value as RuleOperator;
                             condition.value = undefined;
 
-                            await this.ntb.settingsManager.save();
+                            await this.saveAndUpdateActiveRule();
 
                             conditionEl.replaceWith(await this.renderConditionForm(rule, condition));
                         }, 250));
@@ -383,7 +384,7 @@ export default class RulesModal extends Modal {
                                 .setValue(condition.value as string)
                                 .onChange(async (value) => {
                                     condition.value = value;
-                                    await this.ntb.settingsManager.save();
+                                    await this.saveAndUpdateActiveRule();
                                 });
                         });
                     break;
@@ -398,7 +399,7 @@ export default class RulesModal extends Modal {
                                 .setValue((condition.value as string) ?? '')
                                 .onChange(debounce(async (value) => {
                                     condition.value = value;
-                                    await this.ntb.settingsManager.save();
+                                    await this.saveAndUpdateActiveRule();
                                 }, 250));
                         });
                     break;
@@ -414,16 +415,16 @@ export default class RulesModal extends Modal {
                                     [RULE_VALUE_TYPE_OTHER]: t('setting.rules.option-other'),
                                 })
                                 .setValue(condition.value as string)
-                                .onChange(async (value) => {
+                                .onChange(debounce(async (value) => {
                                     condition.value = value;
                                     if (value !== RULE_VALUE_TYPE_OTHER) {
                                         condition.otherValue = '';
                                     }
-                                    await this.ntb.settingsManager.save();
+                                    await this.saveAndUpdateActiveRule();
                                     conditionEl.replaceWith(
                                         await this.renderConditionForm(rule, condition)
                                     );
-                                });
+                                }, 250));
                         });
 
                     if (condition.value === RULE_VALUE_TYPE_OTHER) {
@@ -441,13 +442,13 @@ export default class RulesModal extends Modal {
                                 .setValue((condition.value as string) ?? '')
                                 .onChange(debounce(async (value) => {
                                     condition.value = value;
-                                    await this.ntb.settingsManager.save();
+                                    await this.saveAndUpdateActiveRule();
                                 }, 250));
                         });
                     break;
 
                 case 'none':
-                    // do nothing: no value needed for this operator
+                    // do nothing: no value needed for this condition
                     break;
 
                 case 'platform':
@@ -460,7 +461,7 @@ export default class RulesModal extends Modal {
                                 .setValue(condition.value as string)
                                 .onChange(async (value) => {
                                     condition.value = value;
-                                    await this.ntb.settingsManager.save();
+                                    await this.saveAndUpdateActiveRule();
                                 });
                         });
                     break;
@@ -475,7 +476,7 @@ export default class RulesModal extends Modal {
                                 .setValue((condition.value as string) ?? '')
                                 .onChange(debounce(async (value) => {
                                     condition.value = value;
-                                    await this.ntb.settingsManager.save();
+                                    await this.saveAndUpdateActiveRule();
                                 }, 250));
                         });
                     break;
@@ -489,7 +490,7 @@ export default class RulesModal extends Modal {
                                 .setValue((condition.value as string) ?? '')
                                 .onChange(debounce(async (value) => {
                                     condition.value = value;
-                                    await this.ntb.settingsManager.save();
+                                    await this.saveAndUpdateActiveRule();
                                 }, 250));
                         });
                     break;
@@ -509,7 +510,7 @@ export default class RulesModal extends Modal {
                         const rowId = cb.buttonEl.getAttribute('data-row-id');
                         if (rowId) {
                             this.removeConditionById(rowId);
-                            await this.ntb.settingsManager.save();
+                            await this.saveAndUpdateActiveRule();
                             const conditionEl = this.contentEl.querySelector(`.note-toolbar-setting-condition[data-row-id="${rowId}"]`);
                             if (conditionEl) conditionEl.remove();
                         }
@@ -517,7 +518,7 @@ export default class RulesModal extends Modal {
                 cb.buttonEl.setAttribute('data-row-id', condition.id);
             });
 
-        await this.ntb.settingsManager.save();
+        await this.saveAndUpdateActiveRule();
         return conditionEl;
 
     }
@@ -534,7 +535,7 @@ export default class RulesModal extends Modal {
                     .setValue(condition.otherValue ?? '')
                     .onChange(async (value) => {
                         condition.otherValue = value;
-                        await this.ntb.settingsManager.save();
+                        await this.saveAndUpdateActiveRule();
                     });
             })
             .settingEl;
@@ -543,6 +544,52 @@ export default class RulesModal extends Modal {
 	/*************************************************************************
 	 * UTILITIES
 	 *************************************************************************/
+
+    private async saveAndUpdateActiveRule() {
+        await this.ntb.settingsManager.save();
+        this.updateActiveRule();
+    }
+
+    /**
+     * Highlights the Rule row for the toolbar that matches the active file.
+     */
+    private updateActiveRule() {
+
+        const ACTIVE_RULE_CLASS = 'note-toolbar-setting-rule-active';
+        this.contentEl.querySelector(`.${ACTIVE_RULE_CLASS}`)?.removeClass(ACTIVE_RULE_CLASS);
+
+        const activeFile = this.ntb.app.workspace.getActiveFile();
+        if (!activeFile) return;
+        const fileCache = this.ntb.app.metadataCache.getFileCache(activeFile);
+        if (!fileCache) return;
+        
+        // TODO: get the active toolbar so we can highlight the active rule in the list
+        const [mappedToolbar, matchType] = this.ntb.rules.getMappedToolbar(fileCache, activeFile);
+        this.ntb.debug('getActiveRule: toolbar', mappedToolbar, '⭐️ matches:', matchType);
+
+        let cssSelector;
+        switch (matchType) {
+            case 'default':
+                // TODO: show
+                break;
+            case 'prop':
+                // TODO: show
+                break;
+            default:
+                if (typeof matchType === 'object' && matchType !== null) {
+                    cssSelector = `[data-row-id="${matchType.id}"]`;
+                }
+                break;
+
+        }
+        if (cssSelector) {
+            const ruleEl = this.contentEl.querySelector(cssSelector);
+            this.ntb.debug(ruleEl);
+            if (!ruleEl) return;
+            ruleEl.toggleClass(ACTIVE_RULE_CLASS, true);
+        }
+
+    }
 
     removeConditionById(conditionId: string): boolean {
         for (const rule of this.ntb.settings.rules) {
@@ -607,7 +654,7 @@ export default class RulesModal extends Modal {
                 keyEvent?.preventDefault();
                 break;
         }
-        await this.ntb.settingsManager.save();
+        await this.saveAndUpdateActiveRule();
     }
 
 	async listMoveHandlerById(

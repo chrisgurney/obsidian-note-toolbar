@@ -507,6 +507,8 @@ export type RuleValueEditor =
     | 'string'
 	| 'tags';
 
+export type RuleMatchType = 'default' | 'prop' | Rule | undefined;
+
 /**
  * A single ordered rule. The first matching rule determines the toolbar.
  */

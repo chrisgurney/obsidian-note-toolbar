@@ -471,6 +471,12 @@
 
     }
 
+    & .note-toolbar-setting-rule-active {
+        & .note-toolbar-setting-mapping-toolbar .search-input-container {
+            outline: solid 1px var(--interactive-accent);
+        }
+    }
+
     & .setting-item.note-toolbar-setting-item-tbar-name {
         border-top: none;
         & .setting-item-control {
