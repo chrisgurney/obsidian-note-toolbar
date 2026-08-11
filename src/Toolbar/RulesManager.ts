@@ -44,9 +44,7 @@ export default class RulesManager {
     {
 
         let matchType: RuleMatchType;
-
         let matchingToolbar: ToolbarSettings | undefined = undefined;
-
         let ignoreToolbar = false;
 
         const notetoolbarProp = this.getToolbarNameFromProps(frontmatter);

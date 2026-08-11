@@ -633,7 +633,6 @@ export default class RulesModal extends Modal {
         const activeFile = this.ntb.app.workspace.getActiveFile();
         if (!activeFile) return;
         const frontmatterCache = this.ntb.app.metadataCache.getFileCache(activeFile)?.frontmatter;
-        if (!frontmatterCache) return;
         
         const [, matchType] = this.ntb.rules.getMappedToolbar(frontmatterCache, activeFile);
         // this.ntb.debug('getActiveRule: toolbar', mappedToolbar, '⭐️ matches:', matchType);
