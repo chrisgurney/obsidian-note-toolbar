@@ -1,5 +1,5 @@
 import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, DEFAULT_ITEM_SETTINGS, DEFAULT_SETTINGS, ItemType, NoteToolbarSettings, Position, PositionType, SETTINGS_VERSION, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
-import { getUUID } from "Utils/Utils";
+import { getUUID, isUuid } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
 import { Platform } from "obsidian";
 import { PLUGIN_VERSION } from "version";
@@ -152,15 +152,10 @@ export default class SettingsManager {
 	 */
 	public getToolbar(nameOrUuid: string | null): ToolbarSettings | undefined {
 		if (!nameOrUuid) return undefined;
-		const isUuid = this.isUuid(nameOrUuid);
+		const isValidUuid = isUuid(nameOrUuid);
 		return this.ntb.settings.toolbars.find(tbar => 
-			isUuid ? tbar.uuid === nameOrUuid : tbar.name.toLowerCase() === nameOrUuid.toLowerCase()
+			isValidUuid ? tbar.uuid === nameOrUuid : tbar.name.toLowerCase() === nameOrUuid.toLowerCase()
 		);
-	}
-
-	private isUuid(value: string): boolean {
-		const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-		return uuidRegex.test(value);
 	}
 
 	/**
