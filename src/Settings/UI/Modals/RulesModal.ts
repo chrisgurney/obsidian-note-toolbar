@@ -469,7 +469,7 @@ export default class RulesModal extends Modal {
                     new Setting(operatorValueContainerEl)
                         .setClass('note-toolbar-setting-mapping-value')
                         .addSearch((cb) => {
-                            new TagSuggester(this.ntb.app, cb.inputEl);
+                            new TagSuggester(this.ntb, cb.inputEl);
                             cb
                                 .setPlaceholder(t('setting.rules.condition-value-tags-placeholder'))
                                 .setValue((condition.value as string) ?? '')

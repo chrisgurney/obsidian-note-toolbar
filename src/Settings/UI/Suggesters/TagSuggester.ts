@@ -1,26 +1,27 @@
-import { AbstractInputSuggest, App } from "obsidian";
+import NoteToolbarPlugin from "main";
+import { AbstractInputSuggest } from "obsidian";
 
 export default class TagSuggester extends AbstractInputSuggest<string> {
 
-    private inputEl: HTMLInputElement;
-
-    constructor(app: App, inputEl: HTMLInputElement) {
-        super(app, inputEl);
-        this.inputEl = inputEl;
+    constructor(
+        private ntb: NoteToolbarPlugin, 
+        private inputEl: HTMLInputElement) 
+    {
+        super(ntb.app, inputEl);
     }
 
     getSuggestions(inputStr: string): Array<string> {
 
-        const allTags = this.app.metadataCache.getTags();
+        const allTags = this.ntb.api.getTags();
         const tags: string[] = [];
 
-        for (const tag of Object.keys(allTags)) {
+        for (const tag of allTags) {
             if (tag.toLowerCase().includes(inputStr.toLowerCase())) {
                 tags.push(tag);
             }
         }
 
-        return tags.sort((a, b) => a.localeCompare(b));
+        return tags;
     }
 
     renderSuggestion(tag: string, el: HTMLElement): void {

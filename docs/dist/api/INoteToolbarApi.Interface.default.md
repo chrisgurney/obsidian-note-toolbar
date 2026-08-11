@@ -507,7 +507,7 @@ new Notice(selectedKey);
 // shows a suggester with no existing values that can be typed in; displays tag and file suggestions when those prefixes are entered
 const selected = await ntb.suggester(null, null, {
   prefixes: {
-    "#": () => Object.keys(this.ntb.app.metadataCache.getTags()),
+    "#": () => ntb.getTags(),
     "[[": () => this.ntb.app.vault.getAllLoadedFiles().map(f => `[[${f.extension === 'md' ? f.basename : f.name}]]`)
   }
 });
@@ -606,6 +606,20 @@ The clipboard value or `null`.
 #### Deprecated
 
 Since 1.33. Use `await activeWindow.navigator.clipboard.readText()` instead.
+
+***
+
+### getTags
+
+> **getTags**: () => `string`[]
+
+Returns list of tags in the vault, sorted alphabetically.
+
+#### Returns
+
+`string`[]
+
+List of tags in the vault.
 
 ***
 

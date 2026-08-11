@@ -142,6 +142,16 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
     }
 
     /**
+     * Returns list of tags in the vault, sorted alphabetically.
+     * 
+     * @see INoteToolbarApi.getTags
+     */
+    getTags(): string[] {
+        const tags = Object.keys(this.ntb.app.metadataCache.getTags());
+        return tags.sort((a, b) => a.localeCompare(b));
+    }
+
+    /**
      * Gets an item by its ID, if it exists.
      * 
      * @see INoteToolbarApi.getItem

@@ -136,6 +136,14 @@ export default interface INoteToolbarApi<T> {
     getSelection: () => string;
 
     /**
+     * Returns list of tags in the vault, sorted alphabetically.
+     * 
+     * @returns List of tags in the vault.
+     * @group Utilities
+     */
+    getTags: () => string[];
+
+    /**
      * Gets all toolbars.
      * 
      * @returns All toolbars.
@@ -324,7 +332,7 @@ export default interface INoteToolbarApi<T> {
      * // shows a suggester with no existing values that can be typed in; displays tag and file suggestions when those prefixes are entered
      * const selected = await ntb.suggester(null, null, {
      *   prefixes: {
-     *     "#": () => Object.keys(this.ntb.app.metadataCache.getTags()),
+     *     "#": () => ntb.getTags(),
      *     "[[": () => this.ntb.app.vault.getAllLoadedFiles().map(f => `[[${f.extension === 'md' ? f.basename : f.name}]]`)
      *   }
      * });
