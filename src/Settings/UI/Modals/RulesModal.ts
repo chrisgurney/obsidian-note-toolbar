@@ -110,9 +110,9 @@ export default class RulesModal extends Modal {
         const rulesContainerEl = this.contentEl.createDiv();
         rulesContainerEl.addClasses(['note-toolbar-setting-rules-container', 'note-toolbar-setting-top-border', 'note-toolbar-setting-ui']);
 
-        const rulesGroupEl = new SettingGroup(rulesContainerEl);
+        const rulesSettingGroup = new SettingGroup(rulesContainerEl);
 
-        const ruleListEl = Platform.isDesktop ? rulesGroupEl.listEl : rulesContainerEl.createDiv();
+        const ruleListEl = Platform.isDesktop ? rulesSettingGroup.listEl : rulesContainerEl.createDiv();
         ruleListEl.addClass('note-toolbar-sortablejs-list');
         
         // add all the rules
@@ -121,6 +121,10 @@ export default class RulesModal extends Modal {
                 this.ntb.settings.rules.map((rule) => this.renderRuleForm(rule))
             ).then((elements) => {
                 ruleListEl.append(...elements);
+                // add rule button
+                const addRuleContainerEl = Platform.isDesktop ? rulesSettingGroup.listEl : rulesContainerEl;
+                this.renderAddRuleButton(addRuleContainerEl, ruleListEl);
+                // update the active rule
                 this.updateActiveRule();
             });
         }
@@ -141,9 +145,14 @@ export default class RulesModal extends Modal {
             }
         });
 
-        // add rule button
+    }
 
-        new Setting(rulesContainerEl)
+    /**
+     * Renders the add rule button.
+     */
+    renderAddRuleButton(addRuleContainerEl: HTMLElement, ruleListEl: HTMLElement) {
+
+        new Setting(addRuleContainerEl)
             .setClass("note-toolbar-setting-button")
             .addButton((button: ButtonComponent) => {
                 button
