@@ -44,12 +44,9 @@ export default class RulesManager {
     {
 
         let matchType: RuleMatchType;
-        // this.debug('getMappedToolbar');
 
         let matchingToolbar: ToolbarSettings | undefined = undefined;
 
-        // this.debug('- frontmatter: ', frontmatter);
-        // const propName = this.ntb.settings.toolbarProp;
         let ignoreToolbar = false;
 
         const notetoolbarProp = this.getToolbarNameFromProps(frontmatter);

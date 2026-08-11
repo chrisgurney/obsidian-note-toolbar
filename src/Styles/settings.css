@@ -471,12 +471,6 @@
 
     }
 
-    & .note-toolbar-setting-rule-active {
-        & .note-toolbar-setting-mapping-toolbar .search-input-container {
-            outline: solid 1px var(--interactive-accent);
-        }
-    }
-
     & .setting-item.note-toolbar-setting-item-tbar-name {
         border-top: none;
         & .setting-item-control {
@@ -846,6 +840,14 @@
 
     & .note-toolbar-setting-no-border {
         border-top: none;
+    }
+
+    & .note-toolbar-setting-rule-active {
+        & .note-toolbar-setting-mapping-toolbar .search-input-container,
+        &[data-ntb-field-default] .search-input-container,
+        &[data-ntb-field-prop] input {
+            box-shadow: 0 0 0 1px var(--interactive-accent);
+        }
     }
 
 }

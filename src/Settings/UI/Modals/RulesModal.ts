@@ -55,13 +55,14 @@ export default class RulesModal extends Modal {
                     }, 250));
                 await this.ntb.settingsUtils.updateItemComponentStatus(this, existingDefaultToolbar ? existingDefaultToolbar.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend');
             });
-        this.ntb.settingsUtils.setFieldPreview(defaultToolbarSetting, existingDefaultToolbar);	
+        this.ntb.settingsUtils.setFieldPreview(defaultToolbarSetting, existingDefaultToolbar);
+        defaultToolbarSetting.controlEl.setAttr('data-ntb-field-default', '');
 
         //
         // property
         //
 
-        new Setting(this.contentEl)
+        const propertySetting = new Setting(this.contentEl)
             .setName(t('setting.display-rules.option-property'))
             .setDesc(t('setting.display-rules.option-property-description'))
             .addText(text => text
@@ -73,6 +74,7 @@ export default class RulesModal extends Modal {
                     // this.plugin.settings.toolbars.updated = new Date().toISOString();
                     await this.saveAndUpdateActiveRule();	
                 }, 750)));
+        propertySetting.controlEl.setAttr('data-ntb-field-prop', '');
 
         //
         // rules
@@ -614,27 +616,25 @@ export default class RulesModal extends Modal {
 
         const activeFile = this.ntb.app.workspace.getActiveFile();
         if (!activeFile) return;
-        const fileCache = this.ntb.app.metadataCache.getFileCache(activeFile);
-        if (!fileCache) return;
+        const frontmatterCache = this.ntb.app.metadataCache.getFileCache(activeFile)?.frontmatter;
+        if (!frontmatterCache) return;
         
-        // TODO: get the active toolbar so we can highlight the active rule in the list
-        const [mappedToolbar, matchType] = this.ntb.rules.getMappedToolbar(fileCache, activeFile);
+        const [mappedToolbar, matchType] = this.ntb.rules.getMappedToolbar(frontmatterCache, activeFile);
         this.ntb.debug('getActiveRule: toolbar', mappedToolbar, '⭐️ matches:', matchType);
 
         let cssSelector;
         switch (matchType) {
             case 'default':
-                // TODO: show
+                cssSelector = `[data-ntb-field-default]`;
                 break;
             case 'prop':
-                // TODO: show
+                cssSelector = `[data-ntb-field-prop]`;
                 break;
             default:
                 if (typeof matchType === 'object' && matchType !== null) {
                     cssSelector = `[data-row-id="${matchType.id}"]`;
                 }
                 break;
-
         }
         if (cssSelector) {
             const ruleEl = this.contentEl.querySelector(cssSelector);
