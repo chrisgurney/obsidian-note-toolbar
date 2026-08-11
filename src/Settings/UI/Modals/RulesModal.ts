@@ -38,10 +38,10 @@ export default class RulesModal extends Modal {
         //
 
         const propertySetting = new Setting(this.contentEl)
-            .setName(t('setting.display-rules.option-property'))
-            .setDesc(t('setting.display-rules.option-property-description'))
+            .setName(t('setting.rules.setting-property'))
+            .setDesc(t('setting.rules.setting-property-description'))
             .addText(text => text
-                .setPlaceholder(t('setting.display-rules.option-property-placeholder'))
+                .setPlaceholder(t('setting.rules.setting-property-placeholder'))
                 .setValue(this.ntb.settings.toolbarProp)
                 .onChange(debounce(async (value) => {
                     this.ntb.settings.toolbarProp = value;
@@ -63,12 +63,12 @@ export default class RulesModal extends Modal {
 
         const existingDefaultToolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.defaultToolbar);
         const defaultToolbarSetting = new Setting(this.contentEl)
-            .setName(t('setting.display-rules.option-default'))
-            .setDesc(t('setting.display-rules.option-default-description'))
+            .setName(t('setting.rules.setting-default'))
+            .setDesc(t('setting.rules.setting-default-description'))
             .setClass('note-toolbar-setting-item-control-std-with-help')
             .addSearch(async (cb) => {
                 new ToolbarSuggester(this.ntb, cb.inputEl);
-                cb.setPlaceholder(t('setting.display-rules.option-default-placeholder'))
+                cb.setPlaceholder(t('setting.rules.setting-default-placeholder'))
                     .setValue(existingDefaultToolbar ? existingDefaultToolbar.name : '')
                     .onChange(debounce(async (name) => {
                         const isValid = await this.ntb.settingsUtils.updateItemComponentStatus(this, name, SettingType.Toolbar, defaultToolbarSetting.controlEl, undefined, 'beforeend');
