@@ -1,7 +1,7 @@
 import { FILE_TYPE_OPTIONS, FileType, PLATFORM_OPTIONS, PlatformType, Rule, RULE_OPERANDS, RULE_VALUE_TYPE_OTHER, RuleCondition, RuleConjunction, RuleField, RuleOperator, SettingType, t, UiSelectOption, VIEW_MODE_OPTIONS, ViewType } from "Settings/NoteToolbarSettings";
 import { arraymove, getElementPosition, getUUID, moveElement } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
-import { ButtonComponent, debounce, Menu, MenuItem, Modal, Notice, Setting } from "obsidian";
+import { ButtonComponent, debounce, Menu, MenuItem, Modal, Notice, Platform, Setting, SettingGroup } from "obsidian";
 import Sortable from "sortablejs";
 import FileSuggester from "../Suggesters/FileSuggester";
 import FolderSuggester from "../Suggesters/FolderSuggester";
@@ -96,7 +96,9 @@ export default class RulesModal extends Modal {
         const rulesContainerEl = this.contentEl.createDiv();
         rulesContainerEl.addClasses(['note-toolbar-setting-rules-container', 'note-toolbar-setting-top-border', 'note-toolbar-setting-ui']);
 
-        const ruleListEl = rulesContainerEl.createDiv();
+        const rulesGroupEl = new SettingGroup(rulesContainerEl);
+
+        const ruleListEl = Platform.isDesktop ? rulesGroupEl.listEl : rulesContainerEl.createDiv();
         ruleListEl.addClass('note-toolbar-sortablejs-list');
         
         // add all the rules
