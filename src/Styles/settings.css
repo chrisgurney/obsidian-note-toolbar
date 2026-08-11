@@ -409,6 +409,9 @@
                 & .note-toolbar-setting-mapping-value {
                     border-top: none;
                     padding: 0;
+                    &::before {
+                        border: none;
+                    }
                     & .setting-item-info {
                         display: none;
                     }
