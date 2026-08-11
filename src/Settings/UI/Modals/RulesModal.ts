@@ -82,6 +82,20 @@ export default class RulesModal extends Modal {
         this.ntb.settingsUtils.setFieldPreview(defaultToolbarSetting, existingDefaultToolbar);
         defaultToolbarSetting.controlEl.setAttr('data-ntb-field-default', '');
 
+        //
+        // done button
+        //
+
+		new Setting(this.contentEl)
+			.addButton((btn: ButtonComponent) => {
+				btn.setButtonText(t('setting.styles.button-close'))
+					.setCta()
+					.setTooltip(t('setting.styles.button-close-description'))
+					.onClick(() => {
+						this.close();
+					});
+			});
+
     }
 
     /**
