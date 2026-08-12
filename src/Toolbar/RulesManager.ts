@@ -58,28 +58,9 @@ export default class RulesManager {
 
         // we still don't have a matching toolbar
         if (!matchingToolbar && !ignoreToolbar) {
-
             let rule: Rule | undefined;
             [matchingToolbar, rule] = this.getRuleToolbar(file);
             if (matchingToolbar) matchType = rule;
-
-            // check if the note is in a folder that's mapped, and if the mapping is valid
-            // let mapping: FolderMapping;
-            // let filePath: string;
-            // for (let index = 0; index < this.ntb.settings.folderMappings.length; index++) {
-            //     mapping = this.ntb.settings.folderMappings[index];
-            //     filePath = file.parent?.path === '/' ? '/' : file.path.toLowerCase();
-            //     // this.debug('getMatchingToolbar: checking folder mappings: ', filePath, ' startsWith? ', mapping.folder.toLowerCase());
-            //     if (['*'].includes(mapping.folder) || filePath.toLowerCase().startsWith(mapping.folder.toLowerCase())) {
-            //         // continue until we get a matching toolbar
-            //         matchingToolbar = this.ntb.settingsManager.getToolbarById(mapping.toolbar);
-            //         if (matchingToolbar) {
-            //             // this.debug('  - matched toolbar:', matchingToolbar);
-            //             break;
-            //         }
-            //     }
-            // }
-
         }
 
         // use the configured default
@@ -215,7 +196,7 @@ export default class RulesManager {
 
         switch (condition.operator) {
             case RuleOperator.Is:
-                return fileName === searchValue;
+                return searchValue === '*' || fileName === searchValue;
 
             case RuleOperator.IsNot:
                 return fileName !== searchValue;
@@ -276,7 +257,7 @@ export default class RulesManager {
 
         switch (condition.operator) {
             case RuleOperator.Is:
-                return path === value;
+                return value === '*' || path === value;
 
             case RuleOperator.IsNot:
                 return path !== value;
