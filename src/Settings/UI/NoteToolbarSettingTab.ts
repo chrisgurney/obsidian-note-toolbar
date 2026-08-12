@@ -588,23 +588,22 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 	displayRules(containerEl: HTMLElement): void {
 
 		const settingsContainerEl = createDiv();
-		settingsContainerEl.addClasses(['note-toolbar-setting-mappings-container']);
-		settingsContainerEl.setAttribute('data-active', this.isSectionOpen['displayRules'].toString());
 
-		const rulesSetting = new Setting(settingsContainerEl)
+		new Setting(settingsContainerEl)
 			.setHeading()
 			.setName(t('setting.display-rules.name'))
-			.setDesc(learnMoreFr(t('setting.display-rules.description'), 'Defining-where-to-show-toolbars'));
+			.setDesc(learnMoreFr(t('setting.display-rules.description'), 'Defining-where-to-show-toolbars'))
+			.addButton((button: ButtonComponent) => {
+				button
+					.setButtonText('Edit')
+					.setTooltip('Open toolbar rules')
+					.setCta()
+					.onClick(() => {
+						const rulesModal = new RulesModal(this.ntb);
+						rulesModal.open();
+					})
+			});
 
-		// make collapsible
-		this.renderSettingToggle(rulesSetting, '.note-toolbar-setting-mappings-container', 'displayRules');
-
-		const collapsibleContainerEl = createDiv();
-		collapsibleContainerEl.addClass('note-toolbar-setting-items-collapsible-container');
-
-		this.displayMappingsSettings(collapsibleContainerEl);
-
-		settingsContainerEl.appendChild(collapsibleContainerEl);
 		containerEl.append(settingsContainerEl);
 
 	}
