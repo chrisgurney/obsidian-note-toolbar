@@ -171,28 +171,20 @@ export default class RulesModal extends Modal {
                             return;
                         }
 
-                        // create the rule
+                        // create the rule and initial condition
                         const newRule: Rule = {
                             id: getUUID(),
                             conjunction: RuleConjunction.And,
-                            conditions: [],
+                            conditions: [{
+                                id: getUUID(),
+                                field: RuleField.FileName,
+                                operator: RuleOperator.Contains
+                            }],
                             toolbar: ''
                         };
                         this.ntb.settings.rules.push(newRule);
                         const ruleFormEl = await this.renderRuleForm(newRule);
                         ruleListEl.appendChild(ruleFormEl);
-
-                        // add an initial condition
-                        const newCondition: RuleCondition = {
-                            id: getUUID(),
-                            field: RuleField.FileName,
-                            operator: RuleOperator.Contains
-                        };
-                        newRule.conditions.push(newCondition);
-                        const ruleConditionEl = await this.renderConditionForm(newRule, newCondition);
-
-                        const conditionContainerEl = ruleFormEl.querySelector('.note-toolbar-setting-condition-container');
-                        if (conditionContainerEl) conditionContainerEl.appendChild(ruleConditionEl);
 
                         await this.ntb.settingsManager.save();
                     });
