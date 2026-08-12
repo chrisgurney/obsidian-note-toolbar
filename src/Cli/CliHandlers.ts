@@ -336,7 +336,7 @@ export default class CliHandlers {
         const format = hasValue(args.format) ? args.format : 'tsv';
 
         const mappings = this.ntb.settings.folderMappings;
-        if (!mappings.length) return t('cli.no-mappings');
+        if (!mappings?.length) return '';
         
         type MappingSchema = 'position' | 'folder' | 'toolbar';
         const schema: MappingSchema[] = ['position', 'folder', 'toolbar'];

@@ -387,7 +387,7 @@ export default class SettingsUIUtils {
 	 * @returns mappingCount and itemCount
 	 */
 	private getToolbarSettingsUsage(id: string): [number, number] {
-		const mappingCount = this.ntb.settings.folderMappings.filter(mapping => mapping.toolbar === id).length;
+		const mappingCount = this.ntb.settings.folderMappings?.filter(mapping => mapping.toolbar === id).length ?? 0;
 		const itemCount = this.ntb.settings.toolbars.reduce((count, toolbar) => {
 			return count + toolbar.items.filter(item => 
 				item.link === id && (item.linkAttr.type === ItemType.Group || item.linkAttr.type === ItemType.Menu)

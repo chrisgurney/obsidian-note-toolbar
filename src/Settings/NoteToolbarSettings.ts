@@ -4,7 +4,7 @@ import { getLanguage, PaneType } from "obsidian";
 export const WHATSNEW_VERSION = '1.34';
 
 /* only update when settings structure changes to trigger migrations */
-export const SETTINGS_VERSION = 20260703.1;
+export const SETTINGS_VERSION = 20260812.1;
 
 // *****************************************************************************
 // TRANSLATIONS
@@ -246,7 +246,8 @@ export interface NoteToolbarSettings {
 	editorMenuToolbar: string | null;
 	emptyViewToolbar: string | null;
 	export: ExportSettings;
-	folderMappings: Array<FolderMapping>;
+	/** deprecated in 1.35: replaced with rules */
+	folderMappings?: Array<FolderMapping>;
 	icon: string;
 	keepPropsState: boolean;
 	lockCallouts: boolean;

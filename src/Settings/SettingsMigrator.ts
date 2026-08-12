@@ -1,5 +1,6 @@
 import NoteToolbarPlugin from "main";
-import { NoteToolbarSettings, PlatformType, SETTINGS_VERSION, ToolbarItemSettings, ToolbarSettings } from "./NoteToolbarSettings";
+import { getUUID } from "Utils/Utils";
+import { NoteToolbarSettings, PlatformType, Rule, RuleConjunction, RuleField, RuleOperator, SETTINGS_VERSION, ToolbarItemSettings, ToolbarSettings } from "./NoteToolbarSettings";
 
 
 export default class SettingsMigrator {
@@ -294,6 +295,39 @@ export default class SettingsMigrator {
             this.ntb.debug("| starting migration: " + old_version + " -> " + new_version);
             delete this.ntb.settings.ribbonAction;
             delete this.ntb.settings.ribbonToolbar;
+            // for the next migration to run
+            old_version = new_version;
+        }
+
+        // MIGRATION: folder mappings to rules
+        if (old_version === 20260703.1) {
+            new_version = 20260812.1;
+            this.ntb.debug("| starting migration: " + old_version + " -> " + new_version);
+
+            // for each folder mapping
+            loaded_settings.folderMappings?.forEach((mapping, index) => {
+                if (!mapping.toolbar || !mapping.folder) {
+                    this.ntb.debug("| ", index, mapping, "⚠️ SKIPPED: no toolbar or folder defined");
+                    return;
+                }
+                // create a rule with a folder condition
+                const newRule: Rule = {
+                    id: getUUID(),
+                    conjunction: RuleConjunction.And,
+                    conditions: [{
+                        id: getUUID(),
+                        field: RuleField.Folder,
+                        operator: RuleOperator.Is,
+                        value: mapping.folder
+                    }],
+                    toolbar: mapping.toolbar
+                };
+                loaded_settings.rules.push(newRule);
+                this.ntb.debug('| ', index, mapping, '->', newRule);
+            });
+            // keep the mappings for now; do not delete
+            // delete this.ntb.settings.folderMappings;
+
             // for the next migration to run
             old_version = new_version;
         }

@@ -628,7 +628,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 			const itemsContainerEl = createDiv();
 			itemsContainerEl.addClasses([ 'note-toolbar-setting-items-list-container', 'note-toolbar-setting-folder-mapping-container' ]);
 
-			if (this.ntb.settings.folderMappings.length == 0) {
+			if (!this.ntb.settings.folderMappings || this.ntb.settings.folderMappings?.length == 0) {
 
 				const emptyMsgEl = createDiv({ 
 					text: this.ntb.settingsUtils.emptyMessageFr(t('setting.mappings.label-empty')),
@@ -640,7 +640,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 				const toolbarFolderListEl = createDiv();
 				toolbarFolderListEl.addClass('note-toolbar-sortablejs-list');
 
-				this.ntb.settings.folderMappings.forEach((mapping, ) => {
+				this.ntb.settings.folderMappings?.forEach((mapping, ) => {
 					const rowId = this.itemListIdCounter.toString();
 					const toolbarFolderListItemDiv = this.generateMappingForm(mapping, rowId);
 					toolbarFolderListEl.append(toolbarFolderListItemDiv);
@@ -656,6 +656,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 					onSort: (item) => {
 						this.ntb.debug("sortable: index: ", item.oldIndex, " -> ", item.newIndex);
 						if (item.oldIndex !== undefined && item.newIndex !== undefined) {
+							if (!this.ntb.settings.folderMappings) return;
 							moveElement(this.ntb.settings.folderMappings, item.oldIndex, item.newIndex);
 							void this.ntb.settingsManager.save();
 						}
@@ -680,7 +681,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 					.setCta()
 					.onClick(async () => {
 						const newMapping = { folder: "", toolbar: "" };
-						this.ntb.settings.folderMappings.push(newMapping);
+						this.ntb.settings.folderMappings?.push(newMapping);
 						await this.ntb.settingsManager.save();
 						// TODO: add a form item to the existing list
 							// TODO: put the existing code in a function
@@ -731,7 +732,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 					.onChange(debounce(async (newFolder) => {
 						if (
 							newFolder &&
-							this.ntb.settings.folderMappings.some(
+							this.ntb.settings.folderMappings?.some(
 								(map, ) => {
 									return mapping != map ? map.folder.toLowerCase() === newFolder.toLowerCase() : undefined;
 								}
@@ -1435,6 +1436,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 	 * @param action Direction of the move, "delete", or don't provided if just checking the keyboard for the action
 	 */
 	async listMoveHandler(keyEvent: KeyboardEvent | null, index: number, action?: 'up' | 'down' | 'delete'): Promise<void> {
+		if (!this.ntb.settings.folderMappings) return;
 		if (keyEvent) {
 			switch (keyEvent.key) {
 				case 'ArrowUp':
