@@ -30,8 +30,11 @@ export default class RulesModal extends Modal {
 
         this.contentEl.empty();
 
+        const activeFileName = this.ntb.app.workspace.getActiveFile()?.basename;
         new Setting(this.contentEl)
-            .setDesc(learnMoreFr(t('setting.rules.description-modal', { property: this.ntb.settings.toolbarProp }), 'Defining-where-to-show-toolbars'));
+            .setDesc(learnMoreFr(activeFileName 
+                ? t('setting.rules.description-modal', { filename: activeFileName }) : t('setting.rules.description-modal-no-file')
+            , 'Defining-where-to-show-toolbars'));
 
         //
         // property
