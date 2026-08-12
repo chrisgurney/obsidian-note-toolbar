@@ -394,9 +394,15 @@
                         padding: 0;
                     }
                 }
-                /* hides the first conjunction for the first operator in the list */
-                &:first-child > .note-toolbar-setting-mapping-field > .setting-item-info {
-                    display: none;
+                &:first-child {
+                    /* hides the first conjunction for the first operator in the list */
+                    & > .note-toolbar-setting-mapping-field > .setting-item-info {
+                        display: none;
+                    }
+                    /* hides the delete button for the first condition in the list */
+                    & > .note-toolbar-setting-mapping-operator-value > .note-toolbar-setting-item-delete {
+                        display: none;
+                    }
                 }
                 & .note-toolbar-setting-mapping-field {
                     & .setting-item-info .setting-item-name {

@@ -121,11 +121,12 @@ export default class RulesModal extends Modal {
                 this.ntb.settings.rules.map((rule) => this.renderRuleForm(rule))
             ).then((elements) => {
                 ruleListEl.append(...elements);
-                this.renderAddRuleButton(rulesContainerEl, ruleListEl);
                 // update the active rule
                 this.updateActiveRule();
             });
         }
+
+        this.renderAddRuleButton(rulesContainerEl, ruleListEl);
 
         // make the list sortable
         Sortable.create(ruleListEl, {
@@ -169,6 +170,7 @@ export default class RulesModal extends Modal {
                             new Notice(t('setting.rules.notice-all-toolbars-used')).containerEl.addClass('mod-warning');
                             return;
                         }
+
                         // create the rule
                         const newRule: Rule = {
                             id: getUUID(),
@@ -179,6 +181,19 @@ export default class RulesModal extends Modal {
                         this.ntb.settings.rules.push(newRule);
                         const ruleFormEl = await this.renderRuleForm(newRule);
                         ruleListEl.appendChild(ruleFormEl);
+
+                        // add an initial condition
+                        const newCondition: RuleCondition = {
+                            id: getUUID(),
+                            field: RuleField.FileName,
+                            operator: RuleOperator.Contains
+                        };
+                        newRule.conditions.push(newCondition);
+                        const ruleConditionEl = await this.renderConditionForm(newRule, newCondition);
+
+                        const conditionContainerEl = ruleFormEl.querySelector('.note-toolbar-setting-condition-container');
+                        if (conditionContainerEl) conditionContainerEl.appendChild(ruleConditionEl);
+
                         await this.ntb.settingsManager.save();
                     });
                 button.buttonEl.setText(iconTextFr('plus', t('setting.rules.button-new')));
@@ -231,17 +246,6 @@ export default class RulesModal extends Modal {
                         const mappedToolbar = isValid ? toolbar : undefined;
                         rule.toolbar = mappedToolbar?.uuid ?? '';
                         this.ntb.settingsUtils.setFieldPreview(toolbarSetting, mappedToolbar);
-                        // add the initial condition
-                        if (isValid && rule.conditions.length === 0) {
-                            const newCondition: RuleCondition = {
-                                id: getUUID(),
-                                field: RuleField.FileName,
-                                operator: RuleOperator.Contains
-                            };
-                            rule.conditions.push(newCondition);
-                            const ruleConditionEl = await this.renderConditionForm(rule, newCondition);
-                            conditionContainerEl.appendChild(ruleConditionEl);
-                        }
                         await this.saveAndUpdateActiveRule();
                     });
                 cb
