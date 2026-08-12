@@ -616,23 +616,6 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 
 		const mappingsGroup = new SettingGroup(containerEl);
 
-		// open toolbar rules button
-		mappingsGroup.addSetting((rulesSetting) => {
-			rulesSetting
-				.setName('Advanced rules')
-				.setDesc('Define more detailed conditions for when toolbars are displayed.')
-				.addButton((button: ButtonComponent) => {
-					button
-						.setButtonText('Edit')
-						.setTooltip('Open toolbar rules')
-						.setCta()
-						.onClick(() => {
-							const rulesModal = new RulesModal(this.ntb);
-							rulesModal.open();
-						})
-				});
-		});
-
 		mappingsGroup.addSetting((folderMappingSetting) => {
 			folderMappingSetting
 				.setName(t('setting.mappings.name'))
