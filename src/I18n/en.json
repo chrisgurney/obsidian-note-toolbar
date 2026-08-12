@@ -439,6 +439,8 @@
             }
         },
         "display-rules": {
+            "button-edit-label": "Edit rules",
+            "button-edit-tooltip": "Open toolbar rules",
             "description": "Define which notes to display toolbars on.",
             "name": "Display rules"
         },

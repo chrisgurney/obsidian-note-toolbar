@@ -595,8 +595,8 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 			.setDesc(learnMoreFr(t('setting.display-rules.description'), 'Defining-where-to-show-toolbars'))
 			.addButton((button: ButtonComponent) => {
 				button
-					.setButtonText('Edit')
-					.setTooltip('Open toolbar rules')
+					.setButtonText(t('setting.display-rules.button-edit-label'))
+					.setTooltip(t('setting.display-rules.button-edit-tooltip'))
 					.setCta()
 					.onClick(() => {
 						const rulesModal = new RulesModal(this.ntb);
