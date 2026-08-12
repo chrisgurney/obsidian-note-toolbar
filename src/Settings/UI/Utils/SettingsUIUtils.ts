@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { ButtonComponent, Component, getIcon, ItemView, MarkdownRenderer, Notice, Platform, requireApiVersion, setIcon, Setting, setTooltip, TFile, TFolder, ToggleComponent } from "obsidian";
-import { COMMAND_DOES_NOT_EXIST, ComponentType, DEFAULT_ITEM_VISIBILITY_SETTINGS, IGNORE_PLUGIN_IDS, ItemComponentVisibility, ItemType, SettingType, t, ToolbarItemSettings, ToolbarSettings, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_WHATS_NEW, ViewModeType, Visibility, WHATSNEW_VERSION } from "Settings/NoteToolbarSettings";
+import { COMMAND_DOES_NOT_EXIST, ComponentType, DEFAULT_ITEM_VISIBILITY_SETTINGS, IGNORE_PLUGIN_IDS, ItemComponentVisibility, ItemType, NONE_TOOLBAR_ID, SettingType, t, ToolbarItemSettings, ToolbarSettings, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_WHATS_NEW, ViewModeType, Visibility, WHATSNEW_VERSION } from "Settings/NoteToolbarSettings";
 import SettingsManager from "Settings/SettingsManager";
 import { URLS } from "Utils/Urls";
 import { hasVisibleComponents, importArgs } from "Utils/Utils";
@@ -9,10 +9,10 @@ import { confirmWithModal } from "../Modals/ConfirmModal";
 import ItemModal from "../Modals/ItemModal";
 import ItemSuggestModal, { ItemSuggestMode } from "../Modals/ItemSuggestModal";
 import MessageModal from "../Modals/MessageModal";
+import RulesModal from "../Modals/RulesModal";
 import ToolbarSettingsModal from "../Modals/ToolbarSettingsModal";
 import ToolbarSuggestModal from "../Modals/ToolbarSuggestModal";
 import NoteToolbarSettingTab from "../NoteToolbarSettingTab";
-import RulesModal from "../Modals/RulesModal";
 
 // warnings if this toolbar is assigned to any app locations
 const APP_TOOLBAR_WARNINGS = [
@@ -813,8 +813,9 @@ export default class SettingsUIUtils {
 	 * Updates the toolbar preview for the given setting.
 	 */
 	setFieldPreview(setting: Setting, toolbar: ToolbarSettings | undefined) {
-		const toolbarPreviewFr = toolbar && this.ntb.settingsUtils.createToolbarPreviewFr(toolbar, undefined, false);
 		removeFieldHelp(setting.controlEl);
+		if (toolbar?.uuid === NONE_TOOLBAR_ID) return;
+		const toolbarPreviewFr = toolbar && this.ntb.settingsUtils.createToolbarPreviewFr(toolbar, undefined, false);
 		setFieldHelp(setting.controlEl, toolbarPreviewFr);
 		const tbarEl = setting.controlEl.querySelector('.note-toolbar-setting-tbar-preview');
 		// only apply fade if the preview is overflowing

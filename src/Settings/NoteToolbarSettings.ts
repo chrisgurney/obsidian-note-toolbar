@@ -366,7 +366,7 @@ export const EMPTY_TOOLBAR: ToolbarSettings = {
 
 export const NONE_TOOLBAR: ToolbarSettings = {
 	uuid: NONE_TOOLBAR_ID,
-	name: '',
+	name: t('setting.toolbar-suggest-modal.option-none'),
 	commandPosition: PositionType.Floating,
 	customClasses: '',
 	defaultItem: null,

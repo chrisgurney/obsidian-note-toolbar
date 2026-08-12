@@ -1,4 +1,4 @@
-import { FILE_TYPE_OPTIONS, FileType, PLATFORM_OPTIONS, PlatformType, Rule, RULE_OPERANDS, RULE_VALUE_TYPE_OTHER, RuleCondition, RuleConjunction, RuleField, RuleOperator, SettingType, t, UiSelectOption, VIEW_MODE_OPTIONS, ViewType } from "Settings/NoteToolbarSettings";
+import { FILE_TYPE_OPTIONS, FileType, NONE_TOOLBAR_ID, PLATFORM_OPTIONS, PlatformType, Rule, RULE_OPERANDS, RULE_VALUE_TYPE_OTHER, RuleCondition, RuleConjunction, RuleField, RuleOperator, SettingType, t, UiSelectOption, VIEW_MODE_OPTIONS, ViewType } from "Settings/NoteToolbarSettings";
 import { arraymove, getElementPosition, getUUID, moveElement } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
 import { ButtonComponent, debounce, Menu, MenuItem, Modal, Notice, Platform, Setting, SettingGroup } from "obsidian";
@@ -137,7 +137,7 @@ export default class RulesModal extends Modal {
             onChange: (item) => navigator.vibrate(50),
             onChoose: (item) => navigator.vibrate(50),
             onSort: (item) => {
-                this.ntb.debug("sortable: index: ", item.oldIndex, " -> ", item.newIndex);
+                // this.ntb.debug("sortable: index: ", item.oldIndex, " -> ", item.newIndex);
                 if (item.oldIndex !== undefined && item.newIndex !== undefined) {
                     moveElement(this.ntb.settings.rules, item.oldIndex, item.newIndex);
                     void this.saveAndUpdateActiveRule();
@@ -214,18 +214,23 @@ export default class RulesModal extends Modal {
             .setClass('note-toolbar-setting-mapping-toolbar')
             .setClass('note-toolbar-setting-item-control-std-with-help')
             .addSearch(async (cb) => {
-                // do not show toolbars already used in other rules
-                new ToolbarSuggester(this.ntb, cb.inputEl, (toolbar) => {
-                    const toolbarsWithRules = new Set<string>(
-                        this.ntb.settings.rules.map((rule) => rule.toolbar)
-                    );
-                    return !toolbarsWithRules.has(toolbar.uuid);
-                });
-                cb.setPlaceholder(t('setting.rules.placeholder-toolbar'))
-                    .setValue(existingToolbarSetting ? existingToolbarSetting.name : '')
-                    .onChange(debounce(async (name) => {
-                        const isValid = await this.ntb.settingsUtils.updateItemComponentStatus(this, name, SettingType.Toolbar, toolbarSetting.controlEl, undefined, 'beforeend');
-                        const mappedToolbar = isValid ? this.ntb.settingsManager.getToolbarByName(name) : undefined;
+                new ToolbarSuggester(this.ntb, cb.inputEl, true,
+                    // do not show toolbars already used in other rules
+                    (toolbar) => {
+                        const toolbarsWithRules = new Set<string>(
+                            this.ntb.settings.rules.map((rule) => rule.toolbar)
+                        );
+                        return !toolbarsWithRules.has(toolbar.uuid);
+                    },
+                    async (toolbar) => {
+                        let isValid = false;
+                        if (toolbar.uuid === NONE_TOOLBAR_ID) {
+                            isValid = true;
+                        }
+                        else {
+                            isValid = await this.ntb.settingsUtils.updateItemComponentStatus(this, toolbar.name, SettingType.Toolbar, toolbarSetting.controlEl, undefined, 'beforeend');
+                        }
+                        const mappedToolbar = isValid ? toolbar : undefined;
                         rule.toolbar = mappedToolbar?.uuid ?? '';
                         this.ntb.settingsUtils.setFieldPreview(toolbarSetting, mappedToolbar);
                         // add the initial condition
@@ -240,10 +245,22 @@ export default class RulesModal extends Modal {
                             conditionContainerEl.appendChild(ruleConditionEl);
                         }
                         await this.saveAndUpdateActiveRule();
-                    }, 250));
-                await this.ntb.settingsUtils.updateItemComponentStatus(
-                    this, existingToolbarSetting ? existingToolbarSetting.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend'
-                );
+                    });
+                cb
+                    .setPlaceholder(t('setting.rules.placeholder-toolbar'))
+                    .setValue(existingToolbarSetting ? existingToolbarSetting.name : '')
+                    .onChange((name) => {
+                        if (name === '') {
+                            this.ntb.settingsUtils.setFieldPreview(toolbarSetting, undefined);
+                            rule.toolbar = '';
+                            this.updateActiveRule();
+                        }
+                    })
+                if (existingToolbarSetting?.uuid !== NONE_TOOLBAR_ID) {
+                    await this.ntb.settingsUtils.updateItemComponentStatus(
+                        this, existingToolbarSetting ? existingToolbarSetting.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend'
+                    );
+                }
             });
         this.ntb.settingsUtils.setFieldPreview(toolbarSetting, existingToolbarSetting);
 
@@ -662,7 +679,7 @@ export default class RulesModal extends Modal {
         }
         if (cssSelector) {
             const ruleEl = this.contentEl.querySelector(cssSelector);
-            this.ntb.debug(ruleEl);
+            // this.ntb.debug(ruleEl);
             if (!ruleEl) return;
             ruleEl.toggleClass(ACTIVE_RULE_CLASS, true);
         }

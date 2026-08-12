@@ -1,4 +1,4 @@
-import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, DEFAULT_ITEM_SETTINGS, DEFAULT_SETTINGS, ItemType, NoteToolbarSettings, Position, PositionType, SETTINGS_VERSION, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, DEFAULT_ITEM_SETTINGS, DEFAULT_SETTINGS, ItemType, NONE_TOOLBAR, NONE_TOOLBAR_ID, NoteToolbarSettings, Position, PositionType, SETTINGS_VERSION, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { getUUID, isUuid } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
 import { Platform } from "obsidian";
@@ -164,6 +164,7 @@ export default class SettingsManager {
 	 * @returns ToolbarSettings for the provided matched toolbar ID, undefined otherwise.
 	 */
 	public getToolbarById(uuid: string | null): ToolbarSettings | undefined {
+		if (uuid === NONE_TOOLBAR_ID) return { ...NONE_TOOLBAR };
 		return uuid ? this.ntb.settings.toolbars.find(tbar => tbar.uuid === uuid) : undefined;
 	}
 
