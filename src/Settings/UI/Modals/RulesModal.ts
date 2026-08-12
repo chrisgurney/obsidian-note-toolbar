@@ -121,9 +121,7 @@ export default class RulesModal extends Modal {
                 this.ntb.settings.rules.map((rule) => this.renderRuleForm(rule))
             ).then((elements) => {
                 ruleListEl.append(...elements);
-                // add rule button
-                const addRuleContainerEl = Platform.isDesktop ? rulesSettingGroup.listEl : rulesContainerEl;
-                this.renderAddRuleButton(addRuleContainerEl, ruleListEl);
+                this.renderAddRuleButton(rulesContainerEl, ruleListEl);
                 // update the active rule
                 this.updateActiveRule();
             });
