@@ -754,7 +754,6 @@
         "rules": {
             "button-collapse-tooltip": "Collapse all rules",
             "button-delete-condition-tooltip": "Delete condition",
-            "button-delete-rule-tooltip": "Delete rule",
             "button-expand-tooltip": "Expand all rules",
             "button-new": "New toolbar rule",
             "button-new-tooltip": "Add a new rule",
@@ -773,6 +772,8 @@
             "description-modal-no-file": "Define when each toolbar is displayed.",
             "error-folder-already-mapped": "This folder already has a toolbar associated with it. Precedence is top to bottom.",
             "label-empty": "Use the button to create a rule.",
+            "menu-delete-rule": "Delete rule",
+            "menu-duplicate-rule": "Duplicate rule",
             "name": "Rules",
             "name-modal": "Toolbar display rules",
             "name-with-count": "Rules ({{count}})",

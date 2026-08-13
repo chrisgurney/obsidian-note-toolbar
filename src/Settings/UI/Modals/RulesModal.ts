@@ -299,7 +299,17 @@ export default class RulesModal extends Modal {
                         const menu = new Menu();
                         menu.addItem((item: MenuItem) => {
                             item
-                                .setTitle(t('setting.rules.button-delete-rule-tooltip'))
+                                .setTitle(t('setting.rules.menu-duplicate-rule'))
+                                .setIcon('copy')
+                                .onClick(async () => {
+                                    await this.ntb.rules.duplicateRule(rule);
+                                    this.display();
+                                })
+                        });
+                        menu.addSeparator();
+                        menu.addItem((item: MenuItem) => {
+                            item
+                                .setTitle(t('setting.rules.menu-delete-rule'))
                                 .setWarning(true)
                                 .setIcon('trash')
                                 .onClick(async () => {

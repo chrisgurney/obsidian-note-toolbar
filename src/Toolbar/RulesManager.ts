@@ -1,12 +1,31 @@
 import NoteToolbarPlugin from "main";
 import { FrontMatterCache, ItemView, MarkdownView, Platform, TFile } from "obsidian";
 import { RULE_VALUE_TYPE_OTHER, Rule, RuleCondition, RuleConjunction, RuleField, RuleMatchType, RuleOperator, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { getUUID } from "Utils/Utils";
 
 export default class RulesManager {
     
     constructor(
         private ntb: NoteToolbarPlugin
     ) {}
+
+    /**
+     * Duplicates the provided rule (but for a new, empty toolbar) and adds it to the end of the list of rules.
+     * @param rule 
+     */
+    public async duplicateRule(rule: Rule) {
+        const duplicatedRule: Rule = {
+            ...rule,
+            id: getUUID(),
+            toolbar: '',
+            conditions: rule.conditions.map((condition) => ({
+                ...condition,
+                id: getUUID(),
+            }))
+        };
+        this.ntb.settings.rules.push(duplicatedRule);
+        await this.ntb.settingsManager.save();
+    }
 
 	/**
 	 * Gets the toolbar configured for the empty view, assuming we're actively in an empty view.
