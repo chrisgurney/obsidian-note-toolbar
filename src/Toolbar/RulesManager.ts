@@ -247,7 +247,7 @@ export default class RulesManager {
             ? condition.otherValue
             : condition.value;
 
-        this.ntb.debug(condition, value, viewType);
+        // this.ntb.debug(condition, value, viewType);
 
         if (typeof value !== 'string' || value.length === 0) {
             return false;
@@ -258,7 +258,7 @@ export default class RulesManager {
                 const isMatch = viewType === value;
                 const isViewTypeSupported = this.ntb.utils.hasToolbarForViewType(value);
                 if (isMatch && !isViewTypeSupported) {
-                    this.ntb.error('Toolbar rule matches but file type is not enabled in settings:', value);
+                    this.ntb.error(`Toolbar rule matches current view, but file type (${value}) is not enabled in Note Toolbar settings.`);
                 }
                 return isViewTypeSupported && isMatch;
             }

@@ -703,10 +703,23 @@ export default class RulesModal extends Modal {
                 }
                 break;
         }
+
         if (cssSelector) {
             const ruleEl = this.contentEl.querySelector(cssSelector);
             // this.ntb.debug(ruleEl);
             if (!ruleEl) return;
+
+            // display an error if the corresponding file type setting is disabled
+            const itemView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
+            if (itemView) {
+                const isViewTypeSupported = this.ntb.utils.hasToolbarForItemView(itemView);
+                if (!isViewTypeSupported) {
+                    const errorText = `Toolbar is not displayed in active file (${activeFile.basename}) because file type (${itemView.getViewType()}) is not enabled in Note Toolbar settings.`;
+                    new Notice(errorText, 10000).containerEl.addClass('mod-warning');
+                    // this.ntb.settingsUtils.setFieldError(null, ruleEl, "beforeend", errorText);
+                }
+            }
+
             ruleEl.toggleClass(ACTIVE_RULE_CLASS, true);
         }
 
