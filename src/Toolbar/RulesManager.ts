@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { FrontMatterCache, ItemView, MarkdownView, Platform, TFile } from "obsidian";
-import { RULE_VALUE_TYPE_OTHER, Rule, RuleCondition, RuleConjunction, RuleField, RuleMatchType, RuleOperator, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { RULE_VALUE_TYPE_OTHER, Rule, RuleCondition, RuleConjunction, RuleField, RuleMatchType, RuleOperator, ToolbarSettings, t } from "Settings/NoteToolbarSettings";
 import { getUUID } from "Utils/Utils";
 
 export default class RulesManager {
@@ -258,9 +258,9 @@ export default class RulesManager {
                 const isMatch = viewType === value;
                 const isViewTypeSupported = this.ntb.utils.hasToolbarForViewType(value);
                 if (isMatch && !isViewTypeSupported) {
-                    this.ntb.error(`Toolbar rule matches current view, but file type (${value}) is not enabled in Note Toolbar settings.`);
+                    this.ntb.error(t('setting.rules.error-file-type-disabled_view', { filetype: viewType }));
                 }
-                return isViewTypeSupported && isMatch;
+                return isMatch;
             }
 
             case RuleOperator.IsNot:

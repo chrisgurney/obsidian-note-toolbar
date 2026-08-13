@@ -714,7 +714,7 @@ export default class RulesModal extends Modal {
             if (itemView) {
                 const isViewTypeSupported = this.ntb.utils.hasToolbarForItemView(itemView);
                 if (!isViewTypeSupported) {
-                    const errorText = `Toolbar is not displayed in active file (${activeFile.basename}) because file type (${itemView.getViewType()}) is not enabled in Note Toolbar settings.`;
+                    const errorText = t('setting.rules.error-file-type-disabled_file', { filename: activeFile.basename, filetype: itemView.getViewType() });
                     new Notice(errorText, 10000).containerEl.addClass('mod-warning');
                     // this.ntb.settingsUtils.setFieldError(null, ruleEl, "beforeend", errorText);
                 }
