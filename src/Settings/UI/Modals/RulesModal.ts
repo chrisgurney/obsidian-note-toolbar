@@ -258,7 +258,7 @@ export default class RulesModal extends Modal {
                         if (name === '') {
                             this.ntb.settingsUtils.setFieldPreview(toolbarSetting, undefined);
                             rule.toolbar = '';
-                            this.updateActiveRule();
+                            this.updateActiveRule(); // no need to save: done in suggester callback
                         }
                     })
                 if (existingToolbarSetting?.uuid !== NONE_TOOLBAR_ID) {
@@ -412,11 +412,10 @@ export default class RulesModal extends Modal {
                             condition.field = undefined;
                             condition.key = undefined;
                             condition.operator = undefined;
-                            condition.value = undefined;
+                            condition.value = '';
                             this.updateActiveRule();
-                            // void this.renderConditionForm(rule, condition).then((conditionFormEl) => {
-                            //     conditionEl.replaceWith(conditionFormEl);
-                            // });
+                            // const conditionFormEl = this.renderConditionForm(rule, condition);
+                            // conditionEl.replaceWith(conditionFormEl);
                         }
                     })
 
