@@ -18,16 +18,17 @@ export default class RulesModal extends Modal {
         super(ntb.app);
     }
 
-    public onOpen() {
-        this.setTitle(t('setting.rules.name-modal'));
-		this.modalEl.addClass('note-toolbar-setting-modal-container');
-        this.display();
+    public async onOpen(): Promise<void> {
+        await this.display();
     }
     
     /**
      * Displays rules for displaying toolbars.
      */
-    public display() {
+    public async display(): Promise<void> {
+
+        this.setTitle(t('setting.rules.name-modal'));
+		this.modalEl.addClass('note-toolbar-setting-modal-container');
 
         this.contentEl.empty();
 
@@ -59,7 +60,7 @@ export default class RulesModal extends Modal {
         // rules
         //
 
-        this.renderRules();
+        await this.renderRules();
 
         //
         // default toolbar
@@ -105,7 +106,7 @@ export default class RulesModal extends Modal {
     /**
      * Renders the rules section.
      */
-    private renderRules() {
+    private async renderRules(): Promise<void> {
 
         new Setting(this.contentEl)
             .setName(t('setting.rules.name'))
@@ -121,7 +122,7 @@ export default class RulesModal extends Modal {
         
         // add all the rules
         if (this.ntb.settings.rules.length > 0) {
-            void Promise.all(
+            await Promise.all(
                 this.ntb.settings.rules.map((rule) => this.renderRuleForm(rule))
             ).then((elements) => {
                 ruleListEl.append(...elements);
@@ -280,7 +281,7 @@ export default class RulesModal extends Modal {
                     .onChange(debounce(async (value) => {
                         rule.conjunction = value as RuleConjunction;
                         await this.saveAndUpdateActiveRule();
-                        this.display();
+                        await this.display();
                     }, 250));
             });
 
@@ -303,7 +304,7 @@ export default class RulesModal extends Modal {
                                 .setIcon('copy')
                                 .onClick(async () => {
                                     await this.ntb.rules.duplicateRule(rule);
-                                    this.display();
+                                    await this.display();
                                 })
                         });
                         menu.addSeparator();

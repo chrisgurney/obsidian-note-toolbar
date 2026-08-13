@@ -797,7 +797,7 @@ export default class SettingsUIUtils {
 							const oldLink = event.currentTarget as HTMLElement;
 							oldLink?.replaceWith(refreshLink);
 							this.ntb.registerDomEvent(refreshLink, 'click', () => {
-								parent?.display();
+								void parent?.display();
 							});
 						});
 						errorDiv.append(' ', errorLink);
