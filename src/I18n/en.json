@@ -760,7 +760,7 @@
             "button-new-tooltip": "Add a new rule",
             "button-newcondition": "Add condition",
             "button-newcondition-tooltip": "Add a new condition to this rule",
-            "condition-field-placeholder": "Select a field",
+            "condition-field-placeholder": "Search...",
             "condition-field-prefix-and": "and",
             "condition-field-prefix-or": "or",
             "condition-operator-placeholder": "Select an operator",

@@ -36,6 +36,7 @@
 }
 
 .note-toolbar-item-suggestion-container,
+.note-toolbar-rule-suggestion-container,
 .note-toolbar-tbar-suggestion-container {
     gap: 0 0.5em;
     display: flex;

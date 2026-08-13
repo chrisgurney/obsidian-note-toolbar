@@ -442,9 +442,6 @@
             align-items: center;
             border-top: none;
             padding: 0;
-            & .setting-item-info {
-                margin-inline-end: var(--size-2-2);
-            }
             & select, & input {
                 background-color: transparent;
             }

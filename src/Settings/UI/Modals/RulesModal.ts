@@ -5,6 +5,7 @@ import { ButtonComponent, debounce, Menu, MenuItem, Modal, Notice, Platform, Set
 import Sortable from "sortablejs";
 import FileSuggester from "../Suggesters/FileSuggester";
 import FolderSuggester from "../Suggesters/FolderSuggester";
+import RuleOperandSuggester from "../Suggesters/RuleOperandSuggester";
 import TagSuggester from "../Suggesters/TagSuggester";
 import ToolbarSuggester from "../Suggesters/ToolbarSuggester";
 import { iconTextFr, learnMoreFr } from "../Utils/SettingsUIUtils";
@@ -376,40 +377,49 @@ export default class RulesModal extends Modal {
         conditionEl.setAttribute('data-row-id', condition.id);
 
         // operands
-        const ruleOperandOptions = Object.fromEntries(
-            [...RULE_OPERANDS]
-                .sort((a, b) => a.label.localeCompare(b.label))
-                .map((operand) => [
-                    operand.id,
-                    operand.label
-                ])
+        const operand = RULE_OPERANDS.find((operand) =>
+            operand.field === condition.field &&
+            operand.key === condition.key
         );
 
         new Setting(conditionEl)
             .setName(rule.conjunction === RuleConjunction.And ? t('setting.rules.condition-field-prefix-and') : t('setting.rules.condition-field-prefix-or'))
             .setClass('note-toolbar-setting-mapping-field')
             .setClass('note-toolbar-setting-item-text-style')
-            .addDropdown((cb) => {
+            .addSearch((cb) => {
                 cb
-                    .addOptions(ruleOperandOptions)
-                    .setValue(
-                        RULE_OPERANDS.find((operand) =>
-                            operand.field === condition.field &&
-                            operand.key === condition.key
-                        )?.id ?? ''
-                    )
-                    .onChange(debounce(async (id) => {
-                        const operand = RULE_OPERANDS.find( (operand) => operand.id === id );
-                        if (!operand) return;
-                        // set condition based on id selected
-                        condition.field = operand.field;
-                        condition.key = operand.key;
-                        condition.operator = operand.operators[0].op;
-                        condition.value = undefined;
-                        await this.saveAndUpdateActiveRule();
-                        // re-render the condition for the selected operand
-                        conditionEl.replaceWith(await this.renderConditionForm(rule, condition));
-                    }, 250));
+                    .setValue(operand?.label ?? '')
+                    .setPlaceholder(t('setting.rules.condition-field-placeholder'))
+                    .onChange((name) => {
+                        if (name === '') {
+                            condition.field = undefined;
+                            condition.key = undefined;
+                            condition.operator = undefined;
+                            condition.value = undefined;
+                            this.updateActiveRule();
+                            // void this.renderConditionForm(rule, condition).then((conditionFormEl) => {
+                            //     conditionEl.replaceWith(conditionFormEl);
+                            // });
+                        }
+                    })
+
+                new RuleOperandSuggester(this.ntb, cb.inputEl, (selectedOperand) => {
+                    condition.field = selectedOperand.field;
+                    condition.key = selectedOperand.key;
+                    condition.operator = selectedOperand.operators[0].op;
+                    condition.value = undefined;
+
+                    void this.saveAndUpdateActiveRule().then(async () => {
+                        await this.renderConditionForm(rule, condition).then((conditionFormEl) => {
+                            conditionEl.replaceWith(conditionFormEl);
+                            // move focus to the next field
+                            const nextInput = conditionFormEl.querySelector<HTMLSelectElement>(
+                                '.note-toolbar-setting-mapping-operator select'
+                            );
+                            nextInput?.focus();
+                        });
+                    });
+                });
             });
 
         //
@@ -418,11 +428,6 @@ export default class RulesModal extends Modal {
 
         const operatorValueContainerEl = conditionEl.createDiv();
         operatorValueContainerEl.addClass('note-toolbar-setting-mapping-operator-value');
-        
-        const operand = RULE_OPERANDS.find((operand) =>
-            operand.field === condition.field &&
-            operand.key === condition.key
-        );
 
         if (operand) {
             const operatorOptions = Object.fromEntries(
@@ -444,9 +449,19 @@ export default class RulesModal extends Modal {
                             condition.operator = value as RuleOperator;
                             condition.value = undefined;
 
-                            await this.saveAndUpdateActiveRule();
+                            await this.saveAndUpdateActiveRule().then(async () => {
+                                await this.renderConditionForm(rule, condition).then((conditionFormEl) => {
+                                    conditionEl.replaceWith(conditionFormEl);
+                                    // move focus to the next field
+                                    const nextInput = conditionFormEl
+                                        .querySelector<HTMLElement>('.note-toolbar-setting-mapping-value')
+                                        ?.querySelector<HTMLElement>(
+                                            'input, button, select, textarea'
+                                        );
+                                    nextInput?.focus();
+                                });
+                            });
 
-                            conditionEl.replaceWith(await this.renderConditionForm(rule, condition));
                         }, 250));
                 });
         }
@@ -454,14 +469,6 @@ export default class RulesModal extends Modal {
         //
         // value
         //
-
-        // const VALUE_EDITORS: Record<RuleValueEditor, ValueEditorRenderer> = {
-        //     string: renderStringEditor,
-        //     folder: renderFolderEditor,
-        //     tag: renderTagEditor,
-        //     platform: renderPlatformEditor,
-        //     editormode: renderEditorModeEditor
-        // };
 
         const operatorDefinition = operand?.operators.find(
             (definition) => definition.op === condition.operator

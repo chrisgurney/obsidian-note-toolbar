@@ -543,6 +543,7 @@ export const RULE_VALUE_TYPE_OTHER = 'ntb-other';
 export interface RuleOperand {
 	id: string;
     field: RuleField;
+	icon: string;
     label: string;
     operators: RuleOperatorDefinition[];
 
@@ -554,6 +555,7 @@ export const RULE_OPERANDS: RuleOperand[] = [
     {
         id: 'editormode',
         field: RuleField.EditorMode,
+		icon: 'note-toolbar-pen-book',
         label: t('setting.rules.option-field-editormode'),
         operators: [
             { op: RuleOperator.Is, label: t('setting.rules.operator-is'), editor: 'editormode' },
@@ -563,6 +565,7 @@ export const RULE_OPERANDS: RuleOperand[] = [
     {
         id: 'filename',
         field: RuleField.FileName,
+		icon: 'file-text',
         label: t('setting.rules.option-field-filename'),
         operators: [
             { op: RuleOperator.Is, label: t('setting.rules.operator-is'), editor: 'file' },
@@ -576,6 +579,7 @@ export const RULE_OPERANDS: RuleOperand[] = [
     {
         id: 'folder',
         field: RuleField.Folder,
+		icon: 'folder-closed',
         label: t('setting.rules.option-field-folder'),
         operators: [
             { op: RuleOperator.Is, label: t('setting.rules.operator-is'), editor: 'folder' },
@@ -589,6 +593,7 @@ export const RULE_OPERANDS: RuleOperand[] = [
     {
         id: 'filetype',
         field: RuleField.FileType,
+		icon: 'file-type',
         label: t('setting.rules.option-field-filetype'),
         operators: [
             { op: RuleOperator.Is, label: t('setting.rules.operator-is'), editor: 'filetype' },
@@ -598,6 +603,7 @@ export const RULE_OPERANDS: RuleOperand[] = [
     {
         id: 'platform',
         field: RuleField.Platform,
+		icon: 'monitor-smartphone',
         label: t('setting.rules.option-field-platform'),
         operators: [
             { op: RuleOperator.Is, label: t('setting.rules.operator-is'), editor: 'platform' },
@@ -607,6 +613,7 @@ export const RULE_OPERANDS: RuleOperand[] = [
     {
         id: 'tags',
         field: RuleField.Tag,
+		icon: 'tags',
         label: t('setting.rules.option-field-tags'),
         operators: [
             { op: RuleOperator.Contains, label: t('setting.rules.operator-contains'), editor: 'tags' },
