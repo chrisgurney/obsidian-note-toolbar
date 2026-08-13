@@ -66,31 +66,39 @@ export default class PluginUtils {
 
 	/**
 	 * Determines whether any toolbar should be visible for the given view type.
-	 * @param currentViewType Type of the current view.
+	 * @param itemView ItemView to check.
 	 * @returns `true` if the toolbar should be visible, otherwise `false`.
 	 */
 	hasToolbarForItemView(itemView: ItemView): boolean {
-		const currentViewType = itemView.getViewType();
-		if (this.ntb.settings.showToolbarInOther.includes(currentViewType)) return true;
-		
+		return this.hasToolbarForViewType(itemView.getViewType());
+	}
+
+	/**
+	 * Determines whether any toolbar should be visible for the given view type.
+	 * @param viewType Type of the current view.
+	 * @returns `true` if the toolbar should be visible, otherwise `false`.
+	 */
+	hasToolbarForViewType(viewType: string): boolean {
+		if (this.ntb.settings.showToolbarInOther.includes(viewType)) return true;
+
 		const viewSettings: Record<string, boolean | undefined> = {
 			'audio': this.ntb.settings.showToolbarIn.audio,
 			'bases': this.ntb.settings.showToolbarIn.bases,
-			'beautitab-react-view': (this.ntb.settings.emptyViewToolbar !== undefined),
+			'beautitab-react-view': this.ntb.settings.emptyViewToolbar !== undefined,
 			'canvas': this.ntb.settings.showToolbarIn.canvas,
-			'empty': (this.ntb.settings.emptyViewToolbar !== undefined),
-			'home-tab-view': (this.ntb.settings.emptyViewToolbar !== undefined),
+			'empty': this.ntb.settings.emptyViewToolbar !== undefined,
+			'home-tab-view': this.ntb.settings.emptyViewToolbar !== undefined,
 			'image': this.ntb.settings.showToolbarIn.image,
 			'kanban': this.ntb.settings.showToolbarIn.kanban,
 			'markdown': true,
 			'pdf': this.ntb.settings.showToolbarIn.pdf,
 			'video': this.ntb.settings.showToolbarIn.video,
-			'webviewer': (this.ntb.settings.webviewerToolbar !== undefined)
+			'webviewer': this.ntb.settings.webviewerToolbar !== undefined
 		};
-	
-		if (viewSettings[currentViewType] === false) return false;
-		if (!(currentViewType in viewSettings)) return false;
-		return true;
+
+		if (!(viewType in viewSettings)) return false;
+
+		return viewSettings[viewType] !== false;
 	}
 
 	/**
