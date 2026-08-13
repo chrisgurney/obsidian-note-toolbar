@@ -33,10 +33,19 @@ export default class RulesModal extends Modal {
         this.contentEl.empty();
 
         const activeFileName = this.ntb.app.workspace.getActiveFile()?.basename;
+        const modalDescFr = new DocumentFragment();
+        modalDescFr.append(learnMoreFr(t('setting.rules.description-modal'), 'Defining-where-to-show-toolbars'));
+        if (activeFileName) {
+            modalDescFr.append(
+                createEl('br'),
+                createSpan({
+                    text: t('setting.rules.description-active-file', { filename: activeFileName }),
+                    cls: 'note-toolbar-setting-text-active'
+                })
+            );
+        }
         new Setting(this.contentEl)
-            .setDesc(learnMoreFr(activeFileName 
-                ? t('setting.rules.description-modal', { filename: activeFileName }) : t('setting.rules.description-modal-no-file')
-            , 'Defining-where-to-show-toolbars'));
+            .setDesc(modalDescFr);
 
         //
         // property
@@ -100,6 +109,8 @@ export default class RulesModal extends Modal {
 						this.close();
 					});
 			});
+
+        this.updateActiveRule();
 
     }
 

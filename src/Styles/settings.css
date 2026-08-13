@@ -870,6 +870,10 @@
         }
     }
 
+    & .note-toolbar-setting-text-active {
+        color: var(--interactive-accent);
+    }
+
 }
 
 .mod-cta .note-toolbar-setting-text-with-icon {
