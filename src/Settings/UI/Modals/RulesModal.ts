@@ -1,7 +1,7 @@
 import { FILE_TYPE_OPTIONS, FileType, NONE_TOOLBAR_ID, PLATFORM_OPTIONS, PlatformType, Rule, RULE_OPERANDS, RULE_VALUE_TYPE_OTHER, RuleCondition, RuleConjunction, RuleField, RuleOperator, SettingType, t, UiSelectOption, VIEW_MODE_OPTIONS, ViewType } from "Settings/NoteToolbarSettings";
 import { arraymove, getElementPosition, getUUID, moveElement } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
-import { ButtonComponent, debounce, Menu, MenuItem, Modal, Notice, Platform, Setting, SettingGroup } from "obsidian";
+import { ButtonComponent, debounce, ItemView, Menu, MenuItem, Modal, Notice, Platform, Setting, SettingGroup } from "obsidian";
 import Sortable from "sortablejs";
 import FileSuggester from "../Suggesters/FileSuggester";
 import FolderSuggester from "../Suggesters/FolderSuggester";
@@ -18,14 +18,14 @@ export default class RulesModal extends Modal {
         super(ntb.app);
     }
 
-    public async onOpen(): Promise<void> {
-        await this.display();
+    public onOpen() {
+        this.display();
     }
     
     /**
      * Displays rules for displaying toolbars.
      */
-    public async display(): Promise<void> {
+    public display() {
 
         this.setTitle(t('setting.rules.name-modal'));
 		this.modalEl.addClass('note-toolbar-setting-modal-container');
@@ -69,7 +69,7 @@ export default class RulesModal extends Modal {
         // rules
         //
 
-        await this.renderRules();
+        this.renderRules();
 
         //
         // default toolbar
@@ -117,7 +117,7 @@ export default class RulesModal extends Modal {
     /**
      * Renders the rules section.
      */
-    private async renderRules(): Promise<void> {
+    private renderRules() {
 
         new Setting(this.contentEl)
             .setName(t('setting.rules.name'))
@@ -132,15 +132,10 @@ export default class RulesModal extends Modal {
         ruleListEl.addClass('note-toolbar-sortablejs-list');
         
         // add all the rules
-        if (this.ntb.settings.rules.length > 0) {
-            await Promise.all(
-                this.ntb.settings.rules.map((rule) => this.renderRuleForm(rule))
-            ).then((elements) => {
-                ruleListEl.append(...elements);
-                // update the active rule
-                this.updateActiveRule();
-            });
-        }
+        this.ntb.settings.rules.map((rule) => {
+            const ruleFormEl = this.renderRuleForm(rule)
+            ruleListEl.append(ruleFormEl);
+        }); 
 
         this.renderAddRuleButton(rulesContainerEl, ruleListEl);
 
@@ -199,7 +194,7 @@ export default class RulesModal extends Modal {
                             toolbar: ''
                         };
                         this.ntb.settings.rules.push(newRule);
-                        const ruleFormEl = await this.renderRuleForm(newRule);
+                        const ruleFormEl = this.renderRuleForm(newRule);
                         ruleListEl.appendChild(ruleFormEl);
 
                         await this.ntb.settingsManager.save();
@@ -214,7 +209,7 @@ export default class RulesModal extends Modal {
      * @param rule ToolbarRule to return the form for
      * @returns the form element as a div
      */
-    async renderRuleForm(rule: Rule): Promise<HTMLDivElement> {
+    renderRuleForm(rule: Rule): HTMLDivElement {
 
         const ruleContainerEl = createDiv();
         ruleContainerEl.className = "note-toolbar-setting-rules-list-item-container";
@@ -292,7 +287,7 @@ export default class RulesModal extends Modal {
                     .onChange(debounce(async (value) => {
                         rule.conjunction = value as RuleConjunction;
                         await this.saveAndUpdateActiveRule();
-                        await this.display();
+                        this.display();
                     }, 250));
             });
 
@@ -315,7 +310,7 @@ export default class RulesModal extends Modal {
                                 .setIcon('copy')
                                 .onClick(async () => {
                                     await this.ntb.rules.duplicateRule(rule);
-                                    await this.display();
+                                    this.display();
                                 })
                         });
                         menu.addSeparator();
@@ -354,7 +349,7 @@ export default class RulesModal extends Modal {
         //
 
         for (const condition of rule.conditions) {
-            const conditionEl = await this.renderConditionForm(rule, condition);
+            const conditionEl = this.renderConditionForm(rule, condition);
             conditionContainerEl.append(conditionEl);
         }
 
@@ -376,9 +371,9 @@ export default class RulesModal extends Modal {
                         };
                         rule.conditions.push(newCondition);
                         // add the condition UI
-                        const ruleConditionEl = await this.renderConditionForm(rule, newCondition);
+                        const ruleConditionEl = this.renderConditionForm(rule, newCondition);
                         conditionContainerEl.appendChild(ruleConditionEl);
-                        await this.ntb.settingsManager.save();
+                        await this.saveAndUpdateActiveRule();
                     });
                 button.buttonEl.setText(iconTextFr('plus', t('setting.rules.button-newcondition')));
             });
@@ -392,7 +387,7 @@ export default class RulesModal extends Modal {
      * @param condition ToolbarRuleCondition to return the form for
      * @returns the form element as a div
      */
-    async renderConditionForm(rule: Rule, condition: RuleCondition): Promise<HTMLDivElement> {
+    renderConditionForm(rule: Rule, condition: RuleCondition): HTMLDivElement {
         
         const conditionEl = createDiv();
         conditionEl.className = "note-toolbar-setting-condition";
@@ -431,16 +426,13 @@ export default class RulesModal extends Modal {
                     condition.operator = selectedOperand.operators[0].op;
                     condition.value = undefined;
 
-                    void this.saveAndUpdateActiveRule().then(async () => {
-                        await this.renderConditionForm(rule, condition).then((conditionFormEl) => {
-                            conditionEl.replaceWith(conditionFormEl);
-                            // move focus to the next field
-                            const nextInput = conditionFormEl.querySelector<HTMLSelectElement>(
-                                '.note-toolbar-setting-mapping-operator select'
-                            );
-                            nextInput?.focus();
-                        });
-                    });
+                    const conditionFormEl = this.renderConditionForm(rule, condition);
+                    conditionEl.replaceWith(conditionFormEl);
+                    // move focus to the next field
+                    const nextInput = conditionFormEl.querySelector<HTMLSelectElement>(
+                        '.note-toolbar-setting-mapping-operator select'
+                    );
+                    nextInput?.focus();
                 });
             });
 
@@ -471,17 +463,16 @@ export default class RulesModal extends Modal {
                             condition.operator = value as RuleOperator;
                             condition.value = undefined;
 
-                            await this.saveAndUpdateActiveRule().then(async () => {
-                                await this.renderConditionForm(rule, condition).then((conditionFormEl) => {
-                                    conditionEl.replaceWith(conditionFormEl);
-                                    // move focus to the next field
-                                    const nextInput = conditionFormEl
-                                        .querySelector<HTMLElement>('.note-toolbar-setting-mapping-value')
-                                        ?.querySelector<HTMLElement>(
-                                            'input, button, select, textarea'
-                                        );
-                                    nextInput?.focus();
-                                });
+                            await this.saveAndUpdateActiveRule().then(() => {
+                                const conditionFormEl = this.renderConditionForm(rule, condition);
+                                conditionEl.replaceWith(conditionFormEl);
+                                // move focus to the next field
+                                const nextInput = conditionFormEl
+                                    .querySelector<HTMLElement>('.note-toolbar-setting-mapping-value')
+                                    ?.querySelector<HTMLElement>(
+                                        'input, button, select, textarea'
+                                    );
+                                nextInput?.focus();
                             });
 
                         }, 250));
@@ -499,7 +490,10 @@ export default class RulesModal extends Modal {
         if (operatorDefinition) {
             switch (operatorDefinition.editor) {
                 case 'editormode':
-                    if (!condition.value) condition.value ??= ViewType.Preview;
+                    if (!condition.value) {
+                        condition.value ??= ViewType.Preview;
+                        void this.saveAndUpdateActiveRule();
+                    }
                     new Setting(operatorValueContainerEl)
                         .setClass('note-toolbar-setting-mapping-value')
                         .addDropdown((dropdown) => {
@@ -529,7 +523,10 @@ export default class RulesModal extends Modal {
                     break;
 
                 case 'filetype':
-                    if (!condition.value) condition.value ??= FileType.Bases;
+                    if (!condition.value) {
+                        condition.value ??= FileType.Bases;
+                        void this.saveAndUpdateActiveRule();
+                    }
                     new Setting(operatorValueContainerEl)
                         .setClass('note-toolbar-setting-mapping-value')
                         .addDropdown((dropdown) => {
@@ -546,7 +543,7 @@ export default class RulesModal extends Modal {
                                     }
                                     await this.saveAndUpdateActiveRule();
                                     conditionEl.replaceWith(
-                                        await this.renderConditionForm(rule, condition)
+                                        this.renderConditionForm(rule, condition)
                                     );
                                 }, 250));
                         });
@@ -642,7 +639,6 @@ export default class RulesModal extends Modal {
                 cb.buttonEl.setAttribute('data-row-id', condition.id);
             });
 
-        await this.saveAndUpdateActiveRule();
         return conditionEl;
 
     }
