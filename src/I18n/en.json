@@ -768,7 +768,7 @@
             "condition-value-string-placeholder": "value",
             "condition-value-tags-placeholder": "tag",
             "description": "Rules are evaluated from top to bottom, and the first matching rule is used.",
-            "description-active-file": "The matching rule for the active file ({{filename}}) is highlighted.",
+            "description-active-file": "The matching rule for the active file ({{filename}}) is highlighted below.",
             "description-modal": "Define when each toolbar is displayed.",
             "error-folder-already-mapped": "This folder already has a toolbar associated with it. Precedence is top to bottom.",
             "label-empty": "Use the button to create a rule.",
