@@ -252,10 +252,16 @@ export default class RulesManager {
         if (typeof value !== 'string' || value.length === 0) {
             return false;
         }
-
+        
         switch (condition.operator) {
-            case RuleOperator.Is:
-                return viewType === value;
+            case RuleOperator.Is: {
+                const isMatch = viewType === value;
+                const isViewTypeSupported = this.ntb.utils.hasToolbarForViewType(value);
+                if (isMatch && !isViewTypeSupported) {
+                    this.ntb.error('Toolbar rule matches but file type is not enabled in settings:', value);
+                }
+                return isViewTypeSupported && isMatch;
+            }
 
             case RuleOperator.IsNot:
                 return viewType !== value;
