@@ -700,7 +700,7 @@ export default class RulesModal extends Modal {
         }
 
         if (cssSelector) {
-            const ruleEl = this.contentEl.querySelector(cssSelector);
+            const ruleEl = this.contentEl.querySelector(cssSelector) as HTMLElement;
             // this.ntb.debug(ruleEl);
             if (!ruleEl) return;
 
