@@ -328,6 +328,7 @@
                         display: none;
                     }
                     & .setting-item-control {
+                        align-items: flex-start;
                         max-width: unset;
                     }
                 }
@@ -863,9 +864,7 @@
     }
 
     & .note-toolbar-setting-rule-active {
-        & .note-toolbar-setting-mapping-toolbar .search-input-container,
-        &[data-ntb-field-default] .search-input-container,
-        &[data-ntb-field-prop] input {
+        & .search-input-container, input {
             box-shadow: 0 0 0 1px var(--interactive-accent);
         }
     }

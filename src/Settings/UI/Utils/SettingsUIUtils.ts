@@ -1232,6 +1232,21 @@ export function removeFieldError(el: HTMLElement | null, position: 'beforeend' |
 }
 
 /**
+ * Removes any errors on fields in the given container.
+ * @param containerEl HTMLElement to check for errors to remove
+ */
+export function removeFieldErrors(containerEl: HTMLElement) {
+	const fieldErrorEls = containerEl?.querySelectorAll('.note-toolbar-setting-field-error');
+	fieldErrorEls.forEach((el) => {
+		el.remove();
+	});
+	const errorEls = containerEl?.querySelectorAll('.note-toolbar-setting-error');
+	errorEls.forEach((el) => {
+		el.toggleClass('note-toolbar-setting-error', false);
+	});
+}
+
+/**
  * Removes help from the given element, if it exists.
  * @param fieldEl HTMLElement to update
  */

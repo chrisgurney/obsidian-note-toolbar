@@ -770,6 +770,7 @@
             "description": "Rules are evaluated from top to bottom, and the first matching rule is used.",
             "description-active-file": "The matching rule for the active file ({{filename}}) is highlighted below.",
             "description-modal": "Define when each toolbar is displayed.",
+            "error-file-type-disabled_field": "Toolbar is not shown because the file type ({{filetype}}) is not enabled in main settings.",
             "error-file-type-disabled_file": "Note Toolbar is not displayed in the active file ({{filename}}) because the file type ({{filetype}}) is not enabled in the plugin's settings.",
             "error-file-type-disabled_view": "Note Toolbar is not displayed in the active view because the file type ({{filetype}}) is not enabled in the plugin's settings.",
             "error-folder-already-mapped": "This folder already has a toolbar associated with it. Precedence is top to bottom.",

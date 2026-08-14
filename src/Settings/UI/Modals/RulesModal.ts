@@ -8,7 +8,7 @@ import FolderSuggester from "../Suggesters/FolderSuggester";
 import RuleOperandSuggester from "../Suggesters/RuleOperandSuggester";
 import TagSuggester from "../Suggesters/TagSuggester";
 import ToolbarSuggester from "../Suggesters/ToolbarSuggester";
-import { iconTextFr, learnMoreFr } from "../Utils/SettingsUIUtils";
+import { iconTextFr, learnMoreFr, removeFieldErrors } from "../Utils/SettingsUIUtils";
 
 export default class RulesModal extends Modal {
 
@@ -675,7 +675,10 @@ export default class RulesModal extends Modal {
     private updateActiveRule() {
 
         const ACTIVE_RULE_CLASS = 'note-toolbar-setting-rule-active';
+
+        // remove existing active toolbar highlight and field errors
         this.contentEl.querySelector(`.${ACTIVE_RULE_CLASS}`)?.removeClass(ACTIVE_RULE_CLASS);
+        removeFieldErrors(this.contentEl);
 
         const activeFile = this.ntb.app.workspace.getActiveFile();
         if (!activeFile) return;
@@ -694,7 +697,7 @@ export default class RulesModal extends Modal {
                 break;
             default:
                 if (typeof matchType === 'object' && matchType !== null) {
-                    cssSelector = `[data-row-id="${matchType.id}"]`;
+                    cssSelector = `[data-row-id="${matchType.id}"] .setting-item-control`;
                 }
                 break;
         }
@@ -706,16 +709,15 @@ export default class RulesModal extends Modal {
 
             // display an error if the corresponding file type setting is disabled
             const itemView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
-            if (itemView) {
-                const isViewTypeSupported = this.ntb.utils.hasToolbarForItemView(itemView);
-                if (!isViewTypeSupported) {
-                    const errorText = t('setting.rules.error-file-type-disabled_file', { filename: activeFile.basename, filetype: itemView.getViewType() });
-                    new Notice(errorText, 10000).containerEl.addClass('mod-warning');
-                    // this.ntb.settingsUtils.setFieldError(null, ruleEl, "beforeend", errorText);
-                }
+            const isViewTypeSupported = itemView ? this.ntb.utils.hasToolbarForItemView(itemView) : true;
+            if (itemView && !isViewTypeSupported) {
+                const errorText = t('setting.rules.error-file-type-disabled_field', { filetype: itemView.getViewType() });
+                new Notice(errorText, 10000).containerEl.addClass('mod-warning');
+                this.ntb.settingsUtils.setFieldError(null, ruleEl, "beforeend", errorText);
             }
 
             ruleEl.toggleClass(ACTIVE_RULE_CLASS, true);
+            
         }
 
     }
