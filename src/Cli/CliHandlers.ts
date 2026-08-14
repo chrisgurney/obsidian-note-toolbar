@@ -335,20 +335,33 @@ export default class CliHandlers {
     handleRules(args: CliData): string {
         const format = hasValue(args.format) ? args.format : 'tsv';
 
-        const mappings = this.ntb.settings.folderMappings;
-        if (!mappings?.length) return '';
+        const rules = this.ntb.settings.rules;
+        if (!rules?.length) return '';
         
-        type MappingSchema = 'position' | 'folder' | 'toolbar';
-        const schema: MappingSchema[] = ['position', 'folder', 'toolbar'];
+        type RuleSchema = 'position' | 'toolbar' | 'conditions';
+        const schema: RuleSchema[] = ['position', 'toolbar', 'conditions'];
 
-        const rows = mappings.map((mapping, i) => {
-            const values: Record<MappingSchema, string> = { 
-                position: String(i + 1),
-                folder: mapping.folder, 
-                toolbar: formatToolbarRef(this.ntb, mapping.toolbar) 
-            };
-            return schema.map(col => values[col]);
-        });
+        const rows: Array<string[]> = [
+            [
+                '1', 
+                `toolbar set by property: ${this.ntb.settings.toolbarProp}`,
+                '',
+            ],
+            ...rules.map((rule, i) => {
+                const values: Record<RuleSchema, string> = {
+                    position: String(i + 2),
+                    toolbar: formatToolbarRef(this.ntb, rule.toolbar),
+                    conditions: this.ntb.rules.formatRuleConditions(rule),
+                };
+
+                return schema.map((column) => values[column]);
+            }),
+            [
+                String(rules.length + 2),
+                this.ntb.settings.defaultToolbar ? formatToolbarRef(this.ntb, this.ntb.settings.defaultToolbar) : '',
+                'default (if none of the above rules apply)',
+            ],
+        ];
 
         switch (format) {
             case 'csv': {

@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { FrontMatterCache, ItemView, MarkdownView, Platform, TFile } from "obsidian";
-import { RULE_VALUE_TYPE_OTHER, Rule, RuleCondition, RuleConjunction, RuleField, RuleMatchType, RuleOperator, ToolbarSettings, t } from "Settings/NoteToolbarSettings";
+import { RULE_OPERANDS, RULE_VALUE_TYPE_OTHER, Rule, RuleCondition, RuleConjunction, RuleField, RuleMatchType, RuleOperator, RuleValueEditor, ToolbarSettings, t } from "Settings/NoteToolbarSettings";
 import { getUUID } from "Utils/Utils";
 
 export default class RulesManager {
@@ -171,6 +171,92 @@ export default class RulesManager {
 
             default:
                 return false;
+        }
+    }
+
+    // *****************************************************************************
+    // FORMATTING
+    //******************************************************************************
+
+    /**
+     * Provides a string representation of a Rule's conditions, for the CLI and abbreviated Rules UI.
+     * @param Rule 
+     * @returns string representation of all conditions for the rule
+     */
+    formatRuleConditions(rule: Rule): string {
+        const conditions = rule.conditions.filter(
+            (condition) => condition.field && condition.operator
+        );
+
+        if (!conditions.length) {
+            return '';
+        }
+
+        const formatted = conditions.map((condition) => this.formatRuleCondition(condition));
+
+        return `${t('setting.rules.label-conjunction-if').toUpperCase()} ${formatted.join(` ${rule.conjunction.toUpperCase()} `)}`;
+    }
+
+    private formatRuleCondition(condition: RuleCondition): string {
+        const operand = RULE_OPERANDS.find(
+            (operand) =>
+                operand.field === condition.field &&
+                (!condition.key || operand.key === condition.key)
+        );
+
+        if (!operand || !condition.operator) {
+            return '';
+        }
+
+        const operator = operand.operators.find(
+            (operator) => operator.op === condition.operator
+        );
+
+        if (!operator) {
+            return '';
+        }
+
+        const value = this.formatRuleValue(condition, operator.editor);
+
+        return [
+            operand.label,
+            operator.label,
+            value,
+        ].filter(Boolean).join(' ');
+    }
+
+    private formatRuleValue(
+        condition: RuleCondition,
+        editor: RuleValueEditor
+    ): string | undefined {
+
+        if (condition.value === undefined) {
+            return;
+        }
+
+        switch (editor) {
+            case 'none':
+                return;
+
+            case 'tags': {
+                const tags = Array.isArray(condition.value)
+                    ? condition.value
+                    : [String(condition.value)];
+
+                return tags
+                    .map((tag) => tag.startsWith('#') ? tag : `#${tag}`)
+                    .join(', ');
+            }
+
+            case 'string':
+            case 'file':
+            case 'folder':
+                return `"${String(condition.value)}"`;
+
+            default:
+                return condition.value === undefined
+                    ? undefined
+                    : String(condition.value);
         }
     }
 
