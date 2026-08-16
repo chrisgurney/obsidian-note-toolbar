@@ -344,7 +344,7 @@ export default class CliHandlers {
         const rows: Array<string[]> = [
             [
                 '1', 
-                `toolbar set by property: ${this.ntb.settings.toolbarProp}`,
+                t('setting.rules.cli-label-property', { property: this.ntb.settings.toolbarProp }),
                 '',
             ],
             ...rules.map((rule, i) => {
@@ -359,7 +359,7 @@ export default class CliHandlers {
             [
                 String(rules.length + 2),
                 this.ntb.settings.defaultToolbar ? formatToolbarRef(this.ntb, this.ntb.settings.defaultToolbar) : '',
-                'default (if none of the above rules apply)',
+                t('setting.rules.cli-label-default'),
             ],
         ];
 

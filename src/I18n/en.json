@@ -759,6 +759,8 @@
             "button-new-tooltip": "Add a new rule",
             "button-newcondition": "Add condition",
             "button-newcondition-tooltip": "Add a new condition to this rule",
+            "cli-label-default": "default (if none of the above rules apply)",
+            "cli-label-property": "toolbar set by property: {{property}}",
             "condition-field-placeholder": "Search...",
             "condition-field-prefix-and": "and",
             "condition-field-prefix-or": "or",
