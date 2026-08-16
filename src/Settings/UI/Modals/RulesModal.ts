@@ -171,18 +171,6 @@ export default class RulesModal extends Modal {
                     .setTooltip(t('setting.rules.button-new-tooltip'))
                     .setCta()
                     .onClick(async () => {
-                        // show a message if all toolbars have rules assigned
-                        const toolbarsWithRules = new Set(
-                            this.ntb.settings.rules.map((rule) => rule.toolbar)
-                        );
-                        const availableToolbars = this.ntb.settings.toolbars.filter(
-                            (toolbar) => !toolbarsWithRules.has(toolbar.uuid)
-                        );
-                        if (availableToolbars.length === 0) {
-                            new Notice(t('setting.rules.notice-all-toolbars-used')).containerEl.addClass('mod-warning');
-                            return;
-                        }
-
                         // create the rule and initial condition
                         const newRule: Rule = {
                             id: getUUID(),
@@ -232,13 +220,6 @@ export default class RulesModal extends Modal {
             .setClass('note-toolbar-setting-item-control-std-with-help')
             .addSearch(async (cb) => {
                 new ToolbarSuggester(this.ntb, cb.inputEl, true,
-                    // do not show toolbars already used in other rules
-                    (toolbar) => {
-                        const toolbarsWithRules = new Set<string>(
-                            this.ntb.settings.rules.map((rule) => rule.toolbar)
-                        );
-                        return !toolbarsWithRules.has(toolbar.uuid);
-                    },
                     async (toolbar) => {
                         let isValid = false;
                         if (toolbar.uuid === NONE_TOOLBAR_ID) {

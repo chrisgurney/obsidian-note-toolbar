@@ -8,7 +8,6 @@ export default class ToolbarSuggester extends AbstractInputSuggest<ToolbarSettin
         private ntb: NoteToolbarPlugin, 
         private inputEl: HTMLInputElement,
         private showNone = false,
-        private filter?: (toolbar: ToolbarSettings) => boolean,
         private callback?: (toolbar: ToolbarSettings) => Promise<void>
     ) {
         super(ntb.app, inputEl);
@@ -26,8 +25,7 @@ export default class ToolbarSuggester extends AbstractInputSuggest<ToolbarSettin
         return toolbars.filter((toolbar) => {
             return (
                 toolbar.name !== '' &&
-                toolbar.name.toLowerCase().includes(lowerCaseInputStr) &&
-                (!this.filter || this.filter(toolbar))
+                toolbar.name.toLowerCase().includes(lowerCaseInputStr)
             );
         });
     }
