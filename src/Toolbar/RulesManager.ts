@@ -53,10 +53,24 @@ export default class RulesManager {
 	}
 
     /**
+     * Get toolbar for the active file.
+     * @returns ToolbarSettings or undefined (if no match), and RuleMatchType.
+     */
+    public getActiveToolbar(): 
+        [toolbar: ToolbarSettings | undefined, matchType: RuleMatchType] 
+    {
+        const activeFile = this.ntb.app.workspace.getActiveFile();
+        if (!activeFile) return [undefined, undefined];
+        const frontmatterCache = this.ntb.app.metadataCache.getFileCache(activeFile)?.frontmatter;
+        
+        return this.ntb.rules.getMappedToolbar(frontmatterCache, activeFile);
+    }
+
+    /**
      * Get toolbar for the given frontmatter (based on a toolbar prop), and failing that the file (based on folder mappings).
      * @param frontmatter FrontMatterCache to check if there's a prop for the toolbar.
      * @param file The note to check if we have a toolbar for.
-     * @returns ToolbarSettings or undefined, if there is no matching toolbar.
+     * @returns ToolbarSettings or undefined (if no match), and RuleMatchType.
      */
     public getMappedToolbar(frontmatter: FrontMatterCache | undefined, file: TFile): 
         [toolbar: ToolbarSettings | undefined, matchType: RuleMatchType] 
