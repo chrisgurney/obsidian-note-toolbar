@@ -355,11 +355,9 @@ export default class RulesModal extends Modal {
         // show existing conditions
         //
 
-        let conditionIndex = 0;
         for (const condition of rule.conditions) {
-            const conditionEl = this.renderConditionForm(rule, condition, conditionIndex === 0);
+            const conditionEl = this.renderConditionForm(rule, condition);
             conditionContainerEl.append(conditionEl);
-            conditionIndex++;
         }
 
         //
@@ -395,14 +393,15 @@ export default class RulesModal extends Modal {
      * Returns the form to edit a condition.
      * @param rule Rule for the condition (to get its conjunction)
      * @param condition ToolbarRuleCondition to return the form for
-     * @param isFirst if true, does not show conjunction for condition (use for the first)
      * @returns the form element as a div
      */
-    renderConditionForm(rule: Rule, condition: RuleCondition, isFirst = false): HTMLDivElement {
+    renderConditionForm(rule: Rule, condition: RuleCondition): HTMLDivElement {
         
         const conditionEl = createDiv();
         conditionEl.className = "note-toolbar-setting-condition";
         conditionEl.setAttribute('data-row-id', condition.id);
+
+        const isFirst = rule.conditions[0]?.id === condition.id;
 
         // operands
         const operand = RULE_OPERANDS.find((operand) =>
