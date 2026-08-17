@@ -12,7 +12,6 @@
         & .note-toolbar-setting-rule {
             align-items: flex-start;
             display: flex;
-            column-gap: var(--size-2-2);
             padding-top: var(--size-4-4);
             & .note-toolbar-setting-rule-name-conjunction {
                 align-items: flex-start;
@@ -93,7 +92,6 @@
             align-items: stretch;
         }
         & .note-toolbar-setting-condition {
-            /* column-gap: var(--size-2-2); */
             display: flex;
             margin-left: var(--size-4-4);
             padding-left: var(--size-4-4);
