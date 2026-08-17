@@ -10,10 +10,11 @@ export default class RulesManager {
     ) {}
 
     /**
-     * Duplicates the provided rule (but for a new, empty toolbar) and adds it to the end of the list of rules.
-     * @param rule 
+     * Duplicates the provided rule (but for a new, empty toolbar) and adds it as the next in the list.
+     * @param rule Rule to duplicate
+     * @returns the duplicated Rule
      */
-    public async duplicateRule(rule: Rule) {
+    public async duplicateRule(rule: Rule): Promise<Rule> {
         const duplicatedRule: Rule = {
             ...rule,
             id: getUUID(),
@@ -23,8 +24,11 @@ export default class RulesManager {
                 id: getUUID(),
             }))
         };
-        this.ntb.settings.rules.push(duplicatedRule);
+        const ruleIndex = this.ntb.settings.rules.indexOf(rule);
+        this.ntb.settings.rules.splice(ruleIndex + 1, 0, duplicatedRule);
+
         await this.ntb.settingsManager.save();
+        return duplicatedRule;
     }
 
 	/**

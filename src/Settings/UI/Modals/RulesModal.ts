@@ -315,8 +315,9 @@ export default class RulesModal extends Modal {
                                 .setTitle(t('setting.rules.menu-duplicate-rule'))
                                 .setIcon('copy')
                                 .onClick(async () => {
-                                    await this.ntb.rules.duplicateRule(rule);
-                                    this.display();
+                                    const newRule = await this.ntb.rules.duplicateRule(rule);
+                                    const newRuleContainerEl = this.renderRuleForm(newRule);
+                                    ruleContainerEl?.after(newRuleContainerEl);
                                 })
                         });
                         menu.addSeparator();
