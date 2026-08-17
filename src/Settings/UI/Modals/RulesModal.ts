@@ -260,6 +260,30 @@ export default class RulesModal extends Modal {
             [RuleConjunction.Or]: t('setting.rules.option-conjunction-or'),
         };
 
+        // updates conjunction text on all conditions
+        const updateConjunctionText = () => {
+            const conditionEls = ruleContainerEl.querySelectorAll<HTMLElement>(
+                '.note-toolbar-setting-condition'
+            );
+
+            conditionEls.forEach((conditionEl, i) => {
+                const conjunctionEl = conditionEl.querySelector<HTMLElement>(
+                    '.note-toolbar-setting-mapping-field .setting-item-name'
+                );
+
+                if (i === 0) {
+                    conjunctionEl?.remove();
+                    return;
+                }
+
+                if (conjunctionEl) {
+                    conjunctionEl.textContent = rule.conjunction === RuleConjunction.And
+                        ? t('setting.rules.condition-field-prefix-and')
+                        : t('setting.rules.condition-field-prefix-or');
+                }
+            });
+        };
+
         new Setting(nameConjunctionContainerEl)
             .setClass('note-toolbar-setting-mapping-conjunction')
             .setClass('note-toolbar-setting-item-text-style')
@@ -268,8 +292,8 @@ export default class RulesModal extends Modal {
                     .setValue(rule.conjunction)
                     .onChange(debounce(async (value) => {
                         rule.conjunction = value as RuleConjunction;
+                        updateConjunctionText();
                         await this.saveAndUpdateActiveRule();
-                        this.display();
                     }, 250));
             });
 
@@ -330,9 +354,11 @@ export default class RulesModal extends Modal {
         // show existing conditions
         //
 
+        let conditionIndex = 0;
         for (const condition of rule.conditions) {
-            const conditionEl = this.renderConditionForm(rule, condition);
+            const conditionEl = this.renderConditionForm(rule, condition, conditionIndex === 0);
             conditionContainerEl.append(conditionEl);
+            conditionIndex++;
         }
 
         //
@@ -366,10 +392,12 @@ export default class RulesModal extends Modal {
 
     /**
      * Returns the form to edit a condition.
+     * @param rule Rule for the condition (to get its conjunction)
      * @param condition ToolbarRuleCondition to return the form for
+     * @param isFirst if true, does not show conjunction for condition (use for the first)
      * @returns the form element as a div
      */
-    renderConditionForm(rule: Rule, condition: RuleCondition): HTMLDivElement {
+    renderConditionForm(rule: Rule, condition: RuleCondition, isFirst = false): HTMLDivElement {
         
         const conditionEl = createDiv();
         conditionEl.className = "note-toolbar-setting-condition";
@@ -382,7 +410,7 @@ export default class RulesModal extends Modal {
         );
 
         new Setting(conditionEl)
-            .setName(rule.conjunction === RuleConjunction.And ? t('setting.rules.condition-field-prefix-and') : t('setting.rules.condition-field-prefix-or'))
+            .setName(isFirst ? '' : rule.conjunction === RuleConjunction.And ? t('setting.rules.condition-field-prefix-and') : t('setting.rules.condition-field-prefix-or'))
             .setClass('note-toolbar-setting-mapping-field')
             .setClass('note-toolbar-setting-item-text-style')
             .addSearch((cb) => {
