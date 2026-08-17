@@ -111,7 +111,7 @@ export default class RulesModal extends Modal {
 					});
 			});
 
-        this.updateActiveRule();
+        this.updateActiveRule(true);
 
     }
 
@@ -682,7 +682,7 @@ export default class RulesModal extends Modal {
     /**
      * Highlights the Rule row for the toolbar that matches the active file.
      */
-    private updateActiveRule() {
+    private updateActiveRule(scrollToFocus = false) {
 
         const ACTIVE_RULE_CLASS = 'note-toolbar-setting-rule-active';
 
@@ -723,7 +723,8 @@ export default class RulesModal extends Modal {
             }
 
             ruleEl.toggleClass(ACTIVE_RULE_CLASS, true);
-            
+            if (scrollToFocus) ruleEl.scrollIntoView({ behavior: 'instant', block: 'center' });
+
         }
 
     }
