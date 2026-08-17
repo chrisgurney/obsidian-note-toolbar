@@ -139,6 +139,7 @@ export default interface INoteToolbarApi<T> {
      * Returns list of tags in the vault, sorted alphabetically.
      * 
      * @returns List of tags in the vault.
+     * @since 1.35
      * @group Utilities
      */
     getTags: () => string[];

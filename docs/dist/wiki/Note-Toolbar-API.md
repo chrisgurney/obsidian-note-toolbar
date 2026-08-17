@@ -657,6 +657,10 @@ Returns list of tags in the vault, sorted alphabetically.
 
 List of tags in the vault.
 
+#### Since
+
+1.35
+
 ***
 
 ### o
