@@ -94,11 +94,11 @@
         & .note-toolbar-setting-condition {
             display: flex;
             margin-left: var(--size-4-4);
-            padding-left: var(--size-4-4);
             .is-phone & {
                 border: var(--background-modifier-border) solid 1px;
                 flex-direction: column;
                 margin-left: 0;
+                padding-left: var(--size-4-4);
                 & .note-toolbar-setting-mapping-field .dropdown,
                 & .note-toolbar-setting-mapping-operator .dropdown {
                     padding: 0;
