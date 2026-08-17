@@ -723,7 +723,7 @@ export default class RulesModal extends Modal {
             }
 
             ruleEl.toggleClass(ACTIVE_RULE_CLASS, true);
-            if (scrollToFocus) ruleEl.scrollIntoView({ behavior: 'instant', block: 'center' });
+            if (scrollToFocus) ruleEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
         }
 
