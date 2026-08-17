@@ -1,0 +1,161 @@
+
+.modal .modal-content .note-toolbar-setting-ui.note-toolbar-setting-rules-container {
+
+    padding-bottom: var(--size-4-4);
+    & .note-toolbar-setting-rules-list-item-container {
+        border-top: var(--border-width) solid var(--background-modifier-border);
+        padding-bottom: var(--size-4-4);
+        padding-inline: var(--size-4-4);
+        &:first-child {
+            border-top: none;
+        }
+        & .note-toolbar-setting-rule {
+            align-items: flex-start;
+            display: flex;
+            column-gap: var(--size-2-2);
+            padding-top: var(--size-4-4);
+            & .note-toolbar-setting-rule-name-conjunction {
+                align-items: flex-start;
+                display: flex;
+                flex-wrap: wrap;
+                flex-basis: 100%;
+                & .note-toolbar-setting-mapping-conjunction::before {
+                    border: none;
+                }
+            }
+            & .note-toolbar-setting-item-delete {
+                padding: 0;
+            }
+            & .note-toolbar-setting-item-controls {
+                flex: 1;
+                & .setting-item {
+                    margin-left: auto;
+                }
+            }
+            & .setting-item {
+                border: none;
+                padding-top: 0;      
+                & .setting-item-info {
+                    display: none;
+                }
+                & .setting-item-control {
+                    align-items: flex-start;
+                    max-width: unset;
+                }
+            }
+            & .note-toolbar-setting-mapping-toolbar {
+                padding-inline-start: 0;
+                .is-mobile & {
+                    width: 100%;
+                    & .search-input-container {
+                        width: 100%;
+                    }
+                    & .note-toolbar-setting-field-help {
+                        max-width: 175px;
+                    }
+                }
+            }
+        }
+        & .note-toolbar-setting-text-button {
+            border: none;
+            padding: var(--size-4-4) 0 0 0;
+            .is-phone & {
+                margin-left: 0;
+            }
+            &::before {
+                border: none;
+            }
+            & .setting-item-info {
+                display: none;
+            }
+            & .setting-item-control {
+                justify-content: flex-start;
+                & button {
+                    background: transparent;
+                    color: var(--text-muted);
+                    & svg {
+                        color: var(--text-muted);
+                    }
+                    &:hover {
+                        background-color: var(--background-modifier-hover);
+                        color: var(--text-normal);
+                    }
+                }
+            }
+        }
+    }
+    & .note-toolbar-setting-condition-container {
+        align-items: flex-end;
+        display: flex;
+        flex-direction: column;
+        row-gap: var(--size-2-2);
+        .is-phone & {
+            align-items: stretch;
+        }
+        & .note-toolbar-setting-condition {
+            /* column-gap: var(--size-2-2); */
+            display: flex;
+            margin-left: var(--size-4-4);
+            padding-left: var(--size-4-4);
+            .is-phone & {
+                border: var(--background-modifier-border) solid 1px;
+                flex-direction: column;
+                margin-left: 0;
+                & .note-toolbar-setting-mapping-field .dropdown,
+                & .note-toolbar-setting-mapping-operator .dropdown {
+                    padding: 0;
+                }
+            }
+            &:first-child {
+                /* hides the first conjunction for the first operator in the list */
+                & > .note-toolbar-setting-mapping-field > .setting-item-info {
+                    display: none;
+                }
+                /* hides the delete button for the first condition in the list */
+                & > .note-toolbar-setting-mapping-operator-value > .note-toolbar-setting-item-delete {
+                    display: none;
+                }
+            }
+            & .note-toolbar-setting-mapping-field {
+                & .setting-item-info .setting-item-name {
+                    overflow: visible;
+                }
+                .is-phone & {
+                    flex-direction: row;
+                    flex-grow: 1;
+                }
+            }
+            & .note-toolbar-setting-item-delete,
+            & .note-toolbar-setting-mapping-operator,
+            & .note-toolbar-setting-mapping-value {
+                border-top: none;
+                padding: 0;
+                &::before {
+                    border: none;
+                }
+                & .setting-item-info {
+                    display: none;
+                }
+                & select, & input {
+                    background-color: transparent;
+                }
+            }
+            & .note-toolbar-setting-item-delete {
+                & svg {
+                    color: var(--text-muted);
+                }
+            }
+            & .note-toolbar-setting-mapping-operator-value {
+                display: flex;
+            }
+        }
+    }
+    & .note-toolbar-setting-item-text-style {
+        align-items: center;
+        border-top: none;
+        padding: 0;
+        & select, & input {
+            background-color: transparent;
+        }
+    }
+}
