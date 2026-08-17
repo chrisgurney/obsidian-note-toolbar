@@ -23,7 +23,7 @@
         },
         "rules": {
             "heading": "Rules",
-            "docs": "Display folder mappings."
+            "docs": "List toolbar display rules."
         },
         "toolbars": { 
             "heading": "Create toolbars"
@@ -645,9 +645,9 @@
         "note-toolbar:rules": {
             "category": "rules",
             "description": {
-                "en": "List mapping rules"
+                "en": "List toolbar display rules"
             },
-            "docs": "Lists toolbar [folder mappings](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Defining-where-to-show-toolbars).",
+            "docs": "Lists toolbar [display rules](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Defining-where-to-show-toolbars).",
             "flags": {
                 "$after": ["format"]
             }
