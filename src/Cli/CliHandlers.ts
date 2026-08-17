@@ -355,7 +355,7 @@ export default class CliHandlers {
                 '1', 
                 propToolbar
                     ? propToolbar
-                    : '',
+                    : t('setting.rules.cli-label-property-na'),
                 t('setting.rules.cli-label-property', { property: this.ntb.settings.toolbarProp }),
             ],
             ...rules.map((rule, i) => {
