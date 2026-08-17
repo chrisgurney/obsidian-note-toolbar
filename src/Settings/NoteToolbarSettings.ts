@@ -116,7 +116,7 @@ export const enum PositionType {
 	Text = 'text',
 	Top = 'top'
 }
-/** @deprecated In 1.34 replaced with ribbon settings for toolbars and toolbar items */
+/** deprecated: In 1.34 replaced with ribbon settings for toolbars and toolbar items */
 export const enum RibbonAction {
 	ItemSuggester = 'item-suggester',
 	ToolbarSelected = 'toolbar-selected',
@@ -338,9 +338,7 @@ export interface ToolbarSettings {
 	icon?: string;
 	items: Array<ToolbarItemSettings>;
 	mobileStyles: string[];
-	/**
-	 * @deprecated positions property as of v1.7 (settings v20240426.1) and moved to desktop, tablet, mobile properties (in migration)
-	 */
+	/** deprecated: positions property as of v1.7 (settings v20240426.1) and moved to desktop, tablet, mobile properties (in migration) */
 	positions?: Array<Position>;
 	position: Position;
 	updated: string;
@@ -402,13 +400,9 @@ export interface Position {
 		editingView?: { position: PositionType },
 		readingView?: { position: PositionType },
 	},
-	/**
-	 * @deprecated contexts property as of v1.7 (settings v20240426.1) and moved to desktop, tablet, mobile properties (in migration)
-	 */
+	/** deprecated: contexts property as of v1.7 (settings v20240426.1) and moved to desktop, tablet, mobile properties (in migration) */
 	contexts?: Array<ViewContext>;
-	/**
-	 * @deprecated position property as of v1.7 (settings v20240426.1) and moved to desktop, tablet, mobile properties (in migration)
-	 */
+	/** deprecated: position property as of v1.7 (settings v20240426.1) and moved to desktop, tablet, mobile properties (in migration) */
 	position?: PositionType.Props | PositionType.Top;
 }
 
@@ -633,7 +627,7 @@ export interface ToolbarItemSettings {
 	icon: string;
 	label: string;
 	tooltip: string;
-	/**	@deprecated contexts property as of v1.7 (settings v20240426.1) and moved to visibility property (in migration) */
+	/**	deprecated: contexts property as of v1.7 (settings v20240426.1) and moved to visibility property (in migration) */
 	contexts?: ViewContext[];
 	description?: string;
 	hasCommand: boolean;	
@@ -691,7 +685,7 @@ export interface ToolbarItemLinkAttr {
 	commandId: string;
 	fileContext?: ItemFileContextType;
 	focus?: ItemFocusType;
-	/**	@deprecated use the hasVars() method instead */
+	/**	deprecated: use the hasVars() method instead */
 	hasVars: boolean;
 	target?: PaneType | 'modal';
 	type: ItemType;
