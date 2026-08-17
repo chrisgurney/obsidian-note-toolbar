@@ -20,7 +20,7 @@
     "@types/sortablejs": "^1.15.8",
     "chokidar": "^5.0.0",
     "esbuild": "^0.28.1",
-    "eslint": "^10.8.0",
+    "eslint": "^10.8.1",
     "eslint-plugin-obsidianmd": "latest",
     "obsidian": "latest",
     "stylelint": "^17.12.1",
