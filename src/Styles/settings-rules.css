@@ -43,7 +43,7 @@
                 }
             }
             & .note-toolbar-setting-mapping-toolbar {
-                padding-inline-start: 0;
+                padding-inline: 0;
                 .is-mobile & {
                     width: 100%;
                     & .search-input-container {
