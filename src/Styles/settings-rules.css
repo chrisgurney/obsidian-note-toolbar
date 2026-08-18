@@ -110,6 +110,10 @@
             .is-phone & {
                 flex-direction: column;
             }
+            /* hide first condition's conjunction (also hidden from DOM, for the most part) */
+            &:first-child .note-toolbar-setting-mapping-field .setting-item-info {
+                display: none;
+            }
             & .note-toolbar-setting-mapping-field {
                 & .setting-item-info .setting-item-name {
                     overflow: visible;

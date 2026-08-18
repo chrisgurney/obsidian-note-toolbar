@@ -685,6 +685,7 @@ export default class RulesModal extends Modal {
                         if (rowId) {
                             this.removeConditionById(rowId);
                             await this.saveAndUpdateActiveRule();
+                            // remove condition from the DOM
                             const conditionEl = this.contentEl.querySelector(`.note-toolbar-setting-condition[data-row-id="${rowId}"]`);
                             if (conditionEl) conditionEl.remove();
                         }
