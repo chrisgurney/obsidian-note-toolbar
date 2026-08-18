@@ -1,7 +1,7 @@
 import { FILE_TYPE_OPTIONS, FileType, NONE_TOOLBAR_ID, PLATFORM_OPTIONS, PlatformType, Rule, RULE_OPERANDS, RULE_VALUE_TYPE_OTHER, RuleCondition, RuleConjunction, RuleField, RuleOperator, SettingType, t, UiSelectOption, VIEW_MODE_OPTIONS, ViewType } from "Settings/NoteToolbarSettings";
 import { arraymove, getElementPosition, getUUID, moveElement } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
-import { ButtonComponent, debounce, ItemView, Menu, MenuItem, Modal, Notice, Platform, Setting, SettingGroup } from "obsidian";
+import { ButtonComponent, debounce, ItemView, Menu, MenuItem, Modal, Notice, Platform, Setting, SettingGroup, setTooltip } from "obsidian";
 import Sortable from "sortablejs";
 import FileSuggester from "../Suggesters/FileSuggester";
 import FolderSuggester from "../Suggesters/FolderSuggester";
@@ -136,7 +136,7 @@ export default class RulesModal extends Modal {
         this.ntb.settings.rules.map((rule) => {
             const ruleFormEl = this.renderRuleForm(rule)
             ruleListEl.append(ruleFormEl);
-        }); 
+        });
 
         this.renderAddRuleButton(rulesContainerEl, ruleListEl);
 
@@ -184,6 +184,7 @@ export default class RulesModal extends Modal {
                         };
                         this.ntb.settings.rules.push(newRule);
                         const ruleFormEl = this.renderRuleForm(newRule);
+                        ruleFormEl.toggleAttribute('data-visible', true);
                         ruleListEl.appendChild(ruleFormEl);
 
                         await this.ntb.settingsManager.save();
@@ -207,11 +208,51 @@ export default class RulesModal extends Modal {
         const ruleEl = ruleContainerEl.createDiv({ cls: 'note-toolbar-setting-rule' });
         const conditionContainerEl = ruleContainerEl.createDiv({ cls: 'note-toolbar-setting-condition-container' });
 
-        //
-        // toolbar name field
-        //
+        // rule preview
+        this.addRulePreview(ruleEl, rule, ruleContainerEl);
+        
+        // toolbar name + conjunction
+        const nameConjunctionEl = this.renderNameConjunction(rule, ruleContainerEl);
+        ruleEl.append(nameConjunctionEl);
 
-        const nameConjunctionContainerEl = ruleEl.createDiv({ cls: 'note-toolbar-setting-rule-name-conjunction' });
+        // rule controls (drag + menu)
+        this.addRuleControls(ruleEl, rule, ruleContainerEl);
+
+        // show existing conditions
+        for (const condition of rule.conditions) {
+            const conditionEl = this.renderConditionForm(rule, condition);
+            conditionContainerEl.append(conditionEl);
+        }
+
+        // add condition button
+        new Setting(ruleContainerEl)
+            .setClass("note-toolbar-setting-text-button")
+            .addButton((button: ButtonComponent) => {
+                button
+                    .setButtonText(t('setting.rules.button-newcondition'))
+                    .setTooltip(t('setting.rules.button-newcondition-tooltip'))
+                    .onClick(async () => {
+                        const newCondition: RuleCondition = {
+                            id: getUUID(),
+                            field: RuleField.FileName,
+                            operator: RuleOperator.Contains
+                        };
+                        rule.conditions.push(newCondition);
+                        // add the condition UI
+                        const ruleConditionEl = this.renderConditionForm(rule, newCondition);
+                        conditionContainerEl.appendChild(ruleConditionEl);
+                        await this.saveAndUpdateActiveRule();
+                    });
+                button.buttonEl.setText(iconTextFr('plus', t('setting.rules.button-newcondition')));
+            });
+
+        return ruleContainerEl;
+
+    }
+
+    renderNameConjunction(rule: Rule, ruleContainerEl: HTMLElement): HTMLElement {
+
+        const nameConjunctionContainerEl = createDiv({ cls: 'note-toolbar-setting-rule-name-conjunction' });
 
         const existingToolbarSetting = this.ntb.settingsManager.getToolbarById(rule.toolbar);
         const toolbarSetting = new Setting(nameConjunctionContainerEl)
@@ -297,10 +338,11 @@ export default class RulesModal extends Modal {
                     }, 250));
             });
 
-        //
-        // rule drag handle
-        //
+        return nameConjunctionContainerEl;
 
+    }
+
+    addRuleControls(ruleEl: HTMLElement, rule: Rule, ruleContainerEl: HTMLElement) {
         const ruleControlsEl = ruleEl.createDiv();
         ruleControlsEl.addClass("note-toolbar-setting-item-controls");
 
@@ -350,42 +392,41 @@ export default class RulesModal extends Modal {
                         if (rowId) await this.listMoveHandlerById(e, rowId);
                     });
             });
+    }
 
-        //
-        // show existing conditions
-        //
+    addRulePreview(ruleEl: HTMLElement, rule: Rule, ruleContainerEl: HTMLElement): HTMLDivElement {
 
-        for (const condition of rule.conditions) {
-            const conditionEl = this.renderConditionForm(rule, condition);
-            conditionContainerEl.append(conditionEl);
+        const rulePreviewContainerEl = ruleEl.createDiv({ cls: 'note-toolbar-setting-rule-preview-container' });
+
+        const rulePreviewEl = rulePreviewContainerEl.createDiv();
+        
+        const rulePreviewToolbarEl = rulePreviewEl.createDiv();
+        const ruleToolbar = this.ntb.settingsManager.getToolbarById(rule.toolbar);
+
+        // toolbar name and preview
+        if (ruleToolbar) {
+            this.ntb.settingsUtils.renderToolbarName(ruleToolbar, rulePreviewToolbarEl);
+        }
+        else {
+            rulePreviewToolbarEl.setText('Toolbar not selected');
         }
 
-        //
-        // add condition button
-        //
+        // TODO: show toolbar preview?
+        // const ruleToolbarPreviewFr = this.ntb.settingsUtils.createToolbarPreviewFr(ruleToolbar);
+        // rulePreviewToolbarEl.append(ruleToolbarPreviewFr);
 
-        new Setting(ruleContainerEl)
-            .setClass("note-toolbar-setting-text-button")
-            .addButton((button: ButtonComponent) => {
-                button
-                    .setButtonText(t('setting.rules.button-newcondition'))
-                    .setTooltip(t('setting.rules.button-newcondition-tooltip'))
-                    .onClick(async () => {
-                        const newCondition: RuleCondition = {
-                            id: getUUID(),
-                            field: RuleField.FileName,
-                            operator: RuleOperator.Contains
-                        };
-                        rule.conditions.push(newCondition);
-                        // add the condition UI
-                        const ruleConditionEl = this.renderConditionForm(rule, newCondition);
-                        conditionContainerEl.appendChild(ruleConditionEl);
-                        await this.saveAndUpdateActiveRule();
-                    });
-                button.buttonEl.setText(iconTextFr('plus', t('setting.rules.button-newcondition')));
-            });
+        // rule conditions
+        const rulePreviewConditionsEl = rulePreviewEl.createDiv({ cls: 'note-toolbar-setting-rule-preview-conditions' });
+        const ruleConditions = this.ntb.rules.formatRuleConditions(rule);
+        rulePreviewConditionsEl.append(ruleConditions);
 
-        return ruleContainerEl;
+        // click handler
+        setTooltip(rulePreviewContainerEl, 'Edit rule');
+        this.ntb.registerDomEvent(rulePreviewContainerEl, 'click', (event: MouseEvent) => {
+            ruleContainerEl.toggleAttribute('data-visible');
+        });
+
+        return rulePreviewContainerEl;
 
     }
 
@@ -687,31 +728,38 @@ export default class RulesModal extends Modal {
         const ACTIVE_RULE_CLASS = 'note-toolbar-setting-rule-active';
 
         // remove existing active toolbar highlight and field errors
-        this.contentEl.querySelector(`.${ACTIVE_RULE_CLASS}`)?.removeClass(ACTIVE_RULE_CLASS);
+        this.contentEl
+            .querySelectorAll(`.${ACTIVE_RULE_CLASS}`)
+            .forEach(el => el.removeClass(ACTIVE_RULE_CLASS));
         removeFieldErrors(this.contentEl);
 
         const [, matchType] = this.ntb.rules.getActiveToolbar();
         // this.ntb.debug('getActiveRule: toolbar', mappedToolbar, '⭐️ matches:', matchType);
 
-        let cssSelector;
+        let inputCssSelector;
+        let ruleEl;
         switch (matchType) {
             case 'default':
-                cssSelector = `[data-ntb-field-default]`;
+                inputCssSelector = `[data-ntb-field-default]`;
                 break;
             case 'prop':
-                cssSelector = `[data-ntb-field-prop]`;
+                inputCssSelector = `[data-ntb-field-prop]`;
                 break;
             default:
                 if (typeof matchType === 'object' && matchType !== null) {
-                    cssSelector = `[data-row-id="${matchType.id}"] .setting-item-control`;
+                    inputCssSelector = `[data-row-id="${matchType.id}"] .setting-item-control`;
+                    // set active state on the rule container (to also highlight previews)
+                    ruleEl = this.contentEl.querySelector<HTMLElement>(`.note-toolbar-setting-rules-list-item-container[data-row-id="${matchType.id}"]`);
+                    ruleEl?.toggleClass(ACTIVE_RULE_CLASS, true);
                 }
                 break;
         }
 
-        if (cssSelector) {
-            const ruleEl = this.contentEl.querySelector(cssSelector) as HTMLElement;
-            // this.ntb.debug(ruleEl);
-            if (!ruleEl) return;
+        // set active state on the toolbar input/selector
+        let ruleToolbarEl;
+        if (inputCssSelector) {
+            ruleToolbarEl = this.contentEl.querySelector(inputCssSelector) as HTMLElement;
+            if (!ruleToolbarEl) return;
 
             // display an error if the corresponding file type setting is disabled
             const itemView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
@@ -719,13 +767,13 @@ export default class RulesModal extends Modal {
             if (itemView && !isViewTypeSupported) {
                 const errorText = t('setting.rules.error-file-type-disabled_field', { filetype: itemView.getViewType() });
                 new Notice(errorText, 10000).containerEl.addClass('mod-warning');
-                this.ntb.settingsUtils.setFieldError(null, ruleEl, "beforeend", errorText);
+                this.ntb.settingsUtils.setFieldError(null, ruleToolbarEl, "beforeend", errorText);
             }
 
-            ruleEl.toggleClass(ACTIVE_RULE_CLASS, true);
-            if (scrollToFocus) ruleEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
+            ruleToolbarEl.toggleClass(ACTIVE_RULE_CLASS, true);
         }
+
+        if (scrollToFocus && ruleToolbarEl) ruleToolbarEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
     }
 

@@ -653,16 +653,6 @@
         border-top: none;
     }
 
-    & .note-toolbar-setting-rule-active {
-        & .search-input-container, input {
-            box-shadow: 0 0 0 1px var(--interactive-accent);
-        }
-    }
-
-    & .note-toolbar-setting-text-active {
-        color: var(--interactive-accent);
-    }
-
 }
 
 .mod-cta .note-toolbar-setting-text-with-icon {
