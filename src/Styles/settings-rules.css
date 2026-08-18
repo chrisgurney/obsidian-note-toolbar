@@ -110,7 +110,11 @@
             .is-phone & {
                 flex-direction: column;
             }
-            /* hide first condition's conjunction (also hidden from DOM, for the most part) */
+            /* hide only condition's delete icon */
+            &:only-child .note-toolbar-setting-item-delete {
+                display: none;
+            }
+            /* hide first condition's conjunction (also removed from DOM, for the most part) */
             &:first-child .note-toolbar-setting-mapping-field .setting-item-info {
                 display: none;
             }

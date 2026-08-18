@@ -249,6 +249,9 @@ export default class RulesManager {
     ): string | undefined {
 
         if (condition.value === undefined) {
+            if (editor === 'string') {
+                return `""`;
+            }
             return;
         }
 
