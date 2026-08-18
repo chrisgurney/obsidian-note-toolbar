@@ -408,7 +408,10 @@ export default class RulesModal extends Modal {
             this.ntb.settingsUtils.renderToolbarName(ruleToolbar, rulePreviewToolbarEl);
         }
         else {
-            rulePreviewToolbarEl.setText('Toolbar not selected');
+            rulePreviewToolbarEl.createSpan({ 
+                cls: 'note-toolbar-setting-item-preview-empty',
+                text: t('setting.rules.label-no-toolbar')
+            });
         }
 
         // TODO: show toolbar preview?
@@ -421,7 +424,7 @@ export default class RulesModal extends Modal {
         rulePreviewConditionsEl.append(ruleConditions);
 
         // click handler
-        setTooltip(rulePreviewContainerEl, 'Edit rule');
+        setTooltip(rulePreviewContainerEl, t('setting.rules.tooltip-edit'));
         this.ntb.registerDomEvent(rulePreviewContainerEl, 'click', (event: MouseEvent) => {
             ruleContainerEl.toggleAttribute('data-visible');
         });

@@ -779,6 +779,7 @@
             "error-folder-already-mapped": "This folder already has a toolbar associated with it. Precedence is top to bottom.",
             "label-conjunction-if": "if",
             "label-empty": "Use the button to create a rule.",
+            "label-no-toolbar": "Toolbar not selected",
             "menu-delete-rule": "Delete rule",
             "menu-duplicate-rule": "Duplicate rule",
             "name": "Rules",
@@ -819,6 +820,7 @@
             "setting-property": "Property",
             "setting-property-description": "If a toolbar name is found in this property, the toolbar will be displayed on the note. This takes precedence over any of the below rules. In a note, set this property to 'none' to hide the toolbar.",
             "setting-property-placeholder": "Property",
+            "tooltip-edit": "Edit rule",
             "tooltip-options": "Options"
         },
         "search": {
