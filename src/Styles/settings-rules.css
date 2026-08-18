@@ -108,12 +108,6 @@
             .is-phone & {
                 flex-direction: column;
             }
-            /* hides the delete button for the first condition in the list */
-            &:first-child {
-                & > .note-toolbar-setting-mapping-operator-value > .note-toolbar-setting-item-delete {
-                    display: none;
-                }
-            }
             & .note-toolbar-setting-mapping-field {
                 & .setting-item-info .setting-item-name {
                     overflow: visible;
