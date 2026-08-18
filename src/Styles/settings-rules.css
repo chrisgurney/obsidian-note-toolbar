@@ -169,6 +169,7 @@
         }
         & .note-toolbar-setting-rule-preview-conditions {
             font-size: var(--font-ui-small);
+            margin-top: var(--size-2-2);
         }
         &:focus-within {
             box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
@@ -206,6 +207,15 @@
 .modal .modal-content {
     & .note-toolbar-setting-rules-list-item-container.note-toolbar-setting-rule-active {
         box-shadow: inset 0 0 0 1px var(--interactive-accent);
+        &:not(:first-child):not(:last-child) {
+            border-radius: 0;
+        }
+        &:first-child {
+            border-radius: var(--setting-items-radius) var(--setting-items-radius) 0 0;
+        }
+        &:last-child {
+            border-radius: 0 0 var(--setting-items-radius) var(--setting-items-radius);
+        }
     }
     & .note-toolbar-setting-rule-active {
         & > .search-input-container, > input {
