@@ -815,7 +815,7 @@
             "placeholder-other-filetype": "e.g., excalidraw",
             "placeholder-toolbar": "Toolbar to show",
             "setting-default": "Default toolbar",
-            "setting-default-description": "Show this toolbar on all files, unless one of the rules above is satisfied.",
+            "setting-default-description": "Show this toolbar on all files, unless one of the rules below is satisfied.",
             "setting-default-placeholder": "Select toolbar...",
             "setting-property": "Property",
             "setting-property-description": "If a toolbar name is found in this property, the toolbar will be displayed on the note. This takes precedence over any of the below rules. In a note, set this property to 'none' to hide the toolbar.",

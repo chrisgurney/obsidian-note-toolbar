@@ -66,12 +66,6 @@ export default class RulesModal extends Modal {
         propertySetting.controlEl.setAttr('data-ntb-field-prop', '');
 
         //
-        // rules
-        //
-
-        this.renderRules();
-
-        //
         // default toolbar
         //
 
@@ -95,6 +89,12 @@ export default class RulesModal extends Modal {
             });
         this.ntb.settingsUtils.setFieldPreview(defaultToolbarSetting, existingDefaultToolbar);
         defaultToolbarSetting.controlEl.setAttr('data-ntb-field-default', '');
+
+        //
+        // rules
+        //
+
+        this.renderRules();
 
         //
         // done button
