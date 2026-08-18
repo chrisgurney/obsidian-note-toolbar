@@ -95,15 +95,18 @@
         & .note-toolbar-setting-condition {
             display: flex;
             margin-left: var(--size-4-4);
-            .is-phone & {
+            .is-mobile & {
                 border: var(--background-modifier-border) solid 1px;
-                flex-direction: column;
                 margin-left: 0;
                 padding-left: var(--size-4-4);
+                width: 100%;
                 & .note-toolbar-setting-mapping-field .dropdown,
                 & .note-toolbar-setting-mapping-operator .dropdown {
                     padding: 0;
                 }
+            }
+            .is-phone & {
+                flex-direction: column;
             }
             /* hides the delete button for the first condition in the list */
             &:first-child {
