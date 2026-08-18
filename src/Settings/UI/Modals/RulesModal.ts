@@ -760,10 +760,10 @@ export default class RulesModal extends Modal {
         }
 
         // set active state on the toolbar input/selector
-        let ruleToolbarEl;
+        let toolbarInputEl;
         if (inputCssSelector) {
-            ruleToolbarEl = this.contentEl.querySelector(inputCssSelector) as HTMLElement;
-            if (!ruleToolbarEl) return;
+            toolbarInputEl = this.contentEl.querySelector(inputCssSelector) as HTMLElement;
+            if (!toolbarInputEl) return;
 
             // display an error if the corresponding file type setting is disabled
             const itemView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
@@ -771,14 +771,16 @@ export default class RulesModal extends Modal {
             if (itemView && !isViewTypeSupported) {
                 const errorText = t('setting.rules.error-file-type-disabled_field', { filetype: itemView.getViewType() });
                 new Notice(errorText, 10000).containerEl.addClass('mod-warning');
-                this.ntb.settingsUtils.setFieldError(null, ruleToolbarEl, "beforeend", errorText);
+                this.ntb.settingsUtils.setFieldError(null, toolbarInputEl, "beforeend", errorText);
             }
 
-            ruleToolbarEl.toggleClass(ACTIVE_RULE_CLASS, true);
+            toolbarInputEl.toggleClass(ACTIVE_RULE_CLASS, true);
         }
 
-        if (scrollToFocus && ruleToolbarEl) ruleToolbarEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
+        if (scrollToFocus) {
+            if (ruleEl) ruleEl.scrollIntoView({ behavior: 'smooth', block: 'center' })
+                else if (toolbarInputEl) toolbarInputEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
     }
 
     removeConditionById(conditionId: string): boolean {
