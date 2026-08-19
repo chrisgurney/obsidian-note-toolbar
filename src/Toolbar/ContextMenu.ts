@@ -308,12 +308,15 @@ export default class ContextMenu {
 				item
 					.setTitle(t('export.menu-callout'))
 					.setIcon('copy')
-					.onClick(async () => {
+					.onClick(() => {
 						if (toolbarSettings) {
-							const calloutExport = await exportToCallout(this.ntb, toolbarSettings, this.ntb.settings.export);
-							const copyModal = new CopyTextModal( this.ntb, calloutExport,
+							const copyModal = new CopyTextModal( 
+								this.ntb, 
+								async () => { return await exportToCallout(this.ntb, toolbarSettings, this.ntb.settings.export) },
 								t('export.label-callout'),
-								 learnMoreFr(t('export.label-callout-description'), 'Creating-callouts-from-toolbars'));
+								learnMoreFr(t('export.label-callout-description'), 'Creating-callouts-from-toolbars'),
+								undefined,
+								true);
 							copyModal.open();
 						}
 					})

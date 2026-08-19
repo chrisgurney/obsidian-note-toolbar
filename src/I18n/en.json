@@ -348,7 +348,11 @@
             "placeholder": "Search for a command..."
         },
         "copy-as-callout": {
+            "button-close": "Done",
+            "button-close-description": "Saves and closes these settings",
+            "button-callout-settings": "Settings...",
             "description": "Define what happens when toolbars are converted to callouts.",
+            "label-callout-settings": "Copy as callout settings",
             "option-data": "Use data elements",
             "option-data-description": "Data elements allow toolbars opened in new windows to still work. If disabled, Note Toolbar URIs will be used instead of data elements, and also provide cleaner-looking markdown.",
             "option-icons": "Include icons",

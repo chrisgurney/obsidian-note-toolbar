@@ -81,7 +81,6 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		this.displayFileTypeSettings(containerEl);
 
 		// other global settings
-		this.displayCopyAsCalloutSettings(containerEl);
 		this.displayOtherSettings(containerEl);
 
 		// scroll + focus view
@@ -293,11 +292,14 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 											menuItem
 												.setTitle(t('export.menu-callout'))
 												.setIcon('copy')
-												.onClick(async () => {
-													const calloutExport = await exportToCallout(this.ntb, toolbar, this.ntb.settings.export);
-													const copyTextModal = new CopyTextModal( this.ntb, calloutExport,
+												.onClick(() => {
+													const copyTextModal = new CopyTextModal(
+														this.ntb,
+														() => { return exportToCallout(this.ntb, toolbar, this.ntb.settings.export) },
 														t('export.label-callout'),
-														learnMoreFr(t('export.label-callout-description'), 'Creating-callouts-from-toolbars'));
+														learnMoreFr(t('export.label-callout-description'), 'Creating-callouts-from-toolbars'),
+														undefined,
+														true);
 													copyTextModal.open();
 												});
 										});
@@ -996,93 +998,6 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 						this.ntb.settings.showToolbarInOther = value;
 						await this.ntb.settingsManager.save();	
 					}, 750)));
-		});
-
-		collapsibleEl.appendChild(collapsibleContainerEl);
-		containerEl.appendChild(collapsibleEl);
-
-	}
-
-	/**
-	 * Displays settings for exporting/copying to markdown.
-	 * @param containerEl 
-	 */	
-	displayCopyAsCalloutSettings(containerEl: HTMLElement): void {
-
-		const collapsibleEl = createDiv();
-		collapsibleEl.addClass('note-toolbar-setting-callout-container');
-		collapsibleEl.setAttribute('data-active', this.isSectionOpen['callouts'].toString());
-
-		const copyAsCalloutSetting = new Setting(collapsibleEl)
-			.setName(t('setting.copy-as-callout.title'))
-			.setDesc(learnMoreFr(t('setting.copy-as-callout.description'), 'Creating-callouts-from-toolbars'))
-			.setHeading();
-
-		this.renderSettingToggle(copyAsCalloutSetting, '.note-toolbar-setting-callout-container', 'callouts');
-
-		const collapsibleContainerEl = createDiv();
-		collapsibleContainerEl.addClass('note-toolbar-setting-items-collapsible-container');
-
-		const calloutGroup = new SettingGroup(collapsibleContainerEl);
-
-		calloutGroup.addSetting((includeIconsSetting) => {
-			includeIconsSetting
-				.setName(t('setting.copy-as-callout.option-icons'))
-				.setDesc(t('setting.copy-as-callout.option-icons-description'))
-				.addToggle((toggle: ToggleComponent) => {
-					toggle
-						.setValue(this.ntb.settings.export.includeIcons)
-						.onChange(async (value) => {
-							this.ntb.settings.export.includeIcons = value;
-							await this.ntb.settingsManager.save();
-						});
-					fixToggleTab(toggle);
-				});
-		});
-
-		calloutGroup.addSetting((replaceVarsSetting) => {
-			replaceVarsSetting
-				.setName(t('setting.copy-as-callout.option-vars'))
-				.setDesc(t('setting.copy-as-callout.option-vars-description', {interpolation: { skipOnVariables: true }} ))
-				.addToggle((toggle: ToggleComponent) => {
-					toggle
-						.setValue(this.ntb.settings.export.replaceVars)
-						.onChange(async (value) => {
-							this.ntb.settings.export.replaceVars = value;
-							await this.ntb.settingsManager.save();
-						});
-					fixToggleTab(toggle);
-				});
-		});
-
-		calloutGroup.addSetting((useIdsSetting) => {
-			useIdsSetting
-				.setName(t('setting.copy-as-callout.option-ids'))
-				.setDesc(t('setting.copy-as-callout.option-ids-description'))
-				.addToggle((toggle: ToggleComponent) => {
-					toggle
-						.setValue(this.ntb.settings.export.useIds)
-						.onChange(async (value) => {
-							this.ntb.settings.export.useIds = value;
-							await this.ntb.settingsManager.save();
-						});
-					fixToggleTab(toggle);
-				});
-		});
-
-		calloutGroup.addSetting((useDataElsSetting) => {
-			useDataElsSetting
-				.setName(t('setting.copy-as-callout.option-data'))
-				.setDesc(t('setting.copy-as-callout.option-data-description'))
-				.addToggle((toggle: ToggleComponent) => {
-					toggle
-						.setValue(this.ntb.settings.export.useDataEls)
-						.onChange(async (value) => {
-							this.ntb.settings.export.useDataEls = value;
-							await this.ntb.settingsManager.save();
-						});
-					fixToggleTab(toggle);
-				});
 		});
 
 		collapsibleEl.appendChild(collapsibleContainerEl);

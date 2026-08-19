@@ -569,11 +569,14 @@ export default class ToolbarItemUi {
                 menuItem
                     .setTitle(t('export.menu-callout-item'))
                     .setIcon('copy')
-                    .onClick(async () => {
-                        const itemCallout = await exportItemToCallout(this.ntb, toolbarItem, null, this.ntb.settings.export);
-                        const copyTextModal = new CopyTextModal( this.ntb, itemCallout,
+                    .onClick(() => {
+                        const copyTextModal = new CopyTextModal( 
+                            this.ntb, 
+                            () => { return exportItemToCallout(this.ntb, toolbarItem, null, this.ntb.settings.export) },
                             t('export.label-callout-item'),
-                            learnMoreFr(t('setting.item.label-copy-callout-description'), 'Note-Toolbar-Callouts'));
+                            learnMoreFr(t('setting.item.label-copy-callout-description'), 'Note-Toolbar-Callouts'),
+                            undefined,
+                            true);
                         copyTextModal.open();
                     });
             });
