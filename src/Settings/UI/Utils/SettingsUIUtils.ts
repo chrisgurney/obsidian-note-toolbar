@@ -1072,7 +1072,10 @@ export default class SettingsUIUtils {
  * @see https://discord.com/channels/686053708261228577/716028884885307432/1454335099545059389
  */
 export function fixToggleTab(toggle: ToggleComponent) {
-	toggle.toggleEl.tabIndex = -1;
+	// workaround no longer needed after Obsidian 1.13
+	if (!requireApiVersion('1.13.0')) {
+		toggle.toggleEl.tabIndex = -1;
+	}
 }
 
 /**
