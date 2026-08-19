@@ -206,7 +206,8 @@ export default class RulesModal extends Modal {
         ruleContainerEl.setAttribute('data-row-id', rule.id);
 
         const ruleEl = ruleContainerEl.createDiv({ cls: 'note-toolbar-setting-rule' });
-        const conditionContainerEl = ruleContainerEl.createDiv({ cls: 'note-toolbar-setting-condition-container' });
+        const conditionsSectionEl = ruleContainerEl.createDiv({ cls: 'note-toolbar-setting-conditions-section' });
+        const conditionContainerEl = conditionsSectionEl.createDiv({ cls: 'note-toolbar-setting-condition-container' });
 
         // rule preview
         this.addRulePreview(ruleEl, rule, ruleContainerEl);
@@ -225,7 +226,7 @@ export default class RulesModal extends Modal {
         }
 
         // add condition button
-        new Setting(ruleContainerEl)
+        new Setting(conditionsSectionEl)
             .setClass("note-toolbar-setting-text-button")
             .addButton((button: ButtonComponent) => {
                 button

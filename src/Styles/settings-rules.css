@@ -4,22 +4,28 @@
     padding-bottom: var(--size-4-4);
     & .note-toolbar-setting-rules-list-item-container {
         border-top: var(--border-width) solid var(--background-modifier-border);
-        padding-bottom: var(--size-4-4);
-        padding-inline: var(--size-4-4);
         &:first-child {
             border-top: none;
         }
         & .note-toolbar-setting-rule {
             align-items: flex-start;
             display: flex;
-            padding-top: var(--size-4-4);
             & .note-toolbar-setting-rule-name-conjunction {
                 align-items: flex-start;
                 display: none;
                 flex-wrap: wrap;
                 flex-basis: 100%;
-                & .note-toolbar-setting-mapping-conjunction::before {
-                    border: none;
+                padding: var(--size-4-4);
+                padding-bottom: 0;
+                & .note-toolbar-setting-mapping-conjunction {
+                    &::before {
+                        border: none;
+                    }
+                    & select.dropdown {
+                        .is-mobile & {
+                            padding-left: 0;
+                        }
+                    }
                 }
             }
             & .note-toolbar-setting-item-delete {
@@ -27,6 +33,7 @@
             }
             & .note-toolbar-setting-item-controls {
                 flex: 1;
+                padding: var(--size-4-4);
                 & .setting-item {
                     margin-left: auto;
                 }
@@ -57,7 +64,6 @@
         }
         & .note-toolbar-setting-text-button {
             border: none;
-            display: none;
             padding: var(--size-4-4) 0 0 0;
             .is-phone & {
                 margin-left: 0;
@@ -84,10 +90,15 @@
             }
         }
     }
+    & .note-toolbar-setting-conditions-section {
+        display: none;
+        padding: var(--size-4-4);
+        padding-top: 0;
+    }
     & .note-toolbar-setting-condition-container {
         align-items: flex-end;
-        display: none;
         flex-direction: column;
+        display: flex;
         row-gap: var(--size-2-2);
         .is-phone & {
             align-items: stretch;
@@ -162,7 +173,7 @@
     }
 
     & .note-toolbar-setting-rule-preview-container {
-        padding: none;
+        padding: var(--size-4-4);
         width: 100%;
         &:first-child {
             border-top: none;
@@ -176,7 +187,7 @@
         }
         @media (hover: hover) {
             &:hover {
-                box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
+                box-shadow: inset 0 0 0 2px var(--background-modifier-border-focus);
                 cursor: text;    
             }
         }
@@ -189,10 +200,7 @@
     }
 
     & .note-toolbar-setting-rules-list-item-container[data-visible] {
-        & .note-toolbar-setting-condition-container {
-            display: flex;
-        }
-        & .note-toolbar-setting-text-button {
+        & .note-toolbar-setting-conditions-section {
             display: block;
         }
         & .note-toolbar-setting-rule-preview-container {
