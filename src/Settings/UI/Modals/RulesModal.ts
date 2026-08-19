@@ -102,9 +102,9 @@ export default class RulesModal extends Modal {
 
 		new Setting(this.contentEl)
 			.addButton((btn: ButtonComponent) => {
-				btn.setButtonText(t('setting.styles.button-close'))
+				btn.setButtonText(t('setting.rules.button-close'))
 					.setCta()
-					.setTooltip(t('setting.styles.button-close-description'))
+					.setTooltip(t('setting.rules.button-close-description'))
 					.onClick(async () => {
                         await this.ntb.settingsManager.save();
 						this.close();

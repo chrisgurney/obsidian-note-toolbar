@@ -752,6 +752,8 @@
             "option-position-description": "Choose how the toolbar should be displayed when accessed from the ribbon."
         },
         "rules": {
+            "button-close": "Done",
+            "button-close-description": "Saves and closes these settings",
             "button-collapse-tooltip": "Collapse all rules",
             "button-delete-condition-tooltip": "Delete condition",
             "button-expand-tooltip": "Expand all rules",
