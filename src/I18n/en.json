@@ -361,7 +361,8 @@
             "option-ids-description": "This ensures menu items still work for you if the menu toolbar's renamed. If you want to share callouts, turn this off, and the toolbar's name will be used instead.",
             "option-vars": "Replace variables and expressions",
             "option-vars-description": "Any variables and expressions used in the toolbar will be replaced with values from the note you're currently viewing. Example: {{note_title}} → My Note",
-            "title": "Copy as callout"
+            "title": "Copy as callout",
+            "title-modal": "Copy as callout settings"
         },
         "delete-toolbar": {
             "button-delete": "Delete...",

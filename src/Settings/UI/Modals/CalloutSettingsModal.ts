@@ -22,7 +22,7 @@ export default class CalloutSettingsModal extends Modal {
      */
     public display() {
 
-        this.setTitle(t('setting.copy-as-callout.title'))
+        this.setTitle(t('setting.copy-as-callout.title-modal'))
 
         new Setting(this.contentEl)
             .setDesc(learnMoreFr(t('setting.copy-as-callout.description'), 'Creating-callouts-from-toolbars'))
