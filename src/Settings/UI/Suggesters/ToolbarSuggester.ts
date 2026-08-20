@@ -8,7 +8,8 @@ export default class ToolbarSuggester extends AbstractInputSuggest<ToolbarSettin
         private ntb: NoteToolbarPlugin, 
         private inputEl: HTMLInputElement,
         private showNone = false,
-        private callback?: (toolbar: ToolbarSettings) => Promise<void>
+        private callback?: (toolbar: ToolbarSettings) => Promise<void>,
+        private classes?: string[]
     ) {
         super(ntb.app, inputEl);
     }
@@ -31,6 +32,7 @@ export default class ToolbarSuggester extends AbstractInputSuggest<ToolbarSettin
     }
 
     renderSuggestion(toolbar: ToolbarSettings, el: HTMLElement): void {
+        if (this.classes) el.addClasses(this.classes);
         const containerEl = el.createDiv();
         containerEl.addClass('note-toolbar-tbar-suggestion-container');
         this.ntb.settingsUtils.renderToolbarName(toolbar, containerEl);

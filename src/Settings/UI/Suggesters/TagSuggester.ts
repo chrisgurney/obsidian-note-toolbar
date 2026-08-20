@@ -5,8 +5,9 @@ export default class TagSuggester extends AbstractInputSuggest<string> {
 
     constructor(
         private ntb: NoteToolbarPlugin, 
-        private inputEl: HTMLInputElement) 
-    {
+        private inputEl: HTMLInputElement,
+        private classes?: string[]
+    ) {
         super(ntb.app, inputEl);
     }
 
@@ -25,6 +26,7 @@ export default class TagSuggester extends AbstractInputSuggest<string> {
     }
 
     renderSuggestion(tag: string, el: HTMLElement): void {
+        if (this.classes) el.addClasses(this.classes);
         el.setText(tag);
     }
 

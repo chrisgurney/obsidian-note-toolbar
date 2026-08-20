@@ -11,6 +11,7 @@ export default class FileSuggester extends AbstractInputSuggest<TAbstractFile> {
         private showFileNamesOnly: boolean = false,
         private fileExtension?: string, 
         private inFolderPath?: string,
+        private classes?: string[]
     ) {
         super(ntb.app, inputEl);
     }
@@ -47,6 +48,7 @@ export default class FileSuggester extends AbstractInputSuggest<TAbstractFile> {
     }
 
     renderSuggestion(file: TAbstractFile, el: HTMLElement): void {
+        if (this.classes) el.addClasses(this.classes);
         el.setText(this.getDisplayName(file));
     }
 

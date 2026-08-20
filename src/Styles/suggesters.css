@@ -68,6 +68,15 @@
     }
 }
 
+.note-toolbar-suggestion-small {
+    font-size: var(--font-ui-small);
+    & svg.svg-icon {
+        vertical-align: baseline;
+        height: var(--font-ui-small);
+        width: var(--font-ui-small);
+    }
+}
+
 .note-toolbar-icon-action-button-container {
     display: flex;
     justify-content: space-between;

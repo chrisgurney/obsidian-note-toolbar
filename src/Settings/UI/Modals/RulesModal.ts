@@ -274,7 +274,9 @@ export default class RulesModal extends Modal {
                         rule.toolbar = mappedToolbar?.uuid ?? '';
                         this.ntb.settingsUtils.setFieldPreview(toolbarSetting, mappedToolbar);
                         await this.saveAndUpdateActiveRule();
-                    });
+                    },
+                    ['note-toolbar-suggestion-small']
+                );
                 cb
                     .setPlaceholder(t('setting.rules.placeholder-toolbar'))
                     .setValue(existingToolbarSetting ? existingToolbarSetting.name : '')
@@ -487,7 +489,7 @@ export default class RulesModal extends Modal {
                         '.note-toolbar-setting-mapping-operator select'
                     );
                     nextInput?.focus();
-                });
+                }, ['note-toolbar-suggestion-small']);
             });
 
         //
@@ -565,7 +567,7 @@ export default class RulesModal extends Modal {
                     new Setting(operatorValueContainerEl)
                         .setClass('note-toolbar-setting-mapping-value')
                         .addSearch((cb) => {
-                            new FileSuggester(this.ntb, cb.inputEl, true, true);
+                            new FileSuggester(this.ntb, cb.inputEl, true, true, undefined, undefined, ['note-toolbar-suggestion-small']);
                             cb
                                 .setPlaceholder(t('setting.rules.condition-value-file-placeholder'))
                                 .setValue((condition.value as string) ?? '')
@@ -611,7 +613,7 @@ export default class RulesModal extends Modal {
                     new Setting(operatorValueContainerEl)
                         .setClass('note-toolbar-setting-mapping-value')
                         .addSearch((cb) => {
-                            new FolderSuggester(this.ntb.app, cb.inputEl);
+                            new FolderSuggester(this.ntb, cb.inputEl, ['note-toolbar-suggestion-small']);
                             cb
                                 .setPlaceholder(t('setting.rules.condition-value-folder-placeholder'))
                                 .setValue((condition.value as string) ?? '')
@@ -645,7 +647,7 @@ export default class RulesModal extends Modal {
                     new Setting(operatorValueContainerEl)
                         .setClass('note-toolbar-setting-mapping-value')
                         .addSearch((cb) => {
-                            new TagSuggester(this.ntb, cb.inputEl);
+                            new TagSuggester(this.ntb, cb.inputEl, ['note-toolbar-suggestion-small']);
                             cb
                                 .setPlaceholder(t('setting.rules.condition-value-tags-placeholder'))
                                 .setValue((condition.value as string) ?? '')

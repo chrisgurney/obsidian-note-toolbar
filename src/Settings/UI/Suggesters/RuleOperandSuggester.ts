@@ -13,6 +13,7 @@ export default class RuleOperandSuggester extends AbstractInputSuggest<RuleOpera
         private ntb: NoteToolbarPlugin, 
         private inputEl: HTMLInputElement,
         private callback: (operand: RuleOperand) => void,
+        private classes?: string[]
     ) {
         super(ntb.app, inputEl);
     }
@@ -27,6 +28,7 @@ export default class RuleOperandSuggester extends AbstractInputSuggest<RuleOpera
     }
 
     renderSuggestion(operand: RuleOperand, el: HTMLElement): void {
+        if (this.classes) el.addClasses(this.classes);
         const containerEl = el.createDiv({ cls: 'note-toolbar-rule-suggestion-container' });
         const iconEl = containerEl.createDiv();
         const labelEl = containerEl.createDiv();

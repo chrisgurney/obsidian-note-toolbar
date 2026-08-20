@@ -1,4 +1,5 @@
-import { AbstractInputSuggest, App, TAbstractFile, TFolder } from "obsidian";
+import NoteToolbarPlugin from "main";
+import { AbstractInputSuggest, TAbstractFile, TFolder } from "obsidian";
 import { t } from "Settings/NoteToolbarSettings";
 
 export type FolderSuggesterPattern = {
@@ -9,14 +10,15 @@ export type FolderSuggesterPattern = {
 
 export default class FolderSuggester extends AbstractInputSuggest<string> {
 
-    private inputEl: HTMLInputElement;
-
     private PATTERN_ALL_FILES: FolderSuggesterPattern = { pattern: '*', label: '*', desc: t('setting.mappings.option-folder-all') };
     private PATTERN_ROOT_ONLY: FolderSuggesterPattern = { pattern: '/', label: '/', desc: t('setting.mappings.option-folder-root') };
 
-    constructor(app: App, inputEl: HTMLInputElement) {
-        super(app, inputEl);
-        this.inputEl = inputEl;
+    constructor(
+        private ntb: NoteToolbarPlugin, 
+        private inputEl: HTMLInputElement,
+        private classes?: string[]
+    ) {
+        super(ntb.app, inputEl);
     }
 
     getSuggestions(inputStr: string): Array<string> {
@@ -37,6 +39,7 @@ export default class FolderSuggester extends AbstractInputSuggest<string> {
     }
 
     renderSuggestion(folder: string, el: HTMLElement): void {
+        if (this.classes) el.addClasses(this.classes);
         if (folder === this.PATTERN_ALL_FILES.pattern) {
             this.renderPattern(el, this.PATTERN_ALL_FILES);
         } 
