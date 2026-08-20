@@ -3,6 +3,7 @@ import { readFileSync, writeFileSync } from 'fs';
 import * as path from 'path';
 import * as readline from 'readline';
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
 
 // displays command to console, then executes it
