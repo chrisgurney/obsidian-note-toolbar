@@ -27,7 +27,6 @@ export default class ImportModal extends Modal {
         private toolbar?: ToolbarSettings
     ) {
         super(ntb.app);
-        this.modalEl.addClass('note-toolbar-setting-dialog-phonefix');
         this.component = new Component();
         this.component.load();
     }

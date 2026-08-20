@@ -16,7 +16,7 @@ export default class CopyTextModal extends Modal {
         private showCalloutSettings = false
     ) {
         super(ntb.app);
-        this.modalEl.addClass('note-toolbar-copy-text-dialog', 'note-toolbar-setting-dialog-phonefix');
+        this.modalEl.addClass('note-toolbar-copy-text-dialog');
     }
 
     public onOpen() {

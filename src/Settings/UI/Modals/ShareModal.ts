@@ -14,7 +14,7 @@ export default class ShareModal extends Modal {
         private toolbarOrItem: ToolbarSettings | ToolbarItemSettings
     ) {
         super(ntb.app);
-        this.modalEl.addClass('note-toolbar-share-dialog', 'note-toolbar-setting-dialog-phonefix');
+        this.modalEl.addClass('note-toolbar-share-dialog');
     }
 
     public onOpen() {
