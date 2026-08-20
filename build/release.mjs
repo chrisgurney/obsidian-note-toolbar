@@ -1,5 +1,6 @@
 import { execSync } from 'child_process';
 import { readFileSync, writeFileSync } from 'fs';
+import { fileURLToPath } from 'node:url';
 import * as path from 'path';
 import * as readline from 'readline';
 
