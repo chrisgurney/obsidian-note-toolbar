@@ -435,12 +435,12 @@ export default class SettingsManager {
 	 * @param value value to update the list with
 	 */
 	updateRecentList(localVar: string, value: string) {
+		const MAX_SIZE = 10;
 		const list = JSON.parse(this.ntb.app.loadLocalStorage(localVar) as string || '[]') as string[];
-		const maxSize = 10;
 		const i = list.indexOf(value);
 		if (i !== -1) list.splice(i, 1); // remove if it already exists
 		list.unshift(value); // add to top
-		if (list.length > maxSize) list.pop(); // remove oldest
+		if (list.length > MAX_SIZE) list.pop(); // remove oldest
 		this.ntb.app.saveLocalStorage(localVar, JSON.stringify(list));
 	}
 
