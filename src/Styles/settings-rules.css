@@ -17,6 +17,9 @@
                 flex-basis: 100%;
                 padding: var(--size-4-4);
                 padding-bottom: 0;
+                .is-mobile & {
+                    padding-inline-start: var(--size-2-2);
+                }
                 & .note-toolbar-setting-mapping-conjunction {
                     &::before {
                         border: none;
@@ -34,6 +37,9 @@
             & .note-toolbar-setting-item-controls {
                 flex: 1;
                 padding: var(--size-4-4);
+                .is-mobile & {
+                    padding-inline-end: 0;
+                }
                 & .setting-item {
                     margin-left: auto;
                 }
@@ -94,6 +100,9 @@
         display: none;
         padding: var(--size-4-4);
         padding-top: 0;
+        .is-mobile & {
+            padding-inline: var(--size-2-2);
+        }
     }
     & .note-toolbar-setting-condition-container {
         align-items: flex-end;
@@ -174,6 +183,9 @@
 
     & .note-toolbar-setting-rule-preview-container {
         padding: var(--size-4-4);
+        .is-mobile & {
+            padding-inline: var(--size-2-2);
+        }
         width: 100%;
         &:first-child {
             border-top: none;
@@ -215,6 +227,7 @@
 .modal .modal-content {
     & .note-toolbar-setting-rules-list-item-container.note-toolbar-setting-rule-active {
         box-shadow: inset 0 0 0 1px var(--interactive-accent);
+        padding: var(--size-2-2);
         &:not(:first-child):not(:last-child) {
             border-radius: 0;
         }
@@ -223,6 +236,9 @@
         }
         &:last-child {
             border-radius: 0 0 var(--setting-items-radius) var(--setting-items-radius);
+        }
+        .is-mobile & {
+            border-radius: 0;
         }
     }
     & .note-toolbar-setting-rule-active {
