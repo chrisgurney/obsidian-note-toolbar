@@ -1,4 +1,4 @@
-import { DEFAULT_STYLE_DISCLAIMERS, DEFAULT_STYLE_OPTIONS, MOBILE_STYLE_DISCLAIMERS, MOBILE_STYLE_OPTIONS, PositionType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { DEFAULT_STYLE_DISCLAIMERS, DEFAULT_STYLE_OPTIONS, DefaultStyleType, MOBILE_STYLE_DISCLAIMERS, MOBILE_STYLE_OPTIONS, MobileStyleType, PositionType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { arraymove } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
 import { debounce, ItemView, MarkdownView, Setting, SettingGroup } from "obsidian";
@@ -11,7 +11,8 @@ export default class ToolbarStyleUi {
     constructor(
         private ntb: NoteToolbarPlugin, 
         private parent: ToolbarSettingsModal | StyleModal, 
-        private toolbar: ToolbarSettings
+        private toolbar: ToolbarSettings,
+        private isForFloatingToolbar = false
     ) {}
 
     /**
@@ -213,11 +214,17 @@ export default class ToolbarStyleUi {
     getExcludedDefaultStyles(): string[] {
         const excludedStyles: string[] = [];
 
-        if (this.toolbar.position.desktop?.allViews?.position !== PositionType.Props) excludedStyles.push('sticky');
+        if (this.toolbar.position.desktop?.allViews?.position !== PositionType.Props) excludedStyles.push(DefaultStyleType.Sticky);
         if (this.toolbar.position.desktop?.allViews?.position !== PositionType.Top &&
-            this.toolbar.position.desktop?.allViews?.position !== PositionType.Bottom) excludedStyles.push('wide');
+            this.toolbar.position.desktop?.allViews?.position !== PositionType.Bottom) excludedStyles.push(DefaultStyleType.Wide);
 
-        if (this.isUsingLaunchpad()) {
+        if (this.isForFloatingToolbar) {
+            excludedStyles.push(
+                DefaultStyleType.Autohide, DefaultStyleType.Between, DefaultStyleType.Center, DefaultStyleType.Even, 
+                DefaultStyleType.Inactive, DefaultStyleType.Left, DefaultStyleType.NoWrap, DefaultStyleType.Right, 
+                DefaultStyleType.Sticky, DefaultStyleType.Tab, DefaultStyleType.Wide);
+        }
+        else if (this.isUsingLaunchpad()) {
             excludedStyles.push('center', 'left', 'right', 'between', 'even', 'sticky', 'tab');
         }
 
@@ -239,10 +246,22 @@ export default class ToolbarStyleUi {
         const excludedStyles: string[] = [];
         
         const position: PositionType | undefined = this.toolbar.position.mobile?.allViews?.position;
-        if (position !== PositionType.Top && position !== PositionType.Bottom) excludedStyles.push('mnwd', 'mwd');
-        if (position !== PositionType.Props) excludedStyles.push('mstcky', 'mnstcky');
+        if (position !== PositionType.Top && position !== PositionType.Bottom) excludedStyles.push(
+            MobileStyleType.NoWide, MobileStyleType.Wide
+        );
+        if (position !== PositionType.Props) excludedStyles.push(
+            MobileStyleType.Sticky, MobileStyleType.NoSticky
+        );
 
-        if (this.isUsingLaunchpad()) {
+        if (this.isForFloatingToolbar) {
+            excludedStyles.push(
+                MobileStyleType.Autohide, MobileStyleType.Between, MobileStyleType.Center, MobileStyleType.Even,
+                MobileStyleType.Left, MobileStyleType.NoAutohide, MobileStyleType.NoSticky, MobileStyleType.NoTab,
+                MobileStyleType.NoWrap, MobileStyleType.Right, MobileStyleType.Sticky, MobileStyleType.Tab, 
+                MobileStyleType.Wide, MobileStyleType.Wrap
+            );
+        }
+        else if (this.isUsingLaunchpad()) {
             excludedStyles.push('mctr', 'mlft', 'mrght', 'mbtwn', 'mevn', 'mstcky', 'mnstcky', 'mntb', 'mnwrp', 'mtb');
         }
 

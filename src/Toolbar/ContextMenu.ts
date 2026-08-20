@@ -158,7 +158,7 @@ export default class ContextMenu {
 						.setTitle(t('toolbar.menu-style'))
 						.onClick(() => {
 							if (toolbarSettings) {
-								const styleModal = new StyleModal(this.ntb, toolbarSettings);
+								const styleModal = new StyleModal(this.ntb, toolbarSettings, isFloatingToolbar);
 								styleModal.open();
 							}
 						});
