@@ -739,7 +739,6 @@
     },
     "ribbon": {
       "description": "从侧边栏（Ribbon）访问此工具栏。",
-      "description-migration": "1.34 新增：使用工具栏和项目设置，分别从侧边栏访问它们。",
       "error-item-not-found": "Note Toolbar：未找到项目。",
       "error-item-toolbar-not-found": "Note Toolbar：未找到项目对应的工具栏。",
       "error-item-text-empty": "添加到侧边栏时出错：项目需要标签或工具提示。",

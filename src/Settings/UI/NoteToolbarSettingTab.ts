@@ -702,16 +702,6 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 				});
 		});
 
-		//
-		// Ribbon button
-		//
-
-		navbarGroup.addSetting((ribbonActionSetting) => {
-			ribbonActionSetting
-				.setName(t('setting.ribbon.name'))
-				.setDesc(learnMoreFr(t('setting.ribbon.description-migration'), 'Ribbon'))
-		});
-
 		collapsibleEl.appendChild(collapsibleContainerEl);
 		containerEl.append(collapsibleEl);
 
