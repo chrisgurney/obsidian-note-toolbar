@@ -7,11 +7,13 @@ export default class FileSuggester extends AbstractInputSuggest<TAbstractFile> {
     constructor(
         private ntb: NoteToolbarPlugin,
         private inputEl: HTMLInputElement, 
-        private showFilesOnly: boolean = false, 
-        private showFileNamesOnly: boolean = false,
-        private fileExtension?: string, 
-        private inFolderPath?: string,
-        private classes?: string[]
+        private options?: {
+            showFilesOnly: boolean, 
+            showFileNamesOnly: boolean,
+            fileExtension?: string, 
+            inFolderPath?: string,
+        },
+        private classes?: string[],
     ) {
         super(ntb.app, inputEl);
     }
@@ -28,9 +30,9 @@ export default class FileSuggester extends AbstractInputSuggest<TAbstractFile> {
             const lowerCaseFilePath = file.path.toLowerCase();
             const matchesInput = lowerCaseFilePath.includes(lowerCaseInputStr);
             if (!matchesInput) return false;
-            if (this.showFilesOnly && !isFile) return false;
-            if (this.fileExtension && isFile && !lowerCaseFilePath.endsWith(this.fileExtension.toLowerCase())) return false;
-            const lowerCaseFolder = this.inFolderPath?.toLowerCase();
+            if (this.options?.showFilesOnly && !isFile) return false;
+            if (this.options?.fileExtension && isFile && !lowerCaseFilePath.endsWith(this.options?.fileExtension.toLowerCase())) return false;
+            const lowerCaseFolder = this.options?.inFolderPath?.toLowerCase();
             if (lowerCaseFolder && !lowerCaseFilePath.startsWith(lowerCaseFolder + '/')) return false;
             return true;
         })
@@ -60,6 +62,6 @@ export default class FileSuggester extends AbstractInputSuggest<TAbstractFile> {
     }
 
     private getDisplayName(file: TAbstractFile): string {
-        return this.showFileNamesOnly ? file.name : file.path;
+        return this.options?.showFileNamesOnly ? file.name : file.path;
     }
 }
