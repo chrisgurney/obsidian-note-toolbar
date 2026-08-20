@@ -1,12 +1,14 @@
 import { execSync } from 'child_process';
-import { readFileSync, writeFileSync } from "fs";
+import { readFileSync, writeFileSync } from 'fs';
+import * as path from 'path';
 import * as readline from 'readline';
 
+const rootDir = path.resolve(__dirname, '..');
 
 // displays command to console, then executes it
 function cmd(command) {
     console.log(command);
-    execSync(command, { stdio: 'inherit' });
+    execSync(command, { stdio: 'inherit', cwd: rootDir });
 }
 
 // helper function to prompt user (hit enter before continuing)
@@ -35,34 +37,42 @@ if (!newVersion) {
 
 try {
     console.log('[release] Updating JSON files...');
+
     // update package.json
-    const packageJson = JSON.parse(readFileSync('package.json', 'utf-8'));
+    const packageJsonPath = path.join(rootDir, 'package.json');
+    const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf-8'));
+
     if (packageJson.version === newVersion) {
         throw Error('Provided version is the same as the existing version.');
     }
+
     packageJson.version = newVersion;
-    writeFileSync('package.json', JSON.stringify(packageJson, null, 2) + '\n');
+    writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2) + '\n');
     console.log('\x1b[32m✓ package.json updated\x1b[0m');
 
     // read minAppVersion from manifest.json and bump version to target version
-    let manifest = JSON.parse(readFileSync("manifest.json", "utf8"));
+    const manifestPath = path.join(rootDir, 'manifest.json');
+    const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
     const { minAppVersion } = manifest;
+
     manifest.version = newVersion;
-    writeFileSync("manifest.json", JSON.stringify(manifest, null, "\t"));
+    writeFileSync(manifestPath, JSON.stringify(manifest, null, '\t'));
     console.log('\x1b[32m✓ manifest.json updated\x1b[0m');
 
     // update versions.json with target version and minAppVersion from manifest.json
-    let versions = JSON.parse(readFileSync("versions.json", "utf8"));
+    const versionsPath = path.join(rootDir, 'versions.json');
+    const versions = JSON.parse(readFileSync(versionsPath, 'utf8'));
     const lastMinAppVersion = Object.values(versions).at(-1);
+
     if (minAppVersion !== lastMinAppVersion) {
         versions[newVersion] = minAppVersion;
-        writeFileSync("versions.json", JSON.stringify(versions, null, "\t"));
+        writeFileSync(versionsPath, JSON.stringify(versions, null, '\t'));
         console.log('\x1b[32m✓ versions.json updated\x1b[0m');
     }
 
     // git add the version files
     console.log('\n[release] Adding JSON files to git...');
-    cmd(`git add manifest.json package.json versions.json`);
+    cmd('git add manifest.json package.json versions.json');
     console.log('\x1b[32m✓ Files added to git\x1b[0m');
 
     // ask before committing and pushing the version files
@@ -76,8 +86,7 @@ try {
     cmd(`git tag -a "${newVersion}" -m "${newVersion}"`);
     cmd(`git push origin "${newVersion}"`);
     console.log('\x1b[32m✓ Tag created and pushed\x1b[0m');
-} 
-catch (error) {
+} catch (error) {
     console.error('\x1b[31m[release] Error:\x1b[0m', error.message);
     process.exit(1);
 }

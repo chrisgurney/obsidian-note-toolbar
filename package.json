@@ -10,7 +10,7 @@
     "dev": "npm run prebuild && node esbuild.config.mjs",
     "lint": "npx eslint .",
     "prebuild": "node build/generate-version.mjs",
-    "release": "node release.mjs",
+    "release": "node build/release.mjs",
     "stylelint": "npx stylelint '**/*.css'",
     "typecheck": "tsc --noEmit --skipLibCheck"
   },
