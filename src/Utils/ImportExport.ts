@@ -453,7 +453,7 @@ export function importFromCallout(
                             .toLowerCase();
                         // check the Lucide set first, and then the icon's name by itself (for custom icons, like Templater's)
                         icon = getIcon('lucide-' + iconImported) ? 'lucide-' + iconImported : (getIcon(iconImported) ? iconImported : '');
-                        warningLog += icon ? '' : `- ${t('import.errorlog-item', { number: index + 1 })} ${t('import.errorlog-icon-not-found', { icon: iconImported })}\n`;
+                        warningLog += icon ? '' : `- ${t('import.errorlog-line', { number: index + 1 })} ${t('import.errorlog-icon-not-found', { icon: iconImported })}\n`;
                     }
                     // remove the icon from the label string
                     label = label?.replace(iconMatch[1], '').trim();
@@ -473,7 +473,7 @@ export function importFromCallout(
                             const commandName = ntb.utils.getCommandNameById(commandId);
                             // if the command name doesn't exist, show the command ID and an error
                             link = commandName ? commandName : commandId;
-                            warningLog += commandName ? '' : `- ${t('import.errorlog-item', { number: index + 1 })} ${t('import.errorlog-command-not-recognized', { command: commandId })}\n`;
+                            warningLog += commandName ? '' : `- ${t('import.errorlog-line', { number: index + 1 })} ${t('import.errorlog-command-not-recognized', { command: commandId })}\n`;
                             break;
                         }
                         case ItemType.Dataview:
@@ -508,7 +508,7 @@ export function importFromCallout(
                             itemType = ItemType.Menu;
                             const menuToolbar = ntb.settingsManager.getToolbar(dataUriValue);
                             link = menuToolbar ? menuToolbar.uuid : dataUriValue;
-                            errorLog += menuToolbar ? '' : `- ${t('import.errorlog-item', { number: index + 1 })} ${t('import.errorlog-menu-not-found', { menu: dataUriValue })}\n`;
+                            errorLog += menuToolbar ? '' : `- ${t('import.errorlog-line', { number: index + 1 })} ${t('import.errorlog-menu-not-found', { menu: dataUriValue })}\n`;
                             // TODO: link needs to trigger field error style somehow
                             break;
                         }
@@ -529,7 +529,7 @@ export function importFromCallout(
         ntb.debug('| scriptConfig?', scriptConfig);
         ntb.debug(`| => ${itemType?.toUpperCase()}`);
 
-        errorLog += itemType ? '' : `- ${t('import.errorlog-item', { number: index + 1 })} ${t('import.errorlog-invalid-format', { line: line })}\n`;
+        errorLog += itemType ? '' : `- ${t('import.errorlog-line', { number: index + 1 })} ${t('import.errorlog-invalid-format', { line: line })}\n`;
 
         // create the toolbar item and add it to the toolbar
         if (itemType) {

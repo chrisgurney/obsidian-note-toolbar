@@ -259,7 +259,6 @@
     "errorlog-icon-not-found": "未找到图标：`{{icon}}`",
     "errorlog-invalid-format": "格式无效：`{{line}}`",
     "errorlog-invalid-styles": "无效样式：`{{styles}}`",
-    "errorlog-item": "项目 {{number}}：",
     "errorlog-menu-not-found": "未找到菜单：`{{menu}}`",
     "label-import": "在下方粘贴笔记工具栏的标注（Callout），它将被添加为新的工具栏。",
     "label-import-confirmation": "确认要添加此工具栏。添加后，需要将此工具栏映射到一个或多个笔记。",

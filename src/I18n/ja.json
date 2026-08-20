@@ -191,7 +191,6 @@
         "errorlog-icon-not-found": "アイコンが見つかりません: {{icon}}",
         "errorlog-invalid-format": "無効な形式: {{line}}",
         "errorlog-invalid-styles": "無効なスタイルを無視しました: {{styles}}",
-        "errorlog-item": "アイテム {{number}}:",
         "errorlog-menu-not-found": "メニューが見つかりません: {{menu}}",
         "label-import": "下記にNote Toolbarコールアウトを貼り付けると、新しいツールバーとして追加されます。",
         "label-import-confirmation": "このツールバーを追加することを確認してください。追加後、このツールバーを1つ以上のノートにマッピングする必要があります。",

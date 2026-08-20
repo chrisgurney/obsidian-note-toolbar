@@ -260,7 +260,7 @@
         "errorlog-icon-not-found": "Icon not found: `{{icon}}`",
         "errorlog-invalid-format": "Invalid format: `{{line}}`",
         "errorlog-invalid-styles": "Invalid style(s): `{{styles}}`",
-        "errorlog-item": "Item {{number}}:",
+        "errorlog-line": "Line {{number}}:",
         "errorlog-menu-not-found": "Menu not found: `{{menu}}`",
         "label-import": "Paste a Note Toolbar Callout below and it will be added as a new toolbar.",
         "label-import-confirmation": "Confirm you would like to add this toolbar. Once added, this toolbar will need to be mapped to one or more notes.",

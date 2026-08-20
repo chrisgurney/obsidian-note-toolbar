@@ -233,7 +233,6 @@
         "errorlog-icon-not-found": "Іконку не знайдено: {{icon}}",
         "errorlog-invalid-format": "Невірний формат: {{line}}",
         "errorlog-invalid-styles": "Проігноровані недійсні стилі: {{styles}}",
-        "errorlog-item": "Елемент {{number}}:",
         "errorlog-menu-not-found": "Меню не знайдено: {{menu}}",
         "label-import": "Вставте текст виноски Note Toolbar для імпорту панелі.",
         "label-import-confirmation": "Підтвердьте, що бажаєте створити нову панель. Після додавання цю панель потрібно буде зіставити з однією, або кількома нотатками.",

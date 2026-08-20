@@ -187,7 +187,6 @@
         "errorlog-icon-not-found": "Icon nicht gefunden: {{icon}}",
         "errorlog-invalid-format": "Ungültiges Format: {{line}}",
         "errorlog-invalid-styles": "Ungültige(r) Stil(e) ignoriert: {{styles}}",
-        "errorlog-item": "Element {{number}}:",
         "errorlog-menu-not-found": "Menü nicht gefunden: {{menu}}",
         "label-import": "Füge unten einen Note Toolbar-Hinweis ein, und er wird als neue Toolbar hinzugefügt.",
         "label-import-confirmation": "Bestätige, dass du diese Toolbar hinzufügen möchtest. Sobald sie hinzugefügt ist, muss diese Toolbar einem oder mehreren Notizen zugeordnet werden.",
