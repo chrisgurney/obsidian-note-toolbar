@@ -249,7 +249,7 @@ export default class RulesManager {
     ): string | undefined {
 
         if (condition.value === undefined) {
-            if (editor === 'string') {
+            if (['folder', 'string'].includes(editor)) {
                 return `""`;
             }
             return;
@@ -273,6 +273,11 @@ export default class RulesManager {
             case 'file':
             case 'folder':
                 return `"${String(condition.value)}"`;
+
+            case 'filetype':
+                return condition.value === RULE_VALUE_TYPE_OTHER
+                    ? `"${String(condition.otherValue)}"`
+                    : String(condition.value);
 
             default:
                 return condition.value === undefined
