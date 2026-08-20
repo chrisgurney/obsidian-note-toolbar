@@ -1,6 +1,7 @@
 import NoteToolbarPlugin from "main";
 import { getUUID } from "Utils/Utils";
-import { NoteToolbarSettings, PlatformType, Rule, RuleConjunction, RuleField, RuleOperator, SETTINGS_VERSION, ToolbarItemSettings, ToolbarSettings } from "./NoteToolbarSettings";
+import { NoteToolbarSettings, PlatformType, Rule, RuleConjunction, RuleField, RuleOperator, ToolbarItemSettings, ToolbarSettings } from "./NoteToolbarSettings";
+import { SETTINGS_VERSION } from "version";
 
 
 export default class SettingsMigrator {

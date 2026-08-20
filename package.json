@@ -1,13 +1,15 @@
 {
   "name": "obsidian-note-toolbar",
   "version": "1.35.01",
+  "releaseVersion": "1.35",
+  "settingsVersion": 20260812.1,
   "description": "Obsidian plugin that adds customizable toolbars to your notes.",
   "main": "main.js",
   "scripts": {
     "build": "tsc --noEmit --skipLibCheck && node esbuild.config.mjs production",
     "dev": "npm run prebuild && node esbuild.config.mjs",
     "lint": "npx eslint .",
-    "prebuild": "node -p \"'export const PLUGIN_VERSION = ' + JSON.stringify(require('./package.json').version) + ';'\" > src/version.ts",
+    "prebuild": "node build/generate-version.mjs",
     "release": "node release.mjs",
     "stylelint": "npx stylelint '**/*.css'",
     "typecheck": "tsc --noEmit --skipLibCheck"

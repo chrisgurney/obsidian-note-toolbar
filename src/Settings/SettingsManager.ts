@@ -1,8 +1,8 @@
-import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, DEFAULT_ITEM_SETTINGS, DEFAULT_SETTINGS, ItemType, NONE_TOOLBAR, NONE_TOOLBAR_ID, NoteToolbarSettings, Position, PositionType, SETTINGS_VERSION, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, DEFAULT_ITEM_SETTINGS, DEFAULT_SETTINGS, ItemType, NONE_TOOLBAR, NONE_TOOLBAR_ID, NoteToolbarSettings, Position, PositionType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { getUUID, isUuid } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
 import { Platform } from "obsidian";
-import { PLUGIN_VERSION } from "version";
+import { PLUGIN_VERSION, SETTINGS_VERSION } from "version";
 import SettingsMigrator from "./SettingsMigrator";
 import ToolbarSettingsModal from "./UI/Modals/ToolbarSettingsModal";
 import NoteToolbarSettingTab from "./UI/NoteToolbarSettingTab";

@@ -1,11 +1,12 @@
 import NoteToolbarPlugin from 'main';
 import { ButtonComponent, debounce, Menu, MenuItem, Platform, PluginSettingTab, setIcon, Setting, SettingGroup, ToggleComponent } from 'obsidian';
-import { FILE_TYPE_OPTIONS, OBSIDIAN_UI_ELEMENTS, OBSIDIAN_UI_MOBILE_NAVBAR_OPTIONS, SETTINGS_VERSION, SettingType, t, VIEW_TYPE_GALLERY } from 'Settings/NoteToolbarSettings';
+import { FILE_TYPE_OPTIONS, OBSIDIAN_UI_ELEMENTS, OBSIDIAN_UI_MOBILE_NAVBAR_OPTIONS, SettingType, t, VIEW_TYPE_GALLERY } from 'Settings/NoteToolbarSettings';
 import IconSuggestModal from 'Settings/UI/Modals/IconSuggestModal';
 import ToolbarSuggester from 'Settings/UI/Suggesters/ToolbarSuggester';
 import TextToolbar from 'Toolbar/TextToolbar';
 import { exportToCallout } from 'Utils/ImportExport';
 import { getElementPosition } from 'Utils/Utils';
+import { SETTINGS_VERSION } from 'version';
 import CopyTextModal from './Modals/CopyTextModal';
 import { importFromModal } from './Modals/ImportModal';
 import RulesModal from './Modals/RulesModal';

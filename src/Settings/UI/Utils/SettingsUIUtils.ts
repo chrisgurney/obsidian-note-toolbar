@@ -1,10 +1,10 @@
 import NoteToolbarPlugin from "main";
 import { ButtonComponent, Component, getIcon, ItemView, MarkdownRenderer, Notice, Platform, requireApiVersion, setIcon, Setting, setTooltip, TFile, TFolder, ToggleComponent } from "obsidian";
-import { COMMAND_DOES_NOT_EXIST, ComponentType, DEFAULT_ITEM_VISIBILITY_SETTINGS, IGNORE_PLUGIN_IDS, ItemComponentVisibility, ItemType, NONE_TOOLBAR_ID, SettingType, t, ToolbarItemSettings, ToolbarSettings, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_WHATS_NEW, ViewModeType, Visibility, WHATSNEW_VERSION } from "Settings/NoteToolbarSettings";
+import { COMMAND_DOES_NOT_EXIST, ComponentType, DEFAULT_ITEM_VISIBILITY_SETTINGS, IGNORE_PLUGIN_IDS, ItemComponentVisibility, ItemType, NONE_TOOLBAR_ID, SettingType, t, ToolbarItemSettings, ToolbarSettings, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_WHATS_NEW, ViewModeType, Visibility } from "Settings/NoteToolbarSettings";
 import SettingsManager from "Settings/SettingsManager";
 import { URLS } from "Utils/Urls";
 import { hasVisibleComponents, importArgs } from "Utils/Utils";
-import { PLUGIN_VERSION } from "version";
+import { PLUGIN_VERSION, RELEASE_VERSION } from "version";
 import { confirmWithModal } from "../Modals/ConfirmModal";
 import ItemModal from "../Modals/ItemModal";
 import ItemSuggestModal, { ItemSuggestMode } from "../Modals/ItemSuggestModal";
@@ -840,8 +840,8 @@ export default class SettingsUIUtils {
 	 */
 	showWhatsNewIfNeeded() {
 		// show the What's New dialog once if the user hasn't seen it yet
-		if (this.ntb.settings.showWhatsNew && this.ntb.settings.whatsnew_version !== WHATSNEW_VERSION) {
-			this.ntb.settings.whatsnew_version = WHATSNEW_VERSION;
+		if (this.ntb.settings.showWhatsNew && this.ntb.settings.whatsnew_version !== RELEASE_VERSION) {
+			this.ntb.settings.whatsnew_version = RELEASE_VERSION;
 			void this.ntb.settingsManager.save(false).then(async () => {
 				const leaf = this.ntb.app.workspace.getLeaf(true);
 				await leaf.setViewState({ type: VIEW_TYPE_WHATS_NEW, active: true });
