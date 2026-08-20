@@ -678,13 +678,13 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 				.setDesc(t('setting.display-navbar.top.description'))
 				.addButton((button: ButtonComponent) => {
 					button
-						.setIcon(this.ntb.settings.obsidianUiVisibility?.['view-header'] === false ? 'eye-off' : 'eye')
 						.onClick(async () => {
 							const currentValue = this.ntb.settings.obsidianUiVisibility['view-header'] ?? true;
 							this.ntb.settings.obsidianUiVisibility['view-header'] = !currentValue;
 							await this.ntb.settingsManager.save();
-							button.setIcon(!currentValue ? 'eye' : 'eye-off');
+							this.updateTopNavbarVisButton(button);
 						});
+					this.updateTopNavbarVisButton(button);
 				});
 		});
 
@@ -698,7 +698,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 							const visibilityMenu = this.getNavbarVisibilityMenu(button);
 							visibilityMenu.showAtPosition(getElementPosition(button.buttonEl));
 						});
-					this.updateNavbarVisibilityButton(button);
+					this.updateBottomNavbarVisButton(button);
 				});
 		});
 
@@ -1166,7 +1166,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 					allNavbarKeys.forEach((key) => {
 						this.ntb.settings.obsidianUiVisibility[key] = allHidden ? true : false;
 					});
-					this.updateNavbarVisibilityButton(button);
+					this.updateBottomNavbarVisButton(button);
 					await this.ntb.settingsManager.save();
 				});
 		});
@@ -1184,7 +1184,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 						.onClick(async () => {
 							const currentValue = this.ntb.settings.obsidianUiVisibility[uiEl.key] ?? true;
 							this.ntb.settings.obsidianUiVisibility[uiEl.key] = !currentValue;
-							this.updateNavbarVisibilityButton(button);
+							this.updateBottomNavbarVisButton(button);
 							await this.ntb.settingsManager.save();
 						});
 				});
@@ -1220,23 +1220,31 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		};
 	}
 
-	updateNavbarVisibilityButton(button: ButtonComponent) {
+	updateTopNavbarVisButton(button: ButtonComponent) {
+		const isHidden = this.ntb.settings.obsidianUiVisibility?.['view-header'] === false;
+		button.buttonEl.setText(iconTextFr(
+			isHidden ? 'eye-off' : 'eye',
+			isHidden ? t('setting.display-navbar.label-hidden') : t('setting.display-navbar.label-visible'))
+		);
+	}
+	
+	updateBottomNavbarVisButton(button: ButtonComponent) {
 		const { obsidianUiSetting, allNavbarKeys, allHidden } = this.getNavbarState();
 		if (allHidden) {
-			button.setIcon('eye-off');
-			button.setTooltip(t('setting.display-navbar.bottom.label-hidden'));
+			button.buttonEl.setText(
+				iconTextFr('eye-off', t('setting.display-navbar.label-hidden')));
 			return;
 		}
 		// if some are hidden
 		else if (allNavbarKeys.some(key => obsidianUiSetting.get(key) === false)) {
-			button.setIcon('note-toolbar-eye-dashed');
-			button.setTooltip(t('setting.display-navbar.bottom.label-partial'));
+			button.buttonEl.setText(
+				iconTextFr('note-toolbar-eye-dashed', t('setting.display-navbar.label-partial')));
 			return;
 		}
 		// all are visible
 		else {
-			button.setIcon('eye');
-			button.setTooltip(t('setting.display-navbar.bottom.label-visible'));
+			button.buttonEl.setText(
+				iconTextFr('eye', t('setting.display-navbar.label-visible')));
 			return;
 		}
 	}

@@ -1144,7 +1144,7 @@ export function iconTextFr(icon: string, text: string): DocumentFragment {
 	const headingEl = headingFr.createSpan();
 	headingEl.addClass('note-toolbar-setting-text-with-icon');
 	const headingIcon = headingEl.createSpan();
-	setIcon(headingIcon, 'lucide-' + icon);
+	setIcon(headingIcon, icon);
 	const headingText = headingEl.createSpan();
 	headingText.setText(text);
 	headingFr.append(headingEl);
