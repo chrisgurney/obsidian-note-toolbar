@@ -28,7 +28,7 @@ export default class RulesModal extends Modal {
     public display() {
 
         this.setTitle(t('setting.rules.name-modal'));
-		this.modalEl.addClass('note-toolbar-setting-modal-container');
+		this.modalEl.addClass('note-toolbar-setting-modal-container', 'note-toolbar-setting-modal-phone-bottom-inset-fix');
 
         this.contentEl.empty();
 
