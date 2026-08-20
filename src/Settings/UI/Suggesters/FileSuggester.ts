@@ -23,7 +23,13 @@ export default class FileSuggester extends AbstractInputSuggest<TAbstractFile> {
         
         let files: TAbstractFile[] = [];
         const lowerCaseInputStr = inputStr.toLowerCase();
-        const recentFiles = JSON.parse(this.ntb.app.loadLocalStorage(LocalVar.RecentFiles) as string || '[]') as string[];
+
+        // get recent files, and make sure they still exist in the vault
+        const recentFiles = (JSON.parse(
+            this.ntb.app.loadLocalStorage(LocalVar.RecentFiles) as string || '[]'
+        ) as string[]).filter(path =>
+            abstractFiles.some(file => file.path === path)
+        );
 
         files = abstractFiles.filter((file: TAbstractFile) => {
             const isFile = file instanceof TFile;
