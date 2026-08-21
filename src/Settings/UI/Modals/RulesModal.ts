@@ -785,6 +785,7 @@ export default class RulesModal extends Modal {
             const isViewTypeSupported = itemView ? this.ntb.utils.hasToolbarForItemView(itemView) : true;
             if (itemView && !isViewTypeSupported) {
                 const errorText = t('setting.rules.error-file-type-disabled_field', { filetype: itemView.getViewType() });
+                this.ntb.error(errorText);
                 this.ntb.settingsUtils.setFieldError(null, toolbarInputEl, "beforeend", errorText);
             }
 
