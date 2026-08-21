@@ -217,9 +217,7 @@ export default class RulesManager {
 
     private formatRuleCondition(condition: RuleCondition): string {
         const operand = RULE_OPERANDS.find(
-            (operand) =>
-                operand.field === condition.field &&
-                (!condition.key || operand.key === condition.key)
+            (operand) => operand.field === condition.field
         );
 
         if (!operand || !condition.operator) {
@@ -233,11 +231,15 @@ export default class RulesManager {
         if (!operator) {
             return '';
         }
+        
+        const operandLabel = condition.field === RuleField.Property
+            ? condition.key
+            : operand?.label ?? '';
 
         const value = this.formatRuleValue(condition, operator.editor);
 
         return [
-            operand.label,
+            operandLabel,
             operator.label,
             value,
         ].filter(Boolean).join(' ');

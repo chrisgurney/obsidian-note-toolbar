@@ -451,6 +451,7 @@ export enum RuleField {
     FileType = 'filetype',
     Folder = 'folder',
     Platform = 'platform',
+    Property = 'property',
     Tag = 'tag',
 }
 
@@ -599,6 +600,16 @@ export const RULE_OPERANDS: RuleOperand[] = [
             { op: RuleOperator.IsNot, label: t('setting.rules.operator-isNot'), editor: 'platform' },
         ]
     },
+	{
+		id: 'property',
+		field: RuleField.Property,
+		icon: 'list',
+		label: t('setting.rules.option-field-property'),
+		operators: [
+			{ op: RuleOperator.Contains, label: t('setting.rules.operator-contains'), editor: 'string' },
+			{ op: RuleOperator.DoesNotContain, label: t('setting.rules.operator-doesNotContain'), editor: 'string' },
+		]
+	},
     {
         id: 'tags',
         field: RuleField.Tag,

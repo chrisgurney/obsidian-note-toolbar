@@ -452,9 +452,11 @@ export default class RulesModal extends Modal {
 
         // operands
         const operand = RULE_OPERANDS.find((operand) =>
-            operand.field === condition.field &&
-            operand.key === condition.key
+            operand.field === condition.field
         );
+        const operandLabel = condition.field === RuleField.Property
+            ? condition.key
+            : operand?.label ?? '';
 
         new Setting(conditionEl)
             .setName(isFirst ? '' : rule.conjunction === RuleConjunction.And ? t('setting.rules.condition-field-prefix-and') : t('setting.rules.condition-field-prefix-or'))
@@ -462,7 +464,7 @@ export default class RulesModal extends Modal {
             .setClass('note-toolbar-setting-item-text-style')
             .addSearch((cb) => {
                 cb
-                    .setValue(operand?.label ?? '')
+                    .setValue(operandLabel ?? '')
                     .setPlaceholder(t('setting.rules.condition-field-placeholder'))
                     .onChange((name) => {
                         if (name === '') {

@@ -39,6 +39,11 @@ declare module "obsidian" {
             getPluginById(id: string): Plugin;
             plugins: Record<string, { enabled?: boolean }>;
         };
+        metadataTypeManager: {
+            properties: Record<string, {
+                type: string;
+            }>;
+        };
         plugins: {
             plugins: Record<string, Plugin>;
         };

@@ -810,6 +810,7 @@
             "option-field-filetype": "file type",
             "option-field-folder": "folder path",
             "option-field-platform": "platform",
+            "option-field-property": "property",
             "option-field-tags": "tags",
             "option-folder-all": "all folders",
             "option-folder-root": "root folder only",
