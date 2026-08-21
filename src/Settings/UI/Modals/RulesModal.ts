@@ -742,18 +742,21 @@ export default class RulesModal extends Modal {
      */
     private updateActiveRule(scrollToFocus = false) {
 
-        const ACTIVE_RULE_CLASS = 'note-toolbar-setting-rule-active';
+        const RULE_ACTIVE_CLASS = 'note-toolbar-setting-rule-active';
 
         // remove existing active toolbar highlight and field errors
         this.contentEl
-            .querySelectorAll(`.${ACTIVE_RULE_CLASS}`)
+            .querySelectorAll(`.${RULE_ACTIVE_CLASS}`)
             .forEach((el: Element) => {
-                el.removeClass(ACTIVE_RULE_CLASS);
+                el.removeClass(RULE_ACTIVE_CLASS);
                 removeFieldError(el as HTMLElement, "beforeend");
             });
 
         const [, matchType] = this.ntb.rules.getActiveToolbar();
         // this.ntb.debug('getActiveRule: toolbar', mappedToolbar, '⭐️ matches:', matchType);
+
+        const itemView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
+        const isViewTypeSupported = itemView ? this.ntb.utils.hasToolbarForItemView(itemView) : true;
 
         let inputCssSelector;
         let ruleEl;
@@ -769,7 +772,7 @@ export default class RulesModal extends Modal {
                     inputCssSelector = `[data-row-id="${matchType.id}"] .setting-item-control`;
                     // set active state on the rule container (to also highlight previews)
                     ruleEl = this.contentEl.querySelector<HTMLElement>(`.note-toolbar-setting-rules-list-item-container[data-row-id="${matchType.id}"]`);
-                    ruleEl?.toggleClass(ACTIVE_RULE_CLASS, true);
+                    ruleEl?.toggleClass(RULE_ACTIVE_CLASS, true);
                 }
                 break;
         }
@@ -781,15 +784,13 @@ export default class RulesModal extends Modal {
             if (!toolbarInputEl) return;
 
             // display an error if the corresponding file type setting is disabled
-            const itemView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
-            const isViewTypeSupported = itemView ? this.ntb.utils.hasToolbarForItemView(itemView) : true;
             if (itemView && !isViewTypeSupported) {
                 const errorText = t('setting.rules.error-file-type-disabled_field', { filetype: itemView.getViewType() });
                 this.ntb.error(errorText);
                 this.ntb.settingsUtils.setFieldError(null, toolbarInputEl, "beforeend", errorText);
             }
 
-            toolbarInputEl.toggleClass(ACTIVE_RULE_CLASS, true);
+            toolbarInputEl.toggleClass(RULE_ACTIVE_CLASS, true);
         }
 
         if (scrollToFocus) {
