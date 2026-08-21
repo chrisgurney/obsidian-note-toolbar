@@ -13,6 +13,9 @@ export default class EditorMenu {
 
     async render(menu: Menu, editor: Editor) {
 
+		// unhide in case it was hidden earlier
+		menu.dom.toggleClass('ntb-hide-menu', false);
+
 		// replace Editor menu with the selected toolbar
 		if (this.ntb.settings.editorMenuToolbar) {
 			// FIXME? should we check if the active file is what we're viewing? might be confusing otherwise
@@ -21,6 +24,7 @@ export default class EditorMenu {
 			if (toolbar) {
 				menu.items = [];
 				if (this.ntb.settings.editorMenuAsToolbar) {
+					menu.dom.toggleClass('ntb-hide-menu', true);
 					const pointerPos = this.ntb.utils.getPosition('pointer');
 					await this.ntb.render.renderFloatingToolbar(toolbar, pointerPos, PositionType.Floating);
 				}

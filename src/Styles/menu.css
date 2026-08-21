@@ -58,3 +58,8 @@ body.is-tablet .note-toolbar-menu[data-ntb-meta*="mgls"] {
         border-radius: 24px;
     }
 }
+
+/* fix: class to hide editor menu if displaying editor menu as toolbar, as some plugins use it (e.g., Notebook Navigator) */
+.menu.ntb-hide-menu {
+    display: none;
+}
