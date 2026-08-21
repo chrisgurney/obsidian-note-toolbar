@@ -2,7 +2,7 @@
  * Toolbar Container
  */
 
-.cg-note-toolbar-bar-container {
+body .cg-note-toolbar-bar-container {
     border-radius: var(--cg-nt-tbar-border-radius);
     /* fix: (#90) box-shadow appearing over top of text */
     /* box-shadow: 0 0 0 1px var(--cg-nt-tbar-bg-color); */
@@ -96,7 +96,7 @@
         }
         /* fix: puts toolbar above popovers + Hover Editor plugin */
         z-index: var(--cg-nt-tbar-text-z-index);
-        & .cg-note-toolbar-callout {
+        & .callout.cg-note-toolbar-callout {
             margin-bottom: 0;
             & a, span.external-link {
                 color: var(--cg-nt-tbar-text-item-text-color);
