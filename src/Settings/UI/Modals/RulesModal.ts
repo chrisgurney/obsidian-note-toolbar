@@ -473,8 +473,6 @@ export default class RulesModal extends Modal {
                             condition.operator = undefined;
                             condition.value = '';
                             this.updateActiveRule();
-                            // const conditionFormEl = this.renderConditionForm(rule, condition);
-                            // conditionEl.replaceWith(conditionFormEl);
                         }
                     })
 
@@ -483,6 +481,7 @@ export default class RulesModal extends Modal {
                     condition.key = selectedOperand.key;
                     condition.operator = selectedOperand.operators[0].op;
                     condition.value = undefined;
+                    this.updateActiveRule();
 
                     const conditionFormEl = this.renderConditionForm(rule, condition);
                     conditionEl.replaceWith(conditionFormEl);
