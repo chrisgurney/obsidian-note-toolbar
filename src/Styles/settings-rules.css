@@ -114,21 +114,28 @@
         }
         & .note-toolbar-setting-condition {
             display: flex;
-            align-items: end;
+            align-items: flex-start;
             justify-content: flex-end;
             margin-left: var(--size-4-4);
             .is-mobile & {
-                border: var(--background-modifier-border) solid 1px;
+                align-items: flex-start;
+                background-color: var(--background-modifier-form-field);
+                border-radius: var(--metadata-property-radius);
                 margin-left: 0;
+                padding: var(--size-2-2);
                 padding-left: var(--size-4-4);
                 width: 100%;
                 & .note-toolbar-setting-mapping-field .dropdown,
                 & .note-toolbar-setting-mapping-operator .dropdown {
                     padding: 0;
                 }
+                & .note-toolbar-setting-mapping-operator-value {
+                    align-items: flex-start;
+                }
             }
             .is-phone & {
                 flex-direction: column;
+                align-items: flex-end;
             }
             /* hide only condition's delete icon */
             &:only-child .note-toolbar-setting-item-delete {
@@ -158,6 +165,9 @@
                 & .setting-item-info {
                     display: none;
                 }
+                & .setting-item-control {
+                    flex-direction: column;
+                }
                 & select, & input {
                     background-color: transparent;
                 }
@@ -169,6 +179,7 @@
             }
             & .note-toolbar-setting-mapping-operator-value {
                 display: flex;
+                align-items: flex-start;
             }
         }
     }

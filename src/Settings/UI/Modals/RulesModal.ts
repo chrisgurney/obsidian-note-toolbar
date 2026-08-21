@@ -1,14 +1,14 @@
 import { FILE_TYPE_OPTIONS, FileType, NONE_TOOLBAR_ID, PLATFORM_OPTIONS, PlatformType, Rule, RULE_OPERANDS, RULE_VALUE_TYPE_OTHER, RuleCondition, RuleConjunction, RuleField, RuleOperator, SettingType, t, UiSelectOption, VIEW_MODE_OPTIONS, ViewType } from "Settings/NoteToolbarSettings";
 import { arraymove, getElementPosition, getUUID, moveElement } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
-import { ButtonComponent, debounce, ItemView, Menu, MenuItem, Modal, Notice, Platform, Setting, SettingGroup, setTooltip } from "obsidian";
+import { ButtonComponent, debounce, ItemView, Menu, MenuItem, Modal, Platform, Setting, SettingGroup, setTooltip } from "obsidian";
 import Sortable from "sortablejs";
 import FileSuggester from "../Suggesters/FileSuggester";
 import FolderSuggester from "../Suggesters/FolderSuggester";
 import RuleOperandSuggester from "../Suggesters/RuleOperandSuggester";
 import TagSuggester from "../Suggesters/TagSuggester";
 import ToolbarSuggester from "../Suggesters/ToolbarSuggester";
-import { iconTextFr, learnMoreFr, removeFieldErrors } from "../Utils/SettingsUIUtils";
+import { iconTextFr, learnMoreFr, removeFieldError } from "../Utils/SettingsUIUtils";
 
 export default class RulesModal extends Modal {
 
@@ -577,8 +577,14 @@ export default class RulesModal extends Modal {
                                 .setValue((condition.value as string) ?? '')
                                 .onChange(debounce(async (value) => {
                                     condition.value = value;
+                                    void this.ntb.settingsUtils.updateItemComponentStatus(
+                                        this, value, SettingType.File, cb.inputEl.parentElement, undefined, 'beforeend'
+                                    );
                                     await this.saveAndUpdateActiveRule();
                                 }, 250));
+                            void this.ntb.settingsUtils.updateItemComponentStatus(
+                                this, condition.value as string, SettingType.File, cb.inputEl.parentElement, undefined, 'beforeend'
+                            );
                         });
                     break;
 
@@ -741,8 +747,10 @@ export default class RulesModal extends Modal {
         // remove existing active toolbar highlight and field errors
         this.contentEl
             .querySelectorAll(`.${ACTIVE_RULE_CLASS}`)
-            .forEach(el => el.removeClass(ACTIVE_RULE_CLASS));
-        removeFieldErrors(this.contentEl);
+            .forEach((el: Element) => {
+                el.removeClass(ACTIVE_RULE_CLASS);
+                removeFieldError(el as HTMLElement, "beforeend");
+            });
 
         const [, matchType] = this.ntb.rules.getActiveToolbar();
         // this.ntb.debug('getActiveRule: toolbar', mappedToolbar, '⭐️ matches:', matchType);
@@ -777,7 +785,6 @@ export default class RulesModal extends Modal {
             const isViewTypeSupported = itemView ? this.ntb.utils.hasToolbarForItemView(itemView) : true;
             if (itemView && !isViewTypeSupported) {
                 const errorText = t('setting.rules.error-file-type-disabled_field', { filetype: itemView.getViewType() });
-                new Notice(errorText, 10000).containerEl.addClass('mod-warning');
                 this.ntb.settingsUtils.setFieldError(null, toolbarInputEl, "beforeend", errorText);
             }
 
