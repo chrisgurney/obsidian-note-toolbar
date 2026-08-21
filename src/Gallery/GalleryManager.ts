@@ -87,7 +87,7 @@ export default class GalleryManager {
         }
 
         // prompt: confirm with user if they would like to enable scripting
-        const isScriptingEnabled = await this.ntb.settingsUtils.openScriptPrompt(galleryItem);
+        const isScriptingEnabled = await this.ntb.settingsUtils.openScriptPrompt([galleryItem]);
         if (!isScriptingEnabled) return;
 
         // prompts for certain item types
@@ -151,10 +151,16 @@ export default class GalleryManager {
 	}
 
     async addItems(galleryItems: ToolbarItemSettings[], toolbarName: string): Promise<void> {
+
+        // additional items warning
         if (galleryItems.find((item) => item.linkAttr.type === ItemType.Additional)) {
             const notice = new Notice(t('gallery.warning-additional-items'), 10000);
             notice.containerEl.addClass('mod-warning');
         }
+
+        // prompt for script items
+        await this.ntb.settingsUtils.openScriptPrompt(galleryItems);
+
         const toolbar = await this.ntb.settingsManager.newToolbar(toolbarName);
         const [newItems] = await this.addItemToToolbar(toolbar, galleryItems);
         if (!newItems) return;

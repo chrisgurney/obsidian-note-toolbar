@@ -499,7 +499,7 @@ export default class SettingsUIUtils {
 					newItem.visibility = JSON.parse(JSON.stringify(DEFAULT_ITEM_VISIBILITY_SETTINGS)) as Visibility;
 
 					// confirm with user if they would like to enable scripting
-					const isScriptingEnabled = await this.openScriptPrompt(newItem);
+					const isScriptingEnabled = await this.openScriptPrompt([newItem]);
 					if (!isScriptingEnabled) return;
 
 					if (selectedItem.inGallery && !(await this.ntb.settingsManager.resolveGalleryItem(newItem))) return;
@@ -520,19 +520,23 @@ export default class SettingsUIUtils {
 	}
 
 	/**
-	 * Prompts the user if they want to enable scripting, if the item requires it.
-	 * @param item 
+	 * Prompts user if they want to enable scripting, if the item (or items) requires it.
+	 * @param items
 	 * @returns true if the user confirmed, false if they cancelled
 	 */
-	async openScriptPrompt(item: ToolbarItemSettings): Promise<boolean> {
-		const isScript = [ItemType.Dataview,  ItemType.JavaScript, ItemType.JsEngine, ItemType.Templater].contains(item.linkAttr.type);
+	async openScriptPrompt(items: ToolbarItemSettings[]): Promise<boolean> {
+		const isScript = items.some(item =>
+			[ItemType.Dataview, ItemType.JavaScript, ItemType.JsEngine, ItemType.Templater].contains(item.linkAttr.type)
+		);
 
 		if (isScript && !this.ntb.settings.scriptingEnabled) {
 			const isConfirmed = await confirmWithModal(
 				this.ntb.app, 
 				{
 					title: t('setting.add-item.title-confirm-scripting'),
-					questionLabel: t('setting.add-item.label-confirm-scripting'),
+					questionLabel: 
+						t('setting.add-item.label-confirm-scripting', { count: items.length }) + '\n\n' 
+						+ t('setting.add-item.label-confirm-scripting-description'),
 					approveLabel: t('setting.button-enable'),
 					denyLabel: t('setting.button-cancel')
 				}
