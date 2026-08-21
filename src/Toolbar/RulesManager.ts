@@ -184,6 +184,9 @@ export default class RulesManager {
             case RuleField.Platform:
                 return this.matchesPlatformCondition(condition);
 
+            case RuleField.Property:
+                return this.matchesPropertyCondition(condition);
+
             case RuleField.Tag:
                 return this.matchesTagsCondition(condition, file);
 
@@ -320,9 +323,9 @@ export default class RulesManager {
                 return file.basename.length > 0;
         }
 
-            if (typeof value !== 'string' || value.length === 0) {
-                return false;
-            }
+        if (typeof value !== 'string' || value.length === 0) {
+            return false;
+        }
 
         const fileName = file.name.toLowerCase();
         const searchValue = value.toLowerCase();
@@ -435,6 +438,31 @@ export default class RulesManager {
                 return condition.value === 'mobile'
                     ? !Platform.isMobile
                     : platform !== condition.value;
+
+            default:
+                return false;
+        }
+    }
+
+    private matchesPropertyCondition(condition: RuleCondition): boolean {
+        if (typeof condition.key !== 'string' || condition.key.length === 0) {
+            return false;
+        }
+
+        if (typeof condition.value !== 'string' || condition.value.length === 0) {
+            return false;
+        }
+
+        const propValue = this.ntb.api.getProperty(condition.key);
+        const value = condition.value.toLowerCase();
+        const propertyValue = String(propValue ?? '').toLowerCase();
+
+        switch (condition.operator) {
+            case RuleOperator.Contains:
+                return propertyValue.includes(value);
+
+            case RuleOperator.DoesNotContain:
+                return !propertyValue.includes(value);
 
             default:
                 return false;
