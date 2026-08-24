@@ -21,30 +21,24 @@ export default class RuleOperandSuggester extends AbstractInputSuggest<RuleOpera
     getSuggestions(inputStr: string): RuleOperand[] {
         const normalizedInput = inputStr.toLowerCase();
 
-        // const propertyOperand = RULE_OPERANDS.find(operand => operand.id === 'property')!;
+        const propertyOperand = RULE_OPERANDS.find(operand => operand.id === 'property')!;
         const operands = RULE_OPERANDS.filter(operand => operand.id !== 'property');
 
-        // const properties: RuleOperand[] = Object.keys(this.app.metadataTypeManager.properties)
-        //     .sort((a, b) => a.localeCompare(b))
-        //     .map(label => ({
-        //         ...propertyOperand,
-        //         id: label,
-        //         label,
-        //         key: label
-        //     }));
+        const properties: RuleOperand[] = Object.keys(this.app.metadataTypeManager.properties)
+            .sort((a, b) => a.localeCompare(b))
+            .map(label => ({
+                ...propertyOperand,
+                id: label,
+                label,
+                key: label
+            }));
 
-        // return [
-        //     ...operands.sort((a, b) => a.label.localeCompare(b.label)),
-        //     ...properties
-        // ].filter(operand =>
-        //     operand.label.toLowerCase().includes(normalizedInput)
-        // );
-
-        return [...operands]
-            .sort((a, b) => a.label.localeCompare(b.label))
-            .filter((operand) =>
-                operand.label.toLowerCase().includes(normalizedInput)
-            );
+        return [
+            ...operands.sort((a, b) => a.label.localeCompare(b.label)),
+            ...properties
+        ].filter(operand =>
+            operand.label.toLowerCase().includes(normalizedInput)
+        );
     }
 
     renderSuggestion(operand: RuleOperand, el: HTMLElement): void {

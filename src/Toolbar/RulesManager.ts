@@ -449,20 +449,73 @@ export default class RulesManager {
             return false;
         }
 
-        if (typeof condition.value !== 'string' || condition.value.length === 0) {
-            return false;
-        }
-
-        const propValue = this.ntb.api.getProperty(condition.key);
-        const value = condition.value.toLowerCase();
-        const propertyValue = String(propValue ?? '').toLowerCase();
+        const propExists = this.hasProperty(condition.key);
 
         switch (condition.operator) {
-            case RuleOperator.Contains:
-                return propertyValue.includes(value);
+            case RuleOperator.Exists:
+                return propExists;
 
-            case RuleOperator.DoesNotContain:
-                return !propertyValue.includes(value);
+            case RuleOperator.DoesNotExist:
+                return !propExists;
+
+            case RuleOperator.IsEmpty: {
+                if (!propExists) {
+                    return false;
+                }
+
+                const propValue = this.getProperty(condition.key);
+
+                return propValue === null ||
+                    propValue === undefined ||
+                    propValue === '' ||
+                    (Array.isArray(propValue) && propValue.length === 0);
+            }
+
+            case RuleOperator.IsNotEmpty: {
+                if (!propExists) {
+                    return false;
+                }
+
+                const value = this.getProperty(condition.key);
+
+                return value !== null &&
+                    value !== undefined &&
+                    value !== '' &&
+                    (!Array.isArray(value) || value.length > 0);
+            }
+
+            case RuleOperator.Contains:
+            case RuleOperator.DoesNotContain: {
+                if (typeof condition.value !== 'string' || condition.value.length === 0) {
+                    return false;
+                }
+
+                const propValue = this.ntb.api.getProperty(condition.key);
+
+                if (
+                    propValue === undefined ||
+                    propValue === null ||
+                    (
+                        !Array.isArray(propValue) &&
+                        typeof propValue !== 'string' &&
+                        typeof propValue !== 'number' &&
+                        typeof propValue !== 'boolean'
+                    )
+                ) {
+                    return false;
+                }
+
+                const propertyValue = Array.isArray(propValue)
+                    ? propValue.join(', ')
+                    : String(propValue);
+
+                const searchValue = condition.value.toLowerCase();
+                const normalizedPropertyValue = propertyValue.toLowerCase();
+
+                return condition.operator === RuleOperator.Contains
+                    ? normalizedPropertyValue.includes(searchValue)
+                    : !normalizedPropertyValue.includes(searchValue);
+            }
 
             default:
                 return false;
@@ -512,6 +565,34 @@ export default class RulesManager {
         if (!activeView) return undefined;
         // const isSourceMode = activeView?.getState().source;
         return activeView.getMode();
+    }
+
+    /**
+     * This version of getProperty returns the property not as just a string (like the API does),
+     * so that conditions work better with the result.
+     * @param property to get
+     * @returns property's value, or undefined
+     */
+    private getProperty(property: string): unknown {
+        const activeFile = this.ntb.app.workspace.getActiveFile();
+        if (!activeFile) {
+            return undefined;
+        }
+        return this.ntb.app.metadataCache.getFileCache(activeFile)?.frontmatter?.[property];
+    }
+
+    /**
+     * Returns true if the property exists in the active file.
+     * @param property to check
+     * @returns true if the property exists in the active file
+     */
+    private hasProperty(property: string): boolean {
+        const activeFile = this.ntb.app.workspace.getActiveFile();
+        if (!activeFile) {
+            return false;
+        }
+        const frontmatter = this.ntb.app.metadataCache.getFileCache(activeFile)?.frontmatter;
+        return frontmatter !== undefined && property in frontmatter;
     }
 
 }

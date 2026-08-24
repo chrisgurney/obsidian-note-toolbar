@@ -71,7 +71,7 @@
 .note-toolbar-suggestion-small {
     font-size: var(--font-ui-small);
     & svg.svg-icon {
-        vertical-align: baseline;
+        vertical-align: text-bottom;
         height: var(--font-ui-small);
         width: var(--font-ui-small);
     }

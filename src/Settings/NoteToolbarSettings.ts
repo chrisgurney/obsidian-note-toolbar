@@ -465,6 +465,9 @@ export const enum RuleOperator {
     Contains = 'contains',
     DoesNotContain = 'doesNotContain',
 
+	Exists = 'exists',
+	DoesNotExist = 'doesNotExist',
+
     StartsWith = 'startsWith',
     EndsWith = 'endsWith',
 
@@ -606,6 +609,10 @@ export const RULE_OPERANDS: RuleOperand[] = [
 		icon: 'list',
 		label: t('setting.rules.option-field-property'),
 		operators: [
+			{ op: RuleOperator.Exists, label: t('setting.rules.operator-exists'), editor: 'none' },
+			{ op: RuleOperator.DoesNotExist, label: t('setting.rules.operator-doesNotExist'), editor: 'none' },
+			{ op: RuleOperator.IsEmpty, label: t('setting.rules.operator-isEmpty'), editor: 'none' },
+			{ op: RuleOperator.IsNotEmpty, label: t('setting.rules.operator-isNotEmpty'), editor: 'none' },
 			{ op: RuleOperator.Contains, label: t('setting.rules.operator-contains'), editor: 'string' },
 			{ op: RuleOperator.DoesNotContain, label: t('setting.rules.operator-doesNotContain'), editor: 'string' },
 		]
