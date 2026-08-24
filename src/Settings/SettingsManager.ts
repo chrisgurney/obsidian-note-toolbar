@@ -1,4 +1,4 @@
-import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, DEFAULT_ITEM_SETTINGS, DEFAULT_SETTINGS, FolderMapping, ItemType, NoteToolbarSettings, PositionType, SETTINGS_VERSION, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, DEFAULT_ITEM_SETTINGS, DEFAULT_SETTINGS, FolderMapping, ItemType, NoteToolbarSettings, Position, PositionType, SETTINGS_VERSION, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { getUUID } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
 import { FrontMatterCache, ItemView, Platform, TFile } from "obsidian";
@@ -29,12 +29,17 @@ export default class SettingsManager {
 	 * @param item ToolbarItemSettings to add
 	 * @param insertIndex optional index to insert the item at; if too large, the item is added to the end of the toolbar; if not provided, the item is added to the end of the toolbar
 	 */
-	public async addToolbarItem(toolbar: ToolbarSettings, item: ToolbarItemSettings, insertIndex?: number): Promise<void> {
+	public async addToolbarItem(
+		toolbar: ToolbarSettings,
+		items: ToolbarItemSettings | ToolbarItemSettings[],
+		insertIndex?: number
+	): Promise<void> {
+		const itemsToAdd = Array.isArray(items) ? items : [items];
 		if (insertIndex !== undefined && insertIndex >= 0) {
-			toolbar.items.splice(insertIndex, 0, item);
+			toolbar.items.splice(insertIndex, 0, ...itemsToAdd);
 		}
 		else {
-			toolbar.items.push(item);
+			toolbar.items.push(...itemsToAdd);
 		}
 		toolbar.updated = new Date().toISOString();
 		await this.save();
@@ -45,11 +50,13 @@ export default class SettingsManager {
 	 * @param id UUID of the toolbar to remove.
 	 */
 	public async deleteToolbar(id: string): Promise<void> {
-		let toolbarToDelete = this.ntb.settingsManager.getToolbarById(id);
-		toolbarToDelete?.items.forEach((item) => {
+		const toolbarToDelete = this.ntb.settingsManager.getToolbarById(id);
+		if (!toolbarToDelete) return;
+		toolbarToDelete.items.forEach((item) => {
 			if (item.hasCommand) this.ntb.removeCommand(COMMAND_PREFIX_ITEM + item.uuid);
 		});
 		this.ntb.removeCommand(COMMAND_PREFIX_TBAR + id);
+		this.ntb.ribbon.remove(toolbarToDelete.uuid);
 		this.ntb.settings.toolbars = this.ntb.settings.toolbars.filter(tbar => tbar.uuid !== id);
 		(['defaultToolbar', 'editorMenuToolbar', 'emptyViewToolbar', 'ribbonToolbar', 'textToolbar', 'webviewerToolbar'] as const).forEach(key => {
 			if (this.ntb.settings[key] === id) this.ntb.settings[key] = null;
@@ -62,6 +69,7 @@ export default class SettingsManager {
 	 */
 	public deleteToolbarItemById(uuid: string): void {
 		this.ntb.removeCommand(COMMAND_PREFIX_ITEM + uuid);
+		this.ntb.ribbon.remove(uuid);
 		for (const toolbar of this.ntb.settings.toolbars) {
 			const index = toolbar.items.findIndex(item => item.uuid === uuid);
 			if (index !== -1) {
@@ -78,22 +86,22 @@ export default class SettingsManager {
 	 */
 	public async duplicateToolbar(toolbar: ToolbarSettings): Promise<string> {
 		this.ntb.debug('duplicateToolbar', toolbar);
-		let newToolbar = {
+		const newToolbar = {
 			uuid: getUUID(),
 			commandPosition: toolbar.commandPosition,
 			customClasses: "",
 			defaultItem: toolbar.defaultItem,
-			defaultStyles: JSON.parse(JSON.stringify(toolbar.defaultStyles)),
+			defaultStyles: JSON.parse(JSON.stringify(toolbar.defaultStyles)) as string[],
 			hasCommand: false,
 			items: [],
-			mobileStyles: JSON.parse(JSON.stringify(toolbar.mobileStyles)),
+			mobileStyles: JSON.parse(JSON.stringify(toolbar.mobileStyles)) as string[],
 			name: this.getUniqueToolbarName(toolbar.name, true),
-			position: JSON.parse(JSON.stringify(toolbar.position)),
+			position: JSON.parse(JSON.stringify(toolbar.position)) as Position,
 			updated: new Date().toISOString(),
 		} as ToolbarSettings;
-		toolbar.items.forEach((item) => {
-			this.duplicateToolbarItem(newToolbar, item);
-		});
+		for (const item of toolbar.items) {
+			await this.duplicateToolbarItem(newToolbar, item);
+		}
 		this.ntb.debug('duplicateToolbar: duplicated', newToolbar);
 		await this.addToolbar(newToolbar);
 		return newToolbar.uuid;
@@ -107,7 +115,7 @@ export default class SettingsManager {
 	 * @returns the new item.
 	 */
 	public async duplicateToolbarItem(toolbar: ToolbarSettings, item: ToolbarItemSettings, insertIndex?: number): Promise<ToolbarItemSettings> {
-		let newItem = JSON.parse(JSON.stringify(item)) as ToolbarItemSettings;
+		const newItem = JSON.parse(JSON.stringify(item)) as ToolbarItemSettings;
 		newItem.description = undefined;
 		newItem.hasCommand = false;
 		newItem.inGallery = false;
@@ -133,7 +141,7 @@ export default class SettingsManager {
 	 * @returns ToolbarItemSettings
 	 */
 	getDefaultItem(itemType: ItemType = ItemType.Command): ToolbarItemSettings {
-		const item: ToolbarItemSettings = JSON.parse(JSON.stringify(DEFAULT_ITEM_SETTINGS));
+		const item: ToolbarItemSettings = JSON.parse(JSON.stringify(DEFAULT_ITEM_SETTINGS)) as ToolbarItemSettings;
 		item.linkAttr.type = itemType;
 		item.uuid = getUUID();
 		return item;
@@ -146,19 +154,17 @@ export default class SettingsManager {
 	public getEmptyViewToolbar(): ToolbarSettings | undefined {
 		const itemView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
 		if (itemView) {
-			let renderToolbar = this.ntb.utils.hasToolbarForItemView(itemView);
+			const renderToolbar = this.ntb.utils.hasToolbarForItemView(itemView);
 			if (!renderToolbar) return;
 			switch (itemView.getViewType()) {
-				case 'empty':
-				case 'beautitab-react-view':
-				case 'home-tab-view':
-					if (this.ntb.settings.emptyViewToolbar) {
-						return this.getToolbarById(this.ntb.settings.emptyViewToolbar);
-					}
-					break;
 				case 'webviewer':
 					if (this.ntb.settings.webviewerToolbar) {
 						return this.getToolbarById(this.ntb.settings.webviewerToolbar);
+					}
+					break;
+				default:
+					if (this.ntb.settings.emptyViewToolbar) {
+						return this.getToolbarById(this.ntb.settings.emptyViewToolbar);
 					}
 					break;
 			}
@@ -179,15 +185,15 @@ export default class SettingsManager {
 		let matchingToolbar: ToolbarSettings | undefined = undefined;
 
 		// this.debug('- frontmatter: ', frontmatter);
-		const propName = this.ntb.settings.toolbarProp;
+		// const propName = this.ntb.settings.toolbarProp;
 		let ignoreToolbar = false;
 
 		const notetoolbarProp = this.getToolbarNameFromProps(frontmatter);
 		if (notetoolbarProp) {
 			// if any prop = 'none' then don't return a toolbar
-			notetoolbarProp.includes('none') ? ignoreToolbar = true : false;
+			ignoreToolbar = notetoolbarProp.includes('none') ? true : false;
 			// is it valid? (i.e., is there a matching toolbar?)
-			ignoreToolbar ? undefined : matchingToolbar = this.getToolbarByName(notetoolbarProp);
+			if (!ignoreToolbar) matchingToolbar = this.getToolbarByName(notetoolbarProp);
 		}
 
 		// we still don't have a matching toolbar
@@ -240,7 +246,7 @@ export default class SettingsManager {
 	 * @returns property value (the first value if it's a list type) or undefined.
 	 */
 	public getToolbarNameFromProps(frontmatter: FrontMatterCache | undefined): string | undefined {
-		const propValue = frontmatter?.[this.ntb.settings.toolbarProp];
+		const propValue = frontmatter?.[this.ntb.settings.toolbarProp] as string | string[];
 		if (Array.isArray(propValue)) {
 			// if we're checking tags, make sure what's returned is a toolbar
 			if (this.ntb.settings.toolbarProp === 'tags') {
@@ -315,7 +321,7 @@ export default class SettingsManager {
 	 * @returns Name of the toolbar; empty string otherwise.
 	 */
 	public getToolbarName(uuid: string): string {
-		let toolbarName = this.ntb.settings.toolbars.find(tbar => tbar.uuid === uuid)?.name;
+		const toolbarName = this.ntb.settings.toolbars.find(tbar => tbar.uuid === uuid)?.name;
 		return toolbarName ? toolbarName : "";
 	}
 
@@ -376,14 +382,20 @@ export default class SettingsManager {
 	 * @param name name of the toolbar
 	 * @returns ToolbarSettings for the new toolbar
 	 */
-	public async newToolbar(name: string = t('setting.toolbars.new-tbar-name')): Promise<ToolbarSettings> {
+	public async newToolbar(
+		name: string = t('setting.toolbars.new-tbar-name'),
+		description?: string, 
+		icon?: string
+	): Promise<ToolbarSettings> {
 		const newToolbar = {
 			uuid: getUUID(),
 			commandPosition: PositionType.Floating,
 			customClasses: "",
 			defaultItem: null,
 			defaultStyles: ["border", "even", "sticky"],
+			description: description ?? '',
 			hasCommand: false,
+			icon: icon ?? '',
 			items: [],
 			mobileStyles: [],
 			name: name ? this.getUniqueToolbarName(name, false) : '',
@@ -401,9 +413,14 @@ export default class SettingsManager {
 	 * Opens the toolbar settings modal for the provided toolbar.
 	 * @param toolbar ToolbarSettings to open
 	 * @param parent provide the NoteToolbarSettingTab if coming from settings UI; null if coming from editor 
+	 * @param isFromCommand if using command to create toolbar, set `true` to prompt user to set note property; default is `false`
 	 */
-    public openToolbarSettings(toolbar: ToolbarSettings, parent: NoteToolbarSettingTab | null | undefined = null) {
-        const modal = new ToolbarSettingsModal(this.ntb.app, this.ntb, parent, toolbar);
+    public openToolbarSettings(
+		toolbar: ToolbarSettings, 
+		parent: NoteToolbarSettingTab | null | undefined = null, 
+		isFromCommand = false
+	) {
+        const modal = new ToolbarSettingsModal(this.ntb.app, this.ntb, parent, toolbar, isFromCommand);
 		modal.setTitle( toolbar.name 
 			? t('setting.title-edit-toolbar', { toolbar: toolbar.name, interpolation: { escapeValue: false } }) 
 			: t('setting.title-edit-toolbar_none'));
@@ -423,12 +440,13 @@ export default class SettingsManager {
 		}
 
 		switch (item.linkAttr.type) {
-			case ItemType.JavaScript:
+			case ItemType.JavaScript: {
 				if (item.scriptConfig?.expression) {
 					item.scriptConfig.pluginFunction = 'evaluate';
 					return true;
 				}
 				break;
+			}
 			case ItemType.Plugin: {
 				const pluginType = await this.resolvePluginType(item);
 				return pluginType ? true : false;
@@ -471,7 +489,7 @@ export default class SettingsManager {
 				pluginType = await this.ntb.api.suggester(pluginNames, plugins, {
 					class: 'note-toolbar-setting-mini-dialog',
 					placeholder: t('gallery.select-plugin-placeholder')
-				});
+				}) as ItemType | undefined;
 				if (!pluginType) {
 					return undefined;
 				}
@@ -510,9 +528,8 @@ export default class SettingsManager {
 
 	async updatePosition(toolbarSettings: ToolbarSettings | undefined, newPosition: PositionType) {
 		if (toolbarSettings?.position) {
-			Platform.isDesktop ?
-				toolbarSettings.position.desktop = { allViews: { position: newPosition } }
-				: toolbarSettings.position.mobile = { allViews: { position: newPosition } };
+			if (Platform.isDesktop) toolbarSettings.position.desktop = { allViews: { position: newPosition } }
+				else toolbarSettings.position.mobile = { allViews: { position: newPosition } };
 			toolbarSettings.updated = new Date().toISOString();
 			await this.save();
 		}
@@ -523,8 +540,8 @@ export default class SettingsManager {
 	 * @param list the list to update (`recentFiles`, `recentItems`, `recentToolbars`)
 	 * @param value value to update the list with
 	 */
-	async updateRecentList(localVar: string, value: string): Promise<void> {
-		const list = JSON.parse(this.ntb.app.loadLocalStorage(localVar) || '[]');
+	updateRecentList(localVar: string, value: string) {
+		const list = JSON.parse(this.ntb.app.loadLocalStorage(localVar) as string || '[]') as string[];
 		const maxSize = 10;
 		const i = list.indexOf(value);
 		if (i !== -1) list.splice(i, 1); // remove if it already exists
@@ -548,14 +565,14 @@ export default class SettingsManager {
 	 */
 	async load(): Promise<void> {
 
-		const loaded_settings: NoteToolbarSettings = await this.ntb.loadData();
+		const loaded_settings = await this.ntb.loadData() as NoteToolbarSettings;
 		this.ntb.settings = Object.assign({}, DEFAULT_SETTINGS, loaded_settings);
 		
 		// initialize debugging based on user preference
 		this.ntb.toggleDebugging();
 		this.ntb.debug(`Note Toolbar ${PLUGIN_VERSION}: loading with settings:`, loaded_settings);
 	
-		let old_version = loaded_settings?.version as number;
+		const old_version = loaded_settings?.version;
 
 		// if we actually have existing settings for this plugin, and the old version does not match the current...
 		if (loaded_settings && (old_version !== SETTINGS_VERSION)) {
@@ -570,13 +587,12 @@ export default class SettingsManager {
 
 	/**
 	 * Saves settings.
-	 * Sorts the toolbar list (by name) first.
 	 */
 	async save(renderToolbar: boolean = true): Promise<void> {
 		await this.ntb.saveData(this.ntb.settings);
 
 		if (renderToolbar) {
-			await this.ntb.render.removeActive();
+			this.ntb.render.removeActive();
 			await this.ntb.render.renderForView();
 		}
 

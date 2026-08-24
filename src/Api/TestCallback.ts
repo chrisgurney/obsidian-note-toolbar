@@ -2,7 +2,7 @@ import NoteToolbarPlugin from "main";
 
 type Callback = (arg: string) => void;
 
-export async function testCallback(ntb: NoteToolbarPlugin, buttonId: string, callback: Callback): Promise<void> {
+export function testCallback(ntb: NoteToolbarPlugin, buttonId: string, callback: Callback) {
 
     ntb.debug("%c🟡 Experimental: This function will be deleted.", "color: #f00");
 

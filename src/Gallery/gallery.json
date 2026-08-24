@@ -20,6 +20,30 @@
     "categories": [
         {
             "name": { 
+                "en": "Editor Tools"
+            },
+            "description": { 
+                "en": "Obsidian's built-in editor toolbar."
+            },
+            "featured": true,
+            "itemIds": [
+                "undo", "redo", "insert-wikilink", "insert-embed", "insert-tag", "attach-file", "toggle-heading", "toggle-bold", "toggle-italic", "toggle-strikethrough", "toggle-highlight", "toggle-code", "toggle-blockquote", "insert-link", "toggle-bullet-list", "toggle-numbered-list", "toggle-checklist-status", "indent", "unindent", "note-toolbar-tbar-settings"
+            ]
+        },
+        { 
+            "name": { 
+                "en": "Clipboard"
+            },
+            "addAsToolbar": false,
+            "description": { 
+                "en": "Items that use the clipboard. Learn how to add these to Obsidian on the [Additional Gallery items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Additional-Gallery-items) page."
+            },
+            "itemIds": [
+                "copy", "cut", "paste", "copy-block-link", "copy-note-content", "paste-external-embed"
+            ]
+        },
+        {
+            "name": { 
                 "en": "Daily Notes",
                 "ja": "デイリーノート",
                 "zh": "Daily Notes 每日笔记",
@@ -37,23 +61,6 @@
         },
         {
             "name": { 
-                "en": "Basic Actions",
-                "ja": "基本操作",
-                "zh": "基本操作",
-                "uk": "Основні дії"
-            },
-            "description": { 
-                "en": "For quick text editing and history control.",
-                "ja": "テキストの簡易編集と履歴の操作に。",
-                "zh": "用于快速文本编辑和操作历史。",
-                "uk": "Для швидкого редагування тексту та керування історією."
-            },
-            "itemIds": [
-                "copy", "cut", "paste", "undo", "redo", "clear-formatting", "copy-note-content"
-            ]
-        },
-        {
-            "name": { 
                 "en": "Editing",
                 "ja": "編集",
                 "zh": "编辑",
@@ -66,7 +73,21 @@
                 "uk": "Працюйте швидше з текстовим редактором."
             },
             "itemIds": [
-                "swap-line-up", "swap-line-down", "toggle-comments", "toggle-inline-math", "copy-block-link"
+                "swap-line-up", "swap-line-down", "toggle-comments", "toggle-inline-math", "add-cursor-above", "add-cursor-below"
+            ]
+        },
+        {
+            "name": { 
+                "en": "Editor Navigation"
+            },
+            "description": { 
+                "en": "Get around the text editor faster.",
+                "ja": "テキストエディター内を素早く移動します。",
+                "zh": "更快地在文本编辑器中导航。",
+                "uk": "Швидше працюйте з текстовим редактором."
+            },
+            "itemIds": [
+                "go-next-heading", "go-prev-heading", "go-top", "go-bottom", "go-next-callout", "toggle-vim-mode"
             ]
         },
         {
@@ -83,7 +104,29 @@
                 "uk": "Інструменти роботи з файлами."
             },
             "itemIds": [
-                "file-new", "obsidian-kanban-create", "canvas-new", "file-append", "file-move", "file-in-explorer", "file-in-system", "vscode-open"
+                "file-new", "obsidian-kanban-create", "canvas-new", "file-move", "file-in-explorer", "file-in-system", "vscode-open"
+            ]
+        },
+        {
+            "name": {
+                "en": "Focus"
+            },
+            "description": {
+                "en": "Remove Obsidian's UI and focus on your writing."
+            },
+            "itemIds": [
+                "note-toolbar-toggle-properties", "toggle-status-bar", "toggle-ui", "load-workspace", "toggle-keyboard"
+            ]
+        },
+        { 
+            "name": { 
+                "en": "Folding"
+            },
+            "description": { 
+                "en": "Collapse and expand sections of your note for easier navigation."
+            },
+            "itemIds": [
+                "toggle-fold", "fold-all", "unfold-all", "fold-less", "fold-more"
             ]
         },
         {
@@ -100,7 +143,7 @@
                 "uk": "Змініть вигляд тексту."
             },
             "itemIds": [
-                "toggle-blockquote", "toggle-bold", "toggle-code", "set-heading-1", "set-heading-2", "set-heading-3", "set-heading-4", "set-heading-5", "set-heading-6", "toggle-highlight", "toggle-italics", "toggle-strikethrough"
+                "toggle-blockquote", "toggle-bold", "toggle-code", "toggle-heading", "remove-heading", "set-heading-1", "set-heading-2", "set-heading-3", "set-heading-4", "set-heading-5", "set-heading-6", "toggle-highlight", "toggle-italics", "toggle-strikethrough", "clear-formatting"
             ]
         },
         {
@@ -134,24 +177,7 @@
                 "uk": "Додайте різні типи вмісту, такі як посилання, або медіа."
             },
             "itemIds": [
-                "insert-codeblock", "insert-callout", "insert-link", "insert-tag", "insert-horizontal-rule", "insert-wikilink", "insert-table", "insert-embed", "insert-external-embed", "attach-file", "insert-mathblock"
-            ]
-        },
-        {
-            "name": { 
-                "en": "Navigating the Editor",
-                "ja": "エディターのナビゲーション",
-                "zh": "编辑器导航",
-                "uk": "Навігація редактора"
-            },
-            "description": { 
-                "en": "Get around the text editor faster.",
-                "ja": "テキストエディター内を素早く移動します。",
-                "zh": "更快地在文本编辑器中导航。",
-                "uk": "Швидше працюйте з текстовим редактором."
-            },
-            "itemIds": [
-                "go-next-heading", "go-prev-heading", "go-top", "go-bottom", "go-next-callout", "toggle-vim-mode"
+                "insert-codeblock", "insert-callout", "insert-footnote", "insert-link", "insert-tag", "insert-horizontal-rule", "insert-wikilink", "insert-table", "insert-embed", "attach-file", "insert-mathblock"
             ]
         },
         {
@@ -160,27 +186,10 @@
                 "uk": "Навігація на мобільном"
             },
             "description": { 
-                "en": "Use these after hiding Obsidian's Navigation actions (on phones)."
+                "en": "Helpful for navigating within the app and around the editor on mobile."
             },
             "itemIds": [
                 "tab-prev", "tab-next", "file-switcher-open", "tab-new", "tab-switcher-open", "toggle-keyboard"
-            ]
-        },
-        {
-            "name": { 
-                "en": "Navigating the Vault",
-                "ja": "ボールトのナビゲーション",
-                "zh": "库导航",
-                "uk": "Навігація по сховищу"
-            },
-            "description": { 
-                "en": "Navigate between notes and files.",
-                "ja": "ファイルやディレクトリ間を移動します。",
-                "zh": "在不同的文件和目录之间导航。",
-                "uk": "Переміщуйтесь між файлами та каталогами."
-            },
-            "itemIds": [
-                "go-back", "go-forward","file-prev", "file-next", "file-new-tab", "file-switcher-open", "tab-prev", "tab-next", "tab-switcher-open", "tab-new", "tab-close", "go-home", "go-up", "bookmarks-open", "system-vault-open"
             ]
         },
         {
@@ -196,24 +205,7 @@
                 "zh": "使用工具栏替换新标签页视图。  [了解更多](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/New-tab-view)"
             },
             "itemIds": [
-                "go-home", "daily-notes-today", "file-new", "file-new-tab", "templater-new-note-from-template", "bookmarks-open"
-            ]
-        },
-        {
-            "name": {
-                "en": "Reduce Distractions",
-                "ja": "集中モード",
-                "zh": "减少干扰",
-                "uk": "Зменшити відволікання"
-            },
-            "description": {
-                "en": "Remove Obsidian's UI and focus on your writing.",
-                "ja": "Obsidian の UI を非表示にして執筆に集中します。",
-                "zh": "隐藏 Obsidian 的 UI 元素，专注于写作。",
-                "uk": "Сховати зайві елементи інтерфейсу та зосередитися на написанні."
-            },
-            "itemIds": [
-                "note-toolbar-toggle-properties", "toggle-status-bar", "toggle-ui", "load-workspace", "toggle-keyboard"
+                "go-home", "daily-notes-today", "file-new", "templater-new-note-from-template", "bookmarks-open"
             ]
         },
         {
@@ -229,7 +221,7 @@
                 "uk": "Отримайте швидкий доступ до налаштувань та інструментів Note Toolbar."
             },
             "itemIds": [
-                "note-toolbar-quick-toolbars", "note-toolbar-quick-tools", "note-toolbar-tbar-settings", "note-toolbar-user-guide", "note-toolbar-backup-data"
+                "note-toolbar-quick-toolbars", "note-toolbar-quick-tools", "note-toolbar-tbar-settings", "note-toolbar-user-guide"
             ]
         },
         {
@@ -246,7 +238,7 @@
                 "uk": "Отримайте допомогу від спільноти Obsidian."
             },
             "itemIds": [
-                "obsidian-help-site", "obsidian-markdown-reference", "obsidian-forum"
+                "obsidian-help-site", "obsidian-markdown-reference"
             ]
         },
         {
@@ -268,7 +260,36 @@
         },
         {
             "name": { 
-                "en": "Views and Themes",
+                "en": "Vault Files"
+            },
+            "addAsToolbar": false,
+            "description": { 
+                "en": "Items that require access to vault files. Learn how to add these to Obsidian on the [Additional Gallery items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Additional-Gallery-items) page."
+            },
+            "itemIds": [
+                "file-new-tab", "file-append", "note-toolbar-export", "note-toolbar-backup-data"
+            ]
+        },
+        {
+            "name": { 
+                "en": "Vault Navigation",
+                "ja": "ボールトのナビゲーション",
+                "zh": "库导航",
+                "uk": "Навігація по сховищу"
+            },
+            "description": { 
+                "en": "Navigate between notes and files.",
+                "ja": "ファイルやディレクトリ間を移動します。",
+                "zh": "在不同的文件和目录之间导航。",
+                "uk": "Переміщуйтесь між файлами та каталогами."
+            },
+            "itemIds": [
+                "go-back", "go-forward","file-prev", "file-next", "file-switcher-open", "tab-prev", "tab-next", "tab-switcher-open", "tab-new", "tab-close", "go-home", "go-up", "bookmarks-open", "system-vault-open"
+            ]
+        },
+        {
+            "name": { 
+                "en": "Views & Themes",
                 "ja": "ビューとテーマ",
                 "zh": "视图与主题",
                 "uk": "Теми та режими перегляду"

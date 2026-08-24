@@ -1,8 +1,9 @@
 import { ScriptConfig, SettingType } from "Settings/NoteToolbarSettings";
 
 export interface AdapterFunction {
+    name: string;
     /** The actual function in the adapter. */
-    function: Function;
+    function: (...args: unknown[]) => Promise<string>;
     /** The name shown in the selection UI. */
     label: string;
     /** Field help text shown in the UI. */

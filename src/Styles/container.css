@@ -2,11 +2,11 @@
  * Toolbar Container
  */
 
-.cg-note-toolbar-bar-container {
+body .cg-note-toolbar-bar-container {
     border-radius: var(--cg-nt-tbar-border-radius);
     /* fix: (#90) box-shadow appearing over top of text */
     /* box-shadow: 0 0 0 1px var(--cg-nt-tbar-bg-color); */
-    &:has(.callout[data-callout-metadata*="autohide"]) {
+    &[data-ntb-meta*="autohide"] {
         box-shadow: none;
     }
     margin-bottom: 1em;
@@ -14,14 +14,6 @@
         margin-inline-start: 0;
         margin-inline-end: 0;
     }
-    &:hover {
-        &:not(:has(.note-toolbar-launchpad)) {
-            /* fix: (#14) flickering problem experienced with Banner plugin beta in use */
-            overflow: inherit !important;
-        }
-    }
-    /* width: var(--var-max-width);
-    max-width: var(--var-max-width); */
 
     &[data-tbar-position="bottom"],
     &[data-tbar-position="top"] {
@@ -32,13 +24,9 @@
         padding-bottom: 0;
         padding-top: 0;
         z-index: var(--cg-nt-tbar-z-index);
-        &:hover {
-            /* undoes fix (#14) which causes a layout shift on hover */
-            overflow: visible !important;
-        }
         & .cg-note-toolbar-callout {
             margin-bottom: 0;
-            margin-inline: auto auto !important;
+            margin-inline: auto auto;
             transition: border-top 0.5s ease-out;
         }
     }
@@ -61,15 +49,15 @@
             }
             /* fix: bottom margin needs to be removed when keyboard is open on phone */
             .is-phone.ntb-is-keyboard-open & {
-                margin-bottom: unset !important;
-                transition: unset !important;
+                margin-bottom: unset;
+                transition: unset;
             }
         }
 
         /* remove the background color for toolbars using the button style */
         & .cg-note-toolbar-callout[data-callout-metadata*="button"],
-        & .cg-note-toolbar-callout[data-callout-metadata*="mbtn"] {
-            background-color: unset !important;
+        .is-mobile & .cg-note-toolbar-callout[data-callout-metadata*="mbtn"] {
+            background-color: unset;
             @media (hover: hover) {
                 & a:hover, span.external-link:hover {
                     background-color: var(--interactive-hover);
@@ -82,6 +70,16 @@
     &[data-tbar-position="top"] {
         .is-mobile & {
             padding-inline: var(--cg-nt-tbar-top-padding-x-mobile);
+        }
+        .workspace-leaf-content[data-type="bases"] &, .workspace-leaf-content[data-type="canvas"] & {
+            &[data-ntb-meta*="wide"] {
+                padding-inline: 0;
+            }
+            &[data-ntb-meta*="mwd"] {
+                .is-mobile & {
+                    padding-inline: 0;
+                }
+            }
         }
     }
 
@@ -98,7 +96,7 @@
         }
         /* fix: puts toolbar above popovers + Hover Editor plugin */
         z-index: var(--cg-nt-tbar-text-z-index);
-        & .cg-note-toolbar-callout {
+        & .callout.cg-note-toolbar-callout {
             margin-bottom: 0;
             & a, span.external-link {
                 color: var(--cg-nt-tbar-text-item-text-color);
@@ -123,8 +121,8 @@
     &[data-tbar-position="props"] {
         /* remove the background color for toolbars using the button style */
         & .cg-note-toolbar-callout[data-callout-metadata*="button"],
-        & .cg-note-toolbar-callout[data-callout-metadata*="mbtn"] {
-            background-color: unset !important;
+        .is-mobile & .cg-note-toolbar-callout[data-callout-metadata*="mbtn"] {
+            background-color: unset;
             @media (hover: hover) {
                 & a:hover, span.external-link:hover {
                     background-color: var(--interactive-hover);
@@ -137,7 +135,7 @@
 
 .is-phone .cg-note-toolbar-container[data-tbar-position*="bottom"] {
     /* if toolbar doesn't wrap, container needs a constrained width so it's scrollable */
-    &:has(.cg-note-toolbar-callout[data-callout-metadata*="mnwrp"]) {
+    &[data-ntb-meta*="mnwrp"] {
         max-width: 100%;
     }
     /* reduce padding to better align with formatting toolbar */
@@ -147,12 +145,12 @@
 }
 
 /* hides the FAB when a sidebar is open on phones */
-.is-phone .app-container:has(.workspace.is-left-sidedock-open) .cg-note-toolbar-container[data-tbar-position*="fab"],
-.is-phone .app-container:has(.workspace.is-right-sidedock-open) .cg-note-toolbar-container[data-tbar-position*="fab"] {
+body.is-phone.ntb-is-sidedock-open .cg-note-toolbar-container[data-tbar-position*="fab"] {
     display: none;
 }
 
 /* remove spacing after props section, only if toolbar is in props position */
-.metadata-container:has(+ .cg-note-toolbar-bar-container[data-tbar-position="props"]) {
+/* TODO: apply class to .metadata-container when in props position instead of using :has() */
+.workspace-leaf-content[data-tbar-position*="props"] .metadata-container {
     margin-block-end: 0;
 }

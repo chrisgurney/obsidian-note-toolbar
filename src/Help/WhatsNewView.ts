@@ -1,13 +1,9 @@
 import NoteToolbarPlugin from 'main';
-import { Component, ItemView, MarkdownRenderer, requestUrl, Setting, ToggleComponent, WorkspaceLeaf } from 'obsidian';
+import { Component, ItemView, MarkdownRenderer, WorkspaceLeaf } from 'obsidian';
 import { t, VIEW_TYPE_WHATS_NEW, WHATSNEW_VERSION } from 'Settings/NoteToolbarSettings';
-import { URL_GH_RELEASES, URL_GH_USER_GUIDE, URL_GHUC_RELEASE_NOTES } from "Utils/Urls";
+import { URLS } from "Utils/Urls";
 import { iconTextFr } from '../Settings/UI/Utils/SettingsUIUtils';
-
-type Release = { 
-	tag_name: string; 
-	body: string;
-};
+import { getRelease } from './HelpContent';
 
 export default class WhatsNewView extends ItemView {
 
@@ -37,107 +33,48 @@ export default class WhatsNewView extends ItemView {
 
 		const markdownEl = contentDiv.createDiv();
 		markdownEl.addClass('markdown-preview-view', 'note-toolbar-setting-whatsnew-content', 'is-readable-line-width');
-		this.renderSkeleton(markdownEl);
 
 		const ctaEl = contentDiv.createDiv();
-		ctaEl.addClass('note-toolbar-setting-view-cta', 'is-readable-line-width');
+		ctaEl.addClass('is-readable-line-width');
 
 		ctaEl.createDiv({ cls: 'note-toolbar-setting-link' }).append(
 			createDiv({ cls: 'note-toolbar-setting-link-text' }, el => 
 				el.append( iconTextFr('book-text', t('setting.whats-new.label-release-notes')), createSpan({ cls: 'note-toolbar-setting-link-description', text: t('setting.whats-new.label-release-notes-description') }) )
 			),
-			createDiv().createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.whats-new.button-read'), href: URL_GH_RELEASES, attr: { 'aria-label': t('setting.whats-new.button-read-tooltip') } })
+			createDiv().createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.whats-new.button-read'), href: URLS.GH_RELEASES, attr: { 'aria-label': t('setting.whats-new.button-read-tooltip') } })
 		);
 
 		ctaEl.createDiv({ cls: 'note-toolbar-setting-link' }).append(
 			createDiv({ cls: 'note-toolbar-setting-link-text' }, el => 
 				el.append( iconTextFr('signpost', t('setting.whats-new.label-roadmap')), createSpan({ cls: 'note-toolbar-setting-link-description', text: t('setting.whats-new.label-roadmap-description') }) )
 			),
-			createDiv().createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.whats-new.button-read'), href: `${URL_GH_USER_GUIDE}/Roadmap`, attr: { 'aria-label': t('setting.whats-new.button-read-tooltip') } })
+			createDiv().createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.whats-new.button-read'), href: `${URLS.GH_USER_GUIDE}/Roadmap`, attr: { 'aria-label': t('setting.whats-new.button-read-tooltip') } })
 		);
 
-		new Setting(ctaEl)
-			.setName(iconTextFr('party-popper', t('setting.whats-new.label-show-whatsnew')))
-			.setDesc(t('setting.whats-new.label-show-whatsnew-description'))
-			.addToggle((toggle: ToggleComponent) => {
-				toggle
-					.setValue(this.ntb.settings.showWhatsNew)
-					.onChange((value: boolean) => {
-						this.ntb.settings.showWhatsNew = value;
-						this.ntb.settingsManager.save();
-					});
-			});
+		// new Setting(ctaEl)
+		// 	.setName(iconTextFr('party-popper', t('setting.whats-new.label-show-whatsnew')))
+		// 	.setDesc(t('setting.whats-new.label-show-whatsnew-description'))
+		// 	.addToggle((toggle: ToggleComponent) => {
+		// 		toggle
+		// 			.setValue(this.ntb.settings.showWhatsNew)
+		// 			.onChange(async (value: boolean) => {
+		// 				this.ntb.settings.showWhatsNew = value;
+		// 				await this.ntb.settingsManager.save();
+		// 			});
+		// 	});
 
-		// fetch and display the content
+		// get the content
 		const language = (typeof i18next.language === 'string' && i18next.language.trim()) || 'en';
-		let releaseText = '';
-		try {
-			const release = await this.getReleaseNote(WHATSNEW_VERSION, language);
-			if (release) {
-				releaseText = release.body;
-			}
-			else {
-				releaseText = t('setting.whats-new.error-failed-to-load', { baseUrl: URL_GHUC_RELEASE_NOTES, lang: language, version: WHATSNEW_VERSION });
-			}
-		}
-		catch (error) {
-			releaseText = t('setting.whats-new.error-failed-to-load', { baseUrl: URL_GHUC_RELEASE_NOTES, lang: language, version: WHATSNEW_VERSION });
-			releaseText += `\n>[!error]-\n> \`${error as string}\`\n`;
-		}
-		finally {
-			markdownEl.empty();
-		}
+		const releaseMd = getRelease(WHATSNEW_VERSION, language);
+		markdownEl.empty();
 
 		const rootPath = this.ntb.app.vault.getRoot().path;
 		const component = new Component();
-		MarkdownRenderer.render(this.ntb.app, releaseText, markdownEl, rootPath, component);
+		await MarkdownRenderer.render(this.ntb.app, releaseMd, markdownEl, rootPath, component);
 
     }
 
     async onClose() {
     }
-
-	/**
-	 * Fetches the release note for a specific release.
-	 *
-	 * @param version The tag name of the release to get the release note for.
-	 * @returns Release or null.
-	 */
-	async getReleaseNote(version: string, language: string = 'en'): Promise<Release | null> {
-		try {
-			const res = await requestUrl(`${URL_GHUC_RELEASE_NOTES}/${language}/${version}.md`);
-			if (res.status !== 200) return null;
-			return { tag_name: version, body: res.text ?? '' };
-		} catch (e) {
-			this.ntb.debug(`Error fetching release notes for language (${language}). Falling back to English.\n${e}`);
-			try {
-				const res = await requestUrl(`${URL_GHUC_RELEASE_NOTES}/en/${version}.md`);
-				if (res.status !== 200) return null;
-				return { tag_name: version, body: res.text ?? '' };
-			} catch {
-				return null;
-			}
-		}
-	}
-
-	/**
-	 * Renders a skeleton to show while the content is being fetched.
-	 * @param el HTMLDivElement to render the skeleton in.
-	 */
-	renderSkeleton(el: HTMLDivElement) {
-		const heights = ['2em', '1.5em', '1em', '1em', '1em', '1em'];
-		const widths = ['30%', '70%', '80%', '90%', '80%', '90%'];
-	
-		const placeholderTextEl = el.createEl('p');
-		placeholderTextEl.setText(t('setting.whats-new.placehoder-loading'));
-		placeholderTextEl.setAttr('style', 'color: var(--text-muted)');
-
-		for (let i = 0; i < heights.length; i++) {
-			const lineEl = el.createEl('p');
-			const lineStyle = `height: ${heights[i]};${widths[i] ? ` width: ${widths[i]};` : ''} margin-bottom: 0.5em;`;
-			lineEl.addClass('note-toolbar-setting-remote-skeleton');
-			lineEl.setAttr('style', lineStyle);
-		}
-	}
 
 }

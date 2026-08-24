@@ -34,9 +34,15 @@ export function galleryDocs(itemsFile, galleryFile, outputFile) {
             //     description += ` • Uses plugin: ${item.pluginName})`;
             // }
 
+            if (item.type === 'additional') {
+                description += ` *Add from: [[Additional Gallery items]]*`;
+            }
+
             const exclusionNote = getExclusionNote(item);
-            description += `${exclusionNote ? ` *${exclusionNote}*` : ''}`;
+            description += exclusionNote ? ` *${exclusionNote}*` : '';
             
+            description += item.since ? ` *Since ${item.since}*` : '';
+
             let line = `| ${item.tooltip.en} | ${description} |`;
             markdown += line + '\n';
         }

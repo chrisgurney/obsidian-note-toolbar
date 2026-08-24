@@ -16,14 +16,16 @@ import VaultListeners from 'Listeners/VaultListeners';
 import ViewListeners from 'Listeners/ViewListeners';
 import WindowListeners from 'Listeners/WindowListeners';
 import WorkspaceListeners from 'Listeners/WorkspaceListeners';
-import { Platform, Plugin, requireApiVersion, WorkspaceLeaf } from 'obsidian';
+import { Platform, Plugin, WorkspaceLeaf, WorkspacesPlugin } from 'obsidian';
 import ProtocolManager from 'Protocol/ProtocolManager';
-import { NoteToolbarSettings, t, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_TIP, VIEW_TYPE_WHATS_NEW } from 'Settings/NoteToolbarSettings';
+import { RibbonManager } from 'Ribbon/RibbonManager';
+import { NoteToolbarSettings, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_TIP, VIEW_TYPE_WHATS_NEW } from 'Settings/NoteToolbarSettings';
 import SettingsIcons from 'Settings/SettingsIcons';
 import SettingsManager from 'Settings/SettingsManager';
 import NoteToolbarSettingTab from 'Settings/UI/NoteToolbarSettingTab';
 import SettingsUIUtils from 'Settings/UI/Utils/SettingsUIUtils';
 import CalloutHandler from 'Toolbar/CalloutHandler';
+import CalloutPlugin from 'Toolbar/CalloutPlugin';
 import TextToolbar, { TextToolbarClass } from 'Toolbar/TextToolbar';
 import ToolbarElementHelper from 'Toolbar/ToolbarElementHelper';
 import ToolbarHandler from 'Toolbar/ToolbarHandler';
@@ -36,12 +38,13 @@ import PluginUtils from 'Utils/Utils';
 export default class NoteToolbarPlugin extends Plugin {
 
 	adapters!: AdapterManager;
-	api!: INoteToolbarApi<any>;
+	api!: INoteToolbarApi<unknown>;
 	cli!: CliManager;
 	commands!: CommandManager;
 	hotkeys!: HotkeyHelper;
 	gallery!: GalleryManager;
 	protocolManager!: ProtocolManager;
+	ribbon!: RibbonManager;
 	settings!: NoteToolbarSettings;	
 	settingsManager!: SettingsManager;
 	settingsUtils!: SettingsUIUtils;
@@ -56,7 +59,7 @@ export default class NoteToolbarPlugin extends Plugin {
 
 	listeners!: {
 		callout: CalloutListeners;
-		document: DocumentListeners;
+		doc: DocumentListeners;
 		metadata: MetadataListeners;
 		vault: VaultListeners;
 		view: ViewListeners;
@@ -67,8 +70,6 @@ export default class NoteToolbarPlugin extends Plugin {
 	textToolbar: ViewPlugin<TextToolbarClass> | null = null;
 
 	debug!: (...args: unknown[]) => void;
-	debugGroup!: (...args: unknown[]) => void;
-	debugGroupEnd!: (...args: unknown[]) => void;
 	error!: (...args: unknown[]) => void;
 
 	/**
@@ -84,6 +85,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.el = new ToolbarElementHelper(this);
 		this.items = new ToolbarItemHandler(this);
 		this.render = new ToolbarRenderer(this);
+		this.ribbon = new RibbonManager(this);
 		this.settingsUtils = new SettingsUIUtils(this);
 		this.toolbars = new ToolbarHandler(this);
 		this.utils = new PluginUtils(this);
@@ -92,7 +94,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		// listeners
 		this.listeners = {
 			callout: new CalloutListeners(this),
-			document: new DocumentListeners(this),
+			doc: new DocumentListeners(this),
 			metadata: new MetadataListeners(this),
 			vault: new VaultListeners(this),
 			view: new ViewListeners(this),
@@ -104,10 +106,8 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.settingsManager = new SettingsManager(this);
 		await this.settingsManager.load();
 
-		// add the ribbon icon, on phone only (seems redundant to add on desktop + tablet)
-		if (Platform.isPhone) {
-			this.addRibbonIcon(this.settings.icon, t('plugin.note-toolbar'), (event: MouseEvent) => this.listeners.workspace.onRibbonMenu(event));
-		}
+		// add ribbon items
+		this.ribbon.load();
 
 		// initialize managers + helpers that require settings to be loaded
 		this.api = new NoteToolbarApi(this);
@@ -117,10 +117,19 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.gallery = new GalleryManager(this);
 		this.protocolManager = new ProtocolManager(this);
 
+		// this.registerBasesView(NoteToolbarViewType, {
+		// 	name: 'Note Toolbar',
+		// 	icon: 'lucide-graduation-cap',
+		// 	factory: (controller, containerEl) => {
+		// 		return new BasesToolbar(controller, containerEl)
+		// 	},
+		// });
+
 		this.app.workspace.onLayoutReady(async () => {
 
 			// make API available
-			(window["ntb"] = this.api) && this.register(() => delete window["ntb"]);
+			window["ntb"] = this.api;
+			this.register(() => delete window["ntb"]);
 
 			// check what other plugins are enabled that we need to know about
 			this.adapters.checkPlugins();
@@ -128,7 +137,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		
 			// has to be done on plugin load
 			const internalPlugins = this.app.internalPlugins;
-			this.listeners.workspace.workspacesPlugin = internalPlugins.getPluginById('workspaces');
+			this.listeners.workspace.workspacesPlugin = internalPlugins.getPluginById('workspaces') as WorkspacesPlugin;
 
 			// add icons specific to the plugin
 			SettingsIcons.register();
@@ -138,7 +147,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				await this.render.renderForView();
 			}
 			else {
-				await this.render.renderForAllLeaves();
+				this.render.renderForAllLeaves();
 			}
 
 			// add the settings UI
@@ -150,11 +159,11 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.listeners.metadata.register();
 			this.listeners.vault.register();
 			this.listeners.view.register();
-			this.listeners.document.register();	
+			this.listeners.doc.register();	
 			this.listeners.window.register();
 
 			// add commands
-			if (Platform.isDesktop && requireApiVersion('1.12.2')) this.cli.register();
+			this.cli.register();
 			this.commands.addCommands();
 
 			// prototcol handler
@@ -172,6 +181,9 @@ export default class NoteToolbarPlugin extends Plugin {
 			// needs to be done after plugins are setup so that string variable checks work
 			this.commands.setupItemCommands();
 			this.commands.setupToolbarCommands();
+
+			// register extension to modify editable callout blocks, for styling
+			this.registerEditorExtension(CalloutPlugin(this));
 
 			// register the text toolbar if enabled; this might be required for backwards compat (#451)
 			if (this.settings.textToolbar) {
@@ -197,6 +209,12 @@ export default class NoteToolbarPlugin extends Plugin {
 		// remove the global API
 		if (window["ntb"]) delete window["ntb"];
 
+		// cleanup listeners
+		this.listeners.doc.cleanup();
+
+		this.commands.unload();
+		this.ribbon.unload();
+
 		this.debug('UNLOADED');
 
 	}
@@ -209,22 +227,16 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * Toggle debugging based on user setting.
 	 */
 	toggleDebugging() {
-		/* eslint-disable no-console */
 		// all errors should be logged
 		this.error = console.error.bind(console);
 		// setup debug functions, preserving line numbers
 		if (this.settings.debugEnabled) {
-			this.debug = console.log.bind(console);
-			this.debugGroup = console.group.bind(console);
-			this.debugGroupEnd = console.groupEnd.bind(console);
+			this.debug = console.debug.bind(console);
 		}
 		// otherwise do nothing when debug functions are called
 		else {
-			this.debug = (...args: unknown[]) => {};
-			this.debugGroup = (...args: unknown[]) => {};
-			this.debugGroupEnd = (...args: unknown[]) => {};
+			this.debug = (..._args: unknown[]) => {};
 		}
-		/* eslint-enable no-console */
 	}
 
 	// #endregion

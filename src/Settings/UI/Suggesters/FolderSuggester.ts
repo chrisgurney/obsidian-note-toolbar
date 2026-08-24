@@ -1,20 +1,18 @@
 import { AbstractInputSuggest, App, TAbstractFile, TFolder } from "obsidian";
 import { t } from "Settings/NoteToolbarSettings";
 
-namespace FolderSuggester {
-    export type Pattern = {
-        pattern: string,
-        label: string,
-        desc: string
-    }
+export type FolderSuggesterPattern = {
+    pattern: string,
+    label: string,
+    desc: string
 }
 
 export default class FolderSuggester extends AbstractInputSuggest<string> {
 
     private inputEl: HTMLInputElement;
 
-    private PATTERN_ALL_FILES: FolderSuggester.Pattern = { pattern: '*', label: '*', desc: t('setting.mappings.option-folder-all') };
-    private PATTERN_ROOT_ONLY: FolderSuggester.Pattern = { pattern: '/', label: '/', desc: t('setting.mappings.option-folder-root') };
+    private PATTERN_ALL_FILES: FolderSuggesterPattern = { pattern: '*', label: '*', desc: t('setting.mappings.option-folder-all') };
+    private PATTERN_ROOT_ONLY: FolderSuggesterPattern = { pattern: '/', label: '/', desc: t('setting.mappings.option-folder-root') };
 
     constructor(app: App, inputEl: HTMLInputElement) {
         super(app, inputEl);
@@ -61,7 +59,7 @@ export default class FolderSuggester extends AbstractInputSuggest<string> {
 	 * DISPLAY HELPERS
 	 *************************************************************************/
 
-    renderPattern(el: HTMLElement, suggestion: FolderSuggester.Pattern) {
+    renderPattern(el: HTMLElement, suggestion: FolderSuggesterPattern) {
         el.addClass('note-toolbar-setting-folder-suggestion-item-muted');
         el.createSpan().setText(suggestion.label);
         el.createSpan().setText(suggestion.desc);

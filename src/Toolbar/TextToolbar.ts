@@ -27,7 +27,7 @@ export class TextToolbarClass implements PluginValue {
     private selection: { from: number; to: number; text: string } | null = null;
 
     constructor(
-        view: EditorView, 
+        _view: EditorView, 
         private ntb: NoteToolbarPlugin
     ) {}
 
@@ -36,21 +36,21 @@ export class TextToolbarClass implements PluginValue {
         // if there's no text toolbar set, there's nothing to do; or
         // if disabled, do not display for keyboard selections
         if (!this.ntb.settings.textToolbar ||
-            (!this.ntb.settings.textToolbarOnKeyboard && this.ntb.listeners.document.isKeyboardSelection)
+            (!this.ntb.settings.textToolbarOnKeyboard && this.ntb.listeners.doc.isKeyboardSelection)
         ) {
             if (this.ntb.render.hasFloatingTextToolbar()) this.ntb.render.removeFloatingToolbar();
             return;
         };
         
         // don't show toolbar until mouse selection is complete
-        if (this.ntb.listeners.document.isMouseDown) {
+        if (this.ntb.listeners.doc.isPointerDown) {
             // fix: in source mode the mouse up event doesn't seem to fire after selection
             const currentView = this.ntb.app.workspace.getActiveViewOfType(MarkdownView);
             const isSourceMode = currentView?.getState().source;
             if (!isSourceMode) return;
         };
         
-        const { state, view } = update;
+        const { state, } = update;
 
         const selection = state.selection.main;
         this.selection = {
@@ -61,9 +61,9 @@ export class TextToolbarClass implements PluginValue {
         // this.ntb.debug('selection:', selection);
 
         // right-clicking for some reason selects the current line if it's empty
-        if (this.ntb.listeners.document.isContextOpening && this.selection.from === this.selection.from + 1) {
+        if (this.ntb.listeners.doc.isContextOpening && this.selection.from === this.selection.from + 1) {
             // this.ntb.debug('TextToolbar: selection is just new line - exiting');
-            this.ntb.listeners.document.isContextOpening = false;
+            this.ntb.listeners.doc.isContextOpening = false;
             return;
         }
 
@@ -107,7 +107,7 @@ export class TextToolbarClass implements PluginValue {
             return;
         }
 
-        requestAnimationFrame(async () => {
+        window.requestAnimationFrame(() => {
 
             if (!this.selection) return;
 
@@ -118,16 +118,16 @@ export class TextToolbarClass implements PluginValue {
                 return;
             };
 
-            // place the toolbar above the cursor, which takes the selection into account
-            this.ntb.debug('🎨 TextToolbar: Rendering toolbar', toolbar.name);
-            const cursorPos = this.ntb.utils.getPosition('cursor');
-            await this.ntb.render.renderFloatingToolbar(toolbar, cursorPos, PositionType.Text);
-
             this.lastSelection = {
                 from: this.selection.from,
                 to: this.selection.to,
                 text: this.selection.text
             };
+
+            // place the toolbar above the cursor, which takes the selection into account
+            this.ntb.debug('🎨 TextToolbar: Rendering toolbar', toolbar.name);
+            const cursorPos = this.ntb.utils.getPosition('cursor');
+            void this.ntb.render.renderFloatingToolbar(toolbar, cursorPos, PositionType.Text);
 
         });
 

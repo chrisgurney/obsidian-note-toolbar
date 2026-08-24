@@ -17,6 +17,12 @@ export default class ViewListeners {
         if (activeView && this.ntb.utils.hasToolbarForItemView(activeView)) {
             this.setupScrollListener(activeView);
         }
+
+		// on phones, for header spacing in non-markdown files
+        if (Platform.isPhone) {
+            const isNotMarkdown = !(activeView instanceof MarkdownView || activeView?.getViewType() === 'empty');
+            activeDocument.body.toggleClass('ntb-is-not-markdown', isNotMarkdown);
+        }
     }
 
     /**
@@ -32,7 +38,7 @@ export default class ViewListeners {
     }
 
     /**
-     * Listens to changes on scroll using {@link onScroll}.
+     * Listens to changes on scroll using {@link onScroll}, to reposition the floating toolbar.
      */
     private setupScrollListener(view: ItemView): void {
         // remove existing
@@ -44,7 +50,7 @@ export default class ViewListeners {
         // get the scrollable container based on view type
         this.scrollContainer = this.getScrollContainer(view);
         if (!this.scrollContainer) {
-            this.ntb.debug('⚠️ No scroll container found for this view type');
+            this.ntb.debug('setupScrollListener: No scroll container found for this view type');
             return;
         }
 
@@ -64,8 +70,8 @@ export default class ViewListeners {
         switch (viewType) {
             case 'markdown': {
                 scrollEl = (view as MarkdownView).getMode() === 'preview' 
-                    ? containerEl.querySelector('.markdown-reading-view .markdown-preview-view') as HTMLElement
-                    : containerEl.querySelector('.cm-scroller') as HTMLElement;
+                    ? containerEl.querySelector('.markdown-reading-view .markdown-preview-view')
+                    : containerEl.querySelector('.cm-scroller');
                 break;
             }
             default:

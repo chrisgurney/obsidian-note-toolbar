@@ -11,22 +11,54 @@ body[data-ntb-csstheme="Border"] {
     }
 }
 
-body[data-ntb-csstheme="Cupertino"] {
+body[data-ntb-csstheme="Baseline"], body[data-ntb-csstheme="Cupertino"] {     
+    --cg-nt-fab-inactive-opacity: 0.5;
+    --cg-nt-tbar-inactive-opacity-desktop: 0.5;
+    --cg-nt-tbar-inactive-opacity-mobile: 0.5;
+    --cg-nt-tbar-bg-color: rgba(0,0,0,0.0);
+    /* theme overrides this? so reset it */
+    --raised-blur: blur(2px) saturate(1.5) brightness(1.025);
+    &.is-phone {
+        --cg-nt-fab-pos-x-mobile: var(--navbar-side-offset);
+        --cg-nt-fab-pos-y-mobile: var(--navbar-bottom-offset);
+    }
+}
+
+body[data-ntb-csstheme="Baseline"] {
+    --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1 + 16px);
+    --cg-nt-tbar-top-sticky-pos-mobile: calc(1rem * -1 + 1px);
+    & .cg-note-toolbar-container[data-tbar-position="bottom"],
+    & .cg-note-toolbar-container[data-tbar-position="top"] {
+        --cg-nt-tbar-bg-color: var(--background-primary);
+    }
     &.is-mobile.theme-dark {
+        --cg-nt-tbar-bg-color: unset;
+    }
+}
+
+body[data-ntb-csstheme="Cupertino"] {
+    --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1 + 24px);
+    --ntb-anim-duration-moderate: var(--anim-duration-moderate);
+    --cg-nt-item-button-bg-color: var(--ntb-liquid-glass-background);
+    --cg-nt-item-border-radius: 32px;
+    --ntb-shadow-base: var(--shadow-base);
+    --ntb-shadow-xs: var(--shadow-xs);
+    &.is-mobile.theme-dark {
+        --cg-nt-tbar-bg-color: unset;
         & .callout[data-callout="note-toolbar-output"] {
-            background-color: #000 !important;
+            background-color: #000000;
         }
     }
     /* Liquid Glass effect for the Cupertino theme, thanks to @aaaaalexis */
     /* Licensed under the MIT License; see the LICENSE file */
     & .callout[data-callout="note-toolbar"] {
         background-color: var(--cg-nt-tbar-bg-color);
-        mix-blend-mode: normal !important;
+        mix-blend-mode: normal;
         & ul {
             gap: var(--size-4-2);
             & a, span.external-link {
                 background-color: var(--cg-nt-item-button-bg-color);
-                backdrop-filter: var(--raised-blur) !important;
+                backdrop-filter: var(--raised-blur);
                 border-color: var(--background-modifier-border);
                 border-radius: var(--cg-nt-item-border-radius);
                 border-style: solid;
@@ -46,7 +78,7 @@ body[data-ntb-csstheme="Cupertino"] {
     /* Licensed under the MIT License; see the LICENSE file */
     & button.cg-note-toolbar-fab {
         background-color: var(--cg-nt-item-button-bg-color);
-        backdrop-filter: var(--raised-blur) !important;
+        backdrop-filter: var(--raised-blur);
         border-color: var(--background-modifier-border);
         border-radius: var(--cg-nt-item-border-radius);
         border-style: solid;
@@ -63,8 +95,8 @@ body[data-ntb-csstheme="Cupertino"] {
         }
         .is-mobile & {
             &:is(:active, :hover, :focus-visible) {
-                background-color: var(--ntb-liquid-glass-background) !important;
-                color: var(--text-normal) !important;
+                background-color: var(--ntb-liquid-glass-background);
+                color: var(--text-normal);
             }
         }
     }
@@ -72,17 +104,19 @@ body[data-ntb-csstheme="Cupertino"] {
 
 /* Minimal: width fix for props position #204 #216 */
 body[data-ntb-csstheme="Minimal"] {
+    --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1 + 16px);
     & .cg-note-toolbar-bar-container[data-tbar-position="props"] {
         .is-readable-line-width & {
             max-width: var(--max-width);
             width: var(--line-width);
-            margin-inline: var(--content-margin) !important;
+            margin-inline: var(--content-margin);
         }
     }
 }
 
 /* Velocity: fix: margins and padding incorrect */
 body[data-ntb-csstheme="Velocity"] {
+    --cg-nt-tbar-top-sticky-pos-desktop: calc(var(--header-height) * -1 + 22px);      
     & .callout[data-callout="note-toolbar"] .callout-content {
         margin-block-end: var(--cg-nt-tbar-margin-y);
         padding-inline: unset;

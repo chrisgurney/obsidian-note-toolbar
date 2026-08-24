@@ -23,9 +23,9 @@
         "error": {
             "args-format": "引数の形式が無効です。",
             "args-parsing": "引数の解析に失敗しました",
-            "args-parsing-error": "引数の解析に失敗しました\n```\n{{error}}\n```",
-            "args-parsing-script": "スクリプトの引数の解析に失敗しました: {{filename}}",
-            "args-parsing-script-error": "スクリプトの引数の解析に失敗しました: {{filename}}\n```\n{{error}}\n```",
+            "args-parsing-error": "引数の解析に失敗しました\n```\n{{- error}}\n```",
+            "args-parsing-field-error": "```\n{{- error}}\n```",
+            "args-parsing-script-error": "スクリプトの引数の解析に失敗しました: {{filename}}\n```\n{{- error}}\n```",
             "callout-not-found": "エラー: 現在のノートにID: {{id}}のnote-toolbar-outputコールアウトが見つかりません",
             "exec-failed": "スクリプトの実行に失敗しました: {{filename}}",
             "expr-failed": "式の評価に失敗しました: {{expression}}",
@@ -129,7 +129,6 @@
         }
     },
     "command": {
-        "copy-command-notice": "コマンドをクリップボードにコピーしました",
         "callouts-locked-notice": "Note Toolbarコールアウトをロックしました",
         "callouts-unlocked-notice": "Note Toolbarコールアウトのロックを解除しました",
         "name-copy-cmd-as-data-element": "コマンドのコールアウトアイテムをコピー",
@@ -152,8 +151,6 @@
         "name-use-item": "使用: {{item}}"
     },
     "export": {
-        "button-copy-link": "リンクをコピー",
-        "button-copy-link-description": "このリンクをクリップボードにコピー",
         "item-generic": "アイテム{{number}}",
         "label-callout": "コールアウトとしてコピー",
         "label-share": "共有...",
@@ -335,13 +332,6 @@
             "bottom": {
                 "description": "Hides actions in Obsidian's mobile navigation bar.",
                 "name": "Navbar item visibility"
-            },
-            "ribbon-action": {
-                "description": "リボンアイコン（スマートフォン）を使用したときのアクションを設定します。",
-                "name": "リボン",
-                "option-item-suggester": "すべてのツールを表示",
-                "option-toolbar": "現在のツールバーを表示",
-                "option-toolbar-suggester": "すべてのツールバーを表示"
             }
         },
         "display-rules": {
@@ -360,7 +350,6 @@
             "button-open": "開く",
             "button-open-external": "開く ↗",
             "button-open-github": "github.comを開く",
-            "button-open-google": "google.comを開く",
             "button-read": "読む ↗",
             "description": "ノートのためのコンテキスト対応ツールバー。",
             "error-failed-to-load": "読み込みに失敗しました:\n{{baseUrl}}/{{lang}}/{{name}}.md",
@@ -402,7 +391,6 @@
             "label-preview-empty-no-items": "アイテムがありません。このツールバーを編集してアイテムを追加してください。",
             "label-review-plugin": "プラグインをレビュー",
             "menu-copy-id": "開発者IDをコピー",
-            "menu-copy-id-notice": "ツールバーアイテムIDをクリップボードにコピーしました。",
             "menu-copy-item": "アイテムをツールバーにコピー...",
             "menu-copy-item-notice": "アイテムをツールバーにコピーしました: {{toolbarName}}",
             "menu-more-actions": "その他のアクション...",

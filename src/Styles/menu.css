@@ -44,19 +44,22 @@
     }
 }
 
-body[data-ntb-csstheme="Cupertino"],
-body.is-tablet:has(.callout[data-callout="note-toolbar"][data-callout-metadata*="mgls"]) {
-    & .note-toolbar-menu {
-        background-color: var(--ntb-liquid-glass-background);
-        backdrop-filter: var(--raised-blur) !important;
-        border-color: var(--background-modifier-border);
-        border-radius: 20px;
-        border-style: solid;
-        border-width: var(--border-width);
-        box-shadow: var(--ntb-shadow-xs);
-        mix-blend-mode: normal !important;
-        & .menu-item {
-            border-radius: 24px;
-        }
+body[data-ntb-csstheme="Cupertino"] .note-toolbar-menu,
+body.is-tablet .note-toolbar-menu[data-ntb-meta*="mgls"] {
+    background-color: var(--ntb-liquid-glass-background);
+    backdrop-filter: var(--raised-blur);
+    border-color: var(--background-modifier-border);
+    border-radius: 20px;
+    border-style: solid;
+    border-width: var(--border-width);
+    box-shadow: var(--ntb-shadow-xs);
+    mix-blend-mode: normal;
+    & .menu-item {
+        border-radius: 24px;
     }
+}
+
+/* fix: class to hide editor menu if displaying editor menu as toolbar, as some plugins use it (e.g., Notebook Navigator) */
+.menu.ntb-hide-menu {
+    display: none;
 }

@@ -1,7 +1,8 @@
 import { EditorView, Rect } from "@codemirror/view";
 import NoteToolbarPlugin from "main";
-import { App, Command, FileView, ItemView, MarkdownView, MarkdownViewModeType, PaneType, Platform } from "obsidian";
+import { App, Command, Editor, FileView, ItemView, MarkdownView, MarkdownViewModeType, PaneType, Platform } from "obsidian";
 import { COMMAND_DOES_NOT_EXIST, ComponentType, DefaultStyleType, ItemType, MOBILE_STYLE_COMPLIMENTS, MobileStyleType, ToolbarItemSettings, ToolbarSettings, ViewModeType, Visibility } from "Settings/NoteToolbarSettings";
+import { ScriptArgsParser } from "./ScriptArgsParser";
 
 export default class PluginUtils {
 
@@ -24,7 +25,7 @@ export default class PluginUtils {
 		const currentView = this.ntb.app.workspace.getActiveViewOfType(MarkdownView);
 		if (currentView) {
 			const currentMode = currentView.getMode();
-			if (visibility.viewMode && visibility.viewMode != ViewModeType.All && visibility.viewMode !== currentMode) {
+			if (visibility.viewMode && visibility.viewMode != ViewModeType.All && visibility.viewMode !== currentMode as ViewModeType) {
 				isVisibleInMode = false;
 			}
 		}
@@ -173,12 +174,12 @@ export default class PluginUtils {
 				}
 			}
 			else {
-				const editor = this.ntb.app.workspace.activeEditor?.editor;
+				const editor: Editor | undefined = this.ntb.app.workspace.activeEditor?.editor;
 				
 				// TODO: support other file types here?
 				if (!editor) return;
 				
-				const editorView = (editor as any).cm as EditorView;
+				const editorView = editor.cm as EditorView;
 				const cursorOffset = editor.posToOffset(editor.getCursor());
 				const cursorCoords = editorView.coordsAtPos(cursorOffset);
 		
@@ -217,6 +218,16 @@ export default class PluginUtils {
 		return result;
 	}
 
+	getEventPosition(event: MouseEvent): Rect | undefined {
+		if (!event) return;
+		return {
+			top: event.clientY,
+			bottom: event.clientY,
+			left: event.clientX,
+			right: event.clientX
+		};
+	}
+
 	/**
 	 * Returns a list of plugin IDs for any commands not recognized in the given toolbar.
 	 * @param toolbar ToolbarSettings to check for command usage
@@ -229,7 +240,6 @@ export default class PluginUtils {
 			)
 			.map(item => item.linkAttr.commandId.split(':')[0].trim());
 	}
-
 
 	/**
 	 * Gets the view mode of the most recent leaf.
@@ -250,26 +260,29 @@ export default class PluginUtils {
 	 * @param position The type of position to retrieve. Defaults to `pointer`.
      * `cursor`: editor cursor or selection position (falls back to pointer position, e.g., if editor is not in focus);
 	 * `pointer`: mouse/pointer position;
-	 * `toolbar`: last clicked toolbar element position (falls back to pointer position)
+	 * `toolbar`: last clicked toolbar element position (falls back to pointer or cursor position)
 	 * @returns A Rect object with the position coordinates, or undefined if unable to determine
 	 */
 	getPosition(position: 'cursor' | 'pointer' | 'toolbar' = 'pointer'): Rect | undefined {
 		// 'pointer' position
 		const pointerPos: Rect = { 
-			left: this.ntb.listeners.document.pointerX, right: this.ntb.listeners.document.pointerX,
-			top: this.ntb.listeners.document.pointerY, bottom: this.ntb.listeners.document.pointerY 
+			left: this.ntb.listeners.doc.pointerX, right: this.ntb.listeners.doc.pointerX,
+			top: this.ntb.listeners.doc.pointerY, bottom: this.ntb.listeners.doc.pointerY 
 		};
 		if (position === 'pointer') return pointerPos;
 
 		// 'cursor' position, with fallback to 'pointer'
+		const cursorPos = this.getCursorPosition();
 		if (position === 'cursor') {
-			const cursorPos = this.getCursorPosition();
-			if (!position) this.ntb.debug('getPosition: cursor not found, falling back to pointer position');
+			const cursorIsZero = cursorPos && cursorPos.left === 0 && cursorPos.top === 0;
+			if (cursorIsZero) this.ntb.debug('getPosition: cursor not found, falling back to pointer position');
 			return cursorPos ?? pointerPos;
 		};
-
-		// 'toolbar' position (i.e., last clicked element), with fallback to 'pointer'
-		return this.ntb.render.lastClickedPos ?? pointerPos;
+		
+		// 'toolbar' position (i.e., last clicked element), with fallback to 'pointer' or `cursor` (if pointer is zero)
+		const pointerIsZero = pointerPos.left === 0 && pointerPos.top === 0;
+		// this.ntb.debug('lastClickPos:', this.ntb.render.lastClickedPos, 'pointerPos:', pointerPos, 'cursorPos:', cursorPos);
+		return this.ntb.render.lastClickedPos ?? (!pointerIsZero ? pointerPos : cursorPos);
 	}
 
     /**
@@ -347,7 +360,7 @@ export default class PluginUtils {
 		return toolbar.items.some(item => {
 			const platformComponents = item.visibility[platform]?.components || [];
 			const hasVisibleComponents = platformComponents.length > 0;
-			const modeVisible = !currentMode || !item.visibility.viewMode || (item.visibility.viewMode === ViewModeType.All || item.visibility.viewMode === currentMode);
+			const modeVisible = !currentMode || !item.visibility.viewMode || (item.visibility.viewMode === ViewModeType.All || item.visibility.viewMode === currentMode as ViewModeType);
 			return hasVisibleComponents && modeVisible;
 		});
 	}
@@ -527,81 +540,20 @@ export function hasStyle(toolbar: ToolbarSettings, defaultStyle: DefaultStyleTyp
  * @param args JSON-like formatted string
  * @returns parsed arguments, or null if parsing fails
  */
-export function importArgs(args: string): Record<string, any> | null {
+export function importArgs(args: string): {
+    value: Record<string, unknown> | null;
+    error?: string;
+} {
     try {
-        const result: Record<string, any> = {};
-        let i = 0;
-        const s = args.trim();
-
-        const readToken = (start_i: number, terminators: string[]): { token: string | null, i: number } => {
-            let i = start_i;
-            if (s[i] === '"') {
-                i++; // skip opening quote
-                let str = '';
-                while (i < s.length && s[i] !== '"') {
-                    if (s[i] === '\\' && s[i + 1] === '"') {
-                        str += '"';
-                        i += 2;
-                    } else {
-                        str += s[i++];
-                    }
-                }
-                if (i >= s.length) return { token: null, i };
-                i++; // skip closing quote
-                return { token: str, i };
-            } else {
-                const start = i;
-                while (i < s.length && !terminators.includes(s[i])) i++;
-                return { token: s.slice(start, i).trim(), i };
-            }
+        return {
+            value: new ScriptArgsParser(args).parse()
         };
-
-        // skip optional leading brace
-        if (s[i] === '{') i++;
-
-        while (i < s.length) {
-            // skip whitespace and commas
-            while (i < s.length && (s[i] === ' ' || s[i] === ',' || s[i] === '\n')) i++;
-            if (s[i] === '}' || i >= s.length) break;
-
-            const keyResult = readToken(i, [':']);
-            i = keyResult.i;
-            const key = keyResult.token;
-            if (key === null || key === '') return null;
-
-            // skip colon
-            while (i < s.length && s[i] === ' ') i++;
-            if (s[i] !== ':') return null;
-            i++;
-            while (i < s.length && s[i] === ' ') i++;
-
-            const wasQuoted = s[i] === '"';
-            const valueResult = readToken(i, [',', '}']);
-            i = valueResult.i;
-            const raw = valueResult.token;
-            if (raw === null) return null;
-
-            if (wasQuoted) {
-                result[key] = raw;
-            } else if (raw === '') {
-                result[key] = null;
-            } else if (raw === 'true') {
-                result[key] = true;
-            } else if (raw === 'false') {
-                result[key] = false;
-            } else if (raw === 'null') {
-                result[key] = null;
-            } else if (!isNaN(Number(raw))) {
-                result[key] = Number(raw);
-            } else {
-                result[key] = raw;
-            }
-        }
-
-        return result;
-    }
-    catch {
-        return null;
+    } catch (error) {
+        console.error('importArgs:', error);
+        return {
+            value: null,
+            error: error instanceof Error ? error.message : String(error)
+        };
     }
 }
 
@@ -642,7 +594,7 @@ export function moveElement<T>(array: T[], fromIndex: number, toIndex: number): 
  * Issues a down-arrow event in order to put focus in menus (works in non-native menus only).
  */
 export function putFocusInMenu() {
-	activeWindow.setTimeout(() => {
+	window.setTimeout(() => {
 		const downArrowEvent = new KeyboardEvent('keydown', {
 			key: 'ArrowDown',
 			code: 'ArrowDown',

@@ -1,6 +1,6 @@
-import { AbstractInputSuggest, App } from "obsidian";
-import { ToolbarSettings } from "Settings/NoteToolbarSettings";
 import NoteToolbarPlugin from "main";
+import { AbstractInputSuggest } from "obsidian";
+import { ToolbarSettings } from "Settings/NoteToolbarSettings";
 
 export default class ToolbarSuggester extends AbstractInputSuggest<ToolbarSettings> {
 
@@ -26,7 +26,9 @@ export default class ToolbarSuggester extends AbstractInputSuggest<ToolbarSettin
     }
 
     renderSuggestion(toolbar: ToolbarSettings, el: HTMLElement): void {
-        el.setText(toolbar.name);
+		const containerEl = el.createDiv();
+		containerEl.addClass('note-toolbar-tbar-suggestion-container');
+        this.ntb.settingsUtils.renderToolbarName(toolbar, containerEl);
     }
 
     selectSuggestion(toolbar: ToolbarSettings): void {

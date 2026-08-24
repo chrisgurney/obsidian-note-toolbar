@@ -28,7 +28,7 @@
       .callout[data-callout="note-toolbar"] a.external-link, .callout[data-callout="note-toolbar"] a.internal-link {
         &:is(:focus-visible) {
             border-radius: var(--input-radius);
-            box-shadow: 0 0 0 1px var(--background-modifier-border);
+            /* box-shadow: 0 0 0 1px var(--background-modifier-border); */
             box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
         }
     }
@@ -48,16 +48,15 @@
         & .view-header-left, .view-actions {
             display: none;
         }
+        & .modal-header-button {
+            z-index: 2; /* fix for modal content overlapping close button */
+        }
         & .modal-content {
             overflow-y: auto;
             .is-phone & {
                 padding: var(--size-4-5);
                 /* per what Obsidian's CSS does */
                 padding-bottom: max(100px, var(--safe-area-inset-bottom));
-            }
-            /* hide the Web Viewer navigation bar */
-            & .workspace-leaf-content[data-type="webviewer"] .view-header {
-                display: none !important;
             }
         }
         & .modal-title > .markdown-preview-view > * {

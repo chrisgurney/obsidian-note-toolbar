@@ -1,10 +1,11 @@
 import NoteToolbarPlugin from "main";
 import { Notice, ObsidianProtocolData, Platform } from "obsidian";
-import { ExportSettings, t, ToolbarSettings, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_TIP, VIEW_TYPE_WHATS_NEW } from "Settings/NoteToolbarSettings";
+import { ExportSettings, t, ToolbarItemSettings, ToolbarSettings, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_TIP, VIEW_TYPE_WHATS_NEW } from "Settings/NoteToolbarSettings";
 import { confirmImportWithModal } from "Settings/UI/Modals/ImportConfirmModal";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
+import ToolbarSuggestModal from "Settings/UI/Modals/ToolbarSuggestModal";
 import { exportToCallout, importFromCallout } from "Utils/ImportExport";
-import { URL_GHIO } from "Utils/Urls";
+import { URLS } from "Utils/Urls";
 
 export default class ProtocolManager {
 
@@ -27,48 +28,61 @@ export default class ProtocolManager {
 			this.ntb.items.handleLinkFolder(data.folder);
 		}
 		else if (data.gallery) {
-			this.ntb.app.workspace.getLeaf(true).setViewState({
+			await this.ntb.app.workspace.getLeaf(true).setViewState({
 				type: VIEW_TYPE_GALLERY,
 				active: true
 			});
 			if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
 		}
 		else if (data.help) {
-			this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_HELP, active: true });
+			await this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_HELP, active: true });
 			if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
 		}
         else if (data.import) {
             const content = decodeURIComponent(data.import);
 			// double-check provided text is a Note Toolbar Callout
-			if (data.import.includes('[!note-toolbar')) {
-				confirmImportWithModal(
-					this.ntb, 
-					content
-				).then((isConfirmed: boolean) => {
-					if (isConfirmed) {
-						importFromCallout(this.ntb, content, undefined, true)
-							.then(toolbar => {
-								this.ntb.settingsManager.addToolbar(toolbar)
-									.then(res => {
-										this.ntb.commands.openToolbarSettingsForId(toolbar.uuid);
-									});
+			await confirmImportWithModal(
+				this.ntb, 
+				content
+			).then(async (isConfirmed: boolean) => {
+				if (isConfirmed) {
+					const [ importedToolbar ] = importFromCallout(this.ntb, content, undefined, false);
+					if (data.import.includes('[!note-toolbar')) {
+						await this.ntb.settingsManager.addToolbar(importedToolbar)
+							.then(() => {
+								this.ntb.commands.openToolbarSettingsForId(importedToolbar.uuid);
 							});
 					}
-				});
-			}
-			else {
-				new Notice(t('import.error-invalid-uri-content')).containerEl.addClass('mod-warning');
-			}
+					else {
+						if (importedToolbar.items.length === 0) {
+							new Notice(t('import.error-no-items')).containerEl.addClass('mod-warning');
+							return;
+						}
+						const toolbarSuggester = new ToolbarSuggestModal(this.ntb, true, false, true, (toolbar: ToolbarSettings) => {
+							void this.ntb.settingsManager.addToolbarItem(toolbar, importedToolbar.items).then(() => {
+								this.ntb.commands.openToolbarSettingsForId(toolbar.uuid);
+							});
+						});
+						toolbarSuggester.open();
+					}
+				}
+			});
         }
 		else if (data.menu) {
 			const activeFile = this.ntb.app.workspace.getActiveFile();
 			const toolbar: ToolbarSettings | undefined = this.ntb.settingsManager.getToolbar(data.menu);
 			if (activeFile) {
 				if (toolbar) {
-					this.ntb.render.renderAsMenu(toolbar, activeFile).then(menu => { 
-						this.ntb.render.showMenuAtPosition(menu,
-							{ x: this.ntb.render.lastClickedPos.left, y: this.ntb.render.lastClickedPos.bottom, overlap: true, left: false }
-						)
+					await this.ntb.render.renderAsMenu(toolbar, activeFile).then(menu => { 
+                        const position = this.ntb.render.lastClickedPos ?? this.ntb.utils.getPosition('pointer');
+                        if (position) {
+							this.ntb.render.showMenuAtPosition(menu,
+								{ x: position.left, y: position.bottom, overlap: true, left: false }
+							)
+						}
+						else {
+                            this.ntb.error('No last clicked position available.');
+						}
 					});
 				}
 				else {
@@ -81,23 +95,21 @@ export default class ProtocolManager {
 			this.ntb.commands.openToolbarSettingsForId(toolbar.uuid);
 		}
 		else if (data.settings) {
-			await this.ntb.commands.openSettings();
+			this.ntb.commands.openSettings();
 		}
 		else if (data.tip) {
 			if (data.tip.length > 0) {
-				this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_TIP, state: { id: data.tip }, active: true });
+				await this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_TIP, state: { id: data.tip }, active: true });
 			}
 		}
 		else if (data.toolbarsettings) {
 			let toolbarSettings;
 			if (data.toolbarsettings.length > 0) {
 				toolbarSettings = this.ntb.settingsManager.getToolbarByName(data.toolbarsettings);
-				!toolbarSettings 
-					? new Notice(t('notice.error-toolbar-not-found', { toolbar: data.toolbarsettings })).containerEl.addClass('mod-warning') 
-					: undefined;
+				if (!toolbarSettings) new Notice(t('notice.error-toolbar-not-found', { toolbar: data.toolbarsettings })).containerEl.addClass('mod-warning');
 			}
 			else {
-				let toolbarEl = this.ntb.el.getToolbarEl(); // if not given, figure out what toolbar is on screen
+				const toolbarEl = this.ntb.el.getToolbarEl(); // if not given, figure out what toolbar is on screen
 				toolbarSettings = toolbarEl ? this.ntb.settingsManager.getToolbarById(toolbarEl?.id) : undefined;
 			}
 			if (toolbarSettings) {
@@ -107,7 +119,7 @@ export default class ProtocolManager {
 			}
 		}
 		else if (data.whatsnew) {
-			this.ntb.app.workspace.getLeaf(true).setViewState({
+			await this.ntb.app.workspace.getLeaf(true).setViewState({
 				type: VIEW_TYPE_WHATS_NEW,
 				active: true
 			});
@@ -116,27 +128,27 @@ export default class ProtocolManager {
 		else {
 			new Notice(
 				t('notice.error-uri-params-not-supported', { params: Object.keys(data).join(', ')})
-			).containerEl.addClass('mod-warning');
+			, 10000).containerEl.addClass('mod-warning');
 		}
 	}
 
     /**
-     * Returns a URI which can be shared with other users, that imports the provided toolbar's callout markdown.
-     * @param toolbar ToolbarSettings to share
+     * Returns a URI which can be shared with other users, that imports the provided Note Toolbar Callout markdown.
+     * @param toolbarOrItem ToolbarSettings or ToolbarItemSettings to share
 	 * @param useObsidianUri true if an obsidian:// URI should be generated versus an HTTP URL (default)
      * @returns URI to share as a string
      */
-    async getShareUri(toolbar: ToolbarSettings, useObsidianUri: boolean = false): Promise<string> {
+    async getShareUri(toolbarOrItem: ToolbarSettings | ToolbarItemSettings, useObsidianUri: boolean = false): Promise<string> {
 		const options = {
 			includeIcons: true,
 			replaceVars: false,
 			useDataEls: true,
 			useIds: false
 		} as ExportSettings;
-        let callout = await exportToCallout(this.ntb, toolbar, options);
+        const callout = await exportToCallout(this.ntb, toolbarOrItem, options);
 		const shareUri = useObsidianUri 
 			? `obsidian://note-toolbar?import=${encodeURIComponent(callout)}`
-			: `${URL_GHIO}/open.htm?uri=${encodeURIComponent(`obsidian://note-toolbar?import=${callout}`)}`
+			: `${URLS.GHIO_SHARE}${encodeURIComponent(`obsidian://note-toolbar?import=${callout}`)}`
         return shareUri;
     }
 

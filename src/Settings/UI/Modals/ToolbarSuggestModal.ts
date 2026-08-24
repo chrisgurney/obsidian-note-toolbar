@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { Platform, SuggestModal } from "obsidian";
-import { EMPTY_TOOLBAR, EMPTY_TOOLBAR_ID, LocalVar, t, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { EMPTY_TOOLBAR, EMPTY_TOOLBAR_ID, LocalVar, NONE_TOOLBAR, NONE_TOOLBAR_ID, t, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import ToolbarSettingsModal from "./ToolbarSettingsModal";
 
 /**
@@ -37,7 +37,7 @@ export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
                 ? t('setting.toolbar-suggest-modal.placeholder-add') 
                 : t('setting.toolbar-suggest-modal.placeholder'));
 
-        let instructions = [];
+        const instructions = [];
         instructions.push(
             {command: '↑↓', purpose: t('setting.toolbar-suggest-modal.instruction-navigate')},
             {command: '↵', purpose: t('setting.toolbar-suggest-modal.instruction-use')},
@@ -56,9 +56,9 @@ export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
             // show warning message about properties being changed
             const onboardingId = 'swap-toolbars-prop';
             if (!this.ntb.settings.onboarding[onboardingId]) {
-                let resultsEl = this.modalEl.querySelector('.prompt-results');
+                const resultsEl = this.modalEl.querySelector('.prompt-results');
                 if (resultsEl) {
-                    let messageEl = this.ntb.settingsUtils.createOnboardingMessageEl( 
+                    const messageEl = this.ntb.settingsUtils.createOnboardingMessageEl( 
                         onboardingId, 
                         t('onboarding.swap-toolbar-title'), 
                         t('onboarding.swap-toolbar-content', { property: this.ntb.settings.toolbarProp }));
@@ -84,28 +84,36 @@ export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
         const lowerCaseInputStr = inputStr.toLowerCase();
 
         if (this.showSwapUi) {
-            let emptyToolbar = { ...EMPTY_TOOLBAR };
+            const emptyToolbar = { ...EMPTY_TOOLBAR };
             emptyToolbar.name = t('setting.toolbar-suggest-modal.option-default');
-            tbarSuggestions.push(emptyToolbar);
+            const noneToolbar = { ...NONE_TOOLBAR };
+            noneToolbar.name = t('setting.toolbar-suggest-modal.option-none');
+            tbarSuggestions.push(emptyToolbar, noneToolbar);
         }
         else if (this.showNewOption) {
-            let newToolbar = { ...EMPTY_TOOLBAR };
+            const newToolbar = { ...EMPTY_TOOLBAR };
             newToolbar.name = t('setting.toolbar-suggest-modal.option-new');
             tbarSuggestions.push(newToolbar);
         }
 
         pluginToolbars.forEach((toolbar: ToolbarSettings) => {
-            if (toolbar.name !== '' && toolbar.name.toLowerCase().includes(lowerCaseInputStr)) {
+            const name = toolbar.name.toLowerCase();
+            const desc = (toolbar.description ?? '').toLowerCase();
+            if (toolbar.name !== '' && (name.includes(lowerCaseInputStr) || desc.includes(lowerCaseInputStr))) {
                 sortedSuggestions.push(toolbar);
             }
         });
 
         // sort the search results
-        const recentToolbars = JSON.parse(this.ntb.app.loadLocalStorage(LocalVar.RecentToolbars) || '[]');
+        const recentToolbars = JSON.parse(this.ntb.app.loadLocalStorage(LocalVar.RecentToolbars) as string || '[]') as string[];
         sortedSuggestions.sort((a, b) => {
             const query = lowerCaseInputStr;
+
             const aName = a.name.toLowerCase();
             const bName = b.name.toLowerCase();
+
+            const aDesc = (a.description ?? '').toLowerCase();
+            const bDesc = (b.description ?? '').toLowerCase();
 
             const aStartsWith = aName.startsWith(query);
             const bStartsWith = bName.startsWith(query);
@@ -127,6 +135,13 @@ export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
             if (aIncludes && !bIncludes) return -1;
             if (!aIncludes && bIncludes) return 1;
 
+            const aDescIncludes = aDesc.includes(query);
+            const bDescIncludes = bDesc.includes(query);
+
+            // prioritize items whose description contains the search string
+            if (aDescIncludes && !bDescIncludes) return -1;
+            if (!aDescIncludes && bDescIncludes) return 1;
+
             return aName.localeCompare(bName);
         });
 
@@ -139,29 +154,37 @@ export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
      * @param el HTMLElement to render it in
      */
     renderSuggestion(toolbar: ToolbarSettings, el: HTMLElement): void {
+        
         el.setAttribute('id', toolbar.uuid);
-        let toolbarNameEl = el.createSpan();
-        toolbarNameEl.setText(toolbar.name);
-        if (toolbar.uuid === EMPTY_TOOLBAR_ID) {
-            el.addClass('cm-em');
+        el.addClass('note-toolbar-item-suggestion');
+
+		const containerEl = el.createDiv();
+		containerEl.addClass('note-toolbar-tbar-suggestion-container');
+        this.ntb.settingsUtils.renderToolbarName(toolbar, containerEl, true);
+
+        const isSpecialToolbar = [EMPTY_TOOLBAR_ID, NONE_TOOLBAR_ID].includes(toolbar.uuid);
+        if (isSpecialToolbar) {
+            containerEl.addClass('cm-em');
+            return;
         }
-        if (this.showPreviews && toolbar.uuid !== EMPTY_TOOLBAR_ID) {
-            let previewContainerEl = el.createDiv();
+
+        if (this.showPreviews) {
+            const previewContainerEl = containerEl.createDiv();
             previewContainerEl.addClass('setting-item-description');
-            let previewEl = previewContainerEl.createDiv();
+            const previewEl = previewContainerEl.createDiv();
             previewEl.addClass('note-toolbar-setting-toolbar-list-preview-item');
-            let previewFr = this.ntb.settingsUtils.createToolbarPreviewFr(toolbar, undefined);
+            const previewFr = this.ntb.settingsUtils.createToolbarPreviewFr(toolbar, undefined);
             previewEl.append(previewFr);
-            el.append(previewContainerEl);
+            containerEl.append(previewContainerEl);
         }
+
     }
 
     /**
      * Closes the modal and executes the given item.
      * @param toolbar ToolbarSettings to use.
      */
-    async onChooseSuggestion(toolbar: ToolbarSettings, event: MouseEvent | KeyboardEvent) {
-        await this.ntb.settingsManager.updateRecentList(LocalVar.RecentToolbars, toolbar.name);
+    onChooseSuggestion(toolbar: ToolbarSettings, event: MouseEvent | KeyboardEvent) {
         // open the toolbar editor if the proper key modifiers are pressed
         const isModifierPressed = (Platform.isWin || Platform.isLinux) ? event?.ctrlKey : event?.metaKey;
         if (isModifierPressed && event?.shiftKey && !event?.altKey) {
@@ -175,16 +198,17 @@ export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
             this.callback(toolbar);
             this.close();
         }
+        void this.ntb.settingsManager.updateRecentList(LocalVar.RecentToolbars, toolbar.name);
     }
 
     /**
      * Handle case where keyboard with meta key is used to make selection. 
      * @param event KeyboardEvent
      */
-    async handleKeyboardSelection(event: KeyboardEvent) {
+    handleKeyboardSelection(event: KeyboardEvent) {
         const selectedItem = this.modalEl.querySelector('.suggestion-item.is-selected');
         const selected = selectedItem?.id ? this.ntb.settingsManager.getToolbarById(selectedItem?.id) : undefined;
-        selected ? this.onChooseSuggestion(selected, event) : undefined;
+        if (selected) this.onChooseSuggestion(selected, event);
     }
 
 }

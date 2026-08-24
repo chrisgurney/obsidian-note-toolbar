@@ -1,9 +1,27 @@
 import galleryItems from "Gallery/gallery-items.json";
 import NoteToolbarPlugin from "main";
-import { DEFAULT_ITEM_VISIBILITY_SETTINGS, EMPTY_TOOLBAR, EMPTY_TOOLBAR_ID, ItemType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
-import ToolbarSuggestModal from "Settings/UI/Modals/ToolbarSuggestModal";
+import { getIcon, Notice, PaneType, Platform } from "obsidian";
+import { DEFAULT_ITEM_VISIBILITY_SETTINGS, EMPTY_TOOLBAR, EMPTY_TOOLBAR_ID, ItemFocusType, ItemType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { confirmWithModal } from "Settings/UI/Modals/ConfirmModal";
-import { Notice, Platform } from "obsidian";
+import MessageModal from "Settings/UI/Modals/MessageModal";
+import ToolbarSuggestModal from "Settings/UI/Modals/ToolbarSuggestModal";
+import { URLS } from "Utils/Urls";
+
+export type GalleryItemSettings = {
+    id: string;
+    commandCheck?: boolean;
+    commandId?: string;
+    description?: Record<string, string>;
+    excludeOn?: string | string[];
+    focus?: ItemFocusType;
+    icon: string;
+    plugin?: string | string[];
+    script?: string;
+    target?: PaneType | 'modal';
+    tooltip?: Record<string, string>;
+    type: ItemType;
+    uri?: string;
+}
 
 export default class GalleryManager {
 
@@ -27,7 +45,8 @@ export default class GalleryManager {
         const added: ToolbarItemSettings[] = [];
         let currentPosition = position;
         for (const item of items) {
-            let newItem = await this.ntb.settingsManager.duplicateToolbarItem(toolbar, item, currentPosition);
+            if (item.linkAttr.type === ItemType.Additional) continue;
+            const newItem = await this.ntb.settingsManager.duplicateToolbarItem(toolbar, item, currentPosition);
             const isResolved = await this.ntb.settingsManager.resolveGalleryItem(newItem);
             if (!isResolved) continue;
             if (currentPosition !== undefined) currentPosition++;
@@ -46,7 +65,7 @@ export default class GalleryManager {
 	 */
 	async addItemWithPrompt(galleryItem: ToolbarItemSettings): Promise<void> {
 
-        const addItemToToolbar = async (toolbar: ToolbarSettings) => {
+        const addItemToToolbar = async (toolbar: ToolbarSettings): Promise<void> => {
 			if (toolbar && galleryItem) {
 				if (toolbar.uuid === EMPTY_TOOLBAR_ID) {
 					toolbar = await this.ntb.settingsManager.newToolbar();
@@ -60,10 +79,11 @@ export default class GalleryManager {
 			}
         }
         
-        const toolbarSuggester = new ToolbarSuggestModal(this.ntb, true, false, true, async (toolbar: ToolbarSettings) => addItemToToolbar(toolbar));
+        const toolbarSuggester = new ToolbarSuggestModal(this.ntb, true, false, true, (toolbar: ToolbarSettings) => void addItemToToolbar(toolbar));
 
-        const doNextStep = () => {
-            (this.ntb.settings.toolbars.length > 0) ? toolbarSuggester.open() : addItemToToolbar(EMPTY_TOOLBAR);
+        const doNextStep = async () => {
+            if (this.ntb.settings.toolbars.length > 0) toolbarSuggester.open()
+                else await addItemToToolbar(EMPTY_TOOLBAR);
         }
 
         // prompt: confirm with user if they would like to enable scripting
@@ -72,6 +92,17 @@ export default class GalleryManager {
 
         // prompts for certain item types
         switch (galleryItem.linkAttr.type) {
+			case ItemType.Additional: {
+				const messageModal = new MessageModal(
+					this.ntb, 
+					t('gallery.label-additional-title', { item: galleryItem.tooltip }), 
+					t('gallery.label-additional-description'),
+					URLS.GH_USER_GUIDE + '/Additional-Gallery-items', 
+					t('gallery.label-additional-cta')
+				);
+				messageModal.open();
+				break;
+			}
             case ItemType.Command: {
                 // check if the item's command exists, before displaying toolbar modal
                 const command = this.ntb.app.commands.commands[galleryItem.linkAttr.commandId];
@@ -88,9 +119,9 @@ export default class GalleryManager {
                         approveLabel: t('setting.button-proceed'),
                         denyLabel: t('setting.button-cancel')
                     });
-                    if (proceedWithoutCommand) doNextStep();
+                    if (proceedWithoutCommand) await doNextStep();
                 }
-                else doNextStep();
+                else await doNextStep();
                 break;
             }
             case ItemType.JavaScript:
@@ -106,67 +137,137 @@ export default class GalleryManager {
                             approveLabel: t('setting.button-proceed'),
                             denyLabel: t('setting.button-cancel')
                         });
-                        if (proceedWithFileUri) doNextStep();
+                        if (proceedWithFileUri) await doNextStep();
                     }
-                    else doNextStep();
+                    else await doNextStep();
                 }
-                else doNextStep();
+                else await doNextStep();
                 break;
             default:
-                doNextStep();
+                await doNextStep();
                 break;
         }
 
 	}
 
+    async addItems(galleryItems: ToolbarItemSettings[], toolbarName: string): Promise<void> {
+        if (galleryItems.find((item) => item.linkAttr.type === ItemType.Additional)) {
+            const notice = new Notice(t('gallery.warning-additional-items'), 10000);
+            notice.containerEl.addClass('mod-warning');
+        }
+        const toolbar = await this.ntb.settingsManager.newToolbar(toolbarName);
+        const [newItems] = await this.addItemToToolbar(toolbar, galleryItems);
+        if (!newItems) return;
+        this.ntb.commands.openToolbarSettingsForId(toolbar.uuid);
+        new Notice(
+            t('gallery.notice-toolbar-created', { toolbar: toolbar.name, interpolation: { escapeValue: false } })
+        ).containerEl.addClass('mod-success');
+    }
+
+    /**
+     * Returns an item based on the ID requested.
+     * @param id UUID of the item
+     * @returns ToolbarItemSettings or undefined
+     */
     getItemById(id: string): ToolbarItemSettings | undefined {
-        return this.getItems().find((item: any) => item.uuid === id);
+        return this.getItems().find((item) => item.uuid === id);
+    }
+
+    /**
+     * Returns corresponding items in the order of the IDs requested.
+     * @param ids UUIDs of the items
+     * @returns ToolbarItemsSettings array of items requested
+     */
+    getItemsById(ids: string[]): ToolbarItemSettings[] {
+        const items = new Map(
+            this.getItems().map(item => [item.uuid, item])
+        );
+
+        return ids
+            .map(id => items.get(id))
+            .filter((item): item is ToolbarItemSettings => item !== undefined);
     }
 
     private loadItems() {
-        const startTime = performance.now();
+        const loadStartTime = performance.now();
         
         const language = (typeof i18next.language === 'string' && i18next.language.trim()) || 'en';
-        this.items = galleryItems
-            .filter((item: any) => {
-                const excludeOn = item.excludeOn
-                    ? (Array.isArray(item.excludeOn) ? item.excludeOn : [item.excludeOn])
-                    : [];
-                return !(
-                    (excludeOn.includes('mobile') && Platform.isMobile) ||
-                    (excludeOn.includes('desktop') && Platform.isDesktop) ||
-                    (excludeOn.includes('phone') && Platform.isPhone)
-                );
-            })
-            .map((item: any) => ({
+        const typedGalleryItems = galleryItems as GalleryItemSettings[];
+
+        let debugLog = '';
+        this.items = [];
+        for (const item of typedGalleryItems) {
+
+            const excludeOn = item.excludeOn
+                ? (Array.isArray(item.excludeOn) ? item.excludeOn : [item.excludeOn])
+                : [];
+            if (
+                (excludeOn.includes('mobile') && Platform.isMobile) ||
+                (excludeOn.includes('desktop') && Platform.isDesktop) ||
+                (excludeOn.includes('phone') && Platform.isPhone)
+            ) {
+                debugLog += `| ${item.id}: SKIPPED item not available on platform\n`;
+                continue;
+            }
+
+            if (item.type === ItemType.Command) {
+                if (!item.commandId) {
+                    debugLog += `⚠️ ${item.id}: Command not defined for item\n`;
+                    continue;
+                }
+                if (!(item.commandId in this.ntb.app.commands.commands)) {
+                     // non-fatal error, as it may be for plugin that's not installed/enabled
+                    debugLog += `| ${item.id}: No such command: ${item.commandId}\n`;
+                }
+            }
+
+            const hasIcon = getIcon(item.icon);
+            if (!hasIcon) {
+                // non-fatal error, can display item anyway
+                debugLog += `⚠️ ${item.id}: No such icon: ${item.icon}\n`;
+            }
+
+            this.items.push({
                 uuid: item.id ?? '',
-                description: item.description ? (item.description[language] || item.description['en']) : '',
+                description: item.description
+                    ? (item.description[language] || item.description['en'])
+                    : '',
                 hasCommand: false,
                 icon: item.icon ?? '',
                 inGallery: true,
-                label: item.label ? (item.label[language] || item.label['en']) : '',
+                label: '',
                 link: item.uri ?? '',
                 linkAttr: {
                     commandCheck: item.commandCheck ?? false,
                     commandId: item.commandId ?? '',
                     focus: item.focus || undefined,
                     hasVars: false,
-                    target: item.target ?? '',
+                    target: item.target ?? undefined,
                     type: item.type
                 },
                 plugin: item.plugin ?? '',
-                scriptConfig: item.script ? {
-                    expression: item.script ?? '',
-                    pluginFunction: 'TBD'
-                } : undefined,
-                tooltip: item.tooltip ? (item.tooltip[language] || item.tooltip['en']) : '',
-                visibility: DEFAULT_ITEM_VISIBILITY_SETTINGS
-            }));
+                scriptConfig: item.script
+                    ? {
+                        expression: item.script,
+                        pluginFunction: 'TBD'
+                    }
+                    : undefined,
+                tooltip: item.tooltip
+                    ? (item.tooltip[language] || item.tooltip['en'])
+                    : '',
+                visibility: { ...DEFAULT_ITEM_VISIBILITY_SETTINGS }
+            });
+        }
         
         this.items.sort((a, b) => a.tooltip.localeCompare(b.tooltip));
 
-        const endTime = performance.now();
-        this.ntb.debug(`Gallery loaded in ${endTime - startTime} ms`);
+        const loadEndTime = performance.now();
+
+        if (debugLog) {
+            this.ntb.debug(`GalleryManager: Warnings/Errors while loading Gallery:\n${debugLog}`);
+        }
+        this.ntb.debug(`Gallery loaded in ${(loadEndTime - loadStartTime).toFixed(3)}s`);
+
     }
 
 }

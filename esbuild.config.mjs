@@ -132,6 +132,33 @@ const eslintPlugin = {
 	},
 };
 
+const stylelintPlugin = {
+	name: 'stylelint',
+	setup(build) {
+		build.onEnd(async () => {
+			return new Promise((resolve) => {
+				console.log('[stylelint] running...');
+				const stylelint = spawn('npx', ['stylelint', '**/*.css'], {
+					stdio: 'inherit',
+					shell: true, // needed for Windows
+					env: {
+						...process.env,
+						NODE_OPTIONS: '--no-warnings'
+					}
+				});
+				stylelint.on('close', (code) => {
+					if (code === 0) {
+						console.log('\x1b[32m[stylelint] ✓ passed\x1b[0m');
+					} else {
+						console.log('\x1b[33m[stylelint] ⚠ warnings/errors found\x1b[0m');
+					}
+					resolve();
+				});
+			});
+		});
+	},
+};
+
 // copy configured files into the external wiki repo, only if contents changed
 const copyToWikiPlugin = {
 	name: 'copy-to-wiki',
@@ -173,6 +200,7 @@ const stylesPlugin = {
 	  build.onEnd(async () => {
 		try {
 			if (fileInliner('src/Styles/styles.css', 'styles.css')) isDocsChange = true;
+			if (isDocsChange) console.log(`\x1b[32m[styles] ✓ generated styles.css\x1b[0m`);
 		} catch (error) {
 			console.error("\x1b[31m[styles] Error:\x1b[0m", error);
 			process.exit(1);
@@ -293,6 +321,7 @@ const context = await esbuild.context({
 		galleryDocsPlugin, 
 		typecheckPlugin, 
 		eslintPlugin, 
+		stylelintPlugin,
 		copyToWikiPlugin, 
 		buildEnd
 	],
@@ -314,7 +343,7 @@ if (prod) {
 		console.log('[watch] watching for changes...');
 	});
 	watcher.on('change', async (path) => {
-		console.log(`[watch] file changed: ${path}`);
+		console.log(`[watch] file modified: ${path}`);
 		try {
 			await context.rebuild();
 		} 

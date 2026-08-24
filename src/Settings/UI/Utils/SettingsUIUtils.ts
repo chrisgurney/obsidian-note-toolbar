@@ -1,13 +1,14 @@
 import NoteToolbarPlugin from "main";
-import { ButtonComponent, getIcon, ItemView, Notice, Platform, setIcon, Setting, setTooltip, TFile, TFolder, ToggleComponent } from "obsidian";
-import { COMMAND_DOES_NOT_EXIST, ComponentType, DEFAULT_ITEM_VISIBILITY_SETTINGS, IGNORE_PLUGIN_IDS, ItemComponentVisibility, ItemType, ScriptConfig, SettingType, t, ToolbarItemSettings, ToolbarSettings, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_WHATS_NEW, ViewModeType, WHATSNEW_VERSION } from "Settings/NoteToolbarSettings";
+import { ButtonComponent, Component, getIcon, ItemView, MarkdownRenderer, Notice, Platform, requireApiVersion, setIcon, Setting, setTooltip, TFile, TFolder, ToggleComponent } from "obsidian";
+import { COMMAND_DOES_NOT_EXIST, ComponentType, DEFAULT_ITEM_VISIBILITY_SETTINGS, IGNORE_PLUGIN_IDS, ItemComponentVisibility, ItemType, SettingType, t, ToolbarItemSettings, ToolbarSettings, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_WHATS_NEW, ViewModeType, Visibility, WHATSNEW_VERSION } from "Settings/NoteToolbarSettings";
 import SettingsManager from "Settings/SettingsManager";
-import { URL_GH_USER_GUIDE } from "Utils/Urls";
+import { URLS } from "Utils/Urls";
 import { hasVisibleComponents, importArgs } from "Utils/Utils";
 import { PLUGIN_VERSION } from "version";
 import { confirmWithModal } from "../Modals/ConfirmModal";
 import ItemModal from "../Modals/ItemModal";
 import ItemSuggestModal, { ItemSuggestMode } from "../Modals/ItemSuggestModal";
+import MessageModal from "../Modals/MessageModal";
 import ToolbarSettingsModal from "../Modals/ToolbarSettingsModal";
 import ToolbarSuggestModal from "../Modals/ToolbarSuggestModal";
 import NoteToolbarSettingTab from "../NoteToolbarSettingTab";
@@ -30,11 +31,11 @@ export default class SettingsUIUtils {
 
 	addCloseToPhoneNav(view: ItemView) {
 		if (!Platform.isPhone) return;
-		const closeButton = activeDocument.createElement('button');
+		const closeButton = createEl('button');
 		setIcon(closeButton, 'x');
 		setTooltip(closeButton, t('setting.help.button-close'));
 		closeButton.addClasses(['clickable-icon', 'view-action']);
-		this.ntb.registerDomEvent(closeButton, 'click', (e) => view.leaf?.detach());
+		this.ntb.registerDomEvent(closeButton, 'click', () => view.leaf?.detach());
 		const viewEl = view.leaf?.containerEl as HTMLElement | null;
 		const viewActionsEl = viewEl?.querySelector('.view-actions') as HTMLElement;
 		viewActionsEl?.insertAdjacentElement('afterbegin', closeButton);
@@ -46,11 +47,11 @@ export default class SettingsUIUtils {
 	 * @param onConfirm callback to execute after successful deletion
 	 */
 	async confirmDeleteToolbar(toolbar: ToolbarSettings, onConfirm: () => void): Promise<void> {
-		const questionFr = activeDocument.createDocumentFragment();
+		const questionFr = new DocumentFragment();
 		questionFr.createEl('p', { text: t('setting.delete-toolbar.label-delete-confirm') });
 		questionFr.createEl('p', { text: t('setting.delete-toolbar.warning-permanent') });
 
-		const notesFr = activeDocument.createDocumentFragment();
+		const notesFr = new DocumentFragment();
 		const warningsFr = notesFr.createEl('ul');
 
 		// warnings if this toolbar is assigned to any app locations
@@ -62,19 +63,35 @@ export default class SettingsUIUtils {
 			}
 		});
 
+		// warnings if this toolbar is in use in the ribbon
+		if (this.ntb.settings.ribbon.some(ribbonItem => ribbonItem.uuid === toolbar.uuid)) {
+			warningsFr
+				.createEl('li', { text: t('setting.delete-toolbar.warning-ribbon-toolbar') })
+				.addClass('mod-warning');
+		}
+		// check if any toolbar items are in use in the ribbon
+		const toolbarItemIds = new Set(toolbar.items.map(item => item.uuid));
+		if (this.ntb.settings.ribbon.some(ribbonItem => toolbarItemIds.has(ribbonItem.uuid))) {
+			warningsFr
+				.createEl('li', { text: t('setting.delete-toolbar.warning-ribbon-items') })
+				.addClass('mod-warning');
+		}
+
 		// check usage stats
-		let usageStats = this.ntb.settingsUtils.getToolbarUsageText(toolbar);
+		const usageStats = this.ntb.settingsUtils.getToolbarUsageText(toolbar);
 		if (usageStats) {
 			warningsFr.createEl('li', { text: t('setting.usage.description') + usageStats });
 		}
 
 		// add usage note
-		warningsFr.createEl('li', { 
-			text: t('setting.delete-toolbar.label-usage-note', { 
-				propertyName: this.ntb.settings.toolbarProp, 
-				toolbarName: toolbar.name 
-			}) 
-		});
+		if (toolbar.name !== '') {
+			warningsFr.createEl('li', { 
+				text: t('setting.delete-toolbar.label-usage-note', { 
+					propertyName: this.ntb.settings.toolbarProp, 
+					toolbarName: toolbar.name 
+				}) 
+			});
+		}
 
 		// confirm and delete
 		const isConfirmed = await confirmWithModal(this.ntb.app, {
@@ -103,19 +120,19 @@ export default class SettingsUIUtils {
 		title: string,
 		content: string,
 	): HTMLElement {
-		let containerEl = createDiv();
-		let setting = new Setting(containerEl)
+		const containerEl = createDiv();
+		const setting = new Setting(containerEl)
 			.setName(title)
 			.setDesc(content)
 			.setClass('note-toolbar-setting-plugin-onboarding')
 			.addExtraButton((button) => {
 				button
 					.setIcon('cross')
-					.setTooltip("Dismiss") // FIXME: localize string
-					.onClick(() => {
+					.setTooltip(t('onboarding.tooltip-dismiss'))
+					.onClick(async () => {
 						setting.settingEl.remove();
 						this.ntb.settings.onboarding[messageId] = true;
-						this.ntb.settingsManager.save();
+						await this.ntb.settingsManager.save();
 					});
 				button.extraSettingsEl.addClass('note-toolbar-setting-plugin-onboarding-close');
 				this.handleKeyClick(button.extraSettingsEl);
@@ -136,12 +153,12 @@ export default class SettingsUIUtils {
 		showEditLink: boolean = false
 	): DocumentFragment {
 
-		const toolbarFr: DocumentFragment = document.createDocumentFragment();
+		const toolbarFr: DocumentFragment = new DocumentFragment();
 
 		const previewContainer = toolbarFr.createDiv();
 		previewContainer.addClass('note-toolbar-setting-tbar-preview');
 
-		const itemsFr: DocumentFragment = document.createDocumentFragment();
+		const itemsFr: DocumentFragment = new DocumentFragment();
 
 		if (toolbar.items.length > 0) {
 			toolbar.items
@@ -180,7 +197,7 @@ export default class SettingsUIUtils {
 								defaultItemFr.addClass("note-toolbar-setting-toolbar-list-preview-item");
 								if (item.icon) {
 									if (itemIcon) {
-										const iconFr = document.createDocumentFragment();
+										const iconFr = new DocumentFragment();
 										iconFr.appendChild(itemIcon.cloneNode(true) as SVGSVGElement);
 										defaultItemFr.append(iconFr);
 									}
@@ -211,12 +228,12 @@ export default class SettingsUIUtils {
 		previewContainer.appendChild(itemsFr);
 
 		if (showEditLink) {
-			let toolbarLinkContainer = createDiv();
+			const toolbarLinkContainer = createDiv();
 			toolbarLinkContainer.addClass('note-toolbar-setting-tbar-preview-edit');
-			let toolbarLink = createEl('a');
-			toolbarLink.href = "obsidian://note-toolbar?toolbarsettings=" + encodeURIComponent(toolbar.name);
-			toolbarLink.setText(t('setting.item.label-preview-edit', { toolbar: toolbar.name, interpolation: { escapeValue: false } }));
-			toolbarLinkContainer.appendChild(toolbarLink);
+			const toolbarLinkEl = createEl('a');
+			toolbarLinkEl.addEventListener('click', () => this.ntb.settingsManager.openToolbarSettings(toolbar));
+			toolbarLinkEl.setText(t('setting.item.label-preview-edit', { toolbar: toolbar.name, interpolation: { escapeValue: false } }));
+			toolbarLinkContainer.appendChild(toolbarLinkEl);
 			toolbarFr.appendChild(toolbarLinkContainer);
 		}
 
@@ -234,28 +251,28 @@ export default class SettingsUIUtils {
 		
 		if (Platform.isPhone || useTextVersion) {
 
-			let helpContainerEl = settingsDiv.createDiv();
+			const helpContainerEl = settingsDiv.createDiv();
 			helpContainerEl.addClass('note-toolbar-setting-help-section-phone');
 
-			const helpDesc = document.createDocumentFragment();
+			const helpDesc = new DocumentFragment();
 			helpDesc.append("v" + PLUGIN_VERSION, " • ");
 			const whatsNewLink = helpDesc.createEl("a", { href: "#", text: t('setting.button-whats-new') });
-			this.ntb.registerDomEvent(whatsNewLink, 'click', (event) => { 
-				this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_WHATS_NEW, active: true });
+			this.ntb.registerDomEvent(whatsNewLink, 'click', async () => { 
+				await this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_WHATS_NEW, active: true });
 				if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
 				closeCallback();
 			});
 			helpDesc.append(' • ');
 			const galleryLink = helpDesc.createEl("a", { href: "#", text: iconTextFr('layout-grid', t('setting.button-gallery')) });
-			this.ntb.registerDomEvent(galleryLink, 'click', (event) => { 
-				this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true });
+			this.ntb.registerDomEvent(galleryLink, 'click', async () => { 
+				await this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true });
 				if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
 				closeCallback();
 			});
 			helpDesc.append(' • ');
 			const helpLink = helpDesc.createEl("a", { href: "#", text: iconTextFr('help-circle', t('setting.button-help')) });
-			this.ntb.registerDomEvent(helpLink, 'click', (event) => { 
-				this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_HELP, active: true });
+			this.ntb.registerDomEvent(helpLink, 'click', async () => { 
+				await this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_HELP, active: true });
 				if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
 				closeCallback();
 			});
@@ -264,10 +281,10 @@ export default class SettingsUIUtils {
 		}
 		else {
 
-			const helpDesc = document.createDocumentFragment();
+			const helpDesc = new DocumentFragment();
 			const whatsNewLink = helpDesc.createEl("a", { href: "#", text: t('setting.button-whats-new') });
-			this.ntb.registerDomEvent(whatsNewLink, 'click', (event) => { 
-				this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_WHATS_NEW, active: true });
+			this.ntb.registerDomEvent(whatsNewLink, 'click', async () => { 
+				await this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_WHATS_NEW, active: true });
 				if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
 				closeCallback();
 			});
@@ -279,8 +296,8 @@ export default class SettingsUIUtils {
 				.addButton((button: ButtonComponent) => {
 					button
 						.setTooltip(t('setting.button-gallery-tooltip'))
-						.onClick(() => {
-							this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true });
+						.onClick(async () => {
+							await this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true });
 							if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
 							closeCallback();
 						})
@@ -289,8 +306,8 @@ export default class SettingsUIUtils {
 				.addButton((button: ButtonComponent) => {
 					button
 						.setTooltip(t('setting.button-help-tooltip'))
-						.onClick(() => {
-							this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_HELP, active: true });
+						.onClick(async () => {
+							await this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_HELP, active: true });
 							if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
 							closeCallback();
 						})
@@ -308,8 +325,8 @@ export default class SettingsUIUtils {
 	 */
 	emptyMessageFr(message: string, linkText?: string, linkCallback?: () => void): DocumentFragment {
 
-		let messageFr = document.createDocumentFragment();
-		let messageFrText = document.createElement("i");
+		const messageFr = new DocumentFragment();
+		const messageFrText = createEl('i');
 		messageFrText.textContent = message;
 		messageFr.append(messageFrText);
 
@@ -359,7 +376,7 @@ export default class SettingsUIUtils {
 	 * @returns string 'obsidian://' URI.
 	 */
 	private getToolbarPropSearchUri(toolbarName: string): string {
-		let searchUri = 'obsidian://search?vault=' + this.ntb.app.vault.getName() + '&query=[' + this.ntb.settings.toolbarProp + ': ' + toolbarName + ']';
+		const searchUri = 'obsidian://search?vault=' + this.ntb.app.vault.getName() + '&query=[' + this.ntb.settings.toolbarProp + ': ' + toolbarName + ']';
 		return encodeURI(searchUri);
 	}
 
@@ -369,8 +386,8 @@ export default class SettingsUIUtils {
 	 * @returns mappingCount and itemCount
 	 */
 	private getToolbarSettingsUsage(id: string): [number, number] {
-		let mappingCount = this.ntb.settings.folderMappings.filter(mapping => mapping.toolbar === id).length;
-		let itemCount = this.ntb.settings.toolbars.reduce((count, toolbar) => {
+		const mappingCount = this.ntb.settings.folderMappings.filter(mapping => mapping.toolbar === id).length;
+		const itemCount = this.ntb.settings.toolbars.reduce((count, toolbar) => {
 			return count + toolbar.items.filter(item => 
 				item.link === id && (item.linkAttr.type === ItemType.Group || item.linkAttr.type === ItemType.Menu)
 			).length;
@@ -379,8 +396,8 @@ export default class SettingsUIUtils {
 	}
 
 	getToolbarUsageFr(toolbar: ToolbarSettings, parent: ToolbarSettingsModal): DocumentFragment {
-		let usageFr = document.createDocumentFragment();
-		let usageStats = this.getToolbarUsageText(toolbar);
+		const usageFr = new DocumentFragment();
+		const usageStats = this.getToolbarUsageText(toolbar);
 		if (usageStats) {
 			usageFr.append(t('setting.usage.description'));
 			usageFr.append(usageFr.createEl("br"));
@@ -409,23 +426,27 @@ export default class SettingsUIUtils {
 	 */
 	getToolbarUsageText(toolbar: ToolbarSettings): string {
 		const [ mappingCount, itemCount ] = this.getToolbarSettingsUsage(toolbar.uuid);
-		let usage: String[] = [];
+		const usage: string[] = [];
 		if (mappingCount > 0) usage.push(t('setting.usage.description-mappings', { count: mappingCount }));
 		if (itemCount > 0) usage.push(t('setting.usage.description-toolbar-items', { count: itemCount }));
 		return (usage.length > 0) ? usage.join(', ') : '';
 	}
 
 	handleKeyClick(el: HTMLElement) {
-		el.tabIndex = 0;
-		this.ntb.registerDomEvent(
-			el, 'keydown', (evt) => {
-				switch (evt.key) {
-					case 'Enter':
-					case ' ':
-						evt.preventDefault();
-						el.click();
-				}
-			});
+		// workaround no longer needed after Obsidian 1.13
+		if (!requireApiVersion('1.13.0')) {
+			el.tabIndex = 0;
+			this.ntb.registerDomEvent(
+				el, 'keydown', (evt) => {
+					this.ntb.debug('HANDLE KEY CLICK');
+					switch (evt.key) {
+						case 'Enter':
+						case ' ':
+							evt.preventDefault();
+							el.click();
+					}
+				});
+		}
 	}
 
 	/**
@@ -440,44 +461,58 @@ export default class SettingsUIUtils {
 		const modal = new ItemSuggestModal(
 			this.ntb, 
 			undefined, 
-			async (selectedItem: ToolbarItemSettings) => {
-				
-				const isBrowseGalleryItem = selectedItem.uuid === 'OPEN_GALLERY';
-				if (isBrowseGalleryItem) {
-					this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true });
-					if (parent) parent.close();
-					return;
-				}
-
-				const isEmptyItem = selectedItem.uuid === 'NEW_ITEM';
-				if (isEmptyItem) selectedItem.label = selectedItem.tooltip = '';
-				if (isEmptyItem && parent) {
-					const itemContainer = parent.contentEl.querySelector('.note-toolbar-sortablejs-list') as HTMLElement;
-					if (itemContainer) {
-						await parent.itemListUi.addItemHandler(selectedItem.linkAttr.type, itemContainer);
+			(selectedItem: ToolbarItemSettings) => {
+				const handleSelectedItem = async () => {
+					const isBrowseGalleryItem = selectedItem.uuid === 'OPEN_GALLERY';
+					if (isBrowseGalleryItem) {
+						void this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true });
+						if (parent) parent.close();
 						return;
 					}
-				}
 
-				let newItem = await this.ntb.settingsManager.duplicateToolbarItem(toolbar, selectedItem, toolbarInsertIndex);
-				// reset the visibility setting, as there's no prior indication to the user as to its visibility
-				newItem.visibility = JSON.parse(JSON.stringify(DEFAULT_ITEM_VISIBILITY_SETTINGS));
+					const isEmptyItem = selectedItem.uuid === 'NEW_ITEM';
+					if (isEmptyItem) selectedItem.label = selectedItem.tooltip = '';
+					if (isEmptyItem && parent) {
+						const itemContainer = parent.contentEl.querySelector('.note-toolbar-sortablejs-list') as HTMLElement;
+						if (itemContainer) {
+							void parent.itemListUi.addItemHandler(selectedItem.linkAttr.type, itemContainer);
+							return;
+						}
+					}
 
-				// confirm with user if they would like to enable scripting
-				const isScriptingEnabled = await this.openScriptPrompt(newItem);
-				if (!isScriptingEnabled) return;
+					const isAdditionalItem = selectedItem.linkAttr.type === ItemType.Additional;
+					if (isAdditionalItem) {
+						const messageModal = new MessageModal(
+							this.ntb, 
+							t('gallery.label-additional-title', { item: selectedItem.tooltip }), 
+							t('gallery.label-additional-description'),
+							URLS.GH_USER_GUIDE + '/Additional-Gallery-items', 
+							t('gallery.label-additional-cta')
+						);
+						messageModal.open();
+						return;
+					}
 
-				if (selectedItem.inGallery && !(await this.ntb.settingsManager.resolveGalleryItem(newItem))) return;
-				
-				toolbar.updated = new Date().toISOString();
-				await this.ntb.settingsManager.save();
+					const newItem = await this.ntb.settingsManager.duplicateToolbarItem(toolbar, selectedItem, toolbarInsertIndex);
+					// reset the visibility setting, as there's no prior indication to the user as to its visibility
+					newItem.visibility = JSON.parse(JSON.stringify(DEFAULT_ITEM_VISIBILITY_SETTINGS)) as Visibility;
 
-				if (isEmptyItem) new ItemModal(this.ntb, toolbar, newItem).open()
-				else new Notice(t('setting.add-item.notice-item-added', { toolbarName: toolbar.name, interpolation: { escapeValue: false } })).containerEl.addClass('mod-success');
+					// confirm with user if they would like to enable scripting
+					const isScriptingEnabled = await this.openScriptPrompt(newItem);
+					if (!isScriptingEnabled) return;
 
-				parent?.display(newItem.uuid);
+					if (selectedItem.inGallery && !(await this.ntb.settingsManager.resolveGalleryItem(newItem))) return;
+					
+					toolbar.updated = new Date().toISOString();
+					await this.ntb.settingsManager.save();
 
-			}, 
+					if (isEmptyItem) new ItemModal(this.ntb, toolbar, newItem).open()
+					else new Notice(t('setting.add-item.notice-item-added', { toolbarName: toolbar.name, interpolation: { escapeValue: false } })).containerEl.addClass('mod-success');
+
+					parent?.display(newItem.uuid);
+				};
+				void handleSelectedItem();
+			},
 			mode
 		);
 		modal.open();
@@ -516,14 +551,12 @@ export default class SettingsUIUtils {
 
 	/**
 	 * Copies an item to a toolbar of the user's choice.
-	 * @param fromToolbar toolbar to copy the item from
 	 * @param item item to copy
 	 */
-	async copyToolbarItem(fromToolbar: ToolbarSettings, item: ToolbarItemSettings): Promise<void> {
-		const modal = new ToolbarSuggestModal(this.ntb, false, false, false, async (toToolbar: ToolbarSettings) => {
+	copyToolbarItem(item: ToolbarItemSettings) {
+		const modal = new ToolbarSuggestModal(this.ntb, false, false, false, (toToolbar: ToolbarSettings) => {
 			if (toToolbar) {
-				await this.ntb.settingsManager.duplicateToolbarItem(toToolbar, item);
-				await this.ntb.settingsManager.save();
+				void this.ntb.settingsManager.duplicateToolbarItem(toToolbar, item).then(() => this.ntb.settingsManager.save());
 				new Notice(t('setting.item.menu-copy-item-notice', { toolbarName: toToolbar.name })).containerEl.addClass('mod-success');
 			}
 		});
@@ -536,14 +569,15 @@ export default class SettingsUIUtils {
 	 * @param item item to move
 	 * @param callback function to execute after move is complete, to update the UI as needed
 	 */
-	async moveToolbarItem(fromToolbar: ToolbarSettings, item: ToolbarItemSettings, callback: () => void | Promise<void>): Promise<void> {
-		const modal = new ToolbarSuggestModal(this.ntb, false, false, false, async (toToolbar: ToolbarSettings) => {
+	moveToolbarItem(fromToolbar: ToolbarSettings, item: ToolbarItemSettings, callback: () => void | Promise<void>) {
+		const modal = new ToolbarSuggestModal(this.ntb, false, false, false, (toToolbar: ToolbarSettings) => {
 			if (toToolbar) {
 				fromToolbar.items.remove(item);
 				fromToolbar.updated = new Date().toISOString();
-				this.ntb.settingsManager.addToolbarItem(toToolbar, item);
-				new Notice(t('setting.item.menu-move-item-notice', { toolbarName: toToolbar.name })).containerEl.addClass('mod-success');
-				await callback();
+				void this.ntb.settingsManager.addToolbarItem(toToolbar, item).then(() => {
+					new Notice(t('setting.item.menu-move-item-notice', { toolbarName: toToolbar.name })).containerEl.addClass('mod-success');
+					void callback();
+				});
 			}
 		});
 		modal.open();
@@ -572,35 +606,26 @@ export default class SettingsUIUtils {
 		itemMainEl.addClass('note-toolbar-item-suggestion-container');
 
 		if (item.icon) {
-			let svgExists = getIcon(item.icon);
+			const svgExists = getIcon(item.icon);
 			if (svgExists) {
-				let iconGlyphEl = itemMainEl.createSpan();
+				const iconGlyphEl = itemMainEl.createSpan();
 				setIcon(iconGlyphEl, item.icon);
 			}
 		}
-		let itemNameEl = itemMainEl.createSpan();
+		const itemNameEl = itemMainEl.createSpan();
 		let itemName = item.label || item.tooltip;
 
 		// fallback if no label or tooltip
-		let isItemNameLink = false;
-		if (!itemName) {
-			if (item.icon) {
-				isItemNameLink = true;
-				itemName = item.link;
-			}
-			else {
-				itemName = '';
-			}
-		}
+		if (!itemName) itemName = item.icon ? item.link : '';
 
 		itemNameEl.addClass("note-toolbar-item-suggester-name");
 		const itemLabelEl = itemNameEl.createSpan();
 
-		let title = itemName;
+		const title = itemName;
 		// replace variables in labels (or tooltip, if no label set)
 		const activeFile = this.ntb.app.workspace.getActiveFile();
 		if (replaceVars) {
-			this.ntb.vars.replaceVars(itemName, activeFile).then((resolvedName: string) => {
+			void this.ntb.vars.replaceVars(itemName, activeFile).then((resolvedName: string) => {
 				itemLabelEl.setText(resolvedName);
 			});
 		}
@@ -609,7 +634,7 @@ export default class SettingsUIUtils {
 		}
 		
 		if (showMeta) {
-			let itemMeta = itemNameEl.createSpan();
+			const itemMeta = itemNameEl.createSpan();
 			itemMeta.addClass("note-toolbar-item-suggester-type");
 			switch (item.linkAttr.type) {
 				case ItemType.Command:
@@ -643,7 +668,7 @@ export default class SettingsUIUtils {
 		const inputStrLower = inputStr.toLowerCase();
 		// if what's shown doesn't already contain the searched string, show it below
 		if (!title.toLowerCase().includes(inputStrLower)) {
-			let inputMatch = 
+			const inputMatch = 
 				item.label.toLowerCase().includes(inputStrLower)
 					? item.label
 					: item.tooltip.toLowerCase().includes(inputStrLower) 
@@ -661,7 +686,7 @@ export default class SettingsUIUtils {
 
 			// show the plugin(s) supported, or the command ID used
 			if ([ItemType.Command, ItemType.Dataview, ItemType.JsEngine, ItemType.Plugin, ItemType.Templater].contains(item.linkAttr.type)) {
-				let itemPluginText = this.getPluginNames(item);
+				const itemPluginText = this.getPluginNames(item);
 				if (itemPluginText) {
 					const pluginDescEl = el.createDiv();
 					pluginDescEl.addClass('note-toolbar-item-suggester-note');	
@@ -669,6 +694,45 @@ export default class SettingsUIUtils {
 					pluginDescEl.createSpan().setText(t('gallery.label-requires-plugin', { plugin: itemPluginText }));
 				}
 			}
+		}
+	}
+
+	renderToolbarName(toolbar: ToolbarSettings, el: HTMLElement | DocumentFragment, showDescription: boolean = false, showHotkey: boolean = false) {
+        const nameContainerEl = el.createDiv();
+        nameContainerEl.addClass('note-toolbar-tbar-name-container');
+
+        if (toolbar.icon) {
+            const iconEl = nameContainerEl.createSpan();
+            iconEl.addClass('note-toolbar-tbar-icon-muted');
+            setIcon(iconEl, toolbar.icon);
+        }
+
+        const toolbarNameEl = nameContainerEl.createSpan();
+        toolbarNameEl.addClass('note-toolbar-tbar-suggester-name');
+        toolbarNameEl.setText(toolbar.name || t('setting.toolbars.label-tbar-name-not-set'));
+
+		if (showHotkey && !Platform.isPhone) {
+			const tbarCommand = this.ntb.commands.getCommandFor(toolbar);
+			if (tbarCommand) {
+				const hotkeyEl = this.ntb.hotkeys.getHotkeyEl(tbarCommand);
+				if (hotkeyEl) {
+					nameContainerEl.appendChild(hotkeyEl);
+					setTooltip(hotkeyEl, t('setting.use-item-command.tooltip-command-indicator', { command: tbarCommand.name, interpolation: { escapeValue: false } }));
+				}
+				else {
+					const commandIconEl = nameContainerEl.createSpan();
+					commandIconEl.addClass('note-toolbar-setting-command-indicator');
+					setIcon(commandIconEl, 'terminal');
+					setTooltip(commandIconEl, t('setting.use-item-command.tooltip-command-indicator', { command: tbarCommand.name, interpolation: { escapeValue: false } }));
+				}
+			}
+		}
+
+		if (showDescription && toolbar.description) {
+			const descEl = nameContainerEl.createSpan();
+			descEl.addClass('note-toolbar-tbar-desc');
+			descEl.setText(toolbar.description);
+			setTooltip(descEl, toolbar.description);
 		}
 	}
 
@@ -694,10 +758,10 @@ export default class SettingsUIUtils {
 	 * @param errorLink Optional link to display after error text
 	 */
 	setFieldError(
-		parent: NoteToolbarSettingTab | ToolbarSettingsModal | ItemModal, 
+		parent: NoteToolbarSettingTab | ToolbarSettingsModal | ItemModal | null, 
 		fieldEl: HTMLElement | null, 
 		position: 'afterend' | 'beforeend',
-		errorText?: string, 
+		errorText?: string | DocumentFragment | HTMLElement, 
 		errorLink?: HTMLAnchorElement
 	) {
 		if (fieldEl) {
@@ -711,20 +775,28 @@ export default class SettingsUIUtils {
 					: fieldContainerEl?.querySelector('.note-toolbar-setting-field-error') !== null;
 			if (fieldContainerEl && !hasError) {
 				if (errorText) {
-					let errorDiv = createEl('div', { 
-						text: errorText, 
-						cls: 'note-toolbar-setting-field-error' });
+					const errorDiv = createDiv({ cls: 'note-toolbar-setting-field-error' });
+					if (typeof errorText === "string") {
+						const component = new Component();
+						component.load();
+						void MarkdownRenderer
+							.render(this.ntb.app, errorText, errorDiv, '', component)
+							.finally(() => component.unload());
+					}
+					else {
+						errorDiv.append(errorText);
+					}
 					if (errorLink) {
 						// as it's not easy to listen for plugins being enabled,
 						// user will have to click a refresh link to dismiss the error
 						this.ntb.registerDomEvent(errorLink, 'click', (event) => {
-							let refreshLink = document.createDocumentFragment().createEl('a', { text: t('setting.item.option-command-error-refresh'), href: '#' } );
-							let refreshIcon = refreshLink.createSpan();
+							const refreshLink = new DocumentFragment().createEl('a', { text: t('setting.item.option-command-error-refresh'), href: '#' } );
+							const refreshIcon = refreshLink.createSpan();
 							setIcon(refreshIcon, 'refresh-cw');
-							let oldLink = event.currentTarget as HTMLElement;
+							const oldLink = event.currentTarget as HTMLElement;
 							oldLink?.replaceWith(refreshLink);
-							this.ntb.registerDomEvent(refreshLink, 'click', event => {
-								parent.display();
+							this.ntb.registerDomEvent(refreshLink, 'click', () => {
+								parent?.display();
 							});
 						});
 						errorDiv.append(' ', errorLink);
@@ -743,9 +815,9 @@ export default class SettingsUIUtils {
 		const toolbarPreviewFr = toolbar && this.ntb.settingsUtils.createToolbarPreviewFr(toolbar, undefined, false);
 		removeFieldHelp(setting.controlEl);
 		setFieldHelp(setting.controlEl, toolbarPreviewFr);
-		const tbarEl = setting.controlEl.querySelector('.note-toolbar-setting-tbar-preview') as HTMLElement | null;
+		const tbarEl = setting.controlEl.querySelector('.note-toolbar-setting-tbar-preview');
 		// only apply fade if the preview is overflowing
-		if (tbarEl) activeWindow.setTimeout(() => {
+		if (tbarEl) window.setTimeout(() => {
 			tbarEl.classList.toggle('note-toolbar-setting-tbar-preview-fade', tbarEl.scrollWidth > tbarEl.clientWidth);
 		}, 0);
 	}
@@ -754,8 +826,10 @@ export default class SettingsUIUtils {
 	 * Shows the Help view (for onboarding) if the user hasn't seen it yet.
 	 */
 	showHelpViewIfNeeded() {
-		this.runOnboarding('startup-help-view', () => {
-			this.ntb.app.workspace.getLeaf(true).setViewState({	type: VIEW_TYPE_HELP, active: true });
+		void this.runOnboarding('startup-help-view', async () => {
+			const leaf = this.ntb.app.workspace.getLeaf(true);
+			await leaf.setViewState({ type: VIEW_TYPE_HELP, active: true });
+			await this.ntb.app.workspace.revealLeaf(leaf);
 		});
 	}
 
@@ -766,11 +840,10 @@ export default class SettingsUIUtils {
 		// show the What's New dialog once if the user hasn't seen it yet
 		if (this.ntb.settings.showWhatsNew && this.ntb.settings.whatsnew_version !== WHATSNEW_VERSION) {
 			this.ntb.settings.whatsnew_version = WHATSNEW_VERSION;
-			this.ntb.settingsManager.save().then(() => {
-				this.ntb.app.workspace.getLeaf(true).setViewState({
-					type: VIEW_TYPE_WHATS_NEW,
-					active: true
-				});
+			void this.ntb.settingsManager.save(false).then(async () => {
+				const leaf = this.ntb.app.workspace.getLeaf(true);
+				await leaf.setViewState({ type: VIEW_TYPE_WHATS_NEW, active: true });
+				await this.ntb.app.workspace.revealLeaf(leaf);
 			});
 		}
 	}
@@ -801,7 +874,7 @@ export default class SettingsUIUtils {
 		}
 
 		let status: Status = Status.Valid;
-		let statusMessage: string = '';
+		let statusMessage: string | DocumentFragment = '';
 		let statusLink: HTMLAnchorElement | undefined = undefined;
 		let isValid = true;
 
@@ -820,9 +893,9 @@ export default class SettingsUIUtils {
 				case SettingType.Args: {
 					const parsedArgs = importArgs(itemValue);
 					this.ntb.debug('validating args:', itemValue, parsedArgs);
-					if (!parsedArgs) {
+					if (parsedArgs.value === null) {
 						status = Status.Invalid;
-						statusMessage = t('adapter.error.args-format');
+						statusMessage = t('adapter.error.args-parsing-field-error', { error: parsedArgs.error });
 					}
 					break;
 				}
@@ -830,12 +903,23 @@ export default class SettingsUIUtils {
 					if (!(itemValue in this.ntb.app.commands.commands)) {
 						status = Status.Invalid;
 						if (itemValue === COMMAND_DOES_NOT_EXIST) {
-							statusMessage = t('setting.item.option-command-error-does-not-exist');
+							const statusFr = new DocumentFragment(); 
+							statusFr.append(t('setting.item.option-command-error-does-not-exist'));
+							statusFr.createEl('p', undefined, (el) => {
+								const link = createEl('a', { text: t('setting.item.option-command-help-gallery-link') });
+								link.onclick = async (e) => {
+									e.preventDefault();
+									if (parent instanceof ItemModal || parent instanceof ToolbarSettingsModal) parent.close();
+									await this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true });
+								};
+								el.append(t('setting.item.option-command-help-gallery'), ' ', link)
+							});
+							statusMessage = statusFr;
 						}
 						else {
 							statusMessage = t('setting.item.option-command-error-not-available-search');
-							let pluginLinkFragment = pluginLinkFr(itemValue);
-							let pluginLink = pluginLinkFragment?.querySelector('a');
+							const pluginLinkFragment = pluginLinkFr(itemValue);
+							const pluginLink = pluginLinkFragment?.querySelector('a');
 							if (pluginLink) {
 								statusMessage = t('setting.item.option-command-error-not-available-install');
 								pluginLink.addClass('note-toolbar-setting-focussable-link');
@@ -880,14 +964,14 @@ export default class SettingsUIUtils {
 				case SettingType.Script:
 					if (toolbarItem && toolbarItem.scriptConfig) {
 						// validate what the selected function for the adapter for this item requires
-						let adapter = this.ntb.adapters.getAdapterForItemType(toolbarItem.linkAttr.type);
+						const adapter = this.ntb.adapters.getAdapterForItemType(toolbarItem.linkAttr.type);
 						if (adapter) {
-							let selectedFunction = toolbarItem.scriptConfig?.pluginFunction || '';
+							const selectedFunction = toolbarItem.scriptConfig?.pluginFunction || '';
 							const params = adapter?.getFunctions().get(selectedFunction)?.parameters;
 							if (params) {
-								for (const [index, param] of params.entries()) {
+								for (const [ , param] of params.entries()) {
 									// TODO? error if required parameter is empty?
-									const value = toolbarItem.scriptConfig?.[param.parameter as keyof ScriptConfig] ?? null;
+									const value = toolbarItem.scriptConfig?.[param.parameter] ?? null;
 									if (value) {
 										const subfieldValid = await this.updateItemComponentStatus(parent, value, param.type, componentEl);
 										status = subfieldValid ? Status.Valid : Status.Invalid;
@@ -960,9 +1044,9 @@ export default class SettingsUIUtils {
 			const visibility = item.visibility ? (Platform.isDesktop ? item.visibility.desktop : item.visibility.mobile) : undefined;
 			
 			if (visibility && item.visibility.viewMode && item.visibility.viewMode !== ViewModeType.All) {
-				const latestMode = this.ntb.utils.getRecentViewMode();
-				if (latestMode && item.visibility.viewMode !== latestMode) {
-					if (item.visibility.viewMode === 'source') {
+				const latestMode = this.ntb.utils.getRecentViewMode() as string;
+				if (latestMode && item.visibility.viewMode as string !== latestMode) {
+					if (item.visibility.viewMode === ViewModeType.Editing) {
 						state = 'preview';
 						tooltip = t('setting.item.visibility.tooltip-editing-visible');
 					} 
@@ -996,12 +1080,12 @@ export function fixToggleTab(toggle: ToggleComponent) {
  * @returns DocumentFragment with disclaimers to show in settings UI
  */
 export function getDisclaimersFr(disclaimers: {[key: string]: string}[], keysToCheck: string[]): DocumentFragment {
-	let disclaimersFr = document.createDocumentFragment();
+	const disclaimersFr = new DocumentFragment();
 	let first = true;
 	keysToCheck.forEach(keyToCheck => {
 		const disclaimer = disclaimers.find(d => keyToCheck in d);
 		if (disclaimer) {
-			if (!first) disclaimersFr.append(document.createElement('br'));
+			if (!first) disclaimersFr.append(createEl('br'));
 			disclaimersFr.append('* ', getValueForKey(disclaimers, keyToCheck) );
 			first = false;
 		}
@@ -1019,7 +1103,7 @@ export function getPlatformVisState(item: ToolbarItemSettings, platform: 'deskto
 	const visibility = item.visibility ? (platform === 'desktop' ? item.visibility.desktop : item.visibility.mobile) : undefined;
 
 	if (visibility) {
-		let components = visibility?.components;
+		const components = visibility?.components;
 		if (components) {
 			if (components.length === 2) {
 				return ['visible', '', t('setting.item.visibility.option-item-show', { platform: labelPlatform })];
@@ -1051,12 +1135,12 @@ export function getValueForKey(dict: {[key: string]: string}[], key: string): st
 }
 
 export function iconTextFr(icon: string, text: string): DocumentFragment {
-	let headingFr = document.createDocumentFragment();
-	let headingEl = headingFr.createEl('span');
+	const headingFr = new DocumentFragment();
+	const headingEl = headingFr.createSpan();
 	headingEl.addClass('note-toolbar-setting-text-with-icon');
-	let headingIcon = headingEl.createEl('span');
+	const headingIcon = headingEl.createSpan();
 	setIcon(headingIcon, 'lucide-' + icon);
-	let headingText = headingEl.createEl('span');
+	const headingText = headingEl.createSpan();
 	headingText.setText(text);
 	headingFr.append(headingEl);
 	return headingFr;
@@ -1069,11 +1153,11 @@ export function iconTextFr(icon: string, text: string): DocumentFragment {
  * @returns DocumentFragment containing the message and styling.
  */
 export function learnMoreFr(message: string, page: string, linkText: string = t('setting.button-learn-more')): DocumentFragment {
-	let messageFr = document.createDocumentFragment();
+	const messageFr = new DocumentFragment();
 	messageFr.append(
 		message, ' ',
 	);
-	let learnMoreLink = messageFr.createEl('a', { href: `${URL_GH_USER_GUIDE}/${page}`, text: linkText });
+	const learnMoreLink = messageFr.createEl('a', { href: `${URLS.GH_USER_GUIDE}/${page}`, text: linkText });
 	learnMoreLink.addClass('note-toolbar-setting-focussable-link');
 	return messageFr;
 }
@@ -1086,13 +1170,13 @@ export function learnMoreFr(message: string, page: string, linkText: string = t(
  * @returns DocumentFragment containing the message and styling.
  */
 export function headingLearnMoreFr(title: string, desc: string, page: string, linkText: string = t('setting.button-learn-more')): DocumentFragment {
-	let messageFr = document.createDocumentFragment();
+	const messageFr = new DocumentFragment();
 	messageFr.append(title);
 
 	// description + learn more link
-	let descFr = messageFr.createEl('div', 'setting-item-description');
+	const descFr = messageFr.createDiv({ cls: 'setting-item-description' });
 	descFr.append(desc, ' ');
-	let learnMoreLink = descFr.createEl('a', { href: `${URL_GH_USER_GUIDE}/${page}`, text: linkText });
+	const learnMoreLink = descFr.createEl('a', { href: `${URLS.GH_USER_GUIDE}/${page}`, text: linkText });
 	learnMoreLink.addClass('note-toolbar-setting-focussable-link');
 
 	return messageFr;
@@ -1106,12 +1190,12 @@ export function headingLearnMoreFr(title: string, desc: string, page: string, li
  */
 export function pluginLinkFr(commandId: string, linkText?: string): DocumentFragment | undefined {
 	let pluginLinkFr = undefined;
-	let pluginId = commandId.includes(':') ? commandId.split(':')[0].trim() : undefined;
+	const pluginId = commandId.includes(':') ? commandId.split(':')[0].trim() : undefined;
 	// don't show Community Plugins link for Obsidian's built-in commands
 	if (pluginId && pluginId !== 'workspace') {
-		pluginLinkFr = document.createDocumentFragment();
+		pluginLinkFr = new DocumentFragment();
 		// TODO: return link to core plugin settings if ID is in CORE_PLUGIN_IDS
-		let pluginLink = pluginLinkFr.createEl('a', { 
+		const pluginLink = pluginLinkFr.createEl('a', { 
 			href: `obsidian://show-plugin?id=${pluginId}`, 
 			text: linkText ? linkText : t('setting.item.label-review-plugin') 
 		});
@@ -1130,9 +1214,9 @@ export function removeFieldError(el: HTMLElement | null, position: 'beforeend' |
 		const itemControlClass = 'setting-item-control';
 		const itemPreviewClass = 'note-toolbar-setting-item-preview';
 		let containerEl = null;
-		el.hasClass(itemControlClass) ? containerEl = el : containerEl = el.closest(`.${itemControlClass}`);
+		containerEl = el.hasClass(itemControlClass) ? el : el.closest(`.${itemControlClass}`);
 		if (!containerEl) {
-			el.hasClass(itemPreviewClass) ? containerEl = el : containerEl = el.closest(`.${itemPreviewClass}`);
+			containerEl = el.hasClass(itemPreviewClass) ? el : el.closest(`.${itemPreviewClass}`);
 		}
 		const errorEl = position === 'beforeend'
 			? containerEl?.querySelector('.note-toolbar-setting-field-error')
@@ -1164,8 +1248,9 @@ export function setFieldHelp(fieldEl: HTMLElement, helpText: DocumentFragment | 
 	removeFieldHelp(fieldEl);
 	const fieldHelp = createDiv();
 	fieldHelp.addClass('note-toolbar-setting-field-help');
-	(helpText instanceof DocumentFragment) ? fieldHelp.append(helpText) : fieldHelp.setText(helpText);
-	fieldHelp ? fieldEl.insertAdjacentElement('beforeend', fieldHelp) : undefined;
+	if (helpText instanceof DocumentFragment) fieldHelp.append(helpText)
+		else fieldHelp.setText(helpText);
+	if (fieldHelp) fieldEl.insertAdjacentElement('beforeend', fieldHelp);
 }
 
 /**
@@ -1175,12 +1260,12 @@ export function setFieldHelp(fieldEl: HTMLElement, helpText: DocumentFragment | 
  */
 export function updateItemIcon(parent: ToolbarSettingsModal | ItemModal, settingEl: HTMLElement, selectedIcon: string) {
 	// update item form
-	let formEl = settingEl.querySelector('.note-toolbar-setting-item-icon .clickable-icon') as HTMLElement;
-	formEl ? setIcon(formEl, selectedIcon === t('setting.icon-suggester.option-no-icon') ? 'lucide-plus-square' : selectedIcon) : undefined;
+	const formEl = settingEl.querySelector('.note-toolbar-setting-item-icon .clickable-icon') as HTMLElement;
+	if (formEl) setIcon(formEl, selectedIcon === t('setting.icon-suggester.option-no-icon') ? 'lucide-plus-square' : selectedIcon);
 	formEl.setAttribute('data-note-toolbar-no-icon', selectedIcon === t('setting.icon-suggester.option-no-icon') ? 'true' : 'false');
 	if (parent instanceof ToolbarSettingsModal) {
 		// update item preview
-		let previewIconEl = settingEl.querySelector('.note-toolbar-setting-item-preview-icon') as HTMLElement;
-		(previewIconEl && selectedIcon) ? setIcon(previewIconEl, selectedIcon) : undefined;
+		const previewIconEl = settingEl.querySelector('.note-toolbar-setting-item-preview-icon') as HTMLElement;
+		if (previewIconEl && selectedIcon) setIcon(previewIconEl, selectedIcon);
 	}
 }

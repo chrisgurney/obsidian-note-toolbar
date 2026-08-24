@@ -23,9 +23,9 @@
     "error": {
       "args-format": "无效的参数格式",
       "args-parsing": "无法解析参数",
-      "args-parsing-error": "无法解析参数\n\n```\n{{error}}\n```",
-      "args-parsing-script": "编译 {{filename}} 脚本的参数失败",
-      "args-parsing-script-error": "编译 {{filename}} 脚本的参数失败\n```\n{{error}}\n```",
+      "args-parsing-error": "无法解析参数\n\n```\n{{- error}}\n```",
+      "args-parsing-field-error": "```\n{{- error}}\n```",
+      "args-parsing-script-error": "编译 {{filename}} 脚本的参数失败\n```\n{{- error}}\n```",
       "callout-not-found": "错误：在当前笔记中无法找到 ID 为 {{id}} 的 note-toolbar-output 标注",
       "exec-failed": "无法执行脚本：{{filename}}",
       "expr-failed": "无法执行表达式：{{expression}}",
@@ -131,7 +131,6 @@
   "command": {
     "callouts-locked-notice": "锁定笔记工具栏标注",
     "callouts-unlocked-notice": "解锁笔记工具栏标注",
-    "copy-command-notice": "命令已复制到剪贴板",
     "name-copy-cmd-as-data-element": "复制命令的 callout 项目",
     "name-copy-cmd-uri": "复制命令的 URI",
     "name-focus": "聚焦",
@@ -152,8 +151,6 @@
     "name-use-item": "调用 {{item}}"
   },
   "export": {
-    "button-copy-link": "复制链接",
-    "button-copy-link-description": "将此链接复制到剪贴板",
     "item-generic": "项目{{number}}",
     "label-callout": "复制为标注（Callout）",
     "label-share": "分享…",
@@ -340,13 +337,6 @@
       "option-text-placeholder": "选择工具栏..."
     },
     "display-navbar": {
-      "ribbon-action": {
-        "description": "设置在手机上使用功能区图标时要执行的操作。",
-        "name": "功能区",
-        "option-item-suggester": "显示所有工具",
-        "option-toolbar": "显示当前工具栏",
-        "option-toolbar-suggester": "显示所有工具栏"
-      }
     },
     "display-rules": {
       "description": "定义在哪些特定笔记上显示工具栏。",
@@ -364,7 +354,6 @@
       "button-open": "打开↗",
       "button-open-external": "打开 ↗",
       "button-open-github": "打开github.com",
-      "button-open-google": "打开Goog​​le.com",
       "button-read": "阅读↗",
       "description": "为您的笔记创建上下文感知的工具栏。",
       "error-failed-to-load": "无法加载：\n{{baseUrl}}/{{lang}}/{{name}}.md",
@@ -408,7 +397,6 @@
       "label-preview-empty-no-items": "缺少项目，编辑此工具栏以添加项目。",
       "label-review-plugin": "查看插件",
       "menu-copy-id": "复制开发者 ID",
-      "menu-copy-id-notice": "已将工具栏项目的ID复制到剪贴板。",
       "menu-copy-item": "复制项目至工具栏…",
       "menu-copy-item-notice": "已将项目复制到工具栏：{{toolbarName}}",
       "menu-more-actions": "更多操作…",

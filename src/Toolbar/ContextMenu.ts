@@ -1,6 +1,7 @@
 import NoteToolbarPlugin from "main";
-import { ItemView, Menu, MenuItem, Notice, Platform } from "obsidian";
-import { ItemType, PositionType, t, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { ItemView, Menu, MenuItem, Platform } from "obsidian";
+import { ItemType, PositionType, t } from "Settings/NoteToolbarSettings";
+import CopyTextModal from "Settings/UI/Modals/CopyTextModal";
 import ItemModal from "Settings/UI/Modals/ItemModal";
 import ShareModal from "Settings/UI/Modals/ShareModal";
 import StyleModal from "Settings/UI/Modals/StyleModal";
@@ -21,8 +22,8 @@ export default class ContextMenu {
 		event.preventDefault();
 
 		// figure out what toolbar we're in
-		let toolbarEl = (event.target as Element).closest('.cg-note-toolbar-container') as HTMLElement;
-		let toolbarSettings = toolbarEl?.id ? this.ntb.settingsManager.getToolbarById(toolbarEl.id) : undefined;
+		const toolbarEl = (event.target as Element).closest('.cg-note-toolbar-container') as HTMLElement;
+		const toolbarSettings = toolbarEl?.id ? this.ntb.settingsManager.getToolbarById(toolbarEl.id) : undefined;
 		const isFloatingToolbar = 
 			toolbarEl.getAttribute(TbarData.Position) === PositionType.Floating || 
 			toolbarEl.getAttribute(TbarData.Position) === PositionType.Text;
@@ -35,9 +36,9 @@ export default class ContextMenu {
 		else {
 			toolbarItemEl = (event.target as Element).closest('.cg-note-toolbar-item');
 		}
-		let toolbarItem = toolbarItemEl?.id ? this.ntb.settingsManager.getToolbarItemById(toolbarItemEl.id) : undefined;
+		const toolbarItem = toolbarItemEl?.id ? this.ntb.settingsManager.getToolbarItemById(toolbarItemEl.id) : undefined;
 
-		let contextMenu = new Menu();
+		const contextMenu = new Menu();
 
 		const currentView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
 		const isSourceView = currentView?.editMode?.sourceMode;
@@ -65,7 +66,7 @@ export default class ContextMenu {
 					contextMenu.addItem((item: MenuItem) => {
 						item.setTitle(t('toolbar.menu-position'));
 						item.setIcon('move');
-						positionMenu = item.setSubmenu() as Menu;
+						positionMenu = item.setSubmenu();
 					});
 				}
 
@@ -78,7 +79,7 @@ export default class ContextMenu {
 						positionMenu.addItem((item: MenuItem) => {
 							item.setTitle(t(EMPTY_VIEW_POSITIONS.titleKey))
 								.setIcon(EMPTY_VIEW_POSITIONS.icon)
-								.onClick(async (menuEvent) => {
+								.onClick(async () => {
 									await this.ntb.settingsManager.updatePosition(toolbarSettings, EMPTY_VIEW_POSITIONS.types[0]);
 									contextMenu.close();
 								});
@@ -98,8 +99,8 @@ export default class ContextMenu {
 								positionMenu.addItem((item: MenuItem) => {
 									item.setTitle(t(option.titleKey))
 										.setIcon(option.icon)
-										.onClick(async (menuEvent) => {
-											await this.ntb.settingsManager.updatePosition(toolbarSettings, option.types[0]!);
+										.onClick(async () => {
+											await this.ntb.settingsManager.updatePosition(toolbarSettings, option.types[0]);
 											contextMenu.close();
 										});
 								});
@@ -155,7 +156,7 @@ export default class ContextMenu {
 					item
 						.setIcon('palette')
 						.setTitle(t('toolbar.menu-style'))
-						.onClick(async () => {
+						.onClick(() => {
 							if (toolbarSettings) {
 								const styleModal = new StyleModal(this.ntb, toolbarSettings);
 								styleModal.open();
@@ -176,7 +177,7 @@ export default class ContextMenu {
 					contextMenu.addItem((item: MenuItem) => {
 						item.setTitle(uiHidden ? t('toolbar.menu-show-properties') : t('toolbar.menu-hide-properties'))
 							.setIcon(uiHidden ? 'captions' : 'captions-off')
-							.onClick(async (menuEvent) => this.ntb.commands.toggleUi('props', uiHidden ? 'show' : 'hide'));
+							.onClick(() => this.ntb.commands.toggleUi('props', uiHidden ? 'show' : 'hide'));
 					});
 				}
 			}
@@ -188,7 +189,7 @@ export default class ContextMenu {
 					contextMenu.addItem((item: MenuItem) => {
 						item.setTitle(uiHidden ? t('toolbar.menu-show-base-toolbar') : t('toolbar.menu-hide-base-toolbar'))
 							.setIcon(uiHidden ? 'panel-top-open' : 'panel-top-close')
-							.onClick(async (menuEvent) => this.ntb.commands.toggleUi('baseToolbar', uiHidden ? 'show' : 'hide'));
+							.onClick(() => this.ntb.commands.toggleUi('baseToolbar', uiHidden ? 'show' : 'hide'));
 					});
 				}
 			}
@@ -205,7 +206,7 @@ export default class ContextMenu {
 			item
 				.setIcon('plus')
 				.setTitle(t('toolbar.menu-add-item'))
-				.onClick(async () => {
+				.onClick(() => {
 					const toolbarItemIndex = this.ntb.utils.calcToolbarItemIndex(event);
 					if (toolbarSettings) this.ntb.settingsUtils.openItemSuggestModal(toolbarSettings, 'New', undefined, toolbarItemIndex);
 				});
@@ -226,7 +227,7 @@ export default class ContextMenu {
 					.setTitle(itemText 
 						? t('toolbar.menu-edit-item', { text: itemText, interpolation: { escapeValue: false } }) 
 						: t('toolbar.menu-edit-item_none'))
-					.onClick(async () => {
+					.onClick(() => {
 						if (toolbarSettings) {
 							const itemModal = new ItemModal(this.ntb, toolbarSettings, toolbarItem);
 							itemModal.open();
@@ -241,8 +242,8 @@ export default class ContextMenu {
 						item
 							.setIcon('square-menu')
 							.setTitle(t('toolbar.menu-edit-menu', { toolbar: menuToolbar.name, interpolation: { escapeValue: false } }))
-							.onClick(async () => {
-								const modal = new ToolbarSettingsModal(this.ntb.app, this.ntb, null, menuToolbar as ToolbarSettings);
+							.onClick(() => {
+								const modal = new ToolbarSettingsModal(this.ntb.app, this.ntb, null, menuToolbar);
 								modal.setTitle(t('setting.title-edit-toolbar', { toolbar: menuToolbar.name, interpolation: { escapeValue: false } }));
 								modal.open();
 							});
@@ -262,8 +263,8 @@ export default class ContextMenu {
 				item
 					.setTitle(t('toolbar.menu-edit-toolbar', { toolbar: toolbarSettings?.name, interpolation: { escapeValue: false } }))
 					.setIcon('rectangle-ellipsis')
-					.onClick((menuEvent) => {
-						const modal = new ToolbarSettingsModal(this.ntb.app, this.ntb, null, toolbarSettings as ToolbarSettings);
+					.onClick(() => {
+						const modal = new ToolbarSettingsModal(this.ntb.app, this.ntb, null, toolbarSettings);
 						modal.setTitle(t('setting.title-edit-toolbar', { toolbar: toolbarSettings?.name, interpolation: { escapeValue: false } }));
 						modal.open();
 					});
@@ -296,7 +297,7 @@ export default class ContextMenu {
 					.onClick(async () => {
 						if (toolbarSettings) {
 							const shareUri = await this.ntb.protocolManager.getShareUri(toolbarSettings);
-							let shareModal = new ShareModal(this.ntb, shareUri, toolbarSettings);
+							const shareModal = new ShareModal(this.ntb, shareUri, toolbarSettings);
 							shareModal.open();
 						}
 					});
@@ -305,15 +306,15 @@ export default class ContextMenu {
 			// copy as callout
 			contextMenu.addItem((item: MenuItem) => {
 				item
-					.setTitle(t('export.label-callout'))
+					.setTitle(t('export.menu-callout'))
 					.setIcon('copy')
-					.onClick(async (menuEvent) => {
+					.onClick(async () => {
 						if (toolbarSettings) {
-							let calloutExport = await exportToCallout(this.ntb, toolbarSettings, this.ntb.settings.export);
-							window.navigator.clipboard.writeText(calloutExport);
-							new Notice(
-								learnMoreFr(t('export.notice-completed'), 'Creating-callouts-from-toolbars')
-							).containerEl.addClass('mod-success');
+							const calloutExport = await exportToCallout(this.ntb, toolbarSettings, this.ntb.settings.export);
+							const copyModal = new CopyTextModal( this.ntb, calloutExport,
+								t('export.label-callout'),
+								 learnMoreFr(t('export.label-callout-description'), 'Creating-callouts-from-toolbars'));
+							copyModal.open();
 						}
 					})
 				});
@@ -326,8 +327,8 @@ export default class ContextMenu {
 			item
 			  .setTitle(t('toolbar.menu-toolbar-settings'))
 			  .setIcon('gear')
-			  .onClick(async (menuEvent) => {
-				  await this.ntb.commands.openSettings();
+			  .onClick(() => {
+				  this.ntb.commands.openSettings();
 			  });
 		  });
 
@@ -344,10 +345,14 @@ export default class ContextMenu {
 		const currentView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
 		const isSourceView = currentView?.editMode?.sourceMode;
 
-		var defaultPositions = [];
+		const defaultPositions = [];
 		if (Platform.isPhone) {
 			defaultPositions.push({ type: PositionType.Top, titleKey: 'setting.position.option-top', icon: 'arrow-up-to-line' });
-			defaultPositions.push({ type: PositionType.TabBar, titleKey: 'setting.position.option-tabbar', icon: 'panel-top' });
+			// should not be able to set position to tab bar, if view header is hidden
+			const isViewHeaderHidden = this.ntb.settings.obsidianUiVisibility['view-header'] === false;
+			if (!isViewHeaderHidden) {
+				defaultPositions.push({ type: PositionType.TabBar, titleKey: 'setting.position.option-tabbar', icon: 'panel-top' });
+			}
 		}
 		else {
 			defaultPositions.push({ type: PositionType.TabBar, titleKey: 'setting.position.option-tabbar', icon: 'panel-top' });

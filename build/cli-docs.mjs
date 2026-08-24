@@ -16,7 +16,8 @@ function flagsBlock(flags, commonFlags) {
         const flagVal = flags[flagKey] ?? commonFlags[flagKey];
         if (!flagVal || Array.isArray(flagVal)) continue;
         const value = (typeof flagVal.value === 'string' ? flagVal.value : flagVal.value?.en) ?? '';
-        const desc  = (flagVal.description?.en ?? '') + (flagVal.required ? ' (required)' : '');
+        let desc  = (flagVal.description?.en ?? '') + (flagVal.required ? ' (required)' : '');
+        if (flagVal.available) desc += ` (${flagVal.available})`;
         rows.push([`${flagKey}${value ? `=${value}` : ''}`, desc]);
     }
 
@@ -42,8 +43,10 @@ export function cliDocs(cliJsonPath, outputFile) {
         if (category.docs) markdown += `${category.docs}\n\n`;
         const commands = Object.entries(cli.commands).filter(([, c]) => c.category === categoryId);
         for (const [id, command] of commands) {
+            // ignore as it's just a container for sub-actions/commands
             if (id === 'note-toolbar:add-tp') continue;
             markdown += `### \`${id}\`\n\n`;
+            if (command.available) markdown += `> Available in \`${command.available}\`\n\n`;
             if (command.docs) markdown += `${command.docs}\n\n`;
             markdown += flagsBlock(command.flags ?? {}, cli.commonFlags ?? {});
             if (command.examples) {

@@ -240,7 +240,7 @@ export default class CliItemsHandler {
         schema: ColumnSchema, 
         verbose: boolean
     ): string[] {
-        let lines: string[] = [];
+        const lines: string[] = [];
 
         // normal single-line row
         
@@ -359,7 +359,7 @@ export default class CliItemsHandler {
      */
     private formatScriptSummary(config: ScriptConfig | undefined, verbose: boolean): string {
         if (!config) return '';
-        let parts: string[] = [];
+        const parts: string[] = [];
         if (config.sourceFile) parts.push(`${config.sourceFile}`);
         if (config.sourceFunction) parts.push(`${config.sourceFunction}`);
         if (config.expression) parts.push(verbose ? config.expression : config.expression.replace(/\n/g, ' '));
@@ -386,7 +386,7 @@ export default class CliItemsHandler {
     }
 
     private isSeparator(item: ToolbarItemSettings): boolean {
-        return [ItemType.Break, ItemType.Separator, ItemType.Spreader].includes(item.linkAttr.type as ItemType);
+        return [ItemType.Break, ItemType.Separator, ItemType.Spreader].includes(item.linkAttr.type);
     }
 
     private truncate(value: string): string {

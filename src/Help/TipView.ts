@@ -1,9 +1,9 @@
 import { renderGalleryItems } from "Gallery/GalleryView";
 import TipItems from "Help/tips.json";
 import NoteToolbarPlugin from "main";
-import { Component, ItemView, MarkdownRenderer, requestUrl, setIcon, setTooltip, ViewStateResult, WorkspaceLeaf } from "obsidian";
-import { t, VIEW_TYPE_TIP } from "Settings/NoteToolbarSettings";
-import { URL_GHUC_TIPS } from "Utils/Urls";
+import { Component, ItemView, MarkdownRenderer, setIcon, setTooltip, ViewStateResult, WorkspaceLeaf } from "obsidian";
+import { t, VIEW_TYPE_GALLERY, VIEW_TYPE_TIP } from "Settings/NoteToolbarSettings";
+import { getTip } from "./HelpContent";
 
 interface TipViewState {
     id: string;
@@ -29,7 +29,7 @@ export default class TipView extends ItemView {
 
         if (!this.state) return; // state is not ready yet
 
-        const tip = TipItems.find(tip => tip.id.includes(this.state.id));
+        const tip = TipItems.find(tip => tip.id.includes(this.state.id)) as TipType;
         if (!tip) return; // no matching tip
         
         this.ntb.settingsUtils.addCloseToPhoneNav(this);
@@ -46,37 +46,22 @@ export default class TipView extends ItemView {
         setIcon(bannerIconEl, tip.icon);
         const bannerTitleEl = bannerEl.createDiv();
         const bannerTitleComponent = new Component();
-        MarkdownRenderer.render(this.ntb.app, `# ${(tip as TipType).title[language]}`, bannerTitleEl, '/', bannerTitleComponent);
+        await MarkdownRenderer.render(this.ntb.app, `# ${tip.title[language] ?? tip.title['en']}`, bannerTitleEl, '/', bannerTitleComponent);
         const bannerDescEl = bannerEl.createDiv();
         const bannerDescComponent = new Component();
-        MarkdownRenderer.render(this.ntb.app, `${(tip as TipType).description[language]}`, bannerDescEl, '/', bannerDescComponent);
+        await MarkdownRenderer.render(this.ntb.app, `${tip.description[language] ?? tip.description['en']}`, bannerDescEl, '/', bannerDescComponent);
 
         const contentEl = contentDiv.createDiv();
         contentEl.addClass('markdown-preview-view', 'note-toolbar-setting-tip-content', 'is-readable-line-width');
-		this.renderSkeleton(contentEl);
 
-        // fetch and display the content
-        let tipText = '';
-        try {
-            const tipMd = await this.getTip(tip.id, language);
-            if (tipMd) {
-				tipText = tipMd;
-            }
-            else {
-                tipText = t('setting.help.error-failed-to-load', { baseUrl: URL_GHUC_TIPS, lang: language, name: tip.id });
-            }
-        }
-        catch (error) {
-            tipText = t('setting.help.error-failed-to-load', { baseUrl: URL_GHUC_TIPS, lang: language, name: tip.id });
-            tipText += `\n>[!error]-\n> \`${error as string}\`\n`;
-        }
-        finally {
-            contentEl.empty();
-        }
+        // get the content
+        const tipMd = getTip(tip.id, language);
+        const tipText = tipMd ?? t('setting.help.error-failed-to-load', { path: 'Help/Tips', lang: language, name: tip.id });
+        contentEl.empty();
 
         const rootPath = this.ntb.app.vault.getRoot().path;
         const component = new Component();
-        MarkdownRenderer.render(this.ntb.app, tipText, contentEl, rootPath, component);
+        await MarkdownRenderer.render(this.ntb.app, tipText, contentEl, rootPath, component);
 
         this.renderTipVideos(contentEl);
         this.renderGalleryCallouts(contentEl, tip.color as ColorType);
@@ -118,32 +103,9 @@ export default class TipView extends ItemView {
      * https://liamca.in/Obsidian/API+FAQ/views/persisting+your+view+state
      * https://github.com/Vinzent03/obsidian-git/blob/3fbd59365085c3084d0b4f654db382b086367f23/src/ui/diff/diffView.ts#L49
      */
-    async setState(state: TipViewState, result: ViewStateResult): Promise<void> {
+    async setState(state: TipViewState, _result: ViewStateResult): Promise<void> {
         this.state = state;
         await this.display();
-    }
-
-    /**
-     * Fetches the provided tip.
-     *
-     * @param filename The name of the Tip file to fetch, without the extension.
-     * @returns Body of the Tip, or null.
-     */
-    async getTip(filename: string, language: string = 'en'): Promise<string | null> {
-        try {
-            const res = await requestUrl(`${URL_GHUC_TIPS}/${language}/${filename}.md`);
-            if (res.status !== 200) return null;
-            return res.text ?? '';
-        } catch (e) {
-            this.ntb.debug(`Error fetching tip for language (${language}). Falling back to English.\n${e}`);
-            try {
-                const res = await requestUrl(`${URL_GHUC_TIPS}/en/${filename}.md`);
-                if (res.status !== 200) return null;
-                return res.text ?? '';
-            } catch {
-                return null;
-            }
-        }
     }
 
     /**
@@ -152,7 +114,7 @@ export default class TipView extends ItemView {
      */
     renderGalleryCallouts(contentEl: HTMLDivElement, color: ColorType) {
         const callouts = contentEl.querySelectorAll<HTMLDivElement>('.callout[data-callout="note-toolbar-gallery"]');
-        callouts.forEach(async (calloutEl: HTMLDivElement) => {
+        callouts.forEach((calloutEl: HTMLDivElement) => {
             const items: string[] = [];
             calloutEl.querySelectorAll('li').forEach(li => {
                 const id = li.textContent?.trim();
@@ -174,33 +136,13 @@ export default class TipView extends ItemView {
 		});
     }
 
-	/**
-	 * Renders a skeleton to show while the content is being fetched.
-	 * @param el HTMLDivElement to render the skeleton in.
-	 */
-	renderSkeleton(el: HTMLDivElement) {
-		const heights = ['2em', '1.5em', '1em', '1em', '1em', '1em'];
-		const widths = ['30%', '70%', '80%', '90%', '80%', '90%'];
-	
-		const placeholderTextEl = el.createEl('p');
-		placeholderTextEl.setText(t('setting.whats-new.placehoder-loading'));
-		placeholderTextEl.setAttr('style', 'color: var(--text-muted)');
-
-		for (let i = 0; i < heights.length; i++) {
-			const lineEl = el.createEl('p');
-			const lineStyle = `height: ${heights[i]};${widths[i] ? ` width: ${widths[i]};` : ''} margin-bottom: 0.5em;`;
-			lineEl.addClass('note-toolbar-setting-remote-skeleton');
-			lineEl.setAttr('style', lineStyle);
-		}
-	}
-
     /**
      * Renders any `note-toolbar-video` callouts in the tip content, replacing the URL with HTML controls to play the video.
      * @param contentEl HTMLDivElement to render videos in.
      */
     renderTipVideos(contentEl: HTMLDivElement) {
         const callouts = contentEl.querySelectorAll<HTMLDivElement>('.callout[data-callout="note-toolbar-video"]');
-        callouts.forEach(async (calloutEl: HTMLDivElement) => {
+        callouts.forEach((calloutEl: HTMLDivElement) => {
             const url = calloutEl.querySelector('.callout-content')?.textContent?.trim();
             if (!url) return;
 
@@ -215,16 +157,17 @@ export default class TipView extends ItemView {
                 src: url 
             });
 
-            const overlayEl = wrapperEl.createEl('div', 'note-toolbar-setting-help-video-overlay');
-            const playButtonEl = overlayEl.createEl('button', 'note-toolbar-setting-help-video-play');
+            const overlayEl = wrapperEl.createDiv({ cls: 'note-toolbar-setting-help-video-overlay' });
+            const playButtonEl = overlayEl.createEl('button', { cls: 'note-toolbar-setting-help-video-play' });
             setIcon(playButtonEl, 'play');
             playButtonEl.hide();
 
             overlayEl.onclick = () => {
                 if (videoEl.paused) {
-                    videoEl.play();
-                    playButtonEl.remove();
-                    videoEl.setAttribute('controls', '');
+                    void videoEl.play().then(() => {
+                        playButtonEl.remove();
+                        videoEl.setAttribute('controls', '');
+                    });
                 } else {
                     videoEl.pause();
                 }
@@ -297,7 +240,7 @@ export function renderTipItems(ntb: NoteToolbarPlugin, containerEl: HTMLDivEleme
             const tipTitle = tip.title?.[language] || tip.title['en'];
             const tipDesc = tip.description?.[language] || tip.description['en'] || '';
 
-            const itemTitleEl = itemEl.createDiv('note-toolbar-card-item-title').setText(tipTitle);
+            itemEl.createDiv('note-toolbar-card-item-title').setText(tipTitle);
             if (tipDesc) itemEl.createDiv('note-toolbar-card-item-description').setText(tipDesc);
 
             const iconEl = itemEl.createDiv();
@@ -308,14 +251,14 @@ export function renderTipItems(ntb: NoteToolbarPlugin, containerEl: HTMLDivEleme
 
     });
 
-    ntb.registerDomEvent(containerEl, 'click', (event) => { 
+    ntb.registerDomEvent(containerEl, 'click', async (event) => { 
         const tipEl = (event.target as HTMLElement).closest('.note-toolbar-card-item');
         if (tipEl) {
             if (tipEl.id === 'gallery') {
-                window.open('obsidian://note-toolbar?gallery', '_blank');
+                await ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true });
             }
             else {
-                window.open(`obsidian://note-toolbar?tip=${tipEl.id}`, '_blank');
+                await ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_TIP, active: true, state: { id: tipEl.id } });
             }
         }
     });

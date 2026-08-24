@@ -20,7 +20,7 @@ export default class ToolbarStyleUi {
      */
     public displayStyleSetting(settingsDiv: HTMLElement) {
 
-        let heading = new Setting(settingsDiv)
+        const heading = new Setting(settingsDiv)
             .setDesc(learnMoreFr(t('setting.styles.description'), 'Styling-toolbars'));
         
         if (this.parent instanceof ToolbarSettingsModal) {
@@ -28,17 +28,17 @@ export default class ToolbarStyleUi {
         }
 
         const styleGroup = new SettingGroup(settingsDiv);
+        styleGroup.listEl.addClass('note-toolbar-setting-styles-group');
 
         //
         // Default
         //
 
-        let defaultStyleDiv = createDiv();
+        const defaultStyleDiv = createDiv();
         defaultStyleDiv.className = "note-toolbar-setting-item-style";
 
         if (this.toolbar.defaultStyles.length == 0) {
-            let emptyMsg = this.parent.containerEl.createEl("div", 
-                { text: this.ntb.settingsUtils.emptyMessageFr(t('setting.styles.option-default-empty')) });
+            const emptyMsg = this.parent.containerEl.createDiv({ text: this.ntb.settingsUtils.emptyMessageFr(t('setting.styles.option-default-empty')) });
             emptyMsg.className = "note-toolbar-setting-empty-message";
             defaultStyleDiv.append(emptyMsg);
         }
@@ -46,7 +46,7 @@ export default class ToolbarStyleUi {
 
             this.toolbar.defaultStyles.forEach(
                 (style, index) => {
-                    let styleDisclaimer = getValueForKey(DEFAULT_STYLE_DISCLAIMERS, style);
+                    const styleDisclaimer = getValueForKey(DEFAULT_STYLE_DISCLAIMERS, style);
                     new Setting(defaultStyleDiv)
                         .setName(getValueForKey(DEFAULT_STYLE_OPTIONS, style) || style)
                         .setTooltip((styleDisclaimer ? styleDisclaimer + ' ' : '') + t('setting.styles.style-tooltip-use-class', { class: style }))
@@ -75,7 +75,7 @@ export default class ToolbarStyleUi {
             })
             .reduce((acc, option) => ({ ...acc, ...option }), {});
 
-        let defaultStyleDropdown = new Setting(defaultStyleDiv)
+        const defaultStyleDropdown = new Setting(defaultStyleDiv)
             .addDropdown((dropdown) =>
                 dropdown
                     .addOptions(defaultStyleOptions)
@@ -95,8 +95,8 @@ export default class ToolbarStyleUi {
         );
         defaultStyleDropdown.controlEl.id = 'default-style-dropdown';
 
-        const defaultDesc = document.createDocumentFragment();
-        defaultDesc.append(t('setting.styles.option-default-description'), document.createElement('br'));
+        const defaultDesc = new DocumentFragment();
+        defaultDesc.append(t('setting.styles.option-default-description'), createEl('br'));
         defaultDesc.append(getDisclaimersFr(DEFAULT_STYLE_DISCLAIMERS, this.toolbar.defaultStyles));
 
         styleGroup.addSetting((defaultSetting) => {
@@ -111,12 +111,11 @@ export default class ToolbarStyleUi {
         // Mobile
         //
 
-        let mobileStyleDiv = createDiv();
+        const mobileStyleDiv = createDiv();
         mobileStyleDiv.className = "note-toolbar-setting-item-style";
 
         if (this.toolbar.mobileStyles.length == 0) {
-            let emptyMsg = this.parent.containerEl.createEl("div", 
-                { text: this.ntb.settingsUtils.emptyMessageFr(t('setting.styles.option-mobile-empty')) });
+            const emptyMsg = this.parent.containerEl.createDiv({ text: this.ntb.settingsUtils.emptyMessageFr(t('setting.styles.option-mobile-empty')) });
             emptyMsg.className = "note-toolbar-setting-empty-message";
             mobileStyleDiv.append(emptyMsg);
         }
@@ -124,7 +123,7 @@ export default class ToolbarStyleUi {
 
             this.toolbar.mobileStyles.forEach(
                 (style, index) => {
-                    let styleDisclaimer = getValueForKey(MOBILE_STYLE_DISCLAIMERS, style);
+                    const styleDisclaimer = getValueForKey(MOBILE_STYLE_DISCLAIMERS, style);
                     new Setting(mobileStyleDiv)
                         .setName(getValueForKey(MOBILE_STYLE_OPTIONS, style) || style)
                         .setTooltip((styleDisclaimer ? styleDisclaimer + ' ' : '') + t('setting.styles.style-tooltip-use-class', { class: style }))
@@ -172,8 +171,8 @@ export default class ToolbarStyleUi {
                     })
         );
 
-        const mobileDesc = document.createDocumentFragment();
-        mobileDesc.append(t('setting.styles.option-mobile-description'), document.createElement('br'));
+        const mobileDesc = new DocumentFragment();
+        mobileDesc.append(t('setting.styles.option-mobile-description'), createEl('br'));
         mobileDesc.append(getDisclaimersFr(MOBILE_STYLE_DISCLAIMERS, this.toolbar.mobileStyles));
 
         styleGroup.addSetting((mobileSetting) => {
@@ -198,7 +197,7 @@ export default class ToolbarStyleUi {
                     }, 750)));
 
             // add message below about using custom styles
-            const styleSettingsMsg = settingsDiv.createEl('div');
+            const styleSettingsMsg = settingsDiv.createDiv();
             new Setting(styleSettingsMsg)
                 .setDesc(learnMoreFr(t('setting.styles.help'), 'Style-Settings-plugin-support'));
             customSetting.settingEl.insertAdjacentElement('afterend', styleSettingsMsg);

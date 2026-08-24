@@ -38,15 +38,10 @@ export default interface INoteToolbarApi<T> {
      * 
      * @returns The clipboard value or `null`.
      * 
-     * @example
-     * // gets the clipboard value
-     * const value = await ntb.clipboard();
-     * 
-     * new Notice(value);
-     * 
      * @group Utilities
+     * @deprecated Since 1.33. Use `await activeWindow.navigator.clipboard.readText()` instead.
      */
-    clipboard: () => Promise<string | null>;
+    clipboard: () => string | null;
 
     /**
      * Exports the given toolbar as a [Note Toolbar callout](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-Callouts).
@@ -67,25 +62,30 @@ export default interface INoteToolbarApi<T> {
     export: (toolbar: IToolbar) => Promise<string | null>;
 
     /**
-     * Shows a file suggester modal and waits for the user's selection.
+     * Shows a file suggester modal for the provided files and waits for the user's selection. Files are sorted by recency.
      * 
      * @param options Optional display options.
      * @returns The selected [TAbstractFile](https://docs.obsidian.md/Reference/TypeScript+API/TAbstractFile).
+     * @remarks This function replaces the old fileSuggester(options?).
      * 
      * @example
-     * const fileOrFolder = await ntb.fileSuggester();
-     * new Notice(fileOrFolder.name);
+     * const fileOrFolder = await ntb.fileSuggester(
+     *   ntb.app.vault.getAllLoadedFiles()
+     * );
+     * if (fileOrFolder) new Notice(fileOrFolder.name);
      * 
      * @example
      * // show only folders
-     * const folder = await ntb.fileSuggester({
-     *  foldersonly: true
-     * });
-     * new Notice(folder.name);
+     * const folder = await ntb.fileSuggester(
+     *   ntb.app.vault.getAllLoadedFiles(),
+     *   { foldersonly: true }
+     * );
+     * if (folder) new Notice(folder.name);
      * 
      * @group UI Components
+     * @since 1.33.15
      */
-    fileSuggester: (options?: NtbFileSuggesterOptions) => Promise<TAbstractFile | null>;
+    fileSuggester: (files: TAbstractFile[], options?: NtbFileSuggesterOptions) => Promise<TAbstractFile | null>;
 
     /**
      * Gets the active (last activated) toolbar item.
@@ -167,7 +167,6 @@ export default interface INoteToolbarApi<T> {
      * const b = ntb.app.internalPlugins.plugins['bookmarks'];
      * if (!b?.enabled) return;
      * const i = b.instance?.getBookmarks();
-     * const b = ntb.app.internalPlugins.plugins['bookmarks'];
      * const mi = i
      *   .filter(b => b.type === 'file' || b.type === 'folder')
      *   .map(b => ({
@@ -205,6 +204,18 @@ export default interface INoteToolbarApi<T> {
      * }
      * else {
      *   new Notice(`File not found: ${filename}`);
+     * }
+     * 
+     * @example
+     * // renders a Base for the current file
+     * const fn = "Bases/Backlinks.base";
+     * const f = ntb.app.vault.getAbstractFileByPath(fn);
+     * if (f) { 
+     *   await ntb.modal(f, {
+     *     originAsContext: true,
+     *     // ...or remove the above line and render for a completely different file:
+     *     //contextPath: "Other File.md"  
+     *   });
      * }
      * 
      * @see `NtbModal.js` in the [examples/Scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts).
@@ -253,7 +264,7 @@ export default interface INoteToolbarApi<T> {
     prompt: (options?: NtbPromptOptions) => Promise<string | null>;
 
     /**
-     * Sets the given property's value in the active note.
+     * Sets the given property's value in the active note. Set the property to `null` to remove it.
      * 
      * @param property Propety to set in the frontmatter.
      * @param value Value to set for the property.
@@ -264,10 +275,11 @@ export default interface INoteToolbarApi<T> {
      * await ntb.setProperty('A Link', '[[Some Note]]');
      * await ntb.setProperty('A Number', 1234);
      * await ntb.setProperty('A List', ['asdf', 'asdf2']);
+     * await ntb.setProperty('Delete Me', null);
      * 
      * @group Note Manipulation
      */
-    setProperty: (property: string, value: any) => Promise<void>;
+    setProperty: (property: string, value: unknown) => Promise<void>;
 
     /**
      * Replaces the selection, the word at the cursor, or inserts at the cursor if neither exists.
@@ -440,10 +452,20 @@ export interface NtbModalOptions {
      */
     class?: string;
     /**
+     * Optionally specify which file rendered content should use as context.
+     * For example, Bases queries that use `this.file` will refer to this file.
+     */
+    contextPath?: string;
+    /**
      * If `true`, and a file was provided, content can be edited; defaults to `false`.
      * @hidden
      */
     editable?: boolean;
+    /**
+     * Use the file that opened the modal as context (assumes the active file); defaults to `false`.
+     * Ignored when `contextPath` is provided.
+     */
+    originAsContext?: boolean;
     /**
      * Optional title for the modal, with markdown formatting supported.
      */

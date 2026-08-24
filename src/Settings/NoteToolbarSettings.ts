@@ -1,11 +1,10 @@
-import { getUUID } from "Utils/Utils";
 import { getLanguage, PaneType } from "obsidian";
 
 /* updates link to plugin's release notes and displays What's New view */
-export const WHATSNEW_VERSION = '1.31';
+export const WHATSNEW_VERSION = '1.34';
 
 /* only update when settings structure changes to trigger migrations */
-export const SETTINGS_VERSION = 20260428.1;
+export const SETTINGS_VERSION = 20260703.1;
 
 // *****************************************************************************
 // #region TRANSLATIONS
@@ -33,7 +32,7 @@ const Locales = i18next.createInstance({
 	}
 });
 
-Locales.init();
+void Locales.init();
 
 export const t: (key: string, ...args: unknown[]) => string = Locales.getFixedT(null, 'plugin-note-toolbar', null); // string translation function
 
@@ -52,6 +51,7 @@ export const VIEW_TYPE_WHATS_NEW = 'ntb-whats-new-view';
 
 export const EMPTY_TOOLBAR_ID = 'EMPTY_TOOLBAR';
 export const GALLERY_DIVIDER_ID = 'GALLERY_DIVIDER';
+export const NONE_TOOLBAR_ID = 'NO_TOOLBAR';
 
 export const CORE_PLUGIN_IDS = ['bookmarks', 'daily-notes', 'file-explorer', 'global-search', 'workspace'];
 export const IGNORE_PLUGIN_IDS = ['app', 'bookmarks', 'editor', 'file-explorer', 'global-search', 'link', 'markdown', 'note-toolbar', 'open-with-default-app', 'theme', 'workspace'];
@@ -77,6 +77,7 @@ export const enum FileType {
 }
 // note: can't make this a constant as it's used in Object.values()
 export enum ItemType {
+	Additional = 'additional', // used for Gallery items that are provided as examples externally
 	Break = 'break',
 	Command = 'command',
 	Dataview = 'dataview',
@@ -118,6 +119,7 @@ export const enum PositionType {
 	Text = 'text',
 	Top = 'top'
 }
+/** deprecated: In 1.34 replaced with ribbon settings for toolbars and toolbar items */
 export const enum RibbonAction {
 	ItemSuggester = 'item-suggester',
 	ToolbarSelected = 'toolbar-selected',
@@ -143,6 +145,7 @@ export const enum DefaultStyleType {
 	Inactive = 'inactive',
 	Wide = 'wide',
 	Left = 'left',
+	NoWrap = 'nowrap',
 	Right = 'right',
 	Between = 'between',
 	Even = 'even',
@@ -167,7 +170,8 @@ export const enum MobileStyleType {
 	Sticky = 'mstcky',
 	NoSticky = 'mnstcky',
 	Tab = 'mtb',
-	NoTab = 'mntb'
+	NoTab = 'mntb',
+	Wrap = 'mwrp'
 }
 export const MOBILE_STYLE_COMPLIMENTS: MobileStyleType[][] = [
 	[MobileStyleType.Left, MobileStyleType.Center, MobileStyleType.Right],
@@ -176,6 +180,7 @@ export const MOBILE_STYLE_COMPLIMENTS: MobileStyleType[][] = [
 ];
 
 export const SettingFieldItemMap: Record<ItemType, SettingType> = {
+	[ItemType.Additional]: SettingType.Ignore,
 	[ItemType.Break]: SettingType.Ignore,
 	[ItemType.Command]: SettingType.Command,
 	[ItemType.Dataview]: SettingType.Script,
@@ -250,8 +255,11 @@ export interface NoteToolbarSettings {
 	lockCallouts: boolean;
 	obsidianUiVisibility: Record<string, boolean>;
 	onboarding: OnboardingState;
-	ribbonAction: RibbonAction;
-	ribbonToolbar: string | null;
+	ribbon: Array<RibbonItem>;
+	/** deprecated in 1.34: replaced with ribbon settings for toolbars and toolbar items */
+	ribbonAction?: RibbonAction;
+	/** deprecated in 1.34: replaced with ribbon settings for toolbars and toolbar items */
+	ribbonToolbar?: string | null;
 	rules: Array<ToolbarRule>;
 	scriptingEnabled: boolean;
 	showEditInFabMenu: boolean;
@@ -287,8 +295,7 @@ export const DEFAULT_SETTINGS: NoteToolbarSettings = {
 	lockCallouts: false,
 	obsidianUiVisibility: {},
 	onboarding: {},
-	ribbonAction: RibbonAction.Toolbar,
-	ribbonToolbar: null,
+	ribbon: [],
 	rules: [],
 	scriptingEnabled: false,
 	showEditInFabMenu: false,
@@ -328,19 +335,38 @@ export interface ToolbarSettings {
 	customClasses: string;
 	defaultItem: string | null;
 	defaultStyles: string[];
+	description?: string;
 	hasCommand: boolean;
+	icon?: string;
 	items: Array<ToolbarItemSettings>;
 	mobileStyles: string[];
-	/**
-	 * @deprecated positions property as of v1.7 (settings v20240426.1) and moved to desktop, tablet, mobile properties (in migration)
-	 */
+	/** deprecated: positions property as of v1.7 (settings v20240426.1) and moved to desktop, tablet, mobile properties (in migration) */
 	positions?: Array<Position>;
 	position: Position;
 	updated: string;
 }
 
+export interface RibbonItem {
+	uuid: string;
+	showAt?: PositionType;
+}
+
 export const EMPTY_TOOLBAR: ToolbarSettings = {
 	uuid: EMPTY_TOOLBAR_ID,
+	name: '',
+	commandPosition: PositionType.Floating,
+	customClasses: '',
+	defaultItem: null,
+	defaultStyles: [],
+	hasCommand: false,
+	items: [], 
+	mobileStyles: [],
+	position: {},
+	updated: ''
+}
+
+export const NONE_TOOLBAR: ToolbarSettings = {
+	uuid: NONE_TOOLBAR_ID,
 	name: '',
 	commandPosition: PositionType.Floating,
 	customClasses: '',
@@ -376,13 +402,9 @@ export interface Position {
 		editingView?: { position: PositionType },
 		readingView?: { position: PositionType },
 	},
-	/**
-	 * @deprecated contexts property as of v1.7 (settings v20240426.1) and moved to desktop, tablet, mobile properties (in migration)
-	 */
+	/** deprecated: contexts property as of v1.7 (settings v20240426.1) and moved to desktop, tablet, mobile properties (in migration) */
 	contexts?: Array<ViewContext>;
-	/**
-	 * @deprecated position property as of v1.7 (settings v20240426.1) and moved to desktop, tablet, mobile properties (in migration)
-	 */
+	/** deprecated: position property as of v1.7 (settings v20240426.1) and moved to desktop, tablet, mobile properties (in migration) */
 	position?: PositionType.Props | PositionType.Top;
 }
 
@@ -446,7 +468,7 @@ export interface ToolbarItemSettings {
 	icon: string;
 	label: string;
 	tooltip: string;
-	/**	@deprecated contexts property as of v1.7 (settings v20240426.1) and moved to visibility property (in migration) */
+	/**	deprecated: contexts property as of v1.7 (settings v20240426.1) and moved to visibility property (in migration) */
 	contexts?: ViewContext[];
 	description?: string;
 	hasCommand: boolean;	
@@ -493,6 +515,7 @@ export const ITEM_GALLERY_DIVIDER: ToolbarItemSettings = {
 	visibility: { ...DEFAULT_ITEM_VISIBILITY_SETTINGS }
 }
 
+export type ItemFileContextType = 'opened' | 'origin';
 export type ItemFocusType = 'editor' | 'none';
 
 /**
@@ -501,8 +524,9 @@ export type ItemFocusType = 'editor' | 'none';
 export interface ToolbarItemLinkAttr {
 	commandCheck: boolean;
 	commandId: string;
+	fileContext?: ItemFileContextType;
 	focus?: ItemFocusType;
-	/**	@deprecated use the hasVars() method instead */
+	/**	deprecated: use the hasVars() method instead */
 	hasVars: boolean;
 	target?: PaneType | 'modal';
 	type: ItemType;
@@ -567,13 +591,6 @@ export const POSITION_OPTIONS = {
 	]
 }
 
-export const RIBBON_ACTION_OPTIONS = {
-	[RibbonAction.Toolbar]: (t('setting.display-navbar.ribbon-action.option-toolbar')),
-	[RibbonAction.ToolbarSelected]: t('setting.display-navbar.ribbon-action.option-toolbar-selected'),
-	[RibbonAction.ItemSuggester]: t('setting.display-navbar.ribbon-action.option-item-suggester'),
-	[RibbonAction.ToolbarSuggester]: t('setting.display-navbar.ribbon-action.option-toolbar-suggester'),
-}
-
 export const TARGET_OPTIONS = {
 	'default': t('setting.item.option-target-default'),
 	'modal': t('setting.item.option-target-modal'),
@@ -582,7 +599,7 @@ export const TARGET_OPTIONS = {
 	'split': t('setting.item.option-target-split')
 }
 
-export const TOOLBAR_COMMAND_POSITION_OPTIONS = {
+export const TOOLBAR_SHOW_POSITION_OPTIONS = {
 	[PositionType.Floating]: t('setting.position.option-floating'),
 	[PositionType.Menu]: t('setting.position.option-menu'),
 	[PositionType.QuickTools]: t('setting.position.option-quicktools')
@@ -600,6 +617,7 @@ export const DEFAULT_STYLE_OPTIONS: { [key: string]: string }[] = [
 	{ [DefaultStyleType.Glass]: t('setting.styles.option-glass') },
 	{ [DefaultStyleType.Inactive]: t('setting.styles.option-inactive') },
     { [DefaultStyleType.Left]: t('setting.styles.option-left') },
+	{ [DefaultStyleType.NoWrap]: t('setting.styles.option-nowrap') },
     { [DefaultStyleType.Right]: t('setting.styles.option-right') },
 	{ [DefaultStyleType.Between]: t('setting.styles.option-between') },
     { [DefaultStyleType.Even]: t('setting.styles.option-even') },
@@ -609,6 +627,7 @@ export const DEFAULT_STYLE_OPTIONS: { [key: string]: string }[] = [
 
 export const DEFAULT_STYLE_DISCLAIMERS: { [key: string]: string }[] = [
 	{ [DefaultStyleType.Autohide]: t('setting.styles.option-autohide-disclaimer') },
+	{ [DefaultStyleType.NoWrap]: t('setting.styles.option-nowrap-disclaimer') },
 	{ [DefaultStyleType.Sticky]: t('setting.styles.option-sticky-disclaimer') },
 ];
 
@@ -633,7 +652,8 @@ export const MOBILE_STYLE_OPTIONS: { [key: string]: string }[] = [
 	{ [MobileStyleType.Between]: t('setting.styles.option-between') },
     { [MobileStyleType.Even]: t('setting.styles.option-even') },
     { [MobileStyleType.Sticky]: t('setting.styles.option-sticky') },
-	{ [MobileStyleType.Tab ]: t('setting.styles.option-tab') }
+	{ [MobileStyleType.Tab ]: t('setting.styles.option-tab') },
+	{ [MobileStyleType.Wrap]: t('setting.styles.option-wrap') },
 ];
 
 export const MOBILE_STYLE_DISCLAIMERS: { [key: string]: string }[] = [

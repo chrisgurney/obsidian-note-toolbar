@@ -48,7 +48,7 @@ export default class NtbPrompt extends Modal {
         this.class = css_classes;
 
         this.modalEl.addClasses(['prompt', 'note-toolbar-ui']);
-        this.class && this.modalEl.addClasses([...this.class.split(' ')]);
+        if (this.class) this.modalEl.addClasses([...this.class.split(' ')]);
         this.modalEl.setAttr('data-ntb-ui-type', 'prompt');
         if (!this.label) this.modalEl.setAttr('data-ntb-ui-mode', 'noclose-noheader');
     }
@@ -99,7 +99,7 @@ export default class NtbPrompt extends Modal {
 
     private enterCallback(e: KeyboardEvent) {
         // fix for Korean inputs from Templater: https://github.com/SilentVoid13/Templater/issues/1284
-        if (e.isComposing || e.keyCode === 229) return;
+        if (e.isComposing) return;
 
         if (this.large) {
             const modifierPressed = (Platform.isWin || Platform.isLinux) ? e?.ctrlKey : e?.metaKey;
@@ -121,7 +121,7 @@ export default class NtbPrompt extends Modal {
         this.close();
     }
 
-    async openAndGetValue(resolve: (value: string) => void, reject: (reason?: Error) => void): Promise<void> {
+    openAndGetValue(resolve: (value: string) => void, reject: (reason?: Error) => void) {
         this.resolve = resolve;
         this.reject = reject;
         this.open();

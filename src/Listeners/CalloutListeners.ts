@@ -24,8 +24,8 @@ export default class CalloutListeners {
     }
 
 	onWindowOpen = (window: WorkspaceWindow) => {
-		this.ntb.registerDomEvent(window.doc, 'click', (event: MouseEvent) => {
-			this.ntb.callouts.calloutLinkHandler(event);
+		this.ntb.registerDomEvent(window.doc, 'click', async (event: MouseEvent) => {
+			await this.ntb.callouts.calloutLinkHandler(event);
 		});
 	}
 

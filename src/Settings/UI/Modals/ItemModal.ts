@@ -42,12 +42,13 @@ export default class ItemModal extends Modal {
 	public display() {
         
         this.contentEl.empty();
+        
         this.modalEl.addClass('note-toolbar-setting-modal-container');
 
 		// update status of installed plugins so we can show available plugins and display errors if needed
         this.ntb.adapters.checkPlugins();
 
-        let itemForm = this.toolbarItemUi.generateItemForm(this.toolbarItem);
+        const itemForm = this.toolbarItemUi.generateItemForm(this.toolbarItem);
         this.contentEl.append(itemForm);
 
         const doneButton = new Setting(this.contentEl)
@@ -55,7 +56,7 @@ export default class ItemModal extends Modal {
                 btn.setButtonText(t('setting.item.button-close'))
                     .setCta()
                     .setTooltip(t('setting.item.button-close-description'))
-                    .onClick(async (event) => {
+                    .onClick(() => {
                         this.close();
                     });
             });
@@ -63,7 +64,7 @@ export default class ItemModal extends Modal {
 
         // let user close modal with Cmd/Ctrl + Enter
         this.ntb.registerDomEvent(
-            this.modalEl, 'keydown', async (e: KeyboardEvent) => {
+            this.modalEl, 'keydown', (e: KeyboardEvent) => {
                 switch (e.key) {
                     case "Enter": {
                         const modifierPressed = (Platform.isWin || Platform.isLinux) ? e?.ctrlKey : e?.metaKey;
@@ -79,7 +80,7 @@ export default class ItemModal extends Modal {
         // TODO: set initial keyboard focus?
     }
 
-    getItemRowEl(uuid: string): HTMLElement {
+    getItemRowEl(_uuid: string): HTMLElement {
         return this.contentEl;
     }
 

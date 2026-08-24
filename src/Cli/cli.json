@@ -522,6 +522,49 @@
             },
             "docs": "Lists all Note Toolbar CLI actions."
         },
+        "note-toolbar:import": {
+            "available": "1.33.28",
+            "category": "toolbars",
+            "description": {
+                "en": "Add items or create toolbar from a Note Toolbar Callout"
+            },
+            "docs": "Adds items, or creates a toolbar from a [Note Toolbar Callout](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-Callouts). Newlines should be escaped (`\\\\n`).",
+            "examples": "note-toolbar:import toolbar=\"Daily Notes\" callout='> [!note-toolbar]\\\\n> - [:LiArrowLeft:]()<data data-ntb-command=\"daily-notes:goto-prev\"/> <!-- Previous day -->\\\\n> - [:LiCalendar:]()<data data-ntb-command=\"daily-notes\"/> <!-- Today -->\\\\n> - [:LiArrowRight:]()<data data-ntb-command=\"daily-notes:goto-next\"/> <!-- Next day -->'",
+            "flags": {
+                "toolbar": {
+                    "description": {
+                        "en": "Toolbar name to add items to"
+                    },
+                    "value": {
+                        "en": "<name>"
+                    }
+                },
+                "callout": {
+                    "description": {
+                        "en": "Callout markdown (required: callout, file, or path)"
+                    },
+                    "value": {
+                        "en": "<markdown>"
+                    }
+                },
+                "file": {
+                    "description": {
+                        "en": "Filename of callout (required: callout, file, or path)"
+                    },
+                    "value": {
+                        "en": "<name>"
+                    }
+                },
+                "path": {
+                    "description": {
+                        "en": "Filename with path of callout (required: callout, file, or path)"
+                    },
+                    "value": {
+                        "en": "<path>"
+                    }
+                }
+            }
+        },
         "note-toolbar:items": {
             "category": "items",
             "description": {
@@ -577,6 +620,24 @@
                     },
                     "value": {
                         "en": "<name>"
+                    }
+                },
+                "desc": {
+                    "available": "1.34",
+                    "description": {
+                        "en": "Toolbar description"
+                    },
+                    "value": {
+                        "en": "<description>"
+                    }
+                },
+                "icon": {
+                    "available": "1.34",
+                    "description": {
+                        "en": "Toolbar icon, from Lucide's icon set"
+                    },
+                    "value": {
+                        "en": "<iconName>"
                     }
                 }
             }

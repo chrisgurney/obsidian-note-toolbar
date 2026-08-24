@@ -19,7 +19,7 @@ export default class VariableResolver {
         let hasVars = /{{.*?}}/g.test(s);
         if (this.ntb.settings.scriptingEnabled) {
             if (!hasVars && this.ntb.adapters.hasPlugin(ItemType.Dataview)) {
-                let prefix = this.ntb.adapters.dv?.getSetting('inlineQueryPrefix');
+                const prefix = this.ntb.adapters.dv?.getSetting('inlineQueryPrefix');
                 hasVars = !!prefix && s.trim().startsWith(prefix);
                 if (!hasVars) hasVars = s.trim().startsWith('{{dv:');
                 // TODO? support dvjs? check for $= JS inline queries
@@ -51,6 +51,70 @@ export default class VariableResolver {
 
 		const hasVar = (varKey: string) => new RegExp(`\\{\\{\\s*(?:encode:)?\\s*${varKey}\\s*\\}\\}`).test(s);
 
+		if (this.ntb.settings.scriptingEnabled) {
+
+			// JAVASCRIPT
+			if (s.trim().startsWith('{{js:')) {
+				s = s.replace(/^{{js:\s*|\s*}}$/g, '');
+				const result = await this.ntb.adapters.js?.use({ 
+					pluginFunction: (errorBehavior === ErrorBehavior.Ignore) ?  'evaluateIgnore' : 'evaluateInline',
+					expression: s
+				});
+				s = (result && typeof result === 'string') ? result : '';
+			}
+
+			// PLUGIN EXPRESSIONS
+			if (this.ntb.adapters.hasPlugin(ItemType.Dataview)) {
+				const prefix = this.ntb.adapters.dv?.getSetting('inlineQueryPrefix');
+				if ((prefix && s.trim().startsWith(prefix)) || s.trim().startsWith('{{dv:')) {
+					// strip prefix before evaluation
+					if (prefix && s.trim().startsWith(prefix)) s = s.slice(prefix.length);
+					if (s.trim().startsWith('{{dv:')) s = s.trim().replace(/^{{dv:\s*|\s*}}$/g, '');
+					s = s.trim();
+					const result = await this.ntb.adapters.dv?.use({
+						pluginFunction: (errorBehavior === ErrorBehavior.Ignore) ?  'evaluateIgnore' : 'evaluateInline',
+						expression: s
+					});
+					s = (result && typeof result === 'string') ? result : '';
+				}
+				// TODO? support for dvjs? example: $=dv.el('p', dv.current().file.mtime)
+				// prefix = this.dvAdapter?.getSetting('inlineJsQueryPrefix');
+				// if (prefix && s.trim().startsWith(prefix)) {
+				// 	s = s.trim().slice(prefix.length); // strip prefix before evaluation
+				// 	let result = await this.dvAdapter?.use({ pluginFunction: 'executeJs', expression: s });
+				// 	s = result ? result : '';
+				// }
+			}
+
+			if (this.ntb.adapters.hasPlugin(ItemType.JsEngine)) {
+				if (s.trim().startsWith('{{jse:')) {
+					s = s.replace(/^{{jse:\s*|\s*}}$/g, '');
+					const result = await this.ntb.adapters.jsEngine?.use({ 
+						pluginFunction: (errorBehavior === ErrorBehavior.Ignore) ?  'evaluateIgnore' : 'evaluateInline',
+						expression: s
+					});
+					s = (result && typeof result === 'string') ? result : '';
+				}
+			}
+
+			if (this.ntb.adapters.hasPlugin(ItemType.Templater)) {
+				if (s.trim().startsWith('<%') || s.trim().startsWith('{{tp:')) {
+					// strip all prefixes
+					if (s.trim().startsWith('{{tp:')) s = s.replace(/^{{tp:\s*|\s*}}$/g, '');
+					s = s.trim();
+					// add Templater's prefix back in for evaluation
+					if (!s.startsWith('<%')) s = '<%' + s;
+					if (!s.endsWith('%>')) s += '%>';
+					const result = await this.ntb.adapters.tp?.use({ 
+						pluginFunction: (errorBehavior === ErrorBehavior.Ignore) ? 'parseIgnore' : 'parseInline',
+						expression: s
+					});
+					s = (result && typeof result === 'string') ? result : '';
+				}
+			}
+
+		}
+
 		// SELECTION
 		if (hasVar('selection')) {
 			const selection = this.ntb.api.getSelection();
@@ -73,13 +137,13 @@ export default class VariableResolver {
 
 		// PROP_ VARIABLES
 		// have to get this at run/click-time, as file or metadata may not have changed
-		let frontmatter = file ? this.ntb.app.metadataCache.getFileCache(file)?.frontmatter : undefined;
+		const frontmatter = file ? this.ntb.app.metadataCache.getFileCache(file)?.frontmatter : undefined;
 		// replace any variable of format {{prop_KEY}} with the value of the frontmatter dictionary with key = KEY
-		s = s.replace(/{{\s*(encode:)?\s*prop_(.*?)\s*}}/g, (match, encode, p1) => {
+		s = s.replace(/{{\s*(encode:)?\s*prop_(.*?)\s*}}/g, (_match, encode: string, p1: string) => {
 			const key = p1.trim();
 			if (frontmatter && frontmatter[key] !== undefined && frontmatter[key] !== null) {
 				// regex to remove [[ and ]] and any alias (bug #75), in case an internal link was passed
-				const linkWrap = /\[\[([^\|\]]+)(?:\|[^\]]*)?\]\]/g;
+				const linkWrap = /\[\[([^|\]]+)(?:\|[^\]]*)?\]\]/g;
 				// handle the case where the prop might be a list, and convert numbers to strings
 				let fm = Array.isArray(frontmatter[key]) ? frontmatter[key].join(',') : String(frontmatter[key]);
 				fm = fm ? fm.replace(linkWrap, '$1') : '';
@@ -91,70 +155,6 @@ export default class VariableResolver {
 			}
 		});
 
-		if (this.ntb.settings.scriptingEnabled) {
-
-			// JAVASCRIPT
-			if (s.trim().startsWith('{{js:')) {
-				s = s.replace(/^{{js:\s*|\s*}}$/g, '');
-				let result = await this.ntb.adapters.js?.use({ 
-					pluginFunction: (errorBehavior === ErrorBehavior.Ignore) ?  'evaluateIgnore' : 'evaluateInline',
-					expression: s
-				});
-				s = (result && typeof result === 'string') ? result : '';
-			}
-
-			// PLUGIN EXPRESSIONS
-			if (this.ntb.adapters.hasPlugin(ItemType.Dataview)) {
-				let prefix = this.ntb.adapters.dv?.getSetting('inlineQueryPrefix');
-				if ((prefix && s.trim().startsWith(prefix)) || s.trim().startsWith('{{dv:')) {
-					// strip prefix before evaluation
-					if (prefix && s.trim().startsWith(prefix)) s = s.slice(prefix.length);
-					if (s.trim().startsWith('{{dv:')) s = s.trim().replace(/^{{dv:\s*|\s*}}$/g, '');
-					s = s.trim();
-					let result = await this.ntb.adapters.dv?.use({
-						pluginFunction: (errorBehavior === ErrorBehavior.Ignore) ?  'evaluateIgnore' : 'evaluateInline',
-						expression: s
-					});
-					s = (result && typeof result === 'string') ? result : '';
-				}
-				// TODO? support for dvjs? example: $=dv.el('p', dv.current().file.mtime)
-				// prefix = this.dvAdapter?.getSetting('inlineJsQueryPrefix');
-				// if (prefix && s.trim().startsWith(prefix)) {
-				// 	s = s.trim().slice(prefix.length); // strip prefix before evaluation
-				// 	let result = await this.dvAdapter?.use({ pluginFunction: 'executeJs', expression: s });
-				// 	s = result ? result : '';
-				// }
-			}
-
-			if (this.ntb.adapters.hasPlugin(ItemType.JsEngine)) {
-				if (s.trim().startsWith('{{jse:')) {
-					s = s.replace(/^{{jse:\s*|\s*}}$/g, '');
-					let result = await this.ntb.adapters.jsEngine?.use({ 
-						pluginFunction: (errorBehavior === ErrorBehavior.Ignore) ?  'evaluateIgnore' : 'evaluateInline',
-						expression: s
-					});
-					s = (result && typeof result === 'string') ? result : '';
-				}
-			}
-
-			if (this.ntb.adapters.hasPlugin(ItemType.Templater)) {
-				if (s.trim().startsWith('<%') || s.trim().startsWith('{{tp:')) {
-					// strip all prefixes
-					if (s.trim().startsWith('{{tp:')) s = s.replace(/^{{tp:\s*|\s*}}$/g, '');
-					s = s.trim();
-					// add Templater's prefix back in for evaluation
-					if (!s.startsWith('<%')) s = '<%' + s;
-					if (!s.endsWith('%>')) s += '%>';
-					let result = await this.ntb.adapters.tp?.use({ 
-						pluginFunction: (errorBehavior === ErrorBehavior.Ignore) ? 'parseIgnore' : 'parseInline',
-						expression: s
-					});
-					s = (result && typeof result === 'string') ? result : '';
-				}
-			}
-
-		}
-
 		return s;
 
 	}
@@ -163,18 +163,24 @@ export default class VariableResolver {
 	 * Replaces all vars in all labels and tooltips for the given toolbar, so they can be replaced before render.
 	 * @param toolbar toolbar to replace labels and tooltips for
 	 * @param file TFile to render the toolbar within (for context to resolve variables and expressions)
-	 * @returns string arrays of labels and tooltips with resolved values 
+	 * @returns maps (item id -> value) of labels and tooltips with resolved values 
 	 */
-	async resolveText(toolbar: ToolbarSettings, file: TFile | null): Promise<{ resolvedLabels: string[], resolvedTooltips: string[] }> {
-		let labels: string[] = [];
-		let tooltips: string[] = [];
+	async resolveText(
+		toolbar: ToolbarSettings,
+		file: TFile | null
+	): Promise<{
+		resolvedLabels: Record<string, string>;
+		resolvedTooltips: Record<string, string>;
+	}> {
+		const resolvedLabels: Record<string, string> = {};
+		const resolvedTooltips: Record<string, string> = {};
+
 		for (const item of toolbar.items) {
-			const resolvedLabel = await this.replaceVars(item.label, file);
-			const resolvedTooltip = await this.replaceVars(item.tooltip, file);
-			labels.push(resolvedLabel);
-			tooltips.push(resolvedTooltip);
+			resolvedLabels[item.uuid] = await this.replaceVars(item.label, file);
+			resolvedTooltips[item.uuid] = await this.replaceVars(item.tooltip, file);
 		}
-		return { resolvedLabels: labels, resolvedTooltips: tooltips };
+
+		return { resolvedLabels, resolvedTooltips };
 	}
 
 	/**

@@ -28,8 +28,8 @@ const newVersion = process.argv[2];
 
 if (!newVersion) {
     console.error('Error: Version number required');
-    console.log('Usage: npm run version <version>');
-    console.log('Example: npm run version 1.2.3');
+    console.log('Usage: npm run release <version>');
+    console.log('Example: npm run release 1.2.3');
     process.exit(1);
 }
 
@@ -53,9 +53,12 @@ try {
 
     // update versions.json with target version and minAppVersion from manifest.json
     let versions = JSON.parse(readFileSync("versions.json", "utf8"));
-    versions[newVersion] = minAppVersion;
-    writeFileSync("versions.json", JSON.stringify(versions, null, "\t"));
-    console.log('\x1b[32m✓ versions.json updated\x1b[0m');
+    const lastMinAppVersion = Object.values(versions).at(-1);
+    if (minAppVersion !== lastMinAppVersion) {
+        versions[newVersion] = minAppVersion;
+        writeFileSync("versions.json", JSON.stringify(versions, null, "\t"));
+        console.log('\x1b[32m✓ versions.json updated\x1b[0m');
+    }
 
     // git add the version files
     console.log('\n[release] Adding JSON files to git...');

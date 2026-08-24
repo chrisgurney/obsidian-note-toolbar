@@ -310,11 +310,32 @@ format=csv|tsv  # Output format (default: tsv)
 
 ## Create toolbars
 
+### `note-toolbar:import`
+
+> Available in `1.33.28`
+
+Adds items, or creates a toolbar from a [Note Toolbar Callout](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-Callouts). Newlines should be escaped (`\\n`).
+
+```sh
+toolbar=<name>      # Toolbar name to add items to
+callout=<markdown>  # Callout markdown (required: callout, file, or path)
+file=<name>         # Filename of callout (required: callout, file, or path)
+path=<path>         # Filename with path of callout (required: callout, file, or path)
+```
+
+#### Examples
+
+```sh
+note-toolbar:import toolbar="Daily Notes" callout='> [!note-toolbar]\\n> - [:LiArrowLeft:]()<data data-ntb-command="daily-notes:goto-prev"/> <!-- Previous day -->\\n> - [:LiCalendar:]()<data data-ntb-command="daily-notes"/> <!-- Today -->\\n> - [:LiArrowRight:]()<data data-ntb-command="daily-notes:goto-next"/> <!-- Next day -->'
+```
+
 ### `note-toolbar:new`
 
 Creates a new toolbar.
 
 ```sh
-name=<name>  # Toolbar name
+name=<name>         # Toolbar name
+desc=<description>  # Toolbar description (1.34)
+icon=<iconName>     # Toolbar icon, from Lucide's icon set (1.34)
 ```
 

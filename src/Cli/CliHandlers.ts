@@ -2,6 +2,7 @@ import NoteToolbarPlugin from "main";
 import { CliData, CliHandler, getIcon, ItemView, normalizePath, PaneType, TFile } from "obsidian";
 import { ItemType, ScriptConfig, t, ToolbarItemSettings } from "Settings/NoteToolbarSettings";
 import ItemModal from "Settings/UI/Modals/ItemModal";
+import { importFromCallout } from "Utils/ImportExport";
 import { importArgs } from "Utils/Utils";
 import CliDefinition from "./CliDefinition";
 import CliItemsHandler from "./CliItemsHandler";
@@ -27,7 +28,7 @@ export default class CliHandlers {
         const handler = this.cliHandlers[commandId];
         if (!handler) {
             this.ntb.error(`CliManager: No handler registered for command "${commandId}"`);
-            return async () => t('cli.error-handler-not-found', { command: commandId });
+            return () => t('cli.error-handler-not-found', { command: commandId });
         }
         return handler;
     }
@@ -38,6 +39,7 @@ export default class CliHandlers {
 
     /**
      * Defines the CLI command handlers, used in register().
+     * Make sure to add new commands to `cli.json`.
      */
     public cliHandlers: Record<string, CliHandler> = {
         'note-toolbar': this.handleDefault.bind(this),
@@ -59,6 +61,7 @@ export default class CliHandlers {
         'note-toolbar:copy': this.handleCopy.bind(this),
         'note-toolbar:gallery': this.handleGallery.bind(this),
         'note-toolbar:help': this.handleHelp.bind(this),
+        'note-toolbar:import': this.handleImport.bind(this),
         'note-toolbar:items': this.handleItems.bind(this),
         'note-toolbar:move': this.handleMove.bind(this),
         'note-toolbar:new': this.handleNew.bind(this),
@@ -70,7 +73,7 @@ export default class CliHandlers {
     };
 
     async handleAddBreak(args: CliData): Promise<string> {
-        return await this.addItemHelper(args, ItemType.Break, (item) => {});
+        return await this.addItemHelper(args, ItemType.Break, () => {});
     }
 
     async handleAddCommand(args: CliData): Promise<string> {
@@ -97,16 +100,19 @@ export default class CliHandlers {
             const fileResult = this.resolveFileArgs(args.file, args.path);
             if (typeof fileResult === 'string') return fileResult; // error resolving file or path
             const file: TFile | null = fileResult;
-            let scriptConfig: ScriptConfig = {
+            const scriptConfig: ScriptConfig = {
                 pluginFunction: hasValue(args.eval) 
                     ? 'evaluate' 
                     : (hasValue(args.query) ? 'query' : 'exec'),
                 expression: args.eval || args.query || '',
                 sourceFile: file?.path
-            } as ScriptConfig;
+            };
             if (hasValue(args.args)) {
+                // validate the script args by attempting to import them first
                 const parsedArgs = importArgs(args.args);
-                if (!parsedArgs) return t('cli.error-script-invalid-args', { args: args.args });
+                if (parsedArgs.value === null) {
+                    return t('cli.error-script-invalid-args', { error: parsedArgs.error });
+                }
                 scriptConfig.sourceArgs = args.args;
             }
             item.scriptConfig = scriptConfig;
@@ -144,14 +150,17 @@ export default class CliHandlers {
                 const fileResult = this.resolveFileArgs(args.file, args.path);
                 if (typeof fileResult === 'string') return fileResult; // error resolving file or path
                 const file: TFile | null = fileResult;
-                let scriptConfig: ScriptConfig = {
+                const scriptConfig: ScriptConfig = {
                     pluginFunction: hasValue(args.code) ? 'evaluate' : 'exec',
                     expression: args.code,
                     sourceFile: file?.path
-                } as ScriptConfig;
+                };
                 if (hasValue(args.args)) {
+                    // validate the script args by attempting to import them first
                     const parsedArgs = importArgs(args.args);
-                    if (!parsedArgs) return t('cli.error-script-invalid-args', { args: args.args });
+                    if (parsedArgs.value === null) {
+                        return t('cli.error-script-invalid-args', { error: parsedArgs.error });
+                    }
                     scriptConfig.sourceArgs = args.args;
                 }
                 item.scriptConfig = scriptConfig;
@@ -171,11 +180,11 @@ export default class CliHandlers {
     }
 
     async handleAddSep(args: CliData): Promise<string> {
-        return await this.addItemHelper(args, ItemType.Separator, (item) => {});
+        return await this.addItemHelper(args, ItemType.Separator, () => {});
     }
 
     async handleAddSpread(args: CliData): Promise<string> {
-        return await this.addItemHelper(args, ItemType.Spreader, (item) => {});
+        return await this.addItemHelper(args, ItemType.Spreader, () => {});
     }
 
     async handleAddTp(
@@ -194,12 +203,12 @@ export default class CliHandlers {
             file = fileResult;
         }
         return await this.addItemHelper(args, ItemType.Templater, (item) => {
-            let scriptConfig: ScriptConfig = {
+            const scriptConfig: ScriptConfig = {
                 pluginFunction: pluginFunction,
                 expression: args.command ?? '',
                 outputFile: args.output ?? '',
                 sourceFile: file?.path
-            } as ScriptConfig;
+            };
             item.scriptConfig = scriptConfig;
         });  
     }
@@ -231,6 +240,7 @@ export default class CliHandlers {
                 const galleryItemId = id.replace('gallery:', '');
                 item = this.ntb.gallery.getItemById(galleryItemId);
                 if (!item) { cliResult += color(t('cli.error-invalid-item', { item: id }), 'red') + '\n'; continue; }
+                if (item.linkAttr.type === ItemType.Additional) { cliResult += color(t('cli.error-cannot-add-additional-item', { item: item.tooltip }), 'red') + '\n'; continue; }
                 const [newItem] = await this.ntb.gallery.addItemToToolbar(toolbar, item, itemPosition);
                 if (newItem && itemPosition !== undefined) itemPosition++;
             }
@@ -254,15 +264,45 @@ export default class CliHandlers {
         return this.handleToolbars(args);
     }
 
-    handleGallery(args: CliData): string {
+    handleGallery(): string {
         const galleryItems = this.ntb.gallery.getItems();
         const widths = galleryItems.map(item => item.tooltip.length);
         const maxWidth = Math.max(...widths);
         return galleryItems.map(item => item.tooltip.padEnd(maxWidth) + '\t' + color(`gallery:${item.uuid}`, 'black')).join('\n');
     }
 
-    handleHelp(args: CliData): string {
+    handleHelp(): string {
         return t('cli.label-title') + '\n\n' + t('cli.label-heading-commands') + '\n' + this.cliDefinition.formatCommandList();
+    }
+
+    async handleImport(args: CliData): Promise<string> {
+        // get the callout text from an argument, or file/path if provided
+        let callout = hasValue(args.callout) ? args.callout : undefined;
+        const fileResult = this.resolveFileArgs(args.file, args.path);
+        if (typeof fileResult === 'string') return fileResult; // error resolving file or path
+        callout = (!callout && fileResult) ? await this.ntb?.app.vault.cachedRead(fileResult) : callout;
+        if (!callout) return t('cli.error-callout-or-file-required');
+
+        const toolbar = hasValue(args.toolbar) ? this.ntb.settingsManager.getToolbar(args.toolbar) : undefined;
+
+        const [ toolbarWithImport, errorLog, warningLog ] = importFromCallout(this.ntb, callout, toolbar);
+        if (errorLog) return errorLog;
+
+        // if a toolbar name was provided and it's not an existing toolbar, use the name for the new toolbar
+        if (hasValue(args.toolbar) && !toolbar) toolbarWithImport.name = args.toolbar;
+        
+        if (!toolbar) {
+            await this.ntb.settingsManager.addToolbar(toolbarWithImport);
+        }
+        else {
+            await this.ntb.settingsManager.save();
+        }
+        
+        let result = '';
+        result = t('import.label-success-heading', { count: toolbarWithImport.items.length, toolbar: toolbarWithImport.name, interpolation: { escapeValue: false } } ) + '\n\n';
+        result += this.cliItemsHandler.formatItemList({ includeEmpty: 'true', verbose: 'true' }, toolbarWithImport);
+        if (warningLog) result += `\n\n${t('import.errorlog-warning-heading')}\n\n${warningLog}`;
+        return result;
     }
 
     handleItems(args: CliData): string {
@@ -284,11 +324,15 @@ export default class CliHandlers {
     async handleNew(args: CliData): Promise<string> {
         const toolbar = this.ntb.settingsManager.getToolbar(args.name);
         if (toolbar) return t('cli.error-toolbar-already-exists', { toolbar: args.name });
-        const newToolbar = await this.ntb.settingsManager.newToolbar(args.name);
+        if (args.icon) {
+            const icon = getIcon(args.icon);
+            if (!icon) return t('cli.error-invalid-icon', { iconId: args.icon });
+        }
+        const newToolbar = await this.ntb.settingsManager.newToolbar(args.name, args.desc, args.icon);
         return t('cli.success-toolbar-created', { toolbar: newToolbar.name });
     }
 
-    async handleRules(args: CliData): Promise<string> {
+    handleRules(args: CliData): string {
         const format = hasValue(args.format) ? args.format : 'tsv';
 
         const mappings = this.ntb.settings.folderMappings;
@@ -331,7 +375,7 @@ export default class CliHandlers {
 
     }
 
-    async handleSettings(args: CliData): Promise<string> {
+    handleSettings(args: CliData): string {
         const itemId = hasValue(args.item) ? args.item : undefined;
         const toolbarId = hasValue(args.toolbar) ? args.toolbar : undefined;
         if (toolbarId) {
@@ -349,7 +393,7 @@ export default class CliHandlers {
             itemModal.open();
             return t('cli.success-settings-opened');
         }
-        await this.ntb.commands.openSettings();
+        this.ntb.commands.openSettings();
         return t('cli.success-settings-opened');
     }
 
@@ -414,11 +458,15 @@ export default class CliHandlers {
         
         if (!toolbars.length) return t('cli.no-toolbars');
 
-        type ToolbarSchema = 'name' | 'uuid';
-        const schema: ToolbarSchema[] = verbose ? ['name', 'uuid'] : ['name'];
+        type ToolbarSchema = 'name' | 'description' | 'uuid';
+        const schema: ToolbarSchema[] = verbose ? ['name', 'description', 'uuid'] : ['name'];
 
         const rows = toolbars.map(tb => {
-            const values: Record<ToolbarSchema, string> = { name: tb.name, uuid: tb.uuid };
+            const values: Record<ToolbarSchema, string> = { 
+                name: tb.name, 
+                description: tb.description || '', 
+                uuid: tb.uuid 
+            };
             return schema.map(col => values[col]);
         });
 
@@ -451,7 +499,7 @@ export default class CliHandlers {
         if (!item) return t('cli.error-invalid-item', { item: args.item });
         const fileResult = this.resolveFileArgs(args.file, args.path);
         if (typeof fileResult === 'string') return fileResult; // error resolving file or path
-        let activeFile = fileResult || this.ntb.app.workspace.getActiveFile();
+        const activeFile = fileResult || this.ntb.app.workspace.getActiveFile();
         await this.ntb.items.handleItemLink(item, undefined, activeFile);
         return 'Used item: ' + (item.label || item.tooltip || item.uuid);
     }
@@ -516,12 +564,12 @@ export default class CliHandlers {
     private resolveFileArgs(fileArg?: string, pathArg?: string): TFile | null | string {
         if (hasValue(fileArg)) {
             const activeFilePath = this.ntb.app.workspace.getActiveFile()?.path ?? '';
-            const file = this.ntb.app.metadataCache.getFirstLinkpathDest(fileArg!, activeFilePath);
+            const file = this.ntb.app.metadataCache.getFirstLinkpathDest(fileArg, activeFilePath);
             if (!file) return t('cli.error-file-not-found', { file: fileArg, interpolation: { escapeValue: false } });
             return file;
         }
         if (hasValue(pathArg)) {
-            const file = this.ntb.app.vault.getFileByPath(normalizePath(pathArg!));
+            const file = this.ntb.app.vault.getFileByPath(normalizePath(pathArg));
             if (!file) return t('cli.error-path-not-found', { path: pathArg, interpolation: { escapeValue: false } });
             return file;
         }

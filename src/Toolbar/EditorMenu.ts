@@ -1,8 +1,8 @@
 import NoteToolbarPlugin from "main";
-import { Editor, MarkdownFileInfo, MarkdownView, Menu, MenuItem, Notice } from "obsidian";
+import { Editor, Menu, MenuItem, Notice } from "obsidian";
 import { PositionType, t } from "Settings/NoteToolbarSettings";
 import { importFromCallout } from "Utils/ImportExport";
-import { URL_GH_USER_GUIDE } from "Utils/Urls";
+import { URLS } from "Utils/Urls";
 
 
 export default class EditorMenu {
@@ -11,7 +11,10 @@ export default class EditorMenu {
         private ntb: NoteToolbarPlugin
     ) {}
 
-    async render(menu: Menu, editor: Editor, view: MarkdownView | MarkdownFileInfo) {
+    async render(menu: Menu, editor: Editor) {
+
+		// unhide in case it was hidden earlier
+		menu.dom.toggleClass('ntb-hide-menu', false);
 
 		// replace Editor menu with the selected toolbar
 		if (this.ntb.settings.editorMenuToolbar) {
@@ -21,12 +24,13 @@ export default class EditorMenu {
 			if (toolbar) {
 				menu.items = [];
 				if (this.ntb.settings.editorMenuAsToolbar) {
+					menu.dom.toggleClass('ntb-hide-menu', true);
 					const pointerPos = this.ntb.utils.getPosition('pointer');
 					await this.ntb.render.renderFloatingToolbar(toolbar, pointerPos, PositionType.Floating);
 				}
 				else {
 					// not replacing variables here, because we need to call it synchronously
-					this.ntb.render.renderMenuItems(menu, toolbar, activeFile, undefined, false);
+					await this.ntb.render.renderMenuItems(menu, toolbar, activeFile, undefined, false);
 				}
 				return;
 			}
@@ -43,8 +47,8 @@ export default class EditorMenu {
 					item
 						.setIcon('info')
 						.setTitle(t('import.option-help'))
-						.onClick(async () => {
-							window.open(`${URL_GH_USER_GUIDE}/Note-Toolbar-Callouts`, '_blank');
+						.onClick(() => {
+							window.open(`${URLS.GH_USER_GUIDE}/Note-Toolbar-Callouts`, '_blank');
 						});
 				});
 			}
@@ -54,9 +58,11 @@ export default class EditorMenu {
 						.setIcon('import')
 						.setTitle(t('import.option-create'))
 						.onClick(async () => {
-							let toolbar = await importFromCallout(this.ntb, selection);
-							await this.ntb.settingsManager.addToolbar(toolbar);
-							await this.ntb.commands.openToolbarSettingsForId(toolbar.uuid);
+							const [ toolbar, errorLog ] = importFromCallout(this.ntb, selection);
+							if (!errorLog && toolbar) {
+								await this.ntb.settingsManager.addToolbar(toolbar);
+								this.ntb.commands.openToolbarSettingsForId(toolbar.uuid);
+							}
 						});
 				});
 			}

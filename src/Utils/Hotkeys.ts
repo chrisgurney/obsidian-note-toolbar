@@ -93,7 +93,8 @@ export default class HotkeyHelper {
         return hotkeySpan;
     }
 
-    getHotkeyText(command: Command): string | undefined {
+    getHotkeyText(command: Command | undefined): string | undefined {
+		if (!command) return undefined;
         let hotkeyText = undefined;
         const hotkeys = this.ntb.hotkeys.stringifyHotkeysForCommand(command);
         if (hotkeys) {

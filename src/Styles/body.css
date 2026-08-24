@@ -125,7 +125,7 @@ body {
                  --ntb-tbar-top-spacing-md: calc(var(--view-header-height) + var(--ntb-tbar-top-spacing-pad));
              }
          }
-         &:not(:has(.workspace-leaf-content[data-type*="markdown"])) {
+         &.ntb-is-not-markdown {
              --ntb-tbar-top-spacing-md: 0px;
              &.is-floating-nav {
                  --ntb-tbar-top-spacing: calc(var(--view-header-height) + var(--ntb-tbar-top-spacing-pad));
@@ -141,14 +141,32 @@ body {
              --ntb-tbar-bottom-mb-phone: calc(var(--cg-nt-tbar-bottom-mb-phone) + var(--safe-area-inset-bottom));
          }
          &.ntb-remove-view-header {
-             --ntb-tbar-top-spacing: 0px;
-             --ntb-tbar-top-spacing-md: var(--size-4-2);
+            --ntb-tbar-top-spacing: 0px;
+            --ntb-tbar-top-spacing-md: var(--size-4-2);
+
+            --view-header-height: 0px;
+            & .view-header {
+                display: none;
+            }
+            & .view-content {
+                mask-image: var(--view-top-fade-mask);
+            }
          }
          &.ntb-remove-nav {
-             --ntb-tbar-bottom-mb-phone: calc(var(--cg-nt-tbar-bottom-mb-phone) + var(--safe-area-inset-bottom));
+            --ntb-tbar-bottom-mb-phone: calc(var(--cg-nt-tbar-bottom-mb-phone) + var(--safe-area-inset-bottom));
+
+            --navbar-height: 0px;
+            & .mobile-navbar {
+                display: none;
+            }
+         }
+
+         /* animate the top header's vertical position so it doesn't just pop into place when the toolbar adjusts */
+         & .mod-root .view-header {
+            transition: margin-top 100ms ease, padding-top 100ms ease;
          }
     }
-    
+
     /*
      * Android styles
      */
@@ -161,6 +179,8 @@ body {
      */
      --cg-nt-settings-link-focus-box-shadow: 0 0 0 2px;
 
+     --ntb-callout-card-max-width: none;
+     --ntb-callout-card-max-width-mobile: none;
      --ntb-callout-card-width: 150px;
      --ntb-callout-card-width-mobile: 125px;
      --ntb-callout-card-flex: 1 1 var(--ntb-callout-card-width);
@@ -185,34 +205,26 @@ body {
     /* class is added in the Toggle Base toolbar command */
     &.ntb-hide-bases-header {
         .bases-header {
-            display: none !important;
+            display: none;
         }
+    }
+
+    &.ntb-is-modal-displayed {
+        /* fix: popovers + hover editor appearing under modal #568 */
+        --layer-popover: calc(var(--layer-modal) + 1);
+        --he-popover-layer-new: calc(var(--layer-modal) + 1);
+        --he-popover-layer-active: calc(var(--layer-modal) + 1);
+        --he-popover-layer-inactive: calc(var(--layer-modal) + 1);
     }
 
 }
 
 .ntb-hidden {
-    display: none !important;
+    display: none;
 }
 
-body.is-phone.ntb-remove-nav {
-    --navbar-height: 0px;
-    & .mobile-navbar {
-        display: none !important;
-    }
-}
-
-body.is-phone.ntb-remove-view-header {
-    --view-header-height: 0px;
-    & .view-header {
-        display: none !important;
-    }
-    & .view-content {
-        mask-image: var(--view-top-fade-mask);
-    }
-}
-
+/* FIXME: test in Obsidian 1.13 on phones; remove if fixed and if not, try: make selector more specific? */
 /* fix: tooltips appearing on elements below tapped elements */
-body.is-phone .tooltip {
+/* body.is-phone .tooltip {
     display: none !important;
-}
+} */
