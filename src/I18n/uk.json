@@ -148,7 +148,7 @@
         "error-js-code-and-file-exclusive": "Помилка: Вкажіть код або файл/шлях",
         "error-js-code-or-file-required": "Помилка: необхідно значення для коду або файлу/шляху",
         "error-label-or-icon-required": "Помилка: необхідне значення для мітки чи іконки",
-        "error-script-invalid-args": "Помилка: Невірний формат аргументу скрипту:\n{{- error}}",
+        "error-script-invalid-args": "Помилка: Невірний формат аргументу скрипту: {{args}}",
         "error-toolbar-already-exists": "Помилка: Панель з такою назвою вже існує: {{toolbar}}",
         "error-toolbar-not-found-for-item": "Помилка: Панель не знайдено для елемента: {{item}}",
         "items-empty-not-shown": "{{count}} порожніх елементів немає в списку",
@@ -169,6 +169,7 @@
         "success-uri-opened": "Відкрито: {{uri}}"
     },
     "command": {
+        "copy-command-notice": "Команду скопійовано до буфера обміну",
         "callouts-locked-notice": "Заблокувати виноски Note Toolbar",
         "callouts-unlocked-notice": "Розблоковані виноски Note Toolbar",
         "name-copy-cmd-as-data-element": "Копіювати елемент виноски для команди",
@@ -393,6 +394,17 @@
             },
             "description": "Змінити навігаційну панель Обсидіу.",
             "name": "Навігаційні панелі",
+            "ribbon-action": {
+                "description": "Дія натискання у стрічковому меню (мобільний).",
+                "name": "Іконка Стрічкового меню",
+                "option-item-suggester": "Показати всі елементи",
+                "option-toolbar": "Показати поточну панель",
+                "option-toolbar-selected": "Показати вибрану панель інструментів",
+                "option-toolbar-selected-name": "Панель інструментів кнопок стрічки",
+                "option-toolbar-selected-description": "Показувати панель інструментів під час використання кнопки Стрічка.",
+                "option-toolbar-selected-placeholder": "Виберіть панель...",
+                "option-toolbar-suggester": "Показати всі панелі"
+            },
             "top": {
                 "description": "Приховує верхню панель навігації Обсидії.",
                 "name": "Верхня видимість панелі навігації"

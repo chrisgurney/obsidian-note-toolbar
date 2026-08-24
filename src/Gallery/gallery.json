@@ -182,7 +182,8 @@
         },
         {
             "name": { 
-                "en": "Mobile Navigation"
+                "en": "Navigating on Mobile",
+                "uk": "Навігація на мобільном"
             },
             "description": { 
                 "en": "Helpful for navigating within the app and around the editor on mobile."
