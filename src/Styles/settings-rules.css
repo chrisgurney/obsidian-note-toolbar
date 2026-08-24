@@ -248,6 +248,9 @@
         &:last-child {
             border-radius: 0 0 var(--setting-items-radius) var(--setting-items-radius);
         }
+        &:only-child {
+            border-radius: var(--setting-items-radius);
+        }
         .is-mobile & {
             border-radius: 0;
         }
