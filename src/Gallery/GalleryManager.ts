@@ -44,6 +44,7 @@ export default class GalleryManager {
         const items = Array.isArray(galleryItem) ? galleryItem : [galleryItem];
         const added: ToolbarItemSettings[] = [];
         let currentPosition = position;
+        // TODO: only save once at end of "Add as toolbar" loop
         for (const item of items) {
             if (item.linkAttr.type === ItemType.Additional) continue;
             const newItem = await this.ntb.settingsManager.duplicateToolbarItem(toolbar, item, currentPosition);
