@@ -793,7 +793,7 @@
             "menu-delete-rule": "Delete rule",
             "menu-duplicate-rule": "Duplicate rule",
             "name": "Rules",
-            "name-modal": "Toolbar display rules",
+            "name-modal": "Toolbar rules",
             "name-with-count": "Rules ({{count}})",
             "operator-contains": "contains",
             "operator-doesNotContain": "does not contain",
