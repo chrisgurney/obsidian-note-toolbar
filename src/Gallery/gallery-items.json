@@ -3,12 +3,14 @@
         "id": "add-cursor-above",
         "commandId": "editor:add-cursor-above",
         "description": {
-            "en": "Add another cursor above the current cursor."
+            "en": "Add another cursor above the current cursor.",
+            "uk": "Додати ще один курсор над поточним курсором."
         },
         "focus": "editor",
         "icon": "mouse-pointer-click",
         "tooltip": {
-            "en": "Add cursor above"
+            "en": "Add cursor above",
+            "uk": "Додати курсор вище"
         },
         "type": "command"
     },
@@ -16,12 +18,14 @@
         "id": "add-cursor-below",
         "commandId": "editor:add-cursor-below",
         "description": {
-            "en": "Add another cursor below the current cursor."
+            "en": "Add another cursor below the current cursor.",
+            "uk": "Додати ще один курсор під поточним курсором."
         },
         "focus": "editor",
         "icon": "mouse-pointer-click",
         "tooltip": {
-            "en": "Add cursor below"
+            "en": "Add cursor below",
+            "uk": "Додати курсор нижче"
         },
         "type": "command"
     },
@@ -299,12 +303,14 @@
         "id": "delete-paragraph",
         "commandId": "editor:delete-paragraph",
         "description": {
-            "en": "Delete the current paragraph."
+            "en": "Delete the current paragraph.",
+            "uk": "Видалити поточний абзац."
         },
         "focus": "editor",
         "icon": "pilcrow",
         "tooltip": {
-            "en": "Delete paragraph"
+            "en": "Delete paragraph",
+            "uk": "Видалити абзац"
         },
         "type": "command"
     },
@@ -490,12 +496,14 @@
     {
         "id": "file-switcher-open",
         "description": {
-            "en": "Open the file switcher."
+            "en": "Open the file switcher.",
+            "uk": "Відкрити перемикач файлів."
         },
         "icon": "search",
         "script": "ntb.app.internalPlugins.getPluginById('switcher')?.instance?.onOpen();",
         "tooltip": {
-            "en": "File switcher"
+            "en": "File switcher",
+            "uk": "Перемикач файлів"
         },
         "type": "javascript"
     },
@@ -539,11 +547,13 @@
         "id": "go-back",
         "commandId": "app:go-back",
         "description": {
-            "en": "Go backwards."
+            "en": "Go backwards.",
+            "uk": "Перехід назад."
         },
         "icon": "arrow-left",
         "tooltip": {
-            "en": "Navigate back"
+            "en": "Navigate back",
+            "uk": "Навігація назад"
         },
         "type": "command"
     },
@@ -569,11 +579,13 @@
         "id": "go-forward",
         "commandId": "app:go-forward",
         "description": {
-            "en": "Go forwards."
+            "en": "Go forwards.",
+            "uk": "Перехід вперед."
         },
         "icon": "arrow-right",
         "tooltip": {
-            "en": "Navigate forward"
+            "en": "Navigate forward",
+            "uk": "Навігація вперед"
         },
         "type": "command"
     },
@@ -745,12 +757,14 @@
         "id": "insert-footnote",
         "commandId": "editor:insert-footnote",
         "description": {
-            "en": "Insert a footnote."
+            "en": "Insert a footnote.",
+            "uk": "Вставити виноску."
         },
         "focus": "editor",
         "icon": "file-signature",
         "tooltip": {
-            "en": "Insert footnote"
+            "en": "Insert footnote",
+            "uk": "Вставити виноску"
         },
         "type": "command"
     },
@@ -776,12 +790,14 @@
     {
         "id": "paste-external-embed",
         "description": {
-            "en": "Pastes an embedded external link."
+            "en": "Pastes an embedded external link.",
+            "uk": "Вставляє вбудоване зовнішнє посилання."
         },
         "focus": "editor",
         "icon": "image-play",
         "tooltip": {
-            "en": "Paste external embed"
+            "en": "Paste external embed",
+            "uk": "Вставити зовнішню вбудовану частину"
         },
         "type": "additional"
     },
@@ -921,13 +937,15 @@
         "id": "move-caret-up",
         "commandId": "editor:move-caret-up",
         "description": {
-            "en": "Move the caret up."
+            "en": "Move the caret up.",
+            "uk": "Перемістити каретку вгору."
         },
         "excludeOn": "desktop",
         "focus": "editor",
         "icon": "chevron-up",
         "tooltip": {
-            "en": "Move caret up"
+            "en": "Move caret up",
+            "uk": "Перемістити каретку вгору"
         },
         "type": "command"
     },
@@ -935,13 +953,15 @@
         "id": "move-caret-down",
         "commandId": "editor:move-caret-down",
         "description": {
-            "en": "Move the caret down."
+            "en": "Move the caret down.",
+            "uk": "Перемістити каретку вниз."
         },
         "excludeOn": "desktop",
         "focus": "editor",
         "icon": "chevron-down",
         "tooltip": {
-            "en": "Move caret down"
+            "en": "Move caret down",
+            "uk": "Перемістити каретку вниз"
         },
         "type": "command"
     },
@@ -949,13 +969,15 @@
         "id": "move-caret-left",
         "commandId": "editor:move-caret-left",
         "description": {
-            "en": "Move the caret left."
+            "en": "Move the caret left.",
+            "uk": "Перемістити каретку ліворуч."
         },
         "excludeOn": "desktop",
         "focus": "editor",
         "icon": "chevron-left",
         "tooltip": {
-            "en": "Move caret left"
+            "en": "Move caret left",
+            "uk": "Перемістити каретку ліворуч"
         },
         "type": "command"
     },
@@ -963,13 +985,15 @@
         "id": "move-caret-right",
         "commandId": "editor:move-caret-right",
         "description": {
-            "en": "Move the caret right."
+            "en": "Move the caret right.",
+            "uk": "Перемістити каретку праворуч."
         },
         "excludeOn": "desktop",
         "focus": "editor",
         "icon": "chevron-right",
         "tooltip": {
-            "en": "Move caret right"
+            "en": "Move caret right",
+            "uk": "Перемістити каретку праворуч"
         },
         "type": "command"
     },
@@ -1011,11 +1035,13 @@
     {
         "id": "note-toolbar-export",
         "description": {
-            "en": "Writes an export file containing all toolbars as callouts."
+            "en": "Writes an export file containing all toolbars as callouts.",
+            "uk": "Записує файл експорту, що містить усі панелі інструментів як виноски."
         },
         "icon": "file-spreadsheet",
         "tooltip": {
-            "en": "Export all toolbars as callouts"
+            "en": "Export all toolbars as callouts",
+            "uk": "Експортувати всі панелі інструментів як виноски"
         },
         "type": "additional"
     },
@@ -1130,12 +1156,14 @@
     {
         "id": "obsidian-hotkeys",
         "description": {
-            "en": "Opens Obsidian's hotkeys settings."
+            "en": "Opens Obsidian's hotkeys settings.",
+            "uk": "Відкриває налаштування гарячих клавіш Obsidian."
         },
         "icon": "keyboard",
         "script": "ntb.ntb.commands.openHotkeySettings()",
         "tooltip": {
-            "en": "Obsidian hotkeys"
+            "en": "Obsidian hotkeys",
+            "uk": "Гарячі клавіші Obsidian"
         },
         "uri": "https://help.obsidian.md/",
         "type": "javascript"
@@ -1266,11 +1294,13 @@
         "id": "periodic-notes-daily-prev",
         "commandId": "periodic-notes:prev-daily-note",
         "description": {
-            "en": "Go to previous daily note. (Must be in a daily note.)"
+            "en": "Go to previous daily note. (Must be in a daily note.)",
+            "uk": "Перехід до попередньої щоденної нотатки. (Має бути в щоденній нотатці)"
         },
         "icon": "arrow-left",
         "tooltip": {
-            "en": "Previous daily note"
+            "en": "Previous daily note",
+            "uk": "Попередня щоденна нотатка"
         },
         "type": "command"
     },
@@ -1278,11 +1308,13 @@
         "id": "periodic-notes-daily-open",
         "commandId": "periodic-notes:open-daily-note",
         "description": {
-            "en": "Go to today's daily note."
+            "en": "Go to today's daily note.",
+            "uk": "Перехід до сьогоднішньої щоденної нотатки."
         },
         "icon": "calendar",
         "tooltip": {
-            "en": "Today's daily note"
+            "en": "Today's daily note",
+            "uk": "Сьогоднішня щоденна нотатка"
         },
         "type": "command"
     },
@@ -1487,11 +1519,13 @@
     {
         "id": "search-selection",
         "description": {
-            "en": "Search the vault for the currently selected text."
+            "en": "Search the vault for the currently selected text.",
+            "uk": "Пошук вибраного тексту у сховищі."
         },
         "icon": "text-search",
         "tooltip": {
-            "en": "Search for selection"
+            "en": "Search for selection",
+            "uk": "Пошук виділеного фрагмента"
         },
         "type": "uri",
         "uri": "obsidian://search?query={{encode:selection}}"
@@ -1697,13 +1731,15 @@
     {
         "id": "tab-switcher-open",
         "description": {
-            "en": "Open the mobile tab switcher."
+            "en": "Open the mobile tab switcher.",
+            "uk": "Відкрити мобільний перемикач вкладок."
         },
         "excludeOn": "desktop",
         "icon": "tab-frame",
         "script": "ntb.app.mobileTabSwitcher.show()",
         "tooltip": {
-            "en": "Tab switcher"
+            "en": "Tab switcher",
+            "uk": "Перемикач вкладок"
         },
         "type": "javascript"
     },
@@ -1765,12 +1801,14 @@
         "id": "remove-heading",
         "commandId": "editor:set-heading-0",
         "description": {
-            "en": "Remove the heading from the current line."
+            "en": "Remove the heading from the current line.",
+            "uk": "Видалити заголовок з поточного рядка."
         },
         "focus": "editor",
         "icon": "heading",
         "tooltip": {
-            "en": "Remove heading"
+            "en": "Remove heading",
+            "uk": "Видалити заголовок"
         },
         "type": "command"
     },
@@ -2021,12 +2059,14 @@
         "id": "toggle-fold",
         "commandId": "editor:toggle-fold",
         "description": {
-            "en": "Toggle folding on the current line."
+            "en": "Toggle folding on the current line.",
+            "uk": "Перемкнути згортання на поточному рядку."
         },
         "focus": "editor",
         "icon": "fold-vertical",
         "tooltip": {
-            "en": "Toggle fold"
+            "en": "Toggle fold",
+            "uk": "Перемкнути/закрити згортати"
         },
         "type": "command"
     },
@@ -2034,12 +2074,14 @@
         "id": "fold-all",
         "commandId": "editor:fold-all",
         "description": {
-            "en": "Fold all headings and lists."
+            "en": "Fold all headings and lists.",
+            "uk": "Згорнути всі заголовки та списки."
         },
         "focus": "editor",
         "icon": "chevrons-up",
         "tooltip": {
-            "en": "Fold all"
+            "en": "Fold all",
+            "uk": "Згорнути все"
         },
         "type": "command"
     },
@@ -2047,12 +2089,14 @@
         "id": "fold-less",
         "commandId": "editor:fold-less",
         "description": {
-            "en": "Fold one level less."
+            "en": "Fold one level less.",
+            "uk": "Згорнути на один рівень менше."
         },
         "focus": "editor",
         "icon": "minus",
         "tooltip": {
-            "en": "Fold less"
+            "en": "Fold less",
+            "uk": "Згорнути менше"
         },
         "type": "command"
     },
@@ -2060,12 +2104,14 @@
         "id": "fold-more",
         "commandId": "editor:fold-more",
         "description": {
-            "en": "Fold one level more."
+            "en": "Fold one level more.",
+            "uk": "Розгорнути на один рівень більше."
         },
         "focus": "editor",
         "icon": "plus",
         "tooltip": {
-            "en": "Fold more"
+            "en": "Fold more",
+            "uk": "Згорнути більше"
         },
         "type": "command"
     },
@@ -2073,12 +2119,14 @@
         "id": "unfold-all",
         "commandId": "editor:unfold-all",
         "description": {
-            "en": "Unfold all headings and lists."
+            "en": "Unfold all headings and lists.",
+            "uk": "Розгорнути всі заголовки та списки."
         },
         "focus": "editor",
         "icon": "chevrons-down",
         "tooltip": {
-            "en": "Unfold all"
+            "en": "Unfold all",
+            "uk": "Розгорнути все"
         },
         "type": "command"
     },
@@ -2161,12 +2209,14 @@
         "id": "toggle-keyboard",
         "commandId": "editor:toggle-keyboard",
         "description": {
-            "en": "Toggles the keyboard"
+            "en": "Toggles the keyboard",
+            "uk": "Перемикає клавіатуру."
         },
         "excludeOn": ["desktop", "tablet"],
         "icon": "keyboard-toggle",
         "tooltip": {
-            "en": "Toggle keyboard"
+            "en": "Toggle keyboard",
+            "uk": "Перемкнути/закрити клавіатуру"
         },
         "type": "command"
     },
@@ -2174,12 +2224,14 @@
         "id": "toggle-heading",
         "commandId": "editor:set-heading",
         "description": {
-            "en": "Toggle the heading level on the current line."
+            "en": "Toggle the heading level on the current line.",
+            "uk": "Перемикає рівень заголовка на поточному рядку."
         },
         "focus": "editor",
         "icon": "heading",
         "tooltip": {
-            "en": "Toggle heading"
+            "en": "Toggle heading",
+            "uk": "Перемкнути/закрити заголовок"
         },
         "type": "command"
     },
