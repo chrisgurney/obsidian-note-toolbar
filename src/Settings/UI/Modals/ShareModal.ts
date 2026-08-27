@@ -103,7 +103,9 @@ export default class ShareModal extends Modal {
 
         shareContentEl.createEl('p', { 
             cls: 'note-toolbar-setting-field-help-copy',
-            text: Platform.isDesktop ? t('copy.instructions_desktop') : t('copy.instructions_mobile')
+            text: Platform.isPhone ? t('copy.instructions_phone') 
+                : Platform.isTablet ? t('copy.instructions_tablet') 
+                : t('copy.instructions_desktop')
         });
 
         new Setting(shareContentEl)
