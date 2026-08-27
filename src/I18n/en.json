@@ -201,7 +201,8 @@
     "copy": {
         "description": "Copy the text below.",
         "instructions_desktop": "Use Ctrl/Cmd+C or right-click to copy",
-        "instructions_mobile": "Use Ctrl/Cmd+C or long-press to copy."
+        "instructions_phone": "Tap to copy.",
+        "instructions_tablet": "Use Ctrl/Cmd+C or tap to copy."
     },
     "export": {
         "item-generic": "Item{{number}}",
