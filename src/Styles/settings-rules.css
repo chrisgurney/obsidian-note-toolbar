@@ -81,7 +81,7 @@
                 display: none;
             }
             & .setting-item-control {
-                justify-content: flex-start;
+                justify-content: flex-end;
                 & button {
                     background: transparent;
                     color: var(--text-muted);
@@ -91,6 +91,12 @@
                     &:hover {
                         background-color: var(--background-modifier-hover);
                         color: var(--text-normal);
+                    }
+                    .is-phone & {
+                        justify-content: end;
+                        &:hover {
+                            background-color: transparent;
+                        }
                     }
                 }
             }
