@@ -1,13 +1,10 @@
 import NoteToolbarPlugin from "main";
 import { ItemView, Menu, MenuItem, Platform } from "obsidian";
 import { ItemType, PositionType, t } from "Settings/NoteToolbarSettings";
-import CopyTextModal from "Settings/UI/Modals/CopyTextModal";
 import ItemModal from "Settings/UI/Modals/ItemModal";
 import ShareModal from "Settings/UI/Modals/ShareModal";
 import StyleModal from "Settings/UI/Modals/StyleModal";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
-import { learnMoreFr } from "Settings/UI/Utils/SettingsUIUtils";
-import { exportToCallout } from "Utils/ImportExport";
 import { TbarData } from "./ToolbarRenderer";
 
 
@@ -289,11 +286,11 @@ export default class ContextMenu {
 
 			contextMenu.addSeparator();
 
-			// share
+			// copy as callout / share
 			contextMenu.addItem((item: MenuItem) => {
 				item
 					.setIcon('share')
-					.setTitle(t('export.label-share'))
+					.setTitle(t('export.menu-copy-share'))
 					.onClick(async () => {
 						if (toolbarSettings) {
 							const shareUri = await this.ntb.protocolManager.getShareUri(toolbarSettings);
@@ -302,25 +299,6 @@ export default class ContextMenu {
 						}
 					});
 			});
-
-			// copy as callout
-			contextMenu.addItem((item: MenuItem) => {
-				item
-					.setTitle(t('export.menu-callout'))
-					.setIcon('copy')
-					.onClick(() => {
-						if (toolbarSettings) {
-							const copyModal = new CopyTextModal( 
-								this.ntb, 
-								async () => { return await exportToCallout(this.ntb, toolbarSettings, this.ntb.settings.export) },
-								t('export.label-callout'),
-								learnMoreFr(t('export.label-callout-description'), 'Creating-callouts-from-toolbars'),
-								undefined,
-								true);
-							copyModal.open();
-						}
-					})
-				});
 
 			contextMenu.addSeparator();
 

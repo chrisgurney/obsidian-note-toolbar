@@ -212,8 +212,6 @@
     "label-share-description": "分享此链接给其他 Note Toolbar 用户，让他们能将你的工具栏添加到仓库内。",
     "label-share-preview": "预览",
     "label-share-script": "脚本",
-    "menu-callout": "复制为标注…",
-    "menu-callout-item": "复制为标注项目…",
     "notice-completed": "工具栏已作为 Callout 复制到剪贴板，打开设置以调整格式。",
     "notice-shared": "Note Toolbar 链接已复制到剪贴板",
     "option-uri": "使用 Obsidian URI",

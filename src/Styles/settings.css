@@ -1238,6 +1238,27 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 
+    & .note-toolbar-setting-tabs {
+        display: flex;
+        gap: var(--size-4-1);
+        margin-bottom: var(--size-4-4);
+        border-bottom: 1px solid var(--background-modifier-border);
+        & button {
+            padding: var(--size-4-2) var(--size-4-3);
+            border-radius: var(--radius-s) var(--radius-s) 0 0;
+            color: var(--text-muted);
+            &[aria-selected="true"] {
+                box-shadow: inset 0 -1px 0 var(--link-color);
+                color: var(--text-normal);
+                background: var(--background-modifier-hover);
+            }
+            &:focus-visible {
+                outline: 2px solid var(--interactive-accent);
+                outline-offset: -2px;
+            }
+        }
+    }
+
 }
 
 

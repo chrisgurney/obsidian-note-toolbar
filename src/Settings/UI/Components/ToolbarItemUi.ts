@@ -2,7 +2,6 @@ import { Adapter } from "Adapters/Adapter";
 import NoteToolbarPlugin from "main";
 import { ButtonComponent, debounce, DropdownComponent, ExtraButtonComponent, MarkdownViewModeType, Menu, MenuItem, normalizePath, Notice, PaneType, Platform, setIcon, Setting, SettingGroup, ToggleComponent } from "obsidian";
 import { ComponentType, ItemType, LINK_OPTIONS, RibbonItem, SETTINGS_DISCLAIMERS, SettingType, t, TARGET_OPTIONS, ToolbarItemSettings, ToolbarSettings, ViewModeType } from "Settings/NoteToolbarSettings";
-import { exportItemToCallout } from "Utils/ImportExport";
 import { addComponentVisibility, getElementPosition, removeComponentVisibility } from "Utils/Utils";
 import CopyTextModal from "../Modals/CopyTextModal";
 import IconSuggestModal from "../Modals/IconSuggestModal";
@@ -556,28 +555,12 @@ export default class ToolbarItemUi {
 
             menu.addItem((menuItem: MenuItem) => {
                 menuItem
-                    .setTitle(t('setting.item.menu-share'))
+                    .setTitle(t('setting.item.menu-copy-share'))
                     .setIcon('share')
                     .onClick(async () => {
                         const shareUri = await this.ntb.protocolManager.getShareUri(toolbarItem);
                         const shareModal = new ShareModal(this.ntb, shareUri, toolbarItem);
                         shareModal.open();
-                    });
-            });
-
-            menu.addItem((menuItem: MenuItem) => {
-                menuItem
-                    .setTitle(t('export.menu-callout-item'))
-                    .setIcon('copy')
-                    .onClick(() => {
-                        const copyTextModal = new CopyTextModal( 
-                            this.ntb, 
-                            () => { return exportItemToCallout(this.ntb, toolbarItem, null, this.ntb.settings.export) },
-                            t('export.label-callout-item'),
-                            learnMoreFr(t('setting.item.label-copy-callout-description'), 'Note-Toolbar-Callouts'),
-                            undefined,
-                            true);
-                        copyTextModal.open();
                     });
             });
 

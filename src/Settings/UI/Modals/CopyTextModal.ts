@@ -5,8 +5,6 @@ import CalloutSettingsModal from "./CalloutSettingsModal";
 
 export default class CopyTextModal extends Modal {
 
-    private textArea!: TextAreaComponent;
-
 	constructor(
         private ntb: NoteToolbarPlugin,
         private textOrFunction: string | (() => Promise<string>),
@@ -29,26 +27,39 @@ export default class CopyTextModal extends Modal {
         this.contentEl.empty();
         this.modalEl.addClass('note-toolbar-setting-modal-container');
 
-        new Setting(this.contentEl)
-            .setName(this.desc ?? t('copy.description'))
+        this.contentEl.append(
+            CopyTextModal.renderCopyTextContent(this.ntb, this.textOrFunction, this.desc, this.notes, this.showCalloutSettings)
+        );
+
+    }
+
+    static renderCopyTextContent(
+        ntb: NoteToolbarPlugin,
+        textOrFunction: string | (() => Promise<string>),
+        desc?: string | DocumentFragment,
+        notes?: string,
+        showCalloutSettings = false
+    ): HTMLElement {
+
+        const copyTextContentEl = createDiv();
+
+        let textArea: TextAreaComponent;
+
+        new Setting(copyTextContentEl)
+            .setName(desc ?? t('copy.description'))
             .addTextArea(async (text: TextAreaComponent) => {
-                this.textArea = text;
+                textArea = text;
                 const textValue = 
-                    (typeof this.textOrFunction === 'function') ? await this.textOrFunction() : this.textOrFunction;
+                    (typeof textOrFunction === 'function') ? await textOrFunction() : textOrFunction;
                 text.setValue(textValue);
                 window.requestAnimationFrame((): void => {
                     text.inputEl.focus();
                     text.inputEl.select();
                     text.inputEl.readOnly = true;
                     text.inputEl.scrollTop = 0;
-                    this.ntb.registerDomEvent(text.inputEl, 'focus', () => {
+                    ntb.registerDomEvent(text.inputEl, 'focus', () => {
                         text.inputEl.select();
                     });
-                    if (Platform.isDesktop) {
-                        text.inputEl.addEventListener('copy', () => {
-                            window.requestAnimationFrame(() => this.close());
-                        });
-                    }
                     window.setTimeout(() => {
                         text.inputEl.focus();
                         text.inputEl.select();
@@ -56,36 +67,38 @@ export default class CopyTextModal extends Modal {
                 });
             });
     
-        this.contentEl.createEl('p', { 
+        copyTextContentEl.createEl('p', { 
             cls: 'note-toolbar-setting-field-help-copy',
             text: Platform.isDesktop ? t('copy.instructions_desktop') : t('copy.instructions_mobile')
         });
 
-        if (this.notes) {
-            const disclaimers = this.contentEl.createDiv();
+        if (notes) {
+            const disclaimers = copyTextContentEl.createDiv();
             disclaimers.addClass('note-toolbar-setting-field-help');
-            disclaimers.createEl('p', { text: this.notes });
+            disclaimers.createEl('p', { text: notes });
         }
 
-        if (this.showCalloutSettings) {
-            new Setting(this.contentEl)
+        if (showCalloutSettings) {
+            new Setting(copyTextContentEl)
                 .setName(t('setting.copy-as-callout.label-callout-settings'))
                 .setDesc(t('setting.copy-as-callout.description'))
                 .addButton((btn: ButtonComponent) => {
                     btn
                         .setButtonText(t('setting.copy-as-callout.button-callout-settings'))
                         .onClick((event: MouseEvent) => {
-                            const calloutSettingsModal = new CalloutSettingsModal(this.ntb, async () => {
+                            const calloutSettingsModal = new CalloutSettingsModal(ntb, async () => {
                                 // on settings change, update callout text
-                                const textValue = typeof this.textOrFunction === 'function'
-                                    ? await this.textOrFunction()
-                                    : this.textOrFunction;
-                                if (textValue) this.textArea.setValue(textValue);
+                                const textValue = typeof textOrFunction === 'function'
+                                    ? await textOrFunction()
+                                    : textOrFunction;
+                                if (textValue) textArea.setValue(textValue);
                             });
                             calloutSettingsModal.open();
                         });
                 });
         }
+
+        return copyTextContentEl;
 
     }
 

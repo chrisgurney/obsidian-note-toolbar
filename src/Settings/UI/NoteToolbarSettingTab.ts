@@ -4,7 +4,6 @@ import { FILE_TYPE_OPTIONS, OBSIDIAN_UI_ELEMENTS, OBSIDIAN_UI_MOBILE_NAVBAR_OPTI
 import IconSuggestModal from 'Settings/UI/Modals/IconSuggestModal';
 import ToolbarSuggester from 'Settings/UI/Suggesters/ToolbarSuggester';
 import TextToolbar from 'Toolbar/TextToolbar';
-import { exportToCallout } from 'Utils/ImportExport';
 import { getElementPosition } from 'Utils/Utils';
 import { SETTINGS_VERSION } from 'version';
 import CopyTextModal from './Modals/CopyTextModal';
@@ -281,27 +280,12 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 										menu.addSeparator();
 										menu.addItem((menuItem: MenuItem) => {
 											menuItem
-												.setTitle(t('export.label-share'))
+												.setTitle(t('export.menu-copy-share'))
 												.setIcon('share')
 												.onClick(async () => {
 													const shareUri = await this.ntb.protocolManager.getShareUri(toolbar);
 													const shareModal = new ShareModal(this.ntb, shareUri, toolbar);
 													shareModal.open();
-												});
-										});
-										menu.addItem((menuItem: MenuItem) => {
-											menuItem
-												.setTitle(t('export.menu-callout'))
-												.setIcon('copy')
-												.onClick(() => {
-													const copyTextModal = new CopyTextModal(
-														this.ntb,
-														() => { return exportToCallout(this.ntb, toolbar, this.ntb.settings.export) },
-														t('export.label-callout'),
-														learnMoreFr(t('export.label-callout-description'), 'Creating-callouts-from-toolbars'),
-														undefined,
-														true);
-													copyTextModal.open();
 												});
 										});
 									}
