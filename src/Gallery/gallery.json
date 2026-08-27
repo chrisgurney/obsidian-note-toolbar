@@ -20,10 +20,12 @@
     "categories": [
         {
             "name": { 
-                "en": "Editor Tools"
+                "en": "Editor Tools",
+                "uk": "Інструменти редактора"
             },
             "description": { 
-                "en": "Obsidian's built-in editor toolbar."
+                "en": "Obsidian's built-in editor toolbar.",
+                "uk": "Вбудована панель інструментів редактора Obsidian."
             },
             "featured": true,
             "itemIds": [
@@ -32,11 +34,13 @@
         },
         { 
             "name": { 
-                "en": "Clipboard"
+                "en": "Clipboard",
+                "uk": "Буфер обміну"
             },
             "addAsToolbar": false,
             "description": { 
-                "en": "Items that use the clipboard. Learn how to add these to Obsidian on the [Additional Gallery items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Additional-Gallery-items) page."
+                "en": "Items that use the clipboard. Learn how to add these to Obsidian on the [Additional Gallery items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Additional-Gallery-items) page.",
+                "uk": "Елементи, які використовують для буфера обміну. Дізнайтеся, як додати їх до Obsidian, на сторінці [Додаткові елементи галереї](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Additional-Gallery-items)."
             },
             "itemIds": [
                 "copy", "cut", "paste", "copy-block-link", "copy-note-content", "paste-external-embed"
@@ -78,7 +82,8 @@
         },
         {
             "name": { 
-                "en": "Editor Navigation"
+                "en": "Editor Navigation",
+                "uk": "Навігація редактора"
             },
             "description": { 
                 "en": "Get around the text editor faster.",
@@ -109,10 +114,12 @@
         },
         {
             "name": {
-                "en": "Focus"
+                "en": "Focus",
+                "uk": "Зусередження"
             },
             "description": {
-                "en": "Remove Obsidian's UI and focus on your writing."
+                "en": "Remove Obsidian's UI and focus on your writing.",
+                "uk": "Виключить зайвий інтерфейс Obsidian і зосередьтеся на своїх нотатках."
             },
             "itemIds": [
                 "note-toolbar-toggle-properties", "toggle-status-bar", "toggle-ui", "load-workspace", "toggle-keyboard"
@@ -120,10 +127,12 @@
         },
         { 
             "name": { 
-                "en": "Folding"
+                "en": "Folding",
+                "uk": "Згортання"
             },
             "description": { 
-                "en": "Collapse and expand sections of your note for easier navigation."
+                "en": "Collapse and expand sections of your note for easier navigation.",
+                "uk": "Згортайте та розгортайте розділи нотатки для зручнішої навігації."
             },
             "itemIds": [
                 "toggle-fold", "fold-all", "unfold-all", "fold-less", "fold-more"
@@ -182,10 +191,12 @@
         },
         {
             "name": { 
-                "en": "Mobile Navigation"
+                "en": "Mobile Navigation",
+                "uk": "Мобільна навігація"
             },
             "description": { 
-                "en": "Helpful for navigating within the app and around the editor on mobile."
+                "en": "Helpful for navigating within the app and around the editor on mobile.",
+                "uk": "Корисно для навігації по програмі та редактору на мобільному пристрої."
             },
             "itemIds": [
                 "tab-prev", "tab-next", "file-switcher-open", "tab-new", "tab-switcher-open", "toggle-keyboard"
@@ -259,11 +270,13 @@
         },
         {
             "name": { 
-                "en": "Vault Files"
+                "en": "Vault Files",
+                "uk": "Файли сховища"
             },
             "addAsToolbar": false,
             "description": { 
-                "en": "Items that require access to vault files. Learn how to add these to Obsidian on the [Additional Gallery items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Additional-Gallery-items) page."
+                "en": "Items that require access to vault files. Learn how to add these to Obsidian on the [Additional Gallery items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Additional-Gallery-items) page.",
+                "uk": "Елементи, які потребують доступу до сховища файлів. Дізнайтеся, як додати їх до Obsidian, на сторінці [Додаткові елементи галереї](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Additional-Gallery-items)."
             },
             "itemIds": [
                 "file-new-tab", "file-append", "note-toolbar-export", "note-toolbar-backup-data"
