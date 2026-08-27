@@ -153,8 +153,6 @@
         "label-share": "Teilen...",
         "label-share-description": "Teile diesen Link mit einem anderen Note Toolbar-Nutzer, um deine Toolbar zu seinem Vault hinzuzufügen.",
         "label-share-preview": "Vorschau",
-        "notice-completed": "Toolbar als Hinweis in die Zwischenablage kopiert. Öffne die Einstellungen, um das Format anzupassen.",
-        "notice-shared": "Note Toolbar-Link in die Zwischenablage kopiert",
         "option-uri": "Obsidian URI verwenden",
         "option-uri-description": "Bietet einen obsidian://-Link anstelle einer https://-URL.",
         "title-share": "Toolbar teilen: {{toolbar}}",

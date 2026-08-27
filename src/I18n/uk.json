@@ -198,8 +198,6 @@
         "label-share": "Поділитися...",
         "label-share-description": "Поширте це посиланням іншому користувачу Note Toolbar, щоб додати Вашу панель до його сховища.",
         "label-share-preview": "перегляд",
-        "notice-completed": "Панель скопійовано до буфера обміну як виноску. Відкрийте налаштування, щоб змінити форматування.",
-        "notice-shared": "Посилання Note Toolbar скопійовано до буфера обміну",
         "option-uri": "Використати Obsidian URI",
         "option-uri-description": "Створює посилання obsidian:// замість URL-адреси https://.",
         "title-share": "Поширення панелі: {{toolbar}}",

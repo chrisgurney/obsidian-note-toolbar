@@ -156,8 +156,6 @@
         "label-share": "共有...",
         "label-share-description": "このリンクを他のNote Toolbarユーザーと共有して、ツールバーをボルトに追加できます。",
         "label-share-preview": "プレビュー",
-        "notice-completed": "ツールバーをコールアウトとしてクリップボードにコピーしました。書式を調整するには設定を開いてください。",
-        "notice-shared": "Note Toolbarリンクをクリップボードにコピーしました",
         "option-uri": "Obsidian URIを使用",
         "option-uri-description": "https:// URLではなくobsidian://リンクを提供します。",
         "title-share": "ツールバーを共有: {{toolbar}}",
