@@ -75,14 +75,14 @@ _🏆 Runner up in the Obsidian Gems of the Year 2024: New plugins category._
 
 - [Create toolbars](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbars) with items that link to commands, files/folders, URIs/URLs, menus, and [scripts](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Executing-scripts) (Dataview, JS Engine, Templater, and built-in support for JavaScript).
   - Built-in [Gallery of 100+ items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery) that can be added to your toolbars in just a couple clicks/taps.
-- [Define where and how toolbars are displayed](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Defining-where-to-show-toolbars): Based on their folders, or a user-defined property.
+- [Define where and how toolbars are displayed](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Defining-where-to-show-toolbars): Based on flexible rules, using file names, paths, properties, and more.
   - [Position each toolbar](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Positioning-toolbars) below the Properties section, at the top or bottom of notes, in the tab bar, or as a floating button.
   - [Show a toolbar when text is selected.](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Toolbars-within-the-app#Selected-text)
   - Access the toolbar from [the ribbon](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Ribbon), and from [navigation bars](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Navigation-bars) (on mobile).
   - Add a toolbar to the _New tab_ view, or [completely replace the New tab view](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Toolbars-within-the-app#New-tab-view) as a launchpad for your vault.
   - Right-click (or long press) toolbars to swap with others, quickly change their position, style, or to access configuration.
 - Use Obsidian's built-in icons, labels (which can include emojis), or a mix of both.
-  - Show items specifically on mobile, desktop, or both.
+  - Show items based on current platform, or editing mode.
   - Choose whether the icon, label, or both are displayed.
   - Set optional tooltips for each item.
 - [Style toolbars](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Styling-toolbars) by adding borders, sticking to the top of your note on scroll, auto-hiding, choosing whether or not the toolbar should wrap (on mobile), making items look like buttons or act like tabs, and aligning items (left, right, centered, evenly spaced).
