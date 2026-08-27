@@ -2,6 +2,7 @@ import NoteToolbarPlugin from "main";
 import { ItemView, Menu, MenuItem, Platform } from "obsidian";
 import { ItemType, PositionType, t } from "Settings/NoteToolbarSettings";
 import ItemModal from "Settings/UI/Modals/ItemModal";
+import RulesModal from "Settings/UI/Modals/RulesModal";
 import ShareModal from "Settings/UI/Modals/ShareModal";
 import StyleModal from "Settings/UI/Modals/StyleModal";
 import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
@@ -306,12 +307,22 @@ export default class ContextMenu {
 
 		contextMenu.addItem((item: MenuItem) => {
 			item
-			  .setTitle(t('toolbar.menu-toolbar-settings'))
-			  .setIcon('gear')
-			  .onClick(() => {
-				  this.ntb.commands.openSettings();
-			  });
-		  });
+				.setTitle(t('toolbar.menu-rules'))
+				.setIcon('list-filter')
+				.onClick(() => {
+					const rulesModal = new RulesModal(this.ntb);
+					rulesModal.open();
+				});
+			});
+
+		contextMenu.addItem((item: MenuItem) => {
+			item
+				.setTitle(t('toolbar.menu-toolbar-settings'))
+				.setIcon('gear')
+				.onClick(() => {
+					this.ntb.commands.openSettings();
+				});
+			});
 
 		navigator.vibrate(50);
 		contextMenu.showAtPosition(event);
