@@ -1,4 +1,4 @@
-import { App, ButtonComponent, Component, MarkdownRenderer, Modal, requireApiVersion } from "obsidian";
+import { App, ButtonComponent, Component, MarkdownRenderer, Modal } from "obsidian";
 
 interface UiSettings {
     title: string,
@@ -93,8 +93,8 @@ export default class ConfirmModal extends Modal {
             });
 
         if (this.uiSettings.warning) {
-            if (requireApiVersion('1.13.0')) confirmBtn.setDestructive()
-                else confirmBtn.setWarning();
+            // using custom class instead of setWarning() as it's deprecated 
+            confirmBtn.setClass('note-toolbar-setting-button-destructive');
         }
         else confirmBtn.setCta();
 

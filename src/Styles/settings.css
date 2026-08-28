@@ -1495,6 +1495,10 @@ input[type="text"].note-toolbar-setting-error,
         padding-bottom: 1em;
         padding-inline-start: 1em;
     }
+    & button.note-toolbar-setting-button-destructive {
+        --text-color: var(--text-error);
+        background-color: color-mix(in oklch, var(--background-modifier-error) 10%, transparent);
+    }
 }
 
 .note-toolbar-setting-confirm-dialog-buttons {
