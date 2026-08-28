@@ -1,4 +1,4 @@
-import { App, ButtonComponent, Component, MarkdownRenderer, Modal } from "obsidian";
+import { App, ButtonComponent, Component, MarkdownRenderer, Modal, requireApiVersion } from "obsidian";
 
 interface UiSettings {
     title: string,
@@ -92,8 +92,11 @@ export default class ConfirmModal extends Modal {
                 this.close();
             });
 
-        if (this.uiSettings.warning) confirmBtn.setWarning()
-            else confirmBtn.setCta();
+        if (this.uiSettings.warning) {
+            if (requireApiVersion('1.13.0')) confirmBtn.setDestructive()
+                else confirmBtn.setWarning();
+        }
+        else confirmBtn.setCta();
 
     }
 
