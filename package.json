@@ -16,7 +16,7 @@
   "author": "Chris Gurney",
   "license": "GPL-3.0",
   "devDependencies": {
-    "@types/node": "^26.2.0",
+    "@types/node": "^26.4.0",
     "@types/sortablejs": "^1.15.8",
     "chokidar": "^5.0.0",
     "esbuild": "^0.28.2",
