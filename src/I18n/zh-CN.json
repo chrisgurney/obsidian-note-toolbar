@@ -699,10 +699,6 @@
       "scripting": {
         "description": "添加对 Dataview、JavaScript、JS Engine 和 Templater 的支持。需要安装并启用相应插件。",
         "name": "脚本"
-      },
-      "show-edit-tbar": {
-        "description": "在以菜单形式显示的工具栏中添加一个项目，以便快速访问工具栏的设置。",
-        "name": "在工具栏菜单中显示「编辑工具栏」"
       }
     },
     "position": {

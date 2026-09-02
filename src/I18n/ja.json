@@ -555,10 +555,6 @@
             "scripting": {
                 "description": "Dataview、JS Engine、Templaterのサポートを追加します。これらはインストールして有効にする必要があります。",
                 "name": "スクリプティング"
-            },
-            "show-edit-tbar": {
-                "description": "便利なように、メニューとして表示されるツールバーにツールバー設定にアクセスするアイテムを追加します。",
-                "name": "ツールバーメニューに「ツールバーを編集」を表示"
             }
         },
         "position": {

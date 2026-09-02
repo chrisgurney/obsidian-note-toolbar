@@ -255,7 +255,8 @@ export interface NoteToolbarSettings {
 	ribbonToolbar?: string | null;
 	rules: Array<Rule>;
 	scriptingEnabled: boolean;
-	showEditInFabMenu: boolean;
+	/** deprecated in 1.35: removed setting */
+	showEditInFabMenu?: boolean;
 	showLaunchpad: boolean;
 	showToolbarIn: Record<FileType, boolean>;
 	showToolbarInFileMenu: boolean;
@@ -291,7 +292,6 @@ export const DEFAULT_SETTINGS: NoteToolbarSettings = {
 	ribbon: [],
 	rules: [],
 	scriptingEnabled: false,
-	showEditInFabMenu: false,
 	showLaunchpad: false,
 	showToolbarIn: {
 		audio: false,

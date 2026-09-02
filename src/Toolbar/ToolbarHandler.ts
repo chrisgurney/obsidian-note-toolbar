@@ -50,7 +50,7 @@ export default class ToolbarHandler {
 				}
 			}
 			else {
-				await this.ntb.render.renderAsMenu(toolbar, activeFile, this.ntb.settings.showEditInFabMenu).then(menu => { 
+				await this.ntb.render.renderAsMenu(toolbar, activeFile).then(menu => { 
 					const fabEl = this.ntb.el.getToolbarFabEl();
 					if (fabEl) {
 						const fabPos = fabEl.getAttribute('data-tbar-position');

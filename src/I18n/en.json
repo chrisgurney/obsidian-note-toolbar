@@ -709,10 +709,6 @@
             "scripting": {
                 "description": "Adds support for Dataview, JavaScript, JS Engine, and Templater. Plugins must be installed and enabled.",
                 "name": "Scripting"
-            },
-            "show-edit-tbar": {
-                "description": "Adds an item to access the toolbar's settings in toolbars that are displayed as menus, for convenience.",
-                "name": "Show \"Edit toolbar\" in toolbar menus"
             }
         },
         "position": {

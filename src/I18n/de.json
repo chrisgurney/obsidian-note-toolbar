@@ -526,10 +526,6 @@
             "scripting": {
                 "description": "Fügt Unterstützung für Dataview, JS Engine und Templater hinzu, die installiert und aktiviert werden müssen.",
                 "name": "Scripting"
-            },
-            "show-edit-tbar": {
-                "description": "Fügt ein Element für den Zugriff auf die Einstellungen der Symbolleiste in den Menüs der Symbolleiste hinzu.",
-                "name": "Zeige 'Toolbar bearbeiten' in Toolbar-Menüs"
             }
         },
         "position": {

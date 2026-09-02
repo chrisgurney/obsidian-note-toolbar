@@ -1081,22 +1081,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 					fixToggleTab(toggle);
 				});
 		});
-			
-		otherGroup.addSetting((showEditInFabMenuSetting) => {
-			showEditInFabMenuSetting
-				.setName(t('setting.other.show-edit-tbar.name'))
-				.setDesc(t('setting.other.show-edit-tbar.description'))
-				.addToggle((toggle) => {
-					toggle.setValue(this.ntb.settings.showEditInFabMenu)
-					toggle.onChange(async (value) => {
-						this.ntb.settings.showEditInFabMenu = value;
-						await this.ntb.settingsManager.save();
-						// TODO? force the re-rendering of the current toolbar to update the menu
-					});
-					fixToggleTab(toggle);
-				});
-		});
-
+		
 		otherGroup.addSetting((debugSetting) => {
 			debugSetting
 				.setName(t('setting.other.debugging.name'))

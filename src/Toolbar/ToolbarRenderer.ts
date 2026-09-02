@@ -2,7 +2,6 @@ import { Rect } from "@codemirror/view";
 import NoteToolbarPlugin from "main";
 import { FrontMatterCache, getIcon, ItemView, MarkdownView, Menu, MenuItem, MenuPositionDef, Notice, Platform, setIcon, setTooltip, TFile, TFolder } from "obsidian";
 import { DefaultStyleType, ItemType, LocalVar, MobileStyleType, OBSIDIAN_UI_ELEMENTS, PositionType, t, ToggleUiStateType, ToolbarItemSettings, ToolbarSettings, ToolbarStyle } from "Settings/NoteToolbarSettings";
-import ToolbarSettingsModal from "Settings/UI/Modals/ToolbarSettingsModal";
 import { calcComponentVisToggles, getViewId, hasStyle, isValidUri, putFocusInMenu } from "Utils/Utils";
 
 // note: make sure CSS is updated if these are changed
@@ -206,7 +205,7 @@ export default class ToolbarRenderer {
                 // render toolbar in context menu if a default item is set
                 if (toolbar.defaultItem) {
                     this.ntb.registerDomEvent(noteToolbarElement, 'contextmenu', async (event) => {
-                        await this.renderAsMenu(toolbar, file, this.ntb.settings.showEditInFabMenu).then(menu => {
+                        await this.renderAsMenu(toolbar, file).then(menu => {
                             navigator.vibrate(50);
                             menu.showAtPosition(event);
                             if (event.instanceOf(KeyboardEvent)) putFocusInMenu();
@@ -626,14 +625,11 @@ export default class ToolbarRenderer {
 	 * Renders the given toolbar as a menu and returns it.
 	 * @param toolbar ToolbarSettings to show menu for.
 	 * @param activeFile TFile to show menu for.
-	 * @param showEditToolbar set true to show Edit Toolbar link at bottom of menu.
-	 * @param showToolbarName set true to show the menu toolbar's name at top of menu.
 	 * @returns Menu with toolbar's items
 	 */
 	async renderAsMenu(
 		toolbar: ToolbarSettings, 
-		activeFile: TFile | null, 
-		showEditToolbar: boolean = false
+		activeFile: TFile | null
 	): Promise<Menu> {
 
 		const menu = new Menu();
@@ -647,20 +643,6 @@ export default class ToolbarRenderer {
 		}
 
 		await this.renderMenuItems(menu, toolbar, activeFile);
-
-		if (showEditToolbar) {
-			menu.addSeparator();
-			menu.addItem((item: MenuItem) => {
-				item
-					.setTitle(t('toolbar.menu-edit-toolbar', { toolbar: toolbar.name, interpolation: { escapeValue: false } }))
-					.setIcon('rectangle-ellipsis')
-					.onClick(() => {
-						const modal = new ToolbarSettingsModal(this.ntb.app, this.ntb, null, toolbar);
-						modal.setTitle(t('setting.title-edit-toolbar', { toolbar: toolbar.name, interpolation: { escapeValue: false } }));
-						modal.open();
-					});
-			});
-		}
 
 		// add class so we can style the menu
 		menu.dom.addClass('note-toolbar-menu');
@@ -1008,7 +990,7 @@ export default class ToolbarRenderer {
 					if (toolbar?.defaultItem) {
 						// TODO: this is a copy of toolbarFabHandler() -- put in a function?
 						const activeFile = this.ntb.app.workspace.getActiveFile();
-						await this.renderAsMenu(toolbar, activeFile, this.ntb.settings.showEditInFabMenu).then(menu => { 
+						await this.renderAsMenu(toolbar, activeFile).then(menu => { 
 							const fabPos = toolbarFabEl.getAttribute('data-tbar-position');
 							// determine menu orientation based on button position
 							const elemRect = toolbarFabEl.getBoundingClientRect();
