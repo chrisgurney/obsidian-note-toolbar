@@ -56,6 +56,7 @@ export default class ContextMenu {
 			// show/hide properties + bases toolbars
 			//
 
+			let addSeparator = false;
 			if (this.ntb.utils.hasView('markdown') && !isSourceView) {
 				const propsEl = this.ntb.el.getPropsEl();
 				if (propsEl) {
@@ -66,6 +67,7 @@ export default class ContextMenu {
 							.setIcon(uiHidden ? 'captions' : 'captions-off')
 							.onClick(() => this.ntb.commands.toggleUi('props', uiHidden ? 'show' : 'hide'));
 					});
+					addSeparator = true;
 				}
 			}
 			else if (this.ntb.utils.hasView('bases')) {
@@ -78,12 +80,15 @@ export default class ContextMenu {
 							.setIcon(uiHidden ? 'panel-top-open' : 'panel-top-close')
 							.onClick(() => this.ntb.commands.toggleUi('baseToolbar', uiHidden ? 'show' : 'hide'));
 					});
+					addSeparator = true;
 				}
 			}
 
+			if (addSeparator) {
+				contextMenu.addSeparator();
+			}
+
 		}
-		
-		contextMenu.addSeparator();
 
 		//
 		// add item
