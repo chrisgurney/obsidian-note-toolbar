@@ -14,6 +14,7 @@ Obsidian's built-in editor toolbar.
 | Toggle bold | Apply or remove bold formatting. |
 | Toggle strikethrough | Apply or remove strikethrough formatting. |
 | Toggle highlight | Apply or remove text highlighting. |
+| Color highlight | Apply or remove color text highlighting. |
 | Toggle code | Apply or remove inline code formatting. |
 | Toggle blockquote | Apply or remove blockquote formatting. |
 | Insert Markdown link | Insert a Markdown link. |

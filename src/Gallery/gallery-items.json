@@ -2311,6 +2311,22 @@
         "type": "javascript"
     },
     {
+        "id": "toggle-color-highlight",
+        "commandId": "editor:toggle-yellow-highlight",
+        "description": {
+            "en": "Apply or remove color text highlighting.",
+            "ja": "テキストのハイライトを適用または削除します。",
+            "zh": "应用或移除文本高亮。",
+            "uk": "Перемикайте виділення тексту."
+        },
+        "focus": "editor",
+        "icon": "highlighter",
+        "tooltip": {
+            "en": "Color highlight"
+        },
+        "type": "command"
+    },
+    {
         "id": "undo",
         "description": {
             "en": "Reverts the latest action.",
