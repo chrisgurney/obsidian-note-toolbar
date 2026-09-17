@@ -668,12 +668,25 @@ export default class ToolbarRenderer {
 	 * @param file TFile to show menu for.
 	 * @param recursions tracks how deep we are to stop recursion.
 	 * @param resolveVars set to false to skip variable resolution.
+	 * @param resolvedMenuText optional map of resolved menu text, keyed by item UUID; generated if not provided.
 	 * @returns 
 	 */
-	async renderMenuItems(menu: Menu, toolbar: ToolbarSettings, file: TFile | null, recursions: number = 0, resolveVars = true): Promise<void> {
+	async renderMenuItems(
+		menu: Menu, 
+		toolbar: ToolbarSettings, 
+		file: TFile | null, 
+		recursions: number = 0, 
+		resolveVars = true,
+		resolvedMenuText?: Map<string, { title: string; resolvedLink: string }>
+	): Promise<void> {
 
 		if (recursions >= 2) {
 			return; // stop recursion
+		}
+
+		// fix: vars in display text + links need to be resolved async first, so native menus render properly (#606)
+		if (!resolvedMenuText) {
+			resolvedMenuText = await this.resolveMenuVars(toolbar, file, resolveVars);
 		}
 
 		// check if the toolbar has icons, so we know whether to show placeholders or not
@@ -691,9 +704,8 @@ export default class ToolbarRenderer {
 
 			if (showInMode && ((Platform.isMobile && showOnMobile) || (Platform.isDesktop && showOnDesktop))) {
 				// replace variables in labels (or tooltip, if no label set)
-				const title = resolveVars 
-					? await this.ntb.items.getItemText(toolbarItem, file, false, resolveVars)
-					: (toolbarItem.label || toolbarItem.tooltip || '');
+				const resolvedItemText = resolvedMenuText.get(toolbarItem.uuid);
+				const title = resolvedItemText?.title ?? (toolbarItem.label || toolbarItem.tooltip || '');
 				switch(toolbarItem.linkAttr.type) {
 					// show breaks and spreaders as separators in menus
 					case ItemType.Break:
@@ -704,7 +716,7 @@ export default class ToolbarRenderer {
 					case ItemType.Group: {
 						const groupToolbar = this.ntb.settingsManager.getToolbar(toolbarItem.link);
 						if (groupToolbar) {
-							await this.renderMenuItems(menu, groupToolbar, file, recursions + 1, resolveVars);
+							await this.renderMenuItems(menu, groupToolbar, file, recursions + 1, resolveVars, resolvedMenuText);
 						}
 						break;
 					}
@@ -732,7 +744,7 @@ export default class ToolbarRenderer {
 								const menuToolbar = this.ntb.settingsManager.getToolbar(toolbarItem.link);
 								if (menuToolbar) {
 									subMenu.dom.id = menuToolbar.uuid; // add ID in case it's needed for styling
-									await this.renderMenuItems(subMenu, menuToolbar, file, recursions + 1, resolveVars);
+									await this.renderMenuItems(subMenu, menuToolbar, file, recursions + 1, resolveVars, resolvedMenuText);
 								}
 							});
 							break;
@@ -741,12 +753,12 @@ export default class ToolbarRenderer {
 					default: {
 						// don't show the item if the link has variables and resolves to nothing
 						if (resolveVars && this.ntb.vars.hasVars(toolbarItem.link)) {
-							const resolvedLink = await this.ntb.vars.replaceVars(toolbarItem.link, file);
+							const resolvedLink = resolvedItemText?.resolvedLink ?? toolbarItem.link;
 							if (resolvedLink === "") {
 								this.ntb.debug('renderMenuItems: resolved link is empty - skipping');
 								break;
-							};
-						}	
+							}
+						}
 
 						menu.addItem((item: MenuItem) => {
 							const itemTitleFr = new DocumentFragment();
@@ -785,6 +797,43 @@ export default class ToolbarRenderer {
 			}
 		};
 
+	}
+
+	/**
+	 * Resolves variables in menu item labels + links, and returns a map of resolved text.
+	 * @param toolbar ToolbarSettings to add menu items for.
+	 * @param file TFile to show menu for.
+	 * @param resolveVars set to false to skip variable resolution.
+	 * @param resolvedMenuText optional map of resolved text, keyed by item UUID, used for recursion to build final text map.
+	 * @returns 
+	 */
+	private async resolveMenuVars(
+		toolbar: ToolbarSettings, 
+		file: TFile | null, 
+		resolveVars: boolean, 
+		resolvedMenuText = new Map<string, { title: string; resolvedLink: string }>()
+	): Promise<Map<string, { title: string; resolvedLink: string }>> {
+		for (const item of toolbar.items) {
+			const title = resolveVars 
+				? await this.ntb.items.getItemText(item, file, false, resolveVars)
+				: (item.label || item.tooltip || '');
+			
+			let resolvedLink = item.link;
+			if (resolveVars && this.ntb.vars.hasVars(item.link)) {
+				resolvedLink = await this.ntb.vars.replaceVars(item.link, file);
+			}
+
+			resolvedMenuText.set(item.uuid, { title, resolvedLink });
+
+			// recurse into groups and menus to resolve their items as well
+			if (item.linkAttr.type === ItemType.Group || item.linkAttr.type === ItemType.Menu) {
+				const subToolbar = this.ntb.settingsManager.getToolbar(item.link);
+				if (subToolbar) {
+					await this.resolveMenuVars(subToolbar, file, resolveVars, resolvedMenuText);
+				}
+			}
+		}
+		return resolvedMenuText;
 	}
 
 	/**
