@@ -804,15 +804,22 @@ export default class ToolbarRenderer {
 	 * @param toolbar ToolbarSettings to add menu items for.
 	 * @param file TFile to show menu for.
 	 * @param resolveVars set to false to skip variable resolution.
+	 * @param recursions tracks how deep we are to stop recursion.
 	 * @param resolvedMenuText optional map of resolved text, keyed by item UUID, used for recursion to build final text map.
-	 * @returns 
+	 * @returns resolved menu text
 	 */
 	private async resolveMenuVars(
 		toolbar: ToolbarSettings, 
 		file: TFile | null, 
 		resolveVars: boolean, 
+		recursions: number = 0,
 		resolvedMenuText = new Map<string, { title: string; resolvedLink: string }>()
 	): Promise<Map<string, { title: string; resolvedLink: string }>> {
+
+		if (recursions >= 2) {
+			return resolvedMenuText;
+		}
+
 		for (const item of toolbar.items) {
 			const title = resolveVars 
 				? await this.ntb.items.getItemText(item, file, false, resolveVars)
@@ -829,7 +836,7 @@ export default class ToolbarRenderer {
 			if (item.linkAttr.type === ItemType.Group || item.linkAttr.type === ItemType.Menu) {
 				const subToolbar = this.ntb.settingsManager.getToolbar(item.link);
 				if (subToolbar) {
-					await this.resolveMenuVars(subToolbar, file, resolveVars, resolvedMenuText);
+					await this.resolveMenuVars(subToolbar, file, resolveVars, recursions + 1, resolvedMenuText);
 				}
 			}
 		}
