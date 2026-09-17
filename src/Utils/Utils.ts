@@ -590,7 +590,16 @@ export function isUuid(value: string): boolean {
  * Check if a string is a valid URI.
  */
 export function isValidUri(u: string): boolean {
-    return u !== "" && URL.canParse(u.trim());
+	if (!u || u.trim() === "") return false;
+    const trimmed = u.trim();
+
+    // fix: ensure URI contains a valid scheme (e.g., "https://", "obsidian://", "app://");
+	// this might prevent relative strings/fragments from passing as URIs on Android (#608)
+    if (!/^[a-z][a-z0-9+.-]*:/i.test(trimmed)) {
+        return false;
+    }
+
+    return URL.canParse(trimmed);
 }
 
 /**
