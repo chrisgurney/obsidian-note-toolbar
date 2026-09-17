@@ -29,7 +29,7 @@
 _🏆 荣获 2024 年度 Obsidian 新星插件（亚军）_
 
 - [创建工具栏](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbars)：包含命令、文件/文件夹、URI/URL、菜单和[脚本](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Executing-scripts)（Dataview、JS Engine、Templater 及原生的 JavaScript 支持）
-  - 内置 [100+ 项工具预设库](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery)，点击即可添加使用
+  - 内置 [130+ 项工具预设库](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery)，点击即可添加使用
 - [定制显示的工具栏](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Defining-where-to-show-toolbars)：可基于文件夹或笔记属性来选择显示的工具栏
   - [工具栏的位置](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Positioning-toolbars)：可显示在属性下方、笔记顶部/底部，或浮动按钮
   - 支持在 _新标签页_ 添加工具栏
@@ -112,7 +112,7 @@ _🏆 荣获 2024 年度 Obsidian 新星插件（亚军）_
 📖 [完整用户指南](https://github.com/chrisgurney/obsidian-note-toolbar/wiki) | [案例分享](https://github.com/chrisgurney/obsidian-note-toolbar/discussions/categories/show-and-tell)
 
 # 示例库
-在示例库（Gallery）内，你可以 [探索 100+ 个预设工具](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery)
+在示例库（Gallery）内，你可以 [探索 130+ 个预设工具](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery)
 
 ![图库截图](./docs/images/gallery.png)
 
