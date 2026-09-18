@@ -256,29 +256,40 @@ export default class SettingsUIUtils {
 			helpContainerEl.addClass('note-toolbar-setting-help-section-phone');
 
 			const helpDesc = new DocumentFragment();
-			helpDesc.append("v" + PLUGIN_VERSION, " • ");
-			const whatsNewLink = helpDesc.createEl("a", { href: "#", text: t('setting.button-whats-new') });
+			const whatsNewLink = helpDesc.createEl("a", { href: "#", text: 'v' + PLUGIN_VERSION });
 			this.ntb.registerDomEvent(whatsNewLink, 'click', async () => { 
 				await this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_WHATS_NEW, active: true });
 				if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
 				closeCallback();
 			});
+
 			helpDesc.append(' • ');
+
 			const galleryLink = helpDesc.createEl("a", { href: "#", text: iconTextFr('layout-grid', t('setting.button-gallery')) });
 			this.ntb.registerDomEvent(galleryLink, 'click', async () => { 
 				await this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true });
 				if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
 				closeCallback();
 			});
+
 			helpDesc.append(' • ');
+
 			const helpLink = helpDesc.createEl("a", { href: "#", text: iconTextFr('help-circle', t('setting.button-help')) });
 			this.ntb.registerDomEvent(helpLink, 'click', async () => { 
 				await this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_HELP, active: true });
 				if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
 				closeCallback();
 			});
+
+			helpDesc.append(' • ');
+
+			const donateLink = helpDesc.createEl("a", { href: "#", text: iconTextFr('heart', t('setting.help.button-donate')) });
+			this.ntb.registerDomEvent(donateLink, 'click', () => {
+				window.open(URLS.DONATE, '_blank');
+			});
+
 			helpContainerEl.append(helpDesc);
-			
+
 		}
 		else {
 
@@ -313,6 +324,14 @@ export default class SettingsUIUtils {
 							closeCallback();
 						})
 						.buttonEl.setText(iconTextFr('help-circle', t('setting.button-help')))
+				})
+				.addButton((button: ButtonComponent) => {
+					button
+						.setTooltip(t('setting.help.label-donate-description'))
+						.onClick(() => {
+							window.open(URLS.DONATE, '_blank');
+						})
+						.buttonEl.setText(iconTextFr('heart', t('setting.help.label-donate')))
 				});
 
 		}
