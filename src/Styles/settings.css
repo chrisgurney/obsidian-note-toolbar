@@ -1224,6 +1224,12 @@ input[type="text"].note-toolbar-setting-error,
                 }
                 & .setting-item-control {
                     justify-content: end;
+                    select.dropdown {
+                        width: unset;
+                        .is-phone & {
+                            width: 100%;
+                        }
+                    }
                     .is-mobile & {
                         margin-top: 0;
                     }
