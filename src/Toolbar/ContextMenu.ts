@@ -290,7 +290,7 @@ export default class ContextMenu {
 					item
 						.setIcon('repeat')
 						.setTitle(t('toolbar.menu-swap-toolbar'))
-						.onClick(() => this.ntb.commands.swapToolbar());
+						.onClick(() => this.ntb.commands.useToolbar());
 				});
 			}
 

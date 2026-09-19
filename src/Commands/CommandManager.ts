@@ -23,6 +23,7 @@ export default class CommandManager {
     addCommands(): void {
 
         this.ntb.addCommand({ id: 'create-toolbar', name: t('command.name-create-toolbar'), callback: async () => this.createToolbar() });
+        this.ntb.addCommand({ id: 'use-toolbar', name: t('command.name-use-toolbar'), callback: () => this.useToolbar() });
 
         this.ntb.addCommand({ id: 'copy-cmd-uri', name: t('command.name-copy-cmd-uri'), callback: () => this.copy(false) });
         this.ntb.addCommand({ id: 'copy-cmd-as-data-element', name: t('command.name-copy-cmd-as-data-element'), callback: () => this.copy(true) });
@@ -297,10 +298,10 @@ export default class CommandManager {
     }
 
     /**
-     * Opens the toolbar suggester and replaces the current toolbar using the property.
+     * Opens the toolbar suggester and changes the `notetoolbar` property to the selected toolbar.
      * Does nothing if toolbar property is set to `tags`.
      */
-    swapToolbar() {
+    useToolbar() {
         if (this.ntb.settings.toolbarProp === 'tags') return;
         const modal = new ToolbarSuggestModal(this.ntb, true, true, false, (toolbar: ToolbarSettings) => {
             if (toolbar.uuid === EMPTY_TOOLBAR_ID) {
