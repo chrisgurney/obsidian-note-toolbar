@@ -1107,13 +1107,11 @@ export default class ToolbarItemUi {
 
                             const fileContextEl = fieldDiv.querySelector('#note-toolbar-file-context-setting');
                             fileContextEl?.setAttribute('data-active', (item.linkAttr.target === 'modal').toString());
-                            targetSetting.settingEl.toggleClass('note-toolbar-setting-no-padding-bottom', item.linkAttr.target !== 'modal');
 
                             this.toolbar.updated = new Date().toISOString();
                             await this.ntb.settingsManager.save();
                         })
                     );
-                    targetSetting.settingEl.toggleClass('note-toolbar-setting-no-padding-bottom', item.linkAttr.target !== 'modal');
         });
 
         subSettings.addSetting((targetSetting) => {
