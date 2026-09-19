@@ -9,8 +9,9 @@ export const URLS = {
     DONATE: 'https://buymeacoffee.com/cheznine',
 
     /**
-     * Links to the GitHub repository's discussions, issues, releases, and user guide.
+     * Links to the GitHub repository's resources, including discussions, issues, and user guide.
      */
+    GH_CONTRIBUTING: 'https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/CONTRIBUTING.md',
     GH_DISCUSSIONS: 'https://github.com/chrisgurney/obsidian-note-toolbar/discussions',
     GH_ISSUES: 'https://github.com/chrisgurney/obsidian-note-toolbar/issues',
     GH_RELEASES: 'https://github.com/chrisgurney/obsidian-note-toolbar/releases',
