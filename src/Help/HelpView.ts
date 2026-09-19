@@ -54,6 +54,17 @@ export default class HelpView extends ItemView {
         tipsEl.addClass('note-toolbar-tips-card-items');
         renderTipItems(this.ntb, tipsEl, ['getting-started', 'gallery']);
 
+        // Donate
+
+        const donateEl = contentDiv.createDiv();
+        donateEl.addClass('note-toolbar-setting-help-view-section');
+        donateEl.createDiv({ cls: 'note-toolbar-setting-link' }).append(
+            createDiv({ cls: 'note-toolbar-setting-link-text' }, el => 
+                el.append( iconTextFr('heart', t('setting.help.label-donate')), createSpan({ cls: 'note-toolbar-setting-link-description', text: t('setting.help.label-donate-description') }) )
+            ),
+            createDiv().createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.help.button-donate'), href: URLS.DONATE, attr: { 'aria-label': t('setting.help.button-donate-tooltip') } })
+        );
+
         // User guide
 
         contentDiv.createEl('h2').setText(t('setting.help.heading-learn'));
@@ -100,7 +111,7 @@ export default class HelpView extends ItemView {
             createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.help.button-open-external'), href: URLS.GH_USER_GUIDE + '/Feedback', attr: { 'aria-label': t('setting.help.button-open-github') } })
         );
 
-        // Donate
+        // Contribute
 
         contentDiv.createEl('h2').setText(t('setting.help.heading-donate'));
         const contribEl = contentDiv.createDiv();
@@ -112,10 +123,8 @@ export default class HelpView extends ItemView {
         );
 
         contribEl.createDiv({ cls: 'note-toolbar-setting-link' }).append(
-            createDiv({ cls: 'note-toolbar-setting-link-text' }, el => 
-                el.append( iconTextFr('heart', t('setting.help.label-donate')), createSpan({ cls: 'note-toolbar-setting-link-description', text: t('setting.help.label-donate-description') }) )
-            ),
-            createDiv().createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.help.button-donate'), href: URLS.DONATE, attr: { 'aria-label': t('setting.help.button-donate-tooltip') } })
+            createDiv({ cls: 'note-toolbar-setting-link-text' }, el => el.append(iconTextFr('git-pull-request', t('setting.help.label-contribute')))),
+            createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.help.button-read'), href: URLS.GH_CONTRIBUTING, attr: { 'aria-label': t('setting.help.button-open-github') } })
         );
 
     }
