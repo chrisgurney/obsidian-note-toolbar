@@ -582,7 +582,6 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 				button
 					.setButtonText(t('setting.display-rules.button-edit-label'))
 					.setTooltip(t('setting.display-rules.button-edit-tooltip'))
-					.setCta()
 					.onClick(() => {
 						const rulesModal = new RulesModal(this.ntb);
 						rulesModal.open();
