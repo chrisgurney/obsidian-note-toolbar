@@ -522,10 +522,11 @@
 }
 
 .note-toolbar-setting-whatsnew-content {
-    pre:not(.language-css):not(.language-md):not(.language-js):not(.language-sh):not(.language-ts) code {
+    pre code {
         background-color: var(--code-background);
         border-width: var(--code-border-width);
-        padding: 0.3em;
+        display: block;
+        padding: 1em;
     }
     h2 {
         border-bottom: 1px solid var(--background-modifier-border);
