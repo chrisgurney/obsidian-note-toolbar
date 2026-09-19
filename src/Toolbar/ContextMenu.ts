@@ -271,25 +271,28 @@ export default class ContextMenu {
 			  });
 		}
 
-		//
-		// swap toolbar
-		//
-
-		// (if filetype is markdown, and prop != 'tags' so we don't accidentally remove them)
-		if (!isFloatingToolbar && currentView?.getViewType() === 'markdown' && this.ntb.settings.toolbarProp !== 'tags') {
-			contextMenu.addItem((item: MenuItem) => {
-				item
-					.setIcon('repeat')
-					.setTitle(t('toolbar.menu-swap-toolbar'))
-					.onClick(() => this.ntb.commands.swapToolbar());
-			});
-		}
-
 		if (toolbarSettings !== undefined) {
 
 			contextMenu.addSeparator();
 
-			// share
+			//
+			// swap toolbar
+			//
+
+			// (if filetype is markdown, and prop != 'tags' so we don't accidentally remove them)
+			if (!isFloatingToolbar && currentView?.getViewType() === 'markdown' && this.ntb.settings.toolbarProp !== 'tags') {
+				contextMenu.addItem((item: MenuItem) => {
+					item
+						.setIcon('repeat')
+						.setTitle(t('toolbar.menu-swap-toolbar'))
+						.onClick(() => this.ntb.commands.useToolbar());
+				});
+			}
+
+			//
+			// copy as callout / share
+			//
+
 			contextMenu.addItem((item: MenuItem) => {
 				item
 					.setIcon('share')
