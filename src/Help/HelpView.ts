@@ -62,7 +62,7 @@ export default class HelpView extends ItemView {
             createDiv({ cls: 'note-toolbar-setting-link-text' }, el => 
                 el.append( iconTextFr('heart', t('setting.help.label-donate')), createSpan({ cls: 'note-toolbar-setting-link-description', text: t('setting.help.label-donate-description') }) )
             ),
-            createDiv().createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.help.button-donate'), href: URLS.DONATE, attr: { 'aria-label': t('setting.help.button-donate-tooltip') } })
+            createDiv().createEl('a', { cls: 'note-toolbar-setting-link-button', text: t('setting.help.button-donate'), href: URLS.DONATE, attr: { 'aria-label': t('setting.help.button-donate-tooltip'), 'target': '_external', 'rel': 'noopener noreferrer' } })
         );
 
         // User guide
