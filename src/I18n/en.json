@@ -298,7 +298,7 @@
             "label-property-set": "Use in this note",
             "label-rules": "Set display rules...",
             "content": "Set a property ({{property}}) to this toolbar's name to use it in a note. Choose which files should display it, or set it as the default toolbar.",
-            "title": "How to use this toolbar",
+            "title": "How to use toolbars",
             "notice-default-set": "Default toolbar updated for all files, unless a display rule applies: {{toolbar}}",
             "notice-property-set": "Property ({{property}}) updated in current note ({{note}})."
         },
