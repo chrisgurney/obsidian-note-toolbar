@@ -52,7 +52,7 @@ export default class WorkspaceListeners {
 			if (this.lastFileOpenedOnCacheChange !== file) this.lastNtbPropValue = undefined;
 			const ignoreToolbar = ntbPropValue.includes('none') ? true : false;
 			if (ntbPropValue !== this.lastNtbPropValue) {
-				const matchingToolbar = ignoreToolbar ? undefined : this.ntb.settingsManager.getToolbarByName(ntbPropValue);
+				const matchingToolbar = ignoreToolbar ? undefined : this.ntb.settingsManager.getToolbar(ntbPropValue);
 				if (!matchingToolbar && !ignoreToolbar) {
 					const notice = new Notice(t('notice.warning-no-matching-toolbar', { toolbar: ntbPropValue }), 7500);
 					notice.messageEl.addClass('note-toolbar-notice-pointer');

@@ -89,7 +89,7 @@ export default class RulesManager {
             // if any prop = 'none' then don't return a toolbar
             ignoreToolbar = notetoolbarProp.includes('none') ? true : false;
             // is it valid? (i.e., is there a matching toolbar?)
-            if (!ignoreToolbar) matchingToolbar = this.ntb.settingsManager.getToolbarByName(notetoolbarProp);
+            if (!ignoreToolbar) matchingToolbar = this.ntb.settingsManager.getToolbar(notetoolbarProp);
             if (ignoreToolbar || matchingToolbar) matchType = 'prop';
         }
 
@@ -122,9 +122,11 @@ export default class RulesManager {
 		if (Array.isArray(propValue)) {
 			// if we're checking tags, make sure what's returned is a toolbar
 			if (this.ntb.settings.toolbarProp === 'tags') {
-				return propValue.find(tag =>
-					this.ntb.settings.toolbars.some(tbar => tbar.name === tag)
-				);
+                return propValue.find(value =>
+                    this.ntb.settings.toolbars.some(tbar =>
+                        tbar.name === value || tbar.uuid === value
+                    )
+                );
 			}
 			// otherwise, return the first value
 			return propValue[0];
