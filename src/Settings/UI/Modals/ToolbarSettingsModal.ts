@@ -62,12 +62,12 @@ export default class ToolbarSettingsModal extends Modal {
 		contentEl.empty();
 		// refresh the parent window, so we see the new toolbar
 		this.parent?.render();
-		void this.promptForDefault().then(() => {
-			if (this.isFromCommand) this.promptForProp();
+		void this.promptForDefault().then((setAsDefault) => {
+			if (this.isFromCommand && !setAsDefault) this.promptForProp();
 		});
 	}
 
-	async promptForDefault(): Promise<void> {
+	async promptForDefault(): Promise<boolean> {
 		// if this is the only toolbar, prompt once to make this the Default
 		const onboardingId = `default-${this.toolbar.uuid}`;
 		const promptForDefault = this.ntb.settings.toolbars.length === 1 
@@ -89,13 +89,16 @@ export default class ToolbarSettingsModal extends Modal {
 							// refresh the parent window again, so we can see the updated Default setting
 							this.parent?.render();
 						});
+						return true;
 					}
 				});
 			});
 		}
+		return false;
 	}
 
 	promptForProp(): void {
+		if (this.toolbar.items.length === 0) return;
 		void confirmWithModal(this.ntb.app, { 
 			title: t('setting.toolbars.label-set-as-prop', { toolbar: this.toolbar.name, interpolation: { escapeValue: false } }),
 			questionLabel: t('setting.toolbars.label-set-as-prop_confirm'),
