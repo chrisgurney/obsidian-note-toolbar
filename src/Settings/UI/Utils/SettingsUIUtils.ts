@@ -284,7 +284,7 @@ export default class SettingsUIUtils {
 
 			const donateLink = helpDesc.createEl("a", { href: "#", text: iconTextFr('heart', t('setting.help.button-donate')) });
 			this.ntb.registerDomEvent(donateLink, 'click', () => {
-				window.open(URLS.DONATE, '_blank');
+				window.open(URLS.DONATE, '_external');
 			});
 
 			helpContainerEl.append(helpDesc);
@@ -328,7 +328,7 @@ export default class SettingsUIUtils {
 					button
 						.setTooltip(t('setting.help.label-donate-description'))
 						.onClick(() => {
-							window.open(URLS.DONATE, '_blank');
+							window.open(URLS.DONATE, '_external');
 						})
 						.buttonEl.setText(iconTextFr('heart', t('setting.help.label-donate')))
 				});
