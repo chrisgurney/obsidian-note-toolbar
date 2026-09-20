@@ -150,13 +150,16 @@ export default class ToolbarSettingsModal extends Modal {
 		const settingsDiv = createDiv();
 		settingsDiv.className = "vertical-tab-content note-toolbar-setting-modal note-toolbar-setting-ui";
 
-		// show onboarding message
+		// show onboarding message once
 		const onboardingId = 'new-toolbar-mapping';
 		if (!this.ntb.settings.onboarding[onboardingId]) {
+			const contentFr = learnMoreFr(
+				t('onboarding.new-toolbar.content', { property: this.ntb.settings.toolbarProp }),
+				'Defining-where-to-show-toolbars'
+			);
 			const messageEl = this.ntb.settingsUtils.createOnboardingMessageEl( 
-				onboardingId, 
-				t('onboarding.new-toolbar-mapping-title'),
-				t('onboarding.new-toolbar-mapping-content', { property: this.ntb.settings.toolbarProp }));
+				onboardingId, t('onboarding.new-toolbar.title'), contentFr, this.toolbar
+			);
 			settingsDiv.append(messageEl);
 		}
 

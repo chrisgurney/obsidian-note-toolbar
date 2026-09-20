@@ -119,10 +119,17 @@ export default class SettingsUIUtils {
 	createOnboardingMessageEl(
 		messageId: string,
 		title: string,
-		content: string,
+		content: DocumentFragment | string,
+		forToolbar?: ToolbarSettings
 	): HTMLElement {
+		const dismissMessage = async (setting: Setting) => {
+			setting.settingEl.remove();
+			this.ntb.settings.onboarding[messageId] = true;
+			await this.ntb.settingsManager.save();
+		}
+
 		const containerEl = createDiv();
-		const setting = new Setting(containerEl)
+		const onboardSetting = new Setting(containerEl)
 			.setName(title)
 			.setDesc(content)
 			.setClass('note-toolbar-setting-plugin-onboarding')
@@ -131,14 +138,64 @@ export default class SettingsUIUtils {
 					.setIcon('cross')
 					.setTooltip(t('onboarding.tooltip-dismiss'))
 					.onClick(async () => {
-						setting.settingEl.remove();
-						this.ntb.settings.onboarding[messageId] = true;
-						await this.ntb.settingsManager.save();
+						await dismissMessage(onboardSetting);
 					});
 				button.extraSettingsEl.addClass('note-toolbar-setting-plugin-onboarding-close');
 				this.handleKeyClick(button.extraSettingsEl);
 			});
-		return setting.settingEl;
+
+		// if onboarding message is in toolbar settings, add CTAs
+		if (forToolbar) {
+			const actionsEl = onboardSetting.settingEl.createDiv();
+			const actionsSetting = new Setting(actionsEl);
+
+			// update the toolbar property
+			const activeFile = this.ntb.app.workspace.getActiveFile();
+			const view = this.ntb.app.workspace.getActiveViewOfType(ItemView);
+			if (activeFile && view?.getViewType() === 'markdown') {
+				actionsSetting
+					.addButton((button) => {
+						button
+						.setButtonText(t('onboarding.new-toolbar.label-property-set'))
+						.onClick(async () => {
+							await this.ntb.api.setProperty(this.ntb.settings.toolbarProp, forToolbar.name);
+							const fileName = activeFile.basename;
+							new Notice(
+								t('onboarding.new-toolbar.notice-property-set', { property: this.ntb.settings.toolbarProp, note: fileName })
+							).containerEl.addClass('mod-success');
+						})
+					});
+			}
+
+			// open toolbar rules
+			actionsSetting
+				.addButton((button) => {
+					button
+					.setButtonText(t('onboarding.new-toolbar.label-rules'))
+					.onClick(() => {
+						const rulesModal = new RulesModal(this.ntb);
+						rulesModal.open();
+					})
+				});
+
+			// default toolbar
+			if (!this.ntb.settings.defaultToolbar) {
+				actionsSetting
+					.addButton((button) => {
+						button
+						.setButtonText(t('onboarding.new-toolbar.label-default'))
+						.onClick(async () => {
+							this.ntb.settings.defaultToolbar = forToolbar.uuid;
+							await this.ntb.settingsManager.save();
+							new Notice(
+								t('onboarding.new-toolbar.notice-default-set', { toolbar: forToolbar.name })
+							).containerEl.addClass('mod-success');
+						})
+					});				
+			}
+		}
+
+		return onboardSetting.settingEl;
 	}
 
 	/**

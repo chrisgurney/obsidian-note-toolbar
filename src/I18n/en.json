@@ -293,11 +293,20 @@
         "warning-no-matching-toolbar": "Note Toolbar: No matching toolbar: {{toolbar}}\nClick/Tap here to create it."
     },
     "onboarding": {
-        "tooltip-dismiss": "Dismiss",
-        "new-toolbar-mapping-content": "To use this toolbar in a note, set a property ({{property}}) with the name of this toolbar. To use this toolbar in more notes, see: Note Toolbar Settings → Display rules",
-        "new-toolbar-mapping-title": "How to use this toolbar",
-        "swap-toolbar-content": "Selecting an option below will update this note by changing or removing the value of a property ({{property}}).",
-        "swap-toolbar-title": "This note will be changed"
+        "new-toolbar": {
+            "label-default": "Set as default",
+            "label-property-set": "Use in this note",
+            "label-rules": "Set display rules...",
+            "content": "Set a property ({{property}}) to this toolbar's name to use it in a note. Choose which files should display it, or set it as the default toolbar.",
+            "title": "How to use this toolbar",
+            "notice-default-set": "Default toolbar updated for all files, unless a display rule applies: {{toolbar}}",
+            "notice-property-set": "Property ({{property}}) updated in current note ({{note}})."
+        },
+        "swap-toolbar": {
+            "content": "Selecting an option below will update this note by changing or removing the value of a property ({{property}}).",
+            "title": "This note will be changed"
+        },
+        "tooltip-dismiss": "Dismiss"
     },
     "plugin": {
         "canvas": "Canvas",
@@ -790,7 +799,7 @@
             "menu-delete-rule": "Delete rule",
             "menu-duplicate-rule": "Duplicate rule",
             "name": "Rules",
-            "name-modal": "Toolbar rules",
+            "name-modal": "Toolbar display rules",
             "name-with-count": "Rules ({{count}})",
             "operator-contains": "contains",
             "operator-doesNotContain": "does not contain",

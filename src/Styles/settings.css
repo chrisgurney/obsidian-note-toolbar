@@ -120,6 +120,7 @@
         }
         & .note-toolbar-setting-plugin-onboarding {
             margin-bottom: 0.75em;
+            flex-wrap: wrap;
         }
     }
 
