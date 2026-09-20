@@ -303,6 +303,29 @@ function unescapeTextForCallout(str: string): string {
 }
 
 /**
+ * Splits a input callout string into individual lines, preserving literal `\n` sequences 
+ * inside quoted HTML attributes or embedded JavaScript expressions.
+ * @param callout the raw callout string to parse
+ * @returns Array of line strings ready for item processing.
+ */
+function parseCalloutLines(callout: string): string[] {
+    // temporarily protect newlines inside quotes/scripts from splitting
+    const protectedCallout = callout.replace(/(["'])([\s\S]*?)\1/g, (match) => {
+        return match.replace(/\\n/g, '___ESCAPED_NL___');
+    });
+
+    // expand remaining newline (which represent actual callout line breaks)
+    const lines = protectedCallout
+        .replace(/\\n/g, '\n')
+        .trim()
+        .split('\n')
+        // restore newlines inside JavaScript string/attribute values
+        .map(line => line.replace(/___ESCAPED_NL___/g, '\\n'));
+
+    return lines;
+}
+
+/**
  * Imports items from a callout string, adding them to a new toolbar, or the toolbar provided.
  * @param ntb NoteToolbarPlugin
  * @param callout Note Toolbar Calllout string to import
@@ -319,8 +342,8 @@ export function importFromCallout(
 
     ntb.debug('importFromCallout');
 
-    // handle escaped newlines from the command-line, as well as those from the UI 
-    const lines = callout.replace(/\\n/g, '\n').trim().split('\n');
+    // get actual callout lines for processing
+    const lines = parseCalloutLines(callout);
     
     const isToolbarProvided = toolbar ? true : false;
     let errorLog = '';
@@ -568,6 +591,7 @@ export function importFromCallout(
     if (warningLog) noticeText += `${t('import.errorlog-warning-heading')}\n${warningLog}`;
     if (noticeText) {
         if (displayError) new Notice(noticeText, 10000).containerEl.addClass('mod-warning');
+        ntb.error(`| attempted to parse:`, lines);
         ntb.error(noticeText);
     }
 
