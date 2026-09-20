@@ -315,15 +315,20 @@ export default class ContextMenu {
 
 		}
 
-		contextMenu.addItem((item: MenuItem) => {
-			item
-				.setTitle(t('toolbar.menu-rules'))
-				.setIcon('list-filter')
-				.onClick(() => {
-					const rulesModal = new RulesModal(this.ntb);
-					rulesModal.open();
+		if (!isFloatingToolbar
+			&& currentView?.getViewType() !== 'webviewer' 
+			&& currentView?.getViewType() !== 'empty'
+		) {
+			contextMenu.addItem((item: MenuItem) => {
+				item
+					.setTitle(t('toolbar.menu-rules'))
+					.setIcon('list-filter')
+					.onClick(() => {
+						const rulesModal = new RulesModal(this.ntb);
+						rulesModal.open();
+					});
 				});
-			});
+		}
 
 		contextMenu.addItem((item: MenuItem) => {
 			item
