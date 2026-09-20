@@ -62,11 +62,14 @@ export default class ToolbarSettingsModal extends Modal {
 		contentEl.empty();
 		// refresh the parent window, so we see the new toolbar
 		this.parent?.render();
-		void this.promptForDefault().then((setAsDefault) => {
-			if (this.isFromCommand && !setAsDefault) this.promptForProp();
-		});
+
+		/* TODO: possibly remove promptForDefault, now that CTAs are in the onboarding message */
+		// void this.promptForDefault().then((setAsDefault) => {
+		if (this.isFromCommand) this.promptForProp();
+		// });
 	}
 
+	/* TODO: possibly remove promptForDefault, now that CTAs are in the onboarding message */
 	async promptForDefault(): Promise<boolean> {
 		// if this is the only toolbar, prompt once to make this the Default
 		const onboardingId = `default-${this.toolbar.uuid}`;
