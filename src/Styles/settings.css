@@ -93,6 +93,10 @@
     }
 }
 
+.is-phone .modal .setting-item.note-toolbar-setting-plugin-onboarding {
+    gap: unset;
+}
+
 .note-toolbar-setting-plugin-onboarding-close {
     position: absolute;
     top: 8px;

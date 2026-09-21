@@ -957,6 +957,7 @@
             "tooltip-command-indicator": "Open with command:\n{{command}}"
         },
         "whats-new": {
+            "1-35": "Toolbar display rules now allow you to show toolbars based on criteria like file name, folder path, frontmatter properties, tags, editor mode, file type, or device platform.",
             "button-read": "Read ↗",
             "button-read-tooltip": "Open github.com",
             "error-failed-to-load": "Failed to load release notes:\n{{baseUrl}}/{{lang}}/{{version}}.md",
@@ -967,7 +968,8 @@
             "label-show-whatsnew-description": "Show this tab when each new major release is installed.",
             "label-roadmap": "What's ahead for Note Toolbar?",
             "label-roadmap-description": "Check out the Roadmap to preview the features under consideration.",
-            "title": "What's new in Note Toolbar?"
+            "title": "What's new in Note Toolbar?",
+            "title_version": "New in Note Toolbar v{{version}}"
         }
     },
     "toolbar": {

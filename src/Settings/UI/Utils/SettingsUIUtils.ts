@@ -114,17 +114,20 @@ export default class SettingsUIUtils {
 	 * @param messageId unique identifier for the message, so it's not shown again
 	 * @param title title of the message
 	 * @param content content of the message
+	 * @param forToolbar optional ToolbarSettings if message is for a specific toolbar
+	 * @param forVersion optional version string if message for a specific release version
 	 * @returns 
 	 */
 	createOnboardingMessageEl(
 		messageId: string,
 		title: string,
 		content: DocumentFragment | string,
-		forToolbar?: ToolbarSettings
+		forToolbar?: ToolbarSettings,
+		forVersion?: string
 	): HTMLElement {
 		const dismissMessage = async (setting: Setting) => {
 			setting.settingEl.remove();
-			this.ntb.settings.onboarding[messageId] = true;
+			this.ntb.settings.onboarding[messageId] = forVersion ?? true;
 			await this.ntb.settingsManager.save();
 		}
 
@@ -307,6 +310,33 @@ export default class SettingsUIUtils {
 	 */
 	displayHelpSection(settingsDiv: HTMLElement, useTextVersion: boolean = false, closeCallback: () => void) {
 		
+		// What's New CTA in settings, if user hasn't seen it yet
+		let whatsNewEl: HTMLElement | undefined;
+		if (this.ntb.settings.onboarding['onboarding-whats-new'] !== RELEASE_VERSION) {
+
+			const whatsNewDescLangKey = `setting.whats-new.${RELEASE_VERSION.replace('.', '-')}`;
+			const whatsNewLangExists = t(whatsNewDescLangKey) !== whatsNewDescLangKey;
+
+			if (whatsNewLangExists) {
+				const whatsNewFr = new DocumentFragment();
+				const whatsNewDescEl = whatsNewFr.createSpan({ text: t(whatsNewDescLangKey) + ' ' });
+				const whatsNewLinkEl = whatsNewDescEl.createEl('a', { href: '#', text: t('setting.button-learn-more') });
+				this.ntb.registerDomEvent(whatsNewLinkEl, 'click', async () => { 
+					await this.showWhatsNewView();
+					if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
+					closeCallback();
+				});
+	
+				whatsNewEl = this.createOnboardingMessageEl(
+					'onboarding-whats-new',
+					t('setting.whats-new.title_version', { version: RELEASE_VERSION }),
+					whatsNewFr,
+					undefined,
+					RELEASE_VERSION
+				);
+			}
+		}
+
 		if (Platform.isPhone || useTextVersion) {
 
 			const helpContainerEl = settingsDiv.createDiv();
@@ -315,7 +345,7 @@ export default class SettingsUIUtils {
 			const helpDesc = new DocumentFragment();
 			const whatsNewLink = helpDesc.createEl("a", { href: "#", text: 'v' + PLUGIN_VERSION });
 			this.ntb.registerDomEvent(whatsNewLink, 'click', async () => { 
-				await this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_WHATS_NEW, active: true });
+				await this.showWhatsNewView();
 				if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
 				closeCallback();
 			});
@@ -392,6 +422,8 @@ export default class SettingsUIUtils {
 				});
 
 		}
+
+		if (whatsNewEl) settingsDiv.append(whatsNewEl);
 
 	}
 
@@ -909,9 +941,7 @@ export default class SettingsUIUtils {
 	 */
 	showHelpViewIfNeeded() {
 		void this.runOnboarding('startup-help-view', async () => {
-			const leaf = this.ntb.app.workspace.getLeaf(true);
-			await leaf.setViewState({ type: VIEW_TYPE_HELP, active: true });
-			await this.ntb.app.workspace.revealLeaf(leaf);
+			await this.showWhatsNewView();
 		});
 	}
 
@@ -923,13 +953,17 @@ export default class SettingsUIUtils {
 		if (this.ntb.settings.showWhatsNew && this.ntb.settings.whatsnew_version !== RELEASE_VERSION) {
 			this.ntb.settings.whatsnew_version = RELEASE_VERSION;
 			void this.ntb.settingsManager.save(false).then(async () => {
-				const leaf = this.ntb.app.workspace.getLeaf(true);
-				await leaf.setViewState({ type: VIEW_TYPE_WHATS_NEW, active: true });
-				await this.ntb.app.workspace.revealLeaf(leaf);
+				await this.showWhatsNewView();
 			});
 		}
 	}
 	
+	async showWhatsNewView() {
+		const leaf = this.ntb.app.workspace.getLeaf(true);
+		await leaf.setViewState({ type: VIEW_TYPE_WHATS_NEW, active: true });
+		await this.ntb.app.workspace.revealLeaf(leaf);
+	}
+
 	/**
 	 * Updates the UI state of the given component if the value is invalid.
 	 * @param parent Setting UI tab/modal that the component is in

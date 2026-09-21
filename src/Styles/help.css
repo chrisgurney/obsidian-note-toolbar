@@ -269,6 +269,7 @@
 .note-toolbar-setting-help-section-phone {
     color: var(--text-muted);
     font-size: var(--font-ui-smaller);
+    margin-bottom: var(--size-4-2);
     text-align: center;
     a {
         color: var(--text-muted);

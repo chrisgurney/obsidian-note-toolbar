@@ -221,7 +221,7 @@ export enum CalloutAttr {
 }
 
 export interface OnboardingState {
-    [id: string]: boolean;
+    [id: string]: boolean | string;
 }
 
 export const enum ToolbarStyle {
