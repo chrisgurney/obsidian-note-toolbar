@@ -33,8 +33,5 @@
   "dependencies": {
     "@codemirror/view": "6.38.6",
     "sortablejs": "^1.15.2"
-  },
-  "overrides": {
-    "file-entry-cache": "11.1.5"
   }
 }
