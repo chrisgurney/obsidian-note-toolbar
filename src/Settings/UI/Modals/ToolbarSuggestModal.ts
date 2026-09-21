@@ -60,10 +60,10 @@ export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
                 if (resultsEl) {
                     const messageEl = this.ntb.settingsUtils.createOnboardingMessageEl( 
                         onboardingId, 
-                        t('onboarding.swap-toolbar-title'), 
-                        t('onboarding.swap-toolbar-content', { property: this.ntb.settings.toolbarProp }));
+                        t('onboarding.swap-toolbar.title'), 
+                        t('onboarding.swap-toolbar.content', { property: this.ntb.settings.toolbarProp }));
                     resultsEl.insertAdjacentElement('beforebegin', messageEl);
-                }    
+                }
             }
         }
 

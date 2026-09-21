@@ -1,13 +1,8 @@
 import { getLanguage, PaneType } from "obsidian";
-
-/* updates link to plugin's release notes and displays What's New view */
-export const WHATSNEW_VERSION = '1.34';
-
-/* only update when settings structure changes to trigger migrations */
-export const SETTINGS_VERSION = 20260703.1;
+import { SETTINGS_VERSION } from "version";
 
 // *****************************************************************************
-// #region TRANSLATIONS
+// TRANSLATIONS
 // 
 // Language codes used by Obsidian per:
 // https://github.com/obsidianmd/obsidian-translations?tab=readme-ov-file#existing-languages
@@ -36,10 +31,8 @@ void Locales.init();
 
 export const t: (key: string, ...args: unknown[]) => string = Locales.getFixedT(null, 'plugin-note-toolbar', null); // string translation function
 
-//#endregion
-
 // *****************************************************************************
-// #region CONSTANTS
+// CONSTANTS
 //******************************************************************************
 
 export const COMMAND_PREFIX_TBAR = 'open-toolbar-';
@@ -56,10 +49,8 @@ export const NONE_TOOLBAR_ID = 'NO_TOOLBAR';
 export const CORE_PLUGIN_IDS = ['bookmarks', 'daily-notes', 'file-explorer', 'global-search', 'workspace'];
 export const IGNORE_PLUGIN_IDS = ['app', 'bookmarks', 'editor', 'file-explorer', 'global-search', 'link', 'markdown', 'note-toolbar', 'open-with-default-app', 'theme', 'workspace'];
 
-// #endregion
-
 // *****************************************************************************
-// #region TYPES
+// TYPES
 // *****************************************************************************
 
 export const enum ComponentType {
@@ -104,7 +95,8 @@ export const enum PlatformType {
 	Desktop = 'desktop',
 	Tablet = 'tablet',
 	Mobile = 'mobile',
-	None = 'none'
+	None = 'none',
+	Phone = 'phone'
 }
 export const enum PositionType {
 	Bottom = 'bottom',
@@ -249,7 +241,8 @@ export interface NoteToolbarSettings {
 	editorMenuToolbar: string | null;
 	emptyViewToolbar: string | null;
 	export: ExportSettings;
-	folderMappings: Array<FolderMapping>;
+	/** deprecated in 1.35: replaced with rules */
+	folderMappings?: Array<FolderMapping>;
 	icon: string;
 	keepPropsState: boolean;
 	lockCallouts: boolean;
@@ -260,9 +253,10 @@ export interface NoteToolbarSettings {
 	ribbonAction?: RibbonAction;
 	/** deprecated in 1.34: replaced with ribbon settings for toolbars and toolbar items */
 	ribbonToolbar?: string | null;
-	rules: Array<ToolbarRule>;
+	rules: Array<Rule>;
 	scriptingEnabled: boolean;
-	showEditInFabMenu: boolean;
+	/** deprecated in 1.35: removed setting */
+	showEditInFabMenu?: boolean;
 	showLaunchpad: boolean;
 	showToolbarIn: Record<FileType, boolean>;
 	showToolbarInFileMenu: boolean;
@@ -298,7 +292,6 @@ export const DEFAULT_SETTINGS: NoteToolbarSettings = {
 	ribbon: [],
 	rules: [],
 	scriptingEnabled: false,
-	showEditInFabMenu: false,
 	showLaunchpad: false,
 	showToolbarIn: {
 		audio: false,
@@ -367,7 +360,7 @@ export const EMPTY_TOOLBAR: ToolbarSettings = {
 
 export const NONE_TOOLBAR: ToolbarSettings = {
 	uuid: NONE_TOOLBAR_ID,
-	name: '',
+	name: t('setting.toolbar-suggest-modal.option-none'),
 	commandPosition: PositionType.Floating,
 	customClasses: '',
 	defaultItem: null,
@@ -430,38 +423,217 @@ export interface ItemViewContext extends ViewContext {
 	component: ComponentType;
 }
 
+// TODO: deprecate and replace with Rules
 export interface FolderMapping {
 	folder: string;
 	toolbar: string;
 }
 
-export const enum RuleConjunctionType {
-	And = 'and',
-	Or = 'or'
-}
-// note: can't make this a constant as it's used in Object.entries()
-export enum RuleConditionType {
-	Folder = 'folder'
-}
-export const enum RuleOperatorType {
-	Is = 'is',
-	IsNot = 'isNot',
-	StartsWith = 'startsWith'
+// *****************************************************************************
+// RULES
+//******************************************************************************
+
+/**
+ * Logical operator used to combine all conditions in a rule.
+ */
+export const enum RuleConjunction {
+    And = 'and',
+    Or = 'or'
 }
 
-export interface ToolbarRule {
-	toolbar: string;
-	conjunction: RuleConjunctionType;
-	conditions: Array<ToolbarRuleCondition>;
+/**
+ * The underlying field being evaluated.
+ * Note: This can't be const as it's used in Object.entries()
+ */
+export enum RuleField {
+	EditorMode = 'editormode',
+    FileName = 'filename',
+    FileType = 'filetype',
+    Folder = 'folder',
+    Platform = 'platform',
+    Property = 'property',
+    Tag = 'tag',
 }
 
-export interface ToolbarRuleCondition {
+/**
+ * Comparison operation available for a selected operand.
+ */
+export const enum RuleOperator {
+    Is = 'is',
+    IsNot = 'isNot',
+
+    Contains = 'contains',
+    DoesNotContain = 'doesNotContain',
+
+	Exists = 'exists',
+	DoesNotExist = 'doesNotExist',
+
+    StartsWith = 'startsWith',
+    EndsWith = 'endsWith',
+
+    IsEmpty = 'empty',
+    IsNotEmpty = 'notEmpty',
+}
+
+export interface RuleOperatorDefinition {
+    op: RuleOperator;
+	label: string;
+    editor: RuleValueEditor;
+}
+
+/**
+ * Value stored by a condition.
+ */
+export type RuleValue = string | string[] | number | boolean;
+
+/**
+ * Editor used to enter a value.
+ */
+export type RuleValueEditor =
+	| 'boolean'
+	| 'editormode'
+	| 'file'
+	| 'filetype'
+	| 'folder'
+    | 'number'
+	| 'none'
+    | 'platform'
+    | 'string'
+	| 'tags';
+
+export type RuleMatchType = 'default' | 'prop' | Rule | undefined;
+
+/**
+ * A single ordered rule. The first matching rule determines the toolbar.
+ */
+export interface Rule {
+    id: string;
+    toolbar: string;
+    conjunction: RuleConjunction;
+    conditions: RuleCondition[];
+}
+
+/**
+ * A persisted condition within a rule.
+ */
+export interface RuleCondition {
 	id: string;
-	type: RuleConditionType;
-	key: string;
-	operator: RuleOperatorType;
-	value: string;
+    field?: RuleField;
+    operator?: RuleOperator;
+    value?: RuleValue;
+	otherValue?: string;
+
+    // property name when field === Property
+    key?: string;
 }
+
+export const RULE_VALUE_TYPE_OTHER = 'ntb-other';
+
+/**
+ * A selectable operand returned by the first suggester.
+ * May represent either a built-in field or a specific property.
+ */
+export interface RuleOperand {
+	id: string;
+    field: RuleField;
+	icon: string;
+    label: string;
+    operators: RuleOperatorDefinition[];
+
+    // property name when field === Property
+    key?: string;
+}
+
+export const RULE_OPERANDS: RuleOperand[] = [
+    {
+        id: 'editormode',
+        field: RuleField.EditorMode,
+		icon: 'note-toolbar-pen-book',
+        label: t('setting.rules.option-field-editormode'),
+        operators: [
+            { op: RuleOperator.Is, label: t('setting.rules.operator-is'), editor: 'editormode' },
+            { op: RuleOperator.IsNot, label: t('setting.rules.operator-isNot'), editor: 'editormode' },
+        ]
+    },
+    {
+        id: 'filename',
+        field: RuleField.FileName,
+		icon: 'file-text',
+        label: t('setting.rules.option-field-filename'),
+        operators: [
+            { op: RuleOperator.Is, label: t('setting.rules.operator-is'), editor: 'file' },
+            { op: RuleOperator.IsNot, label: t('setting.rules.operator-isNot'), editor: 'file' },
+            { op: RuleOperator.Contains, label: t('setting.rules.operator-contains'), editor: 'string' },
+            { op: RuleOperator.DoesNotContain, label: t('setting.rules.operator-doesNotContain'), editor: 'string' },
+            { op: RuleOperator.StartsWith, label: t('setting.rules.operator-startsWith'), editor: 'string' },
+            { op: RuleOperator.EndsWith, label: t('setting.rules.operator-endsWith'), editor: 'string' },
+        ]
+    },
+    {
+        id: 'folder',
+        field: RuleField.Folder,
+		icon: 'folder-closed',
+        label: t('setting.rules.option-field-folder'),
+        operators: [
+            { op: RuleOperator.Is, label: t('setting.rules.operator-is'), editor: 'folder' },
+            { op: RuleOperator.IsNot, label: t('setting.rules.operator-isNot'), editor: 'folder' },
+            { op: RuleOperator.Contains, label: t('setting.rules.operator-contains'), editor: 'string' },
+            { op: RuleOperator.DoesNotContain, label: t('setting.rules.operator-doesNotContain'), editor: 'string' },
+            { op: RuleOperator.StartsWith, label: t('setting.rules.operator-startsWith'), editor: 'string' },
+            { op: RuleOperator.EndsWith, label: t('setting.rules.operator-endsWith'), editor: 'string' },
+        ]
+    },
+    {
+        id: 'filetype',
+        field: RuleField.FileType,
+		icon: 'file-type',
+        label: t('setting.rules.option-field-filetype'),
+        operators: [
+            { op: RuleOperator.Is, label: t('setting.rules.operator-is'), editor: 'filetype' },
+            { op: RuleOperator.IsNot, label: t('setting.rules.operator-isNot'), editor: 'filetype' },
+        ]
+    },
+    {
+        id: 'platform',
+        field: RuleField.Platform,
+		icon: 'monitor-smartphone',
+        label: t('setting.rules.option-field-platform'),
+        operators: [
+            { op: RuleOperator.Is, label: t('setting.rules.operator-is'), editor: 'platform' },
+            { op: RuleOperator.IsNot, label: t('setting.rules.operator-isNot'), editor: 'platform' },
+        ]
+    },
+	{
+		id: 'property',
+		field: RuleField.Property,
+		icon: 'list',
+		label: t('setting.rules.option-field-property'),
+		operators: [
+			{ op: RuleOperator.Exists, label: t('setting.rules.operator-exists'), editor: 'none' },
+			{ op: RuleOperator.DoesNotExist, label: t('setting.rules.operator-doesNotExist'), editor: 'none' },
+			{ op: RuleOperator.IsEmpty, label: t('setting.rules.operator-isEmpty'), editor: 'none' },
+			{ op: RuleOperator.IsNotEmpty, label: t('setting.rules.operator-isNotEmpty'), editor: 'none' },
+			{ op: RuleOperator.Contains, label: t('setting.rules.operator-contains'), editor: 'string' },
+			{ op: RuleOperator.DoesNotContain, label: t('setting.rules.operator-doesNotContain'), editor: 'string' },
+		]
+	},
+    {
+        id: 'tags',
+        field: RuleField.Tag,
+		icon: 'tags',
+        label: t('setting.rules.option-field-tags'),
+        operators: [
+            { op: RuleOperator.Contains, label: t('setting.rules.operator-contains'), editor: 'tags' },
+            { op: RuleOperator.DoesNotContain, label: t('setting.rules.operator-doesNotContain'), editor: 'tags' },
+            { op: RuleOperator.IsEmpty, label: t('setting.rules.operator-isEmpty'), editor: 'none' },
+            { op: RuleOperator.IsNotEmpty, label: t('setting.rules.operator-isNotEmpty'), editor: 'none' },
+        ]
+    }
+];
+
+// *****************************************************************************
+// TOOLBAR SETTINGS
+//******************************************************************************
 
 export interface ToolbarItemSettings {
 	uuid: string;
@@ -558,6 +730,21 @@ export const SCRIPT_ATTRIBUTE_MAP: Record<string, string> = {
     'outputFile': 'data-dest'
 };
 
+export interface UiSelectOption<T extends string> {
+    type: T;
+    label: string;
+}
+
+export const FILE_TYPE_OPTIONS: UiSelectOption<FileType>[] = [
+    { type: FileType.Audio, label: t('setting.display-contexts.option-audio') },
+    { type: FileType.Bases, label: t('setting.display-contexts.option-bases') },
+    { type: FileType.Canvas, label: t('setting.display-contexts.option-canvas') },
+    { type: FileType.Image, label: t('setting.display-contexts.option-image') },
+    { type: FileType.Kanban, label: t('setting.display-contexts.option-kanban') },
+    { type: FileType.Pdf, label: t('setting.display-contexts.option-pdf') },
+    { type: FileType.Video, label: t('setting.display-contexts.option-video') }
+].sort((a, b) => a.label.localeCompare(b.label));
+
 export const LINK_OPTIONS = {
 	[ItemType.Command]: t('setting.item.option-command'),
 	[ItemType.Dataview]: "Dataview",
@@ -569,6 +756,13 @@ export const LINK_OPTIONS = {
 	[ItemType.Templater]: "Templater",
 	[ItemType.Uri]: t('setting.item.option-uri')
 }
+
+export const PLATFORM_OPTIONS: UiSelectOption<PlatformType>[] = [
+    { type: PlatformType.Desktop, label: t('setting.rules.option-platform-desktop') },
+    { type: PlatformType.Tablet, label: t('setting.rules.option-platform-tablet') },
+    { type: PlatformType.Mobile, label: t('setting.rules.option-platform-mobile') },
+    { type: PlatformType.Phone, label: t('setting.rules.option-platform-phone') }
+].sort((a, b) => a.label.localeCompare(b.label));
 
 export const POSITION_OPTIONS = {
 	desktop: [
@@ -604,6 +798,11 @@ export const TOOLBAR_SHOW_POSITION_OPTIONS = {
 	[PositionType.Menu]: t('setting.position.option-menu'),
 	[PositionType.QuickTools]: t('setting.position.option-quicktools')
 }
+
+export const VIEW_MODE_OPTIONS: UiSelectOption<ViewModeType>[] = [
+    { type: ViewModeType.Editing, label: t('setting.rules.option-editormode-editing') },
+    { type: ViewModeType.Reading, label: t('setting.rules.option-editormode-reading') }
+].sort((a, b) => a.label.localeCompare(b.label));
 
 /**
  * Each of these correlates to (style) metatdata that's matched in styles.css.
@@ -722,5 +921,3 @@ export const OBSIDIAN_UI_MOBILE_NAVBAR_OPTIONS = [
 	'mobile.navbar.tabs',
 	'mobile.navbar.menu'
 ];
-
-// #endregion

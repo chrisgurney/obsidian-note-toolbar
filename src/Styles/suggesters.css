@@ -36,6 +36,7 @@
 }
 
 .note-toolbar-item-suggestion-container,
+.note-toolbar-rule-suggestion-container,
 .note-toolbar-tbar-suggestion-container {
     gap: 0 0.5em;
     display: flex;
@@ -64,6 +65,15 @@
     & svg {
         display: block;
         margin: 0 auto;
+    }
+}
+
+.note-toolbar-suggestion-small {
+    font-size: var(--font-ui-small);
+    & svg.svg-icon {
+        vertical-align: text-bottom;
+        height: var(--font-ui-small);
+        width: var(--font-ui-small);
     }
 }
 

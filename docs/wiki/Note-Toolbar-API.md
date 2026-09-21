@@ -32,6 +32,7 @@ Even if you're not a developer, getting started with the API is easy:
 - **[Utilities](#Utilities)**
     - [[ntb.app|Note-Toolbar-API#app]]
     - [[ntb.clipboard|Note-Toolbar-API#clipboard]]
+    - [[ntb.getTags|Note-Toolbar-API#gettags]]
     - [[ntb.o|Note-Toolbar-API#o]]
     - [[ntb.t|Note-Toolbar-API#t]]
 

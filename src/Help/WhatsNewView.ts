@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from 'main';
 import { Component, ItemView, MarkdownRenderer, WorkspaceLeaf } from 'obsidian';
-import { t, VIEW_TYPE_WHATS_NEW, WHATSNEW_VERSION } from 'Settings/NoteToolbarSettings';
+import { t, VIEW_TYPE_WHATS_NEW } from 'Settings/NoteToolbarSettings';
 import { URLS } from "Utils/Urls";
 import { iconTextFr } from '../Settings/UI/Utils/SettingsUIUtils';
 import { getRelease } from './HelpContent';
@@ -64,8 +64,7 @@ export default class WhatsNewView extends ItemView {
 		// 	});
 
 		// get the content
-		const language = (typeof i18next.language === 'string' && i18next.language.trim()) || 'en';
-		const releaseMd = getRelease(WHATSNEW_VERSION, language);
+		const releaseMd = getRelease();
 		markdownEl.empty();
 
 		const rootPath = this.ntb.app.vault.getRoot().path;

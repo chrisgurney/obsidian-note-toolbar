@@ -1,14 +1,15 @@
 import NoteToolbarPlugin from "main";
 import { ButtonComponent, Component, getIcon, ItemView, MarkdownRenderer, Notice, Platform, requireApiVersion, setIcon, Setting, setTooltip, TFile, TFolder, ToggleComponent } from "obsidian";
-import { COMMAND_DOES_NOT_EXIST, ComponentType, DEFAULT_ITEM_VISIBILITY_SETTINGS, IGNORE_PLUGIN_IDS, ItemComponentVisibility, ItemType, SettingType, t, ToolbarItemSettings, ToolbarSettings, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_WHATS_NEW, ViewModeType, Visibility, WHATSNEW_VERSION } from "Settings/NoteToolbarSettings";
+import { COMMAND_DOES_NOT_EXIST, ComponentType, DEFAULT_ITEM_VISIBILITY_SETTINGS, IGNORE_PLUGIN_IDS, ItemComponentVisibility, ItemType, NONE_TOOLBAR_ID, SettingType, t, ToolbarItemSettings, ToolbarSettings, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_WHATS_NEW, ViewModeType, Visibility } from "Settings/NoteToolbarSettings";
 import SettingsManager from "Settings/SettingsManager";
 import { URLS } from "Utils/Urls";
 import { hasVisibleComponents, importArgs } from "Utils/Utils";
-import { PLUGIN_VERSION } from "version";
+import { PLUGIN_VERSION, RELEASE_VERSION } from "version";
 import { confirmWithModal } from "../Modals/ConfirmModal";
 import ItemModal from "../Modals/ItemModal";
 import ItemSuggestModal, { ItemSuggestMode } from "../Modals/ItemSuggestModal";
 import MessageModal from "../Modals/MessageModal";
+import RulesModal from "../Modals/RulesModal";
 import ToolbarSettingsModal from "../Modals/ToolbarSettingsModal";
 import ToolbarSuggestModal from "../Modals/ToolbarSuggestModal";
 import NoteToolbarSettingTab from "../NoteToolbarSettingTab";
@@ -118,10 +119,17 @@ export default class SettingsUIUtils {
 	createOnboardingMessageEl(
 		messageId: string,
 		title: string,
-		content: string,
+		content: DocumentFragment | string,
+		forToolbar?: ToolbarSettings
 	): HTMLElement {
+		const dismissMessage = async (setting: Setting) => {
+			setting.settingEl.remove();
+			this.ntb.settings.onboarding[messageId] = true;
+			await this.ntb.settingsManager.save();
+		}
+
 		const containerEl = createDiv();
-		const setting = new Setting(containerEl)
+		const onboardSetting = new Setting(containerEl)
 			.setName(title)
 			.setDesc(content)
 			.setClass('note-toolbar-setting-plugin-onboarding')
@@ -130,14 +138,64 @@ export default class SettingsUIUtils {
 					.setIcon('cross')
 					.setTooltip(t('onboarding.tooltip-dismiss'))
 					.onClick(async () => {
-						setting.settingEl.remove();
-						this.ntb.settings.onboarding[messageId] = true;
-						await this.ntb.settingsManager.save();
+						await dismissMessage(onboardSetting);
 					});
 				button.extraSettingsEl.addClass('note-toolbar-setting-plugin-onboarding-close');
 				this.handleKeyClick(button.extraSettingsEl);
 			});
-		return setting.settingEl;
+
+		// if onboarding message is in toolbar settings, add CTAs
+		if (forToolbar) {
+			const actionsEl = onboardSetting.settingEl.createDiv();
+			const actionsSetting = new Setting(actionsEl);
+
+			// update the toolbar property
+			const activeFile = this.ntb.app.workspace.getActiveFile();
+			const view = this.ntb.app.workspace.getActiveViewOfType(ItemView);
+			if (activeFile && view?.getViewType() === 'markdown') {
+				actionsSetting
+					.addButton((button) => {
+						button
+						.setButtonText(t('onboarding.new-toolbar.label-property-set'))
+						.onClick(async () => {
+							await this.ntb.api.setProperty(this.ntb.settings.toolbarProp, forToolbar.name);
+							const fileName = activeFile.basename;
+							new Notice(
+								t('onboarding.new-toolbar.notice-property-set', { property: this.ntb.settings.toolbarProp, note: fileName })
+							).containerEl.addClass('mod-success');
+						})
+					});
+			}
+
+			// open toolbar rules
+			actionsSetting
+				.addButton((button) => {
+					button
+					.setButtonText(t('onboarding.new-toolbar.label-rules'))
+					.onClick(() => {
+						const rulesModal = new RulesModal(this.ntb);
+						rulesModal.open();
+					})
+				});
+
+			// default toolbar
+			if (!this.ntb.settings.defaultToolbar) {
+				actionsSetting
+					.addButton((button) => {
+						button
+						.setButtonText(t('onboarding.new-toolbar.label-default'))
+						.onClick(async () => {
+							this.ntb.settings.defaultToolbar = forToolbar.uuid;
+							await this.ntb.settingsManager.save();
+							new Notice(
+								t('onboarding.new-toolbar.notice-default-set', { toolbar: forToolbar.name })
+							).containerEl.addClass('mod-success');
+						})
+					});				
+			}
+		}
+
+		return onboardSetting.settingEl;
 	}
 
 	/**
@@ -405,7 +463,7 @@ export default class SettingsUIUtils {
 	 * @returns mappingCount and itemCount
 	 */
 	private getToolbarSettingsUsage(id: string): [number, number] {
-		const mappingCount = this.ntb.settings.folderMappings.filter(mapping => mapping.toolbar === id).length;
+		const mappingCount = this.ntb.settings.folderMappings?.filter(mapping => mapping.toolbar === id).length ?? 0;
 		const itemCount = this.ntb.settings.toolbars.reduce((count, toolbar) => {
 			return count + toolbar.items.filter(item => 
 				item.link === id && (item.linkAttr.type === ItemType.Group || item.linkAttr.type === ItemType.Menu)
@@ -517,7 +575,7 @@ export default class SettingsUIUtils {
 					newItem.visibility = JSON.parse(JSON.stringify(DEFAULT_ITEM_VISIBILITY_SETTINGS)) as Visibility;
 
 					// confirm with user if they would like to enable scripting
-					const isScriptingEnabled = await this.openScriptPrompt(newItem);
+					const isScriptingEnabled = await this.openScriptPrompt([newItem]);
 					if (!isScriptingEnabled) return;
 
 					if (selectedItem.inGallery && !(await this.ntb.settingsManager.resolveGalleryItem(newItem))) return;
@@ -538,19 +596,23 @@ export default class SettingsUIUtils {
 	}
 
 	/**
-	 * Prompts the user if they want to enable scripting, if the item requires it.
-	 * @param item 
+	 * Prompts user if they want to enable scripting, if the item (or items) requires it.
+	 * @param items
 	 * @returns true if the user confirmed, false if they cancelled
 	 */
-	async openScriptPrompt(item: ToolbarItemSettings): Promise<boolean> {
-		const isScript = [ItemType.Dataview,  ItemType.JavaScript, ItemType.JsEngine, ItemType.Templater].contains(item.linkAttr.type);
+	async openScriptPrompt(items: ToolbarItemSettings[]): Promise<boolean> {
+		const isScript = items.some(item =>
+			[ItemType.Dataview, ItemType.JavaScript, ItemType.JsEngine, ItemType.Templater].contains(item.linkAttr.type)
+		);
 
 		if (isScript && !this.ntb.settings.scriptingEnabled) {
 			const isConfirmed = await confirmWithModal(
 				this.ntb.app, 
 				{
 					title: t('setting.add-item.title-confirm-scripting'),
-					questionLabel: t('setting.add-item.label-confirm-scripting'),
+					questionLabel: 
+						t('setting.add-item.label-confirm-scripting', { count: items.length }) + '\n\n' 
+						+ t('setting.add-item.label-confirm-scripting-description'),
 					approveLabel: t('setting.button-enable'),
 					denyLabel: t('setting.button-cancel')
 				}
@@ -777,7 +839,7 @@ export default class SettingsUIUtils {
 	 * @param errorLink Optional link to display after error text
 	 */
 	setFieldError(
-		parent: NoteToolbarSettingTab | ToolbarSettingsModal | ItemModal | null, 
+		parent: NoteToolbarSettingTab | ToolbarSettingsModal | ItemModal | RulesModal | null, 
 		fieldEl: HTMLElement | null, 
 		position: 'afterend' | 'beforeend',
 		errorText?: string | DocumentFragment | HTMLElement, 
@@ -831,8 +893,9 @@ export default class SettingsUIUtils {
 	 * Updates the toolbar preview for the given setting.
 	 */
 	setFieldPreview(setting: Setting, toolbar: ToolbarSettings | undefined) {
-		const toolbarPreviewFr = toolbar && this.ntb.settingsUtils.createToolbarPreviewFr(toolbar, undefined, false);
 		removeFieldHelp(setting.controlEl);
+		if (toolbar?.uuid === NONE_TOOLBAR_ID) return;
+		const toolbarPreviewFr = toolbar && this.ntb.settingsUtils.createToolbarPreviewFr(toolbar, undefined, false);
 		setFieldHelp(setting.controlEl, toolbarPreviewFr);
 		const tbarEl = setting.controlEl.querySelector('.note-toolbar-setting-tbar-preview');
 		// only apply fade if the preview is overflowing
@@ -857,8 +920,8 @@ export default class SettingsUIUtils {
 	 */
 	showWhatsNewIfNeeded() {
 		// show the What's New dialog once if the user hasn't seen it yet
-		if (this.ntb.settings.showWhatsNew && this.ntb.settings.whatsnew_version !== WHATSNEW_VERSION) {
-			this.ntb.settings.whatsnew_version = WHATSNEW_VERSION;
+		if (this.ntb.settings.showWhatsNew && this.ntb.settings.whatsnew_version !== RELEASE_VERSION) {
+			this.ntb.settings.whatsnew_version = RELEASE_VERSION;
 			void this.ntb.settingsManager.save(false).then(async () => {
 				const leaf = this.ntb.app.workspace.getLeaf(true);
 				await leaf.setViewState({ type: VIEW_TYPE_WHATS_NEW, active: true });
@@ -878,7 +941,7 @@ export default class SettingsUIUtils {
 	 * @returns true if the item is valid; false otherwise
 	 */
 	async updateItemComponentStatus(
-		parent: NoteToolbarSettingTab | ToolbarSettingsModal | ItemModal,
+		parent: NoteToolbarSettingTab | ToolbarSettingsModal | ItemModal | RulesModal,
 		itemValue: string, 
 		fieldType: SettingType, 
 		componentEl: HTMLElement | null, 
@@ -1089,7 +1152,10 @@ export default class SettingsUIUtils {
  * @see https://discord.com/channels/686053708261228577/716028884885307432/1454335099545059389
  */
 export function fixToggleTab(toggle: ToggleComponent) {
-	toggle.toggleEl.tabIndex = -1;
+	// workaround no longer needed after Obsidian 1.13
+	if (!requireApiVersion('1.13.0')) {
+		toggle.toggleEl.tabIndex = -1;
+	}
 }
 
 /**
@@ -1158,7 +1224,7 @@ export function iconTextFr(icon: string, text: string): DocumentFragment {
 	const headingEl = headingFr.createSpan();
 	headingEl.addClass('note-toolbar-setting-text-with-icon');
 	const headingIcon = headingEl.createSpan();
-	setIcon(headingIcon, 'lucide-' + icon);
+	setIcon(headingIcon, icon);
 	const headingText = headingEl.createSpan();
 	headingText.setText(text);
 	headingFr.append(headingEl);
@@ -1246,6 +1312,21 @@ export function removeFieldError(el: HTMLElement | null, position: 'beforeend' |
 		errorEl?.remove();
 		el?.removeClass('note-toolbar-setting-error');
 	}
+}
+
+/**
+ * Removes any errors on fields in the given container.
+ * @param containerEl HTMLElement to check for errors to remove
+ */
+export function removeFieldErrors(containerEl: HTMLElement) {
+	const fieldErrorEls = containerEl?.querySelectorAll('.note-toolbar-setting-field-error');
+	fieldErrorEls.forEach((el) => {
+		el.remove();
+	});
+	const errorEls = containerEl?.querySelectorAll('.note-toolbar-setting-error');
+	errorEls.forEach((el) => {
+		el.toggleClass('note-toolbar-setting-error', false);
+	});
 }
 
 /**

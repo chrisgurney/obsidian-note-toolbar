@@ -290,11 +290,11 @@ path=<path>    # Path of file to use the item in
 
 ## Rules
 
-Display folder mappings.
+List toolbar display rules.
 
 ### `note-toolbar:rules`
 
-Lists toolbar [folder mappings](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Defining-where-to-show-toolbars).
+Lists toolbar [display rules](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Defining-where-to-show-toolbars).
 
 ```sh
 format=csv|tsv  # Output format (default: tsv)

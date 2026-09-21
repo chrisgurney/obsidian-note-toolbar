@@ -156,8 +156,6 @@
         "label-share": "共有...",
         "label-share-description": "このリンクを他のNote Toolbarユーザーと共有して、ツールバーをボルトに追加できます。",
         "label-share-preview": "プレビュー",
-        "notice-completed": "ツールバーをコールアウトとしてクリップボードにコピーしました。書式を調整するには設定を開いてください。",
-        "notice-shared": "Note Toolbarリンクをクリップボードにコピーしました",
         "option-uri": "Obsidian URIを使用",
         "option-uri-description": "https:// URLではなくobsidian://リンクを提供します。",
         "title-share": "ツールバーを共有: {{toolbar}}",
@@ -191,7 +189,6 @@
         "errorlog-icon-not-found": "アイコンが見つかりません: {{icon}}",
         "errorlog-invalid-format": "無効な形式: {{line}}",
         "errorlog-invalid-styles": "無効なスタイルを無視しました: {{styles}}",
-        "errorlog-item": "アイテム {{number}}:",
         "errorlog-menu-not-found": "メニューが見つかりません: {{menu}}",
         "label-import": "下記にNote Toolbarコールアウトを貼り付けると、新しいツールバーとして追加されます。",
         "label-import-confirmation": "このツールバーを追加することを確認してください。追加後、このツールバーを1つ以上のノートにマッピングする必要があります。",
@@ -558,10 +555,6 @@
             "scripting": {
                 "description": "Dataview、JS Engine、Templaterのサポートを追加します。これらはインストールして有効にする必要があります。",
                 "name": "スクリプティング"
-            },
-            "show-edit-tbar": {
-                "description": "便利なように、メニューとして表示されるツールバーにツールバー設定にアクセスするアイテムを追加します。",
-                "name": "ツールバーメニューに「ツールバーを編集」を表示"
             }
         },
         "position": {

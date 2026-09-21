@@ -175,6 +175,7 @@ export default class GalleryView extends ItemView {
 			// on clicking the "Add as toolbar" button, add it as a toolbar
 			const addToolbarEl = (evt.target as HTMLElement).closest('.note-toolbar-gallery-add-toolbar');
 			if (addToolbarEl) {
+				// TODO: fix? just use category name and get the items on click
 				const addToolbarItemIds = addToolbarEl.getAttr('data-tbar-items');
 				const addToolbarName = addToolbarEl.getAttr('data-tbar-name');
 				if (!addToolbarItemIds || !addToolbarName) {

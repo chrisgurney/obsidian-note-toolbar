@@ -1,16 +1,7 @@
-import release_en_1_33 from 'Help/Releases/en/1.33.md';
-import release_en_1_34 from 'Help/Releases/en/1.34.md';
 import tip_en_daily_notes from 'Help/Tips/en/daily-notes.md';
 import tip_en_getting_started from 'Help/Tips/en/getting-started.md';
 import tip_en_mobile_tips from 'Help/Tips/en/mobile-tips.md';
-import { t } from 'Settings/NoteToolbarSettings';
-
-const RELEASES = {
-    en: {
-        '1.33': release_en_1_33,
-        '1.34': release_en_1_34
-    }
-} as const;
+import { CURRENT_RELEASE } from 'version';
 
 const TIPS = {
     en: {
@@ -23,19 +14,10 @@ const TIPS = {
 /**
  * Returns the release note for a specific release.
  *
- * @param version The tag name of the release to get the release note for.
  * @returns Release content, or null.
  */
-export function getRelease(version: string, language = 'en'): string {
-    const lang = language in RELEASES ? (language as keyof typeof RELEASES) : 'en';
-    if (!(version in RELEASES[lang])) {
-        return "> [!error]\n> " + t('setting.help.error-missing-releases', { path: 'Help/Releases', lang: language, name: version });
-    }
-
-    const releases = RELEASES[lang];
-    return (releases as Record<string, string>)[version]
-        ?? (RELEASES.en as Record<string, string>)[version]
-        ?? null;
+export function getRelease(): string {
+    return CURRENT_RELEASE;
 }
 
 /**

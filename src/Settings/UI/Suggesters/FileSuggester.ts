@@ -7,9 +7,13 @@ export default class FileSuggester extends AbstractInputSuggest<TAbstractFile> {
     constructor(
         private ntb: NoteToolbarPlugin,
         private inputEl: HTMLInputElement, 
-        private showFilesOnly: boolean = false, 
-        private fileExtension?: string, 
-        private folderPath?: string
+        private options?: {
+            showFilesOnly: boolean, 
+            showFileNamesOnly: boolean,
+            fileExtension?: string, 
+            inFolderPath?: string,
+        },
+        private classes?: string[],
     ) {
         super(ntb.app, inputEl);
     }
@@ -19,16 +23,22 @@ export default class FileSuggester extends AbstractInputSuggest<TAbstractFile> {
         
         let files: TAbstractFile[] = [];
         const lowerCaseInputStr = inputStr.toLowerCase();
-        const recentFiles = JSON.parse(this.ntb.app.loadLocalStorage(LocalVar.RecentFiles) as string || '[]') as string[];
+
+        // get recent files, and make sure they still exist in the vault
+        const recentFiles = (JSON.parse(
+            this.ntb.app.loadLocalStorage(LocalVar.RecentFiles) as string || '[]'
+        ) as string[]).filter(path =>
+            abstractFiles.some(file => file.path === path)
+        );
 
         files = abstractFiles.filter((file: TAbstractFile) => {
             const isFile = file instanceof TFile;
             const lowerCaseFilePath = file.path.toLowerCase();
             const matchesInput = lowerCaseFilePath.includes(lowerCaseInputStr);
             if (!matchesInput) return false;
-            if (this.showFilesOnly && !isFile) return false;
-            if (this.fileExtension && isFile && !lowerCaseFilePath.endsWith(this.fileExtension.toLowerCase())) return false;
-            const lowerCaseFolder = this.folderPath?.toLowerCase();
+            if (this.options?.showFilesOnly && !isFile) return false;
+            if (this.options?.fileExtension && isFile && !lowerCaseFilePath.endsWith(this.options?.fileExtension.toLowerCase())) return false;
+            const lowerCaseFolder = this.options?.inFolderPath?.toLowerCase();
             if (lowerCaseFolder && !lowerCaseFilePath.startsWith(lowerCaseFolder + '/')) return false;
             return true;
         })
@@ -46,13 +56,18 @@ export default class FileSuggester extends AbstractInputSuggest<TAbstractFile> {
     }
 
     renderSuggestion(file: TAbstractFile, el: HTMLElement): void {
-        el.setText(file.path);
+        if (this.classes) el.addClasses(this.classes);
+        el.setText(this.getDisplayName(file));
     }
 
     selectSuggestion(file: TAbstractFile): void {
-        this.inputEl.value = file.path;
+        this.inputEl.value = this.getDisplayName(file);
         this.inputEl.trigger("input");
         this.inputEl.blur();
         this.close();
+    }
+
+    private getDisplayName(file: TAbstractFile): string {
+        return this.options?.showFileNamesOnly ? file.name : file.path;
     }
 }

@@ -1,4 +1,4 @@
-The **Note Toolbar Gallery** is a curated list of 100+ items that can be added to your toolbars _in just a couple clicks_. The gallery includes pre-made items that use Obsidian's commands, but also plenty of helpful tools that Obsidian does not provide out of the box.
+The **Note Toolbar Gallery** is a curated list of 130+ items that can be added to your toolbars _in just a couple clicks_. The gallery includes pre-made items that use Obsidian's commands, but also plenty of helpful tools that Obsidian does not provide out of the box.
 
 <img src="https://raw.githubusercontent.com/chrisgurney/obsidian-note-toolbar/refs/heads/master/docs/images/gallery.png" width="700"/>
 
@@ -43,6 +43,7 @@ Obsidian's built-in editor toolbar.
 | Toggle bold | Apply or remove bold formatting. |
 | Toggle strikethrough | Apply or remove strikethrough formatting. |
 | Toggle highlight | Apply or remove text highlighting. |
+| Color highlight | Apply or remove color text highlighting. |
 | Toggle code | Apply or remove inline code formatting. |
 | Toggle blockquote | Apply or remove blockquote formatting. |
 | Insert Markdown link | Insert a Markdown link. |

@@ -32,10 +32,10 @@ export default class ToolbarHandler {
 		// get toolbar to show
 		if (activeFile) {
 			const frontmatter = activeFile ? this.ntb.app.metadataCache.getFileCache(activeFile)?.frontmatter : undefined;
-			toolbar = this.ntb.settingsManager.getMappedToolbar(frontmatter, activeFile);
+			[toolbar] = this.ntb.rules.getMappedToolbar(frontmatter, activeFile);
 		}
 		else {
-			toolbar = this.ntb.settingsManager.getEmptyViewToolbar();
+			toolbar = this.ntb.rules.getEmptyViewToolbar();
 		}
 
 		if (toolbar) {
@@ -50,7 +50,7 @@ export default class ToolbarHandler {
 				}
 			}
 			else {
-				await this.ntb.render.renderAsMenu(toolbar, activeFile, this.ntb.settings.showEditInFabMenu).then(menu => { 
+				await this.ntb.render.renderAsMenu(toolbar, activeFile).then(menu => { 
 					const fabEl = this.ntb.el.getToolbarFabEl();
 					if (fabEl) {
 						const fabPos = fabEl.getAttribute('data-tbar-position');

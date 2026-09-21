@@ -62,12 +62,15 @@ export default class ToolbarSettingsModal extends Modal {
 		contentEl.empty();
 		// refresh the parent window, so we see the new toolbar
 		this.parent?.render();
-		void this.promptForDefault().then(() => {
-			if (this.isFromCommand) this.promptForProp();
-		});
+
+		/* TODO: possibly remove promptForDefault, now that CTAs are in the onboarding message */
+		// void this.promptForDefault().then((setAsDefault) => {
+		if (this.isFromCommand) this.promptForProp();
+		// });
 	}
 
-	async promptForDefault(): Promise<void> {
+	/* TODO: possibly remove promptForDefault, now that CTAs are in the onboarding message */
+	async promptForDefault(): Promise<boolean> {
 		// if this is the only toolbar, prompt once to make this the Default
 		const onboardingId = `default-${this.toolbar.uuid}`;
 		const promptForDefault = this.ntb.settings.toolbars.length === 1 
@@ -89,13 +92,16 @@ export default class ToolbarSettingsModal extends Modal {
 							// refresh the parent window again, so we can see the updated Default setting
 							this.parent?.render();
 						});
+						return true;
 					}
 				});
 			});
 		}
+		return false;
 	}
 
 	promptForProp(): void {
+		if (this.toolbar.items.length === 0) return;
 		void confirmWithModal(this.ntb.app, { 
 			title: t('setting.toolbars.label-set-as-prop', { toolbar: this.toolbar.name, interpolation: { escapeValue: false } }),
 			questionLabel: t('setting.toolbars.label-set-as-prop_confirm'),
@@ -147,13 +153,16 @@ export default class ToolbarSettingsModal extends Modal {
 		const settingsDiv = createDiv();
 		settingsDiv.className = "vertical-tab-content note-toolbar-setting-modal note-toolbar-setting-ui";
 
-		// show onboarding message
+		// show onboarding message once
 		const onboardingId = 'new-toolbar-mapping';
 		if (!this.ntb.settings.onboarding[onboardingId]) {
+			const contentFr = learnMoreFr(
+				t('onboarding.new-toolbar.content', { property: this.ntb.settings.toolbarProp }),
+				'Defining-where-to-show-toolbars'
+			);
 			const messageEl = this.ntb.settingsUtils.createOnboardingMessageEl( 
-				onboardingId, 
-				t('onboarding.new-toolbar-mapping-title'),
-				t('onboarding.new-toolbar-mapping-content', { property: this.ntb.settings.toolbarProp }));
+				onboardingId, t('onboarding.new-toolbar.title'), contentFr, this.toolbar
+			);
 			settingsDiv.append(messageEl);
 		}
 

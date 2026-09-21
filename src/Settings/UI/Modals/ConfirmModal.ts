@@ -28,7 +28,7 @@ export default class ConfirmModal extends Modal {
 
 	constructor(public app: App, uiSettings: UiSettings) {
         super(app);
-        this.modalEl.addClass('note-toolbar-setting-confirm-dialog', 'note-toolbar-setting-mini-dialog', 'note-toolbar-setting-dialog-phonefix'); 
+        this.modalEl.addClass('note-toolbar-setting-confirm-dialog', 'note-toolbar-setting-mini-dialog'); 
         this.uiSettings = uiSettings;
     }
 
@@ -92,8 +92,11 @@ export default class ConfirmModal extends Modal {
                 this.close();
             });
 
-        if (this.uiSettings.warning) confirmBtn.setWarning()
-            else confirmBtn.setCta();
+        if (this.uiSettings.warning) {
+            // using custom class instead of setWarning() as it's deprecated 
+            confirmBtn.setClass('note-toolbar-setting-button-destructive');
+        }
+        else confirmBtn.setCta();
 
     }
 

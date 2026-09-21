@@ -24,11 +24,11 @@ export function color(text: string, color?: 'black' | 'green' | 'red'): string {
 /**
  * Creates a string representation of a reference to another toolbar.
  */    
-export function formatToolbarRef(ntb: NoteToolbarPlugin, id?: string): string {
+export function formatToolbarRef(ntb: NoteToolbarPlugin, id?: string, isActive = false): string {
     if (!id) return '';
     const tb = ntb.settingsManager.getToolbarById(id);
     const name = tb?.name ?? t('cli.label-unknown-toolbar');
-    return `toolbar:${name}`;
+    return `toolbar:${name}${isActive ? ' *' : ''}`;
 }
 
 /**

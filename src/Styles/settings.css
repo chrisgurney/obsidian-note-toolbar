@@ -36,6 +36,38 @@
     } */
 }
 
+
+.note-toolbar-setting-item-delete {
+    padding: 0 8px 0 0;
+    & .setting-item-info {
+        display: none;
+    }
+    & .setting-item-control {
+        .is-mobile & {
+            margin-top: 0;
+        }
+        & button {
+            background: none;
+            box-shadow: none;
+            color: var(--icon-color);
+            gap: var(--size-4-2);
+            padding: var(--size-4-2);
+            &:hover {
+                opacity: var(--icon-opacity-hover);
+                color: var(--icon-color-hover);
+                background-color: var(--background-modifier-hover);
+            }
+            &:focus-visible {
+                border-radius: var(--input-radius);
+                box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
+            }
+        }
+    }
+    & svg {
+        color: var(--text-error);
+    }
+}
+
 .note-toolbar-setting-plugin-error {
     padding: var(--size-4-4);
     border: solid 1px var(--text-error);
@@ -88,6 +120,10 @@
         }
         & .note-toolbar-setting-plugin-onboarding {
             margin-bottom: 0.75em;
+            flex-wrap: wrap;
+            & .setting-item-control {
+                flex-wrap: wrap;
+            }
         }
     }
 
@@ -203,6 +239,9 @@
         border-top: none;
         padding-top: 0;
         padding-bottom: 1em;
+        &::before {
+            border: none;
+        }
     }
 
     & .note-toolbar-setting-group-container {
@@ -248,53 +287,6 @@
             padding: 0;
             margin: 0;
         }
-    }
-
-    & .note-toolbar-setting-folder-mapping-container {
-        padding: 0 var(--setting-items-padding-x);
-    }
-
-    & .note-toolbar-setting-folder-list-item-container {
-        align-items: center;
-        display: flex;
-        border-top: var(--border-width) solid var(--background-modifier-border);
-        &:first-child {
-            border-top: none;
-        }
-        padding: 8px 0;
-        & .setting-item {
-            align-items: center;
-            border-bottom: none;
-            margin-bottom: 0;
-            padding: unset;
-        }
-        & .note-toolbar-setting-item-fields {
-            padding: unset;
-            padding-right: 8px;
-            & .setting-item {
-                flex-grow: 1;
-                & .search-input-container {
-                    flex-grow: 1;
-                    & input {
-                        padding-inline-end: 0;
-                    }
-                }
-            }
-        }
-        & .note-toolbar-setting-mapping-field {
-            border-top: none;
-            padding: 0;
-            & .setting-item-info {
-                display: none;
-            }
-            & .setting-item-control {
-                justify-content: flex-start;
-                .is-mobile & {
-                    margin-top: 0;
-                }
-            }
-        }
-
     }
 
     & .setting-item.note-toolbar-setting-item-tbar-name {
@@ -362,7 +354,6 @@
     & .note-toolbar-setting-callout-container,
     & .note-toolbar-setting-contexts-container,
     & .note-toolbar-setting-items-container,
-    & .note-toolbar-setting-mappings-container,
     & .note-toolbar-setting-navbar-container,
     & .note-toolbar-setting-rules-container {
         padding-top: 0.75em;
@@ -424,7 +415,6 @@
 
     & .note-toolbar-setting-callout-container,
     & .note-toolbar-setting-contexts-container,
-    & .note-toolbar-setting-mappings-container,
     & .note-toolbar-setting-rules-container {
         & .setting-item {
             .is-phone & {
@@ -447,7 +437,6 @@
     & .note-toolbar-setting-app-toolbars-container,
     & .note-toolbar-setting-callout-container,
     & .note-toolbar-setting-contexts-container,
-    & .note-toolbar-setting-mappings-container,
     & .note-toolbar-setting-navbar-container {
         &[data-active="true"] {
             margin-bottom: 0.75em;
@@ -936,10 +925,6 @@
     .note-toolbar-setting-items-list-container & {
         margin: auto;
     }
-    .note-toolbar-setting-mappings-container & {
-        padding-bottom: 1em;
-        justify-content: left;
-    }
 }
 
 .note-toolbar-setting-error-message {
@@ -1260,6 +1245,30 @@ input[type="text"].note-toolbar-setting-error,
         }
     }
 
+    & .note-toolbar-setting-tabs {
+        display: flex;
+        gap: var(--size-4-1);
+        margin-bottom: var(--size-4-4);
+        border-bottom: 1px solid var(--background-modifier-border);
+        & button {
+            padding: var(--size-4-2) var(--size-4-3);
+            border-radius: var(--radius-s) var(--radius-s) 0 0;
+            color: var(--text-muted);
+            &[aria-selected="true"] {
+                box-shadow: inset 0 -1px 0 var(--link-color);
+                color: var(--text-normal);
+                background: var(--background-modifier-hover);
+            }
+            &:focus-visible {
+                outline: 2px solid var(--interactive-accent);
+                outline-offset: -2px;
+            }
+            .is-phone & {
+                width: 100%;
+            }
+        }
+    }
+
 }
 
 
@@ -1355,37 +1364,6 @@ input[type="text"].note-toolbar-setting-error,
     }
 }
 
-.note-toolbar-setting-item-delete {
-    padding: 0 8px 0 0;
-    & .setting-item-info {
-        display: none;
-    }
-    & .setting-item-control {
-        .is-mobile & {
-            margin-top: 0;
-        }
-        & button {
-            background: none;
-            box-shadow: none;
-            color: var(--icon-color);
-            gap: var(--size-4-2);
-            padding: var(--size-4-2);
-            &:hover {
-                opacity: var(--icon-opacity-hover);
-                color: var(--icon-color-hover);
-                background-color: var(--background-modifier-hover);
-            }
-            &:focus-visible {
-                border-radius: var(--input-radius);
-                box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
-            }
-        }
-    }
-    & svg {
-        color: var(--text-error);
-    }
-}
-
 .note-toolbar-setting-item-control-std-with-help {
     & .setting-item-control {
         flex-direction: column;
@@ -1411,11 +1389,6 @@ input[type="text"].note-toolbar-setting-error,
                 position: relative;
                 .is-mobile & {
                     max-width: inherit;
-                }
-                & .note-toolbar-setting-toolbar-list-preview-item {
-                    & .note-toolbar-setting-item-preview-code {
-                        align-self: flex-start;
-                    }
                 }
             }
         }
@@ -1475,10 +1448,6 @@ input[type="text"].note-toolbar-setting-error,
     }
 }
 
-.is-phone .note-toolbar-setting-dialog-phonefix {
-    padding: var(--size-4-4);
-}
-
 .note-toolbar-setting-mini-dialog {
     width: calc(var(--dialog-width) / 1.5);
     .is-phone & {
@@ -1535,6 +1504,10 @@ input[type="text"].note-toolbar-setting-error,
     & ul {
         padding-bottom: 1em;
         padding-inline-start: 1em;
+    }
+    & button.note-toolbar-setting-button-destructive {
+        --text-color: var(--text-error);
+        background-color: color-mix(in oklch, var(--background-modifier-error) 10%, transparent);
     }
 }
 

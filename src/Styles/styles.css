@@ -12,6 +12,7 @@
 @import "./container.css";
 @import "./menu.css";
 @import './settings.css';
+@import './settings-rules.css';
 @import './suggesters.css';
 @import './help.css';
 @import './api.css';

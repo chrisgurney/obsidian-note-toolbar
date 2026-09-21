@@ -26,6 +26,7 @@ import NoteToolbarSettingTab from 'Settings/UI/NoteToolbarSettingTab';
 import SettingsUIUtils from 'Settings/UI/Utils/SettingsUIUtils';
 import CalloutHandler from 'Toolbar/CalloutHandler';
 import CalloutPlugin from 'Toolbar/CalloutPlugin';
+import RulesManager from 'Toolbar/RulesManager';
 import TextToolbar, { TextToolbarClass } from 'Toolbar/TextToolbar';
 import ToolbarElementHelper from 'Toolbar/ToolbarElementHelper';
 import ToolbarHandler from 'Toolbar/ToolbarHandler';
@@ -45,6 +46,7 @@ export default class NoteToolbarPlugin extends Plugin {
 	gallery!: GalleryManager;
 	protocolManager!: ProtocolManager;
 	ribbon!: RibbonManager;
+	rules!: RulesManager;
 	settings!: NoteToolbarSettings;	
 	settingsManager!: SettingsManager;
 	settingsUtils!: SettingsUIUtils;
@@ -86,6 +88,7 @@ export default class NoteToolbarPlugin extends Plugin {
 		this.items = new ToolbarItemHandler(this);
 		this.render = new ToolbarRenderer(this);
 		this.ribbon = new RibbonManager(this);
+		this.rules = new RulesManager(this);
 		this.settingsUtils = new SettingsUIUtils(this);
 		this.toolbars = new ToolbarHandler(this);
 		this.utils = new PluginUtils(this);

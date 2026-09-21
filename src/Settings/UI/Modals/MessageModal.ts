@@ -15,7 +15,7 @@ export default class MessageModal extends Modal {
         private cta?: string,
     ) {
         super(ntb.app);
-        this.modalEl.addClass('note-toolbar-link-dialog', 'note-toolbar-setting-dialog-phonefix');
+        this.modalEl.addClass('note-toolbar-link-dialog');
     }
 
     public onOpen() {

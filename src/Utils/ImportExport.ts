@@ -303,6 +303,29 @@ function unescapeTextForCallout(str: string): string {
 }
 
 /**
+ * Splits a input callout string into individual lines, preserving literal `\n` sequences 
+ * inside quoted HTML attributes or embedded JavaScript expressions.
+ * @param callout the raw callout string to parse
+ * @returns Array of line strings ready for item processing.
+ */
+function parseCalloutLines(callout: string): string[] {
+    // temporarily protect newlines inside quotes/scripts from splitting
+    const protectedCallout = callout.replace(/(["'])([\s\S]*?)\1/g, (match) => {
+        return match.replace(/\\n/g, '___ESCAPED_NL___');
+    });
+
+    // expand remaining newline (which represent actual callout line breaks)
+    const lines = protectedCallout
+        .replace(/\\n/g, '\n')
+        .trim()
+        .split('\n')
+        // restore newlines inside JavaScript string/attribute values
+        .map(line => line.replace(/___ESCAPED_NL___/g, '\\n'));
+
+    return lines;
+}
+
+/**
  * Imports items from a callout string, adding them to a new toolbar, or the toolbar provided.
  * @param ntb NoteToolbarPlugin
  * @param callout Note Toolbar Calllout string to import
@@ -319,8 +342,8 @@ export function importFromCallout(
 
     ntb.debug('importFromCallout');
 
-    // handle escaped newlines from the command-line, as well as those from the UI 
-    const lines = callout.replace(/\\n/g, '\n').trim().split('\n');
+    // get actual callout lines for processing
+    const lines = parseCalloutLines(callout);
     
     const isToolbarProvided = toolbar ? true : false;
     let errorLog = '';
@@ -453,7 +476,7 @@ export function importFromCallout(
                             .toLowerCase();
                         // check the Lucide set first, and then the icon's name by itself (for custom icons, like Templater's)
                         icon = getIcon('lucide-' + iconImported) ? 'lucide-' + iconImported : (getIcon(iconImported) ? iconImported : '');
-                        warningLog += icon ? '' : `- ${t('import.errorlog-item', { number: index + 1 })} ${t('import.errorlog-icon-not-found', { icon: iconImported })}\n`;
+                        warningLog += icon ? '' : `- ${t('import.errorlog-line', { number: index + 1 })} ${t('import.errorlog-icon-not-found', { icon: iconImported })}\n`;
                     }
                     // remove the icon from the label string
                     label = label?.replace(iconMatch[1], '').trim();
@@ -473,7 +496,7 @@ export function importFromCallout(
                             const commandName = ntb.utils.getCommandNameById(commandId);
                             // if the command name doesn't exist, show the command ID and an error
                             link = commandName ? commandName : commandId;
-                            warningLog += commandName ? '' : `- ${t('import.errorlog-item', { number: index + 1 })} ${t('import.errorlog-command-not-recognized', { command: commandId })}\n`;
+                            warningLog += commandName ? '' : `- ${t('import.errorlog-line', { number: index + 1 })} ${t('import.errorlog-command-not-recognized', { command: commandId })}\n`;
                             break;
                         }
                         case ItemType.Dataview:
@@ -508,7 +531,7 @@ export function importFromCallout(
                             itemType = ItemType.Menu;
                             const menuToolbar = ntb.settingsManager.getToolbar(dataUriValue);
                             link = menuToolbar ? menuToolbar.uuid : dataUriValue;
-                            errorLog += menuToolbar ? '' : `- ${t('import.errorlog-item', { number: index + 1 })} ${t('import.errorlog-menu-not-found', { menu: dataUriValue })}\n`;
+                            errorLog += menuToolbar ? '' : `- ${t('import.errorlog-line', { number: index + 1 })} ${t('import.errorlog-menu-not-found', { menu: dataUriValue })}\n`;
                             // TODO: link needs to trigger field error style somehow
                             break;
                         }
@@ -529,7 +552,7 @@ export function importFromCallout(
         ntb.debug('| scriptConfig?', scriptConfig);
         ntb.debug(`| => ${itemType?.toUpperCase()}`);
 
-        errorLog += itemType ? '' : `- ${t('import.errorlog-item', { number: index + 1 })} ${t('import.errorlog-invalid-format', { line: line })}\n`;
+        errorLog += itemType ? '' : `- ${t('import.errorlog-line', { number: index + 1 })} ${t('import.errorlog-invalid-format', { line: line })}\n`;
 
         // create the toolbar item and add it to the toolbar
         if (itemType) {
@@ -568,6 +591,7 @@ export function importFromCallout(
     if (warningLog) noticeText += `${t('import.errorlog-warning-heading')}\n${warningLog}`;
     if (noticeText) {
         if (displayError) new Notice(noticeText, 10000).containerEl.addClass('mod-warning');
+        ntb.error(`| attempted to parse:`, lines);
         ntb.error(noticeText);
     }
 

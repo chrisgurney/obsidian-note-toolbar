@@ -335,28 +335,62 @@ export default class CliHandlers {
     handleRules(args: CliData): string {
         const format = hasValue(args.format) ? args.format : 'tsv';
 
-        const mappings = this.ntb.settings.folderMappings;
-        if (!mappings.length) return t('cli.no-mappings');
+        const rules = this.ntb.settings.rules;
+        if (!rules?.length) return '';
         
-        type MappingSchema = 'position' | 'folder' | 'toolbar';
-        const schema: MappingSchema[] = ['position', 'folder', 'toolbar'];
+        type RuleSchema = 'position' | 'toolbar' | 'conditions';
+        const schema: RuleSchema[] = ['position', 'toolbar', 'conditions'];
 
-        const rows = mappings.map((mapping, i) => {
-            const values: Record<MappingSchema, string> = { 
-                position: String(i + 1),
-                folder: mapping.folder, 
-                toolbar: formatToolbarRef(this.ntb, mapping.toolbar) 
-            };
-            return schema.map(col => values[col]);
-        });
+        const [activeToolbar, matchType] = this.ntb.rules.getActiveToolbar();
+        let activeRuleFlagged = false;
 
+        let propToolbar = '';
+        if (matchType === 'prop' && activeToolbar) {
+            propToolbar = formatToolbarRef(this.ntb, activeToolbar.uuid, matchType === 'prop');
+            activeRuleFlagged = true;
+        }
+
+        const rows: Array<string[]> = [
+            [
+                '1', 
+                propToolbar
+                    ? propToolbar
+                    : t('setting.rules.cli-label-property-na'),
+                t('setting.rules.cli-label-property', { property: this.ntb.settings.toolbarProp }),
+            ],
+            ...rules.map((rule, i) => {
+                const isActiveRule =
+                    (typeof matchType === 'object' && matchType !== null) &&
+                    !activeRuleFlagged &&
+                    rule.toolbar === activeToolbar?.uuid;
+
+                if (isActiveRule) activeRuleFlagged = true;
+
+                const values: Record<RuleSchema, string> = {
+                    position: String(i + 2),
+                    toolbar: formatToolbarRef(this.ntb, rule.toolbar, isActiveRule),
+                    conditions: this.ntb.rules.formatRuleConditions(rule),
+                };
+
+                return schema.map((column) => values[column]);
+            }),
+            [
+                String(rules.length + 2),
+                this.ntb.settings.defaultToolbar
+                    ? formatToolbarRef(this.ntb, this.ntb.settings.defaultToolbar, matchType === 'default') : '',
+                t('setting.rules.cli-label-default'),
+            ],
+        ];
+
+        let rowOutput = '';
         switch (format) {
             case 'csv': {
                 const header = schema.join(',');
                 const lines = rows.map(r =>
                     r.map(v => `"${v.replace(/"/g, '""')}"`).join(',')
                 );
-                return [header, ...lines].join('\n');
+                rowOutput = [header, ...lines].join('\n');
+                break;
             }
             default: {
                 const widths = rows.reduce((acc, r) => {
@@ -364,7 +398,7 @@ export default class CliHandlers {
                     return acc;
                 }, [] as number[]);
 
-                return rows.map(r =>
+                rowOutput = rows.map(r =>
                     r.map((v, i) => {
                         const padded = v.padEnd(widths[i]);
                         return padded;
@@ -372,6 +406,13 @@ export default class CliHandlers {
                 ).join('\n');
             }
         }
+
+        if (activeToolbar) {
+            const activeFileName = this.ntb.app.workspace.getActiveFile()?.basename;
+            return `${rowOutput}\n\n* Indicates the active rule in the active file (${activeFileName})`;
+        }
+
+        return rowOutput;
 
     }
 

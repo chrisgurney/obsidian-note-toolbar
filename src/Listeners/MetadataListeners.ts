@@ -46,13 +46,13 @@ export default class WorkspaceListeners {
 		await this.ntb.render.checkAndRender(file, cachedFrontmatter, toolbarView);
 
 		// prompt to create a toolbar if it doesn't exist in the Note Toolbar property
-		const ntbPropValue = this.ntb.settingsManager.getToolbarNameFromProps(cachedFrontmatter);
+		const ntbPropValue = this.ntb.rules.getToolbarNameFromProps(cachedFrontmatter);
 		if (ntbPropValue && this.ntb.settings.toolbarProp !== 'tags') {
 			// make sure just the relevant property changed in the open file
 			if (this.lastFileOpenedOnCacheChange !== file) this.lastNtbPropValue = undefined;
 			const ignoreToolbar = ntbPropValue.includes('none') ? true : false;
 			if (ntbPropValue !== this.lastNtbPropValue) {
-				const matchingToolbar = ignoreToolbar ? undefined : this.ntb.settingsManager.getToolbarByName(ntbPropValue);
+				const matchingToolbar = ignoreToolbar ? undefined : this.ntb.settingsManager.getToolbar(ntbPropValue);
 				if (!matchingToolbar && !ignoreToolbar) {
 					const notice = new Notice(t('notice.warning-no-matching-toolbar', { toolbar: ntbPropValue }), 7500);
 					notice.messageEl.addClass('note-toolbar-notice-pointer');

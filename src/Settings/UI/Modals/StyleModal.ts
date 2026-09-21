@@ -8,7 +8,8 @@ export default class StyleModal extends Modal {
 
     constructor(
 		private ntb: NoteToolbarPlugin, 
-		private toolbar: ToolbarSettings
+		private toolbar: ToolbarSettings,
+		private isForFloatingToolbar = false
 	) {
         super(ntb.app);
     }
@@ -40,7 +41,7 @@ export default class StyleModal extends Modal {
 		this.modalEl.addClass('note-toolbar-setting-modal-phone-top-inset-fix');
 		this.modalEl.addClass('note-toolbar-setting-modal-phone-bottom-inset-fix');
 		
-        const toolbarStyleUi = new ToolbarStyleUi(this.ntb, this, this.toolbar);
+        const toolbarStyleUi = new ToolbarStyleUi(this.ntb, this, this.toolbar, this.isForFloatingToolbar);
         toolbarStyleUi.displayStyleSetting(this.contentEl);
 
 		const doneButton = new Setting(this.contentEl)
