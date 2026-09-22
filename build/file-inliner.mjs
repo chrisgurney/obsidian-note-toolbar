@@ -7,7 +7,7 @@ export function fileInliner(inputPath, outputPath) {
   try {
     let content = fs.readFileSync(inputPath, 'utf8');
 
-const importRegex = /^(?:@import|@include)\s+['"]([^'"]+)['"]\s*;?\s*$/gm;
+    const importRegex = /^(?:@import|@include)\s+['"]([^'"]+)['"]\s*;?\s*$/gm;
     for (const match of [...content.matchAll(importRegex)]) {
       const fullPath = path.resolve(path.dirname(inputPath), match[1]);
       const fileContent = fs.readFileSync(fullPath, 'utf8');
@@ -23,6 +23,7 @@ const importRegex = /^(?:@import|@include)\s+['"]([^'"]+)['"]\s*;?\s*$/gm;
     if (existing === content) return false;
 
     fs.writeFileSync(outputPath, content);
+    // console.log(`\x1b[32m[file-inliner] ✓ inlined: ${inputPath} -> ${outputPath}\x1b[0m`);
     return true;
   }
   catch (error) {
