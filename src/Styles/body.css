@@ -32,6 +32,8 @@ body {
     --cg-nt-tbar-text-max-width-desktop: 900px;
     --cg-nt-tbar-text-max-width-phone: calc(100vw - 32px);
     --cg-nt-tbar-text-max-width-tablet: 650px;
+    --cg-nt-tbar-text-offset-y: 8px;
+    --cg-nt-tbar-text-orientation: auto;
     --cg-nt-tbar-text-shadow: var(--shadow-s);
     --cg-nt-tbar-text-z-index: calc(var(--layer-slides) - 1); /* above popovers + Hover Editor plugin */
     --cg-nt-tbar-top-padding-x-mobile: var(--size-4-3);

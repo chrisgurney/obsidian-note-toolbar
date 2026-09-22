@@ -1345,38 +1345,54 @@ export default class ToolbarRenderer {
 	 * Positions floating toolbars (e.g., text toolbar), ensuring it doesn't go over the edge of the window.
 	 * @param toolbarEl toolbar element to position.
 	 * @param position coords to position toolbar at.
-	 * @param orientation puts the toolbar above or below the provided position.
 	 */
 	positionFloating(
 		toolbarEl: HTMLDivElement | null, 
-		position: Rect, 
-		orientation: 'above' | 'below' = 'above'
+		position: Rect
 	): void {
 		if (!toolbarEl) return;
 
+		//
 		// vertically: orient relative to position, and prevent overflow
-		// TODO? make offset via CSS variable instead of subtracting here?
+		//
+
+		// offset default + override
+		const cssOffset = getComputedStyle(toolbarEl).getPropertyValue('--cg-nt-tbar-text-offset-y').trim();
+		const offset = parseFloat(cssOffset) || 8;
+
+		// orientation default + override
+		// on Android, default to below the selection because the system toolbar is above the selection
+		const defaultOrientation = Platform.isAndroidApp ? 'below' : 'above';
+		const cssOrientation = getComputedStyle(toolbarEl).getPropertyValue('--cg-nt-tbar-text-orientation').trim().toLowerCase();
+		let orientation: 'above' | 'below' = defaultOrientation;
+		if (cssOrientation === 'above' || cssOrientation === 'below') {
+			orientation = cssOrientation;
+		}
+
 		let top: number;
 		if (orientation === 'below') {
-			top = position.bottom + 8;
-			if (top + toolbarEl.offsetHeight > activeWindow.innerHeight - 8) {
-				top = position.top - toolbarEl.offsetHeight - 8;
+			top = position.bottom + offset;
+			if (top + toolbarEl.offsetHeight > activeWindow.innerHeight - offset) {
+				top = position.top - toolbarEl.offsetHeight - offset;
 				// if still overflows above, clamp to top
-				if (top < 8) top = 8;
+				if (top < offset) top = offset;
 			}
 		}
 		else {
-			top = position.top - toolbarEl.offsetHeight - 8;
-			if (top < 8) {
-				top = position.bottom + 8;
+			top = position.top - toolbarEl.offsetHeight - offset;
+			if (top < offset) {
+				top = position.bottom + offset;
 				// if still overflows below, clamp to bottom
-				if (top + toolbarEl.offsetHeight > activeWindow.innerHeight - 8) {
-					top = activeWindow.innerHeight - toolbarEl.offsetHeight - 8;
+				if (top + toolbarEl.offsetHeight > activeWindow.innerHeight - offset) {
+					top = activeWindow.innerHeight - toolbarEl.offsetHeight - offset;
 				}
 			}
 		}
 
+		//
 		// horizontally: use center of provided position (handles text selections)
+		//
+
 		const centerX = (position.left + position.right) / 2;
 		let left = centerX - (toolbarEl.offsetWidth / 2);
 
@@ -1451,7 +1467,7 @@ export default class ToolbarRenderer {
 		toolbarContainerEl.appendChild(renderedToolbarEl);
 		activeDocument.body.appendChild(toolbarContainerEl);
 
-		this.positionFloating(toolbarContainerEl, position, Platform.isAndroidApp ? 'below' : 'above');
+		this.positionFloating(toolbarContainerEl, position);
 
 		this.ntb.registerDomEvent(toolbarContainerEl, 'contextmenu', (e) => this.ntb.toolbars.onContextMenu(e));
 		this.ntb.registerDomEvent(toolbarContainerEl, 'keydown', (e) => this.ntb.toolbars.onKeyDown(e, true));

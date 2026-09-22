@@ -1150,6 +1150,29 @@ settings:
         level: 2
         collapsed: true
     -
+        id: cg-nt-tbar-text-orientation
+        title: 'Orientation'
+        description: 'Position of the text toolbar relative to the text'
+        type: variable-select
+        default: 'auto'
+        options:
+            - 
+                label: 'Auto'
+                value: 'auto'
+            - 
+                label: 'Above text'
+                value: 'above'
+            - 
+                label: 'Below text'
+                value: 'below'
+    -
+        id: cg-nt-tbar-text-offset-y
+        title: 'Vertical offset (in px units)'
+        description: 'How far the toolbar is positioned from the text.'
+        type: variable-number
+        default: 8
+        format: px
+    -
         id: cg-nt-tbar-text-z-index
         title: 'Z-index'
         description: "Controls stacking order relative to other elements. Increase if floating toolbars appear behind other components, or decrease if it covers them."
