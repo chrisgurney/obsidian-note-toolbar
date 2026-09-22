@@ -33,14 +33,14 @@ Even if you're not a developer, getting started with the API is easy:
 - **[Utilities](#Utilities)**
     - [[ntb.app|Note-Toolbar-API#app]]
     - [[ntb.clipboard|Note-Toolbar-API#clipboard]]
-    - [[ntb.getTags|Note-Toolbar-API#gettags]]
+    - [[ntb.loadScript|Note-Toolbar-API#loadscript]]
     - [[ntb.o|Note-Toolbar-API#o]]
     - [[ntb.t|Note-Toolbar-API#t]]
 
 ---
 
 > [!warning]
-> You can also directly access Note Toolbar's settings or toolbar items via `app.plugins.getPlugin("note-toolbar").settings`, but be aware that these are subject to change and may break your scripts. The API will be the official way to access and change information about toolbars.
+> While you could directly access Note Toolbar's settings via `app.plugins.getPlugin("note-toolbar").settings`, be aware that these are subject to change and may break your scripts. The API will be the official way to access and change information about toolbars.
 
 ---
 
@@ -714,3 +714,59 @@ new Notice(ntb.t('api.msg.clipboard-copied'));
 
  - For usage, see the [i18next documentation](https://www.i18next.com/translation-function/essentials).
  - `en.json` and other translations in the [src/I18n folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/src/I18n).
+
+***
+
+### loadScript()
+
+> **loadScript**\<`T`\>(`path`): `Promise`\<`T`\>
+
+Loads a user script from the vault and returns its result.
+For example, use this to return functions for use in other scripts.
+
+#### Type Parameters
+
+| Type Parameter | Default type |
+| ------ | ------ |
+| `T` | `Record`\<`string`, `unknown`\> |
+
+#### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `path` | `string` | The path to the script file. |
+
+#### Returns
+
+`Promise`\<`T`\>
+
+A promise resolving to the loaded script.
+
+#### Since
+
+1.35
+
+#### Examples
+
+```ts
+// library script: Scripts/NTB Library.js
+async function myFunction() {
+  await ntb.setProperty('HELLO', true);
+}
+
+function anotherFunction() {
+  console.log('Hello from the library');
+}
+
+return {
+  myFunction,
+  anotherFunction
+};
+```
+
+```ts
+// load a script and call its functions
+const lib = await ntb.loadScript('Scripts/NTB Library.js');
+await lib.myFunction();
+lib.anotherFunction();
+```

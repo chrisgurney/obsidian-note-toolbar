@@ -153,6 +153,38 @@ export default interface INoteToolbarApi<T> {
     getToolbars: () => IToolbar[];
 
     /**
+     * Loads a user script from the vault and returns its result.
+     * For example, use this to return functions for use in other scripts.
+     * 
+     * @param path The path to the script file.
+     * @returns A promise resolving to the loaded script.
+     * @since 1.35
+     * @group Utilities
+     * 
+     * @example
+     * // library script: Scripts/NTB Library.js
+     * async function myFunction() {
+     *   await ntb.setProperty('HELLO', true);
+     * }
+     * 
+     * function anotherFunction() {
+     *   console.log('Hello from the library');
+     * }
+     * 
+     * return {
+     *   myFunction,
+     *   anotherFunction
+     * };
+     * 
+     * @example
+     * // load a script and call its functions
+     * const lib = await ntb.loadScript('Scripts/NTB Library.js');
+     * await lib.myFunction();
+     * lib.anotherFunction();
+     */
+    loadScript<T = Record<string, unknown>>(path: string): Promise<T>;
+
+    /**
      * Shows a menu with the provided items.
      * 
      * @param {string | NtbMenuItem[]} toolbarOrItems Toolbar name or [ID](Developer-IDs); or an array of items to display. See {@link NtbMenuItem}.

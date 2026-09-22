@@ -33,14 +33,14 @@ Even if you're not a developer, getting started with the API is easy:
 - **[Utilities](#Utilities)**
     - [[ntb.app|Note-Toolbar-API#app]]
     - [[ntb.clipboard|Note-Toolbar-API#clipboard]]
-    - [[ntb.getTags|Note-Toolbar-API#gettags]]
+    - [[ntb.loadScript|Note-Toolbar-API#loadscript]]
     - [[ntb.o|Note-Toolbar-API#o]]
     - [[ntb.t|Note-Toolbar-API#t]]
 
 ---
 
 > [!warning]
-> You can also directly access Note Toolbar's settings or toolbar items via `app.plugins.getPlugin("note-toolbar").settings`, but be aware that these are subject to change and may break your scripts. The API will be the official way to access and change information about toolbars.
+> While you could directly access Note Toolbar's settings via `app.plugins.getPlugin("note-toolbar").settings`, be aware that these are subject to change and may break your scripts. The API will be the official way to access and change information about toolbars.
 
 ---
 

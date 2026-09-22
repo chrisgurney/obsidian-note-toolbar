@@ -683,7 +683,8 @@ new Notice(ntb.t('api.msg.clipboard-copied'));
 
 > **loadScript**\<`T`\>(`path`): `Promise`\<`T`\>
 
-Loads the provided script file within the vault and returns it for use in other scripts.
+Loads a user script from the vault and returns its result.
+For example, use this to return functions for use in other scripts.
 
 #### Type Parameters
 
@@ -711,18 +712,23 @@ A promise resolving to the loaded script.
 
 ```ts
 // library script: Scripts/NTB Library.js
+async function myFunction() {
+  await ntb.setProperty('HELLO', true);
+}
+
+function anotherFunction() {
+  console.log('Hello from the library');
+}
+
 return {
-  async myFunction() {
-    await ntb.setProperty('HELLO', true);
-  },
-  async anotherFunction() {
-    console.log('Hello from the library');
-  }
+  myFunction,
+  anotherFunction
 };
 ```
 
 ```ts
-// load a script and call its function
+// load a script and call its functions
 const lib = await ntb.loadScript('Scripts/NTB Library.js');
 await lib.myFunction();
+lib.anotherFunction();
 ```

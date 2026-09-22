@@ -1,5 +1,6 @@
 import NoteToolbarPlugin from "main";
 // import { testCallback } from "Api/TestCallback";
+import { ScriptLoader } from "Adapters/ScriptLoader";
 import * as Obsidian from "obsidian";
 import { App, Menu, MenuItem, Modal, normalizePath, Notice, TAbstractFile, TFile, TFolder } from "obsidian";
 import { LocalVar, PositionType, t } from "Settings/NoteToolbarSettings";
@@ -17,8 +18,11 @@ export type Callback = (arg: string) => void;
 
 export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
 
+    public readonly scriptLoader: ScriptLoader;
+
     constructor(private ntb: NoteToolbarPlugin) {
         this.app = ntb.app;
+        this.scriptLoader = new ScriptLoader(ntb);
     }
 
     // async testCallback(buttonId: string, callback: Callback) {
@@ -191,6 +195,17 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
      */
     getToolbars(): Toolbar[] {
         return this.ntb.settings.toolbars.map(toolbar => new Toolbar(toolbar));
+    }
+
+    /**
+     * Loads and evaluates a script within the vault.
+     * 
+     * @see INoteToolbarApi.loadScript 
+     */
+    async loadScript<R = Record<string, unknown>>(
+        path: string
+    ): Promise<R> {
+        return this.scriptLoader.load<R>(path);
     }
 
     /**
