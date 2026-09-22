@@ -6,7 +6,7 @@
 | ------ |
 | `T` |
 
-## Note Manipulation
+## Notes
 
 Functions for reading and manipulating notes in the vault.
 
@@ -51,6 +51,24 @@ The selected text, or the word at the current cursor position. Otherwise returns
 #### Since
 
 1.26
+
+***
+
+### getTags
+
+> **getTags**: () => `string`[]
+
+Returns list of tags in the vault, sorted alphabetically.
+
+#### Returns
+
+`string`[]
+
+List of tags in the vault.
+
+#### Since
+
+1.35
 
 ***
 
@@ -609,24 +627,6 @@ Since 1.33. Use `await activeWindow.navigator.clipboard.readText()` instead.
 
 ***
 
-### getTags
-
-> **getTags**: () => `string`[]
-
-Returns list of tags in the vault, sorted alphabetically.
-
-#### Returns
-
-`string`[]
-
-List of tags in the vault.
-
-#### Since
-
-1.35
-
-***
-
 ### o
 
 > **o**: `__module`
@@ -676,3 +676,53 @@ new Notice(ntb.t('api.msg.clipboard-copied'));
 
  - For usage, see the [i18next documentation](https://www.i18next.com/translation-function/essentials).
  - `en.json` and other translations in the [src/I18n folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/src/I18n).
+
+***
+
+### loadScript()
+
+> **loadScript**\<`T`\>(`path`): `Promise`\<`T`\>
+
+Loads the provided script file within the vault and returns it for use in other scripts.
+
+#### Type Parameters
+
+| Type Parameter | Default type |
+| ------ | ------ |
+| `T` | `Record`\<`string`, `unknown`\> |
+
+#### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `path` | `string` | The path to the script file. |
+
+#### Returns
+
+`Promise`\<`T`\>
+
+A promise resolving to the loaded script.
+
+#### Since
+
+1.35
+
+#### Examples
+
+```ts
+// library script: Scripts/NTB Library.js
+return {
+  async myFunction() {
+    await ntb.setProperty('HELLO', true);
+  },
+  async anotherFunction() {
+    console.log('Hello from the library');
+  }
+};
+```
+
+```ts
+// load a script and call its function
+const lib = await ntb.loadScript('Scripts/NTB Library.js');
+await lib.myFunction();
+```

@@ -8,7 +8,7 @@ import { IToolbar } from "./IToolbar";
  * This is the documentation for the [Note Toolbar API](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-API) page.
  * The page header is in `src/docs/_imports/api-header.md` and is inlined during the build process.
  * 
- * @groupDescription Note Manipulation
+ * @groupDescription Notes
  * Functions for reading and manipulating notes in the vault.
  *
  * @groupDescription Toolbars
@@ -122,7 +122,7 @@ export default interface INoteToolbarApi<T> {
      * @example
      * const createdDate = ntb.getProperty('created');
      * 
-     * @group Note Manipulation
+     * @group Notes
      */
     getProperty: (property: string) => string | undefined;
 
@@ -131,7 +131,7 @@ export default interface INoteToolbarApi<T> {
      * 
      * @returns The selected text, or the word at the current cursor position. Otherwise returns an empty string.
      * @since 1.26
-     * @group Note Manipulation
+     * @group Notes
      */
     getSelection: () => string;
 
@@ -140,7 +140,7 @@ export default interface INoteToolbarApi<T> {
      * 
      * @returns List of tags in the vault.
      * @since 1.35
-     * @group Utilities
+     * @group Notes
      */
     getTags: () => string[];
 
@@ -286,7 +286,7 @@ export default interface INoteToolbarApi<T> {
      * await ntb.setProperty('A List', ['asdf', 'asdf2']);
      * await ntb.setProperty('Delete Me', null);
      * 
-     * @group Note Manipulation
+     * @group Notes
      */
     setProperty: (property: string, value: unknown) => Promise<void>;
 
@@ -302,7 +302,7 @@ export default interface INoteToolbarApi<T> {
      * 
      * @since 1.26
      * 
-     * @group Note Manipulation
+     * @group Notes
      */
     setSelection: (replacement: string) => void;
 

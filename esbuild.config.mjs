@@ -98,7 +98,7 @@ const apiDocsPlugin = {
 				// replace auto-generated heading
 				const apiDocPath = `${DOC_OUTPUT}/wiki/Note-Toolbar-API.md`;
 				const apiDocContent = fs.readFileSync(apiDocPath, 'utf8');
-				const apiDocCleaned = apiDocContent.replace(/\[obsidian-note-toolbar\][\s\S]*?(?=## Note Manipulation\n\n)/, '');
+				const apiDocCleaned = apiDocContent.replace(/\[obsidian-note-toolbar\][\s\S]*?(?=## Notes\n\n)/, '');
 				fs.writeFileSync(apiDocPath, apiDocCleaned);
 			}
 			catch (error) {

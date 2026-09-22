@@ -12,11 +12,12 @@ Even if you're not a developer, getting started with the API is easy:
 
 ## `ntb` API
 
-- **[Note Manipulation](#Note-manipulation)**
+- **[Notes](#Notes)**
     - [[ntb.getProperty|Note-Toolbar-API#getproperty]]
     - [[ntb.setProperty|Note-Toolbar-API#setproperty]]
     - [[ntb.getSelection|Note-Toolbar-API#getselection]]
     - [[ntb.setSelection|Note-Toolbar-API#setselection]]
+    - [[ntb.getTags|Note-Toolbar-API#gettags]]
 - **[Toolbars](#Toolbars)**
     - [[ntb.export|Note-Toolbar-API#export]]
     - [[ntb.getActiveItem|Note-Toolbar-API#getactiveitem]]
