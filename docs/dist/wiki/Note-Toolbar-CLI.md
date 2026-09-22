@@ -5,6 +5,9 @@ The **Note Toolbar CLI** provides command-line access to create [Note Toolbar](h
 > [!NOTE]
 > Out of an abundance of caution, deletion of items and toolbars is currently not supported in the CLI. Perhaps such commands will be added if there is a clean way to undo these actions (for which currently there is not).
 
+> [!TIP] 
+> 🤖 **Automate with LLM Agents:** You can run CLI commands directly through AI agents. See the [LLM Agent Skills Guide](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/skills/README.md) for setup and available tools.
+
 ## Get started
 
 Read the [Obsidian CLI ↗](https://obsidian.md/help/cli) documentation to install, enable, and get familiar with how Obsidian's command-line interface works.
