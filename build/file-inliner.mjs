@@ -10,6 +10,7 @@ export function fileInliner(inputPath, outputPath) {
     const importRegex = /^(?:@import|@include)\s+['"]([^'"]+)['"]\s*;?\s*$/gm;
     for (const match of [...content.matchAll(importRegex)]) {
       const fullPath = path.resolve(path.dirname(inputPath), match[1]);
+      // console.log(`[file-inliner] inlining: ${inputPath} <- ${fullPath}`);
       const fileContent = fs.readFileSync(fullPath, 'utf8');
       content = content.replace(match[0], fileContent);
     }
