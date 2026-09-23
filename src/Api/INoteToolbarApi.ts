@@ -145,7 +145,7 @@ export default interface INoteToolbarApi<T> {
      * @since 1.26
      * @group Notes
      */
-    getSelection: () => string;
+    getSelection: (options?: GetSelectionOptions) => string;
 
     /**
      * Returns list of tags in the vault, sorted alphabetically.
@@ -481,6 +481,19 @@ export interface AppendOptions {
      * Text to insert between the existing file content and the appended content. Defaults to `'\n\n'`.
      */
     separator?: string;
+}
+
+/**
+ * @inline
+ * @hidden
+ */
+export interface GetSelectionOptions {
+    /**
+     * Return the word at the cursor, if there's no selection. Default is `true`.
+     * 
+     * @since 1.35
+     */
+    wordAtCursor?: boolean;
 }
 
 /**

@@ -297,9 +297,10 @@ export default class PluginUtils {
      * Gets the selected text, or the word at the cursor position. Only works in markdown editing or reading modes.
 	 * 
 	 * @see INoteToolbarApi.getSelection
-	 * @param previewOnly set to `true` to only return select text in Preview mode or in embeds (useful for text toolbars). 
+	 * @param previewOnly set to `true` to only return select text in Preview mode or in embeds (useful for text toolbars).
+	 * @param wordAtCursor set to `true` to return word under the cursor, if there is no selection 
 	 */
-	getSelection(previewOnly: boolean = false): string {
+	getSelection(previewOnly: boolean = false, wordAtCursor: boolean = true): string {
 
 		const editor = this.ntb.app.workspace.activeEditor?.editor;
 		const view = this.ntb.app.workspace.getActiveViewOfType(ItemView);
@@ -338,7 +339,7 @@ export default class PluginUtils {
 				// or return word at cursor, if there is one
 				const cursor = editor.getCursor();
 				const wordRange = editor.wordAt(cursor);
-				if (wordRange) return editor.getRange(wordRange.from, wordRange.to);
+				if (wordRange && wordAtCursor) return editor.getRange(wordRange.from, wordRange.to);
 			}
 		}
 

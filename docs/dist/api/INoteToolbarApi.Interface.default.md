@@ -66,9 +66,16 @@ const createdDate = ntb.getProperty('created');
 
 ### getSelection
 
-> **getSelection**: () => `string`
+> **getSelection**: (`options?`) => `string`
 
 Gets the currently selected text, or the word at the current cursor position, if nothing's selected.  Only works in markdown editing or reading modes.
+
+#### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `options?` | \{ `wordAtCursor?`: `boolean`; \} | - |
+| `options.wordAtCursor?` | `boolean` | Return the word at the cursor, if there's no selection. Default is `true`. **Since** 1.35 |
 
 #### Returns
 

@@ -6,7 +6,7 @@ import { App, Menu, MenuItem, Modal, normalizePath, Notice, TAbstractFile, TFile
 import { LocalVar, PositionType, t } from "Settings/NoteToolbarSettings";
 import { exportToCalloutById } from "Utils/ImportExport";
 import { putFocusInMenu } from "Utils/Utils";
-import INoteToolbarApi, { AppendOptions, NtbFileSuggesterOptions, NtbMenuItem, NtbMenuOptions, NtbModalOptions, NtbPromptOptions, NtbSidebarOptions, NtbSuggesterOptions, NtbToolbarOptions } from "./INoteToolbarApi";
+import INoteToolbarApi, { AppendOptions, GetSelectionOptions, NtbFileSuggesterOptions, NtbMenuItem, NtbMenuOptions, NtbModalOptions, NtbPromptOptions, NtbSidebarOptions, NtbSuggesterOptions, NtbToolbarOptions } from "./INoteToolbarApi";
 import Item from "./Item";
 import { IToolbar } from "./IToolbar";
 import NtbModal from "./NtbModal";
@@ -208,8 +208,8 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
      * 
      * @see INoteToolbarApi.getSelection
      */
-    getSelection(): string {
-        return this.ntb.utils.getSelection(false);
+    getSelection(options?: GetSelectionOptions): string {
+        return this.ntb.utils.getSelection(false, options?.wordAtCursor ?? true);
     }
 
     /**
