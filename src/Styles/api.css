@@ -67,6 +67,11 @@
                 padding: unset;
             }
         }
+        textarea.ntb-modal-editable {
+            font-size: var(--font-preferred-size);
+            height: 99%;
+            width: 100%;
+        }
     }
     &[data-ntb-ui-type="suggester"] {
         &.ntb-suggester-collapse {

@@ -65,12 +65,17 @@ export default class NtbModal extends Modal {
             const containerEl = this.titleEl.createDiv({ cls: 'markdown-preview-view' });
             await MarkdownRenderer.render(this.ntb.app, this.title, containerEl, "", this.component);
         }
-        if (this.isEditable && this.content instanceof TFile) {
-            // adapted from https://github.com/likemuuxi/obsidian-modal-opener (MIT license)
-            this.leaf = this.ntb.app.workspace.createLeafInParent(this.ntb.app.workspace.rootSplit, 0);
-            if (this.leaf) (this.leaf.containerEl as HTMLElement).hide();
-            await this.leaf.openFile(this.content);
-            this.contentEl.appendChild(this.leaf.view.containerEl);
+        if (this.isEditable) {
+            if (this.content instanceof TFile) {
+                // adapted from https://github.com/likemuuxi/obsidian-modal-opener (MIT license)
+                this.leaf = this.ntb.app.workspace.createLeafInParent(this.ntb.app.workspace.rootSplit, 0);
+                if (this.leaf) (this.leaf.containerEl as HTMLElement).hide();
+                await this.leaf.openFile(this.content);
+                this.contentEl.appendChild(this.leaf.view.containerEl);
+            }
+            else {
+                this.contentEl.createEl('textarea', { text: this.content, cls: 'ntb-modal-editable' });
+            }
         }
         else if (this.isWebviewer && typeof this.content === 'string') {
             this.leaf = this.ntb.app.workspace.createLeafInParent(this.ntb.app.workspace.rootSplit, 0);
