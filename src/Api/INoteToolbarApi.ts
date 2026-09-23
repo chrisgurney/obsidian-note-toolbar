@@ -360,13 +360,16 @@ export default interface INoteToolbarApi<T> {
      * @example
      * // show the selected file
      * const file = await ntb.fileSuggester(
-     *   ntb.app.vault.getAllLoadedFiles(),
-     *   { filesonly: true }
+     *   ntb.app.vault.getAllLoadedFiles(), { filesonly: true }
      * );
      * await ntb.sidebar(file);
-     * 
+     *
      * @example
-     * // show a string, create a new sidebar view each time
+     * // show a web page
+     * await ntb.sidebar(new URL('https://obsidian.md'));
+     *  
+     * @example
+     * // show a string, creating a new sidebar view each time
      * await ntb.sidebar(`*It is now:*\n${new Date()}`, { reuse: false });
      * 
      * @since 1.35
@@ -608,6 +611,14 @@ export interface NtbSidebarOptions {
      * Reuse an existing sidebar view instead of creating a new one.
      */
     reuse?: boolean;
+    /**
+     * Sets the icon for the sidebar view. Can only be set once.
+     */
+    viewIcon?: string;
+    /**
+     * Sets the title for the sidebar view. Can only be set once.
+     */
+    viewTitle?: string;
 }
 
 /**

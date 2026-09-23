@@ -1,5 +1,6 @@
 import { ItemView, MarkdownRenderer, TFile, WorkspaceLeaf } from "obsidian";
 import { t } from "Settings/NoteToolbarSettings";
+import { NtbSidebarOptions } from "./INoteToolbarApi";
 
 /**
  * Provides a sidebar view that can be accessed from the Note Toolbar API.
@@ -7,11 +8,14 @@ import { t } from "Settings/NoteToolbarSettings";
 export class NtbSidebarView extends ItemView {
 
     public static VIEW_TYPE_SIDEBAR = 'note-toolbar-sidebar';
-    private viewTitle: string = t('plugin.note-toolbar');
 
-    constructor(leaf: WorkspaceLeaf) {
+    private viewIcon: string;
+    private viewTitle: string;
+
+    constructor(leaf: WorkspaceLeaf, options?: NtbSidebarOptions) {
         super(leaf);
-        this.viewTitle = t('plugin.note-toolbar');
+        this.viewIcon = options?.viewIcon ?? 'file';
+        this.viewTitle = options?.viewTitle ?? t('plugin.note-toolbar');
     }
 
     getViewType(): string {
@@ -20,6 +24,10 @@ export class NtbSidebarView extends ItemView {
 
     getDisplayText(): string {
         return this.viewTitle;
+    }
+
+    getIcon(): string {
+        return this.viewIcon;
     }
 
     async setContent(content: string | TFile): Promise<void> {

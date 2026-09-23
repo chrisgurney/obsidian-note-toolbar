@@ -549,8 +549,10 @@ Shows a sidebar view with the given content.
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `content` | `string` \| `TFile` | Content to display. |
-| `options?` | \{ `reuse?`: `boolean`; \} | Optional display options. |
+| `options?` | \{ `reuse?`: `boolean`; `viewIcon?`: `string`; `viewTitle?`: `string`; \} | Optional display options. |
 | `options.reuse?` | `boolean` | Reuse an existing sidebar view instead of creating a new one. |
+| `options.viewIcon?` | `string` | Sets the icon for the sidebar view. Can only be set once. |
+| `options.viewTitle?` | `string` | Sets the title for the sidebar view. Can only be set once. |
 
 #### Returns
 
@@ -563,14 +565,18 @@ Nothing.
 ```ts
 // show the selected file
 const file = await ntb.fileSuggester(
-  ntb.app.vault.getAllLoadedFiles(),
-  { filesonly: true }
+  ntb.app.vault.getAllLoadedFiles(), { filesonly: true }
 );
 await ntb.sidebar(file);
 ```
 
 ```ts
-// show a string, create a new sidebar view each time
+// show a web page
+await ntb.sidebar(new URL('https://obsidian.md'));
+```
+
+```ts
+// show a string, creating a new sidebar view each time
 await ntb.sidebar(`*It is now:*\n${new Date()}`, { reuse: false });
 ```
 

@@ -416,7 +416,7 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
         content: string | TFile,
         options?: NtbSidebarOptions
     ): Promise<void> {
-        this.registerSidebarView();
+        this.registerSidebarView(options);
 
         // get existing leaf (default); create a new one if the `reuse` option is set
         let leaf: WorkspaceLeaf | null = (options?.reuse ?? true)
@@ -426,11 +426,12 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
             : null;
 
         // check which view type to use
-        const viewType = content instanceof TFile
-            ? this.app.viewRegistry.getTypeByExtension(
-                content.extension
-            ) ?? NtbSidebarView.VIEW_TYPE_SIDEBAR
-            : NtbSidebarView.VIEW_TYPE_SIDEBAR;
+        const viewType = content instanceof URL
+            ? 'webviewer'
+            : content instanceof TFile
+                ? this.app.viewRegistry.getTypeByExtension(content.extension)
+                    ?? NtbSidebarView.VIEW_TYPE_SIDEBAR
+                : NtbSidebarView.VIEW_TYPE_SIDEBAR;
 
         if (!leaf) {
             leaf = this.app.workspace.getRightLeaf(false);
@@ -438,15 +439,19 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
             if (!leaf) {
                 return;
             }
-
-            await leaf.setViewState({
-                type: viewType,
-                active: true,
-                state: content instanceof TFile
-                    ? { file: content.path }
-                    : undefined
-            });
         }
+
+        const viewState = content instanceof URL
+            ? { url: content.toString() }
+            : content instanceof TFile
+                ? { file: content.path }
+                : undefined;
+
+        await leaf.setViewState({
+            type: viewType,
+            state: { ...viewState },
+            active: true
+        });
 
         await this.app.workspace.revealLeaf(leaf);
 
@@ -522,14 +527,14 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
 
     private sidebarRegistered = false;
 
-    private registerSidebarView(): void {
+    private registerSidebarView(options?: NtbSidebarOptions): void {
         if (this.sidebarRegistered) {
             return;
         }
 
         this.ntb.registerView(
             NtbSidebarView.VIEW_TYPE_SIDEBAR,
-            leaf => new NtbSidebarView(leaf)
+            leaf => new NtbSidebarView(leaf, options)
         );
 
         this.sidebarRegistered = true;
