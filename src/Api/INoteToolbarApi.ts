@@ -34,6 +34,18 @@ export default interface INoteToolbarApi<T> {
     app: App;
 
     /**
+     * Appends the given content to the current file.
+     * 
+     * @param content content to append
+     * @param options 
+     * @returns Nothing.
+     * 
+     * @group Notes
+     * @since 1.35
+     */
+    append: (content: string, options?: AppendOptions) => Promise<void>;
+
+    /**
      * Gets the clipboard value.
      * 
      * @returns The clipboard value or `null`.
@@ -423,6 +435,21 @@ export default interface INoteToolbarApi<T> {
      */
     toolbar: (toolbarNameOrId: string, options?: NtbToolbarOptions) => Promise<void>;
 
+}
+
+/**
+ * @inline
+ * @hidden
+ */
+export interface AppendOptions {
+    /**
+     * Text to prepend to each line of the content, such as `'> '` for a blockquote.
+     */
+    linePrefix?: string;
+    /**
+     * Text to insert between the existing file content and the appended content. Defaults to `'\n\n'`.
+     */
+    separator?: string;
 }
 
 /**

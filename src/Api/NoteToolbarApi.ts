@@ -6,7 +6,7 @@ import { App, Menu, MenuItem, Modal, normalizePath, Notice, TAbstractFile, TFile
 import { LocalVar, PositionType, t } from "Settings/NoteToolbarSettings";
 import { exportToCalloutById } from "Utils/ImportExport";
 import { putFocusInMenu } from "Utils/Utils";
-import INoteToolbarApi, { NtbFileSuggesterOptions, NtbMenuItem, NtbMenuOptions, NtbModalOptions, NtbPromptOptions, NtbSuggesterOptions, NtbToolbarOptions } from "./INoteToolbarApi";
+import INoteToolbarApi, { AppendOptions, NtbFileSuggesterOptions, NtbMenuItem, NtbMenuOptions, NtbModalOptions, NtbPromptOptions, NtbSuggesterOptions, NtbToolbarOptions } from "./INoteToolbarApi";
 import Item from "./Item";
 import { IToolbar } from "./IToolbar";
 import NtbModal from "./NtbModal";
@@ -35,6 +35,29 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
      * @see INoteToolbarApi.app
      */
     readonly app: App;
+
+    /**
+     * Appends the given content to the current file.
+     * 
+     * @see INoteToolbarApi.append
+     */
+    async append(content: string, options?: AppendOptions): Promise<void> {
+        const file = this.app.workspace.getActiveFile();
+
+        if (!(file instanceof TFile) || file.extension !== 'md') return;
+
+        const separator = file.stat.size > 0
+            ? options?.separator ?? '\n\n'
+            : '';
+
+        const linePrefix = options?.linePrefix ?? ''; 
+        const prefixedContent = content
+            .split('\n')
+            .map(line => `${linePrefix}${line}`)
+            .join('\n');
+
+        await this.app.vault.append(file, `${separator}${prefixedContent}`);
+    }
 
     /**
      * Gets the clipboard value.
