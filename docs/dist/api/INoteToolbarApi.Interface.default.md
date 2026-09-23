@@ -21,7 +21,8 @@ Appends the given content to the current file.
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `content` | `string` | content to append |
-| `options?` | \{ `linePrefix?`: `string`; `separator?`: `string`; \} | - |
+| `options?` | \{ `file?`: `TFile`; `linePrefix?`: `string`; `separator?`: `string`; \} | - |
+| `options.file?` | `TFile` | File to append to. Defaults to active file. |
 | `options.linePrefix?` | `string` | Text to prepend to each line of the content, such as `'> '` for a blockquote. |
 | `options.separator?` | `string` | Text to insert between the existing file content and the appended content. Defaults to `'\n\n'`. |
 

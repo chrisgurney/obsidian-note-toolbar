@@ -443,6 +443,10 @@ export default interface INoteToolbarApi<T> {
  */
 export interface AppendOptions {
     /**
+     * File to append to. Defaults to active file.
+     */
+    file?: TFile;
+    /**
      * Text to prepend to each line of the content, such as `'> '` for a blockquote.
      */
     linePrefix?: string;

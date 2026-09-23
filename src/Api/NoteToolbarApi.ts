@@ -37,12 +37,12 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
     readonly app: App;
 
     /**
-     * Appends the given content to the current file.
+     * Appends the given content to the active markdown file, by default.
      * 
      * @see INoteToolbarApi.append
      */
     async append(content: string, options?: AppendOptions): Promise<void> {
-        const file = this.app.workspace.getActiveFile();
+        const file = options?.file ?? this.app.workspace.getActiveFile();
 
         if (!(file instanceof TFile) || file.extension !== 'md') return;
 
