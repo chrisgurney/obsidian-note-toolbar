@@ -13,6 +13,7 @@ Even if you're not a developer, getting started with the API is easy:
 ## `ntb` API
 
 - **[Notes](#Notes)**
+    - [[ntb.append|Note-Toolbar-API#append]]
     - [[ntb.getProperty|Note-Toolbar-API#getproperty]]
     - [[ntb.setProperty|Note-Toolbar-API#setproperty]]
     - [[ntb.getSelection|Note-Toolbar-API#getselection]]
