@@ -29,6 +29,7 @@ Even if you're not a developer, getting started with the API is easy:
     - [[ntb.menu|Note-Toolbar-API#menu]]
     - [[ntb.modal|Note-Toolbar-API#modal]]
     - [[ntb.prompt|Note-Toolbar-API#prompt]]
+    - [[ntb.sidebar|Note-Toolbar-API#sidebar]]
     - [[ntb.suggester|Note-Toolbar-API#suggester]]
     - [[ntb.toolbar|Note-Toolbar-API#toolbar]]
 - **[Utilities](#Utilities)**

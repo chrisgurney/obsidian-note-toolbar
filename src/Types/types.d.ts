@@ -24,8 +24,8 @@ declare module "obsidian" {
 
     export function getLanguage(): string;
 
-    // allows access to commands for execution
     interface App {
+        // allows access to commands for execution
         commands: {
             executeCommandById: (id: string) => unknown;
             // listCommands: () => [{ id: string; name: string }];
@@ -52,6 +52,9 @@ declare module "obsidian" {
             open(): void;
             openTabById(id: string): SettingTab;
         }
+        viewRegistry: {
+            getTypeByExtension(extension: string): string | null;
+        };
     }
 
     // interface CanvasView extends TextFileView {

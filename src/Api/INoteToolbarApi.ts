@@ -351,6 +351,30 @@ export default interface INoteToolbarApi<T> {
     setSelection: (replacement: string) => void;
 
     /**
+     * Shows a sidebar view with the given content.
+     * 
+     * @param content Content to display.
+     * @param options Optional display options.
+     * @returns Nothing.
+     * 
+     * @example
+     * // show the selected file
+     * const file = await ntb.fileSuggester(
+     *   ntb.app.vault.getAllLoadedFiles(),
+     *   { filesonly: true }
+     * );
+     * await ntb.sidebar(file);
+     * 
+     * @example
+     * // show a string, create a new sidebar view each time
+     * await ntb.sidebar(`*It is now:*\n${new Date()}`, { reuse: false });
+     * 
+     * @since 1.35
+     * @group UI Components
+     */
+    sidebar: (content: string | TFile, options?: NtbSidebarOptions) => Promise<void>;
+
+    /**
      * Shows a suggester modal and waits for the user's selection.
      * 
      * @param values Array of strings representing the text that will be displayed for each item in the suggester prompt. This can also be a function that maps an item to its text representation. Markdown formatting is supported: optionally mix in Obsidian and plugin markdown (e.g., Iconize) to have it rendered
@@ -573,6 +597,17 @@ export interface NtbPromptOptions {
      * Optional CSS class(es) to add to the component.
      */
     class?: string;
+}
+
+/**
+ * @inline
+ * @hidden
+ */
+export interface NtbSidebarOptions {
+    /**
+     * Reuse an existing sidebar view instead of creating a new one.
+     */
+    reuse?: boolean;
 }
 
 /**

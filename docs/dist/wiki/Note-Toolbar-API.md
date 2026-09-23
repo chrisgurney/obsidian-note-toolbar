@@ -29,6 +29,7 @@ Even if you're not a developer, getting started with the API is easy:
     - [[ntb.menu|Note-Toolbar-API#menu]]
     - [[ntb.modal|Note-Toolbar-API#modal]]
     - [[ntb.prompt|Note-Toolbar-API#prompt]]
+    - [[ntb.sidebar|Note-Toolbar-API#sidebar]]
     - [[ntb.suggester|Note-Toolbar-API#suggester]]
     - [[ntb.toolbar|Note-Toolbar-API#toolbar]]
 - **[Utilities](#Utilities)**
@@ -534,6 +535,48 @@ new Notice(result);
 #### See
 
 `NtbPrompt.js` in the [examples/Scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts).
+
+***
+
+### sidebar
+
+> **sidebar**: (`content`, `options?`) => `Promise`\<`void`\>
+
+Shows a sidebar view with the given content.
+
+#### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `content` | `string` \| `TFile` | Content to display. |
+| `options?` | \{ `reuse?`: `boolean`; \} | Optional display options. |
+| `options.reuse?` | `boolean` | Reuse an existing sidebar view instead of creating a new one. |
+
+#### Returns
+
+`Promise`\<`void`\>
+
+Nothing.
+
+#### Examples
+
+```ts
+// show the selected file
+const file = await ntb.fileSuggester(
+  ntb.app.vault.getAllLoadedFiles(),
+  { filesonly: true }
+);
+await ntb.sidebar(file);
+```
+
+```ts
+// show a string, create a new sidebar view each time
+await ntb.sidebar(`*It is now:*\n${new Date()}`, { reuse: false });
+```
+
+#### Since
+
+1.35
 
 ***
 

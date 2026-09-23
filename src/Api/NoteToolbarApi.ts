@@ -2,15 +2,16 @@ import NoteToolbarPlugin from "main";
 // import { testCallback } from "Api/TestCallback";
 import { ScriptLoader } from "Adapters/ScriptLoader";
 import * as Obsidian from "obsidian";
-import { App, Menu, MenuItem, Modal, normalizePath, Notice, TAbstractFile, TFile, TFolder } from "obsidian";
+import { App, Menu, MenuItem, Modal, normalizePath, Notice, TAbstractFile, TFile, TFolder, WorkspaceLeaf } from "obsidian";
 import { LocalVar, PositionType, t } from "Settings/NoteToolbarSettings";
 import { exportToCalloutById } from "Utils/ImportExport";
 import { putFocusInMenu } from "Utils/Utils";
-import INoteToolbarApi, { AppendOptions, NtbFileSuggesterOptions, NtbMenuItem, NtbMenuOptions, NtbModalOptions, NtbPromptOptions, NtbSuggesterOptions, NtbToolbarOptions } from "./INoteToolbarApi";
+import INoteToolbarApi, { AppendOptions, NtbFileSuggesterOptions, NtbMenuItem, NtbMenuOptions, NtbModalOptions, NtbPromptOptions, NtbSidebarOptions, NtbSuggesterOptions, NtbToolbarOptions } from "./INoteToolbarApi";
 import Item from "./Item";
 import { IToolbar } from "./IToolbar";
 import NtbModal from "./NtbModal";
 import NtbPrompt from "./NtbPrompt";
+import { NtbSidebarView } from "./NtbSidebarView";
 import NtbSuggester from "./NtbSuggester";
 import Toolbar from "./Toolbar";
 
@@ -407,6 +408,54 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
     }
 
     /**
+     * Shows a sidebar view with the given content.
+     * 
+     * @see INoteToolbarApi.sidebar
+     */
+    async sidebar(
+        content: string | TFile,
+        options?: NtbSidebarOptions
+    ): Promise<void> {
+        this.registerSidebarView();
+
+        // get existing leaf (default); create a new one if the `reuse` option is set
+        let leaf: WorkspaceLeaf | null = (options?.reuse ?? true)
+            ? this.app.workspace.getLeavesOfType(
+                NtbSidebarView.VIEW_TYPE_SIDEBAR
+            )[0] ?? null
+            : null;
+
+        // check which view type to use
+        const viewType = content instanceof TFile
+            ? this.app.viewRegistry.getTypeByExtension(
+                content.extension
+            ) ?? NtbSidebarView.VIEW_TYPE_SIDEBAR
+            : NtbSidebarView.VIEW_TYPE_SIDEBAR;
+
+        if (!leaf) {
+            leaf = this.app.workspace.getRightLeaf(false);
+
+            if (!leaf) {
+                return;
+            }
+
+            await leaf.setViewState({
+                type: viewType,
+                active: true,
+                state: content instanceof TFile
+                    ? { file: content.path }
+                    : undefined
+            });
+        }
+
+        await this.app.workspace.revealLeaf(leaf);
+
+        if (leaf.view instanceof NtbSidebarView) {
+            await leaf.view.setContent(content);
+        }
+    }
+
+    /**
      * Shows a suggester modal and waits for the user's selection. 
      * 
      * @see INoteToolbarApi.suggester
@@ -465,6 +514,25 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
 
         // this.ntb.debug('ntb.toolbar() is toolbar focussed?', this.ntb.render.isFloatingToolbarFocussed());
 
+    }
+
+    /**
+     * HELPERS
+     */
+
+    private sidebarRegistered = false;
+
+    private registerSidebarView(): void {
+        if (this.sidebarRegistered) {
+            return;
+        }
+
+        this.ntb.registerView(
+            NtbSidebarView.VIEW_TYPE_SIDEBAR,
+            leaf => new NtbSidebarView(leaf)
+        );
+
+        this.sidebarRegistered = true;
     }
 
 }

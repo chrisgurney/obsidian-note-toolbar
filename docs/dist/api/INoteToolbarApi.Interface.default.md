@@ -498,6 +498,48 @@ new Notice(result);
 
 ***
 
+### sidebar
+
+> **sidebar**: (`content`, `options?`) => `Promise`\<`void`\>
+
+Shows a sidebar view with the given content.
+
+#### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `content` | `string` \| `TFile` | Content to display. |
+| `options?` | \{ `reuse?`: `boolean`; \} | Optional display options. |
+| `options.reuse?` | `boolean` | Reuse an existing sidebar view instead of creating a new one. |
+
+#### Returns
+
+`Promise`\<`void`\>
+
+Nothing.
+
+#### Examples
+
+```ts
+// show the selected file
+const file = await ntb.fileSuggester(
+  ntb.app.vault.getAllLoadedFiles(),
+  { filesonly: true }
+);
+await ntb.sidebar(file);
+```
+
+```ts
+// show a string, create a new sidebar view each time
+await ntb.sidebar(`*It is now:*\n${new Date()}`, { reuse: false });
+```
+
+#### Since
+
+1.35
+
+***
+
 ### suggester
 
 > **suggester**: (`values?`, `keys?`, `options?`) => `Promise`\<`T` \| `null`\>
