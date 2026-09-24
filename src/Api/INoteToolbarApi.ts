@@ -68,7 +68,7 @@ export default interface INoteToolbarApi<T> {
      * }
      * 
      * @group Toolbars
-     * @see `NtbExport.js` in the [examples/Scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts).
+     * @see `NtbExport.js` in the [docs/examples/scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/docs/examples/scripts).
      * @since 1.29
      */
     export: (toolbar: IToolbar) => Promise<string | null>;
@@ -271,7 +271,7 @@ export default interface INoteToolbarApi<T> {
      *   });
      * }
      * 
-     * @see `NtbModal.js` in the [examples/Scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts).
+     * @see `NtbModal.js` in the [docs/examples/scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/docs/examples/scripts).
      * @group UI Components
      */
     modal: (content: string | TFile, options?: NtbModalOptions) => Promise<Modal>;
@@ -311,7 +311,7 @@ export default interface INoteToolbarApi<T> {
      * 
      * new Notice(result);
      * 
-     * @see `NtbPrompt.js` in the [examples/Scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts).
+     * @see `NtbPrompt.js` in the [docs/examples/scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/docs/examples/scripts).
      * @group UI Components
      */
     prompt: (options?: NtbPromptOptions) => Promise<string | null>;
@@ -422,7 +422,7 @@ export default interface INoteToolbarApi<T> {
      * });
      * new Notice(selected);
      * 
-     * @see `NtbSuggester.js` in the [examples/Scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts).
+     * @see `NtbSuggester.js` in the [docs/examples/scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/docs/examples/scripts).
      * @group UI Components
      */
     suggester: (values?: string[] | ((value: T) => string), keys?: T[], options?: NtbSuggesterOptions) => Promise<T | null>;

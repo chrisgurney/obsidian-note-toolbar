@@ -202,7 +202,7 @@ for (let toolbar of toolbars) {
 
 #### See
 
-`NtbExport.js` in the [examples/Scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts).
+`NtbExport.js` in the [docs/examples/scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/docs/examples/scripts).
 
 #### Since
 
@@ -451,7 +451,7 @@ if (f) {
 
 #### See
 
-`NtbModal.js` in the [examples/Scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts).
+`NtbModal.js` in the [docs/examples/scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/docs/examples/scripts).
 
 ***
 
@@ -501,7 +501,7 @@ new Notice(result);
 
 #### See
 
-`NtbPrompt.js` in the [examples/Scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts).
+`NtbPrompt.js` in the [docs/examples/scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/docs/examples/scripts).
 
 ***
 
@@ -630,7 +630,7 @@ new Notice(selected);
 
 #### See
 
-`NtbSuggester.js` in the [examples/Scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/examples/Scripts).
+`NtbSuggester.js` in the [docs/examples/scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/docs/examples/scripts).
 
 ***
 
