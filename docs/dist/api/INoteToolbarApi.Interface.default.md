@@ -90,7 +90,7 @@ Gets the currently selected text, or the word at the current cursor position, if
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `options?` | \{ `wordAtCursor?`: `boolean`; \} | - |
-| `options.wordAtCursor?` | `boolean` | Return the word at the cursor, if there's no selection. If set to `false`, text must be selected in order for a string to be returned. Default is `true`. **Since** 1.35 |
+| `options.wordAtCursor?` | `boolean` | Return the word at the cursor, if there's no selection. If set to `false`, text must be selected in order for a non-empty string to be returned. Default is `true`. **Since** 1.35 |
 
 #### Returns
 

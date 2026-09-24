@@ -507,7 +507,7 @@ export interface AppendOptions {
  */
 export interface GetSelectionOptions {
     /**
-     * Return the word at the cursor, if there's no selection. If set to `false`, text must be selected in order for a string to be returned. Default is `true`.
+     * Return the word at the cursor, if there's no selection. If set to `false`, text must be selected in order for a non-empty string to be returned. Default is `true`.
      * 
      * @since 1.35
      */
