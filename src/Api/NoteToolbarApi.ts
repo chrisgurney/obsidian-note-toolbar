@@ -534,7 +534,7 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
 
         this.ntb.registerView(
             NtbSidebarView.VIEW_TYPE_SIDEBAR,
-            leaf => new NtbSidebarView(leaf, options)
+            leaf => new NtbSidebarView(this.ntb, leaf, options)
         );
 
         this.sidebarRegistered = true;

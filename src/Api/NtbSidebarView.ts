@@ -1,3 +1,4 @@
+import NoteToolbarPlugin from "main";
 import { ItemView, MarkdownRenderer, TFile, WorkspaceLeaf } from "obsidian";
 import { t } from "Settings/NoteToolbarSettings";
 import { NtbSidebarOptions } from "./INoteToolbarApi";
@@ -11,8 +12,14 @@ export class NtbSidebarView extends ItemView {
 
     private viewIcon: string;
     private viewTitle: string;
+    
+    private clickHandlerRegistered: boolean = false;
 
-    constructor(leaf: WorkspaceLeaf, options?: NtbSidebarOptions) {
+    constructor(
+        private ntb: NoteToolbarPlugin, 
+        leaf: WorkspaceLeaf, 
+        options?: NtbSidebarOptions) 
+    {
         super(leaf);
         this.viewIcon = options?.viewIcon ?? 'file';
         this.viewTitle = options?.viewTitle ?? t('plugin.note-toolbar');
@@ -48,6 +55,25 @@ export class NtbSidebarView extends ItemView {
             sourcePath,
             this
         );
+
+        // this.contentEl.querySelectorAll<HTMLAnchorElement>('a.internal-link, a.external-link').forEach((link) => {
+        //     link.tabIndex = 1;
+        // });
+
+        // make internal links clickable
+        if (!this.clickHandlerRegistered) {
+            this.ntb.registerDomEvent(this.contentEl, 'click', async (event) => {
+                const link = (event.target as HTMLElement).closest<HTMLAnchorElement>('a.internal-link');
+                if (!link) return;
+    
+                event.preventDefault();
+    
+                const target = link.getAttribute('href');
+                if (target) await this.ntb.app.workspace.openLinkText(target, '', true);
+            });
+            this.clickHandlerRegistered = true;
+        }
+
     }
 
     async onOpen(): Promise<void> {}
