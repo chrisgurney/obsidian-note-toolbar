@@ -37,8 +37,7 @@ export default class RulesModal extends Modal {
         modalDescFr.append(learnMoreFr(t('setting.rules.description-modal'), 'Defining-where-to-show-toolbars'));
         if (activeFileName) {
             modalDescFr.append(
-                createEl('br'),
-                createSpan({
+                createEl('p', {
                     text: t('setting.rules.description-active-file', { filename: activeFileName }),
                     cls: 'note-toolbar-setting-text-active'
                 })
@@ -63,7 +62,7 @@ export default class RulesModal extends Modal {
                     // this.plugin.settings.toolbars.updated = new Date().toISOString();
                     await this.saveAndUpdateActiveRule();	
                 }, 750)));
-        propertySetting.controlEl.setAttr('data-ntb-field-prop', '');
+        propertySetting.settingEl.setAttr('data-ntb-field-prop', '');
 
         //
         // default toolbar
@@ -88,7 +87,7 @@ export default class RulesModal extends Modal {
                 await this.ntb.settingsUtils.updateItemComponentStatus(this, existingDefaultToolbar ? existingDefaultToolbar.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend');
             });
         this.ntb.settingsUtils.setFieldPreview(defaultToolbarSetting, existingDefaultToolbar);
-        defaultToolbarSetting.controlEl.setAttr('data-ntb-field-default', '');
+        defaultToolbarSetting.settingEl.setAttr('data-ntb-field-default', '');
 
         //
         // rules
