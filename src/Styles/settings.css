@@ -716,7 +716,7 @@
     }
     & .note-toolbar-setting-item-preview-code {
         font-family: var(--font-monospace);
-        white-space: normal;
+        white-space: nowrap;
         overflow-wrap: anywhere;
     }
     + .note-toolbar-setting-field-error {
@@ -899,7 +899,7 @@
         }
     }
     & .note-toolbar-setting-item-preview-code {
-        white-space: normal;
+        white-space: nowrap;
         overflow-wrap: anywhere;
     }
 }

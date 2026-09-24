@@ -265,7 +265,11 @@ export default class SettingsUIUtils {
 								}
 								if (item.label) {
 									const labelFr = createSpan();
-									labelFr.textContent = item.label;
+									// shorten long labels with variables
+									const labelText = item.label.length > 6 && this.ntb.vars.hasVars(item.label)
+    									? `${item.label.slice(0, 5)}…` 
+										: item.label;
+									labelFr.textContent = labelText;
 									if (item.label && this.ntb.vars.hasVars(item.label)) {
 										labelFr.addClass('note-toolbar-setting-item-preview-code');
 									}
