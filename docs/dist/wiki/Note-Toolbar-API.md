@@ -80,7 +80,7 @@ ntb.append('New text added to note.');
 ```
 
 ```ts
-// append text to the current note, add a separator, and quote it
+// append text to the current note, add a divider, and quote it
 ntb.append('New text added to note.', { 
   separator: '\n\n---\n', 
   linePrefix: '> ' 
@@ -155,6 +155,15 @@ Returns list of tags in the vault, sorted alphabetically.
 `string`[]
 
 List of tags in the vault.
+
+#### Example
+
+```ts
+// gets all tags, then shows a suggester with those tags
+const tags = ntb.getTags();
+const selected = await ntb.suggester(tags);
+new Notice(selected);
+```
 
 #### Since
 
