@@ -1426,22 +1426,24 @@ export default class ToolbarRenderer {
 		positionType: PositionType.Floating | PositionType.Text | PositionType.Hidden
 	): Promise<void> {
 
-		if (!position || !toolbar) return;
-
 		if (!toolbar) {
 			this.ntb.debug('⚠️ error: no floating toolbar provided');
 			new Notice(t('setting.error-invalid-floating-toolbar')).containerEl.addClass('mod-warning');
 			return;
 		};
+		
+		if (!position) return;
 
 		const activeFile = this.ntb.app.workspace.getActiveFile();
-		const activeView = this.ntb.app.workspace.getActiveViewOfType(MarkdownView) ?? undefined;
+		const activeView = this.ntb.app.workspace.getActiveViewOfType(MarkdownView);
 
 		// remove the existing toolbar because we're likely in a new position
 		if (this.floatingToolbarEl) {
 			// this.ntb.debug('♻️ rendering floating toolbar (removing old toolbar)');
 			this.removeFloatingToolbar();
 		}
+
+		if (!activeView) return;
 
 		/*
 		 * render new toolbar
@@ -1465,7 +1467,8 @@ export default class ToolbarRenderer {
 		
 		const renderedToolbarEl = await this.renderAsCallout(toolbar, positionType, activeFile, activeView);
 		toolbarContainerEl.appendChild(renderedToolbarEl);
-		activeDocument.body.appendChild(toolbarContainerEl);
+		// fix: if separate settings window is open, the text toolbar position is offset (#617)
+		activeView.containerEl.ownerDocument.body.appendChild(toolbarContainerEl);
 
 		this.positionFloating(toolbarContainerEl, position);
 
