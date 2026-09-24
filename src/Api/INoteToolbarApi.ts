@@ -194,11 +194,11 @@ export default interface INoteToolbarApi<T> {
      * @example
      * // library script: Scripts/NTB Library.js
      * async function myFunction() {
-     *   await ntb.setProperty('HELLO', true);
+     *   await ntb.setProperty('SomeProperty', true);
      * }
      * 
      * function anotherFunction() {
-     *   console.log('Hello from the library');
+     *   console.log('Hello from anotherFunction');
      * }
      * 
      * return {
@@ -369,9 +369,9 @@ export default interface INoteToolbarApi<T> {
     setSelection: (replacement: string) => void;
 
     /**
-     * Shows a sidebar view with the given content.
+     * Opens a sidebar view with the given content.
      * 
-     * @param content Content to display.
+     * @param content Text or file content to display.
      * @param options Optional display options.
      * @returns Nothing.
      * 

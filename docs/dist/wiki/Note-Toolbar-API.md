@@ -573,13 +573,13 @@ new Notice(result);
 
 > **sidebar**: (`content`, `options?`) => `Promise`\<`void`\>
 
-Shows a sidebar view with the given content.
+Opens a sidebar view with the given content.
 
 #### Parameters
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `content` | `string` \| `TFile` | Content to display. |
+| `content` | `string` \| `TFile` | Text or file content to display. |
 | `options?` | \{ `reuse?`: `boolean`; `viewIcon?`: `string`; `viewTitle?`: `string`; \} | Optional display options. |
 | `options.reuse?` | `boolean` | Reuse an existing sidebar view instead of creating a new one. |
 | `options.viewIcon?` | `string` | Sets the icon for the sidebar view. Can only be set once. |
@@ -860,11 +860,11 @@ A promise resolving to the loaded script.
 ```ts
 // library script: Scripts/NTB Library.js
 async function myFunction() {
-  await ntb.setProperty('HELLO', true);
+  await ntb.setProperty('SomeProperty', true);
 }
 
 function anotherFunction() {
-  console.log('Hello from the library');
+  console.log('Hello from anotherFunction');
 }
 
 return {
