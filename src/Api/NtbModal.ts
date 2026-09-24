@@ -118,15 +118,17 @@ export default class NtbModal extends Modal {
                     await MarkdownRenderer.render(this.ntb.app, fileContent, containerEl, normalizePath(this.content.path), this.component);
 
                     // make links tabbable
-                    this.modalEl.querySelectorAll<HTMLElement>('a.internal-link, a.external-link').forEach((link) => {
+                    this.modalEl.querySelectorAll<HTMLAnchorElement>('a.internal-link, a.external-link').forEach((link) => {
                         link.tabIndex = 1;
-                        if (link.hasClass('internal-link')) {
-                            this.ntb.registerDomEvent(link, 'click', async (event) => {
-                                event.preventDefault();
-                                const target = link.getAttribute('href');
-                                if (target) await this.ntb.app.workspace.openLinkText(target, '', true);
-                            });
-                        }
+                    });
+                    this.ntb.registerDomEvent(this.modalEl, 'click', async (event) => {
+                        const link = (event.target as HTMLElement).closest<HTMLAnchorElement>('a.internal-link');
+                        if (!link) return;
+
+                        event.preventDefault();
+
+                        const target = link.getAttribute('href');
+                        if (target) await this.ntb.app.workspace.openLinkText(target, '', true);
                     });
                 }
                 // FIXME: PDF viewer not rendering correctly; display notice for now
