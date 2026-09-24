@@ -40,6 +40,17 @@ export default interface INoteToolbarApi<T> {
      * @param options 
      * @returns Nothing.
      * 
+     * @example
+     * // append text to the current note
+     * ntb.append('New text added to note.');
+     * 
+     * @example
+     * // append text to the current note, add a divider, and quote it
+     * ntb.append('New text added to note.', { 
+     *   separator: '\n\n---\n', 
+     *   linePrefix: '> ' 
+     * } );
+     * 
      * @group Notes
      * @since 1.35
      */

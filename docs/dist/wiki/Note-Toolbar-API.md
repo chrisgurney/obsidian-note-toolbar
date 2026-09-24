@@ -72,6 +72,21 @@ Appends the given content to the current file.
 
 Nothing.
 
+#### Examples
+
+```ts
+// append text to the current note
+ntb.append('New text added to note.');
+```
+
+```ts
+// append text to the current note, add a separator, and quote it
+ntb.append('New text added to note.', { 
+  separator: '\n\n---\n', 
+  linePrefix: '> ' 
+} );
+```
+
 #### Since
 
 1.35
