@@ -818,7 +818,7 @@ A promise resolving to the loaded script.
 #### Examples
 
 ```ts
-// library script: Scripts/NTB Library.js
+// create library script in your vault: Scripts/NTB Library.js
 async function myFunction() {
   await ntb.setProperty('SomeProperty', true);
 }
@@ -834,7 +834,7 @@ return {
 ```
 
 ```ts
-// load a script and call its functions
+// ...then load the library, and call its functions
 const lib = await ntb.loadScript('Scripts/NTB Library.js');
 await lib.myFunction();
 lib.anotherFunction();

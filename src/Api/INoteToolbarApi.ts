@@ -192,7 +192,7 @@ export default interface INoteToolbarApi<T> {
      * @group Utilities
      * 
      * @example
-     * // library script: Scripts/NTB Library.js
+     * // create a library script in your vault: Scripts/NTB Library.js
      * async function myFunction() {
      *   await ntb.setProperty('SomeProperty', true);
      * }
@@ -207,7 +207,7 @@ export default interface INoteToolbarApi<T> {
      * };
      * 
      * @example
-     * // load a script and call its functions
+     * // ...then load the library, and call its functions
      * const lib = await ntb.loadScript('Scripts/NTB Library.js');
      * await lib.myFunction();
      * lib.anotherFunction();
