@@ -4,6 +4,7 @@ import { ErrorBehavior, ItemType, ScriptConfig, SettingType, t } from "Settings/
 import { AdapterFunction } from "Types/interfaces";
 import { importArgs } from "Utils/Utils";
 import { Adapter } from "./Adapter";
+import { displayScriptError } from "./AdapterUtils";
 
 type DataviewResult = {
     error: Error;
@@ -105,7 +106,7 @@ export default class DataviewAdapter extends Adapter {
         if (config.outputContainer) {
             containerEl = this.ntb.el.getOutputEl(config.outputContainer);
             if (!containerEl) {
-                this.displayScriptError(t('adapter.error.callout-not-found', { id: config.outputContainer }));
+                displayScriptError(t('adapter.error.callout-not-found', { id: config.outputContainer }));
                 return;
             }
         }
@@ -204,7 +205,7 @@ export default class DataviewAdapter extends Adapter {
         catch (error) {
             switch (errorBehavior) {
                 case ErrorBehavior.Display:
-                    this.displayScriptError(error, t('adapter.error.expr-failed', { expression: expression }), containerEl);
+                    displayScriptError(error, t('adapter.error.expr-failed', { expression: expression }), containerEl);
                     result = t('adapter.error.general', { error: error }) + '\n';
                     break;
                 case ErrorBehavior.Report:
@@ -241,7 +242,7 @@ export default class DataviewAdapter extends Adapter {
 
         const importedArgs = argsJson ? importArgs(argsJson) : { value: {} };
         if (importedArgs.value === null) {
-            this.displayScriptError(importedArgs.error, t('adapter.error.args-parsing', { filename }), containerEl);
+            displayScriptError(importedArgs.error, t('adapter.error.args-parsing', { filename }), containerEl);
             return;
         }
         const args = importedArgs.value;
@@ -255,7 +256,7 @@ export default class DataviewAdapter extends Adapter {
         const viewFile = this.ntb.app.metadataCache.getFirstLinkpathDest(filename, activeFilePath);
         if (!viewFile) {
             // TODO: render messages into the container, if provided
-            this.displayScriptError(t('adapter.error.file-not-found', { filename: filename }));
+            displayScriptError(t('adapter.error.file-not-found', { filename: filename }));
             return;
         }
 
@@ -285,7 +286,7 @@ export default class DataviewAdapter extends Adapter {
                 }
             }
             catch (error) {
-                this.displayScriptError(error, t('adapter.error.exec-failed', { filename: viewFile.path }), containerEl);
+                displayScriptError(error, t('adapter.error.exec-failed', { filename: viewFile.path }), containerEl);
             }
             finally {
                 containerEl.addEventListener('remove', () => component.unload(), { once: true });
@@ -338,7 +339,7 @@ export default class DataviewAdapter extends Adapter {
             }
         }
         catch (error) {
-            this.displayScriptError(error, t('adapter.error.expr-failed', { expression: expression }), containerEl);
+            displayScriptError(error, t('adapter.error.expr-failed', { expression: expression }), containerEl);
         }
         finally {
             component.unload();
@@ -363,7 +364,7 @@ export default class DataviewAdapter extends Adapter {
         const activeFile = this.ntb.app.workspace.getActiveFile();
 
         if (!activeFile) {
-            this.displayScriptError(t('adapter.error.query-note-not-open'));
+            displayScriptError(t('adapter.error.query-note-not-open'));
             return t('adapter.error.query-note-not-open');
         }
 
@@ -396,7 +397,7 @@ export default class DataviewAdapter extends Adapter {
             }
         }
         catch (error) {
-            this.displayScriptError(error, t('adapter.error.query-failed', { expression: expression }), containerEl);
+            displayScriptError(error, t('adapter.error.query-failed', { expression: expression }), containerEl);
             result = t('adapter.error.general', { error: error }) + '\n';
         }
         finally {

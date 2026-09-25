@@ -5,7 +5,7 @@ import { learnMoreFr } from "Settings/UI/Utils/SettingsUIUtils";
 import { AdapterFunction } from "Types/interfaces";
 import { importArgs } from "Utils/Utils";
 import { Adapter } from "./Adapter";
-import { formatExpression, getFileUri } from "./AdapterUtils";
+import { displayScriptError, formatExpression, getFileUri } from "./AdapterUtils";
 
 /**
  * Adapter for JavaScript scripts.
@@ -60,7 +60,7 @@ export default class JavaScriptAdapter extends Adapter {
         if (config.outputContainer) {
             containerEl = this.ntb.el.getOutputEl(config.outputContainer);
             if (!containerEl) {
-                this.displayScriptError(t('adapter.error.callout-not-found', { id: config.outputContainer }));
+                displayScriptError(t('adapter.error.callout-not-found', { id: config.outputContainer }));
                 return;
             }
         }
@@ -122,7 +122,7 @@ export default class JavaScriptAdapter extends Adapter {
 
         const viewFile = this.ntb.app.metadataCache.getFirstLinkpathDest(filename, activeFilePath);
         if (!viewFile) {
-            this.displayScriptError(t('adapter.error.file-not-found', { filename: filename }));
+            displayScriptError(t('adapter.error.file-not-found', { filename: filename }));
             return;
         }
 
@@ -132,7 +132,7 @@ export default class JavaScriptAdapter extends Adapter {
             return await this.evaluate(contents, argsJson, containerEl, viewFile, ErrorBehavior.Report);
         }
         else {
-            this.displayScriptError(t('adapter.error.file-empty', { filename: filename }));
+            displayScriptError(t('adapter.error.file-empty', { filename: filename }));
         }
 
     }
@@ -158,7 +158,7 @@ export default class JavaScriptAdapter extends Adapter {
 
         const importedArgs = argsJson ? importArgs(argsJson) : { value: {} };
         if (importedArgs.value === null) {
-            this.displayScriptError(importedArgs.error, t('adapter.error.args-parsing'), containerEl);
+            displayScriptError(importedArgs.error, t('adapter.error.args-parsing'), containerEl);
             return '';
         }
         const args = importedArgs.value;
@@ -189,7 +189,7 @@ export default class JavaScriptAdapter extends Adapter {
                 const displayExpression = formatExpression(expression);
                 switch (errorBehavior) {
                     case ErrorBehavior.Display: {
-                        this.displayScriptError(error, t('adapter.error.expr-failed', { expression: displayExpression }), containerEl);
+                        displayScriptError(error, t('adapter.error.expr-failed', { expression: displayExpression }), containerEl);
                         result = t('adapter.error.general', { error: error }) + '\n';
                         break;
                     }

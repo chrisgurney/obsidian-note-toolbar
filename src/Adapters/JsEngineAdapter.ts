@@ -1,10 +1,11 @@
 import NoteToolbarPlugin from "main";
 import { Component, Plugin, TFile } from "obsidian";
 import { ErrorBehavior, ItemType, ScriptConfig, SettingType, t } from "Settings/NoteToolbarSettings";
+import { learnMoreFr } from "Settings/UI/Utils/SettingsUIUtils";
 import { AdapterFunction } from "Types/interfaces";
 import { importArgs } from "Utils/Utils";
 import { Adapter } from "./Adapter";
-import { learnMoreFr } from "Settings/UI/Utils/SettingsUIUtils";
+import { displayScriptError } from "./AdapterUtils";
 
 type JsEngineResult = {
     functionBuildError?: Error;
@@ -120,7 +121,7 @@ export default class JsEngineAdapter extends Adapter {
         if (config.outputContainer) {
             containerEl = this.ntb.el.getOutputEl(config.outputContainer);
             if (!containerEl) {
-                this.displayScriptError(t('adapter.error.callout-not-found', { id: config.outputContainer }));
+                displayScriptError(t('adapter.error.callout-not-found', { id: config.outputContainer }));
                 return;
             }
         }
@@ -187,7 +188,7 @@ export default class JsEngineAdapter extends Adapter {
         try {
             containerEl?.empty();
             if (!activeFile) {
-                this.displayScriptError(t('adapter.error.query-note-not-open'));
+                displayScriptError(t('adapter.error.query-note-not-open'));
                 return t('adapter.error.query-note-not-open');
             }            
             const context: ExecutionContext = {
@@ -208,7 +209,7 @@ export default class JsEngineAdapter extends Adapter {
         catch (error) {
             switch (errorBehavior) {
                 case ErrorBehavior.Display:
-                    this.displayScriptError(error);
+                    displayScriptError(error);
                     break;
                 case ErrorBehavior.Report:
                     console.error(t('adapter.error.expr-failed', { expression: expression }) + " • ", error);
@@ -249,7 +250,7 @@ export default class JsEngineAdapter extends Adapter {
 
         const importedArgs = argsJson ? importArgs(argsJson) : { value: {} };
         if (importedArgs.value === null) {
-            this.displayScriptError(importedArgs.error, t('adapter.error.args-parsing', { filename }) );
+            displayScriptError(importedArgs.error, t('adapter.error.args-parsing', { filename }) );
             return t('adapter.error.args-parsing-script-error', { filename: filename, error: importedArgs.error });
         }
         const args = importedArgs.value;
@@ -269,11 +270,11 @@ export default class JsEngineAdapter extends Adapter {
                         this.ntb.debug('importExec() result:', result);
                     }
                     catch (error) {
-                        this.displayScriptError(error, t('adapter.error.exec-failed', { filename: filename }));
+                        displayScriptError(error, t('adapter.error.exec-failed', { filename: filename }));
                     }
                 }
                 else {
-                    this.displayScriptError(t('adapter.error.function-not-found', { function: functionName }));
+                    displayScriptError(t('adapter.error.function-not-found', { function: functionName }));
                 }
             }
         }
@@ -314,7 +315,7 @@ export default class JsEngineAdapter extends Adapter {
             }
         }
         catch (error) {
-            this.displayScriptError(error, t('adapter.error.exec-failed', { filename: filename }), containerEl);
+            displayScriptError(error, t('adapter.error.exec-failed', { filename: filename }), containerEl);
         }
         finally {
             component.unload();

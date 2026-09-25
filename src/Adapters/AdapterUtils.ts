@@ -1,5 +1,28 @@
 import NoteToolbarPlugin from "main";
-import { TFile, FileSystemAdapter } from "obsidian";
+import { TFile, FileSystemAdapter, Notice } from "obsidian";
+
+/**
+ * Displays the provided scripting error as a Notice, console message, and outputs to a container (if provided). 
+ * @param message 
+ * @param error 
+ * @param containerEl 
+ */
+export function displayScriptError(error: unknown, context?: string, containerEl?: HTMLElement) {
+    const message = error instanceof Error ? error.message : String(error);
+    const fullMessage = context ? `${context}\n\n${message}` : message;
+    if (error instanceof Error) {
+        console.error(context ? `${context}\n\n${error.stack}` : error);
+    } else {
+        console.error(fullMessage);
+    }
+    // output the error to the Note Toolbar Output container, if provided
+    if (containerEl) {
+        const errorEl = containerEl.createEl('pre');
+        errorEl.setText(fullMessage);
+    }
+    // show notice
+    new Notice(String(error), 10000).containerEl.addClass('mod-warning');
+}
 
 /**
  * Formats an expression for display (for error notices + console), by prepending and truncating if necessary.

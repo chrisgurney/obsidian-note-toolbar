@@ -1,5 +1,4 @@
 import NoteToolbarPlugin from "main";
-import { Notice } from "obsidian";
 import { ScriptConfig } from "Settings/NoteToolbarSettings";
 import { AdapterFunction } from "Types/interfaces";
 
@@ -22,29 +21,6 @@ export abstract class Adapter {
      * Cleans up the adapter when it's no longer needed.
      */ 
     abstract disable(): void;
-
-    /**
-     * Displays the provided scripting error as a Notice, console message, and outputs to a container (if provided). 
-     * @param message 
-     * @param error 
-     * @param containerEl 
-     */
-    displayScriptError(error: unknown, context?: string, containerEl?: HTMLElement) {
-        const message = error instanceof Error ? error.message : String(error);
-        const fullMessage = context ? `${context}\n\n${message}` : message;
-        if (error instanceof Error) {
-            console.error(context ? `${context}\n\n${error.stack}` : error);
-        } else {
-            console.error(fullMessage);
-        }
-        // output the error to the Note Toolbar Output container, if provided
-        if (containerEl) {
-            const errorEl = containerEl.createEl('pre');
-            errorEl.setText(fullMessage);
-        }
-        // show notice
-        new Notice(String(error), 10000).containerEl.addClass('mod-warning');
-    }
     
     /**
      * Returns all functions for this adapter.
