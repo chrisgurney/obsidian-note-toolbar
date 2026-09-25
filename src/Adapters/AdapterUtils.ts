@@ -8,14 +8,15 @@ import { TFile, FileSystemAdapter, Notice } from "obsidian";
  * @param containerEl 
  */
 export function displayScriptError(error: unknown, context?: string, containerEl?: HTMLElement) {
-    const message = error instanceof Error ? error.message : String(error);
+    const isError = error instanceof Error;
+    const message = isError ? error.message : String(error);
     const fullMessage = context ? `${context}\n\n${message}` : message;
-    if (error instanceof Error) {
-        console.error(context ? `${context}\n\n${error.stack}` : error);
-    } else {
-        console.error(fullMessage);
-    }
-    // output the error to the Note Toolbar Output container, if provided
+
+    // output to console
+    const consoleMessage = isError ? (context ? `${context}\n\n${error.stack}` : error) : fullMessage;
+    console.error(consoleMessage);
+    
+    // output to a container, if provided
     if (containerEl) {
         const errorEl = containerEl.createEl('pre');
         errorEl.setText(fullMessage);
