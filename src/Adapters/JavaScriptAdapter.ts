@@ -1,10 +1,11 @@
 import NoteToolbarPlugin from "main";
-import { Component, MarkdownRenderer } from "obsidian";
+import { Component, FileSystemAdapter, MarkdownRenderer, TFile } from "obsidian";
 import { ErrorBehavior, ScriptConfig, SettingType, t } from "Settings/NoteToolbarSettings";
 import { learnMoreFr } from "Settings/UI/Utils/SettingsUIUtils";
 import { AdapterFunction } from "Types/interfaces";
 import { importArgs } from "Utils/Utils";
 import { Adapter } from "./Adapter";
+import { formatExpression } from "./AdapterUtils";
 
 /**
  * Adapter for JavaScript scripts.
@@ -73,13 +74,13 @@ export default class JavaScriptAdapter extends Adapter {
             // internal function for inline evaluations in which errors should be reported
             case 'evaluateInline':
                 result = config.expression
-                    ? await this.evaluate(config.expression, undefined, containerEl, ErrorBehavior.Report)
+                    ? await this.evaluate(config.expression, undefined, containerEl, undefined, ErrorBehavior.Report)
                     : t('adapter.javascript.eval-expr-error-required');
                 break;
             // internal function for inline evaluations in which errors can be ignored
             case 'evaluateIgnore':
                 result = config.expression
-                    ? await this.evaluate(config.expression, undefined, containerEl, ErrorBehavior.Ignore)
+                    ? await this.evaluate(config.expression, undefined, containerEl, undefined, ErrorBehavior.Ignore)
                     : t('adapter.javascript.eval-expr-error-required');
                 break;
             case 'exec':
@@ -126,8 +127,12 @@ export default class JavaScriptAdapter extends Adapter {
         }
 
         const contents = await this.ntb.app.vault.cachedRead(viewFile);
-        if (contents) {
-            return await this.evaluate(contents, argsJson, containerEl, ErrorBehavior.Report);
+        if (contents.trim()) {
+            this.ntb.debug(`Note Toolbar: Executing: ${viewFile.path}`);
+            return await this.evaluate(contents, argsJson, containerEl, viewFile, ErrorBehavior.Report);
+        }
+        else {
+            this.displayScriptError(t('adapter.error.file-empty', { filename: filename }));
         }
 
     }
@@ -144,6 +149,7 @@ export default class JavaScriptAdapter extends Adapter {
         expression: string,
         argsJson?: string,
         containerEl?: HTMLElement,
+        file?: TFile,
         errorBehavior: ErrorBehavior = ErrorBehavior.Display
     ): Promise<string> => {
                 
@@ -161,12 +167,12 @@ export default class JavaScriptAdapter extends Adapter {
         const activeFilePath = activeFile?.path || '';
 
         if (expression) {
-            const func = new JavaScriptAdapter.AsyncFunction("input", expression);
             const component = new Component();
             component.load();
             try {
+                const func = new JavaScriptAdapter.AsyncFunction("input", expression);
                 resultEl.empty();
-                this.ntb.debug(expression);
+                this.ntb.debug('Note Toolbar: Evaluating:\n\n', formatExpression(expression));
                 // may directly render, in which case it will likely return undefined or null
                 result = await Promise.resolve((func as (...args: unknown[]) => unknown)(args));
                 if (containerEl && result && this.ntb) {
@@ -180,14 +186,25 @@ export default class JavaScriptAdapter extends Adapter {
                 }
             }
             catch (error) {
+                const displayExpression = formatExpression(expression);
                 switch (errorBehavior) {
-                    case ErrorBehavior.Display:
-                        this.displayScriptError(error, t('adapter.error.expr-failed', { expression: expression }), containerEl);
+                    case ErrorBehavior.Display: {
+                        this.displayScriptError(error, t('adapter.error.expr-failed', { expression: displayExpression }), containerEl);
                         result = t('adapter.error.general', { error: error }) + '\n';
                         break;
+                    }
                     case ErrorBehavior.Report:
-                        result = expression;
-                        console.error(t('adapter.error.expr-failed', { expression: expression }) + " • ", error);
+                        if (file) {
+                            const basePath = (this.ntb.app.vault.adapter as FileSystemAdapter).getBasePath();
+                            const uri = `file://${encodeURI(`${basePath}/${file.path}`)}`;
+
+                            console.error(t('adapter.error.exec-failed_expression', { filename: uri, expression: displayExpression } ), '\n\n', error);
+                            result = t('adapter.error.general_file', { filename: `[[${file.path}]]`, error: error });
+                        }
+                        else {
+                            console.error(t('adapter.error.expr-failed', { expression: displayExpression }), '\n\n', error);
+                            result = t('adapter.error.general', { error: error });
+                        }
                         break;
                     case ErrorBehavior.Ignore:
                         // do nothing

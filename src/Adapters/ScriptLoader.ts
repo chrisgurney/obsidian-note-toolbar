@@ -1,5 +1,6 @@
 import NoteToolbarPlugin from 'main';
 import { normalizePath, TFile } from 'obsidian';
+import { ScriptError } from './ScriptError';
 
 /**
  * Loads scripts to make them available for evaluated scripts.
@@ -21,7 +22,7 @@ export class ScriptLoader {
         }
         const contents = await this.ntb.app.vault.cachedRead(file);
         // this.ntb.debug('evaluating:', contents);
-        return this.evaluate<T>(contents);
+        return this.evaluate<T>(contents, file);
     }
 
     private resolve(path: string): TFile | null {
@@ -30,7 +31,7 @@ export class ScriptLoader {
         return file instanceof TFile ? file : null;
     }
 
-    private async evaluate<T>(expression: string): Promise<T> {
+    private async evaluate<T>(expression: string, sourceFile: TFile): Promise<T> {
         type AsyncFunctionConstructor = new (
             ...args: string[]
         ) => (...args: unknown[]) => Promise<unknown>;
@@ -41,10 +42,14 @@ export class ScriptLoader {
 
         const AsyncFunction = asyncFunctionPrototype.constructor;
 
-        const func = new AsyncFunction('ntb', expression);
-        const result = await func(this.ntb.api);
-
-        return result as T;
+        try {
+            const func = new AsyncFunction('ntb', expression);
+            return await func(this.ntb.api) as T;
+        }
+        catch (error) {
+            const notes = 'Error in script loaded by ntb.loadScript(): ';
+            throw new ScriptError(this.ntb, error, sourceFile, notes);
+        }
     }
 
 }

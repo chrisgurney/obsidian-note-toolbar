@@ -24,25 +24,26 @@ export abstract class Adapter {
     abstract disable(): void;
 
     /**
-     * Displays the provided scripting error as a console message, and is output to a container, if provided. 
+     * Displays the provided scripting error as a Notice, console message, and outputs to a container (if provided). 
      * @param message 
      * @param error 
      * @param containerEl 
      */
     displayScriptError(error: unknown, context?: string, containerEl?: HTMLElement) {
         const message = error instanceof Error ? error.message : String(error);
-        const fullMessage = context ? `${context}\n${message}` : message;
-        console.error(fullMessage);
-        console.error(error);
+        const fullMessage = context ? `${context}\n\n${message}` : message;
+        if (error instanceof Error) {
+            console.error(context ? `${context}\n\n${error.stack}` : error);
+        } else {
+            console.error(fullMessage);
+        }
         // output the error to the Note Toolbar Output container, if provided
         if (containerEl) {
             const errorEl = containerEl.createEl('pre');
             errorEl.setText(fullMessage);
         }
         // show notice
-        const errorFr = createFragment();
-        errorFr.append(fullMessage);
-        new Notice(errorFr, 10000).containerEl.addClass('mod-warning');
+        new Notice(String(error), 10000).containerEl.addClass('mod-warning');
     }
     
     /**

@@ -263,13 +263,13 @@ export default class DataviewAdapter extends Adapter {
         if (contents) {
             // if (contents.includes("await")) contents = "(async () => { " + contents + " })()";
             contents += `\n//# sourceURL=${viewFile.path}`;
-            const func = new DataviewAdapter.AsyncFunction("dv", "input", contents);
             // FIXME? component is too short-lived; using this.plugin instead, but might lead to memory leaks? thread:
             // https://discord.com/channels/686053708261228577/840286264964022302/1296883427097710674
             // "then you need to hold on to your component longer and call unload when you want to get rid of the element"
             const component = new Component();
             component.load();
             try {
+                const func = new DataviewAdapter.AsyncFunction("dv", "input", contents);
                 containerEl.empty();
                 const dataviewLocalApi = this.adapterPlugin?.localApi(activeFilePath, component, containerEl);    
                 // from dv.view: may directly render, in which case it will likely return undefined or null
