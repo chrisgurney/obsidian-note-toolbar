@@ -340,7 +340,8 @@ export default class DataviewAdapter extends Adapter {
             }
         }
         catch (error) {
-            displayScriptError(error, t('adapter.error.expr-failed', { expression: expression }), containerEl);
+            const displayExpression = formatExpression(expression);            
+            displayScriptError(error, t('adapter.error.expr-failed', { expression: displayExpression }), containerEl);
         }
         finally {
             component.unload();
