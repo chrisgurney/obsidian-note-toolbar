@@ -1,11 +1,11 @@
 import NoteToolbarPlugin from "main";
-import { Component, FileSystemAdapter, MarkdownRenderer, TFile } from "obsidian";
+import { Component, MarkdownRenderer, TFile } from "obsidian";
 import { ErrorBehavior, ScriptConfig, SettingType, t } from "Settings/NoteToolbarSettings";
 import { learnMoreFr } from "Settings/UI/Utils/SettingsUIUtils";
 import { AdapterFunction } from "Types/interfaces";
 import { importArgs } from "Utils/Utils";
 import { Adapter } from "./Adapter";
-import { formatExpression } from "./AdapterUtils";
+import { formatExpression, getFileUri } from "./AdapterUtils";
 
 /**
  * Adapter for JavaScript scripts.
@@ -195,10 +195,9 @@ export default class JavaScriptAdapter extends Adapter {
                     }
                     case ErrorBehavior.Report:
                         if (file) {
-                            const basePath = (this.ntb.app.vault.adapter as FileSystemAdapter).getBasePath();
-                            const uri = `file://${encodeURI(`${basePath}/${file.path}`)}`;
-
-                            console.error(t('adapter.error.exec-failed_expression', { filename: uri, expression: displayExpression } ), '\n\n', error);
+                            console.error(
+                                t('adapter.error.exec-failed_expression', { filename: getFileUri(this.ntb, file), expression: displayExpression } ), '\n\n', error
+                            );
                             result = t('adapter.error.general_file', { filename: `[[${file.path}]]`, error: error });
                         }
                         else {
