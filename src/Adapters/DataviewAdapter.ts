@@ -4,7 +4,7 @@ import { ErrorBehavior, ItemType, ScriptConfig, SettingType, t } from "Settings/
 import { AdapterFunction } from "Types/interfaces";
 import { importArgs } from "Utils/Utils";
 import { Adapter } from "./Adapter";
-import { displayScriptError } from "./AdapterUtils";
+import { displayScriptError, formatExpression } from "./AdapterUtils";
 
 type DataviewResult = {
     error: Error;
@@ -203,14 +203,15 @@ export default class DataviewAdapter extends Adapter {
             }
         }
         catch (error) {
+            const displayExpression = formatExpression(expression);
             switch (errorBehavior) {
                 case ErrorBehavior.Display:
-                    displayScriptError(error, t('adapter.error.expr-failed', { expression: expression }), containerEl);
+                    displayScriptError(error, t('adapter.error.expr-failed', { expression: displayExpression }), containerEl);
                     result = t('adapter.error.general', { error: error }) + '\n';
                     break;
                 case ErrorBehavior.Report:
                     result = expression;
-                    console.error(t('adapter.error.expr-failed', { expression: expression }) + " • ", error);
+                    console.error(t('adapter.error.expr-failed', { expression: displayExpression }) + " • ", error);
                     break;
                 case ErrorBehavior.Ignore:
                     // do nothing
