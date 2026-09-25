@@ -10,16 +10,16 @@ import { TFile, FileSystemAdapter, Notice } from "obsidian";
 export function displayScriptError(error: unknown, context?: string, containerEl?: HTMLElement) {
     const isError = error instanceof Error;
     const message = isError ? error.message : String(error);
-    const fullMessage = context ? `${context}\n\n${message}` : message;
+    const messageWithContext = context ? `${context}\n\n${message}` : message;
 
     // output to console
-    const consoleMessage = isError ? (context ? `${context}\n\n${error.stack}` : error) : fullMessage;
+    const consoleMessage = isError ? (context ? `${context}\n\n${error.stack}` : error) : messageWithContext;
     console.error(consoleMessage);
     
     // output to a container, if provided
     if (containerEl) {
         const errorEl = containerEl.createEl('pre');
-        errorEl.setText(fullMessage);
+        errorEl.setText(messageWithContext);
     }
     // show notice
     new Notice(String(error), 10000).containerEl.addClass('mod-warning');
