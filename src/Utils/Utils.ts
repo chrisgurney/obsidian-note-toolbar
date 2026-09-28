@@ -418,8 +418,8 @@ export function calcComponentVisToggles(visibility: Visibility) {
  * Returns the text for a toolbar item.
  * @param ntb Plugin instance.
  * @param toolbarItem Item to return text for.
- * @param ignoreVars If true, function tries to return any text that does not include vars/expressions.
- * @returns The resolved text for the toolbar item.
+ * @param ignoreVars If true, function tries to return any text that does not include vars/expressions. Default is `false`.
+ * @returns The resolved text for the toolbar item, or an empty string.
  */
 export function getItemText(ntb: NoteToolbarPlugin, toolbarItem: ToolbarItemSettings, ignoreVars: boolean = false): string {
 	if (ignoreVars) {
