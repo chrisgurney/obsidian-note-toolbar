@@ -643,6 +643,14 @@ export interface NtbSidebarOptions {
      */
     reuse?: boolean;
     /**
+     * Indicates which side to open the sidebar on. Default is `right`.
+     */
+    side?: 'left' | 'right';
+    /**
+     * Indicates whether to create the sidebar in a new split. Default is `false`.
+     */
+    split?: boolean;
+    /**
      * Sets the icon for the sidebar view. Can only be set once.
      */
     viewIcon?: string;

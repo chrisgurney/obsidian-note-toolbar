@@ -434,8 +434,10 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
                 : NtbSidebarView.VIEW_TYPE_SIDEBAR;
 
         if (!leaf) {
-            leaf = this.app.workspace.getRightLeaf(false);
-
+            leaf = options?.side === 'left'
+                ? this.app.workspace.getLeftLeaf(options?.split ?? false)
+                : this.app.workspace.getRightLeaf(options?.split ?? false);
+            
             if (!leaf) {
                 return;
             }
