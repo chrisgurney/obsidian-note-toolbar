@@ -1,9 +1,9 @@
 import NoteToolbarPlugin from "main";
 import { Plugin, TFile } from "obsidian";
-import { ErrorBehavior, ItemType, ScriptConfig, SettingType, t } from "Settings/NoteToolbarSettings";
+import { ErrorBehavior, ItemType, ScriptConfig, ScriptContext, SettingType, t } from "Settings/NoteToolbarSettings";
 import { AdapterFunction } from "Types/interfaces";
 import { Adapter } from "./Adapter";
-import { displayScriptError } from "./AdapterUtils";
+import { checkActiveFile, checkFile, displayScriptError, handleScriptError } from "./AdapterUtils";
 
 type TemplaterRunningConfig = {
     template_file: TFile | undefined;
@@ -88,20 +88,12 @@ export default class TemplaterAdapter extends Adapter {
     }
 
     /**
-     * @see Adapter.use
+     * @see {@link Adapter.use}
      */    
-    async use(config: ScriptConfig): Promise<string | void> {
+    async use(config: ScriptConfig, errorContext: ScriptContext): Promise<string | void> {
+
         let result;
         
-        let containerEl;
-        if (config.outputContainer) {
-            containerEl = this.ntb.el.getOutputEl(config.outputContainer);
-            if (!containerEl) {
-                displayScriptError(t('adapter.error.callout-not-found', { id: config.outputContainer }));
-                return;
-            }
-        }
-
         switch (config.pluginFunction) {
             case 'appendTemplate':
                 result = config.sourceFile
@@ -110,29 +102,29 @@ export default class TemplaterAdapter extends Adapter {
                 break;
             case 'createFrom':
                 result = config.sourceFile
-                    ? await this.createFrom(config.sourceFile, config.outputFile)
+                    ? await this.createFrom(config.sourceFile, errorContext, config.outputFile)
                     : t('adapter.templater.create-sourcefile-error-required');
                 break;
             case 'parseTemplate':
                 result = config.expression
-                    ? await this.parseTemplate(config.expression)
+                    ? await this.parseTemplate(config.expression, errorContext)
                     : t('adapter.templater.eval-expr-error-required');
                 break;
             // internal function for inline evaluations in which errors should be reported
             case 'parseInline':
                 result = config.expression
-                    ? await this.parseTemplate(config.expression, ErrorBehavior.Report)
+                    ? await this.parseTemplate(config.expression, errorContext)
                     : t('adapter.templater.eval-expr-error-required');
                 break;
             // internal function for inline evaluations in which errors can be ignored
             case 'parseIgnore':
                 result = config.expression
-                    ? await this.parseTemplate(config.expression, ErrorBehavior.Ignore)
+                    ? await this.parseTemplate(config.expression, errorContext)
                     : t('adapter.templater.eval-expr-error-required');
                 break;
             case 'parseTemplateFile':
                 result = config.sourceFile
-                    ? await this.parseTemplateFile(config.sourceFile)
+                    ? await this.parseTemplateFile(config.sourceFile, errorContext)
                     : t('adapter.templater.exec-sourcefile-error-required');
                 break;
             case '':
@@ -157,7 +149,8 @@ export default class TemplaterAdapter extends Adapter {
     appendTemplate = async (filename: string): Promise<string> => {
 
         if (this.adapterApi) {
-            const templateFile = this.ntb.app.vault.getFileByPath(filename);
+            const templateFile = checkFile(this.ntb, filename);
+            if (!templateFile) return '';
             try {
                 if (templateFile) {
                     await this.adapterApi.append_template_to_active_file(templateFile);
@@ -180,11 +173,12 @@ export default class TemplaterAdapter extends Adapter {
      * @param filename 
      * @param outputFile 
      */
-    createFrom = async (filename: string, outputFile?: string): Promise<string> => {
+    createFrom = async (filename: string, context: ScriptContext, outputFile?: string): Promise<string> => {
 
+        // replace any variables that might be in the output filename
 		if (outputFile && this.ntb.vars.hasVars(outputFile)) {
             const activeFile = this.ntb.app.workspace.getActiveFile();
-			outputFile = await this.ntb.vars.replaceVars(outputFile, activeFile);
+			outputFile = await this.ntb.vars.replaceVars(outputFile, activeFile, context);
         }
 
         const { parsedFolder, parsedFilename } = this.parseOutputFile(outputFile);
@@ -227,15 +221,15 @@ export default class TemplaterAdapter extends Adapter {
      * @param errorBehavior
      * @returns 
      */
-    parseTemplate = async (expression: string, errorBehavior: ErrorBehavior = ErrorBehavior.Display): Promise<string> => {
+    parseTemplate = async (
+        expression: string,
+        errorContext: ScriptContext
+    ): Promise<string> => {
 
         let result = '';
 
-        const activeFile = this.ntb.app.workspace.getActiveFile();
-        if (!activeFile) {
-            if (errorBehavior === ErrorBehavior.Display) displayScriptError(t('adapter.error.expr-note-not-open'));
-            return t('adapter.error.expr-note-not-open');
-        }
+        const activeFile = checkActiveFile(this.ntb, errorContext.errorBehavior);
+        if (!activeFile) return t('adapter.error.expr-note-not-open');
 
         // make sure the opening and closing tags are present, in case they're omitted
         let expressionToEval = expression.trim();
@@ -255,18 +249,7 @@ export default class TemplaterAdapter extends Adapter {
             }
         }
         catch (error) {
-            switch (errorBehavior) {
-                case ErrorBehavior.Display:
-                    displayScriptError(error);
-                    break;
-                case ErrorBehavior.Report:
-                    result = expression;
-                    console.error(t('adapter.error.expr-failed', { expression: expression }) + " • ", error);
-                    break;
-                case ErrorBehavior.Ignore:
-                    // do nothing
-                    break;
-            }
+            result = handleScriptError(this.ntb, error, expression, errorContext) ?? result;
         }
 
         return result;
@@ -282,17 +265,16 @@ export default class TemplaterAdapter extends Adapter {
      * @param filename 
      * @returns 
      */
-    parseTemplateFile = async (filename: string) => {
+    parseTemplateFile = async (filename: string, errorContext: ScriptContext) => {
 
         let result = '';
 
-        const activeFile = this.ntb.app.workspace.getActiveFile();
-        if (!activeFile) {
-            displayScriptError(t('adapter.error.function-note-not-open'));
-            return t('adapter.error.function-note-not-open');
-        }
+        const activeFile = checkActiveFile(this.ntb, ErrorBehavior.Display);
+        if (!activeFile) return t('adapter.error.function-note-not-open');
 
-        const templateFile = this.ntb.app.vault.getFileByPath(filename);
+        const templateFile = checkFile(this.ntb, filename);
+        if (!templateFile) return;
+
         try {
             if (templateFile) {
                 const config: TemplaterRunningConfig = { 
@@ -311,7 +293,8 @@ export default class TemplaterAdapter extends Adapter {
             }
         }
         catch (error) {
-            displayScriptError(error, t('adapter.error.exec-failed', { filename: filename }));
+            errorContext['scriptFile'] = templateFile;
+            result = handleScriptError(this.ntb, error, '', errorContext) ?? result;
         }
 
         return result;

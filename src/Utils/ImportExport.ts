@@ -1,7 +1,7 @@
 import NoteToolbarPlugin from "main";
-import { DEFAULT_ITEM_VISIBILITY_SETTINGS, DEFAULT_STYLE_OPTIONS, ExportSettings, ItemType, MOBILE_STYLE_OPTIONS, PositionType, SCRIPT_ATTRIBUTE_MAP, ScriptConfig, t, ToolbarItemSettings, ToolbarSettings, Visibility } from "Settings/NoteToolbarSettings";
-import { getUUID } from "./Utils";
 import { getIcon, Notice, TFile, TFolder } from "obsidian";
+import { DEFAULT_ITEM_VISIBILITY_SETTINGS, DEFAULT_STYLE_OPTIONS, ErrorBehavior, ExportSettings, ItemType, MOBILE_STYLE_OPTIONS, PositionType, SCRIPT_ATTRIBUTE_MAP, ScriptConfig, ScriptContext, t, ToolbarItemSettings, ToolbarSettings, Visibility } from "Settings/NoteToolbarSettings";
+import { getUUID } from "./Utils";
 
 const toIconizeFormat = (s: string) => 
     `:Li${s.replace(/^lucide-/, '')
@@ -117,14 +117,15 @@ export async function exportItemToCallout(
     let itemIcon = (options.includeIcons && item.icon) ? toIconizeFormat(item.icon) : '';
     itemIcon = (itemIcon && item.label) ? itemIcon + ' ' : itemIcon; // trailing space if needed
 
+    const varErrorContext: ScriptContext = { errorBehavior: ErrorBehavior.Report };
     let itemText = options.replaceVars 
-        ? await ntb.vars.replaceVars(item.label, activeFile) 
+        ? await ntb.vars.replaceVars(item.label, activeFile, varErrorContext) 
         : replaceScriptDelimiters(ntb, item.label);
     let itemLink = options.replaceVars 
-        ? await ntb.vars.replaceVars(item.link, activeFile) 
+        ? await ntb.vars.replaceVars(item.link, activeFile, varErrorContext) 
         : replaceScriptDelimiters(ntb, item.link);
     let itemTooltip = options.replaceVars 
-        ? await ntb.vars.replaceVars(item.tooltip, activeFile) 
+        ? await ntb.vars.replaceVars(item.tooltip, activeFile, varErrorContext) 
         : replaceScriptDelimiters(ntb, item.tooltip);
 
     itemText = escapeTextForCallout(itemText);
@@ -177,7 +178,7 @@ export async function exportItemToCallout(
         case ItemType.File: {
             // check if the provided file links to a folder, and if so replace with a folder
             let resolvedItemLink = itemLink;
-            await ntb.vars.replaceVars(itemLink, activeFile).then((resolvedLink) => {
+            await ntb.vars.replaceVars(itemLink, activeFile, varErrorContext).then((resolvedLink) => {
                 resolvedItemLink = resolvedLink;
             });
             const fileOrFolder = ntb.app.vault.getAbstractFileByPath(resolvedItemLink);

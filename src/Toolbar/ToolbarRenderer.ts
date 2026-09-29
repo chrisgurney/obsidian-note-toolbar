@@ -1,7 +1,7 @@
 import { Rect } from "@codemirror/view";
 import NoteToolbarPlugin from "main";
 import { FrontMatterCache, getIcon, ItemView, MarkdownView, Menu, MenuItem, MenuPositionDef, Notice, Platform, setIcon, setTooltip, TFile, TFolder } from "obsidian";
-import { DefaultStyleType, ItemType, LocalVar, MobileStyleType, OBSIDIAN_UI_ELEMENTS, PositionType, t, ToggleUiStateType, ToolbarItemSettings, ToolbarSettings, ToolbarStyle } from "Settings/NoteToolbarSettings";
+import { DefaultStyleType, ErrorBehavior, ItemType, LocalVar, MobileStyleType, OBSIDIAN_UI_ELEMENTS, PositionType, ScriptContext, t, ToggleUiStateType, ToolbarItemSettings, ToolbarSettings, ToolbarStyle } from "Settings/NoteToolbarSettings";
 import { calcComponentVisToggles, getViewId, hasStyle, isValidUri, putFocusInMenu } from "Utils/Utils";
 
 // note: make sure CSS is updated if these are changed
@@ -375,7 +375,8 @@ export default class ToolbarRenderer {
                 const type = target?.getAttribute('data-toolbar-link-attr-type');
                 if (target && type && [ItemType.File, ItemType.Uri].contains(type as ItemType)) {
                     let itemLink = target.getAttribute('href') || '';
-                    itemLink = await this.ntb.vars.replaceVars(itemLink, this.ntb.app.workspace.getActiveFile());
+					const errorContext: ScriptContext = { errorBehavior: ErrorBehavior.Ignore, component: 'URI', toolbar };
+                    itemLink = await this.ntb.vars.replaceVars(itemLink, this.ntb.app.workspace.getActiveFile(), errorContext);
                     // make sure it's not actually a folder or URI, as we can't preview them
                     const isFolder = this.ntb.app.vault.getAbstractFileByPath(itemLink) instanceof TFolder;
                     const isUri = (((type as ItemType) === ItemType.Uri) && isValidUri(itemLink));
@@ -454,8 +455,13 @@ export default class ToolbarRenderer {
 				if (!showInMode) noteToolbarLi.addClass('hide-in-mode');
 				if (!showOnMobile) noteToolbarLi.addClass('hide-on-mobile');
 				if (!showOnDesktop) noteToolbarLi.addClass('hide-on-desktop');
-				const isLinkEmpty = this.ntb.vars.hasVars(item.link) && (await this.ntb.vars.replaceVars(item.link, file) === '');
+
+				const varErrorContext: ScriptContext = { 
+					component: 'URI', errorBehavior: ErrorBehavior.Display, item, toolbar
+				};
+				const isLinkEmpty = this.ntb.vars.hasVars(item.link) && (await this.ntb.vars.replaceVars(item.link, file, varErrorContext) === '');
 				if (isLinkEmpty) noteToolbarLi.addClass('hide');
+
 				// disable if it's a command that's not available
 				if (item.linkAttr.type === ItemType.Command) {
 					const isCommandAvailable = view ? this.ntb.items.isCommandItemAvailable(item, view) : true;
@@ -606,7 +612,8 @@ export default class ToolbarRenderer {
 		if (defaultItem) {
 			const activeFile = this.ntb.app.workspace.getActiveFile();
 			let defaultItemText = defaultItem.label || defaultItem.tooltip;
-			if (this.ntb.vars.hasVars(defaultItemText)) defaultItemText = await this.ntb.vars.replaceVars(defaultItemText, activeFile);
+			const errorContext: ScriptContext = { errorBehavior: ErrorBehavior.Report, item: defaultItem, toolbar };
+			if (this.ntb.vars.hasVars(defaultItemText)) defaultItemText = await this.ntb.vars.replaceVars(defaultItemText, activeFile, errorContext);
 			noteToolbarFabButton.setAttribute('aria-label', defaultItemText);
 			setIcon(noteToolbarFabButton, defaultItem.icon ? defaultItem.icon : this.ntb.settings.icon);
 		}
@@ -827,7 +834,8 @@ export default class ToolbarRenderer {
 			
 			let resolvedLink = item.link;
 			if (resolveVars && this.ntb.vars.hasVars(item.link)) {
-				resolvedLink = await this.ntb.vars.replaceVars(item.link, file);
+				const errorContext: ScriptContext = { errorBehavior: ErrorBehavior.Report, item, toolbar };
+				resolvedLink = await this.ntb.vars.replaceVars(item.link, file, errorContext);
 			}
 
 			resolvedMenuText.set(item.uuid, { title, resolvedLink });
@@ -1147,12 +1155,13 @@ export default class ToolbarRenderer {
 
 				// update tooltip + label
 				let itemTooltip = itemSetting.tooltip;
+				const errorContext = { errorBehavior: ErrorBehavior.Ignore };
 				if (this.ntb.vars.hasVars(itemSetting.tooltip)) {
-					itemTooltip = await this.ntb.vars.replaceVars(itemSetting.tooltip, activeFile);
+					itemTooltip = await this.ntb.vars.replaceVars(itemSetting.tooltip, activeFile, errorContext);
 					setTooltip(itemSpanEl, itemTooltip, { placement: "top" });
 				}
 				if (this.ntb.vars.hasVars(itemSetting.label)) {
-					const newLabel = await this.ntb.vars.replaceVars(itemSetting.label, activeFile);
+					const newLabel = await this.ntb.vars.replaceVars(itemSetting.label, activeFile, errorContext);
 					const itemElLabel = itemEl.querySelector('.cg-note-toolbar-item-label');
 					if (newLabel) {
 						itemElLabel?.removeClass('hide');
@@ -1187,7 +1196,8 @@ export default class ToolbarRenderer {
 				// if item's empty, is not visible, or its link resolves to nothing, do not show it
 				const isItemEmpty = itemSpanEl.innerText === '' && itemSetting.icon === '';
 				const isItemHidden = getComputedStyle(itemSpanEl).display === 'none';
-				const isLinkEmpty = this.ntb.vars.hasVars(itemSetting.link) && (await this.ntb.vars.replaceVars(itemSetting.link, activeFile) === '');
+				// TODO? at list put this error in the console?
+				const isLinkEmpty = this.ntb.vars.hasVars(itemSetting.link) && (await this.ntb.vars.replaceVars(itemSetting.link, activeFile, errorContext) === '');
 				if (isItemEmpty || isLinkEmpty || isItemHidden) {
 					itemEl.addClass('hide');
 					continue;
@@ -1332,7 +1342,9 @@ export default class ToolbarRenderer {
 					this.updateActiveViewIds();
 					await this.render(matchingToolbar, file, view);	
 				}
-				await this.update(matchingToolbar, file, view);
+				else {
+					await this.update(matchingToolbar, file, view);
+				}
 			}
 		}
 		finally {

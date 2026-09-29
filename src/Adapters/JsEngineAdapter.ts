@@ -1,11 +1,10 @@
 import NoteToolbarPlugin from "main";
 import { Component, Plugin, TFile } from "obsidian";
-import { ErrorBehavior, ItemType, ScriptConfig, SettingType, t } from "Settings/NoteToolbarSettings";
+import { ItemType, ScriptConfig, ScriptContext, SettingType, t } from "Settings/NoteToolbarSettings";
 import { learnMoreFr } from "Settings/UI/Utils/SettingsUIUtils";
 import { AdapterFunction } from "Types/interfaces";
-import { importArgs } from "Utils/Utils";
 import { Adapter } from "./Adapter";
-import { displayScriptError } from "./AdapterUtils";
+import { checkArgs, checkFileLink, checkOutputContainer, displayScriptError, handleScriptError } from "./AdapterUtils";
 
 type JsEngineResult = {
     functionBuildError?: Error;
@@ -112,46 +111,40 @@ export default class JsEngineAdapter extends Adapter {
     }
 
     /**
-     * @see Adapter.use
+     * @see {@link Adapter.use}
      */    
-    async use(config: ScriptConfig): Promise<string | void> {
+    async use(config: ScriptConfig, errorContext: ScriptContext): Promise<string | void> {
+
         let result;
         
-        let containerEl;
-        if (config.outputContainer) {
-            containerEl = this.ntb.el.getOutputEl(config.outputContainer);
-            if (!containerEl) {
-                displayScriptError(t('adapter.error.callout-not-found', { id: config.outputContainer }));
-                return;
-            }
-        }
+        const containerEl = checkOutputContainer(this.ntb, config.outputContainer);
 
         switch (config.pluginFunction) {
             case 'evaluate':
                 result = config.expression
-                    ? await this.evaluate(config.expression, containerEl)
+                    ? await this.evaluate(config.expression, errorContext, containerEl)
                     : t('adapter.js-engine.eval-expr-error-required');
                 break;
             // internal function for inline evaluations in which errors should be reported
             case 'evaluateInline':
                 result = config.expression
-                    ? await this.evaluate(config.expression, containerEl, ErrorBehavior.Report)
+                    ? await this.evaluate(config.expression, errorContext, containerEl)
                     : t('adapter.js-engine.eval-expr-error-required');
                 break;
             // internal function for inline evaluations in which errors can be ignored
             case 'evaluateIgnore':
                 result = config.expression
-                    ? await this.evaluate(config.expression, containerEl, ErrorBehavior.Ignore)
+                    ? await this.evaluate(config.expression, errorContext, containerEl)
                     : t('adapter.js-engine.eval-expr-error-required');
                 break;
             case 'exec':
                 result = config.sourceFile
-                    ? await this.exec(config.sourceFile, containerEl)
+                    ? await this.exec(config.sourceFile, errorContext, containerEl)
                     : t('adapter.js-engine.exec-sourcefile-error-required');
                 break;
             case 'importExec':
                 result = config.sourceFile
-                    ? await this.importExec(config.sourceFile, config.sourceFunction, config.sourceArgs)
+                    ? await this.importExec(config.sourceFile, errorContext, config.sourceFunction, config.sourceArgs)
                     : t('adapter.js-engine.importexec-sourcefile-error-required');
                 break;
             case '':
@@ -174,7 +167,11 @@ export default class JsEngineAdapter extends Adapter {
      * @param displayErrors
      * @returns
      */
-    evaluate = async (expression: string, containerEl?: HTMLElement, errorBehavior: ErrorBehavior = ErrorBehavior.Display): Promise<string> => {
+    evaluate = async (
+        expression: string,
+        errorContext: ScriptContext,
+        containerEl?: HTMLElement,
+    ): Promise<string> => {
 
         if (!this.adapterApi) return '';
 
@@ -207,17 +204,7 @@ export default class JsEngineAdapter extends Adapter {
             result = execution.result as string;
         }
         catch (error) {
-            switch (errorBehavior) {
-                case ErrorBehavior.Display:
-                    displayScriptError(error);
-                    break;
-                case ErrorBehavior.Report:
-                    console.error(t('adapter.error.expr-failed', { expression: expression }) + " • ", error);
-                    break;
-                case ErrorBehavior.Ignore:
-                    // do nothing
-                    break;
-            }
+            result = handleScriptError(this.ntb, error, expression, errorContext, containerEl) ?? result;
         } 
         finally {
             component.unload();
@@ -244,16 +231,26 @@ export default class JsEngineAdapter extends Adapter {
      * @param argsJson 
      * @returns 
      */
-    importExec = async (filename: string, functionName?: string, argsJson?: string): Promise<string> => {
+    importExec = async (
+        filename: string, 
+        errorContext: ScriptContext,
+        functionName?: string, 
+        argsJson?: string
+    ): Promise<string> => {
 
         let result;
 
-        const importedArgs = argsJson ? importArgs(argsJson) : { value: {} };
-        if (importedArgs.value === null) {
-            displayScriptError(importedArgs.error, t('adapter.error.args-parsing', { filename }) );
-            return t('adapter.error.args-parsing-script-error', { filename: filename, error: importedArgs.error });
-        }
-        const args = importedArgs.value;
+        const args = checkArgs(argsJson);
+        if (!args) return '';
+
+        // const importedArgs = argsJson ? importArgs(argsJson) : { value: {} };
+        // if (importedArgs.value === null) {
+        //     displayScriptError(importedArgs.error, t('adapter.error.args-parsing', { filename }) );
+        //     return t('adapter.error.args-parsing-script-error', { filename: filename, error: importedArgs.error });
+        // }
+        // const args = importedArgs.value;
+
+        const scriptFile = checkFileLink(this.ntb, filename);
 
         if (this.adapterApi) {
             // const module = await this.adapterApi.importJs(filename);
@@ -270,7 +267,8 @@ export default class JsEngineAdapter extends Adapter {
                         this.ntb.debug('importExec() result:', result);
                     }
                     catch (error) {
-                        displayScriptError(error, t('adapter.error.exec-failed', { filename: filename }));
+                        errorContext['scriptFile'] = scriptFile;
+                        result = handleScriptError(this.ntb, error, '', errorContext) ?? result;
                     }
                 }
                 else {
@@ -288,13 +286,17 @@ export default class JsEngineAdapter extends Adapter {
      * @param containerEl 
      * @returns 
      */
-    exec = async (filename: string, containerEl?: HTMLElement): Promise<string> => {
+    exec = async (
+        filename: string,
+        errorContext: ScriptContext,
+        containerEl?: HTMLElement
+    ): Promise<string> => {
 
         let result = '';
         const resultEl = containerEl || createSpan();
 
-        const activeFile = this.ntb.app.workspace.getActiveFile();
-        const activeFilePath = activeFile?.path ?? '';
+        const activeFilePath = this.ntb.app.workspace.getActiveFile()?.path ?? '';
+        const scriptFile = checkFileLink(this.ntb, filename);
 
         const component = new Component();
         component.load();
@@ -315,7 +317,9 @@ export default class JsEngineAdapter extends Adapter {
             }
         }
         catch (error) {
-            displayScriptError(error, t('adapter.error.exec-failed', { filename: filename }), containerEl);
+            // NOTE: it appears errors from JS Engine's executeFile are not thrown up to here...
+            errorContext['scriptFile'] = scriptFile;
+            result = handleScriptError(this.ntb, error, '', errorContext, containerEl) ?? result;
         }
         finally {
             component.unload();

@@ -1227,6 +1227,7 @@ export default class ToolbarItemUi {
                             });
                         break;
                 }
+                // TODO: add link to script file here using callback to open file?
                 if (setting && param.description) {
                     const fieldHelp = createDiv();
                     fieldHelp.setText(param.description);

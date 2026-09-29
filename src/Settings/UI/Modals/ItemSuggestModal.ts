@@ -236,9 +236,9 @@ export default class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> 
                     // ...and does not have a var link and label/tooltip that resolves to nothing
                     if (
                         !(this.ntb.vars.hasVars(item.link) && 
-                            await this.ntb.vars.replaceVars(item.link, this.activeFile, ErrorBehavior.Ignore) === '') &&
+                            await this.ntb.vars.replaceVars(item.link, this.activeFile, { errorBehavior: ErrorBehavior.Ignore }) === '') &&
                         !(this.ntb.vars.hasVars(itemName) && 
-                            await this.ntb.vars.replaceVars(itemName, this.activeFile, ErrorBehavior.Ignore) === '')
+                            await this.ntb.vars.replaceVars(itemName, this.activeFile, { errorBehavior: ErrorBehavior.Ignore }) === '')
                     ) {
                         return true;
                     }

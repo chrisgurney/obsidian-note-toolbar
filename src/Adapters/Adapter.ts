@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { ScriptConfig } from "Settings/NoteToolbarSettings";
+import { ScriptConfig, ScriptContext } from "Settings/NoteToolbarSettings";
 import { AdapterFunction } from "Types/interfaces";
 
 export abstract class Adapter {
@@ -36,7 +36,10 @@ export abstract class Adapter {
 
     /**
      * Executes the function with provided config.
+     * 
+     * @param config {@link ScriptConfig}
+     * @param errorContext Optional {@link ScriptContext} that provides error messages with more detail.
      */
-    abstract use(config: ScriptConfig): Promise<string | void>; 
+    abstract use(config: ScriptConfig, errorContext?: ScriptContext): Promise<string | void>; 
 
 }

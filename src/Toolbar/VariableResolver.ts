@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { TFile, FileSystemAdapter } from "obsidian";
-import { ErrorBehavior, ItemType, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { ErrorBehavior, ItemType, ScriptContext, ToolbarSettings } from "Settings/NoteToolbarSettings";
 
 /**
  * Provides utilities to resolve variables.
@@ -45,9 +45,13 @@ export default class VariableResolver {
 	 * @param s String to replace the variables in.
 	 * @param file File with the metadata (name, frontmatter) we'll use to fill in the variables.
 	 * @param errorBehavior What to do with errors when they occur when replacing variables.
+	 * @param context Optional {@link ScriptContext} to provide more detail for error messages.
 	 * @returns String with the variables replaced.
 	 */
-	async replaceVars(s: string, file: TFile | null, errorBehavior: ErrorBehavior = ErrorBehavior.Report): Promise<string> {
+	async replaceVars(
+		s: string, file: TFile | null,
+		context: ScriptContext
+	): Promise<string> {
 
 		const hasVar = (varKey: string) => new RegExp(`\\{\\{\\s*(?:encode:)?\\s*${varKey}\\s*\\}\\}`).test(s);
 
@@ -57,9 +61,9 @@ export default class VariableResolver {
 			if (s.trim().startsWith('{{js:')) {
 				s = s.replace(/^{{js:\s*|\s*}}$/g, '');
 				const result = await this.ntb.adapters.js?.use({ 
-					pluginFunction: (errorBehavior === ErrorBehavior.Ignore) ?  'evaluateIgnore' : 'evaluateInline',
-					expression: s
-				});
+					pluginFunction: (context.errorBehavior === ErrorBehavior.Ignore) ?  'evaluateIgnore' : 'evaluateInline',
+					expression: s					
+				}, context);
 				s = (result && typeof result === 'string') ? result : '';
 			}
 
@@ -72,9 +76,9 @@ export default class VariableResolver {
 					if (s.trim().startsWith('{{dv:')) s = s.trim().replace(/^{{dv:\s*|\s*}}$/g, '');
 					s = s.trim();
 					const result = await this.ntb.adapters.dv?.use({
-						pluginFunction: (errorBehavior === ErrorBehavior.Ignore) ?  'evaluateIgnore' : 'evaluateInline',
+						pluginFunction: (context.errorBehavior === ErrorBehavior.Ignore) ?  'evaluateIgnore' : 'evaluateInline',
 						expression: s
-					});
+					}, context);
 					s = (result && typeof result === 'string') ? result : '';
 				}
 				// TODO? support for dvjs? example: $=dv.el('p', dv.current().file.mtime)
@@ -90,9 +94,9 @@ export default class VariableResolver {
 				if (s.trim().startsWith('{{jse:')) {
 					s = s.replace(/^{{jse:\s*|\s*}}$/g, '');
 					const result = await this.ntb.adapters.jsEngine?.use({ 
-						pluginFunction: (errorBehavior === ErrorBehavior.Ignore) ?  'evaluateIgnore' : 'evaluateInline',
+						pluginFunction: (context.errorBehavior === ErrorBehavior.Ignore) ?  'evaluateIgnore' : 'evaluateInline',
 						expression: s
-					});
+					}, context);
 					s = (result && typeof result === 'string') ? result : '';
 				}
 			}
@@ -106,9 +110,9 @@ export default class VariableResolver {
 					if (!s.startsWith('<%')) s = '<%' + s;
 					if (!s.endsWith('%>')) s += '%>';
 					const result = await this.ntb.adapters.tp?.use({ 
-						pluginFunction: (errorBehavior === ErrorBehavior.Ignore) ? 'parseIgnore' : 'parseInline',
+						pluginFunction: (context.errorBehavior === ErrorBehavior.Ignore) ? 'parseIgnore' : 'parseInline',
 						expression: s
-					});
+					}, context);
 					s = (result && typeof result === 'string') ? result : '';
 				}
 			}
@@ -176,8 +180,9 @@ export default class VariableResolver {
 		const resolvedTooltips: Record<string, string> = {};
 
 		for (const item of toolbar.items) {
-			resolvedLabels[item.uuid] = await this.replaceVars(item.label, file);
-			resolvedTooltips[item.uuid] = await this.replaceVars(item.tooltip, file);
+			const context: ScriptContext = { errorBehavior: ErrorBehavior.Report, item: item, toolbar: toolbar };
+			resolvedLabels[item.uuid] = await this.replaceVars(item.label, file, { ...context, component: 'label' });
+			resolvedTooltips[item.uuid] = await this.replaceVars(item.tooltip, file, { ...context, component: 'tooltip' });
 		}
 
 		return { resolvedLabels, resolvedTooltips };

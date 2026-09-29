@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { Notice } from "obsidian";
-import { CalloutAttr, ItemType, SCRIPT_ATTRIBUTE_MAP, ScriptConfig, ToolbarSettings, t } from "Settings/NoteToolbarSettings";
+import { CalloutAttr, ErrorBehavior, ItemType, SCRIPT_ATTRIBUTE_MAP, ScriptConfig, ScriptContext, ToolbarSettings, t } from "Settings/NoteToolbarSettings";
 
 
 export default class CalloutHandler {
@@ -64,18 +64,22 @@ export default class CalloutHandler {
                                 outputContainer: dataEl?.getAttribute(SCRIPT_ATTRIBUTE_MAP['outputContainer']) ?? undefined,
                                 outputFile: dataEl?.getAttribute(SCRIPT_ATTRIBUTE_MAP['outputFile']) ?? undefined,
                             } as ScriptConfig;
+                            const errorContext: ScriptContext = { 
+                                component: 'callout', 
+                                errorBehavior: ErrorBehavior.Display 
+                            };
                             switch (attribute) {
                                 case CalloutAttr.Dataview:
-                                    await this.ntb.items.handleLinkScript(ItemType.Dataview, scriptConfig);
+                                    await this.ntb.items.handleLinkScript(ItemType.Dataview, scriptConfig, errorContext);
                                     break;
                                 case CalloutAttr.JavaScript:
-                                    await this.ntb.items.handleLinkScript(ItemType.JavaScript, scriptConfig);
+                                    await this.ntb.items.handleLinkScript(ItemType.JavaScript, scriptConfig, errorContext);
                                     break;
                                 case CalloutAttr.JsEngine:
-                                    await this.ntb.items.handleLinkScript(ItemType.JsEngine, scriptConfig);
+                                    await this.ntb.items.handleLinkScript(ItemType.JsEngine, scriptConfig, errorContext);
                                     break;
                                 case CalloutAttr.Templater:
-                                    await this.ntb.items.handleLinkScript(ItemType.Templater, scriptConfig);
+                                    await this.ntb.items.handleLinkScript(ItemType.Templater, scriptConfig, errorContext);
                                     break;	
                             }
                             break;

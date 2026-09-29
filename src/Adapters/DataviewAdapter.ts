@@ -1,10 +1,9 @@
 import NoteToolbarPlugin from "main";
 import { Component, MarkdownRenderer, Plugin } from "obsidian";
-import { ErrorBehavior, ItemType, ScriptConfig, SettingType, t } from "Settings/NoteToolbarSettings";
+import { ItemType, ScriptConfig, ScriptContext, SettingType, t } from "Settings/NoteToolbarSettings";
 import { AdapterFunction } from "Types/interfaces";
-import { importArgs } from "Utils/Utils";
 import { Adapter } from "./Adapter";
-import { displayScriptError, formatExpression } from "./AdapterUtils";
+import { checkActiveFile, checkArgs, checkFileLink, checkOutputContainer, formatExpression, handleScriptError } from "./AdapterUtils";
 
 type DataviewResult = {
     error: Error;
@@ -96,52 +95,45 @@ export default class DataviewAdapter extends Adapter {
     }
 
     /**
-     * @see Adapter.use
+     * @see {@link Adapter.use}
      */
-    async use(config: ScriptConfig): Promise<string | void> {
-        
+    async use(config: ScriptConfig, errorContext: ScriptContext): Promise<string | void> {
+
         let result;
 
-        let containerEl;
-        if (config.outputContainer) {
-            containerEl = this.ntb.el.getOutputEl(config.outputContainer);
-            if (!containerEl) {
-                displayScriptError(t('adapter.error.callout-not-found', { id: config.outputContainer }));
-                return;
-            }
-        }
+        const containerEl = checkOutputContainer(this.ntb, config.outputContainer);
 
         switch (config.pluginFunction) {
             case 'evaluate':
                 result = config.expression
-                    ? await this.evaluate(config.expression, containerEl)
+                    ? await this.evaluate(config.expression, errorContext, containerEl)
                     : t('adapter.dataview.eval-expr-error-required');
                 break;
             // internal function for inline evaluations in which errors should be reported
             case 'evaluateInline':
                 result = config.expression
-                    ? await this.evaluate(config.expression, containerEl, ErrorBehavior.Report)
+                    ? await this.evaluate(config.expression, errorContext, containerEl)
                     : t('adapter.dataview.eval-expr-error-required');
                 break;
             // internal function for inline evaluations in which errors can be ignored
             case 'evaluateIgnore':
                 result = config.expression
-                    ? await this.evaluate(config.expression, containerEl, ErrorBehavior.Ignore)
+                    ? await this.evaluate(config.expression, errorContext, containerEl)
                     : t('adapter.dataview.eval-expr-error-required');
                 break;
             case 'exec':
                 result = config.sourceFile
-                    ? await this.exec(config.sourceFile, config.sourceArgs, containerEl)
+                    ? await this.exec(config.sourceFile, errorContext, config.sourceArgs, containerEl)
                     : t('adapter.dataview.exec-error-required');
                 break;
             case 'executeJs':
                 result = config.expression
-                    ? await this.executeJs(config.expression, containerEl)
+                    ? await this.executeJs(config.expression, errorContext, containerEl)
                     : t('adapter.dataview.dvjs-expr-error-required');
                 break;
             case 'query':
                 result = config.expression
-                    ? await this.query(config.expression, containerEl)
+                    ? await this.query(config.expression, errorContext, containerEl)
                     : t('adapter.dataview.query-expr-error-required');
                 break;
             case '':
@@ -171,14 +163,13 @@ export default class DataviewAdapter extends Adapter {
      */
     private evaluate = async (
         expression: string, 
-        containerEl?: HTMLElement, 
-        errorBehavior: ErrorBehavior = ErrorBehavior.Display
+        errorContext: ScriptContext,
+        containerEl?: HTMLElement
     ): Promise<string> => {
 
         let result = '';
         
-        const activeFile = this.ntb.app.workspace.getActiveFile();
-        const activeFilePath = activeFile?.path;
+        const activeFilePath = this.ntb.app.workspace.getActiveFile()?.path || '';
 
         const component = new Component();
 		component.load();
@@ -203,20 +194,7 @@ export default class DataviewAdapter extends Adapter {
             }
         }
         catch (error) {
-            const displayExpression = formatExpression(expression);
-            switch (errorBehavior) {
-                case ErrorBehavior.Display:
-                    displayScriptError(error, t('adapter.error.expr-failed', { expression: displayExpression }), containerEl);
-                    result = t('adapter.error.general', { error: error }) + '\n';
-                    break;
-                case ErrorBehavior.Report:
-                    result = expression;
-                    console.error(t('adapter.error.expr-failed', { expression: displayExpression }) + " • ", error);
-                    break;
-                case ErrorBehavior.Ignore:
-                    // do nothing
-                    break;
-            }
+            result = handleScriptError(this.ntb, error, expression, errorContext, containerEl) ?? result;
         }
         finally {
             component.unload();
@@ -233,38 +211,40 @@ export default class DataviewAdapter extends Adapter {
      * Arguments = { "fileFolder": "Demos" }
      * @link https://github.com/blacksmithgu/obsidian-dataview/blob/master/src/api/inline-api.ts
      */
-    private exec = async (filename: string, argsJson?: string, containerEl?: HTMLElement): Promise<string | undefined> => {
+    private exec = async (
+        filename: string,
+        errorContext: ScriptContext,
+        argsJson?: string,
+        containerEl?: HTMLElement,
+    ): Promise<string | undefined> => {
 
         let result;
 
-        if (!filename) {
-            return;
-        }
+        if (!filename) return;
 
-        const importedArgs = argsJson ? importArgs(argsJson) : { value: {} };
-        if (importedArgs.value === null) {
-            displayScriptError(importedArgs.error, t('adapter.error.args-parsing', { filename }), containerEl);
-            return;
-        }
-        const args = importedArgs.value;
+        const scriptFile = checkFileLink(this.ntb, filename);
+        if (!scriptFile) return;
+
+        errorContext = { ...errorContext, scriptFile };
+
+        const args = checkArgs(argsJson, containerEl);
+        if (!args) return '';
+        // const importedArgs = argsJson ? importArgs(argsJson) : { value: {} };
+        // if (importedArgs.value === null) {
+        //     displayScriptError(importedArgs.error, t('adapter.error.args-parsing', { filename }), containerEl);
+        //     return;
+        // }
+        // const args = importedArgs.value;
         
         // TODO: this works if the script doesn't need a container... but where does this span go?
         containerEl = containerEl || createSpan();
 
-        const activeFile = this.ntb.app.workspace.getActiveFile();
-        const activeFilePath = activeFile?.path || '';
+        const activeFilePath = this.ntb.app.workspace.getActiveFile()?.path || '';
 
-        const viewFile = this.ntb.app.metadataCache.getFirstLinkpathDest(filename, activeFilePath);
-        if (!viewFile) {
-            // TODO: render messages into the container, if provided
-            displayScriptError(t('adapter.error.file-not-found', { filename: filename }));
-            return;
-        }
-
-        let contents = await this.ntb.app.vault.cachedRead(viewFile);
+        let contents = await this.ntb.app.vault.cachedRead(scriptFile);
         if (contents) {
             // if (contents.includes("await")) contents = "(async () => { " + contents + " })()";
-            contents += `\n//# sourceURL=${viewFile.path}`;
+            contents += `\n//# sourceURL=${scriptFile.path}`;
             // FIXME? component is too short-lived; using this.plugin instead, but might lead to memory leaks? thread:
             // https://discord.com/channels/686053708261228577/840286264964022302/1296883427097710674
             // "then you need to hold on to your component longer and call unload when you want to get rid of the element"
@@ -287,7 +267,7 @@ export default class DataviewAdapter extends Adapter {
                 }
             }
             catch (error) {
-                displayScriptError(error, t('adapter.error.exec-failed', { filename: viewFile.path }), containerEl);
+                result = handleScriptError(this.ntb, error, contents, errorContext, containerEl) ?? result;
             }
             finally {
                 containerEl.addEventListener('remove', () => component.unload(), { once: true });
@@ -308,13 +288,16 @@ export default class DataviewAdapter extends Adapter {
      * @param containerEl 
      * @returns 
      */
-    executeJs = async (expression: string, containerEl?: HTMLElement): Promise<string> => {
+    executeJs = async (
+        expression: string,
+        errorContext: ScriptContext,
+        containerEl?: HTMLElement
+    ): Promise<string> => {
 
         let result = '';
         const resultEl = containerEl || createSpan();
 
-        const activeFile = this.ntb.app.workspace.getActiveFile();
-        const activeFilePath = activeFile?.path || '';
+        const activeFilePath = this.ntb.app.workspace.getActiveFile()?.path || '';
 
         const component = new Component();
         component.load();
@@ -340,8 +323,7 @@ export default class DataviewAdapter extends Adapter {
             }
         }
         catch (error) {
-            const displayExpression = formatExpression(expression);            
-            displayScriptError(error, t('adapter.error.expr-failed', { expression: displayExpression }), containerEl);
+            result = handleScriptError(this.ntb, error, expression, errorContext, containerEl) ?? result;
         }
         finally {
             component.unload();
@@ -360,26 +342,25 @@ export default class DataviewAdapter extends Adapter {
      * @param containerEl 
      * @returns 
      */
-    private query = async (expression: string, containerEl?: HTMLElement): Promise<string> => {
+    private query = async (
+        expression: string,
+        errorContext: ScriptContext,
+        containerEl?: HTMLElement
+    ): Promise<string> => {
 
         let result = '';
-        const activeFile = this.ntb.app.workspace.getActiveFile();
 
-        if (!activeFile) {
-            displayScriptError(t('adapter.error.query-note-not-open'));
-            return t('adapter.error.query-note-not-open');
-        }
-
-        const activeFilePath = activeFile.path;
+        const activeFile = checkActiveFile(this.ntb, errorContext.errorBehavior);
+        if (!activeFile) return t('adapter.error.query-note-not-open');;
 
         const component = new Component();
         component.load();
         try {
             if (this.adapterApi) {
-                this.ntb.debug("query() " + expression);
+                this.ntb.debug('Note Toolbar: Evaluating:\n', formatExpression(expression));
                 // returns a Promise<Result<QueryResult, string>>
-                const dvResult = await this.adapterApi.queryMarkdown(expression, activeFilePath);
-                this.ntb.debug("query() result: ", dvResult);
+                const dvResult = await this.adapterApi.queryMarkdown(expression, activeFile.path);
+                this.ntb.debug("Note Toolbar: Query result:\n", dvResult);
                 if (containerEl) {
                     containerEl.empty();
                     if (this.ntb) {
@@ -399,8 +380,7 @@ export default class DataviewAdapter extends Adapter {
             }
         }
         catch (error) {
-            displayScriptError(error, t('adapter.error.query-failed', { expression: expression }), containerEl);
-            result = t('adapter.error.general', { error: error }) + '\n';
+            result = handleScriptError(this.ntb, error, expression, errorContext, containerEl) ?? result;
         }
         finally {
 			component.unload();

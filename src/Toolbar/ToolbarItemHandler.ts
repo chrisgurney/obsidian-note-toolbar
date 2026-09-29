@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { Command, FileExplorerPlugin, ItemView, MarkdownView, Notice, PaneType, TFile, TFolder, WebViewerPlugin } from "obsidian";
-import { ItemFocusType, ItemType, LINK_OPTIONS, ScriptConfig, t, ToolbarItemSettings } from "Settings/NoteToolbarSettings";
+import { ErrorBehavior, ItemFocusType, ItemType, LINK_OPTIONS, ScriptConfig, ScriptContext, t, ToolbarItemSettings } from "Settings/NoteToolbarSettings";
 import { getLinkUiTarget, insertTextAtCursor, isValidUri, putFocusInMenu } from "Utils/Utils";
 
 /**
@@ -69,7 +69,8 @@ export default class ToolbarItemHandler {
      */
     async handleItemScript(toolbarItem: ToolbarItemSettings | undefined) {
         if (toolbarItem && toolbarItem?.scriptConfig) {
-            await this.handleLinkScript(toolbarItem.linkAttr.type, toolbarItem.scriptConfig, toolbarItem.linkAttr.focus);
+            const scriptContext: ScriptContext = { errorBehavior: ErrorBehavior.Report, item: toolbarItem };
+            await this.handleLinkScript(toolbarItem.linkAttr.type, toolbarItem.scriptConfig, scriptContext, toolbarItem.linkAttr.focus);
         }
     }
 
@@ -106,8 +107,9 @@ export default class ToolbarItemHandler {
         this.ntb.render.updateActiveItem(uuid);
 
         if (this.ntb.vars.hasVars(linkHref)) {
+            const errorContext = { errorBehavior: ErrorBehavior.Report };
             // TODO: expand to also replace vars in labels + tooltips
-            linkHref = await this.ntb.vars.replaceVars(linkHref, activeFile);
+            linkHref = await this.ntb.vars.replaceVars(linkHref, activeFile, errorContext);
             this.ntb.debug('- uri vars replaced: ', linkHref);
         }
 
@@ -218,7 +220,7 @@ export default class ToolbarItemHandler {
      * @param scriptConfig ScriptConfig to execute.
      * @param focus where to set focus after executing the script; defaults to 'editor'.
      */
-    async handleLinkScript(type: ItemType, scriptConfig: ScriptConfig, focus?: ItemFocusType) {
+    async handleLinkScript(type: ItemType, scriptConfig: ScriptConfig, context: ScriptContext, focus?: ItemFocusType) {
         type ScriptType = Extract<keyof typeof LINK_OPTIONS, ItemType.Dataview | ItemType.JavaScript | ItemType.JsEngine | ItemType.Templater>;
         const adapter = this.ntb.adapters.getAdapterForItemType(type);
         if (!adapter) {
@@ -230,16 +232,16 @@ export default class ToolbarItemHandler {
         let result;
         switch (type) {
             case ItemType.Dataview:
-                result = await this.ntb.adapters.dv?.use(scriptConfig);
+                result = await this.ntb.adapters.dv?.use(scriptConfig, context);
                 break;
             case ItemType.JavaScript:
-                result = await this.ntb.adapters.js?.use(scriptConfig);
+                result = await this.ntb.adapters.js?.use(scriptConfig, context);
                 break;
             case ItemType.JsEngine:
-                result = await this.ntb.adapters.jsEngine?.use(scriptConfig);
+                result = await this.ntb.adapters.jsEngine?.use(scriptConfig, context);
                 break;
             case ItemType.Templater:
-                result = await this.ntb.adapters.tp?.use(scriptConfig);
+                result = await this.ntb.adapters.tp?.use(scriptConfig, context);
                 break;
         }
         if (result) insertTextAtCursor(this.ntb.app, result);
@@ -250,6 +252,7 @@ export default class ToolbarItemHandler {
     }
 
     async handleLinkUri(linkHref: string, event?: MouseEvent | KeyboardEvent, item?: ToolbarItemSettings) {
+        this.ntb.debug('Opening URI:', linkHref); // helpful message in case URI uses var and/or issues an error
         if (isValidUri(linkHref)) {
             const target = getLinkUiTarget(event) ?? item?.linkAttr.target as PaneType | 'modal';
 
@@ -366,9 +369,10 @@ export default class ToolbarItemHandler {
 	async getItemText(toolbarItem: ToolbarItemSettings, file: TFile | null, truncate: boolean = false, resolveVars = true): Promise<string> {
         let itemText: string;
         if (resolveVars) {
+            const errorContext = { errorBehavior: ErrorBehavior.Console, item: toolbarItem };
             itemText = toolbarItem.label ? 
-                (this.ntb.vars.hasVars(toolbarItem.label) ? await this.ntb.vars.replaceVars(toolbarItem.label, file) : toolbarItem.label) : 
-                (this.ntb.vars.hasVars(toolbarItem.tooltip) ? await this.ntb.vars.replaceVars(toolbarItem.tooltip, file) : toolbarItem.tooltip);
+                (this.ntb.vars.hasVars(toolbarItem.label) ? await this.ntb.vars.replaceVars(toolbarItem.label, file, { ...errorContext, component: 'label' }) : toolbarItem.label) : 
+                (this.ntb.vars.hasVars(toolbarItem.tooltip) ? await this.ntb.vars.replaceVars(toolbarItem.tooltip, file, { ...errorContext, component: 'tooltip' }) : toolbarItem.tooltip);
         }
         else {
             itemText = toolbarItem.label || toolbarItem.tooltip || '';
