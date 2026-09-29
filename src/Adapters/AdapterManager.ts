@@ -9,6 +9,7 @@ import TemplaterAdapter from "./TemplaterAdapter";
 export default class AdapterManager {
 
     private internalPluginsEnabled: { [key: string]: boolean } = {
+        'file-explorer': false,
         'page-preview': false,
         'webviewer': false,
     }

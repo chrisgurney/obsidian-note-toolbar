@@ -1,6 +1,6 @@
 import { Adapter } from "Adapters/Adapter";
 import NoteToolbarPlugin from "main";
-import { ButtonComponent, debounce, DropdownComponent, ExtraButtonComponent, MarkdownViewModeType, Menu, MenuItem, normalizePath, Notice, PaneType, Platform, setIcon, Setting, SettingGroup, ToggleComponent } from "obsidian";
+import { ButtonComponent, debounce, DropdownComponent, ExtraButtonComponent, FileExplorerPlugin, MarkdownViewModeType, Menu, MenuItem, normalizePath, Notice, PaneType, Platform, setIcon, Setting, SettingGroup, ToggleComponent } from "obsidian";
 import { ComponentType, ItemType, LINK_OPTIONS, RibbonItem, SETTINGS_DISCLAIMERS, SettingType, t, TARGET_OPTIONS, ToolbarItemSettings, ToolbarSettings, ViewModeType } from "Settings/NoteToolbarSettings";
 import { addComponentVisibility, getElementPosition, removeComponentVisibility } from "Utils/Utils";
 import CopyTextModal from "../Modals/CopyTextModal";
@@ -1227,11 +1227,17 @@ export default class ToolbarItemUi {
                             });
                         break;
                 }
-                // TODO: add link to script file here using callback to open file?
                 if (setting && param.description) {
                     const fieldHelp = createDiv();
                     fieldHelp.setText(param.description);
                     fieldHelp.addClass('note-toolbar-setting-field-help');
+
+                    // adds link to reveal the script file in the file explorer
+                    if (param.type === SettingType.File) {
+                        const revealLinkFr = this.revealFileFr(config[param.parameter]);
+                        if (revealLinkFr) fieldHelp.append(' ', revealLinkFr);
+                    }
+
                     setting.controlEl.insertAdjacentElement('beforeend', fieldHelp);
                 }
             });
@@ -1371,6 +1377,38 @@ export default class ToolbarItemUi {
 
     renderPreview(toolbarItem: ToolbarItemSettings) {
         if (this.parent instanceof ToolbarSettingsModal) this.parent.itemListUi.renderItemPreview(toolbarItem);
+    }
+
+    /**
+     * Returns a clickable link that reveals the given file in the file explorer (if enabled).
+     * @param filename 
+     * @returns DocumentFragment
+     */
+    revealFileFr(filename: string | undefined): DocumentFragment | undefined {
+        let revealLink: DocumentFragment | undefined;
+        if (filename && this.ntb.adapters.isInternalPluginEnabled('file-explorer')) {
+            revealLink = new DocumentFragment();
+            revealLink.createEl('a', { 
+                cls: "note-toolbar-setting-focussable-link", 
+                text: "Reveal", 
+                attr: { 'aria-label': "Show file in navigator", tabindex: '0' }
+            }, el => {
+                const reveal = () => {
+                  const file = this.ntb.app.vault.getFileByPath(filename);
+                    if (!file) return;
+                    (this.ntb.app.internalPlugins.getEnabledPluginById('file-explorer') as FileExplorerPlugin).revealInFolder(file);
+                    this.parent.close();
+                }
+                this.ntb.registerDomEvent(el, 'click', reveal);
+                this.ntb.registerDomEvent(el, 'keydown', event => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        reveal();
+                    }
+                });
+            });
+        }
+        return revealLink;
     }
 
 	/**
