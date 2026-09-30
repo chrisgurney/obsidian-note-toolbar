@@ -20,14 +20,15 @@ body .workspace .note-toolbar-launchpad {
         margin-right: auto;
         max-width: var(--cg-nt-launchpad-max-width);
         & ul[role="menu"] {
-            display: grid;
+            display: flex;
+            flex-wrap: wrap;
             gap: 1rem;
-            grid-template-columns: repeat(var(--cg-nt-launchpad-cols-desktop), 1fr);
-            .is-mobile & {
-                grid-template-columns: repeat(var(--cg-nt-launchpad-cols-mobile), 1fr);
-            }
             margin: 0 auto;
             & li {
+                flex: 1 1 calc((100% - (var(--cg-nt-launchpad-cols-desktop) - 1) * 1rem) / var(--cg-nt-launchpad-cols-desktop));
+                .is-mobile & {
+                    flex: 1 1 calc((100% - (var(--cg-nt-launchpad-cols-mobile) - 1) * 1rem) / var(--cg-nt-launchpad-cols-mobile));
+                }
                 background-color: var(--cg-nt-launchpad-item-bg-color);
                 border-radius: var(--cg-nt-launchpad-item-border-radius);
                 display: flex;
