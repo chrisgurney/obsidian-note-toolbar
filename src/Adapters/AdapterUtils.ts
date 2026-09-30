@@ -333,17 +333,17 @@ export function handleScriptError(
     const formattedExpression = formatExpression(expression);
 
     const errorMessage = context?.scriptFile
-        ? t('adapter.error.exec-failed_context', {
+        ? t('adapter.error.title') + t('adapter.error.exec-failed_context', {
             context: formattedContext,
             filename: getFileUri(ntb, context.scriptFile),
             expression: formattedExpression
         })
         : context
-            ? t('adapter.error.expr-failed_context', {
+            ? t('adapter.error.title') + t('adapter.error.expr-failed_context', {
                 context: formattedContext,
                 expression: formattedExpression
             })
-            : t('adapter.error.expr-failed', {
+            : t('adapter.error.title') + t('adapter.error.expr-failed', {
                 expression: formattedExpression
             });
 
@@ -363,10 +363,10 @@ export function handleScriptError(
         // case ErrorBehavior.Display: {
         //     let errorMessage;
         //     if (context) {
-        //         errorMessage = t('adapter.error.expr-failed_context', { context: formatScriptContext(ntb, context), expression: displayExpression });
+        //         errorMessage = t('adapter.error.title') + t('adapter.error.expr-failed_context', { context: formatScriptContext(ntb, context), expression: displayExpression });
         //     }
         //     else {
-        //         errorMessage = t('adapter.error.expr-failed_item', { expression: displayExpression });
+        //         errorMessage = t('adapter.error.title') + t('adapter.error.expr-failed_item', { expression: displayExpression });
         //     }
         //     displayScriptError( error, errorMessage, containerEl );
         //     return t('adapter.error.general', { error }) + '\n';
@@ -392,10 +392,10 @@ export function handleScriptError(
         // case ErrorBehavior.Inline: {
         //     let errorMessage;
         //     if (context) {
-        //         errorMessage = t('adapter.error.expr-failed_context', { context: formatScriptContext(ntb, context), expression: displayExpression });
+        //         errorMessage = t('adapter.error.title') + t('adapter.error.expr-failed_context', { context: formatScriptContext(ntb, context), expression: displayExpression });
         //     }
         //     else {
-        //         errorMessage = t('adapter.error.expr-failed_item', { expression: displayExpression });
+        //         errorMessage = t('adapter.error.title') + t('adapter.error.expr-failed_item', { expression: displayExpression });
         //     }
         //     console.error(errorMessage, '\n\n', error);
         //     new Notice(errorMessage + '\n\n' + String(error), 10000).containerEl.addClass('mod-warning');
@@ -405,15 +405,15 @@ export function handleScriptError(
         // case ErrorBehavior.Report: {
         //     let errorMessage;
         //     if (context?.scriptFile) {
-        //         errorMessage = t('adapter.error.exec-failed_context', { context: formatScriptContext(ntb, context), filename: getFileUri(ntb, context?.scriptFile), expression: displayExpression });
+        //         errorMessage = t('adapter.error.title') + t('adapter.error.exec-failed_context', { context: formatScriptContext(ntb, context), filename: getFileUri(ntb, context?.scriptFile), expression: displayExpression });
         //         console.error(errorMessage, '\n\n', error);
         //         return t('adapter.error.general_file', { filename: `[[${context?.scriptFile.path}]]`, error }) + '\n';
         //     }
         //     else if (context) {
-        //         errorMessage = t('adapter.error.expr-failed_context', { context: formatScriptContext(ntb, context), expression: displayExpression });
+        //         errorMessage = t('adapter.error.title') + t('adapter.error.expr-failed_context', { context: formatScriptContext(ntb, context), expression: displayExpression });
         //     }
         //     else {
-        //         errorMessage = t('adapter.error.expr-failed', { expression: displayExpression });              
+        //         errorMessage = t('adapter.error.title') + t('adapter.error.expr-failed', { expression: displayExpression });              
         //     }
         //     console.error(errorMessage, '\n\n', error);
         //     new Notice(errorMessage + '\n\n' + String(error), 10000).containerEl.addClass('mod-warning');

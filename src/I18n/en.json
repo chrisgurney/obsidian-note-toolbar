@@ -33,11 +33,11 @@
                 "item": "item ({{- item}})",
                 "script": "script ({{- script}})"
             },
-            "exec-failed": "Note Toolbar: Failed to execute script: {{- filename}}",
-            "exec-failed_context": "Note Toolbar: Failed to execute: {{- context}}:\n{{- filename}}",
-            "expr-failed": "Note Toolbar: Failed to evaluate:\n{{- expression}}",
-            "expr-failed_context": "Note Toolbar: Failed to evaluate: {{- context}}:\n{{- expression}}",
-            "expr-failed_item": "Note Toolbar: Failed to evaluate item variable expression:\n{{- expression}}",
+            "exec-failed": "Failed to execute script: {{- filename}}",
+            "exec-failed_context": "Failed to execute: {{- context}}:\n{{- filename}}",
+            "expr-failed": "Failed to evaluate:\n{{- expression}}",
+            "expr-failed_context": "Failed to evaluate: {{- context}}:\n{{- expression}}",
+            "expr-failed_item": "Failed to evaluate item variable expression:\n{{- expression}}",
             "expr-note-not-open": "This expression must be executed from an open note.",
             "file-empty": "File is empty: {{- filename}}",
             "file-not-found": "File not found: {{- filename}}",
@@ -49,7 +49,8 @@
             "plugin-disabled": "Plugin not installed and enabled: ",
             "plugin-not-installed": "This item uses a plugin that is not installed and enabled.",
             "query-note-not-open": "This query must be run from an open note.",
-            "scripting-disabled": "Enable Scripting in Note Toolbar settings to use this item."
+            "scripting-disabled": "Enable Scripting in Note Toolbar settings to use this item.",
+            "title": "Note Toolbar error:\n"
         },
         "javascript": {
             "eval-expr": "JavaScript expression",
@@ -80,7 +81,7 @@
             "importexec-sourcefunction": "Function (optional)",
             "importexec-sourcefunction-description": "If the script has functions, function name to execute."
         },
-        "link-edit-item": "Edit item",
+        "link-edit-item": "Edit item →",
         "link-edit-item_tooltip": "Open item settings",
         "option-advanced": "Advanced settings",
         "option-advanced-tooltip": "Open advanced settings",
@@ -363,7 +364,7 @@
         "button-help-tooltip": "Open the Help tab",
         "button-learn-more": "Learn\u00A0more",
         "button-user-guide": "User\u00A0Guide",
-        "button-reveal-file": "Reveal",
+        "button-reveal-file": "Show\u00A0file",
         "button-reveal-file-tooltip": "Show file in navigator",
         "button-whats-new": "What's\u00A0new?",
         "button-whats-new-tooltip": "Open a note about what's new",
