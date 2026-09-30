@@ -98,40 +98,37 @@ export default class TemplaterAdapter extends Adapter {
             case 'appendTemplate':
                 result = config.sourceFile
                     ? await this.appendTemplate(config.sourceFile)
-                    : t('adapter.templater.append-sourcefile-error-required');
+                    : displayScriptError(this.ntb, t('adapter.templater.append-sourcefile-error-required'), errorContext);
                 break;
             case 'createFrom':
                 result = config.sourceFile
                     ? await this.createFrom(config.sourceFile, errorContext, config.outputFile)
-                    : t('adapter.templater.create-sourcefile-error-required');
+                    : displayScriptError(this.ntb, t('adapter.templater.create-sourcefile-error-required'), errorContext);
                 break;
             case 'parseTemplate':
                 result = config.expression
                     ? await this.parseTemplate(config.expression, errorContext)
-                    : t('adapter.templater.eval-expr-error-required');
+                    : displayScriptError(this.ntb, t('adapter.templater.eval-expr-error-required'), errorContext);
                 break;
             // internal function for inline evaluations in which errors should be reported
             case 'parseInline':
                 result = config.expression
                     ? await this.parseTemplate(config.expression, errorContext)
-                    : t('adapter.templater.eval-expr-error-required');
+                    : displayScriptError(this.ntb, t('adapter.templater.eval-expr-error-required'), errorContext);
                 break;
             // internal function for inline evaluations in which errors can be ignored
             case 'parseIgnore':
                 result = config.expression
                     ? await this.parseTemplate(config.expression, errorContext)
-                    : t('adapter.templater.eval-expr-error-required');
+                    : displayScriptError(this.ntb, t('adapter.templater.eval-expr-error-required'), errorContext);
                 break;
             case 'parseTemplateFile':
                 result = config.sourceFile
                     ? await this.parseTemplateFile(config.sourceFile, errorContext)
-                    : t('adapter.templater.exec-sourcefile-error-required');
-                break;
-            case '':
-                // do nothing
+                    : displayScriptError(this.ntb, t('adapter.templater.exec-sourcefile-error-required'), errorContext);
                 break;
             default:
-                result = t('adapter.error.function-invalid', { function: config.pluginFunction });
+                displayScriptError(this.ntb, t('adapter.error.function-invalid', { function: config.pluginFunction }), errorContext);
                 break;
         }
 

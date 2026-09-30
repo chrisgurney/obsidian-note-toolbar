@@ -61,30 +61,27 @@ export default class JavaScriptAdapter extends Adapter {
             case 'evaluate':
                 result = config.expression
                     ? await this.evaluate(config.expression, errorContext, undefined, containerEl)
-                    : t('adapter.javascript.eval-expr-error-required');
+                    : displayScriptError(this.ntb, t('adapter.javascript.eval-expr-error-required'), errorContext);
                 break;
             // internal function for inline evaluations in which errors should be reported
             case 'evaluateInline':
                 result = config.expression
                     ? await this.evaluate(config.expression, errorContext, undefined, containerEl)
-                    : t('adapter.javascript.eval-expr-error-required');
+                    : displayScriptError(this.ntb, t('adapter.javascript.eval-expr-error-required'), errorContext);
                 break;
             // internal function for inline evaluations in which errors can be ignored
             case 'evaluateIgnore':
                 result = config.expression
                     ? await this.evaluate(config.expression, errorContext, undefined, containerEl)
-                    : t('adapter.javascript.eval-expr-error-required');
+                    : displayScriptError(this.ntb, t('adapter.javascript.eval-expr-error-required'), errorContext);
                 break;
             case 'exec':
                 result = config.sourceFile
                     ? await this.exec(config.sourceFile, errorContext, config.sourceArgs, containerEl)
-                    : t('adapter.javascript.exec-error-required');
-                break;
-            case '':
-                // do nothing
+                    : displayScriptError(this.ntb, t('adapter.javascript.exec-error-required'), errorContext);
                 break;
             default:
-                result = t('adapter.error.function-invalid', { function: config.pluginFunction });
+                displayScriptError(this.ntb, t('adapter.error.function-invalid', { function: config.pluginFunction }), errorContext);
                 break;
         }
 
