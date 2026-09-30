@@ -1390,8 +1390,8 @@ export default class ToolbarItemUi {
             revealLink = new DocumentFragment();
             revealLink.createEl('a', { 
                 cls: "note-toolbar-setting-focussable-link", 
-                text: "Reveal", 
-                attr: { 'aria-label': "Show file in navigator", tabindex: '0' }
+                text: t('setting.button-reveal-file'), 
+                attr: { 'aria-label': t('setting.button-reveal-file-tooltip'), tabindex: '0' }
             }, el => {
                 const reveal = () => {
                   const file = this.ntb.app.vault.getFileByPath(filename);

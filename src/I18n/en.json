@@ -365,6 +365,8 @@
         "button-help-tooltip": "Open the Help tab",
         "button-learn-more": "Learn\u00A0more",
         "button-user-guide": "User\u00A0Guide",
+        "button-reveal-file": "Reveal",
+        "button-reveal-file-tooltip": "Show file in navigator",
         "button-whats-new": "What's\u00A0new?",
         "button-whats-new-tooltip": "Open a note about what's new",
         "command-suggest-modal": {
