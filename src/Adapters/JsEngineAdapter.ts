@@ -4,7 +4,7 @@ import { ItemType, ScriptConfig, ScriptContext, SettingType, t } from "Settings/
 import { learnMoreFr } from "Settings/UI/Utils/SettingsUIUtils";
 import { AdapterFunction } from "Types/interfaces";
 import { Adapter } from "./Adapter";
-import { checkArgs, checkFileLink, checkOutputContainer, displayScriptError, handleScriptError } from "./AdapterUtils";
+import { checkArgs, checkOutputContainer, displayScriptError, handleScriptError } from "./AdapterUtils";
 
 type JsEngineResult = {
     functionBuildError?: Error;
@@ -294,12 +294,14 @@ export default class JsEngineAdapter extends Adapter {
         const resultEl = containerEl || createSpan();
 
         const activeFilePath = this.ntb.app.workspace.getActiveFile()?.path ?? '';
-        const scriptFile = checkFileLink(this.ntb, filename);
+        // FIXME: this isn't necessarily the same as the executed file (check what executeFile does internally)
+        // const scriptFile = checkFileLink(this.ntb, filename);
 
         const component = new Component();
         component.load();
         try {
             containerEl?.empty();
+            this.ntb.debug(`Note Toolbar: Executing:\n${filename}`);
             const execution = await this.adapterApi?.internal.executeFile(filename, {
                 container: resultEl,
                 component: component,
@@ -316,7 +318,7 @@ export default class JsEngineAdapter extends Adapter {
         }
         catch (error) {
             // NOTE: it appears errors from JS Engine's executeFile are not thrown up to here...
-            errorContext['scriptFile'] = scriptFile;
+            errorContext['scriptFile'] = filename;
             result = handleScriptError(this.ntb, error, '', errorContext, containerEl) ?? result;
         }
         finally {
