@@ -319,7 +319,7 @@ export function getFileUri(ntb: NoteToolbarPlugin, file: TFile) {
  * @param containerEl optional container to output to
  * @returns 
  */
-export function handleScriptError(
+export function handleError(
     ntb: NoteToolbarPlugin,
     error: unknown,
     expression: string,

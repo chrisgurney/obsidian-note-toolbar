@@ -4,7 +4,7 @@ import { ItemType, ScriptConfig, ScriptContext, SettingType, t } from "Settings/
 import { learnMoreFr } from "Settings/UI/Utils/SettingsUIUtils";
 import { AdapterFunction } from "Types/interfaces";
 import { Adapter } from "./Adapter";
-import { checkArgs, checkOutputContainer, displayError, handleScriptError } from "./AdapterUtils";
+import { checkArgs, checkOutputContainer, displayError, handleError } from "./AdapterUtils";
 
 type JsEngineResult = {
     functionBuildError?: Error;
@@ -201,7 +201,7 @@ export default class JsEngineAdapter extends Adapter {
             result = execution.result as string;
         }
         catch (error) {
-            result = handleScriptError(this.ntb, error, expression, errorContext, containerEl) ?? result;
+            result = handleError(this.ntb, error, expression, errorContext, containerEl) ?? result;
         } 
         finally {
             component.unload();
@@ -263,11 +263,11 @@ export default class JsEngineAdapter extends Adapter {
                         this.ntb.debug('importExec() result:', result);
                     }
                     catch (error) {
-                        result = handleScriptError(this.ntb, error, String(module[functionName]), errorContext) ?? result;
+                        result = handleError(this.ntb, error, String(module[functionName]), errorContext) ?? result;
                     }
                 }
                 else {
-                    result = handleScriptError(this.ntb, t('adapter.error.function-not-found', { function: functionName }), String(module[functionName]), errorContext) ?? result;
+                    result = handleError(this.ntb, t('adapter.error.function-not-found', { function: functionName }), String(module[functionName]), errorContext) ?? result;
                 }
             }
         }
@@ -316,7 +316,7 @@ export default class JsEngineAdapter extends Adapter {
         catch (error) {
             // NOTE: it appears errors from JS Engine's executeFile are not thrown up to here...
             errorContext['scriptFile'] = filename;
-            result = handleScriptError(this.ntb, error, '', errorContext, containerEl) ?? result;
+            result = handleError(this.ntb, error, '', errorContext, containerEl) ?? result;
         }
         finally {
             component.unload();

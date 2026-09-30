@@ -3,7 +3,7 @@ import { Component, MarkdownRenderer, Plugin } from "obsidian";
 import { ItemType, ScriptConfig, ScriptContext, SettingType, t } from "Settings/NoteToolbarSettings";
 import { AdapterFunction } from "Types/interfaces";
 import { Adapter } from "./Adapter";
-import { checkActiveFile, checkArgs, checkFileLink, checkOutputContainer, displayError, formatExpression, handleScriptError } from "./AdapterUtils";
+import { checkActiveFile, checkArgs, checkFileLink, checkOutputContainer, displayError, formatExpression, handleError } from "./AdapterUtils";
 
 type DataviewResult = {
     error: Error;
@@ -191,7 +191,7 @@ export default class DataviewAdapter extends Adapter {
             }
         }
         catch (error) {
-            result = handleScriptError(this.ntb, error, expression, errorContext, containerEl) ?? result;
+            result = handleError(this.ntb, error, expression, errorContext, containerEl) ?? result;
         }
         finally {
             component.unload();
@@ -264,7 +264,7 @@ export default class DataviewAdapter extends Adapter {
                 }
             }
             catch (error) {
-                result = handleScriptError(this.ntb, error, contents, errorContext, containerEl) ?? result;
+                result = handleError(this.ntb, error, contents, errorContext, containerEl) ?? result;
             }
             finally {
                 containerEl.addEventListener('remove', () => component.unload(), { once: true });
@@ -320,7 +320,7 @@ export default class DataviewAdapter extends Adapter {
             }
         }
         catch (error) {
-            result = handleScriptError(this.ntb, error, expression, errorContext, containerEl) ?? result;
+            result = handleError(this.ntb, error, expression, errorContext, containerEl) ?? result;
         }
         finally {
             component.unload();
@@ -377,7 +377,7 @@ export default class DataviewAdapter extends Adapter {
             }
         }
         catch (error) {
-            result = handleScriptError(this.ntb, error, expression, errorContext, containerEl) ?? result;
+            result = handleError(this.ntb, error, expression, errorContext, containerEl) ?? result;
         }
         finally {
 			component.unload();

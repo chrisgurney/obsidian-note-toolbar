@@ -4,7 +4,7 @@ import { ScriptConfig, ScriptContext, SettingType, t } from "Settings/NoteToolba
 import { learnMoreFr } from "Settings/UI/Utils/SettingsUIUtils";
 import { AdapterFunction } from "Types/interfaces";
 import { Adapter } from "./Adapter";
-import { checkArgs, checkFileLink, checkOutputContainer, displayError, formatExpression, handleScriptError } from "./AdapterUtils";
+import { checkArgs, checkFileLink, checkOutputContainer, displayError, formatExpression, handleError } from "./AdapterUtils";
 
 /**
  * Adapter for JavaScript scripts.
@@ -168,7 +168,7 @@ export default class JavaScriptAdapter extends Adapter {
                 }
             }
             catch (error) {
-                result = handleScriptError(this.ntb, error, expression, errorContext, containerEl) ?? result;
+                result = handleError(this.ntb, error, expression, errorContext, containerEl) ?? result;
             }
             finally {
                 component.unload();

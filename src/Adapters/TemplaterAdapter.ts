@@ -3,7 +3,7 @@ import { Plugin, TFile } from "obsidian";
 import { ErrorBehavior, ItemType, ScriptConfig, ScriptContext, SettingType, t } from "Settings/NoteToolbarSettings";
 import { AdapterFunction } from "Types/interfaces";
 import { Adapter } from "./Adapter";
-import { checkActiveFile, checkFile, displayError, handleScriptError } from "./AdapterUtils";
+import { checkActiveFile, checkFile, displayError, handleError } from "./AdapterUtils";
 
 type TemplaterRunningConfig = {
     template_file: TFile | undefined;
@@ -246,7 +246,7 @@ export default class TemplaterAdapter extends Adapter {
             }
         }
         catch (error) {
-            result = handleScriptError(this.ntb, error, expression, errorContext) ?? result;
+            result = handleError(this.ntb, error, expression, errorContext) ?? result;
         }
 
         return result;
@@ -291,7 +291,7 @@ export default class TemplaterAdapter extends Adapter {
         }
         catch (error) {
             errorContext['scriptFile'] = templateFile;
-            result = handleScriptError(this.ntb, error, '', errorContext) ?? result;
+            result = handleError(this.ntb, error, '', errorContext) ?? result;
         }
 
         return result;
