@@ -326,8 +326,7 @@ export function handleScriptError(
     context: ScriptContext,
     containerEl?: HTMLElement
 ): string | undefined {
-    if (!context) ntb.debug('⚠️ CONTEXT IS EMPTY') 
-        else ntb.debug('CONTEXT', context, context.errorBehavior);
+    ntb.debug('CONTEXT', context, context.errorBehavior);
 
     const formattedContext = context ? formatScriptContext(ntb, context) : undefined;
     const formattedExpression = formatExpression(expression);
@@ -359,66 +358,16 @@ export function handleScriptError(
             else {
                 return t('adapter.error.general', { error }) + '\n';
             }
-            
-        // case ErrorBehavior.Display: {
-        //     let errorMessage;
-        //     if (context) {
-        //         errorMessage = t('adapter.error.title') + t('adapter.error.expr-failed_context', { context: formatScriptContext(ntb, context), expression: displayExpression });
-        //     }
-        //     else {
-        //         errorMessage = t('adapter.error.title') + t('adapter.error.expr-failed_item', { expression: displayExpression });
-        //     }
-        //     displayScriptError( error, errorMessage, containerEl );
-        //     return t('adapter.error.general', { error }) + '\n';
-        // }
 
         case ErrorBehavior.Report:
             displayError(ntb, error, context, errorMessage, containerEl);
-            // console.error(errorMessage, '\n\n', error);
-            // new Notice(
-            //     errorMessage + '\n\n' + formatErrorMessage(error),
-            //     10000
-            // ).containerEl.addClass('mod-warning');
-
             if (context?.scriptFile) {
                 return t('adapter.error.general_file', {
                     filename: `[[${context.scriptFile instanceof TFile ? context.scriptFile.path : context.scriptFile}]]`,
                     error
                 }) + '\n';
             }
-
             return undefined;
-
-        // case ErrorBehavior.Inline: {
-        //     let errorMessage;
-        //     if (context) {
-        //         errorMessage = t('adapter.error.title') + t('adapter.error.expr-failed_context', { context: formatScriptContext(ntb, context), expression: displayExpression });
-        //     }
-        //     else {
-        //         errorMessage = t('adapter.error.title') + t('adapter.error.expr-failed_item', { expression: displayExpression });
-        //     }
-        //     console.error(errorMessage, '\n\n', error);
-        //     new Notice(errorMessage + '\n\n' + String(error), 10000).containerEl.addClass('mod-warning');
-        //     return undefined;
-        // }
-
-        // case ErrorBehavior.Report: {
-        //     let errorMessage;
-        //     if (context?.scriptFile) {
-        //         errorMessage = t('adapter.error.title') + t('adapter.error.exec-failed_context', { context: formatScriptContext(ntb, context), filename: getFileUri(ntb, context?.scriptFile), expression: displayExpression });
-        //         console.error(errorMessage, '\n\n', error);
-        //         return t('adapter.error.general_file', { filename: `[[${context?.scriptFile.path}]]`, error }) + '\n';
-        //     }
-        //     else if (context) {
-        //         errorMessage = t('adapter.error.title') + t('adapter.error.expr-failed_context', { context: formatScriptContext(ntb, context), expression: displayExpression });
-        //     }
-        //     else {
-        //         errorMessage = t('adapter.error.title') + t('adapter.error.expr-failed', { expression: displayExpression });              
-        //     }
-        //     console.error(errorMessage, '\n\n', error);
-        //     new Notice(errorMessage + '\n\n' + String(error), 10000).containerEl.addClass('mod-warning');
-        //     return undefined;
-        // }
 
         case ErrorBehavior.Console:
             console.error(errorMessage, '\n\n', error);
