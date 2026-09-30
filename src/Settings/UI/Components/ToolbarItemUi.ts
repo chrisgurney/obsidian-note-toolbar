@@ -1236,6 +1236,8 @@ export default class ToolbarItemUi {
                     if (param.type === SettingType.File) {
                         const revealLinkFr = this.revealFileFr(config[param.parameter]);
                         if (revealLinkFr) fieldHelp.append(' ', revealLinkFr);
+                        const openFileFr = this.openFileFr(config[param.parameter]);
+                        if (openFileFr) fieldHelp.append(' ', openFileFr);
                     }
 
                     setting.controlEl.insertAdjacentElement('beforeend', fieldHelp);
@@ -1409,6 +1411,38 @@ export default class ToolbarItemUi {
             });
         }
         return revealLink;
+    }
+
+    /**
+     * Returns a clickable link that opens the given file via Obsidian.
+     * @param filename 
+     * @returns DocumentFragment
+     */
+    openFileFr(filename: string | undefined): DocumentFragment | undefined {
+        let openFileLink: DocumentFragment | undefined;
+        if (filename && this.ntb.adapters.isInternalPluginEnabled('file-explorer')) {
+            openFileLink = new DocumentFragment();
+            openFileLink.createEl('a', { 
+                cls: "note-toolbar-setting-focussable-link", 
+                text: t('setting.button-open-file'), 
+                attr: { 'aria-label': t('setting.button-open-file-tooltip'), tabindex: '0' }
+            }, el => {
+                const open = () => {
+                  const file = this.ntb.app.vault.getFileByPath(filename);
+                    if (!file) return;
+                    void this.ntb.app.workspace.getLeaf(false).openFile(file);
+                    this.parent.close();
+                }
+                this.ntb.registerDomEvent(el, 'click', open);
+                this.ntb.registerDomEvent(el, 'keydown', event => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        open();
+                    }
+                });
+            });
+        }
+        return openFileLink;
     }
 
 	/**

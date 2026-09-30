@@ -363,9 +363,11 @@
         "button-help": "Help",
         "button-help-tooltip": "Open the Help tab",
         "button-learn-more": "Learn\u00A0more",
-        "button-user-guide": "User\u00A0Guide",
+        "button-open-file": "Open\u00A0file",
+        "button-open-file-tooltip": "Open file in Obsidian, if supported",
         "button-reveal-file": "Show\u00A0file",
         "button-reveal-file-tooltip": "Show file in navigator",
+        "button-user-guide": "User\u00A0Guide",
         "button-whats-new": "What's\u00A0new?",
         "button-whats-new-tooltip": "Open a note about what's new",
         "command-suggest-modal": {
