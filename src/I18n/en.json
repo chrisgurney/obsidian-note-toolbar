@@ -21,9 +21,7 @@
             "query-function": "Execute query"
         },
         "error": {
-            "args-format": "Invalid argument format.",
             "args-parsing": "Failed to parse arguments",
-            "args-parsing-error": "Failed to parse arguments:\n```\n{{- error}}\n```",
             "args-parsing-field-error": "```\n{{- error}}\n```",
             "args-parsing-script-error": "Failed to parse arguments for script: {{- filename}}\n```\n{{- error}}\n```",
             "callout-not-found": "Error: Could not find note-toolbar-output callout in current note with ID: {{id}}",
@@ -37,7 +35,6 @@
             },
             "exec-failed": "Note Toolbar: Failed to execute script: {{- filename}}",
             "exec-failed_context": "Note Toolbar: Failed to execute: {{- context}}:\n{{- filename}}",
-            "exec-failed_expression": "Note Toolbar: Failed to execute script: {{- filename}}\n{{- expression}}",
             "expr-failed": "Note Toolbar: Failed to evaluate:\n{{- expression}}",
             "expr-failed_context": "Note Toolbar: Failed to evaluate: {{- context}}:\n{{- expression}}",
             "expr-failed_item": "Note Toolbar: Failed to evaluate item variable expression:\n{{- expression}}",
@@ -51,7 +48,6 @@
             "function-note-not-open": "This function must be executed from an open note.",
             "plugin-disabled": "Plugin not installed and enabled: ",
             "plugin-not-installed": "This item uses a plugin that is not installed and enabled.",
-            "query-failed": "Failed to evaluate query: {{- expression}}",
             "query-note-not-open": "This query must be run from an open note.",
             "scripting-disabled": "Enable Scripting in Note Toolbar settings to use this item."
         },
