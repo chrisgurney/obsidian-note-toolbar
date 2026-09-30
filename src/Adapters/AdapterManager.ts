@@ -1,6 +1,7 @@
 import NoteToolbarPlugin from "main";
 import { ItemType } from "Settings/NoteToolbarSettings";
 import { Adapter } from "./Adapter";
+import AdapterUtils from "./AdapterUtils";
 import DataviewAdapter from "./DataviewAdapter";
 import JavaScriptAdapter from "./JavaScriptAdapter";
 import JsEngineAdapter from "./JsEngineAdapter";
@@ -27,9 +28,13 @@ export default class AdapterManager {
 	jsEngine: JsEngineAdapter | undefined;
 	tp: TemplaterAdapter | undefined;
 
+    utils: AdapterUtils;
+
     constructor(
         private ntb: NoteToolbarPlugin
-    ) {}
+    ) {
+        this.utils = new AdapterUtils(ntb);
+    }
 
     /** 
      * Updates status of other installed plugins we're interested in.

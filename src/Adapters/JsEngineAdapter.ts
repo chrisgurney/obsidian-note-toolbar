@@ -4,7 +4,6 @@ import { ItemType, ScriptConfig, ScriptContext, SettingType, t } from "Settings/
 import { learnMoreFr } from "Settings/UI/Utils/SettingsUIUtils";
 import { AdapterFunction } from "Types/interfaces";
 import { Adapter } from "./Adapter";
-import { checkArgs, checkOutputContainer, displayError, handleError } from "./AdapterUtils";
 
 type JsEngineResult = {
     functionBuildError?: Error;
@@ -94,9 +93,9 @@ export default class JsEngineAdapter extends Adapter {
         settings: Record<string, string>;
     } & Plugin | null;
 
-    constructor(noteToolbar: NoteToolbarPlugin) {
-        const plugin = noteToolbar.app.plugins.plugins[ItemType.JsEngine] as { api: unknown, settings: unknown } & Plugin;
-        super(noteToolbar);
+    constructor(ntb: NoteToolbarPlugin) {
+        const plugin = ntb.app.plugins.plugins[ItemType.JsEngine] as { api: unknown, settings: unknown } & Plugin;
+        super(ntb);
         this.adapterPlugin = plugin as typeof this.adapterPlugin;
         this.adapterApi = this.adapterPlugin?.api as typeof this.adapterApi;
     }
@@ -117,38 +116,38 @@ export default class JsEngineAdapter extends Adapter {
 
         let result;
         
-        const containerEl = checkOutputContainer(this.ntb, config.outputContainer);
+        const containerEl = this.ntb.adapters.utils.checkContainer(config.outputContainer);
 
         switch (config.pluginFunction) {
             case 'evaluate':
                 result = config.expression
                     ? await this.evaluate(config.expression, errorContext, containerEl)
-                    : displayError(this.ntb, t('adapter.js-engine.eval-expr-error-required'), errorContext);
+                    : this.ntb.adapters.utils.displayError(t('adapter.js-engine.eval-expr-error-required'), errorContext);
                 break;
             // internal function for inline evaluations in which errors should be reported
             case 'evaluateInline':
                 result = config.expression
                     ? await this.evaluate(config.expression, errorContext, containerEl)
-                    : displayError(this.ntb, t('adapter.js-engine.eval-expr-error-required'), errorContext);
+                    : this.ntb.adapters.utils.displayError(t('adapter.js-engine.eval-expr-error-required'), errorContext);
                 break;
             // internal function for inline evaluations in which errors can be ignored
             case 'evaluateIgnore':
                 result = config.expression
                     ? await this.evaluate(config.expression, errorContext, containerEl)
-                    : displayError(this.ntb, t('adapter.js-engine.eval-expr-error-required'), errorContext);
+                    : this.ntb.adapters.utils.displayError(t('adapter.js-engine.eval-expr-error-required'), errorContext);
                 break;
             case 'exec':
                 result = config.sourceFile
                     ? await this.exec(config.sourceFile, errorContext, containerEl)
-                    : displayError(this.ntb, t('adapter.js-engine.exec-sourcefile-error-required'), errorContext);
+                    : this.ntb.adapters.utils.displayError(t('adapter.js-engine.exec-sourcefile-error-required'), errorContext);
                 break;
             case 'importExec':
                 result = config.sourceFile
                     ? await this.importExec(config.sourceFile, errorContext, config.sourceFunction, config.sourceArgs)
-                    : displayError(this.ntb, t('adapter.js-engine.importexec-sourcefile-error-required'), errorContext);
+                    : this.ntb.adapters.utils.displayError(t('adapter.js-engine.importexec-sourcefile-error-required'), errorContext);
                 break;
             default:
-                displayError(this.ntb, t('adapter.error.function-invalid', { function: config.pluginFunction }), errorContext);
+                this.ntb.adapters.utils.displayError(t('adapter.error.function-invalid', { function: config.pluginFunction }), errorContext);
                 break;
         }
 
@@ -182,7 +181,7 @@ export default class JsEngineAdapter extends Adapter {
         try {
             containerEl?.empty();
             if (!activeFile) {
-                displayError(this.ntb, t('adapter.error.query-note-not-open'));
+                this.ntb.adapters.utils.displayError(t('adapter.error.query-note-not-open'));
                 return t('adapter.error.query-note-not-open');
             }            
             const context: ExecutionContext = {
@@ -201,7 +200,7 @@ export default class JsEngineAdapter extends Adapter {
             result = execution.result as string;
         }
         catch (error) {
-            result = handleError(this.ntb, error, expression, errorContext, containerEl) ?? result;
+            result = this.ntb.adapters.utils.handleError(error, expression, errorContext, containerEl) ?? result;
         } 
         finally {
             component.unload();
@@ -237,7 +236,7 @@ export default class JsEngineAdapter extends Adapter {
 
         let result;
 
-        const args = checkArgs(this.ntb, argsJson, errorContext);
+        const args = this.ntb.adapters.utils.checkArgs(argsJson, errorContext);
         if (!args) return '';
         // ^ was previously:
         // if (importedArgs.value === null) {
@@ -263,11 +262,11 @@ export default class JsEngineAdapter extends Adapter {
                         this.ntb.debug('importExec() result:', result);
                     }
                     catch (error) {
-                        result = handleError(this.ntb, error, String(module[functionName]), errorContext) ?? result;
+                        result = this.ntb.adapters.utils.handleError(error, String(module[functionName]), errorContext) ?? result;
                     }
                 }
                 else {
-                    result = handleError(this.ntb, t('adapter.error.function-not-found', { function: functionName }), String(module[functionName]), errorContext) ?? result;
+                    result = this.ntb.adapters.utils.handleError(t('adapter.error.function-not-found', { function: functionName }), String(module[functionName]), errorContext) ?? result;
                 }
             }
         }
@@ -316,7 +315,7 @@ export default class JsEngineAdapter extends Adapter {
         catch (error) {
             // NOTE: it appears errors from JS Engine's executeFile are not thrown up to here...
             errorContext['scriptFile'] = filename;
-            result = handleError(this.ntb, error, '', errorContext, containerEl) ?? result;
+            result = this.ntb.adapters.utils.handleError(error, '', errorContext, containerEl) ?? result;
         }
         finally {
             component.unload();

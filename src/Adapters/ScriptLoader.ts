@@ -1,6 +1,5 @@
 import NoteToolbarPlugin from 'main';
 import { normalizePath, TFile } from 'obsidian';
-import { getScriptError } from './AdapterUtils';
 
 /**
  * Loads scripts to make them available for evaluated scripts.
@@ -48,7 +47,7 @@ export class ScriptLoader {
         }
         catch (error) {
             const notes = 'Error in script loaded by ntb.loadScript(): ';
-            throw getScriptError(this.ntb, error, sourceFile, notes);
+            throw this.ntb.adapters.utils.getScriptError(error, sourceFile, notes);
         }
     }
 

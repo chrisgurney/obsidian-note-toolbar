@@ -3,7 +3,6 @@ import { Component, MarkdownRenderer, Plugin } from "obsidian";
 import { ItemType, ScriptConfig, ScriptContext, SettingType, t } from "Settings/NoteToolbarSettings";
 import { AdapterFunction } from "Types/interfaces";
 import { Adapter } from "./Adapter";
-import { checkActiveFile, checkArgs, checkFileLink, checkOutputContainer, displayError, formatExpression, handleError } from "./AdapterUtils";
 
 type DataviewResult = {
     error: Error;
@@ -78,9 +77,9 @@ export default class DataviewAdapter extends Adapter {
         settings: Record<string, string>;
     } & Plugin | null;
 
-    constructor(noteToolbar: NoteToolbarPlugin) {
-        const plugin = noteToolbar.app.plugins.plugins[ItemType.Dataview] as { api: unknown, settings: unknown } & Plugin;
-        super(noteToolbar);
+    constructor(ntb: NoteToolbarPlugin) {
+        const plugin = ntb.app.plugins.plugins[ItemType.Dataview] as { api: unknown, settings: unknown } & Plugin;
+        super(ntb);
         this.adapterPlugin = plugin as typeof this.adapterPlugin;
         this.adapterApi = this.adapterPlugin?.api as typeof this.adapterApi;
     }
@@ -101,43 +100,43 @@ export default class DataviewAdapter extends Adapter {
 
         let result;
 
-        const containerEl = checkOutputContainer(this.ntb, config.outputContainer);
+        const containerEl = this.ntb.adapters.utils.checkContainer(config.outputContainer);
 
         switch (config.pluginFunction) {
             case 'evaluate':
                 result = config.expression
                     ? await this.evaluate(config.expression, errorContext, containerEl)
-                    : displayError(this.ntb, t('adapter.dataview.eval-expr-error-required'), errorContext);
+                    : this.ntb.adapters.utils.displayError(t('adapter.dataview.eval-expr-error-required'), errorContext);
                 break;
             // internal function for inline evaluations in which errors should be reported
             case 'evaluateInline':
                 result = config.expression
                     ? await this.evaluate(config.expression, errorContext, containerEl)
-                    : displayError(this.ntb, t('adapter.dataview.eval-expr-error-required'), errorContext);
+                    : this.ntb.adapters.utils.displayError(t('adapter.dataview.eval-expr-error-required'), errorContext);
                 break;
             // internal function for inline evaluations in which errors can be ignored
             case 'evaluateIgnore':
                 result = config.expression
                     ? await this.evaluate(config.expression, errorContext, containerEl)
-                    : displayError(this.ntb, t('adapter.dataview.eval-expr-error-required'), errorContext);
+                    : this.ntb.adapters.utils.displayError(t('adapter.dataview.eval-expr-error-required'), errorContext);
                 break;
             case 'exec':
                 result = config.sourceFile
                     ? await this.exec(config.sourceFile, errorContext, config.sourceArgs, containerEl)
-                    : displayError(this.ntb, t('adapter.dataview.exec-error-required'), errorContext);
+                    : this.ntb.adapters.utils.displayError(t('adapter.dataview.exec-error-required'), errorContext);
                 break;
             case 'executeJs':
                 result = config.expression
                     ? await this.executeJs(config.expression, errorContext, containerEl)
-                    : displayError(this.ntb, t('adapter.dataview.dvjs-expr-error-required'), errorContext);
+                    : this.ntb.adapters.utils.displayError(t('adapter.dataview.dvjs-expr-error-required'), errorContext);
                 break;
             case 'query':
                 result = config.expression
                     ? await this.query(config.expression, errorContext, containerEl)
-                    : displayError(this.ntb, t('adapter.dataview.query-expr-error-required'), errorContext);
+                    : this.ntb.adapters.utils.displayError(t('adapter.dataview.query-expr-error-required'), errorContext);
                 break;
             default:
-                displayError(this.ntb, t('adapter.error.function-invalid', { function: config.pluginFunction }), errorContext);
+                this.ntb.adapters.utils.displayError(t('adapter.error.function-invalid', { function: config.pluginFunction }), errorContext);
                 break;
         }
 
@@ -191,7 +190,7 @@ export default class DataviewAdapter extends Adapter {
             }
         }
         catch (error) {
-            result = handleError(this.ntb, error, expression, errorContext, containerEl) ?? result;
+            result = this.ntb.adapters.utils.handleError(error, expression, errorContext, containerEl) ?? result;
         }
         finally {
             component.unload();
@@ -219,12 +218,12 @@ export default class DataviewAdapter extends Adapter {
 
         if (!filename) return;
 
-        const scriptFile = checkFileLink(this.ntb, filename);
+        const scriptFile = this.ntb.adapters.utils.checkFileLink(filename);
         if (!scriptFile) return;
 
         errorContext = { ...errorContext, scriptFile };
 
-        const args = checkArgs(this.ntb, argsJson, errorContext, containerEl);
+        const args = this.ntb.adapters.utils.checkArgs(argsJson, errorContext, containerEl);
         if (!args) return '';
         // const importedArgs = argsJson ? importArgs(argsJson) : { value: {} };
         // if (importedArgs.value === null) {
@@ -264,7 +263,7 @@ export default class DataviewAdapter extends Adapter {
                 }
             }
             catch (error) {
-                result = handleError(this.ntb, error, contents, errorContext, containerEl) ?? result;
+                result = this.ntb.adapters.utils.handleError(error, contents, errorContext, containerEl) ?? result;
             }
             finally {
                 containerEl.addEventListener('remove', () => component.unload(), { once: true });
@@ -320,7 +319,7 @@ export default class DataviewAdapter extends Adapter {
             }
         }
         catch (error) {
-            result = handleError(this.ntb, error, expression, errorContext, containerEl) ?? result;
+            result = this.ntb.adapters.utils.handleError(error, expression, errorContext, containerEl) ?? result;
         }
         finally {
             component.unload();
@@ -347,14 +346,14 @@ export default class DataviewAdapter extends Adapter {
 
         let result = '';
 
-        const activeFile = checkActiveFile(this.ntb, errorContext.errorBehavior);
+        const activeFile = this.ntb.adapters.utils.checkActiveFile(errorContext.errorBehavior);
         if (!activeFile) return t('adapter.error.query-note-not-open');;
 
         const component = new Component();
         component.load();
         try {
             if (this.adapterApi) {
-                this.ntb.debug('Note Toolbar: Evaluating:\n', formatExpression(expression));
+                this.ntb.debug('Note Toolbar: Evaluating:\n', this.ntb.adapters.utils.formatExpression(expression));
                 // returns a Promise<Result<QueryResult, string>>
                 const dvResult = await this.adapterApi.queryMarkdown(expression, activeFile.path);
                 this.ntb.debug("Note Toolbar: Query result:\n", dvResult);
@@ -377,7 +376,7 @@ export default class DataviewAdapter extends Adapter {
             }
         }
         catch (error) {
-            result = handleError(this.ntb, error, expression, errorContext, containerEl) ?? result;
+            result = this.ntb.adapters.utils.handleError(error, expression, errorContext, containerEl) ?? result;
         }
         finally {
 			component.unload();
