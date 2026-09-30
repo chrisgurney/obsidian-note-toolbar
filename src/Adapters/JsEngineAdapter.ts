@@ -270,7 +270,7 @@ export default class JsEngineAdapter extends Adapter {
                     }
                 }
                 else {
-                    displayScriptError(this.ntb, t('adapter.error.function-not-found', { function: functionName }));
+                    displayScriptError(this.ntb, t('adapter.error.function-not-found', { function: functionName }), errorContext);
                 }
             }
         }
