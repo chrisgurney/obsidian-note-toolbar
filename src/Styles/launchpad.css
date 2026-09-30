@@ -61,7 +61,7 @@ body .workspace .note-toolbar-launchpad {
         border-radius: var(--button-radius);
         padding: 1em;
     }
-    &[data-callout-metadata*="glass"] {
+    &[data-callout-metadata*="glass"], &[data-callout-metadata*="mgls"] {
         & .callout-content ul[role="menu"] li {
             background-color: unset;
         }
