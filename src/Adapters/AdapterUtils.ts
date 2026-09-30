@@ -14,7 +14,7 @@ export function checkActiveFile(ntb: NoteToolbarPlugin, errorBehavior: ErrorBeha
     const activeFile = ntb.app.workspace.getActiveFile();
     if (!activeFile) {
         // TODO: render messages into the container, if provided
-        if (errorBehavior === ErrorBehavior.Display) displayScriptError(ntb, t('adapter.error.expr-note-not-open'));
+        if (errorBehavior === ErrorBehavior.Display) displayError(ntb, t('adapter.error.expr-note-not-open'));
         return;
     }
     return activeFile;
@@ -36,7 +36,7 @@ export function checkArgs(
     if (importedArgs.value === null) {
         // TODO: render messages into the container, if provided
         const errorMessage = t('adapter.error.args-parsing');
-        displayScriptError(ntb, importedArgs.error, errorContext, errorMessage, containerEl);
+        displayError(ntb, importedArgs.error, errorContext, errorMessage, containerEl);
         throw new Error(errorMessage);
     }
     return importedArgs.value;
@@ -53,7 +53,7 @@ export function checkFile(ntb: NoteToolbarPlugin, filename: string): TFile | und
     if (!file) {
         // TODO: render messages into the container, if provided
         const errorMessage = t('adapter.error.file-not-found', { filename: filename });
-        displayScriptError(ntb, errorMessage);
+        displayError(ntb, errorMessage);
         throw getScriptError(ntb, undefined, filename, errorMessage);
     }
     return file;
@@ -71,7 +71,7 @@ export function checkFileLink(ntb: NoteToolbarPlugin, filename: string): TFile |
     if (!file) {
         // TODO: render messages into the container, if provided
         const errorMessage = t('adapter.error.file-not-found', { filename: filename });
-        displayScriptError(ntb, errorMessage);
+        displayError(ntb, errorMessage);
         throw getScriptError(ntb, undefined, filename, errorMessage);
     }
     return file;
@@ -83,7 +83,7 @@ export function checkOutputContainer(ntb: NoteToolbarPlugin, containerId: string
         containerEl = ntb.el.getOutputEl(containerId) ?? undefined;
         if (!containerEl) {
             const errorMessage = t('adapter.error.callout-not-found', { id: containerId });
-            displayScriptError(ntb, errorMessage);
+            displayError(ntb, errorMessage);
             throw getScriptError(ntb, undefined, '', errorMessage);
         }
     }
@@ -98,7 +98,7 @@ export function checkOutputContainer(ntb: NoteToolbarPlugin, containerId: string
  * @param notes additional notes to display
  * @param containerEl optional output container
  */
-export function displayScriptError(
+export function displayError(
     ntb: NoteToolbarPlugin, 
     error: unknown, 
     context?: ScriptContext, 
@@ -349,7 +349,7 @@ export function handleScriptError(
 
     switch (context.errorBehavior) {
         case ErrorBehavior.Display: 
-            displayScriptError(ntb, error, context, errorMessage, containerEl);
+            displayError(ntb, error, context, errorMessage, containerEl);
             if (context?.scriptFile) {
                 return t('adapter.error.general_file', {
                     filename: `[[${context.scriptFile instanceof TFile ? context.scriptFile.path : context.scriptFile}]]`,
@@ -373,7 +373,7 @@ export function handleScriptError(
         // }
 
         case ErrorBehavior.Report:
-            displayScriptError(ntb, error, context, errorMessage, containerEl);
+            displayError(ntb, error, context, errorMessage, containerEl);
             // console.error(errorMessage, '\n\n', error);
             // new Notice(
             //     errorMessage + '\n\n' + formatErrorMessage(error),

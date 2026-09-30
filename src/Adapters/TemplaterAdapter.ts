@@ -3,7 +3,7 @@ import { Plugin, TFile } from "obsidian";
 import { ErrorBehavior, ItemType, ScriptConfig, ScriptContext, SettingType, t } from "Settings/NoteToolbarSettings";
 import { AdapterFunction } from "Types/interfaces";
 import { Adapter } from "./Adapter";
-import { checkActiveFile, checkFile, displayScriptError, handleScriptError } from "./AdapterUtils";
+import { checkActiveFile, checkFile, displayError, handleScriptError } from "./AdapterUtils";
 
 type TemplaterRunningConfig = {
     template_file: TFile | undefined;
@@ -98,37 +98,37 @@ export default class TemplaterAdapter extends Adapter {
             case 'appendTemplate':
                 result = config.sourceFile
                     ? await this.appendTemplate(config.sourceFile)
-                    : displayScriptError(this.ntb, t('adapter.templater.append-sourcefile-error-required'), errorContext);
+                    : displayError(this.ntb, t('adapter.templater.append-sourcefile-error-required'), errorContext);
                 break;
             case 'createFrom':
                 result = config.sourceFile
                     ? await this.createFrom(config.sourceFile, errorContext, config.outputFile)
-                    : displayScriptError(this.ntb, t('adapter.templater.create-sourcefile-error-required'), errorContext);
+                    : displayError(this.ntb, t('adapter.templater.create-sourcefile-error-required'), errorContext);
                 break;
             case 'parseTemplate':
                 result = config.expression
                     ? await this.parseTemplate(config.expression, errorContext)
-                    : displayScriptError(this.ntb, t('adapter.templater.eval-expr-error-required'), errorContext);
+                    : displayError(this.ntb, t('adapter.templater.eval-expr-error-required'), errorContext);
                 break;
             // internal function for inline evaluations in which errors should be reported
             case 'parseInline':
                 result = config.expression
                     ? await this.parseTemplate(config.expression, errorContext)
-                    : displayScriptError(this.ntb, t('adapter.templater.eval-expr-error-required'), errorContext);
+                    : displayError(this.ntb, t('adapter.templater.eval-expr-error-required'), errorContext);
                 break;
             // internal function for inline evaluations in which errors can be ignored
             case 'parseIgnore':
                 result = config.expression
                     ? await this.parseTemplate(config.expression, errorContext)
-                    : displayScriptError(this.ntb, t('adapter.templater.eval-expr-error-required'), errorContext);
+                    : displayError(this.ntb, t('adapter.templater.eval-expr-error-required'), errorContext);
                 break;
             case 'parseTemplateFile':
                 result = config.sourceFile
                     ? await this.parseTemplateFile(config.sourceFile, errorContext)
-                    : displayScriptError(this.ntb, t('adapter.templater.exec-sourcefile-error-required'), errorContext);
+                    : displayError(this.ntb, t('adapter.templater.exec-sourcefile-error-required'), errorContext);
                 break;
             default:
-                displayScriptError(this.ntb, t('adapter.error.function-invalid', { function: config.pluginFunction }), errorContext);
+                displayError(this.ntb, t('adapter.error.function-invalid', { function: config.pluginFunction }), errorContext);
                 break;
         }
 
@@ -157,7 +157,7 @@ export default class TemplaterAdapter extends Adapter {
                 }
             }
             catch (error) {
-                displayScriptError(this.ntb, error);
+                displayError(this.ntb, error);
             }
         }
 
@@ -193,7 +193,7 @@ export default class TemplaterAdapter extends Adapter {
                 }
             }
             catch (error) {
-                displayScriptError(this.ntb, error);
+                displayError(this.ntb, error);
             }
         }
 

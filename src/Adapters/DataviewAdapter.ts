@@ -3,7 +3,7 @@ import { Component, MarkdownRenderer, Plugin } from "obsidian";
 import { ItemType, ScriptConfig, ScriptContext, SettingType, t } from "Settings/NoteToolbarSettings";
 import { AdapterFunction } from "Types/interfaces";
 import { Adapter } from "./Adapter";
-import { checkActiveFile, checkArgs, checkFileLink, checkOutputContainer, displayScriptError, formatExpression, handleScriptError } from "./AdapterUtils";
+import { checkActiveFile, checkArgs, checkFileLink, checkOutputContainer, displayError, formatExpression, handleScriptError } from "./AdapterUtils";
 
 type DataviewResult = {
     error: Error;
@@ -107,37 +107,37 @@ export default class DataviewAdapter extends Adapter {
             case 'evaluate':
                 result = config.expression
                     ? await this.evaluate(config.expression, errorContext, containerEl)
-                    : displayScriptError(this.ntb, t('adapter.dataview.eval-expr-error-required'), errorContext);
+                    : displayError(this.ntb, t('adapter.dataview.eval-expr-error-required'), errorContext);
                 break;
             // internal function for inline evaluations in which errors should be reported
             case 'evaluateInline':
                 result = config.expression
                     ? await this.evaluate(config.expression, errorContext, containerEl)
-                    : displayScriptError(this.ntb, t('adapter.dataview.eval-expr-error-required'), errorContext);
+                    : displayError(this.ntb, t('adapter.dataview.eval-expr-error-required'), errorContext);
                 break;
             // internal function for inline evaluations in which errors can be ignored
             case 'evaluateIgnore':
                 result = config.expression
                     ? await this.evaluate(config.expression, errorContext, containerEl)
-                    : displayScriptError(this.ntb, t('adapter.dataview.eval-expr-error-required'), errorContext);
+                    : displayError(this.ntb, t('adapter.dataview.eval-expr-error-required'), errorContext);
                 break;
             case 'exec':
                 result = config.sourceFile
                     ? await this.exec(config.sourceFile, errorContext, config.sourceArgs, containerEl)
-                    : displayScriptError(this.ntb, t('adapter.dataview.exec-error-required'), errorContext);
+                    : displayError(this.ntb, t('adapter.dataview.exec-error-required'), errorContext);
                 break;
             case 'executeJs':
                 result = config.expression
                     ? await this.executeJs(config.expression, errorContext, containerEl)
-                    : displayScriptError(this.ntb, t('adapter.dataview.dvjs-expr-error-required'), errorContext);
+                    : displayError(this.ntb, t('adapter.dataview.dvjs-expr-error-required'), errorContext);
                 break;
             case 'query':
                 result = config.expression
                     ? await this.query(config.expression, errorContext, containerEl)
-                    : displayScriptError(this.ntb, t('adapter.dataview.query-expr-error-required'), errorContext);
+                    : displayError(this.ntb, t('adapter.dataview.query-expr-error-required'), errorContext);
                 break;
             default:
-                displayScriptError(this.ntb, t('adapter.error.function-invalid', { function: config.pluginFunction }), errorContext);
+                displayError(this.ntb, t('adapter.error.function-invalid', { function: config.pluginFunction }), errorContext);
                 break;
         }
 

@@ -4,7 +4,7 @@ import { ScriptConfig, ScriptContext, SettingType, t } from "Settings/NoteToolba
 import { learnMoreFr } from "Settings/UI/Utils/SettingsUIUtils";
 import { AdapterFunction } from "Types/interfaces";
 import { Adapter } from "./Adapter";
-import { checkArgs, checkFileLink, checkOutputContainer, displayScriptError, formatExpression, handleScriptError } from "./AdapterUtils";
+import { checkArgs, checkFileLink, checkOutputContainer, displayError, formatExpression, handleScriptError } from "./AdapterUtils";
 
 /**
  * Adapter for JavaScript scripts.
@@ -61,27 +61,27 @@ export default class JavaScriptAdapter extends Adapter {
             case 'evaluate':
                 result = config.expression
                     ? await this.evaluate(config.expression, errorContext, undefined, containerEl)
-                    : displayScriptError(this.ntb, t('adapter.javascript.eval-expr-error-required'), errorContext);
+                    : displayError(this.ntb, t('adapter.javascript.eval-expr-error-required'), errorContext);
                 break;
             // internal function for inline evaluations in which errors should be reported
             case 'evaluateInline':
                 result = config.expression
                     ? await this.evaluate(config.expression, errorContext, undefined, containerEl)
-                    : displayScriptError(this.ntb, t('adapter.javascript.eval-expr-error-required'), errorContext);
+                    : displayError(this.ntb, t('adapter.javascript.eval-expr-error-required'), errorContext);
                 break;
             // internal function for inline evaluations in which errors can be ignored
             case 'evaluateIgnore':
                 result = config.expression
                     ? await this.evaluate(config.expression, errorContext, undefined, containerEl)
-                    : displayScriptError(this.ntb, t('adapter.javascript.eval-expr-error-required'), errorContext);
+                    : displayError(this.ntb, t('adapter.javascript.eval-expr-error-required'), errorContext);
                 break;
             case 'exec':
                 result = config.sourceFile
                     ? await this.exec(config.sourceFile, errorContext, config.sourceArgs, containerEl)
-                    : displayScriptError(this.ntb, t('adapter.javascript.exec-error-required'), errorContext);
+                    : displayError(this.ntb, t('adapter.javascript.exec-error-required'), errorContext);
                 break;
             default:
-                displayScriptError(this.ntb, t('adapter.error.function-invalid', { function: config.pluginFunction }), errorContext);
+                displayError(this.ntb, t('adapter.error.function-invalid', { function: config.pluginFunction }), errorContext);
                 break;
         }
 
@@ -120,7 +120,7 @@ export default class JavaScriptAdapter extends Adapter {
             return await this.evaluate(contents, errorContext, argsJson, containerEl);
         }
         else {
-            displayScriptError(this.ntb, t('adapter.error.file-empty', { filename: filename }));
+            displayError(this.ntb, t('adapter.error.file-empty', { filename: filename }));
         }
 
     }

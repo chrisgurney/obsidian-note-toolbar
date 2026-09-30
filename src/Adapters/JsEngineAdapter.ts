@@ -4,7 +4,7 @@ import { ItemType, ScriptConfig, ScriptContext, SettingType, t } from "Settings/
 import { learnMoreFr } from "Settings/UI/Utils/SettingsUIUtils";
 import { AdapterFunction } from "Types/interfaces";
 import { Adapter } from "./Adapter";
-import { checkArgs, checkOutputContainer, displayScriptError, handleScriptError } from "./AdapterUtils";
+import { checkArgs, checkOutputContainer, displayError, handleScriptError } from "./AdapterUtils";
 
 type JsEngineResult = {
     functionBuildError?: Error;
@@ -123,32 +123,32 @@ export default class JsEngineAdapter extends Adapter {
             case 'evaluate':
                 result = config.expression
                     ? await this.evaluate(config.expression, errorContext, containerEl)
-                    : displayScriptError(this.ntb, t('adapter.js-engine.eval-expr-error-required'), errorContext);
+                    : displayError(this.ntb, t('adapter.js-engine.eval-expr-error-required'), errorContext);
                 break;
             // internal function for inline evaluations in which errors should be reported
             case 'evaluateInline':
                 result = config.expression
                     ? await this.evaluate(config.expression, errorContext, containerEl)
-                    : displayScriptError(this.ntb, t('adapter.js-engine.eval-expr-error-required'), errorContext);
+                    : displayError(this.ntb, t('adapter.js-engine.eval-expr-error-required'), errorContext);
                 break;
             // internal function for inline evaluations in which errors can be ignored
             case 'evaluateIgnore':
                 result = config.expression
                     ? await this.evaluate(config.expression, errorContext, containerEl)
-                    : displayScriptError(this.ntb, t('adapter.js-engine.eval-expr-error-required'), errorContext);
+                    : displayError(this.ntb, t('adapter.js-engine.eval-expr-error-required'), errorContext);
                 break;
             case 'exec':
                 result = config.sourceFile
                     ? await this.exec(config.sourceFile, errorContext, containerEl)
-                    : displayScriptError(this.ntb, t('adapter.js-engine.exec-sourcefile-error-required'), errorContext);
+                    : displayError(this.ntb, t('adapter.js-engine.exec-sourcefile-error-required'), errorContext);
                 break;
             case 'importExec':
                 result = config.sourceFile
                     ? await this.importExec(config.sourceFile, errorContext, config.sourceFunction, config.sourceArgs)
-                    : displayScriptError(this.ntb, t('adapter.js-engine.importexec-sourcefile-error-required'), errorContext);
+                    : displayError(this.ntb, t('adapter.js-engine.importexec-sourcefile-error-required'), errorContext);
                 break;
             default:
-                displayScriptError(this.ntb, t('adapter.error.function-invalid', { function: config.pluginFunction }), errorContext);
+                displayError(this.ntb, t('adapter.error.function-invalid', { function: config.pluginFunction }), errorContext);
                 break;
         }
 
@@ -182,7 +182,7 @@ export default class JsEngineAdapter extends Adapter {
         try {
             containerEl?.empty();
             if (!activeFile) {
-                displayScriptError(this.ntb, t('adapter.error.query-note-not-open'));
+                displayError(this.ntb, t('adapter.error.query-note-not-open'));
                 return t('adapter.error.query-note-not-open');
             }            
             const context: ExecutionContext = {
