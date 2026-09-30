@@ -162,8 +162,8 @@ function formatErrorMessage(error: unknown, notes?: string): string {
     const message = isError ? error.message : String(error);
 
     // truncate if necessary (Dataview puts full stack trace in error.message)
-    const messageLines = message.split('\n');
-    const messageTruncated = messageLines.slice(0, 2).join('\n') + (messageLines.length > 2 ? '\n...' : '');
+    const truncateMatch = message.match(/[\r\n]\s+at\b/);
+    const messageTruncated = truncateMatch ? message.slice(0, truncateMatch.index) : message;
 
     const messageWithNotes = notes ? `${notes}\n\n${messageTruncated}` : messageTruncated;
 
