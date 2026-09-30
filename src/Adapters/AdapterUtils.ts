@@ -94,24 +94,24 @@ export function checkOutputContainer(ntb: NoteToolbarPlugin, containerId: string
  * @param containerEl 
  */
 export function displayScriptError(error: unknown, notes?: string, containerEl?: HTMLElement) {
-    const messageWithContext = formatErrorMessage(error, notes);
+    const messageWithNotes = formatErrorMessage(error, notes);
 
     // output to console
     const consoleMessage = error instanceof Error 
         ? (notes ? `${notes}\n\n${error.stack}` : error) 
-        : messageWithContext;
+        : messageWithNotes;
     console.error(consoleMessage);
     
     // output to a container, if provided
     if (containerEl) {
         const errorEl = containerEl.createEl('pre');
-        errorEl.setText(messageWithContext);
+        errorEl.setText(messageWithNotes);
     }
     // show notice
-    new Notice(messageWithContext, 10000).containerEl.addClass('mod-warning');
+    new Notice(messageWithNotes, 10000).containerEl.addClass('mod-warning');
 }
 
-export function formatErrorMessage(error: unknown, context?: string): string {
+export function formatErrorMessage(error: unknown, notes?: string): string {
     const isError = error instanceof Error;
     const message = isError ? error.message : String(error);
 
@@ -119,8 +119,9 @@ export function formatErrorMessage(error: unknown, context?: string): string {
     const messageLines = message.split('\n');
     const messageTruncated = messageLines.slice(0, 2).join('\n') + (messageLines.length > 2 ? '\n...' : '');
 
-    const messageWithContext = context ? `${context}\n\n${messageTruncated}` : messageTruncated;
-    return messageWithContext;
+    const messageWithNotes = notes ? `${notes}\n\n${messageTruncated}` : messageTruncated;
+
+    return messageWithNotes;
 }
 
 /**
