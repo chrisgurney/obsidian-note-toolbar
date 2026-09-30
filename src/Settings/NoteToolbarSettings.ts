@@ -735,7 +735,7 @@ export interface ScriptContext {
 	component?: 'callout' | 'label' | 'tooltip' | 'URI';
 	errorBehavior: ErrorBehavior;	
 	item?: ToolbarItemSettings;
-	scriptFile?: TFile;
+	scriptFile?: TFile | string;
 	toolbar?: ToolbarSettings;
 }
 

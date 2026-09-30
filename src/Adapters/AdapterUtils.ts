@@ -217,7 +217,7 @@ function formatScriptContext(ntb: NoteToolbarPlugin, context: ScriptContext): st
 
     if (component === 'callout') { return t('adapter.error.context.callout'); }
     if (itemText) { return t('adapter.error.context.item', { item: itemText }); }
-    if (scriptFile) { return t('adapter.error.context.script', { script: scriptFile.path }); }
+    if (scriptFile) { return t('adapter.error.context.script', { script: scriptFile instanceof TFile ? scriptFile.path : scriptFile }); }
     
     return '';
 }
@@ -335,7 +335,7 @@ export function handleScriptError(
     const errorMessage = context?.scriptFile
         ? t('adapter.error.title') + t('adapter.error.exec-failed_context', {
             context: formattedContext,
-            filename: getFileUri(ntb, context.scriptFile),
+            filename: context.scriptFile instanceof TFile ? getFileUri(ntb, context.scriptFile) : context.scriptFile,
             expression: formattedExpression
         })
         : context
@@ -352,7 +352,7 @@ export function handleScriptError(
             displayScriptError(ntb, error, context, errorMessage, containerEl);
             if (context?.scriptFile) {
                 return t('adapter.error.general_file', {
-                    filename: `[[${context.scriptFile.path}]]`,
+                    filename: `[[${context.scriptFile instanceof TFile ? context.scriptFile.path : context.scriptFile}]]`,
                     error
                 }) + '\n';
             }
@@ -382,7 +382,7 @@ export function handleScriptError(
 
             if (context?.scriptFile) {
                 return t('adapter.error.general_file', {
-                    filename: `[[${context.scriptFile.path}]]`,
+                    filename: `[[${context.scriptFile instanceof TFile ? context.scriptFile.path : context.scriptFile}]]`,
                     error
                 }) + '\n';
             }

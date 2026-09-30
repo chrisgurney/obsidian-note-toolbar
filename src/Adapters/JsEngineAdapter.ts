@@ -247,8 +247,9 @@ export default class JsEngineAdapter extends Adapter {
         //     return t('adapter.error.args-parsing-script-error', { filename: filename, error: importedArgs.error });
         // }
 
-        // FIXME: this isn't necessarily the same as the executed file
-        const scriptFile = checkFileLink(this.ntb, filename);
+        // FIXME: this isn't necessarily the same as the executed file (check what importJs does internally)
+        // const scriptFile = checkFileLink(this.ntb, filename);
+        errorContext['scriptFile'] = filename;
 
         if (this.adapterApi) {
             const module = await this.adapterApi.importJs(filename) as Record<string, unknown>;
@@ -265,12 +266,11 @@ export default class JsEngineAdapter extends Adapter {
                         this.ntb.debug('importExec() result:', result);
                     }
                     catch (error) {
-                        errorContext['scriptFile'] = scriptFile;
                         result = handleScriptError(this.ntb, error, String(module[functionName]), errorContext) ?? result;
                     }
                 }
                 else {
-                    displayScriptError(this.ntb, t('adapter.error.function-not-found', { function: functionName }), errorContext);
+                    result = handleScriptError(this.ntb, t('adapter.error.function-not-found', { function: functionName }), String(module[functionName]), errorContext) ?? result;
                 }
             }
         }
