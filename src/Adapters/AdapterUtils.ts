@@ -51,7 +51,7 @@ export function checkFile(ntb: NoteToolbarPlugin, filename: string): TFile | und
         // TODO: render messages into the container, if provided
         const errorMessage = t('adapter.error.file-not-found', { filename: filename });
         displayScriptError(errorMessage);
-        throw formatScriptError(ntb, undefined, filename, errorMessage);
+        throw getScriptError(ntb, undefined, filename, errorMessage);
     }
     return file;
 }
@@ -69,7 +69,7 @@ export function checkFileLink(ntb: NoteToolbarPlugin, filename: string): TFile |
         // TODO: render messages into the container, if provided
         const errorMessage = t('adapter.error.file-not-found', { filename: filename });
         displayScriptError(errorMessage);
-        throw formatScriptError(ntb, undefined, filename, errorMessage);
+        throw getScriptError(ntb, undefined, filename, errorMessage);
     }
     return file;
 }
@@ -81,7 +81,7 @@ export function checkOutputContainer(ntb: NoteToolbarPlugin, containerId: string
         if (!containerEl) {
             const errorMessage = t('adapter.error.callout-not-found', { id: containerId });
             displayScriptError(errorMessage);
-            throw formatScriptError(ntb, undefined, '', errorMessage);
+            throw getScriptError(ntb, undefined, '', errorMessage);
         }
     }
     return containerEl;
@@ -111,7 +111,7 @@ export function displayScriptError(error: unknown, notes?: string, containerEl?:
     new Notice(messageWithNotes, 10000).containerEl.addClass('mod-warning');
 }
 
-export function formatErrorMessage(error: unknown, notes?: string): string {
+function formatErrorMessage(error: unknown, notes?: string): string {
     const isError = error instanceof Error;
     const message = isError ? error.message : String(error);
 
@@ -151,7 +151,7 @@ export function formatExpression(expression: string, maxLength = 250): string {
  * Returns a string representation of the provided {@link ScriptContext}.
  * @param context {@link ScriptContext}
  */
-export function formatScriptContext(ntb: NoteToolbarPlugin, context: ScriptContext): string {
+function formatScriptContext(ntb: NoteToolbarPlugin, context: ScriptContext): string {
     const { scriptFile, toolbar, item, component } = context;
     const itemText = item && formatScriptItem(ntb, item, context);
 
@@ -226,7 +226,7 @@ function formatScriptItem(
  * @param sourceFile the script file where the error occurred
  * @param notes optional context to display with the source file
  */
-export function formatScriptError(
+export function getScriptError(
     ntb: NoteToolbarPlugin,
     error: unknown,
     sourceFile: TFile | string,
