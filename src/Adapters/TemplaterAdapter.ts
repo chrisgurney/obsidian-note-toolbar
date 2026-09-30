@@ -160,7 +160,7 @@ export default class TemplaterAdapter extends Adapter {
                 }
             }
             catch (error) {
-                displayScriptError(error);
+                displayScriptError(this.ntb, error);
             }
         }
 
@@ -196,7 +196,7 @@ export default class TemplaterAdapter extends Adapter {
                 }
             }
             catch (error) {
-                displayScriptError(error);
+                displayScriptError(this.ntb, error);
             }
         }
 

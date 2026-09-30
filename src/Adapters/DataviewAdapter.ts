@@ -227,7 +227,7 @@ export default class DataviewAdapter extends Adapter {
 
         errorContext = { ...errorContext, scriptFile };
 
-        const args = checkArgs(argsJson, containerEl);
+        const args = checkArgs(this.ntb, argsJson, errorContext, containerEl);
         if (!args) return '';
         // const importedArgs = argsJson ? importArgs(argsJson) : { value: {} };
         // if (importedArgs.value === null) {

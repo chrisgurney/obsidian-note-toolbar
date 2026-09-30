@@ -1,6 +1,7 @@
 import NoteToolbarPlugin from "main";
 import { FileSystemAdapter, Notice, TFile } from "obsidian";
 import { ErrorBehavior, ScriptContext, t, ToolbarItemSettings } from "Settings/NoteToolbarSettings";
+import ItemModal from "Settings/UI/Modals/ItemModal";
 import { importArgs } from "Utils/Utils";
 
 /**
@@ -13,7 +14,7 @@ export function checkActiveFile(ntb: NoteToolbarPlugin, errorBehavior: ErrorBeha
     const activeFile = ntb.app.workspace.getActiveFile();
     if (!activeFile) {
         // TODO: render messages into the container, if provided
-        if (errorBehavior === ErrorBehavior.Display) displayScriptError(t('adapter.error.expr-note-not-open'));
+        if (errorBehavior === ErrorBehavior.Display) displayScriptError(ntb, t('adapter.error.expr-note-not-open'));
         return;
     }
     return activeFile;
@@ -26,14 +27,16 @@ export function checkActiveFile(ntb: NoteToolbarPlugin, errorBehavior: ErrorBeha
  * @returns a map of the parsed arguments
  */
 export function checkArgs(
+    ntb: NoteToolbarPlugin,
     argsJson: string | undefined, 
+    errorContext: ScriptContext,
     containerEl?: HTMLElement
 ): Record<string, unknown> | undefined {
     const importedArgs = argsJson ? importArgs(argsJson) : { value: {} };
     if (importedArgs.value === null) {
         // TODO: render messages into the container, if provided
         const errorMessage = t('adapter.error.args-parsing');
-        displayScriptError(importedArgs.error, errorMessage, containerEl);
+        displayScriptError(ntb, importedArgs.error, errorContext, errorMessage, containerEl);
         throw new Error(errorMessage);
     }
     return importedArgs.value;
@@ -50,7 +53,7 @@ export function checkFile(ntb: NoteToolbarPlugin, filename: string): TFile | und
     if (!file) {
         // TODO: render messages into the container, if provided
         const errorMessage = t('adapter.error.file-not-found', { filename: filename });
-        displayScriptError(errorMessage);
+        displayScriptError(ntb, errorMessage);
         throw getScriptError(ntb, undefined, filename, errorMessage);
     }
     return file;
@@ -68,7 +71,7 @@ export function checkFileLink(ntb: NoteToolbarPlugin, filename: string): TFile |
     if (!file) {
         // TODO: render messages into the container, if provided
         const errorMessage = t('adapter.error.file-not-found', { filename: filename });
-        displayScriptError(errorMessage);
+        displayScriptError(ntb, errorMessage);
         throw getScriptError(ntb, undefined, filename, errorMessage);
     }
     return file;
@@ -80,7 +83,7 @@ export function checkOutputContainer(ntb: NoteToolbarPlugin, containerId: string
         containerEl = ntb.el.getOutputEl(containerId) ?? undefined;
         if (!containerEl) {
             const errorMessage = t('adapter.error.callout-not-found', { id: containerId });
-            displayScriptError(errorMessage);
+            displayScriptError(ntb, errorMessage);
             throw getScriptError(ntb, undefined, '', errorMessage);
         }
     }
@@ -89,12 +92,22 @@ export function checkOutputContainer(ntb: NoteToolbarPlugin, containerId: string
 
 /**
  * Displays the provided scripting error as a Notice, console message, and outputs to a container (if provided). 
- * @param message 
- * @param error 
- * @param containerEl 
+ * @param ntb plugin instance
+ * @param error error or message to display 
+ * @param context {@link ScriptContext}
+ * @param notes additional notes to display
+ * @param containerEl optional output container
  */
-export function displayScriptError(error: unknown, notes?: string, containerEl?: HTMLElement) {
+export function displayScriptError(
+    ntb: NoteToolbarPlugin, 
+    error: unknown, 
+    context?: ScriptContext, 
+    notes?: string, 
+    containerEl?: HTMLElement
+) {
     const messageWithNotes = formatErrorMessage(error, notes);
+    const noticeFr = new DocumentFragment();
+    noticeFr.appendText(messageWithNotes);
 
     // output to console
     const consoleMessage = error instanceof Error 
@@ -107,8 +120,41 @@ export function displayScriptError(error: unknown, notes?: string, containerEl?:
         const errorEl = containerEl.createEl('pre');
         errorEl.setText(messageWithNotes);
     }
+
+    // add link to open item settings if item is provided
+    if (context?.item) {
+        const openItemFr = itemModalFr(ntb, context?.item);
+        if (openItemFr) noticeFr.append('\n\n', openItemFr);
+    }
+
     // show notice
-    new Notice(messageWithNotes, 10000).containerEl.addClass('mod-warning');
+    new Notice(noticeFr, 10000).containerEl.addClass('mod-warning');
+}
+
+function itemModalFr(ntb: NoteToolbarPlugin, item: ToolbarItemSettings): DocumentFragment | undefined {
+    let itemLink: DocumentFragment | undefined;
+    const itemToolbar = ntb.settingsManager.getToolbarByItemId(item.uuid);
+    if (itemToolbar) {
+        itemLink = new DocumentFragment();
+        itemLink.createEl('a', { 
+            cls: "note-toolbar-setting-focussable-link", 
+            text: t('adapter.link-edit-item'), 
+            attr: { 'aria-label': t('adapter.link-edit-item_tooltip'), tabindex: '0' }
+        }, el => {
+            const open = () => {
+                const itemModal = new ItemModal(ntb, itemToolbar, item);
+                itemModal.open();
+            }
+            ntb.registerDomEvent(el, 'click', open);
+            ntb.registerDomEvent(el, 'keydown', event => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    open();
+                }
+            });
+        });
+    }
+    return itemLink;
 }
 
 function formatErrorMessage(error: unknown, notes?: string): string {
@@ -282,7 +328,7 @@ export function handleScriptError(
 ): string | undefined {
     if (!context) ntb.debug('⚠️ CONTEXT IS EMPTY') 
         else ntb.debug('CONTEXT', context, context.errorBehavior);
-    
+
     const formattedContext = context ? formatScriptContext(ntb, context) : undefined;
     const formattedExpression = formatExpression(expression);
 
@@ -303,7 +349,7 @@ export function handleScriptError(
 
     switch (context.errorBehavior) {
         case ErrorBehavior.Display: 
-            displayScriptError(error, errorMessage, containerEl);
+            displayScriptError(ntb, error, context, errorMessage, containerEl);
             if (context?.scriptFile) {
                 return t('adapter.error.general_file', {
                     filename: `[[${context.scriptFile.path}]]`,
@@ -327,11 +373,12 @@ export function handleScriptError(
         // }
 
         case ErrorBehavior.Report:
-            console.error(errorMessage, '\n\n', error);
-            new Notice(
-                errorMessage + '\n\n' + formatErrorMessage(error),
-                10000
-            ).containerEl.addClass('mod-warning');
+            displayScriptError(ntb, error, context, errorMessage, containerEl);
+            // console.error(errorMessage, '\n\n', error);
+            // new Notice(
+            //     errorMessage + '\n\n' + formatErrorMessage(error),
+            //     10000
+            // ).containerEl.addClass('mod-warning');
 
             if (context?.scriptFile) {
                 return t('adapter.error.general_file', {

@@ -185,7 +185,7 @@ export default class JsEngineAdapter extends Adapter {
         try {
             containerEl?.empty();
             if (!activeFile) {
-                displayScriptError(t('adapter.error.query-note-not-open'));
+                displayScriptError(this.ntb, t('adapter.error.query-note-not-open'));
                 return t('adapter.error.query-note-not-open');
             }            
             const context: ExecutionContext = {
@@ -240,7 +240,7 @@ export default class JsEngineAdapter extends Adapter {
 
         let result;
 
-        const args = checkArgs(argsJson);
+        const args = checkArgs(this.ntb, argsJson, errorContext);
         if (!args) return '';
         // ^ was previously:
         // if (importedArgs.value === null) {
@@ -270,7 +270,7 @@ export default class JsEngineAdapter extends Adapter {
                     }
                 }
                 else {
-                    displayScriptError(t('adapter.error.function-not-found', { function: functionName }));
+                    displayScriptError(this.ntb, t('adapter.error.function-not-found', { function: functionName }));
                 }
             }
         }

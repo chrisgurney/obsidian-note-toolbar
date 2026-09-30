@@ -84,6 +84,8 @@
             "importexec-sourcefunction": "Function (optional)",
             "importexec-sourcefunction-description": "If the script has functions, function name to execute."
         },
+        "link-edit-item": "Edit item",
+        "link-edit-item_tooltip": "Open item settings",
         "option-advanced": "Advanced settings",
         "option-advanced-tooltip": "Open advanced settings",
         "option-function-default": "Select a function...",

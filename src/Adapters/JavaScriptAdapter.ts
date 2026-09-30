@@ -123,7 +123,7 @@ export default class JavaScriptAdapter extends Adapter {
             return await this.evaluate(contents, errorContext, argsJson, containerEl);
         }
         else {
-            displayScriptError(t('adapter.error.file-empty', { filename: filename }));
+            displayScriptError(this.ntb, t('adapter.error.file-empty', { filename: filename }));
         }
 
     }
@@ -146,7 +146,7 @@ export default class JavaScriptAdapter extends Adapter {
         let result;
         const resultEl = containerEl || createSpan();
 
-        const args = checkArgs(argsJson, containerEl);
+        const args = checkArgs(this.ntb, argsJson, errorContext, containerEl);
         if (!args) return '';
 
         const activeFilePath = this.ntb.app.workspace.getActiveFile()?.path || '';
