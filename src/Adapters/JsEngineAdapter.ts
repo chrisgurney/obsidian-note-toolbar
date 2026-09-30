@@ -250,12 +250,13 @@ export default class JsEngineAdapter extends Adapter {
         // }
         // const args = importedArgs.value;
 
+        // FIXME: this isn't necessarily the same as the executed file
         const scriptFile = checkFileLink(this.ntb, filename);
 
         if (this.adapterApi) {
-            // const module = await this.adapterApi.importJs(filename);
             const module = await this.adapterApi.importJs(filename) as Record<string, unknown>;
             if (module && functionName) {
+                this.ntb.debug('Note Toolbar: Executing:\n', module[functionName]);
                 if (module[functionName] && (typeof module[functionName] === 'function')) {
                     try {
                         if (args) {
@@ -268,7 +269,7 @@ export default class JsEngineAdapter extends Adapter {
                     }
                     catch (error) {
                         errorContext['scriptFile'] = scriptFile;
-                        result = handleScriptError(this.ntb, error, '', errorContext) ?? result;
+                        result = handleScriptError(this.ntb, error, String(module[functionName]), errorContext) ?? result;
                     }
                 }
                 else {
