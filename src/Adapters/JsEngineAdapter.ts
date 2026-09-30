@@ -242,13 +242,10 @@ export default class JsEngineAdapter extends Adapter {
 
         const args = checkArgs(argsJson);
         if (!args) return '';
-
-        // const importedArgs = argsJson ? importArgs(argsJson) : { value: {} };
+        // ^ was previously:
         // if (importedArgs.value === null) {
-        //     displayScriptError(importedArgs.error, t('adapter.error.args-parsing', { filename }) );
         //     return t('adapter.error.args-parsing-script-error', { filename: filename, error: importedArgs.error });
         // }
-        // const args = importedArgs.value;
 
         // FIXME: this isn't necessarily the same as the executed file
         const scriptFile = checkFileLink(this.ntb, filename);
