@@ -107,6 +107,8 @@ export default class JavaScriptAdapter extends Adapter {
         containerEl?: HTMLElement,
     ): Promise<string | undefined> => {
 
+        let result;
+        
         if (!filename) return;
 
         const scriptFile = this.ntb.adapters.utils.checkFileLink(filename);
@@ -116,11 +118,13 @@ export default class JavaScriptAdapter extends Adapter {
         if (contents.trim()) {
             this.ntb.debug(`Note Toolbar: Executing: ${scriptFile.path}`);
             errorContext['scriptFile'] = scriptFile;
-            return await this.evaluate(contents, errorContext, argsJson, containerEl);
+            result = await this.evaluate(contents, errorContext, argsJson, containerEl);
         }
         else {
             this.ntb.adapters.utils.displayError(t('adapter.error.file-empty', { filename: filename }));
         }
+
+        return result;
 
     }
 
