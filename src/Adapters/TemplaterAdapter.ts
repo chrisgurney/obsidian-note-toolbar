@@ -153,7 +153,7 @@ export default class TemplaterAdapter extends Adapter {
 
             // TODO? show notice instead? errors are not thrown from Templater's code, and there's no feasible way to check success
             errorContext['scriptFile'] = templateFile;
-            this.ntb.debug('Note Toolbar: Using:', this.ntb.adapters.utils.formatScriptContext(errorContext));
+            this.ntb.debug('Note Toolbar: Using:', this.ntb.adapters.utils.formatContext(errorContext));
             await this.adapterApi.append_template_to_active_file(templateFile);
         }
 
@@ -187,7 +187,7 @@ export default class TemplaterAdapter extends Adapter {
 
             // TODO? show notice instead? errors are not thrown from Templater's code, and there's no feasible way to check success
             errorContext['scriptFile'] = templateFile;
-            this.ntb.debug('Note Toolbar: Using:', this.ntb.adapters.utils.formatScriptContext(errorContext));
+            this.ntb.debug('Note Toolbar: Using:', this.ntb.adapters.utils.formatContext(errorContext));
             await this.adapterApi.create_new_note_from_template(templateFile, outputFolder, outputFilename);
         }
 

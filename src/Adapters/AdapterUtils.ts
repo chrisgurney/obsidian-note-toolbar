@@ -148,7 +148,7 @@ export default class AdapterUtils {
     ): string | undefined {
         this.ntb.debug('CONTEXT', context, context.errorBehavior);
 
-        const formattedContext = context ? this.formatScriptContext(context) : undefined;
+        const formattedContext = context ? this.formatContext(context) : undefined;
         const formattedExpression = this.formatExpression(expression);
 
         const errorMessage = context?.scriptFile
@@ -203,30 +203,47 @@ export default class AdapterUtils {
      * Returns a string representation of the provided {@link ScriptContext}.
      * @param context {@link ScriptContext}
      */
-    formatScriptContext(context: ScriptContext): string {
-        const { scriptFile, toolbar, item, component } = context;
-        const itemText = item && formatScriptItem(this.ntb, item, context);
+    formatContext(context: ScriptContext): string {
+        const { scriptFile, toolbar, item, component, operation } = context;
 
-        if (component && toolbar && itemText) {
-            return t('adapter.error.context.component', {
-                component: component, toolbar: toolbar.name, item: itemText, 
-            });
+        let result = '';
+
+        const wrap = ( subject: string, type: 'in' | 'with' | 'of', context: string ): string => 
+            t(`adapter.error.context.${type}`, { subject, context });
+
+        if (operation) {
+            result = t('adapter.error.context.operation', { operation });
         }
 
-        if (toolbar && itemText) {
-            return t('adapter.error.context.toolbar-item', {
-                toolbar: toolbar.name, item: itemText
-            });
+        if (component) {
+            const componentText = t('adapter.error.context.component', { component });
+            result = result ? wrap(result, 'of', componentText) : componentText;
         }
 
-        if (component && itemText) { return t('adapter.error.context.component-item', { component: component, item: itemText }); }
+        if (item) {
+            const itemText = t('adapter.error.context.item', { 
+                item: formatScriptItem(this.ntb, item, context) 
+            });
+            result = result ? wrap(result, 'of', itemText) : itemText;
+        }
 
-        if (component === 'callout') { return t('adapter.error.context.callout'); }
-        if (itemText && scriptFile) { return t('adapter.error.context.item-file', { item: itemText, file: scriptFile instanceof TFile ? scriptFile.path : scriptFile }); }
-        if (itemText) { return t('adapter.error.context.item', { item: itemText }); }
-        if (scriptFile) { return t('adapter.error.context.file', { file: scriptFile instanceof TFile ? scriptFile.path : scriptFile }); }
-        
-        return '';
+        if (toolbar) {
+            const toolbarText = t('adapter.error.context.toolbar', { toolbar: toolbar.name });
+            result = result ? wrap(result, 'in', toolbarText) : toolbarText;
+        }
+
+        if (scriptFile) {
+            const fileText = t('adapter.error.context.file', { 
+                file: (scriptFile instanceof TFile ? scriptFile.path : scriptFile) 
+            });
+            result = result ? wrap(result, 'with', fileText) : fileText;
+        }
+
+        if (component === 'callout') {
+            return t('adapter.error.context.callout');
+        }
+
+        return result;
     }
 
     /**
