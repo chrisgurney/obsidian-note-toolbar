@@ -185,12 +185,6 @@ export default class AdapterUtils {
 
             case ErrorBehavior.Report:
                 this.displayError(error, context, errorMessage, containerEl);
-                if (context?.scriptFile) {
-                    return t('adapter.error.general_file', {
-                        filename: `[[${context.scriptFile instanceof TFile ? context.scriptFile.path : context.scriptFile}]]`,
-                        error
-                    }) + '\n';
-                }
                 return undefined;
 
             case ErrorBehavior.Console:
