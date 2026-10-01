@@ -27,14 +27,14 @@
             "callout-not-found": "Error: Could not find note-toolbar-output callout in current note with ID: {{id}}",
             "context": {
                 "callout": "item in Note Toolbar callout",
-                "component": "{{component}}",
+                "component": "{{- component}}",
                 "file": "file ({{- file}})",
-                "in": "{{subject}} in {{context}}",
+                "in": "{{- subject}} in {{- context}}",
                 "item": "item ({{- item}})",
-                "of": "{{subject}} of {{context}}",
-                "operation": "{{operation}}",
+                "of": "{{- subject}} of {{- context}}",
+                "operation": "{{- operation}}",
                 "toolbar": "toolbar ({{- toolbar}})",
-                "with": "{{subject}} with {{context}}"
+                "with": "{{- subject}} with {{- context}}"
             },
             "exec-failed": "Failed to execute script: {{- filename}}",
             "exec-failed_context": "Failed to execute: {{- context}}:\n{{- filename}}",

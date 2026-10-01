@@ -206,8 +206,9 @@ export default class AdapterUtils {
     formatContext(context: ScriptContext): string {
         let result = '';
         const { scriptFile, toolbar, item, component, operation } = context;
-        const wrap = ( subject: string, type: 'in' | 'with' | 'of', context: string ): string => 
-            t(`adapter.error.context.${type}`, { subject, context });
+
+        const wrap = ( subject: string, type: 'in' | 'with' | 'of', target: string ): string => 
+            t(`adapter.error.context.${type}`, { subject, target });
 
         if (component === 'callout') { return t('adapter.error.context.callout'); }
 
