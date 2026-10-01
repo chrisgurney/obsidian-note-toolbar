@@ -232,7 +232,7 @@ export default class AdapterUtils {
         }
 
         if (scriptFile) {
-            const fileText = t('adapter.error.context.file', { file: (scriptFile instanceof TFile ? scriptFile.path : scriptFile) });
+            const fileText = t('adapter.error.context.file', { file: (scriptFile instanceof TFile) ? scriptFile.path : scriptFile });
             result = result ? wrap(result, 'with', fileText) : fileText;
         }
 

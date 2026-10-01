@@ -29,12 +29,12 @@
                 "callout": "item in Note Toolbar callout",
                 "component": "{{- component}}",
                 "file": "file ({{- file}})",
-                "in": "{{- subject}} in {{- context}}",
+                "in": "{{- subject}} in {{- target}}",
                 "item": "item ({{- item}})",
-                "of": "{{- subject}} of {{- context}}",
+                "of": "{{- subject}} of {{- target}}",
                 "operation": "{{- operation}}",
                 "toolbar": "toolbar ({{- toolbar}})",
-                "with": "{{- subject}} with {{- context}}"
+                "with": "{{- subject}} with {{- target}}"
             },
             "exec-failed": "Failed to execute script: {{- filename}}",
             "exec-failed_context": "Failed to execute: {{- context}}:\n{{- filename}}",
