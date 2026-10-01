@@ -106,8 +106,6 @@ export default class AdapterUtils {
         containerEl?: HTMLElement
     ) {
         const messageWithNotes = formatErrorMessage(error, notes);
-        const noticeFr = new DocumentFragment();
-        noticeFr.appendText(messageWithNotes);
 
         // output to console
         const consoleMessage = error instanceof Error 
@@ -121,10 +119,16 @@ export default class AdapterUtils {
             errorEl.setText(messageWithNotes);
         }
 
+        // show notice
+        const noticeFr = new DocumentFragment();
+        noticeFr.createEl('strong', { text: t('adapter.error.label-title') });
+        noticeFr.appendText(messageWithNotes);
+        noticeFr.append('\n\n• ', t('adapter.error.check-console'));
+
         // add link to open item settings if item is provided
         if (context?.item) {
             const openItemFr = itemModalFr(this.ntb, context?.item);
-            if (openItemFr) noticeFr.append('\n\n', openItemFr);
+            if (openItemFr) noticeFr.append('\n• ', openItemFr);
         }
 
         // show notice
@@ -152,17 +156,17 @@ export default class AdapterUtils {
         const formattedExpression = this.formatExpression(expression);
 
         const errorMessage = context?.scriptFile
-            ? t('adapter.error.title') + t('adapter.error.exec-failed_context', {
+            ? t('adapter.error.exec-failed_context', {
                 context: formattedContext,
                 filename: context.scriptFile instanceof TFile ? getFileUri(this.ntb, context.scriptFile) : context.scriptFile,
                 expression: formattedExpression
             })
             : context
-                ? t('adapter.error.title') + t('adapter.error.expr-failed_context', {
+                ? t('adapter.error.expr-failed_context', {
                     context: formattedContext,
                     expression: formattedExpression
                 })
-                : t('adapter.error.title') + t('adapter.error.expr-failed', {
+                : t('adapter.error.expr-failed', {
                     expression: formattedExpression
                 });
 

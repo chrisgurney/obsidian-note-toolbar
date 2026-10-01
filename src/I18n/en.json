@@ -25,6 +25,7 @@
             "args-parsing-field-error": "```\n{{- error}}\n```",
             "args-parsing-script-error": "Failed to parse arguments for script: {{- filename}}\n```\n{{- error}}\n```",
             "callout-not-found": "Error: Could not find note-toolbar-output callout in current note with ID: {{id}}",
+            "check-console": "Check console for details",
             "context": {
                 "callout": "item in Note Toolbar callout",
                 "component": "{{- component}}",
@@ -50,11 +51,11 @@
             "general": "Error: Check console for more details.\n```\n{{- error}}\n```",
             "general_file": "{{- filename}} • Error: Check console for more details.\n```\n{{- error}}\n```",
             "function-note-not-open": "This function must be executed from an open note.",
+            "label-title": "Note Toolbar error:\n",
             "plugin-disabled": "Plugin not installed and enabled: ",
             "plugin-not-installed": "This item uses a plugin that is not installed and enabled.",
             "query-note-not-open": "This query must be run from an open note.",
-            "scripting-disabled": "Enable Scripting in Note Toolbar settings to use this item.",
-            "title": "Note Toolbar error:\n"
+            "scripting-disabled": "Enable Scripting in Note Toolbar settings to use this item."
         },
         "javascript": {
             "eval-expr": "JavaScript expression",
@@ -85,7 +86,7 @@
             "importexec-sourcefunction": "Function (optional)",
             "importexec-sourcefunction-description": "If the script has functions, function name to execute."
         },
-        "link-edit-item": "Edit item →",
+        "link-edit-item": "Edit item",
         "link-edit-item_tooltip": "Open item settings",
         "option-advanced": "Advanced settings",
         "option-advanced-tooltip": "Open advanced settings",
