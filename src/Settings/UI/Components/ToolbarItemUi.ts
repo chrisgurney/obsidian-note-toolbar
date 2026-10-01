@@ -1161,17 +1161,10 @@ export default class ToolbarItemUi {
                         setting = new Setting(fieldDiv)
                             .setClass("note-toolbar-setting-item-field-link")
                             .addSearch((cb) => {
-                                let fileSuggesterFolder: string | undefined = undefined;
-                                let fileSuggesterExt: string | undefined = '.js';
-                                if (toolbarItem.linkAttr.type === ItemType.Templater) {
-                                    fileSuggesterFolder = this.ntb.adapters.tp?.getSetting('templates_folder');
-                                    fileSuggesterExt = undefined;
-                                }
                                 new FileSuggester(this.ntb, cb.inputEl, {
                                     showFilesOnly: true,
                                     showFileNamesOnly: false,
-                                    fileExtension: fileSuggesterExt,
-                                    inFolderPath: fileSuggesterFolder
+                                    fileExtension: (toolbarItem.linkAttr.type === ItemType.Templater) ? undefined : '.js',
                                 });
                                 cb.setPlaceholder(param.label)
                                     .setValue(initialValue ? initialValue : '')
