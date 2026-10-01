@@ -204,12 +204,12 @@ export default class AdapterUtils {
      * @param context {@link ScriptContext}
      */
     formatContext(context: ScriptContext): string {
-        const { scriptFile, toolbar, item, component, operation } = context;
-
         let result = '';
-
+        const { scriptFile, toolbar, item, component, operation } = context;
         const wrap = ( subject: string, type: 'in' | 'with' | 'of', context: string ): string => 
             t(`adapter.error.context.${type}`, { subject, context });
+
+        if (component === 'callout') { return t('adapter.error.context.callout'); }
 
         if (operation) {
             result = t('adapter.error.context.operation', { operation });
@@ -221,9 +221,7 @@ export default class AdapterUtils {
         }
 
         if (item) {
-            const itemText = t('adapter.error.context.item', { 
-                item: formatScriptItem(this.ntb, item, context) 
-            });
+            const itemText = t('adapter.error.context.item', { item: formatScriptItem(this.ntb, item, context) });
             result = result ? wrap(result, 'of', itemText) : itemText;
         }
 
@@ -233,14 +231,8 @@ export default class AdapterUtils {
         }
 
         if (scriptFile) {
-            const fileText = t('adapter.error.context.file', { 
-                file: (scriptFile instanceof TFile ? scriptFile.path : scriptFile) 
-            });
+            const fileText = t('adapter.error.context.file', { file: (scriptFile instanceof TFile ? scriptFile.path : scriptFile) });
             result = result ? wrap(result, 'with', fileText) : fileText;
-        }
-
-        if (component === 'callout') {
-            return t('adapter.error.context.callout');
         }
 
         return result;
