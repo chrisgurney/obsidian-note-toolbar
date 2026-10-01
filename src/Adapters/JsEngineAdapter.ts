@@ -243,12 +243,12 @@ export default class JsEngineAdapter extends Adapter {
         //     return t('adapter.error.args-parsing-script-error', { filename: filename, error: importedArgs.error });
         // }
 
-        // FIXME: this isn't necessarily the same as the executed file (check what importJs does internally)
-        // const scriptFile = checkFileLink(this.ntb, filename);
-        errorContext['scriptFile'] = filename;
+        const scriptFile = this.ntb.adapters.utils.checkFile(filename);
+        const scriptFilePath = scriptFile?.path || filename;
+        errorContext['scriptFile'] = scriptFilePath;
 
         if (this.adapterApi) {
-            const module = await this.adapterApi.importJs(filename) as Record<string, unknown>;
+            const module = await this.adapterApi.importJs(scriptFilePath) as Record<string, unknown>;
             if (module && functionName) {
                 this.ntb.debug('Note Toolbar: Executing:\n', module[functionName]);
                 if (module[functionName] && (typeof module[functionName] === 'function')) {
@@ -290,15 +290,17 @@ export default class JsEngineAdapter extends Adapter {
         const resultEl = containerEl || createSpan();
 
         const activeFilePath = this.ntb.app.workspace.getActiveFile()?.path ?? '';
-        // FIXME: this isn't necessarily the same as the executed file (check what executeFile does internally)
-        // const scriptFile = checkFileLink(this.ntb, filename);
+
+        const scriptFile = this.ntb.adapters.utils.checkFile(filename);
+        const scriptFilePath = scriptFile?.path || filename;
+        errorContext['scriptFile'] = scriptFilePath;
 
         const component = new Component();
         component.load();
         try {
             containerEl?.empty();
-            this.ntb.debug(`Note Toolbar: Executing:\n${filename}`);
-            const execution = await this.adapterApi?.internal.executeFile(filename, {
+            this.ntb.debug(`Note Toolbar: Executing:\n${scriptFilePath}`);
+            const execution = await this.adapterApi?.internal.executeFile(scriptFilePath, {
                 container: resultEl,
                 component: component,
             });
@@ -314,7 +316,6 @@ export default class JsEngineAdapter extends Adapter {
         }
         catch (error) {
             // NOTE: it appears errors from JS Engine's executeFile are not thrown up to here...
-            errorContext['scriptFile'] = filename;
             result = this.ntb.adapters.utils.handleError(error, '', errorContext, containerEl) ?? result;
         }
         finally {
