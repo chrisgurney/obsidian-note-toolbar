@@ -146,7 +146,7 @@ export default class AdapterUtils {
         context: ScriptContext,
         containerEl?: HTMLElement
     ): string | undefined {
-        this.ntb.debug('CONTEXT', context, context.errorBehavior);
+        // this.ntb.debug('CONTEXT', context, context.errorBehavior);
 
         const formattedContext = context ? this.formatContext(context) : undefined;
         const formattedExpression = this.formatExpression(expression);
