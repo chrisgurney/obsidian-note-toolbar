@@ -64,12 +64,12 @@ export default class AdapterUtils {
      * @param filename 
      * @returns the file, or undefined
      */
-    checkFile(filename: string): TFile | undefined {
+    checkFile(filename: string, errorContext: ScriptContext): TFile | undefined {
         const file = this.ntb.app.vault.getFileByPath(filename);
         if (!file) {
             // TODO: render messages into the container, if provided
             const errorMessage = t('adapter.error.file-not-found', { filename: filename });
-            this.displayError(errorMessage);
+            this.displayError(errorMessage, errorContext);
             throw this.getScriptError(undefined, filename, errorMessage);
         }
         return file;

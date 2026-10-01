@@ -111,8 +111,7 @@ export default class JavaScriptAdapter extends Adapter {
         
         if (!filename) return;
 
-        const scriptFile = this.ntb.adapters.utils.checkFileLink(filename);
-        if (!scriptFile) return;
+        const scriptFile = this.ntb.adapters.utils.checkFile(filename, errorContext);
 
         const contents = await this.ntb.app.vault.cachedRead(scriptFile);
         if (contents.trim()) {

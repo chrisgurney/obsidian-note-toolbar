@@ -145,7 +145,7 @@ export default class TemplaterAdapter extends Adapter {
     appendTemplate = async (filename: string, errorContext: ScriptContext): Promise<string> => {
 
         if (this.adapterApi) {
-            const templateFile = this.ntb.adapters.utils.checkFile(filename);
+            const templateFile = this.ntb.adapters.utils.checkFile(filename, errorContext);
             if (!templateFile) {
                 this.ntb.adapters.utils.displayError(t('adapter.error.file-not-found', { filename: filename }), errorContext);
                 return '';
@@ -267,7 +267,7 @@ export default class TemplaterAdapter extends Adapter {
         const activeFile = this.ntb.adapters.utils.checkActiveFile(ErrorBehavior.Display);
         if (!activeFile) return t('adapter.error.function-note-not-open');
 
-        const templateFile = this.ntb.adapters.utils.checkFile(filename);
+        const templateFile = this.ntb.adapters.utils.checkFile(filename, errorContext);
         if (!templateFile) return;
 
         try {

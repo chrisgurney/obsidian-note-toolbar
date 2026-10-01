@@ -218,10 +218,7 @@ export default class DataviewAdapter extends Adapter {
 
         if (!filename) return;
 
-        const scriptFile = this.ntb.adapters.utils.checkFileLink(filename);
-        if (!scriptFile) return;
-
-        errorContext = { ...errorContext, scriptFile };
+        const scriptFile = this.ntb.adapters.utils.checkFile(filename, errorContext);
 
         const args = this.ntb.adapters.utils.checkArgs(argsJson, errorContext, containerEl);
         if (!args) return '';

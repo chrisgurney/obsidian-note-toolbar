@@ -243,7 +243,7 @@ export default class JsEngineAdapter extends Adapter {
         //     return t('adapter.error.args-parsing-script-error', { filename: filename, error: importedArgs.error });
         // }
 
-        const scriptFile = this.ntb.adapters.utils.checkFile(filename);
+        const scriptFile = this.ntb.adapters.utils.checkFile(filename, errorContext);
         const scriptFilePath = scriptFile?.path || filename;
         errorContext['scriptFile'] = scriptFilePath;
 
@@ -291,7 +291,9 @@ export default class JsEngineAdapter extends Adapter {
 
         const activeFilePath = this.ntb.app.workspace.getActiveFile()?.path ?? '';
 
-        const scriptFile = this.ntb.adapters.utils.checkFile(filename);
+        if (!filename) return;
+
+        const scriptFile = this.ntb.adapters.utils.checkFile(filename, errorContext);
         const scriptFilePath = scriptFile?.path || filename;
         errorContext['scriptFile'] = scriptFilePath;
 
