@@ -29,6 +29,7 @@
                 "callout": "item in Note Toolbar callout",
                 "component": "{{- component}}",
                 "file": "file ({{- file}})",
+                "for": "{{- subject}} for {{- target}}",
                 "in": "{{- subject}} in {{- target}}",
                 "item": "item ({{- item}})",
                 "of": "{{- subject}} of {{- target}}",

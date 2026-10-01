@@ -207,7 +207,7 @@ export default class AdapterUtils {
         let result = '';
         const { scriptFile, toolbar, item, component, operation } = context;
 
-        const wrap = ( subject: string, type: 'in' | 'with' | 'of', target: string ): string => 
+        const wrap = ( subject: string, type: 'for' | 'in' | 'of' | 'with', target: string ): string => 
             t(`adapter.error.context.${type}`, { subject, target });
 
         if (component === 'callout') { return t('adapter.error.context.callout'); }
@@ -218,12 +218,12 @@ export default class AdapterUtils {
 
         if (component) {
             const componentText = t('adapter.error.context.component', { component });
-            result = result ? wrap(result, 'of', componentText) : componentText;
+            result = result ? wrap(result, operation ? 'for' : 'of', componentText) : componentText;
         }
 
         if (item) {
             const itemText = t('adapter.error.context.item', { item: formatScriptItem(this.ntb, item, context) });
-            result = result ? wrap(result, 'of', itemText) : itemText;
+            result = result ? wrap(result, component ? 'of' : (operation ? 'for' : 'of'), itemText) : itemText;
         }
 
         if (toolbar) {
