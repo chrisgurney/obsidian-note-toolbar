@@ -96,7 +96,7 @@ export default class TemplaterAdapter extends Adapter {
         switch (config.pluginFunction) {
             case 'appendTemplate':
                 result = config.sourceFile
-                    ? await this.appendTemplate(config.sourceFile)
+                    ? await this.appendTemplate(config.sourceFile, errorContext)
                     : this.ntb.adapters.utils.displayError(t('adapter.templater.append-sourcefile-error-required'), errorContext);
                 break;
             case 'createFrom':
@@ -142,22 +142,19 @@ export default class TemplaterAdapter extends Adapter {
      * Calls append_template_to_active_file.
      * @param filename 
      */
-    appendTemplate = async (filename: string): Promise<string> => {
+    appendTemplate = async (filename: string, errorContext: ScriptContext): Promise<string> => {
 
         if (this.adapterApi) {
             const templateFile = this.ntb.adapters.utils.checkFile(filename);
-            if (!templateFile) return '';
-            try {
-                if (templateFile) {
-                    await this.adapterApi.append_template_to_active_file(templateFile);
-                }
-                else {
-                    throw new Error(t('adapter.error.file-not-found', { filename: filename }));
-                }
+            if (!templateFile) {
+                this.ntb.adapters.utils.displayError(t('adapter.error.file-not-found', { filename: filename }), errorContext);
+                return '';
             }
-            catch (error) {
-                this.ntb.adapters.utils.displayError(error);
-            }
+
+            // TODO? show notice instead? errors are not thrown from Templater's code, and there's no feasible way to check success
+            errorContext['scriptFile'] = templateFile;
+            this.ntb.debug('Note Toolbar: Using:', this.ntb.adapters.utils.formatScriptContext(errorContext));
+            await this.adapterApi.append_template_to_active_file(templateFile);
         }
 
         return ''; // required to satisfy function signature
@@ -169,12 +166,12 @@ export default class TemplaterAdapter extends Adapter {
      * @param filename 
      * @param outputFile 
      */
-    createFrom = async (filename: string, context: ScriptContext, outputFile?: string): Promise<string> => {
+    createFrom = async (filename: string, errorContext: ScriptContext, outputFile?: string): Promise<string> => {
 
         // replace any variables that might be in the output filename
 		if (outputFile && this.ntb.vars.hasVars(outputFile)) {
             const activeFile = this.ntb.app.workspace.getActiveFile();
-			outputFile = await this.ntb.vars.replaceVars(outputFile, activeFile, context);
+			outputFile = await this.ntb.vars.replaceVars(outputFile, activeFile, errorContext);
         }
 
         const { parsedFolder, parsedFilename } = this.parseOutputFile(outputFile);
@@ -183,17 +180,15 @@ export default class TemplaterAdapter extends Adapter {
 
         if (this.adapterApi) {
             const templateFile = this.ntb.app.vault.getFileByPath(filename);
-            try {
-                if (templateFile) {
-                    await this.adapterApi.create_new_note_from_template(templateFile, outputFolder, outputFilename);
-                }
-                else {
-                    throw new Error(t('adapter.error.file-not-found', { filename: filename }));
-                }
+            if (!templateFile) {
+                this.ntb.adapters.utils.displayError(t('adapter.error.file-not-found', { filename: filename }), errorContext);
+                return '';
             }
-            catch (error) {
-                this.ntb.adapters.utils.displayError(error);
-            }
+
+            // TODO? show notice instead? errors are not thrown from Templater's code, and there's no feasible way to check success
+            errorContext['scriptFile'] = templateFile;
+            this.ntb.debug('Note Toolbar: Using:', this.ntb.adapters.utils.formatScriptContext(errorContext));
+            await this.adapterApi.create_new_note_from_template(templateFile, outputFolder, outputFilename);
         }
 
         return ''; // required to satisfy function signature
