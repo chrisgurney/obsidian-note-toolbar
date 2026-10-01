@@ -148,7 +148,7 @@ export default class AdapterUtils {
     ): string | undefined {
         this.ntb.debug('CONTEXT', context, context.errorBehavior);
 
-        const formattedContext = context ? formatScriptContext(this.ntb, context) : undefined;
+        const formattedContext = context ? this.formatScriptContext(context) : undefined;
         const formattedExpression = this.formatExpression(expression);
 
         const errorMessage = context?.scriptFile
@@ -197,6 +197,35 @@ export default class AdapterUtils {
                 // completely ignore messages, e.g. for toolbar updates it would be too noisy to output errors to console
                 return undefined;
         }
+    }
+
+    /**
+     * Returns a string representation of the provided {@link ScriptContext}.
+     * @param context {@link ScriptContext}
+     */
+    formatScriptContext(context: ScriptContext): string {
+        const { scriptFile, toolbar, item, component } = context;
+        const itemText = item && formatScriptItem(this.ntb, item, context);
+
+        if (component && toolbar && itemText) {
+            return t('adapter.error.context.component', {
+                component: component, toolbar: toolbar.name, item: itemText, 
+            });
+        }
+
+        if (toolbar && itemText) {
+            return t('adapter.error.context.toolbar-item', {
+                toolbar: toolbar.name, item: itemText
+            });
+        }
+
+        if (component && itemText) { return t('adapter.error.context.component-item', { component: component, item: itemText }); }
+
+        if (component === 'callout') { return t('adapter.error.context.callout'); }
+        if (itemText) { return t('adapter.error.context.item', { item: itemText }); }
+        if (scriptFile) { return t('adapter.error.context.script', { script: scriptFile instanceof TFile ? scriptFile.path : scriptFile }); }
+        
+        return '';
     }
 
     /**
@@ -292,35 +321,6 @@ function formatErrorMessage(error: unknown, notes?: string): string {
     const messageWithNotes = notes ? `${notes}\n\n${messageTruncated}` : messageTruncated;
 
     return messageWithNotes;
-}
-
-/**
- * Returns a string representation of the provided {@link ScriptContext}.
- * @param context {@link ScriptContext}
- */
-function formatScriptContext(ntb: NoteToolbarPlugin, context: ScriptContext): string {
-    const { scriptFile, toolbar, item, component } = context;
-    const itemText = item && formatScriptItem(ntb, item, context);
-
-    if (component && toolbar && itemText) {
-        return t('adapter.error.context.component', {
-            component: component, toolbar: toolbar.name, item: itemText, 
-        });
-    }
-
-    if (toolbar && itemText) {
-        return t('adapter.error.context.toolbar-item', {
-            toolbar: toolbar.name, item: itemText
-        });
-    }
-
-    if (component && itemText) { return t('adapter.error.context.component-item', { component: component, item: itemText }); }
-
-    if (component === 'callout') { return t('adapter.error.context.callout'); }
-    if (itemText) { return t('adapter.error.context.item', { item: itemText }); }
-    if (scriptFile) { return t('adapter.error.context.script', { script: scriptFile instanceof TFile ? scriptFile.path : scriptFile }); }
-    
-    return '';
 }
 
 /**
