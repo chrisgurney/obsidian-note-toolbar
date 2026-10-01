@@ -222,8 +222,9 @@ export default class AdapterUtils {
         if (component && itemText) { return t('adapter.error.context.component-item', { component: component, item: itemText }); }
 
         if (component === 'callout') { return t('adapter.error.context.callout'); }
+        if (itemText && scriptFile) { return t('adapter.error.context.item-file', { item: itemText, file: scriptFile instanceof TFile ? scriptFile.path : scriptFile }); }
         if (itemText) { return t('adapter.error.context.item', { item: itemText }); }
-        if (scriptFile) { return t('adapter.error.context.script', { script: scriptFile instanceof TFile ? scriptFile.path : scriptFile }); }
+        if (scriptFile) { return t('adapter.error.context.file', { file: scriptFile instanceof TFile ? scriptFile.path : scriptFile }); }
         
         return '';
     }

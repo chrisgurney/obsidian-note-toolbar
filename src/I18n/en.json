@@ -29,9 +29,10 @@
                 "callout": "item in Note Toolbar callout",
                 "component": "{{component}} of item ({{- item}}) in toolbar ({{- toolbar}})",
                 "component-item": "{{component}} of item ({{- item}})",
+                "file": "file ({{- file}})",
                 "toolbar-item": "item ({{- item}}) in toolbar ({{- toolbar}})",
                 "item": "item ({{- item}})",
-                "script": "script ({{- script}})"
+                "item-file": "item ({{- item}}) with file ({{- file}})"
             },
             "exec-failed": "Failed to execute script: {{- filename}}",
             "exec-failed_context": "Failed to execute: {{- context}}:\n{{- filename}}",
