@@ -46,13 +46,13 @@ export default class AdapterUtils {
         return importedArgs.value;
     }
 
-    checkContainer(containerId: string | undefined): HTMLElement | undefined {
+    checkContainer(containerId: string | undefined, errorContext: ScriptContext): HTMLElement | undefined {
         let containerEl: HTMLElement | undefined = undefined;
         if (containerId) {
             containerEl = this.ntb.el.getOutputEl(containerId) ?? undefined;
             if (!containerEl) {
                 const errorMessage = t('adapter.error.callout-not-found', { id: containerId });
-                this.displayError(errorMessage);
+                this.displayError(errorMessage, errorContext);
                 throw this.getScriptError(undefined, '', errorMessage);
             }
         }

@@ -116,7 +116,7 @@ export default class JsEngineAdapter extends Adapter {
 
         let result;
         
-        const containerEl = this.ntb.adapters.utils.checkContainer(config.outputContainer);
+        const containerEl = this.ntb.adapters.utils.checkContainer(config.outputContainer, errorContext);
 
         switch (config.pluginFunction) {
             case 'evaluate':
