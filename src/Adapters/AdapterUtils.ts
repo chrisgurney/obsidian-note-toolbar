@@ -136,11 +136,10 @@ export default class AdapterUtils {
     }
 
     /**
-     * Outputs the provided script error based on provided {@link ErrorBehavior}.
+     * Outputs the provided script error based on provided {@link ScriptContext}.
      * @param error error to handle
-     * @param errorBehavior {@link ErrorBehavior}
      * @param expression script code to report
-     * @param sourceFile the script file where the error occurred
+     * @param context {@link ScriptContext}
      * @param containerEl optional container to output to
      * @returns 
      */
