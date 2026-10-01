@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { Plugin, TFile } from "obsidian";
+import { Notice, Plugin, TFile } from "obsidian";
 import { ErrorBehavior, ItemType, ScriptConfig, ScriptContext, SettingType, t } from "Settings/NoteToolbarSettings";
 import { AdapterFunction } from "Types/interfaces";
 import { Adapter } from "./Adapter";
@@ -151,9 +151,8 @@ export default class TemplaterAdapter extends Adapter {
                 return '';
             }
 
-            // TODO? show notice instead? errors are not thrown from Templater's code, and there's no feasible way to check success
-            errorContext['scriptFile'] = templateFile;
-            this.ntb.debug('Note Toolbar: Using:', this.ntb.adapters.utils.formatContext(errorContext));
+            // showing notice as errors are not thrown from Templater's code, and there's no feasible way to check success
+            new Notice(t('adapter.templater.append-function') + ':\n' + templateFile.path);
             await this.adapterApi.append_template_to_active_file(templateFile);
         }
 
@@ -187,7 +186,8 @@ export default class TemplaterAdapter extends Adapter {
 
             // TODO? show notice instead? errors are not thrown from Templater's code, and there's no feasible way to check success
             errorContext['scriptFile'] = templateFile;
-            this.ntb.debug('Note Toolbar: Using:', this.ntb.adapters.utils.formatContext(errorContext));
+            // showing notice as errors are not thrown from Templater's code, and there's no feasible way to check success
+            new Notice(t('adapter.templater.create-function') + ':\n' + templateFile.path);
             await this.adapterApi.create_new_note_from_template(templateFile, outputFolder, outputFilename);
         }
 
