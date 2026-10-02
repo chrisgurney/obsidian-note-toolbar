@@ -46,6 +46,7 @@
             "expr-note-not-open": "This expression must be executed from an open note.",
             "file-empty": "File is empty: {{- filename}}",
             "file-not-found": "File not found: {{- filename}}",
+            "file-not-found_load": "loadScript file not found: {{- filename}}",
             "function-invalid": "Unsupported function: {{- function}}",
             "function-not-found": "Function not found: {{- function}}",
             "general": "Error: Check console for more details.\n```\n{{- error}}\n```",

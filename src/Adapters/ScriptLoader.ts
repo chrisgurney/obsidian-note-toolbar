@@ -1,5 +1,6 @@
 import NoteToolbarPlugin from 'main';
 import { normalizePath, TFile } from 'obsidian';
+import { t } from 'Settings/NoteToolbarSettings';
 
 /**
  * Loads scripts to make them available for evaluated scripts.
@@ -17,7 +18,7 @@ export class ScriptLoader {
     ): Promise<T> {
         const file = this.resolve(path);
         if (!file) {
-            throw new Error(`User script not found: ${path}`);
+            throw new Error(t('adapter.error.file-not-found_load', { filename: path }));
         }
         const contents = await this.ntb.app.vault.cachedRead(file);
         // this.ntb.debug('evaluating:', contents);

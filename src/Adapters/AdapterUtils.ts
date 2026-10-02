@@ -123,12 +123,12 @@ export default class AdapterUtils {
         const noticeFr = new DocumentFragment();
         noticeFr.createEl('strong', { text: t('adapter.error.label-title') });
         noticeFr.appendText(messageWithNotes);
-        noticeFr.append('\n\n• ', t('adapter.error.check-console'));
+        noticeFr.append('\n\n→ ', t('adapter.error.check-console'));
 
         // add link to open item settings if item is provided
         if (context?.item) {
             const openItemFr = itemModalFr(this.ntb, context?.item);
-            if (openItemFr) noticeFr.append('\n• ', openItemFr);
+            if (openItemFr) noticeFr.append('\n→ ', openItemFr);
         }
 
         // show notice
