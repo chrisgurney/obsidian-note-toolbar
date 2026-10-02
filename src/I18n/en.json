@@ -22,7 +22,7 @@
         },
         "error": {
             "additional-details": "Additional details provided:",
-            "args-parsing": "Failed to parse arguments",
+            "args-parsing": "Failed to parse arguments:\n{{- error}}",
             "args-parsing-field-error": "```\n{{- error}}\n```",
             "args-parsing-script-error": "Failed to parse arguments for script: {{- filename}}\n```\n{{- error}}\n```",
             "callout-not-found": "Error: Could not find note-toolbar-output callout in current note with ID: {{id}}",

@@ -38,9 +38,7 @@ export default class AdapterUtils {
     ): Record<string, unknown> | undefined {
         const importedArgs = argsJson ? importArgs(argsJson) : { value: {} };
         if (importedArgs.value === null) {
-            // TODO: render messages into the container, if provided
-            const errorMessage = t('adapter.error.args-parsing');
-            this.displayError(importedArgs.error, errorContext, errorMessage, containerEl);
+            this.handleError(t('adapter.error.args-parsing', { error: importedArgs.error }), errorContext, '', containerEl);
             return;
         }
         return importedArgs.value;
