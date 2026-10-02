@@ -144,6 +144,8 @@ export default class TemplaterAdapter extends Adapter {
      */
     appendTemplate = async (filename: string, errorContext: ScriptContext): Promise<string> => {
 
+        errorContext = { ...errorContext, scriptFile: filename, operation: t('adapter.templater.append-function') };
+
         if (this.adapterApi) {
             const templateFile = this.ntb.adapters.utils.checkFile(filename, errorContext);
             if (!templateFile) {
@@ -153,7 +155,6 @@ export default class TemplaterAdapter extends Adapter {
 
             // showing notice as errors are not thrown from Templater's code, and there's no feasible way to check success
             new Notice(t('adapter.templater.append-function') + ':\n' + templateFile.path);
-            errorContext = { ...errorContext, scriptFile: templateFile, operation: t('adapter.templater.append-function') };
             this.ntb.debug('Note Toolbar: Using:', this.ntb.adapters.utils.formatContext(errorContext));
             await this.adapterApi.append_template_to_active_file(templateFile);
         }

@@ -284,9 +284,9 @@ export default class JsEngineAdapter extends Adapter {
         filename: string,
         errorContext: ScriptContext,
         containerEl?: HTMLElement
-    ): Promise<string> => {
+    ): Promise<string | undefined> => {
 
-        let result = '';
+        let result;
         const resultEl = containerEl || createSpan();
 
         const activeFilePath = this.ntb.app.workspace.getActiveFile()?.path ?? '';
@@ -296,6 +296,17 @@ export default class JsEngineAdapter extends Adapter {
         const scriptFile = this.ntb.adapters.utils.checkFile(filename, errorContext);
         const scriptFilePath = scriptFile?.path || filename;
         errorContext['scriptFile'] = scriptFilePath;
+
+        if (!scriptFile) {
+            this.ntb.adapters.utils.displayError(t('adapter.error.file-not-found', { filename: filename }), errorContext);
+            return;
+        }
+
+        const contents = await this.ntb.app.vault.cachedRead(scriptFile);
+        if (!contents.trim()) {
+            this.ntb.adapters.utils.displayError(t('adapter.error.file-empty', { filename: filename }), errorContext);
+            return;
+        }
 
         const component = new Component();
         component.load();

@@ -107,23 +107,25 @@ export default class JavaScriptAdapter extends Adapter {
         containerEl?: HTMLElement,
     ): Promise<string | undefined> => {
 
-        let result;
-        
         if (!filename) return;
 
         const scriptFile = this.ntb.adapters.utils.checkFile(filename, errorContext);
+        const scriptFilePath = scriptFile?.path || filename;
+        // errorContext['scriptFile'] = scriptFilePath;
+
+        if (!scriptFile) {
+            this.ntb.adapters.utils.displayError(t('adapter.error.file-not-found', { filename: filename }), errorContext);
+            return;
+        }
 
         const contents = await this.ntb.app.vault.cachedRead(scriptFile);
-        if (contents.trim()) {
-            this.ntb.debug(`Note Toolbar: Executing: ${scriptFile.path}`);
-            errorContext['scriptFile'] = scriptFile;
-            result = await this.evaluate(contents, errorContext, argsJson, containerEl);
-        }
-        else {
-            this.ntb.adapters.utils.displayError(t('adapter.error.file-empty', { filename: filename }));
+        if (!contents.trim()) {
+            this.ntb.adapters.utils.displayError(t('adapter.error.file-empty', { filename: filename }), errorContext);
+            return;
         }
 
-        return result;
+        this.ntb.debug(`Note Toolbar: Executing: ${scriptFilePath}`);
+        return await this.evaluate(contents, errorContext, argsJson, containerEl);
 
     }
 

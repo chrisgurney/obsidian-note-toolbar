@@ -219,6 +219,19 @@ export default class DataviewAdapter extends Adapter {
         if (!filename) return;
 
         const scriptFile = this.ntb.adapters.utils.checkFile(filename, errorContext);
+        const scriptFilePath = scriptFile?.path || filename;
+        errorContext['scriptFile'] = scriptFilePath;
+
+        if (!scriptFile) {
+            this.ntb.adapters.utils.displayError(t('adapter.error.file-not-found', { filename: filename }), errorContext);
+            return;
+        }
+
+        let contents = await this.ntb.app.vault.cachedRead(scriptFile);
+        if (!contents.trim()) {
+            this.ntb.adapters.utils.displayError(t('adapter.error.file-empty', { filename: filename }), errorContext);
+            return;
+        }
 
         const args = this.ntb.adapters.utils.checkArgs(argsJson, errorContext, containerEl);
         if (!args) return '';
@@ -234,38 +247,34 @@ export default class DataviewAdapter extends Adapter {
 
         const activeFilePath = this.ntb.app.workspace.getActiveFile()?.path || '';
 
-        let contents = await this.ntb.app.vault.cachedRead(scriptFile);
-        if (contents) {
-            // if (contents.includes("await")) contents = "(async () => { " + contents + " })()";
-            contents += `\n//# sourceURL=${scriptFile.path}`;
-            // FIXME? component is too short-lived; using this.plugin instead, but might lead to memory leaks? thread:
-            // https://discord.com/channels/686053708261228577/840286264964022302/1296883427097710674
-            // "then you need to hold on to your component longer and call unload when you want to get rid of the element"
-            const component = new Component();
-            component.load();
-            try {
-                const func = new DataviewAdapter.AsyncFunction("dv", "input", contents);
-                containerEl.empty();
-                const dataviewLocalApi = this.adapterPlugin?.localApi(activeFilePath, component, containerEl);    
-                // from dv.view: may directly render, in which case it will likely return undefined or null
-                result = await Promise.resolve((func as (...args: unknown[]) => unknown)(dataviewLocalApi, args));
-                // console.debug(result, containerEl);
-                if (result && component) {
-                        await this.adapterApi?.renderValue(
-                            result,
-                            containerEl,
-                            component,
-                            activeFilePath
-                        );
-                }
+        // if (contents.includes("await")) contents = "(async () => { " + contents + " })()";
+        contents += `\n//# sourceURL=${scriptFile.path}`;
+        // FIXME? component is too short-lived; using this.plugin instead, but might lead to memory leaks? thread:
+        // https://discord.com/channels/686053708261228577/840286264964022302/1296883427097710674
+        // "then you need to hold on to your component longer and call unload when you want to get rid of the element"
+        const component = new Component();
+        component.load();
+        try {
+            const func = new DataviewAdapter.AsyncFunction("dv", "input", contents);
+            containerEl.empty();
+            const dataviewLocalApi = this.adapterPlugin?.localApi(activeFilePath, component, containerEl);    
+            // from dv.view: may directly render, in which case it will likely return undefined or null
+            result = await Promise.resolve((func as (...args: unknown[]) => unknown)(dataviewLocalApi, args));
+            // console.debug(result, containerEl);
+            if (result && component) {
+                    await this.adapterApi?.renderValue(
+                        result,
+                        containerEl,
+                        component,
+                        activeFilePath
+                    );
             }
-            catch (error) {
-                result = this.ntb.adapters.utils.handleError(error, contents, errorContext, containerEl) ?? result;
-            }
-            finally {
-                containerEl.addEventListener('remove', () => component.unload(), { once: true });
-            }
-
+        }
+        catch (error) {
+            result = this.ntb.adapters.utils.handleError(error, contents, errorContext, containerEl) ?? result;
+        }
+        finally {
+            containerEl.addEventListener('remove', () => component.unload(), { once: true });
         }
 
         return result as string;
