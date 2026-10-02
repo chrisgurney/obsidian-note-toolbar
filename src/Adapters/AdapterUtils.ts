@@ -176,15 +176,15 @@ export default class AdapterUtils {
                 filename: context.scriptFile instanceof TFile ? getFileUri(this.ntb, context.scriptFile) : context.scriptFile,
                 expression: formattedExpression
             })
-            : context
-                ? t('adapter.error.expr-failed_context', {
+            : formattedExpression
+                ? t('adapter.error.expr-failed', {
                     context: formattedContext,
                     expression: formattedExpression
                 })
-                : t('adapter.error.expr-failed', {
-                    expression: formattedExpression
+                : t('adapter.error.expr-failed_context', {
+                    context: formattedContext
                 });
-        
+
         switch (context.errorBehavior) {
             case ErrorBehavior.Display: 
                 this.displayError(error, context, errorMessage, containerEl);
