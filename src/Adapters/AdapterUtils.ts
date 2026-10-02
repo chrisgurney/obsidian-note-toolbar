@@ -41,7 +41,7 @@ export default class AdapterUtils {
             // TODO: render messages into the container, if provided
             const errorMessage = t('adapter.error.args-parsing');
             this.displayError(importedArgs.error, errorContext, errorMessage, containerEl);
-            throw new Error(errorMessage);
+            return;
         }
         return importedArgs.value;
     }
@@ -53,7 +53,7 @@ export default class AdapterUtils {
             if (!containerEl) {
                 const errorMessage = t('adapter.error.callout-not-found', { id: containerId });
                 this.displayError(errorMessage, errorContext);
-                throw this.getScriptError(undefined, '', errorMessage);
+                return;
             }
         }
         return containerEl;
@@ -70,7 +70,7 @@ export default class AdapterUtils {
             // TODO: render messages into the container, if provided
             const errorMessage = t('adapter.error.file-not-found', { filename: filename });
             this.displayError(errorMessage, errorContext);
-            throw this.getScriptError(undefined, filename, errorMessage);
+            return;
         }
         return file;
     }
@@ -80,17 +80,17 @@ export default class AdapterUtils {
      * @param filename 
      * @returns the file, or undefined
      */
-    checkFileLink(filename: string): TFile | undefined {
-        const activeFilePath = this.ntb.app.workspace.getActiveFile()?.path || '';
-        const file = this.ntb.app.metadataCache.getFirstLinkpathDest(filename, activeFilePath);
-        if (!file) {
-            // TODO: render messages into the container, if provided
-            const errorMessage = t('adapter.error.file-not-found', { filename: filename });
-            this.displayError(errorMessage);
-            throw this.getScriptError(undefined, filename, errorMessage);
-        }
-        return file;
-    }
+    // checkFileLink(filename: string): TFile | undefined {
+    //     const activeFilePath = this.ntb.app.workspace.getActiveFile()?.path || '';
+    //     const file = this.ntb.app.metadataCache.getFirstLinkpathDest(filename, activeFilePath);
+    //     if (!file) {
+    //         // TODO: render messages into the container, if provided
+    //         const errorMessage = t('adapter.error.file-not-found', { filename: filename });
+    //         this.displayError(errorMessage);
+    //         return;
+    //     }
+    //     return file;
+    // }
 
     /**
      * Displays the provided scripting error as a Notice, console message, and outputs to a container (if provided). 
@@ -214,25 +214,25 @@ export default class AdapterUtils {
      */
     formatContext(context: ScriptContext): string {
         let result = '';
-        const { scriptFile, toolbar, item, component, operation } = context;
+        const { scriptFile, toolbar, item, component, adapterFunction } = context;
 
         const wrap = ( subject: string, type: 'for' | 'in' | 'of' | 'with', target: string ): string => 
             t(`adapter.error.context.${type}`, { subject, target });
 
         if (component === 'callout') { return t('adapter.error.context.callout'); }
 
-        if (operation) {
-            result = t('adapter.error.context.operation', { operation });
+        if (adapterFunction) {
+            result = t('adapter.error.context.adapterFunction', { adapterFunction });
         }
 
         if (component) {
             const componentText = t('adapter.error.context.component', { component });
-            result = result ? wrap(result, operation ? 'for' : 'of', componentText) : componentText;
+            result = result ? wrap(result, adapterFunction ? 'for' : 'of', componentText) : componentText;
         }
 
         if (item) {
             const itemText = t('adapter.error.context.item', { item: formatScriptItem(this.ntb, item, context) });
-            result = result ? wrap(result, component ? 'of' : (operation ? 'for' : 'of'), itemText) : itemText;
+            result = result ? wrap(result, component ? 'of' : (adapterFunction ? 'for' : 'of'), itemText) : itemText;
         }
 
         if (toolbar) {

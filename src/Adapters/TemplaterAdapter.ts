@@ -144,14 +144,11 @@ export default class TemplaterAdapter extends Adapter {
      */
     appendTemplate = async (filename: string, errorContext: ScriptContext): Promise<string> => {
 
-        errorContext = { ...errorContext, scriptFile: filename, operation: t('adapter.templater.append-function') };
-
         if (this.adapterApi) {
+            errorContext = { ...errorContext, scriptFile: filename, adapterFunction: t('adapter.templater.append-function') };
             const templateFile = this.ntb.adapters.utils.checkFile(filename, errorContext);
-            if (!templateFile) {
-                this.ntb.adapters.utils.displayError(t('adapter.error.file-not-found', { filename: filename }), errorContext);
-                return '';
-            }
+            if (!templateFile) return '';
+            errorContext['scriptFile'] = templateFile;
 
             // showing notice as errors are not thrown from Templater's code, and there's no feasible way to check success
             new Notice(t('adapter.templater.append-function') + ':\n' + templateFile.path);
@@ -182,16 +179,15 @@ export default class TemplaterAdapter extends Adapter {
 
         if (this.adapterApi) {
             const templateFile = this.ntb.app.vault.getFileByPath(filename);
+            errorContext = { ...errorContext, scriptFile: templateFile ?? filename, adapterFunction: t('adapter.templater.create-function') };
             if (!templateFile) {
                 this.ntb.adapters.utils.displayError(t('adapter.error.file-not-found', { filename: filename }), errorContext);
                 return '';
             }
 
             // TODO? show notice instead? errors are not thrown from Templater's code, and there's no feasible way to check success
-            errorContext['scriptFile'] = templateFile;
             // showing notice as errors are not thrown from Templater's code, and there's no feasible way to check success
             new Notice(t('adapter.templater.create-function') + ':\n' + templateFile.path);
-            errorContext = { ...errorContext, scriptFile: templateFile, operation: t('adapter.templater.create-function') };
             this.ntb.debug('Note Toolbar: Using:', this.ntb.adapters.utils.formatContext(errorContext));
             await this.adapterApi.create_new_note_from_template(templateFile, outputFolder, outputFilename);
         }

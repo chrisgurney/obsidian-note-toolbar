@@ -28,6 +28,7 @@
             "callout-not-found": "Error: Could not find note-toolbar-output callout in current note with ID: {{id}}",
             "check-console": "Check console for details",
             "context": {
+                "adapterFunction": "{{- adapterFunction}}",
                 "callout": "item in Note Toolbar callout",
                 "component": "{{- component}}",
                 "file": "file ({{- file}})",
@@ -35,7 +36,6 @@
                 "in": "{{- subject}} in {{- target}}",
                 "item": "item ({{- item}})",
                 "of": "{{- subject}} of {{- target}}",
-                "operation": "{{- operation}}",
                 "toolbar": "toolbar ({{- toolbar}})",
                 "with": "{{- subject}} with {{- target}}"
             },

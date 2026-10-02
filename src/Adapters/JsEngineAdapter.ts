@@ -238,7 +238,7 @@ export default class JsEngineAdapter extends Adapter {
         errorContext: ScriptContext,
         functionName?: string, 
         argsJson?: string
-    ): Promise<string> => {
+    ): Promise<string | undefined> => {
 
         let result;
 
@@ -254,25 +254,32 @@ export default class JsEngineAdapter extends Adapter {
         errorContext['scriptFile'] = scriptFilePath;
 
         if (this.adapterApi) {
-            const module = await this.adapterApi.importJs(scriptFilePath) as Record<string, unknown>;
+            this.ntb.debug('Note Toolbar: Executing:\n', scriptFilePath, functionName ?? '');
+            let module;
+            try {
+                module = await this.adapterApi.importJs(scriptFilePath) as Record<string, unknown>;
+            }
+            catch (error) {
+                this.ntb.adapters.utils.handleError(error, errorContext);
+                return;
+            }
             if (module && functionName) {
-                this.ntb.debug('Note Toolbar: Executing:\n', module[functionName]);
-                if (module[functionName] && (typeof module[functionName] === 'function')) {
-                    try {
-                        if (args) {
-                            result = (module[functionName] as (...args: unknown[]) => unknown)(this.adapterApi, args);
-                        }
-                        else {
-                            result = (module[functionName] as (...args: unknown[]) => unknown)(this.adapterApi);
-                        }
-                        this.ntb.debug('importExec() result:', result);
-                    }
-                    catch (error) {
-                        result = this.ntb.adapters.utils.handleError(error, errorContext, String(module[functionName])) ?? result;
-                    }
+                const isFunction = module[functionName] && (typeof module[functionName] === 'function');
+                if (!isFunction) {
+                    this.ntb.adapters.utils.handleError(t('adapter.error.function-not-found', { function: functionName }), errorContext);
+                    return;
                 }
-                else {
-                    result = this.ntb.adapters.utils.handleError(t('adapter.error.function-not-found', { function: functionName }), errorContext, String(module[functionName])) ?? result;
+                try {
+                    if (args) {
+                        result = (module[functionName] as (...args: unknown[]) => unknown)(this.adapterApi, args);
+                    }
+                    else {
+                        result = (module[functionName] as (...args: unknown[]) => unknown)(this.adapterApi);
+                    }
+                    this.ntb.debug('importExec() result:', result);
+                }
+                catch (error) {
+                    result = this.ntb.adapters.utils.handleError(error, errorContext, String(module[functionName])) ?? result;
                 }
             }
         }
