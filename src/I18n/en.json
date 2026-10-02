@@ -21,6 +21,7 @@
             "query-function": "Execute query"
         },
         "error": {
+            "additional-details": "Additional details provided:",
             "args-parsing": "Failed to parse arguments",
             "args-parsing-field-error": "```\n{{- error}}\n```",
             "args-parsing-script-error": "Failed to parse arguments for script: {{- filename}}\n```\n{{- error}}\n```",

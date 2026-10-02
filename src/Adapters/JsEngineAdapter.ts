@@ -12,6 +12,12 @@ type JsEngineResult = {
         apiInstance: unknown;
         content?: string;
         markdownElements?: [];
+        message?: {
+            code: string;
+            content: string;
+            title: string;
+            type: string;
+        };
     };
 }
 
@@ -317,13 +323,19 @@ export default class JsEngineAdapter extends Adapter {
                 container: resultEl,
                 component: component,
             });
-            this.ntb.debug('exec() result:', execution?.result);
+            this.ntb.debug('Note Toolbar: Execution result:\n', execution?.result);
             if (containerEl) {
                 const renderer = this.adapterApi?.internal.createRenderer(resultEl, activeFilePath, component);
                 await renderer?.render(execution?.result);
                 // await MarkdownRenderer.render(this.plugin.app, execution.result, resultEl, activeFilePath, this.plugin);
             }
             else {
+                const jsExecution = execution as JsEngineResult;
+                if (jsExecution.result.message?.type === 'error') {
+                    errorContext['errorObject'] = jsExecution.result.message;
+                    this.ntb.adapters.utils.handleError(jsExecution.result.message.code, errorContext, '', containerEl);
+                    return;
+                }
                 result = execution?.result?.content || (execution?.result || '') as string;
             }
         }

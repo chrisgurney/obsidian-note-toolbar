@@ -731,9 +731,11 @@ export interface ScriptConfig {
  * Used to indicate more precisely what triggered script and variable errors.
  */
 export interface ScriptContext {
-	/** part of an item where variables can be used */
+	/** callout, or part of an item where variables can be used */
 	component?: 'callout' | 'label' | 'tooltip' | 'URI';
-	errorBehavior: ErrorBehavior;	
+	errorBehavior: ErrorBehavior;
+	/** error object from adapter, if provided, e.g., `JsExecution` */
+	errorObject?: unknown;
 	item?: ToolbarItemSettings;
 	operation?: string;
 	scriptFile?: TFile | string;

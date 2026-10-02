@@ -112,8 +112,11 @@ export default class AdapterUtils {
         const consoleMessage = error instanceof Error 
             ? (notes ? `${notes}\n\n${error.stack}` : error) 
             : messageWithNotes;
-        console.error(consoleMessage);
-        
+        const consoleMessageDetails = context?.errorObject ? [
+            '\n\n', t('adapter.error.additional-details'), context?.errorObject
+        ] : [];
+        console.error(consoleMessage, ...consoleMessageDetails);
+
         // output to a container, if provided
         if (containerEl) {
             const errorEl = containerEl.createEl('pre');
@@ -163,7 +166,7 @@ export default class AdapterUtils {
         const formattedContext = context ? this.formatContext(context) : undefined;
         const formattedExpression = expression ? this.formatExpression(expression) : undefined;
 
-        const errorMessage = context?.scriptFile
+        const errorMessage = context.scriptFile
             ? t('adapter.error.exec-failed_context', {
                 context: formattedContext,
                 filename: context.scriptFile instanceof TFile ? getFileUri(this.ntb, context.scriptFile) : context.scriptFile,
@@ -177,7 +180,7 @@ export default class AdapterUtils {
                 : t('adapter.error.expr-failed', {
                     expression: formattedExpression
                 });
-
+        
         switch (context.errorBehavior) {
             case ErrorBehavior.Display: 
                 this.displayError(error, context, errorMessage, containerEl);
@@ -196,7 +199,7 @@ export default class AdapterUtils {
                 return undefined;
 
             case ErrorBehavior.Console:
-                console.error(errorMessage, '\n\n', error);
+                console.error(errorMessage, '\n\n', error, context.errorObject ?? '');
                 return undefined;
 
             case ErrorBehavior.Ignore:
