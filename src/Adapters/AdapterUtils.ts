@@ -105,7 +105,8 @@ export default class AdapterUtils {
         notes?: string, 
         containerEl?: HTMLElement
     ) {
-        const messageWithNotes = formatErrorMessage(error, notes);
+        const formattedMessage = formatErrorMessage(error);
+        const messageWithNotes = notes ? `${notes}\n\n${formattedMessage}` : formattedMessage;
 
         // output to console
         const consoleMessage = error instanceof Error 
@@ -122,7 +123,13 @@ export default class AdapterUtils {
         // show notice
         const noticeFr = new DocumentFragment();
         noticeFr.createEl('strong', { text: t('adapter.error.label-title') });
-        noticeFr.appendText(messageWithNotes);
+        
+        if (notes) noticeFr.append(notes, '\n\n');
+
+        const formattedMessageFr = new DocumentFragment();
+        formattedMessageFr.createEl('code', { text: formattedMessage });
+        noticeFr.append(formattedMessageFr);
+
         noticeFr.append('\n\n→ ', t('adapter.error.check-console'));
 
         // add link to open item settings if item is provided
@@ -318,7 +325,7 @@ function itemModalFr(ntb: NoteToolbarPlugin, item: ToolbarItemSettings): Documen
     return itemLink;
 }
 
-function formatErrorMessage(error: unknown, notes?: string): string {
+function formatErrorMessage(error: unknown): string {
     const isError = error instanceof Error;
     const message = isError ? error.message : String(error);
 
@@ -326,9 +333,7 @@ function formatErrorMessage(error: unknown, notes?: string): string {
     const truncateMatch = message.match(/[\r\n]\s+at\b/);
     const messageTruncated = truncateMatch ? message.slice(0, truncateMatch.index) : message;
 
-    const messageWithNotes = notes ? `${notes}\n\n${messageTruncated}` : messageTruncated;
-
-    return messageWithNotes;
+    return messageTruncated;
 }
 
 /**
