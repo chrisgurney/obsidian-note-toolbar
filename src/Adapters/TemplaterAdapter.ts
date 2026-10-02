@@ -245,7 +245,7 @@ export default class TemplaterAdapter extends Adapter {
             }
         }
         catch (error) {
-            result = this.ntb.adapters.utils.handleError(error, expression, errorContext) ?? result;
+            result = this.ntb.adapters.utils.handleError(error, errorContext, expression) ?? result;
         }
 
         return result;
@@ -290,7 +290,7 @@ export default class TemplaterAdapter extends Adapter {
         }
         catch (error) {
             errorContext['scriptFile'] = templateFile;
-            result = this.ntb.adapters.utils.handleError(error, '', errorContext) ?? result;
+            result = this.ntb.adapters.utils.handleError(error, errorContext) ?? result;
         }
 
         return result;

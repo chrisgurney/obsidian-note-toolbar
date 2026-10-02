@@ -190,7 +190,7 @@ export default class DataviewAdapter extends Adapter {
             }
         }
         catch (error) {
-            result = this.ntb.adapters.utils.handleError(error, expression, errorContext, containerEl) ?? result;
+            result = this.ntb.adapters.utils.handleError(error, errorContext, expression, containerEl) ?? result;
         }
         finally {
             component.unload();
@@ -271,7 +271,7 @@ export default class DataviewAdapter extends Adapter {
             }
         }
         catch (error) {
-            result = this.ntb.adapters.utils.handleError(error, contents, errorContext, containerEl) ?? result;
+            result = this.ntb.adapters.utils.handleError(error, errorContext, contents, containerEl) ?? result;
         }
         finally {
             containerEl.addEventListener('remove', () => component.unload(), { once: true });
@@ -325,7 +325,7 @@ export default class DataviewAdapter extends Adapter {
             }
         }
         catch (error) {
-            result = this.ntb.adapters.utils.handleError(error, expression, errorContext, containerEl) ?? result;
+            result = this.ntb.adapters.utils.handleError(error, errorContext, expression, containerEl) ?? result;
         }
         finally {
             component.unload();
@@ -382,7 +382,7 @@ export default class DataviewAdapter extends Adapter {
             }
         }
         catch (error) {
-            result = this.ntb.adapters.utils.handleError(error, expression, errorContext, containerEl) ?? result;
+            result = this.ntb.adapters.utils.handleError(error, errorContext, expression, containerEl) ?? result;
         }
         finally {
 			component.unload();

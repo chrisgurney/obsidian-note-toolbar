@@ -138,21 +138,21 @@ export default class AdapterUtils {
     /**
      * Outputs the provided script error based on provided {@link ScriptContext}.
      * @param error error to handle
-     * @param expression script code to report
      * @param context {@link ScriptContext}
+     * @param expression script code to report
      * @param containerEl optional container to output to
      * @returns 
      */
     handleError(
         error: unknown,
-        expression: string,
         context: ScriptContext,
+        expression: string = '',
         containerEl?: HTMLElement
     ): string | undefined {
         // this.ntb.debug('CONTEXT', context, context.errorBehavior);
 
         const formattedContext = context ? this.formatContext(context) : undefined;
-        const formattedExpression = this.formatExpression(expression);
+        const formattedExpression = expression ? this.formatExpression(expression) : undefined;
 
         const errorMessage = context?.scriptFile
             ? t('adapter.error.exec-failed_context', {

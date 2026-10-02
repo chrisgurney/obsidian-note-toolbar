@@ -172,7 +172,7 @@ export default class JavaScriptAdapter extends Adapter {
                 }
             }
             catch (error) {
-                result = this.ntb.adapters.utils.handleError(error, expression, errorContext, containerEl) ?? result;
+                result = this.ntb.adapters.utils.handleError(error, errorContext, expression, containerEl) ?? result;
             }
             finally {
                 component.unload();

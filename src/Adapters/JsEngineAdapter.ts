@@ -200,7 +200,7 @@ export default class JsEngineAdapter extends Adapter {
             result = execution.result as string;
         }
         catch (error) {
-            result = this.ntb.adapters.utils.handleError(error, expression, errorContext, containerEl) ?? result;
+            result = this.ntb.adapters.utils.handleError(error, errorContext, expression, containerEl) ?? result;
         } 
         finally {
             component.unload();
@@ -262,11 +262,11 @@ export default class JsEngineAdapter extends Adapter {
                         this.ntb.debug('importExec() result:', result);
                     }
                     catch (error) {
-                        result = this.ntb.adapters.utils.handleError(error, String(module[functionName]), errorContext) ?? result;
+                        result = this.ntb.adapters.utils.handleError(error, errorContext, String(module[functionName])) ?? result;
                     }
                 }
                 else {
-                    result = this.ntb.adapters.utils.handleError(t('adapter.error.function-not-found', { function: functionName }), String(module[functionName]), errorContext) ?? result;
+                    result = this.ntb.adapters.utils.handleError(t('adapter.error.function-not-found', { function: functionName }), errorContext, String(module[functionName])) ?? result;
                 }
             }
         }
@@ -329,7 +329,7 @@ export default class JsEngineAdapter extends Adapter {
         }
         catch (error) {
             // NOTE: it appears errors from JS Engine's executeFile are not thrown up to here...
-            result = this.ntb.adapters.utils.handleError(error, '', errorContext, containerEl) ?? result;
+            result = this.ntb.adapters.utils.handleError(error, errorContext, '', containerEl) ?? result;
         }
         finally {
             component.unload();
