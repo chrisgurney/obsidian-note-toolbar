@@ -130,12 +130,14 @@ export default class AdapterUtils {
         formattedMessageFr.createEl('code', { text: formattedMessage });
         noticeFr.append(formattedMessageFr);
 
-        noticeFr.append('\n\n→ ', t('adapter.error.check-console'));
+        // notice CTAs
+        const ctaFr = noticeFr.createEl('p', { cls: 'note-toolbar-notice-ctas' });
+        ctaFr.append('→ ', t('adapter.error.check-console'));
 
-        // add link to open item settings if item is provided
+        // notice CTAs: add link to open item settings if item is provided
         if (context?.item) {
             const openItemFr = itemModalFr(this.ntb, context?.item);
-            if (openItemFr) noticeFr.append('\n→ ', openItemFr);
+            if (openItemFr) ctaFr.append('\n→ ', openItemFr);
         }
 
         // show notice
