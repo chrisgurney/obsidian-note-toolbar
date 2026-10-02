@@ -51,8 +51,7 @@ export default class AdapterUtils {
         if (containerId) {
             containerEl = this.ntb.el.getOutputEl(containerId) ?? undefined;
             if (!containerEl) {
-                const errorMessage = t('adapter.error.callout-not-found', { id: containerId });
-                this.displayError(errorMessage, errorContext);
+                this.handleError(t('adapter.error.callout-not-found', { id: containerId }), errorContext);
                 return;
             }
         }
@@ -68,8 +67,7 @@ export default class AdapterUtils {
         const file = this.ntb.app.vault.getFileByPath(filename);
         if (!file) {
             // TODO: render messages into the container, if provided
-            const errorMessage = t('adapter.error.file-not-found', { filename: filename });
-            this.displayError(errorMessage, errorContext);
+            this.handleError(t('adapter.error.file-not-found', { filename: filename }), errorContext);
             return;
         }
         return file;

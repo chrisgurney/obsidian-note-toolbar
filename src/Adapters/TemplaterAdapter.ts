@@ -266,6 +266,7 @@ export default class TemplaterAdapter extends Adapter {
 
         const templateFile = this.ntb.adapters.utils.checkFile(filename, errorContext);
         if (!templateFile) return;
+        errorContext['scriptFile'] = templateFile;
 
         try {
             if (templateFile) {

@@ -219,9 +219,10 @@ export default class DataviewAdapter extends Adapter {
 
         if (!filename) return;
 
+        errorContext['scriptFile'] = filename;
         const scriptFile = this.ntb.adapters.utils.checkFile(filename, errorContext);
-        const scriptFilePath = scriptFile?.path || filename;
-        errorContext['scriptFile'] = scriptFilePath;
+        if (!scriptFile) return;
+        errorContext['scriptFile'] = scriptFile;
 
         if (!scriptFile) {
             this.ntb.adapters.utils.displayError(t('adapter.error.file-not-found', { filename: filename }), errorContext);

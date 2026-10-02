@@ -250,9 +250,11 @@ export default class JsEngineAdapter extends Adapter {
         //     return t('adapter.error.args-parsing-script-error', { filename: filename, error: importedArgs.error });
         // }
 
+        errorContext['scriptFile'] = filename;
         const scriptFile = this.ntb.adapters.utils.checkFile(filename, errorContext);
+        if (!scriptFile) return;
         const scriptFilePath = scriptFile?.path || filename;
-        errorContext['scriptFile'] = scriptFilePath;
+        errorContext['scriptFile'] = scriptFile;
 
         if (this.adapterApi) {
             this.ntb.debug('Note Toolbar: Executing:\n', scriptFilePath, functionName ?? '');
@@ -307,14 +309,11 @@ export default class JsEngineAdapter extends Adapter {
 
         if (!filename) return;
 
+        errorContext['scriptFile'] = filename;
         const scriptFile = this.ntb.adapters.utils.checkFile(filename, errorContext);
+        if (!scriptFile) return;
         const scriptFilePath = scriptFile?.path || filename;
-        errorContext['scriptFile'] = scriptFilePath;
-
-        if (!scriptFile) {
-            this.ntb.adapters.utils.displayError(t('adapter.error.file-not-found', { filename: filename }), errorContext);
-            return;
-        }
+        errorContext['scriptFile'] = scriptFile;
 
         const contents = await this.ntb.app.vault.cachedRead(scriptFile);
         if (!contents.trim()) {
