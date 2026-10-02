@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { Notice, Plugin, TFile } from "obsidian";
-import { ErrorBehavior, ItemType, ScriptConfig, ScriptContext, SettingType, t } from "Settings/NoteToolbarSettings";
+import { ItemType, ScriptConfig, ScriptContext, SettingType, t } from "Settings/NoteToolbarSettings";
 import { AdapterFunction } from "Types/interfaces";
 import { Adapter } from "./Adapter";
 
@@ -216,12 +216,12 @@ export default class TemplaterAdapter extends Adapter {
     parseTemplate = async (
         expression: string,
         errorContext: ScriptContext
-    ): Promise<string> => {
+    ): Promise<string | undefined> => {
 
         let result = '';
 
-        const activeFile = this.ntb.adapters.utils.checkActiveFile(errorContext.errorBehavior);
-        if (!activeFile) return t('adapter.error.expr-note-not-open');
+        const activeFile = this.ntb.adapters.utils.checkActiveFile(errorContext);
+        if (!activeFile) return;
 
         // make sure the opening and closing tags are present, in case they're omitted
         let expressionToEval = expression.trim();
@@ -261,8 +261,8 @@ export default class TemplaterAdapter extends Adapter {
 
         let result = '';
 
-        const activeFile = this.ntb.adapters.utils.checkActiveFile(ErrorBehavior.Display);
-        if (!activeFile) return t('adapter.error.function-note-not-open');
+        const activeFile = this.ntb.adapters.utils.checkActiveFile(errorContext);
+        if (!activeFile) return;
 
         const templateFile = this.ntb.adapters.utils.checkFile(filename, errorContext);
         if (!templateFile) return;

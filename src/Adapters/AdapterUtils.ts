@@ -12,14 +12,13 @@ export default class AdapterUtils {
 
     /**
      * Gets the active file, or displays an error if there isn't one.
-     * @param errorBehavior 
+     * @param errorContext {@link ScriptContext}
      * @returns the active file, or undefined
      */
-    checkActiveFile(errorBehavior: ErrorBehavior): TFile | undefined {
+    checkActiveFile(errorContext: ScriptContext): TFile | undefined {
         const activeFile = this.ntb.app.workspace.getActiveFile();
         if (!activeFile) {
-            // TODO: render messages into the container, if provided
-            if (errorBehavior === ErrorBehavior.Display) this.displayError(t('adapter.error.expr-note-not-open'));
+            this.handleError(t('adapter.error.expr-note-not-open'), errorContext);
             return;
         }
         return activeFile;
@@ -28,6 +27,7 @@ export default class AdapterUtils {
     /**
      * Parses the provided script args, or displays an error if there's a problem.
      * @param argsJson 
+     * @param errorContext {@link ScriptContext}
      * @param containerEl 
      * @returns a map of the parsed arguments
      */
@@ -46,6 +46,12 @@ export default class AdapterUtils {
         return importedArgs.value;
     }
 
+    /**
+     * Checks for the existence of the given container, or displays an error if it doesn't exist.
+     * @param containerId 
+     * @param errorContext {@link ScriptContext}
+     * @returns the HTMLElement or undefined
+     */
     checkContainer(containerId: string | undefined, errorContext: ScriptContext): HTMLElement | undefined {
         let containerEl: HTMLElement | undefined = undefined;
         if (containerId) {

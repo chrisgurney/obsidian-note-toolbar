@@ -350,12 +350,12 @@ export default class DataviewAdapter extends Adapter {
         expression: string,
         errorContext: ScriptContext,
         containerEl?: HTMLElement
-    ): Promise<string> => {
+    ): Promise<string | undefined> => {
 
         let result = '';
 
-        const activeFile = this.ntb.adapters.utils.checkActiveFile(errorContext.errorBehavior);
-        if (!activeFile) return t('adapter.error.query-note-not-open');;
+        const activeFile = this.ntb.adapters.utils.checkActiveFile(errorContext);
+        if (!activeFile) return;
 
         const component = new Component();
         component.load();
