@@ -55,6 +55,7 @@ export default class JavaScriptAdapter extends Adapter {
         let result;
 
         const containerEl = this.ntb.adapters.utils.checkContainer(config.outputContainer, errorContext);
+        if (!containerEl && config.outputContainer) return;
 
         switch (config.pluginFunction) {
             case 'evaluate':
