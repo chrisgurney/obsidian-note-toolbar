@@ -30,7 +30,8 @@ export default class EditorMenu {
 				}
 				else {
 					// not replacing variables here, because we need to call it synchronously
-					await this.ntb.render.renderMenuItems(menu, toolbar, activeFile, undefined, false);
+					const resolvedMenuText = this.ntb.render.resolveMenuTextSync(toolbar);
+					this.ntb.render.renderMenuItemsSync(menu, toolbar, activeFile, undefined, false, resolvedMenuText);
 				}
 				return;
 			}

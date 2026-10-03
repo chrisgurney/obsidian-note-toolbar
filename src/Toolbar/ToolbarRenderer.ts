@@ -687,13 +687,30 @@ export default class ToolbarRenderer {
 		resolvedMenuText?: Map<string, { title: string; resolvedLink: string }>
 	): Promise<void> {
 
-		if (recursions >= 2) {
-			return; // stop recursion
-		}
-
 		// fix: vars in display text + links need to be resolved async first, so native menus render properly (#606)
 		if (!resolvedMenuText) {
 			resolvedMenuText = await this.resolveMenuVars(toolbar, file, resolveVars);
+		}
+
+		this.renderMenuItemsSync(menu, toolbar, file, recursions, resolveVars, resolvedMenuText);
+
+	}
+
+	/**
+	 * Synchronous version of {@link renderMenuItems}. Does not resolve vars.
+	 */
+	renderMenuItemsSync(
+		menu: Menu, 
+		toolbar: ToolbarSettings, 
+		file: TFile | null, 
+		recursions: number = 0, 
+		// TODO: this param is not used, but is kept for compatibility with the async version; consider removing it
+		resolveVars = true,
+		resolvedMenuText: Map<string, { title: string; resolvedLink: string }>
+	): void {
+
+		if (recursions >= 2) {
+			return; // stop recursion
 		}
 
 		// check if the toolbar has icons, so we know whether to show placeholders or not
@@ -723,7 +740,9 @@ export default class ToolbarRenderer {
 					case ItemType.Group: {
 						const groupToolbar = this.ntb.settingsManager.getToolbar(toolbarItem.link);
 						if (groupToolbar) {
-							await this.renderMenuItems(menu, groupToolbar, file, recursions + 1, resolveVars, resolvedMenuText);
+							this.renderMenuItemsSync(
+								menu, groupToolbar, file, recursions + 1, resolveVars, resolvedMenuText
+							);
 						}
 						break;
 					}
@@ -732,7 +751,7 @@ export default class ToolbarRenderer {
 						if (!Platform.isMobile) {
 							// display menus in sub-menus, but only if we're not more than a level deep
 							if (recursions >= 1) break;
-							menu.addItem(async (item: MenuItem) => {
+							menu.addItem((item: MenuItem) => {
 								item
 									.setIcon(toolbarItem.icon && getIcon(toolbarItem.icon)
 										? toolbarItem.icon 
@@ -751,7 +770,9 @@ export default class ToolbarRenderer {
 								const menuToolbar = this.ntb.settingsManager.getToolbar(toolbarItem.link);
 								if (menuToolbar) {
 									subMenu.dom.id = menuToolbar.uuid; // add ID in case it's needed for styling
-									await this.renderMenuItems(subMenu, menuToolbar, file, recursions + 1, resolveVars, resolvedMenuText);
+									this.renderMenuItemsSync(
+										subMenu, menuToolbar, file, recursions + 1, resolveVars, resolvedMenuText
+									);
 								}
 							});
 							break;
@@ -848,6 +869,44 @@ export default class ToolbarRenderer {
 				}
 			}
 		}
+		return resolvedMenuText;
+	}
+
+	/**
+	 * Synchronous version of {@link resolveMenuVars}, but does not resolve any variables.
+	 * @param toolbar ToolbarSettings to add menu items for.
+	 * @param resolvedMenuText optional map of resolved text, keyed by item UUID, used for recursion to build final text map.
+	 * @param recursions tracks how deep we are to stop recursion.
+	 * @returns resolved menu text
+	 */
+	resolveMenuTextSync(
+		toolbar: ToolbarSettings,
+		resolvedMenuText = new Map<string, { title: string; resolvedLink: string }>(),
+		recursions = 0
+	): Map<string, { title: string; resolvedLink: string }> {
+		if (recursions >= 2) {
+			return resolvedMenuText;
+		}
+
+		for (const item of toolbar.items) {
+			resolvedMenuText.set(item.uuid, {
+				title: item.label || item.tooltip || '',
+				resolvedLink: item.link
+			});
+
+			// recurse into groups and menus
+			if (item.linkAttr.type === ItemType.Group || item.linkAttr.type === ItemType.Menu) {
+				const subToolbar = this.ntb.settingsManager.getToolbar(item.link);
+				if (subToolbar) {
+					this.resolveMenuTextSync(
+						subToolbar,
+						resolvedMenuText,
+						recursions + 1
+					);
+				}
+			}
+		}
+
 		return resolvedMenuText;
 	}
 
