@@ -541,8 +541,8 @@ Opens a sidebar view with the given content.
 | ------ | ------ | ------ |
 | `content` | `string` \| `TFile` | Text or file content to display. |
 | `options?` | \{ `id?`: `string`; `reuse?`: `boolean`; `side?`: `"left"` \| `"right"`; `split?`: `boolean`; `viewIcon?`: `string`; `viewTitle?`: `string`; \} | Optional display options. |
-| `options.id?` | `string` | Use to uniquely identify the sidebar. Use with the `reuse` option. |
-| `options.reuse?` | `boolean` | Reuse an existing sidebar view instead of creating a new one. |
+| `options.id?` | `string` | Uniquely identify the sidebar view for reuse. When set, only a sidebar with the same ID is reused. |
+| `options.reuse?` | `boolean` | Reuse an existing sidebar view instead of creating a new one. Ignored when `id` is set. |
 | `options.side?` | `"left"` \| `"right"` | Indicates which side to open the sidebar on. Default is `right`. |
 | `options.split?` | `boolean` | Indicates whether to create the sidebar in a new split. Default is `false`. |
 | `options.viewIcon?` | `string` | Sets the icon for the sidebar view. Can only be set once. |
