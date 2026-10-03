@@ -240,6 +240,14 @@ export default class NoteToolbarPlugin extends Plugin {
 		else {
 			this.debug = (..._args: unknown[]) => {};
 		}
+		
+		// TODO: add a setting for the sidebar?
+		// NOTE: adds to the error stack, so the line number won't be accurate
+		// const error = console.error.bind(console);
+		// this.error = (...args: unknown[]): void => {
+		// 	error(...args);
+		// 	error('SIDEBAR LOGGING NOT YET IMPLEMENTED');
+		// };
 	}
 
 	// #endregion
