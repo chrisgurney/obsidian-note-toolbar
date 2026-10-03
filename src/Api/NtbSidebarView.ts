@@ -1,7 +1,12 @@
 import NoteToolbarPlugin from "main";
-import { ItemView, MarkdownRenderer, TFile, WorkspaceLeaf } from "obsidian";
+import { ItemView, MarkdownRenderer, TFile, ViewStateResult, WorkspaceLeaf } from "obsidian";
 import { t } from "Settings/NoteToolbarSettings";
 import { NtbSidebarOptions } from "./INoteToolbarApi";
+
+interface NtbSidebarViewState {
+    content: string | TFile;
+    id: string;
+}
 
 /**
  * Provides a sidebar view that can be accessed from the Note Toolbar API.
@@ -9,6 +14,8 @@ import { NtbSidebarOptions } from "./INoteToolbarApi";
 export class NtbSidebarView extends ItemView {
 
     public static VIEW_TYPE_SIDEBAR = 'note-toolbar-sidebar';
+
+    state!: NtbSidebarViewState;
 
     private viewIcon: string;
     private viewTitle: string;
@@ -37,7 +44,11 @@ export class NtbSidebarView extends ItemView {
         return this.viewIcon;
     }
 
-    async setContent(content: string | TFile): Promise<void> {
+    getState(): Record<string, unknown> {
+        return this.state as unknown as Record<string, unknown>;
+    }
+
+    async display(content: string | TFile): Promise<void> {
         this.contentEl.empty();
 
         const markdown = content instanceof TFile
@@ -74,6 +85,11 @@ export class NtbSidebarView extends ItemView {
             this.clickHandlerRegistered = true;
         }
 
+    }
+    
+    async setState(state: NtbSidebarViewState, _result: ViewStateResult): Promise<void> {
+        this.state = state;
+        await this.display(this.state.content);
     }
 
     async onOpen(): Promise<void> {}
