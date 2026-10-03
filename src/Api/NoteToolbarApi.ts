@@ -444,10 +444,10 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
         }
 
         const viewState = content instanceof URL
-            ? { url: content.toString() }
+            ? { content: content.toString(), id: options?.id ?? '' }
             : content instanceof TFile
-                ? { file: content.path }
-                : undefined;
+                ? { content: content.path, id: options?.id ?? '' }
+                : { content, id: options?.id ?? '' };
 
         await leaf.setViewState({
             type: viewType,
@@ -457,9 +457,9 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
 
         await this.app.workspace.revealLeaf(leaf);
 
-        if (leaf.view instanceof NtbSidebarView) {
-            await leaf.view.setContent(content);
-        }
+        // if (leaf.view instanceof NtbSidebarView) {
+        //     await leaf.view.setState({ content, id: options?.id ?? '' }, {} as ViewStateResult);
+        // }
     }
 
     /**

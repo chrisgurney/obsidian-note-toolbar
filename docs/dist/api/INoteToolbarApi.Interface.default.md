@@ -540,7 +540,8 @@ Opens a sidebar view with the given content.
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `content` | `string` \| `TFile` | Text or file content to display. |
-| `options?` | \{ `reuse?`: `boolean`; `side?`: `"left"` \| `"right"`; `split?`: `boolean`; `viewIcon?`: `string`; `viewTitle?`: `string`; \} | Optional display options. |
+| `options?` | \{ `id?`: `string`; `reuse?`: `boolean`; `side?`: `"left"` \| `"right"`; `split?`: `boolean`; `viewIcon?`: `string`; `viewTitle?`: `string`; \} | Optional display options. |
+| `options.id?` | `string` | Use to uniquely identify the sidebar. Use with the `reuse` option. |
 | `options.reuse?` | `boolean` | Reuse an existing sidebar view instead of creating a new one. |
 | `options.side?` | `"left"` \| `"right"` | Indicates which side to open the sidebar on. Default is `right`. |
 | `options.split?` | `boolean` | Indicates whether to create the sidebar in a new split. Default is `false`. |
