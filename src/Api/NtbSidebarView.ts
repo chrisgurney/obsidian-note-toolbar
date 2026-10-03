@@ -3,7 +3,7 @@ import { ItemView, MarkdownRenderer, TFile, ViewStateResult, WorkspaceLeaf } fro
 import { t } from "Settings/NoteToolbarSettings";
 import { NtbSidebarOptions } from "./INoteToolbarApi";
 
-interface NtbSidebarViewState {
+export interface NtbSidebarViewState {
     content: string | TFile;
     id: string;
 }

@@ -639,11 +639,11 @@ export interface NtbPromptOptions {
  */
 export interface NtbSidebarOptions {
     /**
-     * Use to uniquely identify the sidebar. Use with the `reuse` option.
+     * Uniquely identify the sidebar view for reuse. When set, only a sidebar with the same ID is reused.
      */
     id?: string;
     /**
-     * Reuse an existing sidebar view instead of creating a new one.
+     * Reuse an existing sidebar view instead of creating a new one. Ignored when `id` is set.
      */
     reuse?: boolean;
     /**
