@@ -639,6 +639,10 @@ export interface NtbPromptOptions {
  */
 export interface NtbSidebarOptions {
     /**
+     * Activate the sidebar after opening or updating it. Defaults to `true`.
+     */
+    active?: boolean;
+    /**
      * Uniquely identify the sidebar view for reuse. When set, only a sidebar with the same ID is reused.
      */
     id?: string;

@@ -458,10 +458,12 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
         await leaf.setViewState({
             type: viewType,
             state: { ...viewState },
-            active: true
+            active: options?.active ?? true
         });
 
-        await this.app.workspace.revealLeaf(leaf);
+        if (options?.active ?? true) {
+            await this.app.workspace.revealLeaf(leaf);
+        }
 
         // if (leaf.view instanceof NtbSidebarView) {
         //     await leaf.view.setState({ content, id: options?.id ?? '' }, {} as ViewStateResult);
