@@ -120,7 +120,7 @@ export default class AdapterUtils {
         const consoleDetails = context?.errorObject ? [
             `\n\n${t('adapter.error.details-additional')}`, context?.errorObject
         ] : [];
-        console.error(consoleMessage, ...consoleFile, ...consoleDetails);
+        this.ntb.error(consoleMessage, ...consoleFile, ...consoleDetails);
 
         // output to a container, if provided
         if (containerEl) {
@@ -203,7 +203,7 @@ export default class AdapterUtils {
                 return undefined;
 
             case ErrorBehavior.Console:
-                console.error(errorMessage, '\n\n', error, context.errorObject ?? '');
+                this.ntb.error(errorMessage, '\n\n', error, context.errorObject ?? '');
                 return undefined;
 
             case ErrorBehavior.Ignore:
