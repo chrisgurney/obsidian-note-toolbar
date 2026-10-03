@@ -110,14 +110,17 @@ export default class AdapterUtils {
         const formattedMessage = formatErrorMessage(error);
         const messageWithNotes = notes ? `${notes}\n\n${formattedMessage}` : formattedMessage;
 
-        // output to console
+        // output details to console
         const consoleMessage = error instanceof Error 
             ? (notes ? `${notes}\n\n${error.stack}` : error) 
             : messageWithNotes;
-        const consoleMessageDetails = context?.errorObject ? [
-            '\n\n', t('adapter.error.additional-details'), context?.errorObject
+        const consoleFile = context?.scriptFile instanceof TFile ? [ 
+            `\n\n${t('adapter.error.details-file')}`, getFileUri(this.ntb, context.scriptFile)
         ] : [];
-        console.error(consoleMessage, ...consoleMessageDetails);
+        const consoleDetails = context?.errorObject ? [
+            `\n\n${t('adapter.error.details-additional')}`, context?.errorObject
+        ] : [];
+        console.error(consoleMessage, ...consoleFile, ...consoleDetails);
 
         // output to a container, if provided
         if (containerEl) {
@@ -171,7 +174,6 @@ export default class AdapterUtils {
         const errorMessage = context.scriptFile
             ? t('adapter.error.exec-failed_context', {
                 context: formattedContext,
-                filename: context.scriptFile instanceof TFile ? getFileUri(this.ntb, context.scriptFile) : context.scriptFile,
                 expression: formattedExpression
             })
             : formattedExpression

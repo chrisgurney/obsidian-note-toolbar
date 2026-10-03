@@ -21,7 +21,6 @@
             "query-function": "Execute query"
         },
         "error": {
-            "additional-details": "Additional details provided:",
             "args-parsing": "Failed to parse arguments:\n{{- error}}",
             "args-parsing-field-error": "```\n{{- error}}\n```",
             "args-parsing-script-error": "Failed to parse arguments for script: {{- filename}}\n```\n{{- error}}\n```",
@@ -39,8 +38,10 @@
                 "toolbar": "toolbar ({{- toolbar}})",
                 "with": "{{- subject}} with {{- target}}"
             },
+            "details-additional": "Additional details provided:",
+            "details-file": "File executed:",
             "exec-failed": "Failed to execute script: {{- filename}}",
-            "exec-failed_context": "Failed to execute: {{- context}}:\n{{- filename}}",
+            "exec-failed_context": "Failed to execute: {{- context}}:",
             "expr-failed": "Failed to evaluate: {{- context}}:\n{{- expression}}",
             "expr-failed_context": "Failed to evaluate: {{- context}}",
             "expr-failed_item": "Failed to evaluate item variable expression:\n{{- expression}}",
