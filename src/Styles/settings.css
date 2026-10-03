@@ -1335,7 +1335,7 @@ input[type="text"].note-toolbar-setting-error,
     & button.copy-code-button {
         display: none;
     }
-    & p {
+    & p, pre {
         margin-block-start: 0;
         margin-block-end: 0;
     }
