@@ -78,13 +78,13 @@ export default class RulesModal extends Modal {
                 cb.setPlaceholder(t('setting.rules.setting-default-placeholder'))
                     .setValue(existingDefaultToolbar ? existingDefaultToolbar.name : '')
                     .onChange(debounce(async (name) => {
-                        const isValid = await this.ntb.settingsUtils.updateItemComponentStatus(this, name, SettingType.Toolbar, defaultToolbarSetting.controlEl, undefined, 'beforeend');
+                        const isValid = this.ntb.settingsUtils.updateItemComponentStatus(this, name, SettingType.Toolbar, defaultToolbarSetting.controlEl, undefined, 'beforeend');
                         const newToolbar = isValid ? this.ntb.settingsManager.getToolbarByName(name) : undefined;
                         this.ntb.settings.defaultToolbar = newToolbar?.uuid ?? null;
                         this.ntb.settingsUtils.setFieldPreview(defaultToolbarSetting, newToolbar);
                         await this.saveAndUpdateActiveRule();
                     }, 250));
-                await this.ntb.settingsUtils.updateItemComponentStatus(this, existingDefaultToolbar ? existingDefaultToolbar.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend');
+                this.ntb.settingsUtils.updateItemComponentStatus(this, existingDefaultToolbar ? existingDefaultToolbar.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend');
             });
         this.ntb.settingsUtils.setFieldPreview(defaultToolbarSetting, existingDefaultToolbar);
         defaultToolbarSetting.settingEl.setAttr('data-ntb-field-default', '');
@@ -267,7 +267,7 @@ export default class RulesModal extends Modal {
                             isValid = true;
                         }
                         else {
-                            isValid = await this.ntb.settingsUtils.updateItemComponentStatus(this, toolbar.name, SettingType.Toolbar, toolbarSetting.controlEl, undefined, 'beforeend');
+                            isValid = this.ntb.settingsUtils.updateItemComponentStatus(this, toolbar.name, SettingType.Toolbar, toolbarSetting.controlEl, undefined, 'beforeend');
                         }
                         const mappedToolbar = isValid ? toolbar : undefined;
                         rule.toolbar = mappedToolbar?.uuid ?? '';
@@ -287,7 +287,7 @@ export default class RulesModal extends Modal {
                         }
                     })
                 if (existingToolbarSetting?.uuid !== NONE_TOOLBAR_ID) {
-                    await this.ntb.settingsUtils.updateItemComponentStatus(
+                    this.ntb.settingsUtils.updateItemComponentStatus(
                         this, existingToolbarSetting ? existingToolbarSetting.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend'
                     );
                 }

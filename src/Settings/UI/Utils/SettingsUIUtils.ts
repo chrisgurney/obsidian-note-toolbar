@@ -979,13 +979,13 @@ export default class SettingsUIUtils {
 	 * @param [errorPosition='afterend'] where to add the error relative to the given componentEl
 	 * @returns true if the item is valid; false otherwise
 	 */
-	async updateItemComponentStatus(
+	updateItemComponentStatus(
 		parent: NoteToolbarSettingTab | ToolbarSettingsModal | ItemModal | RulesModal,
 		itemValue: string, 
 		fieldType: SettingType, 
 		componentEl: HTMLElement | null, 
 		toolbarItem?: ToolbarItemSettings,
-		errorPosition: 'beforeend' | 'afterend' = 'afterend'): Promise<boolean> 
+		errorPosition: 'beforeend' | 'afterend' = 'afterend'): boolean 
 	{
 
 		const enum Status {
@@ -1013,7 +1013,7 @@ export default class SettingsUIUtils {
 			switch(fieldType) {
 				case SettingType.Args: {
 					const parsedArgs = importArgs(itemValue);
-					this.ntb.debug('validating args:', itemValue, parsedArgs);
+					// this.ntb.debug('validating args:', itemValue, parsedArgs);
 					if (parsedArgs.value === null) {
 						status = Status.Invalid;
 						statusMessage = t('adapter.error.args-parsing-field-error', { error: parsedArgs.error });
@@ -1094,8 +1094,9 @@ export default class SettingsUIUtils {
 									// TODO? error if required parameter is empty?
 									const value = toolbarItem.scriptConfig?.[param.parameter] ?? null;
 									if (value) {
-										const subfieldValid = await this.updateItemComponentStatus(parent, value, param.type, componentEl);
+										const subfieldValid = this.updateItemComponentStatus(parent, value, param.type, componentEl);
 										status = subfieldValid ? Status.Valid : Status.Invalid;
+										if (status === Status.Invalid) break;
 									}
 								}
 							}
@@ -1118,7 +1119,7 @@ export default class SettingsUIUtils {
 			}
 		}
 
-		removeFieldError(componentEl, errorPosition);
+		if (status !== Status.Invalid) removeFieldError(componentEl, errorPosition);
 		switch (status) {
 			case Status.Empty:
 				// TODO? flag for whether empty should show as an error or not
@@ -1357,16 +1358,16 @@ export function removeFieldError(el: HTMLElement | null, position: 'beforeend' |
  * Removes any errors on fields in the given container.
  * @param containerEl HTMLElement to check for errors to remove
  */
-export function removeFieldErrors(containerEl: HTMLElement) {
-	const fieldErrorEls = containerEl?.querySelectorAll('.note-toolbar-setting-field-error');
-	fieldErrorEls.forEach((el) => {
-		el.remove();
-	});
-	const errorEls = containerEl?.querySelectorAll('.note-toolbar-setting-error');
-	errorEls.forEach((el) => {
-		el.toggleClass('note-toolbar-setting-error', false);
-	});
-}
+// export function removeFieldErrors(containerEl: HTMLElement) {
+// 	const fieldErrorEls = containerEl?.querySelectorAll('.note-toolbar-setting-field-error');
+// 	fieldErrorEls.forEach((el) => {
+// 		el.remove();
+// 	});
+// 	const errorEls = containerEl?.querySelectorAll('.note-toolbar-setting-error');
+// 	errorEls.forEach((el) => {
+// 		el.toggleClass('note-toolbar-setting-error', false);
+// 	});
+// }
 
 /**
  * Removes help from the given element, if it exists.

@@ -150,7 +150,7 @@ export default class ItemListUi {
                 // check if item previews are valid (non-empty + valid), and highlight if not
                 const itemPreviewEl = itemPreviewContainer.querySelector('.note-toolbar-setting-item-preview') as HTMLElement;
                 if (itemPreviewEl) {
-                    void this.ntb.settingsUtils.updateItemComponentStatus(
+                    this.ntb.settingsUtils.updateItemComponentStatus(
                         this.parent,
                         (toolbarItem.linkAttr.type === ItemType.Command) ? toolbarItem.linkAttr.commandId : toolbarItem.link, 
                         SettingFieldItemMap[toolbarItem.linkAttr.type], 

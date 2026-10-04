@@ -729,7 +729,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 						cb.setPlaceholder(t('setting.display-locations.option-editor-menu-placeholder'))
 							.setValue(existingEditorMenuToolbar ? existingEditorMenuToolbar.name : '')
 							.onChange(debounce(async (name) => {
-								const isValid = await this.ntb.settingsUtils.updateItemComponentStatus(this, name, SettingType.Toolbar, editorMenuSetting.controlEl, undefined, 'beforeend');
+								const isValid = this.ntb.settingsUtils.updateItemComponentStatus(this, name, SettingType.Toolbar, editorMenuSetting.controlEl, undefined, 'beforeend');
 								const newToolbar = isValid ? this.ntb.settingsManager.getToolbarByName(name) : undefined;
 								this.ntb.settings.editorMenuToolbar = newToolbar?.uuid ?? null;
 								// toggle editor menu as toolbar setting
@@ -739,7 +739,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 								this.ntb.settingsUtils.setFieldPreview(editorMenuSetting, newToolbar);
 								await this.ntb.settingsManager.save();
 							}, 250));
-						await this.ntb.settingsUtils.updateItemComponentStatus(this, existingEditorMenuToolbar ? existingEditorMenuToolbar.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend');
+						this.ntb.settingsUtils.updateItemComponentStatus(this, existingEditorMenuToolbar ? existingEditorMenuToolbar.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend');
 					});
 				this.ntb.settingsUtils.setFieldPreview(editorMenuSetting, existingEditorMenuToolbar);
 			});
@@ -798,7 +798,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 					cb.setPlaceholder(t('setting.display-locations.option-emptyview-tbar-placeholder'))
 						.setValue(existingEmptyViewToolbar ? existingEmptyViewToolbar.name : '')
 						.onChange(debounce(async (name) => {
-							const isValid = await this.ntb.settingsUtils.updateItemComponentStatus(this, name, SettingType.Toolbar, emptyViewSetting.controlEl, undefined, 'beforeend');
+							const isValid = this.ntb.settingsUtils.updateItemComponentStatus(this, name, SettingType.Toolbar, emptyViewSetting.controlEl, undefined, 'beforeend');
 							const newToolbar = isValid ? this.ntb.settingsManager.getToolbarByName(name) : undefined;
 							this.ntb.settings.emptyViewToolbar = newToolbar?.uuid ?? null;
 							// toggle launchpad setting
@@ -809,7 +809,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 							this.ntb.settingsUtils.setFieldPreview(emptyViewSetting, newToolbar);
 							await this.ntb.settingsManager.save();
 						}, 250));
-					await this.ntb.settingsUtils.updateItemComponentStatus(this, existingEmptyViewToolbar ? existingEmptyViewToolbar.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend');
+					this.ntb.settingsUtils.updateItemComponentStatus(this, existingEmptyViewToolbar ? existingEmptyViewToolbar.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend');
 				});
 			this.ntb.settingsUtils.setFieldPreview(emptyViewSetting, existingEmptyViewToolbar);
 		});
@@ -848,7 +848,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 					cb.setPlaceholder(t('setting.display-locations.option-text-placeholder'))
 						.setValue(existingTextToolbar ? existingTextToolbar.name : '')
 						.onChange(debounce(async (name) => {
-							const isValid = await this.ntb.settingsUtils.updateItemComponentStatus(this, name, SettingType.Toolbar, textToolbarSetting.controlEl, undefined, 'beforeend');
+							const isValid = this.ntb.settingsUtils.updateItemComponentStatus(this, name, SettingType.Toolbar, textToolbarSetting.controlEl, undefined, 'beforeend');
 							const newToolbar = isValid ? this.ntb.settingsManager.getToolbarByName(name) : undefined;
 							this.ntb.settings.textToolbar = newToolbar?.uuid ?? null;
 							if (this.ntb.settings.textToolbar && !this.ntb.textToolbar) {
@@ -863,7 +863,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 							this.ntb.settingsUtils.setFieldPreview(textToolbarSetting, newToolbar);
 							await this.ntb.settingsManager.save();
 						}, 250));
-					await this.ntb.settingsUtils.updateItemComponentStatus(this, existingTextToolbar ? existingTextToolbar.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend');
+					this.ntb.settingsUtils.updateItemComponentStatus(this, existingTextToolbar ? existingTextToolbar.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend');
 				});
 			this.ntb.settingsUtils.setFieldPreview(textToolbarSetting, existingTextToolbar);
 		});
@@ -904,13 +904,13 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 							cb.setPlaceholder(t('setting.display-locations.option-webviewer-placeholder'))
 								.setValue(existingWebToolbar ? existingWebToolbar.name : '')
 								.onChange(debounce(async (name) => {
-									const isValid = await this.ntb.settingsUtils.updateItemComponentStatus(this, name, SettingType.Toolbar, webToolbarSetting.controlEl, undefined, 'beforeend');
+									const isValid = this.ntb.settingsUtils.updateItemComponentStatus(this, name, SettingType.Toolbar, webToolbarSetting.controlEl, undefined, 'beforeend');
 									const newToolbar = isValid ? this.ntb.settingsManager.getToolbarByName(name) : undefined;
 									this.ntb.settings.webviewerToolbar = newToolbar?.uuid ?? null;
 									this.ntb.settingsUtils.setFieldPreview(webToolbarSetting, newToolbar);
 									await this.ntb.settingsManager.save();
 								}, 250));
-							await this.ntb.settingsUtils.updateItemComponentStatus(this, existingWebToolbar ? existingWebToolbar.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend');
+							this.ntb.settingsUtils.updateItemComponentStatus(this, existingWebToolbar ? existingWebToolbar.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend');
 						});
 					this.ntb.settingsUtils.setFieldPreview(webToolbarSetting, existingWebToolbar);
 				});
