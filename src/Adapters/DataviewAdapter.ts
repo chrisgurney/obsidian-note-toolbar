@@ -107,37 +107,37 @@ export default class DataviewAdapter extends Adapter {
             case 'evaluate':
                 result = config.expression
                     ? await this.evaluate(config.expression, errorContext, containerEl)
-                    : this.ntb.adapters.utils.displayError(t('adapter.dataview.eval-expr-error-required'), errorContext);
+                    : this.ntb.adapters.utils.handleError(t('adapter.dataview.eval-expr-error-required'), errorContext);
                 break;
             // internal function for inline evaluations in which errors should be reported
             case 'evaluateInline':
                 result = config.expression
                     ? await this.evaluate(config.expression, errorContext, containerEl)
-                    : this.ntb.adapters.utils.displayError(t('adapter.dataview.eval-expr-error-required'), errorContext);
+                    : this.ntb.adapters.utils.handleError(t('adapter.dataview.eval-expr-error-required'), errorContext);
                 break;
             // internal function for inline evaluations in which errors can be ignored
             case 'evaluateIgnore':
                 result = config.expression
                     ? await this.evaluate(config.expression, errorContext, containerEl)
-                    : this.ntb.adapters.utils.displayError(t('adapter.dataview.eval-expr-error-required'), errorContext);
+                    : this.ntb.adapters.utils.handleError(t('adapter.dataview.eval-expr-error-required'), errorContext);
                 break;
             case 'exec':
                 result = config.sourceFile
                     ? await this.exec(config.sourceFile, errorContext, config.sourceArgs, containerEl)
-                    : this.ntb.adapters.utils.displayError(t('adapter.dataview.exec-error-required'), errorContext);
+                    : this.ntb.adapters.utils.handleError(t('adapter.dataview.exec-error-required'), errorContext);
                 break;
             case 'executeJs':
                 result = config.expression
                     ? await this.executeJs(config.expression, errorContext, containerEl)
-                    : this.ntb.adapters.utils.displayError(t('adapter.dataview.dvjs-expr-error-required'), errorContext);
+                    : this.ntb.adapters.utils.handleError(t('adapter.dataview.dvjs-expr-error-required'), errorContext);
                 break;
             case 'query':
                 result = config.expression
                     ? await this.query(config.expression, errorContext, containerEl)
-                    : this.ntb.adapters.utils.displayError(t('adapter.dataview.query-expr-error-required'), errorContext);
+                    : this.ntb.adapters.utils.handleError(t('adapter.dataview.query-expr-error-required'), errorContext);
                 break;
             default:
-                this.ntb.adapters.utils.displayError(t('adapter.error.function-invalid', { function: config.pluginFunction }), errorContext);
+                this.ntb.adapters.utils.handleError(t('adapter.error.function-invalid', { function: config.pluginFunction }), errorContext);
                 break;
         }
 
@@ -225,13 +225,13 @@ export default class DataviewAdapter extends Adapter {
         errorContext['scriptFile'] = scriptFile;
 
         if (!scriptFile) {
-            this.ntb.adapters.utils.displayError(t('adapter.error.file-not-found', { filename: filename }), errorContext);
+            this.ntb.adapters.utils.handleError(t('adapter.error.file-not-found', { filename: filename }), errorContext);
             return;
         }
 
         let contents = await this.ntb.app.vault.cachedRead(scriptFile);
         if (!contents.trim()) {
-            this.ntb.adapters.utils.displayError(t('adapter.error.file-empty', { filename: filename }), errorContext);
+            this.ntb.adapters.utils.handleError(t('adapter.error.file-empty', { filename: filename }), errorContext);
             return;
         }
 

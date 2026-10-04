@@ -129,32 +129,32 @@ export default class JsEngineAdapter extends Adapter {
             case 'evaluate':
                 result = config.expression
                     ? await this.evaluate(config.expression, errorContext, containerEl)
-                    : this.ntb.adapters.utils.displayError(t('adapter.js-engine.eval-expr-error-required'), errorContext);
+                    : this.ntb.adapters.utils.handleError(t('adapter.js-engine.eval-expr-error-required'), errorContext);
                 break;
             // internal function for inline evaluations in which errors should be reported
             case 'evaluateInline':
                 result = config.expression
                     ? await this.evaluate(config.expression, errorContext, containerEl)
-                    : this.ntb.adapters.utils.displayError(t('adapter.js-engine.eval-expr-error-required'), errorContext);
+                    : this.ntb.adapters.utils.handleError(t('adapter.js-engine.eval-expr-error-required'), errorContext);
                 break;
             // internal function for inline evaluations in which errors can be ignored
             case 'evaluateIgnore':
                 result = config.expression
                     ? await this.evaluate(config.expression, errorContext, containerEl)
-                    : this.ntb.adapters.utils.displayError(t('adapter.js-engine.eval-expr-error-required'), errorContext);
+                    : this.ntb.adapters.utils.handleError(t('adapter.js-engine.eval-expr-error-required'), errorContext);
                 break;
             case 'exec':
                 result = config.sourceFile
                     ? await this.exec(config.sourceFile, errorContext, containerEl)
-                    : this.ntb.adapters.utils.displayError(t('adapter.js-engine.exec-sourcefile-error-required'), errorContext);
+                    : this.ntb.adapters.utils.handleError(t('adapter.js-engine.exec-sourcefile-error-required'), errorContext);
                 break;
             case 'importExec':
                 result = config.sourceFile
                     ? await this.importExec(config.sourceFile, errorContext, config.sourceFunction, config.sourceArgs)
-                    : this.ntb.adapters.utils.displayError(t('adapter.js-engine.importexec-sourcefile-error-required'), errorContext);
+                    : this.ntb.adapters.utils.handleError(t('adapter.js-engine.importexec-sourcefile-error-required'), errorContext);
                 break;
             default:
-                this.ntb.adapters.utils.displayError(t('adapter.error.function-invalid', { function: config.pluginFunction }), errorContext);
+                this.ntb.adapters.utils.handleError(t('adapter.error.function-invalid', { function: config.pluginFunction }), errorContext);
                 break;
         }
 
@@ -174,7 +174,7 @@ export default class JsEngineAdapter extends Adapter {
         expression: string,
         errorContext: ScriptContext,
         containerEl?: HTMLElement,
-    ): Promise<string> => {
+    ): Promise<string | undefined> => {
 
         if (!this.adapterApi) return '';
 
@@ -182,15 +182,15 @@ export default class JsEngineAdapter extends Adapter {
         const resultEl = containerEl || createSpan();
 
         const activeFile = this.ntb.app.workspace.getActiveFile();
+        if (!activeFile) {
+            this.ntb.adapters.utils.handleError(t('adapter.error.expr-note-not-open'), errorContext);
+            return;
+        }
 
         const component = new Component();
 		component.load();
         try {
             containerEl?.empty();
-            if (!activeFile) {
-                this.ntb.adapters.utils.displayError(t('adapter.error.query-note-not-open'));
-                return t('adapter.error.query-note-not-open');
-            }            
             const context: ExecutionContext = {
                 executionSource: 'markdown-other',
                 file: activeFile
@@ -317,7 +317,7 @@ export default class JsEngineAdapter extends Adapter {
 
         const contents = await this.ntb.app.vault.cachedRead(scriptFile);
         if (!contents.trim()) {
-            this.ntb.adapters.utils.displayError(t('adapter.error.file-empty', { filename: filename }), errorContext);
+            this.ntb.adapters.utils.handleError(t('adapter.error.file-empty', { filename: filename }), errorContext);
             return;
         }
 

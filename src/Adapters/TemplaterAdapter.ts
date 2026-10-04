@@ -97,37 +97,37 @@ export default class TemplaterAdapter extends Adapter {
             case 'appendTemplate':
                 result = config.sourceFile
                     ? await this.appendTemplate(config.sourceFile, errorContext)
-                    : this.ntb.adapters.utils.displayError(t('adapter.templater.append-sourcefile-error-required'), errorContext);
+                    : this.ntb.adapters.utils.handleError(t('adapter.templater.append-sourcefile-error-required'), errorContext);
                 break;
             case 'createFrom':
                 result = config.sourceFile
                     ? await this.createFrom(config.sourceFile, errorContext, config.outputFile)
-                    : this.ntb.adapters.utils.displayError(t('adapter.templater.create-sourcefile-error-required'), errorContext);
+                    : this.ntb.adapters.utils.handleError(t('adapter.templater.create-sourcefile-error-required'), errorContext);
                 break;
             case 'parseTemplate':
                 result = config.expression
                     ? await this.parseTemplate(config.expression, errorContext)
-                    : this.ntb.adapters.utils.displayError(t('adapter.templater.eval-expr-error-required'), errorContext);
+                    : this.ntb.adapters.utils.handleError(t('adapter.templater.eval-expr-error-required'), errorContext);
                 break;
             // internal function for inline evaluations in which errors should be reported
             case 'parseInline':
                 result = config.expression
                     ? await this.parseTemplate(config.expression, errorContext)
-                    : this.ntb.adapters.utils.displayError(t('adapter.templater.eval-expr-error-required'), errorContext);
+                    : this.ntb.adapters.utils.handleError(t('adapter.templater.eval-expr-error-required'), errorContext);
                 break;
             // internal function for inline evaluations in which errors can be ignored
             case 'parseIgnore':
                 result = config.expression
                     ? await this.parseTemplate(config.expression, errorContext)
-                    : this.ntb.adapters.utils.displayError(t('adapter.templater.eval-expr-error-required'), errorContext);
+                    : this.ntb.adapters.utils.handleError(t('adapter.templater.eval-expr-error-required'), errorContext);
                 break;
             case 'parseTemplateFile':
                 result = config.sourceFile
                     ? await this.parseTemplateFile(config.sourceFile, errorContext)
-                    : this.ntb.adapters.utils.displayError(t('adapter.templater.exec-sourcefile-error-required'), errorContext);
+                    : this.ntb.adapters.utils.handleError(t('adapter.templater.exec-sourcefile-error-required'), errorContext);
                 break;
             default:
-                this.ntb.adapters.utils.displayError(t('adapter.error.function-invalid', { function: config.pluginFunction }), errorContext);
+                this.ntb.adapters.utils.handleError(t('adapter.error.function-invalid', { function: config.pluginFunction }), errorContext);
                 break;
         }
 
@@ -165,7 +165,11 @@ export default class TemplaterAdapter extends Adapter {
      * @param filename 
      * @param outputFile 
      */
-    createFrom = async (filename: string, errorContext: ScriptContext, outputFile?: string): Promise<string> => {
+    createFrom = async (
+        filename: string,
+        errorContext: ScriptContext,
+        outputFile?: string
+    ): Promise<string | undefined> => {
 
         // replace any variables that might be in the output filename
 		if (outputFile && this.ntb.vars.hasVars(outputFile)) {
@@ -181,8 +185,8 @@ export default class TemplaterAdapter extends Adapter {
             const templateFile = this.ntb.app.vault.getFileByPath(filename);
             errorContext = { ...errorContext, scriptFile: templateFile ?? filename, adapterFunction: t('adapter.templater.create-function') };
             if (!templateFile) {
-                this.ntb.adapters.utils.displayError(t('adapter.error.file-not-found', { filename: filename }), errorContext);
-                return '';
+                this.ntb.adapters.utils.handleError(t('adapter.error.file-not-found', { filename: filename }), errorContext);
+                return;
             }
 
             // TODO? show notice instead? errors are not thrown from Templater's code, and there's no feasible way to check success

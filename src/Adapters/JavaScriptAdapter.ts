@@ -61,27 +61,27 @@ export default class JavaScriptAdapter extends Adapter {
             case 'evaluate':
                 result = config.expression
                     ? await this.evaluate(config.expression, errorContext, undefined, containerEl)
-                    : this.ntb.adapters.utils.displayError(t('adapter.javascript.eval-expr-error-required'), errorContext);
+                    : this.ntb.adapters.utils.handleError(t('adapter.javascript.eval-expr-error-required'), errorContext);
                 break;
             // internal function for inline evaluations in which errors should be reported
             case 'evaluateInline':
                 result = config.expression
                     ? await this.evaluate(config.expression, errorContext, undefined, containerEl)
-                    : this.ntb.adapters.utils.displayError(t('adapter.javascript.eval-expr-error-required'), errorContext);
+                    : this.ntb.adapters.utils.handleError(t('adapter.javascript.eval-expr-error-required'), errorContext);
                 break;
             // internal function for inline evaluations in which errors can be ignored
             case 'evaluateIgnore':
                 result = config.expression
                     ? await this.evaluate(config.expression, errorContext, undefined, containerEl)
-                    : this.ntb.adapters.utils.displayError(t('adapter.javascript.eval-expr-error-required'), errorContext);
+                    : this.ntb.adapters.utils.handleError(t('adapter.javascript.eval-expr-error-required'), errorContext);
                 break;
             case 'exec':
                 result = config.sourceFile
                     ? await this.exec(config.sourceFile, errorContext, config.sourceArgs, containerEl)
-                    : this.ntb.adapters.utils.displayError(t('adapter.javascript.exec-error-required'), errorContext);
+                    : this.ntb.adapters.utils.handleError(t('adapter.javascript.exec-error-required'), errorContext);
                 break;
             default:
-                this.ntb.adapters.utils.displayError(t('adapter.error.function-invalid', { function: config.pluginFunction }), errorContext);
+                this.ntb.adapters.utils.handleError(t('adapter.error.function-invalid', { function: config.pluginFunction }), errorContext);
                 break;
         }
 
@@ -118,7 +118,7 @@ export default class JavaScriptAdapter extends Adapter {
 
         const contents = await this.ntb.app.vault.cachedRead(scriptFile);
         if (!contents.trim()) {
-            this.ntb.adapters.utils.displayError(t('adapter.error.file-empty', { filename: filename }), errorContext);
+            this.ntb.adapters.utils.handleError(t('adapter.error.file-empty', { filename: filename }), errorContext);
             return;
         }
 

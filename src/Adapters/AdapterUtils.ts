@@ -101,7 +101,7 @@ export default class AdapterUtils {
      * @param notes additional notes to display
      * @param containerEl optional output container
      */
-    displayError(
+    private displayError(
         error: unknown, 
         context?: ScriptContext, 
         notes?: string, 
