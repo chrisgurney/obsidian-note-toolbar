@@ -16,7 +16,7 @@ async function generate(prompt, content, context) {
     const apiKey = ntb.app.secretStorage.getSecret(GEMINI_SECRET);
 
     if (!apiKey) {
-        throw new Error(`Gemini: API key not found in Secret Storage: ${GEMINI_SECRET}`);
+        throw new Error(`Gemini: API key not found in Obsidian Keychain settings: ${GEMINI_SECRET}`);
     }
 
     const res = await geminiRequest(apiKey, prompt, content, GEMINI_MODEL, context);
@@ -28,12 +28,15 @@ async function generate(prompt, content, context) {
  */
 async function geminiRequest(apiKey, prompt, content, model, context) {
 
-    const body = { 
-        systemInstruction: { parts: [{ text: prompt }] },
-        ...(content && { contents: [{ parts: [{ text: content }] }] }) 
-    };
+    const body = content?.trim()
+        ? {
+            systemInstruction: { parts: [{ text: prompt }] },
+            contents: [{ parts: [{ text: content }] }]
+        }
+        : {
+            contents: [{ parts: [{ text: prompt }] }]
+        };
     
-    new Notice('Gemini: Request sent…');
     console.log('Gemini: Sending request:', body, 'for file:', context);
 
     try {
@@ -46,13 +49,12 @@ async function geminiRequest(apiKey, prompt, content, model, context) {
             },
             body: JSON.stringify(body)
         });
-
-        new Notice('Gemini: Response received');
+        console.log('Gemini: Response received', res);
         return res.json;
     }
     catch (error) {
-        new Notice(`Gemini: Request failed: ${error.message}`);
         console.error('Gemini: Request failed:', error);
+        console.error('Gemini: Request body:', body);
         throw error;
     }
 }

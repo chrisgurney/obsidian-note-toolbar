@@ -16,39 +16,45 @@ const LLM = await ntb.loadScript('AI/Lib/Gemini.js');
 const PROMPTS_FOLDER = 'AI/Prompts/';
 const UTILS = await ntb.loadScript('AI/Lib/Utils.js');
 
-// ask the user which prompt file to use
+// ask the user which prompt file to use (or to manually enter one)
 const prompt = await UTILS.getPrompt(PROMPTS_FOLDER);
 if (!prompt) return;
 
-// send the text selected by default
-let content = ntb.getSelection({ wordAtCursor: false });
-let file = await UTILS.getActiveFile();
-if (!content) {
-    if (!file) return;
-    content = await ntb.app.vault.cachedRead(file);
-}
+// gets the selected text, or the active file's contents, or nothing (i.e., use the prompt)
+const { content, file } = await UTILS.getContent();
 
 // send the request
-const response = await LLM.generate(
-    prompt, content, { file: file }
-);
+try {
+    new Notice(`AI: Request sent...`);
+    const response = await LLM.generate(
+        prompt, content, { file: file }
+    );
+    new Notice('AI: Response received');
 
-// CHANGE: use one of several options below to display the response
-if (response) {
-    const heading = `✨ AI response for [[${file.path}|${file.basename}]]:`;
+    // CHANGE: use one of several options below to display the response
+    if (response) {
+        const headingContext = file ? `[[${file.path}|${file.basename}]]\n\n` : content === '' ? `${prompt}\n\n` : '';
+        const heading = `${headingContext}_✨ AI response:_`;
 
-    // option 1: append to the end of the originating note
-    // ntb.append(response, { linePrefix: '> ', file: file } );
-
-    // option 2: replace currently selected text, or insert at the cursor if there's no selection
-    // (not feasible if response takes a while and you've moved on to other notes)
-    // ntb.setSelection(response);
+        // option 1: append to the end of the originating note
+        // ntb.append(response, { linePrefix: '> ', file: file } );
     
-    // option 3: display in a modal
-    // await ntb.modal(response, {
-    //     title: heading, editable: true
-    // });
-
-    // option 4: display in a sidebar
-    ntb.sidebar(`_${heading}_\n\n${response}`);
+        // option 2: replace currently selected text, or insert at the cursor if there's no selection
+        // (not feasible if response takes a while and you've moved on to other notes)
+        // ntb.setSelection(response);
+        
+        // option 3: display in a modal
+        // await ntb.modal(response, {
+        //     title: heading, editable: true
+        // });
+    
+        // option 4: display in a sidebar
+        ntb.sidebar(`${heading}\n\n${response}`);
+    }
+}
+catch (error) {
+    new Notice(
+        `AI: Request failed: ${error.message}`, 10000
+    ).containerEl.addClass('mod-warning');
+    console.error('AI: Request failed:', error);
 }
