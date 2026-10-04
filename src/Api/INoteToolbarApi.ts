@@ -393,7 +393,7 @@ export default interface INoteToolbarApi<T> {
      * @since 1.35
      * @group UI Components
      */
-    sidebar: (content: string | TFile, options?: NtbSidebarOptions) => Promise<void>;
+    sidebar: (content: string | TFile | URL, options?: NtbSidebarOptions) => Promise<void>;
 
     /**
      * Shows a suggester modal and waits for the user's selection.

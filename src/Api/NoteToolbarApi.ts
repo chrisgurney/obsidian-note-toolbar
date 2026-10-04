@@ -413,7 +413,7 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
      * @see INoteToolbarApi.sidebar
      */
     async sidebar(
-        content: string | TFile,
+        content: string | TFile | URL,
         options?: NtbSidebarOptions
     ): Promise<void> {
         this.registerSidebarView(options);
