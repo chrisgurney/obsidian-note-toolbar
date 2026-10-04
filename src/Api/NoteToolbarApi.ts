@@ -449,17 +449,32 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
             }
         }
 
-        const viewState = content instanceof URL
-            ? { content: content.toString(), id: options?.id ?? '' }
+        // setup the view content
+        const viewContent = content instanceof URL
+            ? content.toString()
             : content instanceof TFile
-                ? { content: content.path, id: options?.id ?? '' }
-                : { content, id: options?.id ?? '' };
+                ? content.path
+                : content;
 
-        await leaf.setViewState({
-            type: viewType,
-            state: { ...viewState },
-            active: options?.active ?? true
-        });
+        // set the view state
+        const viewState = {
+            content: viewContent,
+            id: options?.id ?? ''
+        };
+
+        if (options?.append && leaf.view instanceof NtbSidebarView) {
+            await leaf.view.append(viewContent);
+        } 
+        else {
+            if (leaf.view instanceof NtbSidebarView) {
+                leaf.view.clear();
+            }
+            await leaf.setViewState({
+                type: viewType,
+                state: { ...viewState },
+                active: options?.active ?? true
+            });
+        }
 
         if (options?.active ?? true) {
             await this.app.workspace.revealLeaf(leaf);

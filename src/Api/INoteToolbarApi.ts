@@ -643,6 +643,10 @@ export interface NtbSidebarOptions {
      */
     active?: boolean;
     /**
+     * Append string content to the existing sidebar instead of replacing it.
+     */
+    append?: boolean;
+    /**
      * Uniquely identify the sidebar view for reuse. When set, only a sidebar with the same ID is reused.
      */
     id?: string;

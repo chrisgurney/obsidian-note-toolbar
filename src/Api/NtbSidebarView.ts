@@ -48,8 +48,27 @@ export class NtbSidebarView extends ItemView {
         return this.state as unknown as Record<string, unknown>;
     }
 
-    async display(content: string | TFile): Promise<void> {
+    /**
+     * Appends string content to the sidebar, with newlines.
+     * @param content string to append
+     */
+    async append(content: string): Promise<void> {
+        if (this.state.content instanceof TFile) return;
+        
+        const separator = this.state.content ? '\n\n' : '';
+        this.state.content += separator + content;
+        await this.renderContent(separator + content);
+    }
+
+    /**
+     * Empties the sidebar's content.
+     */
+    clear(): void {
         this.contentEl.empty();
+        this.state.content = '';
+    }
+
+    async renderContent(content: string | TFile): Promise<void> {
 
         const markdown = content instanceof TFile
             ? await this.app.vault.cachedRead(content)
@@ -66,10 +85,6 @@ export class NtbSidebarView extends ItemView {
             sourcePath,
             this
         );
-
-        // this.contentEl.querySelectorAll<HTMLAnchorElement>('a.internal-link, a.external-link').forEach((link) => {
-        //     link.tabIndex = 1;
-        // });
 
         // make internal links clickable
         if (!this.clickHandlerRegistered) {
@@ -89,7 +104,7 @@ export class NtbSidebarView extends ItemView {
     
     async setState(state: NtbSidebarViewState, _result: ViewStateResult): Promise<void> {
         this.state = state;
-        await this.display(this.state.content);
+        await this.renderContent(this.state.content);
     }
 
     async onOpen(): Promise<void> {}
