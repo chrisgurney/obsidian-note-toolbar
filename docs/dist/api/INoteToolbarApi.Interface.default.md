@@ -539,12 +539,12 @@ Opens a sidebar view with the given content.
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `content` | `string` \| `TFile` \| `URL` | Text or file content to display. |
-| `options?` | \{ `active?`: `boolean`; `append?`: `boolean`; `id?`: `string`; `reuse?`: `boolean`; `side?`: `"left"` \| `"right"`; `split?`: `boolean`; `viewIcon?`: `string`; `viewTitle?`: `string`; \} | Optional display options. |
+| `content` | `string` \| `TFile` \| `URL` | Text content (rendered as markdown), file, or URL to display. |
+| `options?` | \{ `active?`: `boolean`; `append?`: `string`; `id?`: `string`; `reuse?`: `boolean`; `side?`: `"left"` \| `"right"`; `split?`: `boolean`; `viewIcon?`: `string`; `viewTitle?`: `string`; \} | Optional display options. |
 | `options.active?` | `boolean` | Activate the sidebar after opening or updating it. Defaults to `true`. |
-| `options.append?` | `boolean` | Append string content to the existing sidebar instead of replacing it. |
+| `options.append?` | `string` | Append text content using a provided separator string, instead of replacing it. Only applies when a sidebar is being reused. |
 | `options.id?` | `string` | Uniquely identify the sidebar view for reuse. When set, only a sidebar with the same ID is reused. |
-| `options.reuse?` | `boolean` | Reuse an existing sidebar view instead of creating a new one. Ignored when `id` is set. |
+| `options.reuse?` | `boolean` | Reuse an existing sidebar view instead of creating a new one. Ignored when `id` is set. Defaults to `true`. |
 | `options.side?` | `"left"` \| `"right"` | Indicates which side to open the sidebar on. Default is `right`. |
 | `options.split?` | `boolean` | Indicates whether to create the sidebar in a new split. Default is `false`. |
 | `options.viewIcon?` | `string` | Sets the icon for the sidebar view. Can only be set once. |

@@ -462,8 +462,8 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
             id: options?.id ?? ''
         };
 
-        if (options?.append && leaf.view instanceof NtbSidebarView) {
-            await leaf.view.append(viewContent);
+        if (options?.append !== undefined && leaf.view instanceof NtbSidebarView) {
+            await leaf.view.append(viewContent, options.append);
         } 
         else {
             if (leaf.view instanceof NtbSidebarView) {

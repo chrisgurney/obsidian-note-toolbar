@@ -371,7 +371,7 @@ export default interface INoteToolbarApi<T> {
     /**
      * Opens a sidebar view with the given content.
      * 
-     * @param content Text or file content to display.
+     * @param content Text content (rendered as markdown), file, or URL to display.
      * @param options Optional display options.
      * @returns Nothing.
      * 
@@ -643,15 +643,16 @@ export interface NtbSidebarOptions {
      */
     active?: boolean;
     /**
-     * Append string content to the existing sidebar instead of replacing it.
+     * Append text content using a provided separator string, instead of replacing it.
+     * Only applies when a sidebar is being reused.
      */
-    append?: boolean;
+    append?: string;
     /**
      * Uniquely identify the sidebar view for reuse. When set, only a sidebar with the same ID is reused.
      */
     id?: string;
     /**
-     * Reuse an existing sidebar view instead of creating a new one. Ignored when `id` is set.
+     * Reuse an existing sidebar view instead of creating a new one. Ignored when `id` is set. Defaults to `true`.
      */
     reuse?: boolean;
     /**

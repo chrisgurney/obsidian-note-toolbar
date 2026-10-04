@@ -52,12 +52,12 @@ export class NtbSidebarView extends ItemView {
      * Appends string content to the sidebar, with newlines.
      * @param content string to append
      */
-    async append(content: string): Promise<void> {
+    async append(content: string, separator: string): Promise<void> {
         if (this.state.content instanceof TFile) return;
         
-        const separator = this.state.content ? '\n\n' : '';
-        this.state.content += separator + content;
-        await this.renderContent(separator + content);
+        const separatorText = this.state.content ? separator : '';
+        this.state.content += separatorText + content;
+        await this.renderContent(separatorText + content);
     }
 
     /**
