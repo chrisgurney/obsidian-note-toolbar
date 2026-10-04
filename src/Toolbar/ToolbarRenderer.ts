@@ -1020,7 +1020,7 @@ export default class ToolbarRenderer {
 			const menuOverflow = activeWindow.innerWidth - (position.x + menu.dom.offsetWidth);
 			// not sure why this is close to 2 -- border pixels on either side? is this theme-dependent?
 			if (menuOverflow <= 2) {
-				this.ntb.debug('⬅️ repositioned menu');
+				// this.ntb.debug('⬅️ repositioned menu');
 				// show the menu along the right edge of the window instead
 				menu.showAtPosition( { x: activeWindow.innerWidth, y: position.y, overlap: true, left: true } );
 			}
