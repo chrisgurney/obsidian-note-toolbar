@@ -348,7 +348,7 @@ Shows a file suggester modal for the provided files and waits for the user's sel
 | `files` | `TAbstractFile`[] | - |
 | `options?` | \{ `allowCustomInput?`: `boolean`; `class?`: `string`; `collapse?`: `boolean`; `default?`: `string`; `exact?`: `boolean`; `filesonly?`: `boolean`; `folder?`: `string`; `foldersonly?`: `boolean`; `icon?`: `string`; `keymap?`: `object`[]; `label?`: `string`; `limit?`: `number`; `placeholder?`: `string`; `prefixes?`: `Record`\<`string`, `unknown`[] \| (() => `unknown`[] \| `Promise`\<`unknown`\>)\>; `rendermd?`: `boolean`; \} | Optional display options. |
 | `options.allowCustomInput?` | `boolean` | If set to `true`, the user can input a custom value that is not in the list of suggestions. Default is `false`. |
-| `options.class?` | `string` | Optional CSS class(es) to add to the component. |
+| `options.class?` | `string` | Optional CSS class(es) to add to the component, separated by spaces. |
 | `options.collapse?` | `boolean` | If set to `true`, the results and suggester instructions are hidden until input is provided. Default is `false`. **Since** 1.29.14 |
 | `options.default?` | `string` | Optionally pre-set the suggester's input with this value. Matching results will be shown, as if you typed in that string yourself (assuming the string appears in the list of options provided). If not provided, no default is set. |
 | `options.exact?` | `boolean` | Set to `true` to use substring matching instead of fuzzy matching, prioritizing results that start with the input string. Default is `false`. **Since** 1.30.10 |
@@ -409,7 +409,7 @@ Shows a menu with the provided items.
 | ------ | ------ | ------ |
 | `toolbarOrItems` | `string` \| [`NtbMenuItem`](INoteToolbarApi.Interface.NtbMenuItem.md)[] | Toolbar name or [ID](Developer-IDs); or an array of items to display. See [NtbMenuItem](INoteToolbarApi.Interface.NtbMenuItem.md). |
 | `options?` | \{ `class?`: `string`; `focusInMenu?`: `boolean`; `id?`: `string`; `position`: `"cursor"` \| `"pointer"` \| `"toolbar"`; \} | Optional display options. |
-| `options.class?` | `string` | Optional CSS class(es) to add to the component. |
+| `options.class?` | `string` | Optional CSS class(es) to add to the component, separated by spaces. |
 | `options.focusInMenu?` | `boolean` | If `true`, the menu item will be focused when the menu opens; defaults to `false`. |
 | `options.id?` | `string` | Optional ID to add to the menu when it's rendered. **Since** 1.27 |
 | `options.position?` | `"cursor"` \| `"pointer"` \| `"toolbar"` | Sets the position in which the menu will appear; defaults to `toolbar`. `cursor`: editor cursor or selected text position (falls back to pointer position, e.g., if editor is not in focus); `pointer`: mouse/pointer position; `toolbar`: last clicked toolbar element position (falls back to pointer position) **Since** 1.27 |
@@ -466,7 +466,7 @@ Shows a modal with the provided content.
 | ------ | ------ | ------ |
 | `content` | `string` \| `TFile` | Content to display in the modal, either as a string or a file within the vault. |
 | `options?` | \{ `class?`: `string`; `contextPath?`: `string`; `originAsContext?`: `boolean`; `title?`: `string`; `webpage?`: `boolean`; \} | Optional display options. |
-| `options.class?` | `string` | Optional CSS class(es) to add to the component. |
+| `options.class?` | `string` | Optional CSS class(es) to add to the component, separated by spaces. |
 | `options.contextPath?` | `string` | Optionally specify which file rendered content should use as context. For example, Bases queries that use `this.file` will refer to this file. |
 | `options.originAsContext?` | `boolean` | Use the file that opened the modal as context (assumes the active file); defaults to `false`. Ignored when `contextPath` is provided. |
 | `options.title?` | `string` | Optional title for the modal, with markdown formatting supported. |
@@ -530,7 +530,7 @@ Shows the prompt modal and waits for the user's input.
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `options?` | \{ `class?`: `string`; `default?`: `string`; `label?`: `string`; `large?`: `boolean`; `placeholder?`: `string`; \} | Optional display options. |
-| `options.class?` | `string` | Optional CSS class(es) to add to the component. |
+| `options.class?` | `string` | Optional CSS class(es) to add to the component, separated by spaces. |
 | `options.default?` | `string` | Optional default value for text field. If not provided, no default value is set. |
 | `options.label?` | `string` | Optional text shown above the text field, with markdown formatting supported. Default is no label. |
 | `options.large?` | `boolean` | If set to `true`, the input field will be multi line. If not provided, defaults to `false`. |
@@ -638,7 +638,7 @@ Shows a suggester modal and waits for the user's selection.
 | `keys?` | `T`[] | Optional array containing the keys of each item in the correct order. If not provided or `null`, values are returned on selection. |
 | `options?` | \{ `allowCustomInput?`: `boolean`; `class?`: `string`; `collapse?`: `boolean`; `default?`: `string`; `exact?`: `boolean`; `icon?`: `string`; `keymap?`: `object`[]; `label?`: `string`; `limit?`: `number`; `placeholder?`: `string`; `prefixes?`: `Record`\<`string`, `unknown`[] \| (() => `unknown`[] \| `Promise`\<`unknown`\>)\>; `rendermd?`: `boolean`; \} | Optional display options. |
 | `options.allowCustomInput?` | `boolean` | If set to `true`, the user can input a custom value that is not in the list of suggestions. Default is `false`. |
-| `options.class?` | `string` | Optional CSS class(es) to add to the component. |
+| `options.class?` | `string` | Optional CSS class(es) to add to the component, separated by spaces. |
 | `options.collapse?` | `boolean` | If set to `true`, the results and suggester instructions are hidden until input is provided. Default is `false`. **Since** 1.29.14 |
 | `options.default?` | `string` | Optionally pre-set the suggester's input with this value. Matching results will be shown, as if you typed in that string yourself (assuming the string appears in the list of options provided). If not provided, no default is set. |
 | `options.exact?` | `boolean` | Set to `true` to use substring matching instead of fuzzy matching, prioritizing results that start with the input string. Default is `false`. **Since** 1.30.10 |
@@ -717,7 +717,7 @@ Shows a (floating) toolbar. Defaults to the 'toolbar' position.
 | ------ | ------ | ------ |
 | `toolbarNameOrId` | `string` | Toolbar name or [ID](Developer-IDs). |
 | `options?` | \{ `class?`: `string`; `position`: `"cursor"` \| `"pointer"` \| `"toolbar"`; \} | Optional display options. |
-| `options.class?` | `string` | Optional CSS class(es) to add to the component. |
+| `options.class?` | `string` | Optional CSS class(es) to add to the component, separated by spaces. |
 | `options.position?` | `"cursor"` \| `"pointer"` \| `"toolbar"` | Sets the position in which the toolbar will appear; defaults to `toolbar`. `cursor`: editor cursor or selected text position (falls back to pointer position, e.g., if editor is not in focus); `pointer`: mouse/pointer position; `toolbar`: last clicked toolbar element position (falls back to pointer position) |
 
 #### Returns

@@ -548,7 +548,7 @@ export interface NtbMenuItem {
  */
 export interface NtbMenuOptions {
     /**
-     * Optional CSS class(es) to add to the component.
+     * Optional CSS class(es) to add to the component, separated by spaces.
      */
     class?: string;
     /**
@@ -578,7 +578,7 @@ export interface NtbMenuOptions {
  */
 export interface NtbModalOptions {
     /**
-     * Optional CSS class(es) to add to the component.
+     * Optional CSS class(es) to add to the component, separated by spaces.
      */
     class?: string;
     /**
@@ -628,7 +628,7 @@ export interface NtbPromptOptions {
      */
     default?: string;
     /**
-     * Optional CSS class(es) to add to the component.
+     * Optional CSS class(es) to add to the component, separated by spaces.
      */
     class?: string;
 }
@@ -691,7 +691,7 @@ export interface NtbSuggesterOptions {
      */
     allowCustomInput?: boolean;
     /**
-     * Optional CSS class(es) to add to the component.
+     * Optional CSS class(es) to add to the component, separated by spaces.
      */
     class?: string;
     /**
@@ -755,7 +755,7 @@ export interface NtbSuggesterOptions {
  */
 export interface NtbToolbarOptions {
     /**
-     * Optional CSS class(es) to add to the component.
+     * Optional CSS class(es) to add to the component, separated by spaces.
      */
     class?: string;
     /**
