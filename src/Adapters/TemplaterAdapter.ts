@@ -223,6 +223,7 @@ export default class TemplaterAdapter extends Adapter {
     ): Promise<string | undefined> => {
 
         let result = '';
+        errorContext = { ...errorContext, adapterFunction: t('adapter.templater.eval-function') };
 
         const activeFile = this.ntb.adapters.utils.checkActiveFile(errorContext);
         if (!activeFile) return;
@@ -264,6 +265,7 @@ export default class TemplaterAdapter extends Adapter {
     parseTemplateFile = async (filename: string, errorContext: ScriptContext) => {
 
         let result = '';
+        errorContext = { ...errorContext, adapterFunction: t('adapter.templater.exec-function') };
 
         const activeFile = this.ntb.adapters.utils.checkActiveFile(errorContext);
         if (!activeFile) return;
