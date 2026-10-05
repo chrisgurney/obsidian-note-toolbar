@@ -116,6 +116,9 @@ export class NtbSidebarView extends ItemView {
 
     }
 
+    /**
+     * Adds navigation (clear/close) to the top of the sidebar view.
+     */
     private renderNavigation(): void {
         // make sure it's only rendered once
         if (this.navigationRendered) return;
@@ -153,21 +156,33 @@ export class NtbSidebarView extends ItemView {
 
     async onClose(): Promise<void> {}
 
+    /*************************************************************************
+     * HELPERS
+     *************************************************************************/
+
+    /**
+     * Checks if the provided NtbSidebarView leaf matches the provided ID.
+     * @param leaf leaf to check
+     * @param id ID to compare against
+     * @returns true if it has the ID; false otherwise
+     */
+    static hasId(leaf: WorkspaceLeaf, id: string): boolean {
+        const state = leaf.getViewState().state;
+        return typeof state === 'object' &&
+            state !== null &&
+            'id' in state &&
+            state.id === id;
+    }
+
+    /**
+     * Removes all NtbSidebarViews with an optional provided ID.
+     * @param ntb plugin instance
+     * @param id optional NtbSidebarView ID
+     */
     static removeSidebars(ntb: NoteToolbarPlugin, id?: string): void {
         ntb.app.workspace
             .getLeavesOfType(NtbSidebarView.VIEW_TYPE_SIDEBAR)
-            .filter(leaf => {
-                if (!id) {
-                    return true;
-                }
-
-                const state = leaf.getViewState().state;
-
-                return typeof state === 'object' &&
-                    state !== null &&
-                    'id' in state &&
-                    state.id === id;
-            })
+            .filter(leaf => !id || NtbSidebarView.hasId(leaf, id))
             .forEach(leaf => leaf.detach());
     }
 
