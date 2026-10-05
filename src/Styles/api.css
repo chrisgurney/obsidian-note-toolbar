@@ -139,3 +139,9 @@
 .note-toolbar-ui-input {
     flex-grow: 1;
 }
+
+.workspace-leaf-content[data-type="note-toolbar-sidebar"] {
+    & .view-content {
+        padding-top: var(--size-4-1);
+    }
+}

@@ -65,6 +65,10 @@ export class NtbSidebarView extends ItemView {
     clear(): void {
         this.contentEl.empty();
         this.state.content = '';
+
+        // set empty state
+        const emptyEl = this.contentEl.createDiv('pane-empty');
+        emptyEl.setText(t('api.ui.sidebar-empty'));
     }
 
     async render(): Promise<void> {
@@ -73,6 +77,10 @@ export class NtbSidebarView extends ItemView {
     }
 
     private async renderContent(content: string | TFile): Promise<void> {
+
+        // remove empty state
+        const emptyEl = this.contentEl.querySelector('.pane-empty');
+        emptyEl?.remove();
 
         const markdown = content instanceof TFile
             ? await this.app.vault.cachedRead(content)
@@ -104,6 +112,9 @@ export class NtbSidebarView extends ItemView {
             this.clickHandlerRegistered = true;
         }
 
+        // scroll to make sure new content is in view
+        this.contentEl.scrollTop = this.contentEl.scrollHeight;
+
     }
 
     private renderNavigation(): void {
@@ -126,8 +137,8 @@ export class NtbSidebarView extends ItemView {
             this.ntb.registerDomEvent(button, 'click', callback);
         };
 
-        addNavButton('eraser', 'Clear content', () => this.clear());
-        addNavButton('x', 'Close', () => this.leaf.detach());
+        addNavButton('eraser', t('api.ui.sidebar-clear'), () => this.clear());
+        addNavButton('x', t('api.ui.sidebar-close'), () => this.leaf.detach());
 
         this.containerEl.insertAdjacentElement('afterbegin', navHeaderEl);
 
