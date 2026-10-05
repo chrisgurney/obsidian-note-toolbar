@@ -143,5 +143,7 @@
 .workspace-leaf-content[data-type="note-toolbar-sidebar"] {
     & .view-content {
         padding-top: var(--size-4-1);
+        user-select: text;
+        -webkit-user-select: text;
     }
 }
