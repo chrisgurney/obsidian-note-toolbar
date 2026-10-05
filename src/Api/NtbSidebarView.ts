@@ -17,6 +17,7 @@ export interface NtbSidebarViewState {
 export class NtbSidebarView extends ItemView {
 
     public static VIEW_TYPE_SIDEBAR = 'note-toolbar-sidebar';
+    public static NTB_ERROR_SIDEBAR = 'ntb-errors';
 
     state!: NtbSidebarViewState;
 

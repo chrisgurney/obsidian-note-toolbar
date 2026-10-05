@@ -444,9 +444,12 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
                 .getLeavesOfType(NtbSidebarView.VIEW_TYPE_SIDEBAR)
                 .find(leaf => leaf.view.getState().id === options.id) ?? null;
         } else if (options?.reuse ?? true) {
-            leaf = this.app.workspace.getLeavesOfType(
-                NtbSidebarView.VIEW_TYPE_SIDEBAR
-            )[0] ?? null;
+            leaf = this.app.workspace
+                .getLeavesOfType(NtbSidebarView.VIEW_TYPE_SIDEBAR)
+                .find(leaf =>
+                    options?.append === undefined ||
+                    !NtbSidebarView.hasId(leaf, NtbSidebarView.NTB_ERROR_SIDEBAR)
+                ) ?? null;
         }
 
         // check which view type to use
