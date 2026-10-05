@@ -252,15 +252,20 @@ export default class NoteToolbarPlugin extends Plugin {
 	toggleDebugSidebar() {
 		if (Platform.isMobile) {
 			// cleanup old leaves; this fixes the extra view on first debug message on reload
-			NtbSidebarView.removeSidebars(this, 'ntb-errors');
+			NtbSidebarView.removeSidebars(this, NtbSidebarView.NTB_ERROR_SIDEBAR);
+			const sidebarOptions = {
+				active: false,
+				append: '',
+				id: NtbSidebarView.NTB_ERROR_SIDEBAR,
+				navigation: true,
+				viewTitle: 'Note Toolbar errors'
+			};
 			// debug messages
 			if (this.settings.debugEnabled) {
 				const debug = console.debug.bind(console);
 				this.debug = (...args: unknown[]): void => {
 					debug(...args);
-					void this.api?.sidebar(formatSidebarError(args), {
-						id: 'ntb-errors', active: false, append: '', navigation: true
-					});
+					void this.api?.sidebar(formatSidebarError(args), sidebarOptions);
 				}
 			}
 			// error messages
@@ -268,9 +273,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			this.error = (...args: unknown[]): void => {
 				// note that this adds to the error stack, so console line numbers won't be accurate
 				error(...args);
-				void this.api?.sidebar(formatSidebarError(args, 'error'), {
-					id: 'ntb-errors', active: false, append: '', navigation: true
-				});
+				void this.api?.sidebar(formatSidebarError(args, 'error'), sidebarOptions);
 			};
 		}
 	}
