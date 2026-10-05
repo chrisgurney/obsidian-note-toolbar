@@ -1090,6 +1090,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 					toggle.onChange(async (value) => {
 						this.ntb.settings.debugEnabled = value;
 						this.ntb.toggleDebugging();
+						this.ntb.toggleDebugSidebar();
 						this.ntb.debug('Note Toolbar debugging:', value); // should not output if debugging is disabled
 						await this.ntb.settingsManager.save();
 					});
