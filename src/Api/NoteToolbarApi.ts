@@ -480,6 +480,7 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
         // set the view state
         const viewState: NtbSidebarViewState = {
             content: viewContent,
+            class: options?.class ?? '',
             id: options?.id ?? '',
             navigation: options?.navigation ?? false,
             viewIcon: options?.viewIcon ?? this.ntb.settings.icon,

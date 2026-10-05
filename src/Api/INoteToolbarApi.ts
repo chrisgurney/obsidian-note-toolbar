@@ -648,6 +648,10 @@ export interface NtbSidebarOptions {
      */
     append?: string;
     /**
+     * Optional CSS class(es) to add to the sidebar, separated by spaces.
+     */
+    class?: string;
+    /**
      * Uniquely identify the sidebar view for reuse. When set, only a sidebar with the same ID is reused.
      */
     id?: string;

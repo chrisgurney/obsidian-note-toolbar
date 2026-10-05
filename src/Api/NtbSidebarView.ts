@@ -5,6 +5,7 @@ import { NtbSidebarOptions } from "./INoteToolbarApi";
 
 export interface NtbSidebarViewState {
     content: string | TFile;
+    class: string;
     id: string;
     navigation: boolean;
     viewIcon: string;
@@ -72,6 +73,9 @@ export class NtbSidebarView extends ItemView {
     }
 
     async render(): Promise<void> {
+        if (this.state.class) {
+            this.containerEl.addClasses(this.state.class.split(' '));
+        }
         if (this.state.navigation) this.renderNavigation();
         await this.renderContent(this.state.content);
     }
@@ -81,8 +85,6 @@ export class NtbSidebarView extends ItemView {
         // remove empty state
         const emptyEl = this.contentEl.querySelector('.pane-empty');
         emptyEl?.remove();
-
-        this.contentEl.toggleClass('ntb-error-sidebar', this.state.id === NtbSidebarView.NTB_ERROR_SIDEBAR);
 
         const markdown = content instanceof TFile
             ? await this.app.vault.cachedRead(content)

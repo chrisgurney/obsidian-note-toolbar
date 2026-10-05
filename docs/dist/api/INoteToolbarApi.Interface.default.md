@@ -540,9 +540,10 @@ Opens a sidebar view with the given content.
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `content` | `string` \| `TFile` \| `URL` | Text content (rendered as markdown), file, or URL to display. |
-| `options?` | \{ `active?`: `boolean`; `append?`: `string`; `id?`: `string`; `navigation?`: `boolean`; `reuse?`: `boolean`; `side?`: `"left"` \| `"right"`; `split?`: `boolean`; `viewIcon?`: `string`; `viewTitle?`: `string`; \} | Optional display options. |
+| `options?` | \{ `active?`: `boolean`; `append?`: `string`; `class?`: `string`; `id?`: `string`; `navigation?`: `boolean`; `reuse?`: `boolean`; `side?`: `"left"` \| `"right"`; `split?`: `boolean`; `viewIcon?`: `string`; `viewTitle?`: `string`; \} | Optional display options. |
 | `options.active?` | `boolean` | Activate the sidebar after opening or updating it. Defaults to `true`. |
 | `options.append?` | `string` | Append text content using a provided separator string, instead of replacing it. Only applies when a sidebar is being reused. |
+| `options.class?` | `string` | Optional CSS class(es) to add to the sidebar, separated by spaces. |
 | `options.id?` | `string` | Uniquely identify the sidebar view for reuse. When set, only a sidebar with the same ID is reused. |
 | `options.navigation?` | `boolean` | Shows navigation (clear + close buttons) in the sidebar. Can only be set once per sidebar. Defaults to `false`. |
 | `options.reuse?` | `boolean` | Reuse an existing sidebar view instead of creating a new one. Ignored when `id` is set. Defaults to `true`. |

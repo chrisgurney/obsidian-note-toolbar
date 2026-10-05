@@ -256,6 +256,7 @@ export default class NoteToolbarPlugin extends Plugin {
 			const sidebarOptions = {
 				active: false,
 				append: '',
+				class: 'ntb-error-sidebar',
 				id: NtbSidebarView.NTB_ERROR_SIDEBAR,
 				navigation: true,
 				viewTitle: 'Note Toolbar errors'
