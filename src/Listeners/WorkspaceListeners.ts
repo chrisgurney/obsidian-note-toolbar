@@ -48,7 +48,7 @@ export default class WorkspaceListeners {
 	 * Track changes to the theme (for better CSS overrides when rendering toolbars).
 	 */
 	onCssChange = () => {
-		// this.ntb.debug('===== CSS-CHANGE =====');
+		// this.ntb.debug('--- CSS-CHANGE ---');
 		// update the global theme attribute (for styling)
 		activeDocument.body.setAttr('data-ntb-csstheme', this.ntb.app.vault.getConfig('cssTheme'));
 	};
@@ -84,7 +84,7 @@ export default class WorkspaceListeners {
 	 */
 	onLayoutChange = async () => {
 
-		this.ntb.debug('===== LAYOUT-CHANGE =====');
+		// this.ntb.debug('--- LAYOUT-CHANGE ---');
 
 		const currentView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
 
@@ -107,7 +107,7 @@ export default class WorkspaceListeners {
 		// const currentView = this.ntb.app.workspace.getActiveViewOfType(MarkdownView);
 		// const currentViewId = getViewId(currentView);
 		// const currentViewMode = currentView?.getMode();
-		// this.ntb.debug('===== LAYOUT-CHANGE ===== ', currentViewId, currentView, currentViewMode);
+		// this.ntb.debug('--- LAYOUT-CHANGE --- ', currentViewId, currentView, currentViewMode);
 
 		// // show empty view or other data type toolbar
 		// if (!currentView) {
@@ -165,7 +165,7 @@ export default class WorkspaceListeners {
 		const currentView = this.ntb.utils.getActiveView();
 
 		const viewId = getViewId(currentView);
-		this.ntb.debug('===== LEAF-CHANGE ===== ', viewId);
+		// this.ntb.debug('--- LEAF-CHANGE --- ', viewId);
 
 		// listen to scroll events for floating toolbars
 		this.ntb.listeners.view.register();
