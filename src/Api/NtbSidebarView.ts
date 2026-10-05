@@ -153,4 +153,22 @@ export class NtbSidebarView extends ItemView {
 
     async onClose(): Promise<void> {}
 
+    static removeSidebars(ntb: NoteToolbarPlugin, id?: string): void {
+        ntb.app.workspace
+            .getLeavesOfType(NtbSidebarView.VIEW_TYPE_SIDEBAR)
+            .filter(leaf => {
+                if (!id) {
+                    return true;
+                }
+
+                const state = leaf.getViewState().state;
+
+                return typeof state === 'object' &&
+                    state !== null &&
+                    'id' in state &&
+                    state.id === id;
+            })
+            .forEach(leaf => leaf.detach());
+    }
+
 }

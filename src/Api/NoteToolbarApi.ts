@@ -407,12 +407,30 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
         }
     }
 
+    private sidebarQueue: Promise<void> = Promise.resolve();
+
     /**
      * Shows a sidebar view with the given content.
      * 
      * @see INoteToolbarApi.sidebar
      */
     async sidebar(
+        content: string | TFile | URL,
+        options?: NtbSidebarOptions
+    ): Promise<void> {
+        this.sidebarQueue = this.sidebarQueue
+            .catch(() => {})
+            .then(() => this.renderSidebar(content, options));
+
+        await this.sidebarQueue;
+    }
+
+    /**
+     * Shows a sidebar view with the given content.
+     * 
+     * @see INoteToolbarApi.sidebar
+     */
+    private async renderSidebar(
         content: string | TFile | URL,
         options?: NtbSidebarOptions
     ): Promise<void> {

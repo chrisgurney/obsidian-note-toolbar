@@ -415,6 +415,31 @@ export function calcComponentVisToggles(visibility: Visibility) {
 }
 
 /**
+ * Returns an error's args into callout text.
+ * @param args 
+ * @param callout 
+ * @returns 
+ */
+export function formatSidebarError(args: unknown[], callout?: string): string {
+
+	const formatError = (args: unknown[]): string => args.map(arg => {
+		if (arg instanceof Error) { return arg.stack ?? arg.message; }
+		if (typeof arg === 'string') { return arg; }
+		try {
+			return JSON.stringify(arg, null, 2);
+		} catch {
+			return String(arg);
+		}
+	}).join(' ');
+
+	const content = formatError(args);
+
+	return callout
+		? `> [!${callout}] ${callout}\n> ${content.replace(/\n/g, '\n> ')}`
+		: content;
+};
+
+/**
  * Returns the text for a toolbar item.
  * @param ntb Plugin instance.
  * @param toolbarItem Item to return text for.

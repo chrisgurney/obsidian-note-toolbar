@@ -2,6 +2,7 @@ import { ViewPlugin } from '@codemirror/view';
 import AdapterManager from 'Adapters/AdapterManager';
 import INoteToolbarApi from "Api/INoteToolbarApi";
 import NoteToolbarApi from 'Api/NoteToolbarApi';
+import { NtbSidebarView } from 'Api/NtbSidebarView';
 import CliManager from 'Cli/CliManager';
 import CommandManager from 'Commands/CommandManager';
 import GalleryManager from 'Gallery/GalleryManager';
@@ -34,7 +35,7 @@ import ToolbarItemHandler from 'Toolbar/ToolbarItemHandler';
 import ToolbarRenderer from 'Toolbar/ToolbarRenderer';
 import VariableResolver from 'Toolbar/VariableResolver';
 import HotkeyHelper from 'Utils/Hotkeys';
-import PluginUtils from 'Utils/Utils';
+import PluginUtils, { formatSidebarError } from 'Utils/Utils';
 
 export default class NoteToolbarPlugin extends Plugin {
 
@@ -129,6 +130,9 @@ export default class NoteToolbarPlugin extends Plugin {
 		// });
 
 		this.app.workspace.onLayoutReady(async () => {
+
+			// toggle mobile debug sidebar
+			this.toggleDebugSidebar();
 
 			// make API available
 			window["ntb"] = this.api;
@@ -227,7 +231,7 @@ export default class NoteToolbarPlugin extends Plugin {
     // *****************************************************************************
 
 	/** 
-	 * Toggle debugging based on user setting.
+	 * Toggle debugging, based on user setting.
 	 */
 	toggleDebugging() {
 		// all errors should be logged
@@ -240,29 +244,35 @@ export default class NoteToolbarPlugin extends Plugin {
 		else {
 			this.debug = (..._args: unknown[]) => {};
 		}
-		
-		// const formatError = (args: unknown[]): string => args.map(arg => {
-		// 	if (arg instanceof Error) { return arg.stack ?? arg.message; }
-		// 	if (typeof arg === 'string') { return arg; }
-		// 	try {
-		// 		return JSON.stringify(arg, null, 2);
-		// 	} catch {
-		// 		return String(arg);
-		// 	}
-		// }).join(' ');
+	}
 
-		// // NOTE: adds to the error stack, so the line number won't be accurate
-		// const error = console.error.bind(console);
-		// this.error = (...args: unknown[]): void => {
-		// 	error(...args);
-		// 	const errorContent = `> [!error] Error\n> ${formatError(args).replace(/\n/g, '\n> ')}`;
-		// 	void this.api.sidebar(errorContent, {
-		// 		id: 'ntb-errors',
-		// 		active: false,
-		// 		append: '',
-		// 		navigation: true
-		// 	});
-		// };
+	/**
+	 * Toggles debug sidebar on mobile, based on user setting.
+	 */
+	toggleDebugSidebar() {
+		if (Platform.isMobile) {
+			// cleanup old leaves; this fixes the extra view on first debug message on reload
+			NtbSidebarView.removeSidebars(this, 'ntb-errors');
+			// debug messages
+			if (this.settings.debugEnabled) {
+				const debug = console.debug.bind(console);
+				this.debug = (...args: unknown[]): void => {
+					debug(...args);
+					void this.api?.sidebar(formatSidebarError(args), {
+						id: 'ntb-errors', active: false, append: '', navigation: true, viewTitle: 'Note Toolbar console'
+					});
+				}
+			}
+			// error messages
+			const error = console.error.bind(console);
+			this.error = (...args: unknown[]): void => {
+				// note that this adds to the error stack, so console line numbers won't be accurate
+				error(...args);
+				void this.api?.sidebar(formatSidebarError(args, 'error'), {
+					id: 'ntb-errors', active: false, append: '', navigation: true, viewTitle: 'Note Toolbar console'
+				});
+			};
+		}
 	}
 
 	// #endregion
