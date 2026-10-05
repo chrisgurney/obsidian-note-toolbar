@@ -24,12 +24,12 @@ export default class VaultListeners {
         this.ntb.settings.toolbars.forEach((toolbar: ToolbarSettings) => {
             toolbar.items.forEach((item: ToolbarItemSettings) => {
                 if (item.link === oldPath) {
-                    this.ntb.debug('| changing', item.link, 'to', file.path);
+                    this.ntb.debug('> changing', item.link, 'to', file.path);
                     item.link = file.path;
                     settingsChanged = true;
                 }
                 if (item.scriptConfig?.sourceFile === oldPath) {
-                    this.ntb.debug('| changing', item.scriptConfig?.sourceFile, 'to', file.path);
+                    this.ntb.debug('> changing', item.scriptConfig?.sourceFile, 'to', file.path);
                     item.scriptConfig.sourceFile = file.path;
                     settingsChanged = true;
                 }

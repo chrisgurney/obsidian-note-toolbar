@@ -147,7 +147,7 @@ export default class ToolbarRenderer {
         if (!view) view = this.ntb.app.workspace.getActiveViewOfType(MarkdownView) ?? undefined;
         if (!view) view = this.ntb.app.workspace.getActiveViewOfType(ItemView) ?? undefined;
         if (!view) {
-			this.ntb.debug("| 🛑 renderToolbar: can not find active view → exiting");
+			this.ntb.debug("> 🛑 renderToolbar: can not find active view → exiting");
             return;
         }
 
@@ -159,14 +159,14 @@ export default class ToolbarRenderer {
         if (!(view instanceof MarkdownView)) {
             const isToolbarVisible = this.ntb.utils.hasToolbarForItemView(view);
             if (!isToolbarVisible) {
-                this.ntb.debug("| 🛑 renderToolbar: nothing to render in this view → exiting");
+                this.ntb.debug("> 🛑 renderToolbar: nothing to render in this view → exiting");
                 return;
             }
             if (position === PositionType.Props) position = PositionType.Top;
         }
 
 		if (!this.ntb.utils.hasVisibleItems(toolbar)) {
-			this.ntb.debug("| renderToolbar: toolbar has no visible items → rendering as hidden");
+			this.ntb.debug("> renderToolbar: toolbar has no visible items → rendering as hidden");
 			position = PositionType.Hidden;
 		}
 
@@ -263,7 +263,7 @@ export default class ToolbarRenderer {
                 // position relative to modal container if in a modal
                 if (modalEl) modalEl.insertAdjacentElement('afterbegin', embedBlock)
 					else if (viewEl) viewEl.insertAdjacentElement('afterbegin', embedBlock)
-                    else this.ntb.debug(`| 🛑 renderToolbar: Unable to find active leaf to insert toolbar`);
+                    else this.ntb.debug(`> 🛑 renderToolbar: Unable to find active leaf to insert toolbar`);
                 break;
             case PositionType.FabLeft:
             case PositionType.FabRight:
@@ -289,7 +289,7 @@ export default class ToolbarRenderer {
                 if (viewHeader) {
 					viewHeader.insertAdjacentElement(Platform.isPhone ? 'beforebegin' : 'afterend', embedBlock);
 				}
-				else this.ntb.debug("| 🛑 renderToolbar: Unable to find .view-header to insert toolbar");
+				else this.ntb.debug("> 🛑 renderToolbar: Unable to find .view-header to insert toolbar");
 				// update height for header repositioning on phones
 				if (Platform.isPhone) {
 					const setToolbarHeight = () => {
@@ -316,7 +316,7 @@ export default class ToolbarRenderer {
 							propsEl = this.ntb.el.getPropsEl(view);
 							if (propsEl) break;
 						}
-						if (!propsEl) this.ntb.debug("| 🛑 renderToolbar: Unable to find .metadata-container to insert toolbar");
+						if (!propsEl) this.ntb.debug("> 🛑 renderToolbar: Unable to find .metadata-container to insert toolbar");
                     }
                     propsEl?.insertAdjacentElement("afterend", embedBlock);
                 }
@@ -326,7 +326,7 @@ export default class ToolbarRenderer {
 		// fix: (#415) unable to connect Canvas cards when the toolbar is in Top (fixed) position
 		if (view.getViewType() === 'canvas') view.onResize();
 
-        this.ntb.debug(`| 🎨 Rendered toolbar: "${toolbar.name}" in view:`, getViewId(view));
+        this.ntb.debug(`> 🎨 Rendered toolbar: "${toolbar.name}" in view:`, getViewId(view));
 
     }
     
@@ -1088,7 +1088,7 @@ export default class ToolbarRenderer {
 			// FIXME? remove this check because of Reading/Preview mode?
 			const editor = this.ntb.app.workspace.activeEditor?.editor;
 			if (!editor) {
-				this.ntb.debug('| editor not available - exiting');
+				this.ntb.debug('> editor not available - exiting');
 				return;
 			};
 			const toolbar = this.ntb.settingsManager.getToolbarById(this.ntb.settings.textToolbar);
@@ -1106,7 +1106,7 @@ export default class ToolbarRenderer {
 			case PositionType.FabLeft: {
 				// trigger the menu
 				const toolbarFabEl = toolbarEl?.querySelector('button.cg-note-toolbar-fab') as HTMLButtonElement;
-				this.ntb.debug("| button: ", toolbarFabEl);
+				this.ntb.debug("> button: ", toolbarFabEl);
 				if (toolbarEl) {
 					const toolbar = this.ntb.settingsManager.getToolbarById(toolbarEl.id);
 					// show the toolbar's menu if it has a default item set
@@ -1142,7 +1142,7 @@ export default class ToolbarRenderer {
 				// get the list and set focus on the first visible item
 				const itemsUl: HTMLElement | null = this.ntb.el.getToolbarListEl(isFloatingToolbar);
 				if (itemsUl) {
-					// this.ntb.debug("| toolbar: ", itemsUl);
+					// this.ntb.debug("> toolbar: ", itemsUl);
 					const items = Array.from(itemsUl.children);
 					const visibleItems = items.filter(item => {
 						const hasSpan = item.querySelector('span') !== null; // to filter out separators
@@ -1150,7 +1150,7 @@ export default class ToolbarRenderer {
 						return hasSpan && isVisible;
 					});
 					const linkEl = visibleItems[0] ? visibleItems[0].querySelector('span') : null;
-					// this.ntb.debug("| focussed item: ", linkEl);
+					// this.ntb.debug("> focussed item: ", linkEl);
 					visibleItems[0]?.addClass(ToolbarStyle.ItemFocused);
 					linkEl?.focus();
 				}
@@ -1602,14 +1602,14 @@ export default class ToolbarRenderer {
 	 */
 	removeIfNeeded(correctToolbar: ToolbarSettings | undefined, view?: ItemView): boolean {
 
-		this.ntb.debug('removeIfNeeded');
+		// this.ntb.debug('removeIfNeeded');
 
 		let toolbarRemoved: boolean = false;
 
 		// get toolbar elements in current view, or active view if not provided
 		const existingToolbarEls = this.ntb.el.getAllToolbarEl(view);
 
-		this.ntb.debug("| removeIfNeeded: correct:", correctToolbar?.name);
+		// this.ntb.debug("> removeIfNeeded: correct:", correctToolbar?.name);
 		if (existingToolbarEls?.length > 0) {
 			// remove everything on phones
 			if (Platform.isPhone) {
@@ -1628,7 +1628,7 @@ export default class ToolbarRenderer {
 			}
 		}
 		else {
-			this.ntb.debug("| removeIfNeeded: no existing toolbar");
+			// this.ntb.debug("> removeIfNeeded: no existing toolbar");
 			toolbarRemoved = true;
 		}
 
