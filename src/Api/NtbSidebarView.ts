@@ -82,6 +82,8 @@ export class NtbSidebarView extends ItemView {
         const emptyEl = this.contentEl.querySelector('.pane-empty');
         emptyEl?.remove();
 
+        this.contentEl.toggleClass('ntb-error-sidebar', this.state.id === NtbSidebarView.NTB_ERROR_SIDEBAR);
+
         const markdown = content instanceof TFile
             ? await this.app.vault.cachedRead(content)
             : content;

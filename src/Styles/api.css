@@ -145,5 +145,8 @@
         padding-top: var(--size-4-1);
         user-select: text;
         -webkit-user-select: text;
+        &.ntb-error-sidebar {
+            font-family: monospace;
+        }
     }
 }
