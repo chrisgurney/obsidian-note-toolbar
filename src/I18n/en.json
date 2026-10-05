@@ -152,6 +152,7 @@
             "sidebar-clear": "Clear content",
             "sidebar-close": "Close sidebar",
             "sidebar-empty": "Sidebar is empty",
+            "sidebar-title": "Note Toolbar console",
             "suggester-placeholder": "Select an option...",
             "suggester-placeholder-no-values": "Type something..."
         }

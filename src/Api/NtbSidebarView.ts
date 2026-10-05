@@ -36,11 +36,11 @@ export class NtbSidebarView extends ItemView {
     }
 
     getDisplayText(): string {
-        return this.state?.viewTitle ?? t('plugin.note-toolbar');
+        return this.state?.viewTitle;
     }
 
     getIcon(): string {
-        return this.state?.viewIcon ?? 'file';
+        return this.state?.viewIcon;
     }
 
     getState(): Record<string, unknown> {
