@@ -26,6 +26,7 @@
             "args-parsing-script-error": "Failed to parse arguments for script: {{- filename}}\n```\n{{- error}}\n```",
             "callout-not-found": "Error: Could not find note-toolbar-output callout in current note with ID: {{id}}",
             "check-console": "Check console for details",
+            "check-sidebar": "Check sidebar for details",
             "context": {
                 "adapterFunction": "{{- adapterFunction}}",
                 "callout": "item in Note Toolbar callout",
@@ -152,7 +153,6 @@
             "sidebar-clear": "Clear content",
             "sidebar-close": "Close sidebar",
             "sidebar-empty": "Sidebar is empty",
-            "sidebar-title": "Note Toolbar console",
             "suggester-placeholder": "Select an option...",
             "suggester-placeholder-no-values": "Type something..."
         }

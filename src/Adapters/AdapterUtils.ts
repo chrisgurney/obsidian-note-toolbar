@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { FileSystemAdapter, Notice, TFile } from "obsidian";
+import { FileSystemAdapter, Notice, Platform, TFile } from "obsidian";
 import { ErrorBehavior, ScriptContext, t, ToolbarItemSettings } from "Settings/NoteToolbarSettings";
 import ItemModal from "Settings/UI/Modals/ItemModal";
 import { importArgs } from "Utils/Utils";
@@ -140,7 +140,7 @@ export default class AdapterUtils {
 
         // notice CTAs
         const ctaFr = noticeFr.createEl('p', { cls: 'note-toolbar-notice-ctas' });
-        ctaFr.append('→ ', t('adapter.error.check-console'));
+        ctaFr.append('→ ', Platform.isMobile ? t('adapter.error.check-sidebar') : t('adapter.error.check-console'));
 
         // notice CTAs: add link to open item settings if item is provided
         if (context?.item) {

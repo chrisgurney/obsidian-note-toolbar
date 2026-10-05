@@ -480,7 +480,7 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
             id: options?.id ?? '',
             navigation: options?.navigation ?? false,
             viewIcon: options?.viewIcon ?? this.ntb.settings.icon,
-            viewTitle: options?.viewTitle ?? t('api.ui.sidebar-title')
+            viewTitle: options?.viewTitle ?? t('plugin.note-toolbar')
         };
 
         if (options?.append !== undefined && leaf.view instanceof NtbSidebarView) {

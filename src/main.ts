@@ -259,7 +259,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				this.debug = (...args: unknown[]): void => {
 					debug(...args);
 					void this.api?.sidebar(formatSidebarError(args), {
-						id: 'ntb-errors', active: false, append: '', navigation: true, viewTitle: 'Note Toolbar console'
+						id: 'ntb-errors', active: false, append: '', navigation: true
 					});
 				}
 			}
@@ -269,7 +269,7 @@ export default class NoteToolbarPlugin extends Plugin {
 				// note that this adds to the error stack, so console line numbers won't be accurate
 				error(...args);
 				void this.api?.sidebar(formatSidebarError(args, 'error'), {
-					id: 'ntb-errors', active: false, append: '', navigation: true, viewTitle: 'Note Toolbar console'
+					id: 'ntb-errors', active: false, append: '', navigation: true
 				});
 			};
 		}
