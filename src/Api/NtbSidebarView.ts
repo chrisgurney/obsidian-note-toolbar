@@ -55,7 +55,6 @@ export class NtbSidebarView extends ItemView {
         if (this.state.content instanceof TFile) return;
         
         const separatorText = this.state.content ? separator : '';
-        this.state.content += separatorText + content;
         await this.renderContent(separatorText + content);
     }
 
