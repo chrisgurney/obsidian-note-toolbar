@@ -1,11 +1,14 @@
 import NoteToolbarPlugin from "main";
-import { ItemView, MarkdownRenderer, TFile, ViewStateResult, WorkspaceLeaf } from "obsidian";
+import { ItemView, MarkdownRenderer, setIcon, TFile, ViewStateResult, WorkspaceLeaf } from "obsidian";
 import { t } from "Settings/NoteToolbarSettings";
 import { NtbSidebarOptions } from "./INoteToolbarApi";
 
 export interface NtbSidebarViewState {
     content: string | TFile;
     id: string;
+    navigation: boolean;
+    viewIcon: string;
+    viewTitle: string;
 }
 
 /**
@@ -17,10 +20,8 @@ export class NtbSidebarView extends ItemView {
 
     state!: NtbSidebarViewState;
 
-    private viewIcon: string;
-    private viewTitle: string;
-    
     private clickHandlerRegistered: boolean = false;
+    private navigationRendered: boolean = false;
 
     constructor(
         private ntb: NoteToolbarPlugin, 
@@ -28,8 +29,6 @@ export class NtbSidebarView extends ItemView {
         options?: NtbSidebarOptions) 
     {
         super(leaf);
-        this.viewIcon = options?.viewIcon ?? 'file';
-        this.viewTitle = options?.viewTitle ?? t('plugin.note-toolbar');
     }
 
     getViewType(): string {
@@ -37,11 +36,11 @@ export class NtbSidebarView extends ItemView {
     }
 
     getDisplayText(): string {
-        return this.viewTitle;
+        return this.state?.viewTitle ?? t('plugin.note-toolbar');
     }
 
     getIcon(): string {
-        return this.viewIcon;
+        return this.state?.viewIcon ?? 'file';
     }
 
     getState(): Record<string, unknown> {
@@ -68,7 +67,12 @@ export class NtbSidebarView extends ItemView {
         this.state.content = '';
     }
 
-    async renderContent(content: string | TFile): Promise<void> {
+    async render(): Promise<void> {
+        if (this.state.navigation) this.renderNavigation();
+        await this.renderContent(this.state.content);
+    }
+
+    private async renderContent(content: string | TFile): Promise<void> {
 
         const markdown = content instanceof TFile
             ? await this.app.vault.cachedRead(content)
@@ -101,13 +105,42 @@ export class NtbSidebarView extends ItemView {
         }
 
     }
-    
+
+    private renderNavigation(): void {
+        // make sure it's only rendered once
+        if (this.navigationRendered) return;
+
+        const navHeaderEl = createDiv('nav-header');
+        const navButtonsEl = navHeaderEl.createDiv('nav-buttons-container');
+
+        const addNavButton = (
+            icon: string,
+            label: string,
+            callback: () => void
+        ): void => {
+            const button = navButtonsEl.createDiv({
+                cls: ['clickable-icon', 'nav-action-button']
+            });
+            setIcon(button, icon);
+            button.ariaLabel = label;
+            this.ntb.registerDomEvent(button, 'click', callback);
+        };
+
+        addNavButton('eraser', 'Clear content', () => this.clear());
+        addNavButton('x', 'Close', () => this.leaf.detach());
+
+        this.containerEl.insertAdjacentElement('afterbegin', navHeaderEl);
+
+        this.navigationRendered = true;
+    }
+
     async setState(state: NtbSidebarViewState, _result: ViewStateResult): Promise<void> {
         this.state = state;
-        await this.renderContent(this.state.content);
+        await this.render();
     }
 
     async onOpen(): Promise<void> {}
 
     async onClose(): Promise<void> {}
+
 }

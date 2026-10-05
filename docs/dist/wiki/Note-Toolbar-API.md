@@ -580,15 +580,16 @@ Opens a sidebar view with the given content.
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `content` | `string` \| `TFile` \| `URL` | Text content (rendered as markdown), file, or URL to display. |
-| `options?` | \{ `active?`: `boolean`; `append?`: `string`; `id?`: `string`; `reuse?`: `boolean`; `side?`: `"left"` \| `"right"`; `split?`: `boolean`; `viewIcon?`: `string`; `viewTitle?`: `string`; \} | Optional display options. |
+| `options?` | \{ `active?`: `boolean`; `append?`: `string`; `id?`: `string`; `navigation?`: `boolean`; `reuse?`: `boolean`; `side?`: `"left"` \| `"right"`; `split?`: `boolean`; `viewIcon?`: `string`; `viewTitle?`: `string`; \} | Optional display options. |
 | `options.active?` | `boolean` | Activate the sidebar after opening or updating it. Defaults to `true`. |
 | `options.append?` | `string` | Append text content using a provided separator string, instead of replacing it. Only applies when a sidebar is being reused. |
 | `options.id?` | `string` | Uniquely identify the sidebar view for reuse. When set, only a sidebar with the same ID is reused. |
+| `options.navigation?` | `boolean` | Shows navigation (clear + close buttons) in the sidebar. Can only be set once per sidebar. Defaults to `false`. |
 | `options.reuse?` | `boolean` | Reuse an existing sidebar view instead of creating a new one. Ignored when `id` is set. Defaults to `true`. |
 | `options.side?` | `"left"` \| `"right"` | Indicates which side to open the sidebar on. Default is `right`. |
 | `options.split?` | `boolean` | Indicates whether to create the sidebar in a new split. Default is `false`. |
-| `options.viewIcon?` | `string` | Sets the icon for the sidebar view. Can only be set once. |
-| `options.viewTitle?` | `string` | Sets the title for the sidebar view. Can only be set once. |
+| `options.viewIcon?` | `string` | Sets the icon for the sidebar view. Can only be set once per sidebar. |
+| `options.viewTitle?` | `string` | Sets the title for the sidebar view. Can only be set once per sidebar. |
 
 #### Returns
 

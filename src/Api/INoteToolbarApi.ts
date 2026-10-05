@@ -652,6 +652,10 @@ export interface NtbSidebarOptions {
      */
     id?: string;
     /**
+     * Shows navigation (clear + close buttons) in the sidebar. Can only be set once per sidebar. Defaults to `false`.
+     */
+    navigation?: boolean;
+    /**
      * Reuse an existing sidebar view instead of creating a new one. Ignored when `id` is set. Defaults to `true`.
      */
     reuse?: boolean;
@@ -664,11 +668,11 @@ export interface NtbSidebarOptions {
      */
     split?: boolean;
     /**
-     * Sets the icon for the sidebar view. Can only be set once.
+     * Sets the icon for the sidebar view. Can only be set once per sidebar.
      */
     viewIcon?: string;
     /**
-     * Sets the title for the sidebar view. Can only be set once.
+     * Sets the title for the sidebar view. Can only be set once per sidebar.
      */
     viewTitle?: string;
 }

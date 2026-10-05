@@ -11,7 +11,7 @@ import Item from "./Item";
 import { IToolbar } from "./IToolbar";
 import NtbModal from "./NtbModal";
 import NtbPrompt from "./NtbPrompt";
-import { NtbSidebarView } from "./NtbSidebarView";
+import { NtbSidebarView, NtbSidebarViewState } from "./NtbSidebarView";
 import NtbSuggester from "./NtbSuggester";
 import Toolbar from "./Toolbar";
 
@@ -457,9 +457,12 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
                 : content;
 
         // set the view state
-        const viewState = {
+        const viewState: NtbSidebarViewState = {
             content: viewContent,
-            id: options?.id ?? ''
+            id: options?.id ?? '',
+            navigation: options?.navigation ?? false,
+            viewIcon: options?.viewIcon ?? 'file',
+            viewTitle: options?.viewTitle ?? t('plugin.note-toolbar')
         };
 
         if (options?.append !== undefined && leaf.view instanceof NtbSidebarView) {
