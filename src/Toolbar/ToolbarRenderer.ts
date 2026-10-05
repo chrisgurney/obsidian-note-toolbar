@@ -147,7 +147,7 @@ export default class ToolbarRenderer {
         if (!view) view = this.ntb.app.workspace.getActiveViewOfType(MarkdownView) ?? undefined;
         if (!view) view = this.ntb.app.workspace.getActiveViewOfType(ItemView) ?? undefined;
         if (!view) {
-			this.ntb.debug("> 🛑 renderToolbar: can not find active view → exiting");
+			this.ntb.debug("> renderToolbar: can not find active view → exiting");
             return;
         }
 
@@ -159,7 +159,7 @@ export default class ToolbarRenderer {
         if (!(view instanceof MarkdownView)) {
             const isToolbarVisible = this.ntb.utils.hasToolbarForItemView(view);
             if (!isToolbarVisible) {
-                this.ntb.debug("> 🛑 renderToolbar: nothing to render in this view → exiting");
+                this.ntb.debug("> renderToolbar: nothing to render in this view → exiting");
                 return;
             }
             if (position === PositionType.Props) position = PositionType.Top;
@@ -263,7 +263,7 @@ export default class ToolbarRenderer {
                 // position relative to modal container if in a modal
                 if (modalEl) modalEl.insertAdjacentElement('afterbegin', embedBlock)
 					else if (viewEl) viewEl.insertAdjacentElement('afterbegin', embedBlock)
-                    else this.ntb.debug(`> 🛑 renderToolbar: Unable to find active leaf to insert toolbar`);
+                    else this.ntb.debug(`> renderToolbar: Unable to find active leaf to insert toolbar`);
                 break;
             case PositionType.FabLeft:
             case PositionType.FabRight:
@@ -289,7 +289,7 @@ export default class ToolbarRenderer {
                 if (viewHeader) {
 					viewHeader.insertAdjacentElement(Platform.isPhone ? 'beforebegin' : 'afterend', embedBlock);
 				}
-				else this.ntb.debug("> 🛑 renderToolbar: Unable to find .view-header to insert toolbar");
+				else this.ntb.debug("> renderToolbar: Unable to find .view-header to insert toolbar");
 				// update height for header repositioning on phones
 				if (Platform.isPhone) {
 					const setToolbarHeight = () => {
@@ -316,7 +316,7 @@ export default class ToolbarRenderer {
 							propsEl = this.ntb.el.getPropsEl(view);
 							if (propsEl) break;
 						}
-						if (!propsEl) this.ntb.debug("> 🛑 renderToolbar: Unable to find .metadata-container to insert toolbar");
+						if (!propsEl) this.ntb.debug("> renderToolbar: Unable to find .metadata-container to insert toolbar");
                     }
                     propsEl?.insertAdjacentElement("afterend", embedBlock);
                 }
