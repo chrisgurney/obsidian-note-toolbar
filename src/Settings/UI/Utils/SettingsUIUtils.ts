@@ -43,6 +43,18 @@ export default class SettingsUIUtils {
 	}
 
 	/**
+	 * Closes Obsidian's settings window.
+	 */
+	closeSettingsWindow() {
+		const settingsWindow = this.ntb.app.setting.modalEl?.ownerDocument.defaultView;
+		if (settingsWindow && settingsWindow !== window) {
+			settingsWindow.close();
+			return;
+		}
+		this.ntb.app.setting.close();
+	}
+
+	/**
 	 * Shows a confirmation modal to delete a toolbar, with warnings if it's in use.
 	 * @param toolbar ToolbarSettings to delete
 	 * @param onConfirm callback to execute after successful deletion
@@ -525,7 +537,7 @@ export default class SettingsUIUtils {
 		usageFr.append(descLinkFr);
 		this.ntb.registerDomEvent(descLinkFr, 'click', () => {
 			parent?.close();
-			this.ntb.app.setting.close();
+			this.closeSettingsWindow();
 			window.open(this.getToolbarPropSearchUri(toolbar.name));
 		});
 

@@ -177,7 +177,7 @@ export default class ToolbarSettingsModal extends Modal {
 
 		this.ntb.settingsUtils.displayHelpSection(settingsDiv, true, () => {
 			this.close();
-			if (this.parent) this.ntb.app.setting.close();
+			if (this.parent) this.ntb.settingsUtils.closeSettingsWindow();
 		});
 
 		this.contentEl.appendChild(settingsDiv);

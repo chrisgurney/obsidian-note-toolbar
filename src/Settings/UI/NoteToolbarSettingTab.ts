@@ -68,7 +68,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		this.ntb.adapters.checkPlugins();
 
 		// help
-		this.ntb.settingsUtils.displayHelpSection(containerEl, undefined, () => this.ntb.app.setting.close());
+		this.ntb.settingsUtils.displayHelpSection(containerEl, undefined, () => this.ntb.settingsUtils.closeSettingsWindow());
 
 		// toolbar list
 		this.displayToolbarList(containerEl);
@@ -243,7 +243,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 						.onClick(async () => {
 							await this.ntb.app.workspace.getLeaf(true).setViewState({ type: VIEW_TYPE_GALLERY, active: true });
 							if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
-							this.ntb.app.setting.close();
+							this.ntb.settingsUtils.closeSettingsWindow();
 						})
 						.buttonEl.setText(iconTextFr('layout-grid', t('setting.button-gallery')));
 				});

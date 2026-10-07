@@ -49,6 +49,8 @@ declare module "obsidian" {
         };
         setting: {
             close(): void;
+            // allows closing of the settings window (if it's opened in a new window)
+            modalEl: HTMLElement;
             open(): void;
             openTabById(id: string): SettingTab;
         }
