@@ -186,11 +186,12 @@ export default class JsEngineAdapter extends Adapter {
             this.ntb.adapters.utils.handleError(t('adapter.error.expr-note-not-open'), errorContext);
             return;
         }
+        const activeFilePath = activeFile.path;
 
         const component = new Component();
 		component.load();
         try {
-            containerEl?.empty();
+            resultEl.empty();
             const context: ExecutionContext = {
                 executionSource: 'markdown-other',
                 file: activeFile
@@ -207,6 +208,19 @@ export default class JsEngineAdapter extends Adapter {
             if (execution.functionBuildError) throw execution.functionBuildError;
             if (execution.functionRunError) throw execution.functionRunError;
             result = execution.result as string;
+            if (containerEl) {
+                const renderer = this.adapterApi?.internal.createRenderer(resultEl, activeFilePath, component);
+                await renderer?.render(execution?.result);
+            }
+            // else {
+            //     const jsExecution = execution as JsEngineResult;
+            //     if (jsExecution.result.message?.type === 'error') {
+            //         errorContext['errorObject'] = jsExecution.result.message;
+            //         this.ntb.adapters.utils.handleError(jsExecution.result.message.code, errorContext, '', containerEl);
+            //         return;
+            //     }
+            //     result = execution?.result?.content || (execution?.result || '') as string;
+            // }
         }
         catch (error) {
             result = this.ntb.adapters.utils.handleError(error, errorContext, expression, containerEl) ?? result;
@@ -215,7 +229,7 @@ export default class JsEngineAdapter extends Adapter {
             component.unload();
         }
 
-        return result;
+        return containerEl ? '' : result;
 
     }
 
@@ -326,7 +340,7 @@ export default class JsEngineAdapter extends Adapter {
         const component = new Component();
         component.load();
         try {
-            containerEl?.empty();
+            resultEl?.empty();
             this.ntb.debug(`Note Toolbar: Executing:\n${scriptFilePath}`);
             const execution = await this.adapterApi?.internal.executeFile(scriptFilePath, {
                 container: resultEl,
@@ -336,7 +350,6 @@ export default class JsEngineAdapter extends Adapter {
             if (containerEl) {
                 const renderer = this.adapterApi?.internal.createRenderer(resultEl, activeFilePath, component);
                 await renderer?.render(execution?.result);
-                // await MarkdownRenderer.render(this.plugin.app, execution.result, resultEl, activeFilePath, this.plugin);
             }
             else {
                 const jsExecution = execution as JsEngineResult;
@@ -356,7 +369,7 @@ export default class JsEngineAdapter extends Adapter {
             component.unload();
         }
 
-        return result;
+        return containerEl ? '' : result;
 
     }
 
