@@ -1,4 +1,4 @@
-import { FILE_TYPE_OPTIONS, FileType, NONE_TOOLBAR_ID, PLATFORM_OPTIONS, PlatformType, Rule, RULE_OPERANDS, RULE_VALUE_TYPE_OTHER, RuleCondition, RuleConjunction, RuleField, RuleOperator, SettingType, t, UiSelectOption, VIEW_MODE_OPTIONS, ViewType } from "Settings/NoteToolbarSettings";
+import { FILE_TYPE_OPTIONS, FileType, NONE_TOOLBAR_ID, PLATFORM_OPTIONS, PlatformType, Rule, RULE_OPERANDS, RULE_VALUE_TYPE_OTHER, RuleCondition, RuleConjunction, RuleField, RuleOperator, RuleValueEditor, SettingType, t, UiSelectOption, VIEW_MODE_OPTIONS, ViewType } from "Settings/NoteToolbarSettings";
 import { arraymove, getElementPosition, getUUID, moveElement } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
 import { ButtonComponent, debounce, ItemView, Menu, MenuItem, Modal, Platform, Setting, SettingGroup, setTooltip } from "obsidian";
@@ -11,6 +11,8 @@ import ToolbarSuggester from "../Suggesters/ToolbarSuggester";
 import { iconTextFr, learnMoreFr, removeFieldError } from "../Utils/SettingsUIUtils";
 
 export default class RulesModal extends Modal {
+
+    private previousEditor: RuleValueEditor | undefined;
 
     constructor(
         private ntb: NoteToolbarPlugin
@@ -470,7 +472,6 @@ export default class RulesModal extends Modal {
                             condition.field = undefined;
                             condition.key = undefined;
                             condition.operator = undefined;
-                            condition.value = '';
                             this.updateActiveRule();
                         }
                     })
@@ -479,7 +480,6 @@ export default class RulesModal extends Modal {
                     condition.field = selectedOperand.field;
                     condition.key = selectedOperand.key;
                     condition.operator = selectedOperand.operators[0].op;
-                    condition.value = undefined;
                     this.updateActiveRule();
 
                     const conditionFormEl = this.renderConditionForm(rule, condition);
@@ -517,7 +517,6 @@ export default class RulesModal extends Modal {
                         .setValue(condition.operator ?? '')
                         .onChange(debounce(async (value) => {
                             condition.operator = value as RuleOperator;
-                            condition.value = undefined;
 
                             await this.saveAndUpdateActiveRule().then(() => {
                                 const conditionFormEl = this.renderConditionForm(rule, condition);
@@ -546,8 +545,8 @@ export default class RulesModal extends Modal {
         if (operatorDefinition) {
             switch (operatorDefinition.editor) {
                 case 'editormode':
-                    if (!condition.value) {
-                        condition.value ??= ViewType.Preview;
+                    if (!condition.value || this.previousEditor !== operatorDefinition.editor) {
+                        condition.value = ViewType.Preview;
                         void this.saveAndUpdateActiveRule();
                     }
                     new Setting(operatorValueContainerEl)
@@ -564,6 +563,10 @@ export default class RulesModal extends Modal {
                     break;
 
                 case 'file':
+                    if (!['file', 'folder', 'string', undefined].includes(this.previousEditor)) {
+                        condition.value = undefined;
+                        void this.saveAndUpdateActiveRule();
+                    }
                     new Setting(operatorValueContainerEl)
                         .setClass('note-toolbar-setting-mapping-value')
                         .addSearch((cb) => {
@@ -589,8 +592,8 @@ export default class RulesModal extends Modal {
                     break;
 
                 case 'filetype':
-                    if (!condition.value) {
-                        condition.value ??= FileType.Bases;
+                    if (!condition.value || this.previousEditor !== operatorDefinition.editor) {
+                        condition.value = FileType.Bases;
                         void this.saveAndUpdateActiveRule();
                     }
                     new Setting(operatorValueContainerEl)
@@ -620,6 +623,10 @@ export default class RulesModal extends Modal {
                     break;
 
                 case 'folder':
+                    if (!['file', 'folder', 'string', undefined].includes(this.previousEditor)) {
+                        condition.value = undefined;
+                        void this.saveAndUpdateActiveRule();
+                    }
                     new Setting(operatorValueContainerEl)
                         .setClass('note-toolbar-setting-mapping-value')
                         .addSearch((cb) => {
@@ -639,7 +646,10 @@ export default class RulesModal extends Modal {
                     break;
 
                 case 'platform':
-                    if (!condition.value) condition.value ??= PlatformType.Mobile;
+                    if (!condition.value || this.previousEditor !== operatorDefinition.editor) {
+                        condition.value = PlatformType.Mobile;
+                         void this.saveAndUpdateActiveRule();
+                    }
                     new Setting(operatorValueContainerEl)
                         .setClass('note-toolbar-setting-mapping-value')
                         .addDropdown((dropdown) => {
@@ -654,6 +664,10 @@ export default class RulesModal extends Modal {
                     break;
 
                 case 'tags':
+                    if (!condition.value || this.previousEditor !== operatorDefinition.editor) {
+                        condition.value = '';
+                        void this.saveAndUpdateActiveRule();
+                    }
                     new Setting(operatorValueContainerEl)
                         .setClass('note-toolbar-setting-mapping-value')
                         .addSearch((cb) => {
@@ -669,6 +683,10 @@ export default class RulesModal extends Modal {
                     break;
 
                 case 'string':
+                    if (!['file', 'folder', 'string', undefined].includes(this.previousEditor)) {
+                        condition.value = '';
+                         void this.saveAndUpdateActiveRule();
+                    }
                     new Setting(operatorValueContainerEl)
                         .setClass('note-toolbar-setting-mapping-value')
                         .addText((cb) => {
@@ -682,6 +700,8 @@ export default class RulesModal extends Modal {
                         });
                     break;
             }
+            // track so we know when to reset the condition value
+            this.previousEditor = operatorDefinition.editor;
         }
 
         //
