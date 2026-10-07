@@ -1010,7 +1010,7 @@
         "menu-edit-toolbar": "Edit toolbar: {{toolbar}}...",
         "menu-hide-base-toolbar": "Hide Base toolbar",
         "menu-hide-properties": "Hide note properties",
-        "menu-position": "Set position",
+        "menu-position": "Position",
         "menu-rules": "Toolbar rules...",
         "menu-show-base-toolbar": "Show Base toolbar",
         "menu-show-properties": "Show note properties",
