@@ -122,7 +122,7 @@ export default class JavaScriptAdapter extends Adapter {
             return;
         }
 
-        this.ntb.debug(`Note Toolbar: Executing: ${scriptFilePath}`);
+        this.ntb.debug('Note Toolbar: Executing:', scriptFilePath);
         return await this.evaluate(contents, errorContext, argsJson, containerEl);
 
     }
@@ -156,10 +156,10 @@ export default class JavaScriptAdapter extends Adapter {
             try {
                 const func = new JavaScriptAdapter.AsyncFunction("input", expression);
                 resultEl.empty();
-                this.ntb.debug('Note Toolbar: Evaluating:\n', this.ntb.adapters.utils.formatExpression(expression));
+                this.ntb.debug('Note Toolbar: Evaluating:', this.ntb.adapters.utils.formatExpression(expression));
                 // may directly render, in which case it will likely return undefined or null
                 result = await Promise.resolve((func as (...args: unknown[]) => unknown)(args));
-                this.ntb.debug('Note Toolbar: Result:\n', result);
+                this.ntb.debug('Note Toolbar: Result:', result);
                 if (containerEl && result && this.ntb) {
                     await MarkdownRenderer.render(
                         this.ntb.app,

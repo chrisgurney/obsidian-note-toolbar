@@ -201,9 +201,9 @@ export default class JsEngineAdapter extends Adapter {
                 component: component,
                 context: context
             };
-            this.ntb.debug('Note Toolbar: Evaluating:\n', this.ntb.adapters.utils.formatExpression(expression));
+            this.ntb.debug('Note Toolbar: Evaluating:', this.ntb.adapters.utils.formatExpression(expression));
             const execution = await this.adapterApi?.internal.execute(params);
-            this.ntb.debug('Note Toolbar: Result:\n', execution);
+            this.ntb.debug('Note Toolbar: Result:', execution);
             if (execution.functionBuildError) throw execution.functionBuildError;
             if (execution.functionRunError) throw execution.functionRunError;
             result = execution.result as string;
@@ -259,7 +259,7 @@ export default class JsEngineAdapter extends Adapter {
         errorContext['scriptFile'] = scriptFile;
 
         if (this.adapterApi) {
-            this.ntb.debug('Note Toolbar: Executing:\n', scriptFilePath, functionName ?? '');
+            this.ntb.debug('Note Toolbar: Executing:', scriptFilePath, functionName ?? '');
             let module;
             try {
                 module = await this.adapterApi.importJs(scriptFilePath) as Record<string, unknown>;
@@ -281,7 +281,7 @@ export default class JsEngineAdapter extends Adapter {
                     else {
                         result = (module[functionName] as (...args: unknown[]) => unknown)(this.adapterApi);
                     }
-                    this.ntb.debug('Note Toolbar: Result\n', result);
+                    this.ntb.debug('Note Toolbar: Result', result);
                 }
                 catch (error) {
                     result = this.ntb.adapters.utils.handleError(error, errorContext, String(module[functionName])) ?? result;
@@ -332,7 +332,7 @@ export default class JsEngineAdapter extends Adapter {
                 container: resultEl,
                 component: component,
             });
-            this.ntb.debug('Note Toolbar: Result:\n', execution);
+            this.ntb.debug('Note Toolbar: Result:', execution);
             if (containerEl) {
                 const renderer = this.adapterApi?.internal.createRenderer(resultEl, activeFilePath, component);
                 await renderer?.render(execution?.result);

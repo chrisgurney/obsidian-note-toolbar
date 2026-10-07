@@ -172,7 +172,7 @@ export default class DataviewAdapter extends Adapter {
 		component.load();
         try {
             if (this.adapterApi && activeFilePath) {
-                this.ntb.debug('Note Toolbar: Evaluating:\n', this.ntb.adapters.utils.formatExpression(expression));
+                this.ntb.debug('Note Toolbar: Evaluating:', this.ntb.adapters.utils.formatExpression(expression));
                 const dvResult: DataviewResult = await this.adapterApi.evaluateInline(expression, activeFilePath);
                 this.ntb.debug("Note Toolbar: Result:\n", dvResult);
                 if (containerEl) {
@@ -260,10 +260,10 @@ export default class DataviewAdapter extends Adapter {
             const func = new DataviewAdapter.AsyncFunction("dv", "input", contents);
             containerEl.empty();
             const dataviewLocalApi = this.adapterPlugin?.localApi(activeFilePath, component, containerEl);    
-            this.ntb.debug('Note Toolbar: Executing:\n', scriptFile);
+            this.ntb.debug('Note Toolbar: Executing:', scriptFile);
             // from dv.view: may directly render, in which case it will likely return undefined or null
             result = await Promise.resolve((func as (...args: unknown[]) => unknown)(dataviewLocalApi, args));
-            this.ntb.debug('Note Toolbar: Result:\n', result);
+            this.ntb.debug('Note Toolbar: Result:', result);
             if (result && component) {
                     await this.adapterApi?.renderValue(
                         result,
@@ -362,7 +362,7 @@ export default class DataviewAdapter extends Adapter {
         component.load();
         try {
             if (this.adapterApi) {
-                this.ntb.debug('Note Toolbar: Evaluating:\n', this.ntb.adapters.utils.formatExpression(expression));
+                this.ntb.debug('Note Toolbar: Evaluating:', this.ntb.adapters.utils.formatExpression(expression));
                 // returns a Promise<Result<QueryResult, string>>
                 const dvResult = await this.adapterApi.queryMarkdown(expression, activeFile.path);
                 this.ntb.debug("Note Toolbar: Query result:\n", dvResult);
