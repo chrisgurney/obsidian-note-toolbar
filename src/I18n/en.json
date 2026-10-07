@@ -376,7 +376,7 @@
         "button-help-tooltip": "Open the Help tab",
         "button-learn-more": "Learn\u00A0more",
         "button-open-file": "Open ↗",
-        "button-open-file-tooltip": "Open file in Obsidian, if supported",
+        "button-open-file-tooltip": "Open file",
         "button-reveal-file": "Locate ↗",
         "button-reveal-file-tooltip": "Show file in navigator",
         "button-user-guide": "User\u00A0Guide",
