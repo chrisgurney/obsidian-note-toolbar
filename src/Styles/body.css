@@ -181,6 +181,7 @@ body {
      */
      --cg-nt-settings-link-focus-box-shadow: 0 0 0 2px;
 
+     --ntb-callout-card-border: solid 1px var(--cg-nt-tbar-border-color);
      --ntb-callout-card-max-width: none;
      --ntb-callout-card-max-width-mobile: none;
      --ntb-callout-card-width: 150px;
