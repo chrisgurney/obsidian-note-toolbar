@@ -172,7 +172,7 @@ export default class DataviewAdapter extends Adapter {
 		component.load();
         try {
             if (this.adapterApi && activeFilePath) {
-                this.ntb.debug('Note Toolbar: Evaluating:', this.ntb.adapters.utils.formatExpression(expression));
+                this.ntb.debug('Note Toolbar: Evaluating:\n', this.ntb.adapters.utils.formatExpression(expression));
                 const dvResult: DataviewResult = await this.adapterApi.evaluateInline(expression, activeFilePath);
                 this.ntb.debug("Note Toolbar: Result:\n", dvResult);
                 if (containerEl) {
@@ -308,9 +308,9 @@ export default class DataviewAdapter extends Adapter {
         component.load();
         try {
             if (this.adapterApi) {
-                // console.debug("executeJs() ", expression);
+                this.ntb.debug('Note Toolbar: Executing:\n', expression);
                 await this.adapterApi?.executeJs(expression, resultEl, component, activeFilePath);
-                // console.debug("executeJs() result:", resultEl);
+                this.ntb.debug('Note Toolbar: Result:', resultEl);
                 if (!containerEl) {
                     const errorEl = resultEl.querySelector('.dataview-error');
                     if (errorEl) {
@@ -362,7 +362,7 @@ export default class DataviewAdapter extends Adapter {
         component.load();
         try {
             if (this.adapterApi) {
-                this.ntb.debug('Note Toolbar: Evaluating:', this.ntb.adapters.utils.formatExpression(expression));
+                this.ntb.debug('Note Toolbar: Evaluating:\n', this.ntb.adapters.utils.formatExpression(expression));
                 // returns a Promise<Result<QueryResult, string>>
                 const dvResult = await this.adapterApi.queryMarkdown(expression, activeFile.path);
                 this.ntb.debug("Note Toolbar: Query result:\n", dvResult);

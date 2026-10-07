@@ -201,7 +201,7 @@ export default class JsEngineAdapter extends Adapter {
                 component: component,
                 context: context
             };
-            this.ntb.debug('Note Toolbar: Evaluating:', this.ntb.adapters.utils.formatExpression(expression));
+            this.ntb.debug('Note Toolbar: Evaluating:\n', this.ntb.adapters.utils.formatExpression(expression));
             const execution = await this.adapterApi?.internal.execute(params);
             this.ntb.debug('Note Toolbar: Result:', execution);
             if (execution.functionBuildError) throw execution.functionBuildError;
