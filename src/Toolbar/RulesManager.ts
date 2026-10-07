@@ -413,7 +413,7 @@ export default class RulesManager {
                 return !path.includes(value);
 
             case RuleOperator.StartsWith:
-                return path === value || path.startsWith(`${value}/`);
+                return value === '*' || path === value || path.startsWith(`${value}/`);
 
             case RuleOperator.EndsWith:
                 return path.endsWith(value);
