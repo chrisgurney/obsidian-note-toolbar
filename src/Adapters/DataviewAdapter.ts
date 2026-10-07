@@ -260,7 +260,7 @@ export default class DataviewAdapter extends Adapter {
             const func = new DataviewAdapter.AsyncFunction("dv", "input", contents);
             containerEl.empty();
             const dataviewLocalApi = this.adapterPlugin?.localApi(activeFilePath, component, containerEl);    
-            this.ntb.debug('Note Toolbar: Evaluating:\n', activeFilePath);
+            this.ntb.debug('Note Toolbar: Executing:\n', scriptFile);
             // from dv.view: may directly render, in which case it will likely return undefined or null
             result = await Promise.resolve((func as (...args: unknown[]) => unknown)(dataviewLocalApi, args));
             this.ntb.debug('Note Toolbar: Result:\n', result);
