@@ -377,7 +377,7 @@
         "button-learn-more": "Learn\u00A0more",
         "button-open-file": "Open ↗",
         "button-open-file-tooltip": "Open file in Obsidian, if supported",
-        "button-reveal-file": "Locate",
+        "button-reveal-file": "Locate ↗",
         "button-reveal-file-tooltip": "Show file in navigator",
         "button-user-guide": "User\u00A0Guide",
         "button-whats-new": "What's\u00A0new?",
@@ -967,7 +967,7 @@
             "description_none": "This toolbar is not used in any mappings or items.",
             "description-mappings": "{{count}} mapping",
             "description-mappings_plural": "{{count}} mappings",
-            "description-search": "Search for property usage",
+            "description-search": "Search for property usage ↗",
             "description-toolbar-items": "{{count}} toolbar item",
             "description-toolbar-items_plural": "{{count}} toolbar items",
             "name": "Usage"
