@@ -353,7 +353,7 @@ body .workspace .callout[data-callout="note-toolbar"] {
             & li {
                 align-items: start;
                 background-blend-mode: overlay;
-                box-shadow: var(--input-shadow);
+                border: solid 1px var(--ntb-callout-card-border);
                 border-radius: var(--radius-m);
                 cursor: pointer;
                 display: flex;
