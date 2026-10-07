@@ -216,6 +216,8 @@ export default class DataviewAdapter extends Adapter {
     ): Promise<string | undefined> => {
 
         let result;
+        // OLD NOTE: this works if the script doesn't need a container... but where does this span go?
+        const resultEl = containerEl || createSpan();
 
         if (!filename) return;
 
@@ -244,9 +246,6 @@ export default class DataviewAdapter extends Adapter {
         // }
         // const args = importedArgs.value;
         
-        // TODO: this works if the script doesn't need a container... but where does this span go?
-        containerEl = containerEl || createSpan();
-
         const activeFilePath = this.ntb.app.workspace.getActiveFile()?.path || '';
 
         // if (contents.includes("await")) contents = "(async () => { " + contents + " })()";
@@ -258,29 +257,29 @@ export default class DataviewAdapter extends Adapter {
         component.load();
         try {
             const func = new DataviewAdapter.AsyncFunction("dv", "input", contents);
-            containerEl.empty();
-            const dataviewLocalApi = this.adapterPlugin?.localApi(activeFilePath, component, containerEl);    
+            resultEl.empty();
+            const dataviewLocalApi = this.adapterPlugin?.localApi(activeFilePath, component, resultEl);    
             this.ntb.debug('Note Toolbar: Executing:', scriptFile);
             // from dv.view: may directly render, in which case it will likely return undefined or null
             result = await Promise.resolve((func as (...args: unknown[]) => unknown)(dataviewLocalApi, args));
             this.ntb.debug('Note Toolbar: Result:', result);
             if (result && component) {
-                    await this.adapterApi?.renderValue(
-                        result,
-                        containerEl,
-                        component,
-                        activeFilePath
-                    );
+                await this.adapterApi?.renderValue(
+                    result,
+                    resultEl,
+                    component,
+                    activeFilePath
+                );
             }
         }
         catch (error) {
             result = this.ntb.adapters.utils.handleError(error, errorContext, contents, containerEl) ?? result;
         }
         finally {
-            containerEl.addEventListener('remove', () => component.unload(), { once: true });
+            resultEl.addEventListener('remove', () => component.unload(), { once: true });
         }
 
-        return result as string;
+        return containerEl ? '' : result as string;
 
     }
 

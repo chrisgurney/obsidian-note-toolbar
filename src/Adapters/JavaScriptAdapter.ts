@@ -179,7 +179,7 @@ export default class JavaScriptAdapter extends Adapter {
 
         }
 
-        return result as string;
+        return containerEl ? '' : result as string;
 
     }
 
