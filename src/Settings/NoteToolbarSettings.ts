@@ -579,7 +579,7 @@ export const RULE_OPERANDS: RuleOperand[] = [
             { op: RuleOperator.DoesNotContain, label: t('setting.rules.operator-doesNotContain'), editor: 'string' },
             { op: RuleOperator.Is, label: t('setting.rules.operator-is'), editor: 'folder' },
             { op: RuleOperator.IsNot, label: t('setting.rules.operator-isNot'), editor: 'folder' },
-            { op: RuleOperator.StartsWith, label: t('setting.rules.operator-startsWith'), editor: 'string' },
+            { op: RuleOperator.StartsWith, label: t('setting.rules.operator-startsWith'), editor: 'folder' },
             { op: RuleOperator.EndsWith, label: t('setting.rules.operator-endsWith'), editor: 'string' },
         ]
     },
