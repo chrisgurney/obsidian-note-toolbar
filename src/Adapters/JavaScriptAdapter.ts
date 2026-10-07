@@ -159,6 +159,7 @@ export default class JavaScriptAdapter extends Adapter {
                 this.ntb.debug('Note Toolbar: Evaluating:\n', this.ntb.adapters.utils.formatExpression(expression));
                 // may directly render, in which case it will likely return undefined or null
                 result = await Promise.resolve((func as (...args: unknown[]) => unknown)(args));
+                this.ntb.debug('Note Toolbar: Result:\n', result);
                 if (containerEl && result && this.ntb) {
                     await MarkdownRenderer.render(
                         this.ntb.app,
