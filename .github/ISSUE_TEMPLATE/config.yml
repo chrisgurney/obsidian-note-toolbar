@@ -1,14 +1,8 @@
-# The issue chooser is where a reporter decides how to file. SECURITY.md asks
-# that a vulnerability never be a public issue, so the private route has to be
-# visible here, next to the public templates, not only in a file the reporter
-# may never open.
-#
-# Blank issues stay disabled: that was the behaviour before this file existed
-# (templates were already present without a config.yml, so GitHub hid blank issues),
-# and this file only adds a route, it does not take one away.
-
 blank_issues_enabled: false
 contact_links:
   - name: Report a security vulnerability
     url: https://github.com/chrisgurney/obsidian-note-toolbar/security/advisories/new
     about: Do not open a public issue. Report it privately here. See SECURITY.md.
+  - name: Request a feature
+    url: https://github.com/chrisgurney/obsidian-note-toolbar/discussions/categories/ideas
+    about: Vote on feature requests, or share if you have a new idea.
