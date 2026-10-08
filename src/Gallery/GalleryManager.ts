@@ -80,7 +80,7 @@ export default class GalleryManager {
 			}
         }
         
-        const toolbarSuggester = new ToolbarSuggestModal(this.ntb, true, false, true, (toolbar: ToolbarSettings) => void addItemToToolbar(toolbar));
+        const toolbarSuggester = new ToolbarSuggestModal(this.ntb, false, true, (toolbar: ToolbarSettings) => void addItemToToolbar(toolbar));
 
         const doNextStep = async () => {
             if (this.ntb.settings.toolbars.length > 0) toolbarSuggester.open()

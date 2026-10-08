@@ -14,7 +14,6 @@ export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
     /**
      * Creates a new modal.
      * @param ntb NoteToolbarPlugin
-     * @param showPreviews true if toolbar previews should be shown
      * @param showSwapUi true if UI for swap toolbars should be shown (e.g., default toolbar option)
      * @param showNewOption true if UI should show a "New toolbar" option (for adding items from the Gallery)
      * @param callback function to call when a toolbar is selected
@@ -22,7 +21,6 @@ export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
      */
 	constructor(
         private ntb: NoteToolbarPlugin,
-        private showPreviews: boolean, 
         private showSwapUi: boolean,
         private showNewOption: boolean,
         private callback: (toolbar: ToolbarSettings) => void,
@@ -168,15 +166,14 @@ export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
             return;
         }
 
-        if (this.showPreviews) {
-            const previewContainerEl = containerEl.createDiv();
-            previewContainerEl.addClass('setting-item-description');
-            const previewEl = previewContainerEl.createDiv();
-            previewEl.addClass('note-toolbar-setting-toolbar-list-preview-item');
-            const previewFr = this.ntb.settingsUtils.createToolbarPreviewFr(toolbar, undefined);
-            previewEl.append(previewFr);
-            containerEl.append(previewContainerEl);
-        }
+        // show toolbar preview
+        const previewContainerEl = containerEl.createDiv();
+        previewContainerEl.addClass('setting-item-description');
+        const previewEl = previewContainerEl.createDiv();
+        previewEl.addClass('note-toolbar-setting-toolbar-list-preview-item');
+        const previewFr = this.ntb.settingsUtils.createToolbarPreviewFr(toolbar, undefined);
+        previewEl.append(previewFr);
+        containerEl.append(previewContainerEl);
 
     }
 
