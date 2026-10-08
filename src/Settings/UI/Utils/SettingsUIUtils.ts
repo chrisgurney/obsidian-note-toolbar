@@ -683,7 +683,7 @@ export default class SettingsUIUtils {
 	 * @param item item to copy
 	 */
 	copyToolbarItem(item: ToolbarItemSettings) {
-		const modal = new ToolbarSuggestModal(this.ntb, false, false, false, (toToolbar: ToolbarSettings) => {
+		const modal = new ToolbarSuggestModal(this.ntb, false, false, (toToolbar: ToolbarSettings) => {
 			if (toToolbar) {
 				void this.ntb.settingsManager.duplicateToolbarItem(toToolbar, item).then(() => this.ntb.settingsManager.save());
 				new Notice(t('setting.item.menu-copy-item-notice', { toolbarName: toToolbar.name })).containerEl.addClass('mod-success');
@@ -699,7 +699,7 @@ export default class SettingsUIUtils {
 	 * @param callback function to execute after move is complete, to update the UI as needed
 	 */
 	moveToolbarItem(fromToolbar: ToolbarSettings, item: ToolbarItemSettings, callback: () => void | Promise<void>) {
-		const modal = new ToolbarSuggestModal(this.ntb, false, false, false, (toToolbar: ToolbarSettings) => {
+		const modal = new ToolbarSuggestModal(this.ntb, false, false, (toToolbar: ToolbarSettings) => {
 			if (toToolbar) {
 				fromToolbar.items.remove(item);
 				fromToolbar.updated = new Date().toISOString();

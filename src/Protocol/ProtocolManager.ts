@@ -58,7 +58,7 @@ export default class ProtocolManager {
 							new Notice(t('import.error-no-items')).containerEl.addClass('mod-warning');
 							return;
 						}
-						const toolbarSuggester = new ToolbarSuggestModal(this.ntb, true, false, true, (toolbar: ToolbarSettings) => {
+						const toolbarSuggester = new ToolbarSuggestModal(this.ntb, false, true, (toolbar: ToolbarSettings) => {
 							void this.ntb.settingsManager.addToolbarItem(toolbar, importedToolbar.items).then(() => {
 								this.ntb.commands.openToolbarSettingsForId(toolbar.uuid);
 							});

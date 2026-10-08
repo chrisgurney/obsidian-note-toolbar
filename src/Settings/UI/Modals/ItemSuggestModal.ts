@@ -377,7 +377,7 @@ export default class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> 
             case 'Backspace':
                 if (this.toolbarId && this.inputEl.value === '') {
                     this.close();
-                    const modal = new ToolbarSuggestModal(this.ntb, false, false, false, (toolbar: ToolbarSettings) => {
+                    const modal = new ToolbarSuggestModal(this.ntb, false, false, (toolbar: ToolbarSettings) => {
                         this.ntb.commands.openQuickTools(toolbar.uuid);
                     }, 'QuickTools');
                     modal.open();
