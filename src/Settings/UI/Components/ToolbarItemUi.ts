@@ -247,31 +247,33 @@ export default class ToolbarItemUi {
                         .onClick(async () => this.handleItemDuplicate(toolbarItem));
             });
 
-            const itemCommand = this.ntb.commands.getCommandFor(toolbarItem);
-            const hotkey = itemCommand ? this.ntb.hotkeys.getHotkeyText(itemCommand) : undefined;
-            new Setting(itemControlsContainer)
-                .setClass('note-toolbar-setting-item-visibility-and-controls')
-                .addButton((btn) => {
-                    if (!hotkey) btn.setIcon('keyboard');
-                    if (hotkey) btn.setButtonText(hotkey);
-                    btn.setTooltip(hotkey ? t('setting.hotkeys.label-settings') : t('setting.hotkeys.label-set'));
-                    btn.onClick(async () => {
-                        // if a command doesn't already exist, create it and open hotkey settings
-                        if (!itemCommand) {
-                            await this.ntb.commands.addItemCommand(toolbarItem, (commandName) => {
-                                new Notice(
-                                    t('setting.use-item-command.notice-command-added', { command: commandName, interpolation: { escapeValue: false } })
-                                ).containerEl.addClass('mod-success');
+            if (![ItemType.Break, ItemType.Group, ItemType.Separator, ItemType.Spreader].contains(toolbarItem.linkAttr.type)) {
+                const itemCommand = this.ntb.commands.getCommandFor(toolbarItem);
+                const hotkey = itemCommand ? this.ntb.hotkeys.getHotkeyText(itemCommand) : undefined;
+                new Setting(itemControlsContainer)
+                    .setClass('note-toolbar-setting-item-visibility-and-controls')
+                    .addButton((btn) => {
+                        if (!hotkey) btn.setIcon('keyboard');
+                        if (hotkey) btn.setButtonText(hotkey);
+                        btn.setTooltip(hotkey ? t('setting.hotkeys.label-settings') : t('setting.hotkeys.label-set'));
+                        btn.onClick(async () => {
+                            // if a command doesn't already exist, create it and open hotkey settings
+                            if (!itemCommand) {
+                                await this.ntb.commands.addItemCommand(toolbarItem, (commandName) => {
+                                    new Notice(
+                                        t('setting.use-item-command.notice-command-added', { command: commandName, interpolation: { escapeValue: false } })
+                                    ).containerEl.addClass('mod-success');
+                                    this.parent.close();
+                                    this.ntb.commands.openHotkeySettings(commandName);
+                                });
+                            }
+                            else {
                                 this.parent.close();
-                                this.ntb.commands.openHotkeySettings(commandName);
-                            });
-                        }
-                        else {
-                            this.parent.close();
-                            this.ntb.commands.openHotkeySettings(itemCommand.name);
-                        }
+                                this.ntb.commands.openHotkeySettings(itemCommand.name);
+                            }
+                        });
                     });
-                });
+            }
 
         }
 
