@@ -434,6 +434,8 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
         content: string | TFile | URL,
         options?: NtbSidebarOptions
     ): Promise<void> {
+        if (!content) throw new Error(t('api.error.sidebar-content-undefined'));
+
         this.registerSidebarView(options);
 
         // get existing leaf (default); create a new one if the `reuse` option is set
@@ -455,10 +457,7 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
         // check which view type to use
         const viewType = content instanceof URL
             ? 'webviewer'
-            : content instanceof TFile
-                ? this.app.viewRegistry.getTypeByExtension(content.extension)
-                    ?? NtbSidebarView.VIEW_TYPE_SIDEBAR
-                : NtbSidebarView.VIEW_TYPE_SIDEBAR;
+            : NtbSidebarView.VIEW_TYPE_SIDEBAR;
 
         if (!leaf) {
             leaf = options?.side === 'left'
@@ -473,9 +472,7 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
         // setup the view content
         const viewContent = content instanceof URL
             ? content.toString()
-            : content instanceof TFile
-                ? content.path
-                : content;
+            : content;
 
         // set the view state
         const viewState: NtbSidebarViewState = {
@@ -488,7 +485,12 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
         };
 
         if (options?.append !== undefined && leaf.view instanceof NtbSidebarView) {
-            await leaf.view.append(viewContent, options.append);
+            if (viewContent instanceof TFile) {
+                throw new Error('sidebar: Unable to open files with `append` option.');
+            }
+            else {
+                await leaf.view.append(viewContent, options.append);
+            }
         } 
         else {
             if (leaf.view instanceof NtbSidebarView) {
@@ -496,7 +498,9 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
             }
             await leaf.setViewState({
                 type: viewType,
-                state: { ...viewState },
+                state: content instanceof URL
+                    ? { url: content.toString() }
+                    : { ...viewState },
                 active: options?.active ?? true
             });
         }

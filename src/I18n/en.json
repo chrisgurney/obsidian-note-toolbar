@@ -121,6 +121,10 @@
         }
     },
     "api": {
+        "error": {
+            "sidebar-append-file": "ntb.sidebar: Unable to open files with `append` option.",
+            "sidebar-content-undefined": "ntb.sidebar: No content provided to render."
+        },
         "item": {
             "error-invalid-icon": "Invalid icon ID: {{iconId}}"
         },
