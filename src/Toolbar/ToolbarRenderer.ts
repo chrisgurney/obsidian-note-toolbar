@@ -423,8 +423,8 @@ export default class ToolbarRenderer {
 
 			// TODO: use calcItemVisToggles for the relevant platform here instead?
 			// filter out empty items on display
-			if ((item.label === "" && item.icon === "") 
-				&& ![ItemType.Break, ItemType.Group, ItemType.Separator, ItemType.Spreader].includes(item.linkAttr.type)) {
+			const isDecorator = [ItemType.Break, ItemType.Group, ItemType.Separator, ItemType.Spreader].includes(item.linkAttr.type);
+			if ((item.label === "" && item.icon === "") && !isDecorator) {
 				continue;
 			}
 
@@ -451,6 +451,9 @@ export default class ToolbarRenderer {
 				const noteToolbarLi = createEl('li');
 				noteToolbarLi.dataset.index = i.toString();
 				noteToolbarLi.setAttribute('data-ntb-type', item.linkAttr.type);
+				// hide if it's resolved to empty value
+				const isEmpty = !item.icon && (resolvedLabels[item.uuid] === '') && !isDecorator; 
+				if (isEmpty) noteToolbarLi.addClass('hide');
 				// set its visibility
 				if (!showInMode) noteToolbarLi.addClass('hide-in-mode');
 				if (!showOnMobile) noteToolbarLi.addClass('hide-on-mobile');
