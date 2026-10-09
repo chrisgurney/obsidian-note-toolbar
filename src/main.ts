@@ -263,12 +263,17 @@ export default class NoteToolbarPlugin extends Plugin {
 				navigation: true,
 				viewTitle: 'Note Toolbar errors'
 			};
-			// debug messages
+			// debug + warning messages
 			if (this.settings.debugEnabled) {
 				const debug = console.debug.bind(console);
 				this.debug = (...args: unknown[]): void => {
 					debug(...args);
 					void this.api?.sidebar(formatSidebarError(args), sidebarOptions);
+				}
+				const warn = console.warn.bind(console);
+				this.warn = (...args: unknown[]): void => {
+					warn(...args);
+					void this.api?.sidebar(formatSidebarError(args, 'warning'), sidebarOptions);
 				}
 			}
 			// error messages
