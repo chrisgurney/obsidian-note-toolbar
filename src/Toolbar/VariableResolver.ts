@@ -54,6 +54,8 @@ export default class VariableResolver {
 		context: ScriptContext
 	): Promise<string> {
 
+		if (!this.hasVars(s)) return s;
+
 		const hasVar = (varKey: string) => new RegExp(`\\{\\{\\s*(?:encode:)?\\s*${varKey}\\s*\\}\\}`).test(s);
 
 		if (this.ntb.settings.scriptingEnabled) {
