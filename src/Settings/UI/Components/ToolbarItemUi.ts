@@ -1390,7 +1390,10 @@ export default class ToolbarItemUi {
             }, el => {
                 const reveal = () => {
                   const file = this.ntb.app.vault.getFileByPath(filename);
-                    if (!file) return;
+                    if (!file) {
+                        new Notice(t('adapter.error.file-not-found', { filename })).containerEl.addClass('mod-warning');
+                        return;
+                    }
                     (this.ntb.app.internalPlugins.getEnabledPluginById('file-explorer') as FileExplorerPlugin).revealInFolder(file);
                     this.parent.close();
                 }
@@ -1422,7 +1425,10 @@ export default class ToolbarItemUi {
             }, el => {
                 const open = () => {
                   const file = this.ntb.app.vault.getFileByPath(filename);
-                    if (!file) return;
+                    if (!file) {
+                        new Notice(t('adapter.error.file-not-found', { filename })).containerEl.addClass('mod-warning');
+                        return;
+                    }
                     void this.ntb.app.workspace.getLeaf(false).openFile(file);
                     this.parent.close();
                 }
