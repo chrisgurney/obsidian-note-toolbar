@@ -555,6 +555,7 @@ export default class ToolbarRenderer {
 	
 				const [dkHasIcon, dkHasLabel, mbHasIcon, mbHasLabel, , ] = calcComponentVisToggles(item.visibility);
 				if (item.label) {
+					const labelText = resolvedLabels ? resolvedLabels[item.uuid] : item.label;
 					if (item.icon) {
 						const itemIcon = toolbarItem.createSpan();
 						this.setComponentDisplayClass(itemIcon, dkHasIcon, mbHasIcon);
@@ -562,12 +563,12 @@ export default class ToolbarRenderer {
 	
 						const itemLabelEl = toolbarItem.createSpan();
 						this.setComponentDisplayClass(itemLabelEl, dkHasLabel, mbHasLabel);
-						itemLabelEl.innerText = resolvedLabels ? resolvedLabels[item.uuid] : item.label;
+						itemLabelEl.innerText = labelText;
 						itemLabelEl.addClass('cg-note-toolbar-item-label');
 					}
 					else {
 						this.setComponentDisplayClass(toolbarItem, dkHasLabel, mbHasLabel);
-						toolbarItem.innerText = resolvedLabels ? resolvedLabels[item.uuid] : item.label;
+						toolbarItem.innerText = labelText;
 						toolbarItem.addClass('cg-note-toolbar-item-label');
 					}
 				}
