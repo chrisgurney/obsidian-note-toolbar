@@ -105,7 +105,7 @@ export default class ToolbarSuggestModal extends SuggestModal<ToolbarSettings> {
         });
 
         // sort the search results
-        const recentToolbars = JSON.parse(this.ntb.app.loadLocalStorage(LocalVar.RecentToolbars) as string || '[]') as string[];
+		const recentToolbars: string[] = this.ntb.settingsManager.loadRecentList(LocalVar.RecentToolbars);
         sortedSuggestions.sort((a, b) => {
             const query = lowerCaseInputStr;
 
