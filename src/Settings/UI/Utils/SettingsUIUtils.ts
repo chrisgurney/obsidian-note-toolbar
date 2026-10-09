@@ -1070,17 +1070,19 @@ export default class SettingsUIUtils {
 					break;
 				}
 				case SettingType.Text:
-					// unable to confirm vars as this runs each time the field changes, including while it's being typed 
-					// if (this.ntb.vars.hasVars(itemValue)) {
-					// 	this.ntb.debug('VALIDATING VARS', itemValue);
-					// 	const activeFile = this.ntb.app.workspace.getActiveFile();
-					// 	try {
-					// 		void this.ntb.vars.replaceVars(itemValue, activeFile, { errorBehavior: ErrorBehavior.Console });
-					// 	}
-					// 	catch (error) {
-					// 		this.ntb.error('VARS ERROR', error);
-					// 	}
-					// }
+					// do nothing
+					break;
+				case SettingType.TextWithVars:
+					// validate variables (for just labels, tooltips, and URIs)
+					if (this.ntb.vars.hasVars(itemValue)) {
+						const activeFile = this.ntb.app.workspace.getActiveFile();
+						try {
+							void this.ntb.vars.replaceVars(itemValue, activeFile, { errorBehavior: ErrorBehavior.Console });
+						}
+						catch (error) {
+							this.ntb.error('Error parsing variable:', error);
+						}
+					}
 					break;
 				case SettingType.Toolbar: {
 					let toolbar = this.ntb.settingsManager.getToolbarByName(itemValue);

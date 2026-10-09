@@ -125,6 +125,7 @@ export const enum SettingType {
 	Ignore = 'ignore',
 	Script = 'script',
 	Text = 'text',
+	TextWithVars = 'textwithvars',
 	TextArea = 'textarea',
 	Toolbar = 'toolbar',
 }

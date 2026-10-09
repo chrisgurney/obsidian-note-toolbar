@@ -122,7 +122,7 @@ export default class ToolbarItemUi {
                             if (toolbarItem.hasCommand) await this.ntb.commands.updateItemCommand(toolbarItem);
                             this.renderPreview(toolbarItem);
                         }, 750));
-                    void this.ntb.settingsUtils.updateItemComponentStatus(this.parent, toolbarItem.label, SettingType.Text, text.inputEl.parentElement);
+                    void this.ntb.settingsUtils.updateItemComponentStatus(this.parent, toolbarItem.label, SettingType.TextWithVars, text.inputEl.parentElement);
                 });	
             labelField.settingEl.id = 'note-toolbar-item-field-label';
 
@@ -140,7 +140,7 @@ export default class ToolbarItemUi {
                             if (toolbarItem.hasCommand) await this.ntb.commands.updateItemCommand(toolbarItem);
                             this.renderPreview(toolbarItem);
                         }, 750));
-                    void this.ntb.settingsUtils.updateItemComponentStatus(this.parent, toolbarItem.tooltip, SettingType.Text, text.inputEl.parentElement);
+                    void this.ntb.settingsUtils.updateItemComponentStatus(this.parent, toolbarItem.tooltip, SettingType.TextWithVars, text.inputEl.parentElement);
                 });
             tooltipField.settingEl.id = 'note-toolbar-item-field-tooltip';
             
@@ -985,7 +985,7 @@ export default class ToolbarItemUi {
                             .setValue(toolbarItem.link)
                             .onChange(
                                 debounce(async (value) => {
-                                    this.ntb.settingsUtils.updateItemComponentStatus(this.parent, value, SettingType.Text, cb.inputEl.parentElement);
+                                    this.ntb.settingsUtils.updateItemComponentStatus(this.parent, value, SettingType.TextWithVars, cb.inputEl.parentElement);
                                     toolbarItem.link = value;
                                     toolbarItem.linkAttr.commandId = '';
                                     toolbarItem.linkAttr.type = type;
@@ -993,7 +993,7 @@ export default class ToolbarItemUi {
                                     await this.ntb.settingsManager.save();
                                     this.renderPreview(toolbarItem);
                                 }, 500));
-                        void this.ntb.settingsUtils.updateItemComponentStatus(this.parent, toolbarItem.link, SettingType.Text, cb.inputEl.parentElement);
+                        void this.ntb.settingsUtils.updateItemComponentStatus(this.parent, toolbarItem.link, SettingType.TextWithVars, cb.inputEl.parentElement);
                     });
                 // unable to put help about vars below the field without restructuring; leaving out for now
                 // setFieldHelp(uriSetting.controlEl, helpTextFr);
