@@ -35,7 +35,8 @@ export default class VariableResolver {
         return hasVars;
     }
 
-	replaceVar(s: string, varKey: string, replaceText: string): string {
+	replaceVar(s: string, varKey: string, replaceText?: string): string {
+		if (!replaceText) return '';
 		const regex = new RegExp(`{{\\s*(encode:)?\\s*${varKey}\\s*}}`);
 		return s.replace(regex, (_, encode) => encode ? encodeURIComponent(replaceText) : replaceText);
 	}
@@ -122,16 +123,16 @@ export default class VariableResolver {
 		// SELECTION
 		if (hasVar('selection')) {
 			const selection = this.ntb.api.getSelection();
-			if (selection) s = this.replaceVar(s, 'selection', selection);
+			s = this.replaceVar(s, 'selection', selection);
 		}
 
 		// NOTE_TITLE
 		const noteTitle = file?.basename;
-		if (noteTitle) s = this.replaceVar(s, 'note_title', noteTitle);
+		s = this.replaceVar(s, 'note_title', noteTitle);
 	
 		// FILE_PATH
 		const filePath = file?.path;
-		if (filePath) s = this.replaceVar(s, 'file_path', filePath);
+		s = this.replaceVar(s, 'file_path', filePath);
 		
 		// VAULT_PATH
 		if (this.ntb.app.vault.adapter instanceof FileSystemAdapter) {
