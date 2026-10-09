@@ -1,4 +1,4 @@
-import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, DEFAULT_ITEM_SETTINGS, DEFAULT_SETTINGS, ItemType, NONE_TOOLBAR, NONE_TOOLBAR_ID, NoteToolbarSettings, Position, PositionType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, DEFAULT_ITEM_SETTINGS, DEFAULT_SETTINGS, ItemType, LocalVar, NONE_TOOLBAR, NONE_TOOLBAR_ID, NoteToolbarSettings, Position, PositionType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { getUUID, isUuid } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
 import { Platform } from "obsidian";
@@ -258,6 +258,25 @@ export default class SettingsManager {
 	}
 
 	/**
+	 * Safely loads a recent files/items/toolbars list from local storage.
+	 * @param localVar the list to load (`recentFiles`, `recentItems`, `recentToolbars`)
+	 * @returns list or empty array
+	 */
+	public loadRecentList(localVar: LocalVar.RecentFiles | LocalVar.RecentItems | LocalVar.RecentToolbars): string[] {
+        let recentList: string[] = [];
+        try {
+            recentList = (JSON.parse(this.ntb.app.loadLocalStorage(localVar) as string || '[]') as string[]);
+        }
+        catch (error) {
+            // local storage value is corrupt (won't parse)
+            this.ntb.warn(`Error loading ${localVar} from local storage; clearing.`, error);
+			// clear the value if it's problematic
+            this.ntb.app.saveLocalStorage(localVar, null);
+        }
+		return recentList;
+	}
+
+	/**
 	 * Moves the given toolbar item to the given toolbar.
 	 * @param item ToolbarItemSettings to move.
 	 * @param toToolbar ToolbarSettings to move the item to.
@@ -434,9 +453,20 @@ export default class SettingsManager {
 	 * @param list the list to update (`recentFiles`, `recentItems`, `recentToolbars`)
 	 * @param value value to update the list with
 	 */
-	updateRecentList(localVar: string, value: string) {
+	updateRecentList(
+		localVar: LocalVar.RecentFiles | LocalVar.RecentItems | LocalVar.RecentToolbars,
+		value: string
+	): void {
 		const MAX_SIZE = 10;
-		const list = JSON.parse(this.ntb.app.loadLocalStorage(localVar) as string || '[]') as string[];
+		let list: string[] = [];
+		try {
+			list = JSON.parse(this.ntb.app.loadLocalStorage(localVar) as string || '[]') as string[];
+		} 
+		catch (error) {
+			// ignore corrupted local storage
+			this.ntb.warn(`Error loading ${localVar} from local storage; clearing.`, error);
+			// restart from an empty list below
+		}
 		const i = list.indexOf(value);
 		if (i !== -1) list.splice(i, 1); // remove if it already exists
 		list.unshift(value); // add to top

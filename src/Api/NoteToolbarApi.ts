@@ -98,7 +98,7 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
             return null;
         }
 
-        const recentFiles = JSON.parse(this.ntb.app.loadLocalStorage(LocalVar.RecentFiles) as string || '[]') as string[];
+        const recentFiles: string[] = this.ntb.settingsManager.loadRecentList(LocalVar.RecentFiles);
 
         // filter provided files based on options
         files = files.filter((file: TAbstractFile) => {
