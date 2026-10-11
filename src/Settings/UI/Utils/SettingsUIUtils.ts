@@ -1073,16 +1073,18 @@ export default class SettingsUIUtils {
 					// do nothing
 					break;
 				case SettingType.TextWithVars:
+					// REMOVED below as this may execute unsafe code
+					// TODO? perhaps just check that variable is closed + basic check for supported variables?
 					// validate variables (for just labels, tooltips, and URIs)
-					if (this.ntb.vars.hasVars(itemValue)) {
-						const activeFile = this.ntb.app.workspace.getActiveFile();
-						try {
-							void this.ntb.vars.replaceVars(itemValue, activeFile, { errorBehavior: ErrorBehavior.Console });
-						}
-						catch (error) {
-							this.ntb.error('Error parsing variable:', error);
-						}
-					}
+					// if (this.ntb.vars.hasVars(itemValue)) {
+					// 	const activeFile = this.ntb.app.workspace.getActiveFile();
+					// 	try {
+					// 		void this.ntb.vars.replaceVars(itemValue, activeFile, { errorBehavior: ErrorBehavior.Console });
+					// 	}
+					// 	catch (error) {
+					// 		this.ntb.error('Error parsing variable:', error);
+					// 	}
+					// }
 					break;
 				case SettingType.Toolbar: {
 					let toolbar = this.ntb.settingsManager.getToolbarByName(itemValue);
@@ -1151,6 +1153,35 @@ export default class SettingsUIUtils {
 
 		return isValid;
 
+	}
+
+	/**
+	 * Async check for validity of variables in text fields.
+	 */
+	async updateVarComponentStatus(parent: ItemModal, itemValue: string, componentEl: HTMLElement): Promise<boolean> {
+		let isValid = true;
+		let statusMessage;
+		const errorPosition = 'beforeend';
+
+		// validate variables (for just labels, tooltips, and URIs)
+		if (this.ntb.vars.hasVars(itemValue)) {
+			const activeFile = this.ntb.app.workspace.getActiveFile();
+			try {
+				await this.ntb.vars.replaceVars(itemValue, activeFile, { errorBehavior: ErrorBehavior.Console });
+			}
+			catch (error) {
+				this.ntb.error('Error parsing variable:', error);
+				isValid = false;
+				statusMessage = 'Error parsing variable.';
+			}
+		}
+
+		if (isValid) removeFieldError(componentEl, errorPosition);
+		if (!isValid) {
+			this.setFieldError(parent, componentEl, errorPosition, statusMessage);
+			isValid = false;
+		}
+		return isValid;
 	}
 
 	/**
