@@ -136,7 +136,7 @@ export default class ToolbarItemUi {
                         debounce(async (value) => {
                             toolbarItem.tooltip = value;
                             this.toolbar.updated = new Date().toISOString();
-                            await this.ntb.settingsManager.save();
+                            await this.ntb.settingsManager.save(false);
                             if (toolbarItem.hasCommand) await this.ntb.commands.updateItemCommand(toolbarItem);
                             this.renderPreview(toolbarItem);
                         }, 750));
@@ -184,7 +184,7 @@ export default class ToolbarItemUi {
                                 itemLinkFieldDiv.empty();
                                 toolbarItem.link = '';
                                 this.getLinkSettingForType(toolbarItem.linkAttr.type, itemLinkFieldDiv, toolbarItem);
-                                await this.ntb.settingsManager.save();
+                                await this.ntb.settingsManager.save(false);
                                 this.renderPreview(toolbarItem);
                                 // for case where icon/label/tooltip fields are not used, disable them
                                 const disableFields = toolbarItem.linkAttr.type === ItemType.Group;
@@ -481,13 +481,13 @@ export default class ToolbarItemUi {
                         // add or remove
                         if (initialRibbonItem) {
                             this.ntb.ribbon.remove(toolbarItem.uuid);
-                            await this.ntb.settingsManager.save();
+                            await this.ntb.settingsManager.save(false);
                             new Notice(t('setting.ribbon.notice-ribbon-removed'), 10000).containerEl.addClass('mod-success');
                         }
                         else {
                             const ribbonItem: RibbonItem = { uuid: toolbarItem.uuid };
                             this.ntb.ribbon.add(ribbonItem);
-                            await this.ntb.settingsManager.save();
+                            await this.ntb.settingsManager.save(false);
                             new Notice(t('setting.ribbon.notice-ribbon-added'), 10000).containerEl.addClass('mod-success');
                         }
                         this.parent.display();
@@ -769,7 +769,7 @@ export default class ToolbarItemUi {
                             toolbarItem.link = command.name;
                             toolbarItem.linkAttr.commandId = command.id;
                             toolbarItem.linkAttr.type = type;
-                            void this.ntb.settingsManager.save().then(() => {
+                            void this.ntb.settingsManager.save(false).then(() => {
                                 this.renderPreview(toolbarItem);
                             });
                         });
@@ -783,7 +783,7 @@ export default class ToolbarItemUi {
                                 toolbarItem.link = isValid && commandName ? commandName : '';
                                 toolbarItem.linkAttr.commandId = isValid && commandId ? commandId : '';
                                 toolbarItem.linkAttr.type = type;
-                                await this.ntb.settingsManager.save();
+                                await this.ntb.settingsManager.save(false);
                                 this.renderPreview(toolbarItem);
                             }, 500));
                         void this.ntb.settingsUtils.updateItemComponentStatus(this.parent, toolbarItem.linkAttr.commandId, SettingType.Command, cb.inputEl.parentElement);
@@ -837,7 +837,7 @@ export default class ToolbarItemUi {
                                         toolbarItem.scriptConfig ??= { pluginFunction: value };
                                         toolbarItem.scriptConfig.pluginFunction = value;
                                         this.toolbar.updated = new Date().toISOString();
-                                        await this.ntb.settingsManager.save();
+                                        await this.ntb.settingsManager.save(false);
                                         if (adapter) {
                                             const subfieldsDiv = createDiv();
                                             subfieldsDiv.addClass('note-toolbar-setting-item-link-subfield');
@@ -888,7 +888,7 @@ export default class ToolbarItemUi {
                                 toolbarItem.link = isValid ? normalizePath(value) : '';
                                 toolbarItem.linkAttr.commandId = '';
                                 toolbarItem.linkAttr.type = type;
-                                await this.ntb.settingsManager.save();
+                                await this.ntb.settingsManager.save(false);
                                 this.renderPreview(toolbarItem);
                             }, 500));
                         void this.ntb.settingsUtils.updateItemComponentStatus(this.parent, toolbarItem.link, SettingType.File, cb.inputEl.parentElement);
@@ -953,7 +953,7 @@ export default class ToolbarItemUi {
                                 toolbarItem.link = menuToolbar ? menuToolbar.uuid : '';
                                 toolbarItem.linkAttr.commandId = '';
                                 toolbarItem.linkAttr.type = type;
-                                await this.ntb.settingsManager.save();
+                                await this.ntb.settingsManager.save(false);
                                 this.renderPreview(toolbarItem);
                                 // update this item's icon if it's non-empty and the selected toolbar has one
                                 if (toolbarItem.icon === '' && menuToolbar?.icon) {
@@ -990,7 +990,7 @@ export default class ToolbarItemUi {
                                     toolbarItem.linkAttr.commandId = '';
                                     toolbarItem.linkAttr.type = type;
                                     this.toolbar.updated = new Date().toISOString();
-                                    await this.ntb.settingsManager.save();
+                                    await this.ntb.settingsManager.save(false);
                                     this.renderPreview(toolbarItem);
                                 }, 500));
                         void this.ntb.settingsUtils.updateItemComponentStatus(this.parent, toolbarItem.link, SettingType.TextWithVars, cb.inputEl.parentElement);
@@ -1032,7 +1032,7 @@ export default class ToolbarItemUi {
                         .setValue(item.linkAttr.commandCheck)
                         .onChange(async (value: boolean) => {
                             item.linkAttr.commandCheck = value;
-                            await this.ntb.settingsManager.save();
+                            await this.ntb.settingsManager.save(false);
                         });
                     fixToggleTab(toggle);
                 });       
@@ -1048,7 +1048,7 @@ export default class ToolbarItemUi {
                         .setValue(item.linkAttr.focus === 'editor')
                         .onChange(async (value: boolean) => {
                             item.linkAttr.focus = value ? 'editor' : undefined;
-                            await this.ntb.settingsManager.save();
+                            await this.ntb.settingsManager.save(false);
                         });
                     fixToggleTab(toggle);
                 });
@@ -1069,7 +1069,7 @@ export default class ToolbarItemUi {
                             if (value === 'default') item.linkAttr.target = undefined
                             else item.linkAttr.target = value as PaneType;
                             this.toolbar.updated = new Date().toISOString();
-                            await this.ntb.settingsManager.save();
+                            await this.ntb.settingsManager.save(false);
                         })
                     );
         });
@@ -1096,7 +1096,7 @@ export default class ToolbarItemUi {
                             fileContextEl?.setAttribute('data-active', (item.linkAttr.target === 'modal').toString());
 
                             this.toolbar.updated = new Date().toISOString();
-                            await this.ntb.settingsManager.save();
+                            await this.ntb.settingsManager.save(false);
                         })
                     );
         });
@@ -1112,7 +1112,7 @@ export default class ToolbarItemUi {
                         .onChange(async (value: boolean) => {
                             item.linkAttr.fileContext = value ? 'origin' : 'opened';
                             this.toolbar.updated = new Date().toISOString();
-                            await this.ntb.settingsManager.save();
+                            await this.ntb.settingsManager.save(false);
                         });
                     fixToggleTab(toggle);
                 });
@@ -1143,7 +1143,7 @@ export default class ToolbarItemUi {
                                     this.ntb.settingsUtils.updateItemComponentStatus(this.parent, command.id, param.type, cb.inputEl.parentElement);
                                     config[param.parameter] = command.id;
                                     cb.inputEl.value = command.name;
-                                    void this.ntb.settingsManager.save();
+                                    void this.ntb.settingsManager.save(false);
                                 });
                                 cb.setPlaceholder(param.label)
                                     .setValue(initialValue ? (this.ntb.utils.getCommandNameById(initialValue) || '') : '')
@@ -1151,7 +1151,7 @@ export default class ToolbarItemUi {
                                         const commandId = commandName ? this.ntb.utils.getCommandIdByName(commandName) : '';
                                         const isValid = this.ntb.settingsUtils.updateItemComponentStatus(this.parent, commandId, param.type, cb.inputEl.parentElement);
                                         config[param.parameter] = isValid && commandId ? commandId : '';
-                                        await this.ntb.settingsManager.save();
+                                        await this.ntb.settingsManager.save(false);
                                         this.renderPreview(toolbarItem); // to make sure error state is refreshed
                                     }, 500));
                                 void this.ntb.settingsUtils.updateItemComponentStatus(this.parent, initialValue ? initialValue : '', param.type, cb.inputEl.parentElement);
@@ -1172,7 +1172,7 @@ export default class ToolbarItemUi {
                                         const isValid = this.ntb.settingsUtils.updateItemComponentStatus(this.parent, value, param.type, cb.inputEl.parentElement);
                                         config[param.parameter] = isValid ? normalizePath(value) : '';
                                         this.toolbar.updated = new Date().toISOString();
-                                        await this.ntb.settingsManager.save();
+                                        await this.ntb.settingsManager.save(false);
                                         this.renderPreview(toolbarItem); // to make sure error state is refreshed
                                     }, 500));
                                 void this.ntb.settingsUtils.updateItemComponentStatus(this.parent, initialValue ? initialValue : '', param.type, cb.inputEl.parentElement);
@@ -1189,7 +1189,7 @@ export default class ToolbarItemUi {
                                             const isValid = this.ntb.settingsUtils.updateItemComponentStatus(this.parent, value, param.type, cb.inputEl.parentElement);
                                             config[param.parameter] = isValid ? value : '';
                                             this.toolbar.updated = new Date().toISOString();
-                                            await this.ntb.settingsManager.save();
+                                            await this.ntb.settingsManager.save(false);
                                             this.renderPreview(toolbarItem); // to make sure error state is refreshed
                                         }, 500));
                                 void this.ntb.settingsUtils.updateItemComponentStatus(this.parent, initialValue ? initialValue : '', param.type, cb.inputEl.parentElement);
@@ -1213,7 +1213,7 @@ export default class ToolbarItemUi {
                                             const isValid = this.ntb.settingsUtils.updateItemComponentStatus(this.parent, value, param.type, cb.inputEl.parentElement);
                                             config[param.parameter] = isValid ? value : '';
                                             this.toolbar.updated = new Date().toISOString();
-                                            await this.ntb.settingsManager.save();
+                                            await this.ntb.settingsManager.save(false);
                                             this.renderPreview(toolbarItem); // to make sure error state is refreshed
                                         }, 500));
                                 void this.ntb.settingsUtils.updateItemComponentStatus(this.parent, initialValue ? initialValue : '', param.type, cb.inputEl.parentElement);					
@@ -1286,7 +1286,7 @@ export default class ToolbarItemUi {
                         .onChange(async (value: boolean) => {
                             toolbarItem.linkAttr.focus = value ? 'editor' : 'none';
                             this.toolbar.updated = new Date().toISOString();
-                            await this.ntb.settingsManager.save();
+                            await this.ntb.settingsManager.save(false);
                         });
                     fixToggleTab(toggle);
                 });
@@ -1311,7 +1311,7 @@ export default class ToolbarItemUi {
                             else item.linkAttr.target = value as PaneType | 'modal';
                             uriTargetSetting.setDesc(this.getUriTargetDescription(item.linkAttr.target || 'default'));
                             this.toolbar.updated = new Date().toISOString();
-                            await this.ntb.settingsManager.save();
+                            await this.ntb.settingsManager.save(false);
                         })
                     );
         });
