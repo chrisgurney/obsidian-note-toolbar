@@ -70,35 +70,35 @@ export default class ToolbarSettingsModal extends Modal {
 	}
 
 	/* TODO: possibly remove promptForDefault, now that CTAs are in the onboarding message */
-	async promptForDefault(): Promise<boolean> {
-		// if this is the only toolbar, prompt once to make this the Default
-		const onboardingId = `default-${this.toolbar.uuid}`;
-		const promptForDefault = this.ntb.settings.toolbars.length === 1 
-			&& !this.ntb.settings.defaultToolbar 
-			&& !this.ntb.settings.onboarding[onboardingId];
-		if (promptForDefault) {
-			this.ntb.settings.onboarding[onboardingId] = true;
-			await this.ntb.settingsManager.save().then(() => {
-				return confirmWithModal(this.ntb.app, { 
-					title: t('setting.toolbars.label-set-default', { toolbar: this.toolbar.name, interpolation: { escapeValue: false } }),
-					questionLabel: t('setting.toolbars.label-set-default-confirm'),
-					notes: t('setting.toolbars.label-set-default-notes'),
-					approveLabel: t('setting.toolbars.button-set-default'),
-					denyLabel: t('setting.toolbars.button-no')
-				}).then((setAsDefault) => {
-					if (setAsDefault) {
-						this.ntb.settings.defaultToolbar = this.toolbar.uuid;
-						void this.ntb.settingsManager.save().then(() => {
-							// refresh the parent window again, so we can see the updated Default setting
-							this.parent?.render();
-						});
-						return true;
-					}
-				});
-			});
-		}
-		return false;
-	}
+	// async promptForDefault(): Promise<boolean> {
+	// 	// if this is the only toolbar, prompt once to make this the Default
+	// 	const onboardingId = `default-${this.toolbar.uuid}`;
+	// 	const promptForDefault = this.ntb.settings.toolbars.length === 1 
+	// 		&& !this.ntb.settings.defaultToolbar 
+	// 		&& !this.ntb.settings.onboarding[onboardingId];
+	// 	if (promptForDefault) {
+	// 		this.ntb.settings.onboarding[onboardingId] = true;
+	// 		await this.ntb.settingsManager.save().then(() => {
+	// 			return confirmWithModal(this.ntb.app, { 
+	// 				title: t('setting.toolbars.label-set-default', { toolbar: this.toolbar.name, interpolation: { escapeValue: false } }),
+	// 				questionLabel: t('setting.toolbars.label-set-default-confirm'),
+	// 				notes: t('setting.toolbars.label-set-default-notes'),
+	// 				approveLabel: t('setting.toolbars.button-set-default'),
+	// 				denyLabel: t('setting.toolbars.button-no')
+	// 			}).then((setAsDefault) => {
+	// 				if (setAsDefault) {
+	// 					this.ntb.settings.defaultToolbar = this.toolbar.uuid;
+	// 					void this.ntb.settingsManager.save().then(() => {
+	// 						// refresh the parent window again, so we can see the updated Default setting
+	// 						this.parent?.render();
+	// 					});
+	// 					return true;
+	// 				}
+	// 			});
+	// 		});
+	// 	}
+	// 	return false;
+	// }
 
 	promptForProp(): void {
 		if (this.toolbar.items.length === 0) return;
