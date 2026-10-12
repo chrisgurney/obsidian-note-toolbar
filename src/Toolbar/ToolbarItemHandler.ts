@@ -282,12 +282,17 @@ export default class ToolbarItemHandler {
         else {
             // as fallback, treat it as internal note
             const activeFilePath = this.ntb.app.workspace.getActiveFile()?.path ?? "";
-            const fileOrFolder = this.ntb.app.vault.getAbstractFileByPath(linkHref);
-            if (fileOrFolder instanceof TFile && item?.linkAttr.target === 'modal') {
-                await this.ntb.api.modal(fileOrFolder);
+            const resolvedFile = this.ntb.app.metadataCache.getFirstLinkpathDest(linkHref, activeFilePath);
+            if (resolvedFile instanceof TFile) {
+                if (item?.linkAttr.target === 'modal') {
+                    await this.ntb.api.modal(resolvedFile);
+                }
+                else {
+                    await this.ntb.app.workspace.openLinkText(linkHref, activeFilePath, getLinkUiTarget(event) ?? item?.linkAttr.target);
+                }
             }
             else {
-                await this.ntb.app.workspace.openLinkText(linkHref, activeFilePath, getLinkUiTarget(event) ?? item?.linkAttr.target as PaneType);
+                new Notice(t('notice.error-file-not-found', { filename: linkHref })).containerEl.addClass('mod-warning');
             }
         }
     }
