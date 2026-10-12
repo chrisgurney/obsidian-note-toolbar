@@ -35,7 +35,7 @@ export default class VaultListeners {
                 }
             });
         });
-        if (settingsChanged) await this.ntb.settingsManager.save();
+        if (settingsChanged) await this.ntb.settingsManager.save(false);
     }
 
 }

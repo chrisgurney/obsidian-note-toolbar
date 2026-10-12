@@ -136,7 +136,7 @@ export default class ToolbarItemUi {
                         debounce(async (value) => {
                             toolbarItem.tooltip = value;
                             this.toolbar.updated = new Date().toISOString();
-                            await this.ntb.settingsManager.save(false);
+                            await this.ntb.settingsManager.save();
                             if (toolbarItem.hasCommand) await this.ntb.commands.updateItemCommand(toolbarItem);
                             this.renderPreview(toolbarItem);
                         }, 750));

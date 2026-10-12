@@ -140,7 +140,7 @@ export default class SettingsUIUtils {
 		const dismissMessage = async (setting: Setting) => {
 			setting.settingEl.remove();
 			this.ntb.settings.onboarding[messageId] = forVersion ?? true;
-			await this.ntb.settingsManager.save();
+			await this.ntb.settingsManager.save(false);
 		}
 
 		const containerEl = createDiv();
@@ -600,7 +600,7 @@ export default class SettingsUIUtils {
 					if (isEmptyItem && parent) {
 						const itemContainer = parent.contentEl.querySelector('.note-toolbar-sortablejs-list') as HTMLElement;
 						if (itemContainer) {
-							void parent.itemListUi.addItemHandler(selectedItem.linkAttr.type, itemContainer);
+							void parent.itemListUi.addItemHandler(selectedItem.linkAttr.type, itemContainer, true);
 							return;
 						}
 					}
@@ -629,7 +629,7 @@ export default class SettingsUIUtils {
 					if (selectedItem.inGallery && !(await this.ntb.settingsManager.resolveGalleryItem(newItem))) return;
 					
 					toolbar.updated = new Date().toISOString();
-					await this.ntb.settingsManager.save();
+					await this.ntb.settingsManager.save(!isEmptyItem);
 
 					if (isEmptyItem) new ItemModal(this.ntb, toolbar, newItem).open()
 					else new Notice(t('setting.add-item.notice-item-added', { toolbarName: toolbar.name, interpolation: { escapeValue: false } })).containerEl.addClass('mod-success');
@@ -874,7 +874,7 @@ export default class SettingsUIUtils {
 	async runOnboarding(onboardingId: string, callback: () => void | Promise<void>): Promise<void> {
 		if (!this.ntb.settings.onboarding[onboardingId]) {
 			this.ntb.settings.onboarding[onboardingId] = true;
-			await this.ntb.settingsManager.save();
+			await this.ntb.settingsManager.save(false);
 			await callback();
 		}
 	}

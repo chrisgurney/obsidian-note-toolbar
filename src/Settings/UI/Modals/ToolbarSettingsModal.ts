@@ -487,12 +487,12 @@ export default class ToolbarSettingsModal extends Modal {
 						if (isInRibbon) {
 							const ribbonItem: RibbonItem = { uuid: this.toolbar.uuid, showAt: PositionType.Menu };
 							this.ntb.ribbon.add(ribbonItem);
-							await this.ntb.settingsManager.save();
+							await this.ntb.settingsManager.save(false);
 							new Notice(t('setting.ribbon.notice-ribbon-added'), 10000).containerEl.addClass('mod-success');
 						}
 						else {
 							this.ntb.ribbon.remove(this.toolbar.uuid);
-							await this.ntb.settingsManager.save();
+							await this.ntb.settingsManager.save(false);
 							new Notice(t('setting.ribbon.notice-ribbon-removed'), 10000).containerEl.addClass('mod-success');
 						}
 					});
@@ -519,7 +519,7 @@ export default class ToolbarSettingsModal extends Modal {
 							this.ntb.debug('update ribbon action:', ribbonItemToUpdate);
 							if (ribbonItemToUpdate) {
 								ribbonItemToUpdate.showAt = val as PositionType;
-								await this.ntb.settingsManager.save();
+								await this.ntb.settingsManager.save(false);
 							}
 							else {
 								this.ntb.error('Ribbon item not found for:', this.toolbar.uuid);
@@ -622,7 +622,7 @@ export default class ToolbarSettingsModal extends Modal {
 						.setValue(initialCommandPosition)
 						.onChange(async (val: string) => {
 							this.toolbar.commandPosition = val as PositionType;
-							await this.ntb.settingsManager.save();
+							await this.ntb.settingsManager.save(false);
 						});
 					});
 		});

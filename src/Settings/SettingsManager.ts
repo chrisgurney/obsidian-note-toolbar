@@ -32,7 +32,8 @@ export default class SettingsManager {
 	public async addToolbarItem(
 		toolbar: ToolbarSettings,
 		items: ToolbarItemSettings | ToolbarItemSettings[],
-		insertIndex?: number
+		insertIndex?: number,
+		isEmptyItem = false
 	): Promise<void> {
 		const itemsToAdd = Array.isArray(items) ? items : [items];
 		if (insertIndex !== undefined && insertIndex >= 0) {
@@ -42,7 +43,7 @@ export default class SettingsManager {
 			toolbar.items.push(...itemsToAdd);
 		}
 		toolbar.updated = new Date().toISOString();
-		await this.save();
+		await this.save(!isEmptyItem);
 	}
 
 	/**
@@ -115,13 +116,14 @@ export default class SettingsManager {
 	 * @returns the new item.
 	 */
 	public async duplicateToolbarItem(toolbar: ToolbarSettings, item: ToolbarItemSettings, insertIndex?: number): Promise<ToolbarItemSettings> {
-		const newItem = JSON.parse(JSON.stringify(item)) as ToolbarItemSettings;
-		newItem.description = undefined;
-		newItem.hasCommand = false;
-		newItem.inGallery = false;
-		newItem.uuid = getUUID();
-		await this.addToolbarItem(toolbar, newItem, insertIndex);
-		return newItem;
+		const dupeItem = JSON.parse(JSON.stringify(item)) as ToolbarItemSettings;
+		const isEmptyItem = item.uuid === 'NEW_ITEM';
+		dupeItem.description = undefined;
+		dupeItem.hasCommand = false;
+		dupeItem.inGallery = false;
+		dupeItem.uuid = getUUID();
+		await this.addToolbarItem(toolbar, dupeItem, insertIndex, isEmptyItem);
+		return dupeItem;
 	}
 
 	/**
