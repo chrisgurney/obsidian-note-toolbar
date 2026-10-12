@@ -313,6 +313,7 @@
         "cta-click": "(click)",
         "cta-tap": "(tap)",
         "error-command-not-found": "Error: Check Note Toolbar setting or URI for this command. Command not found: {{command}}",
+        "error-file-not-found": "Error: Check Note Toolbar setting or URI for this file. File not found: {{-filename}}",
         "error-folder-not-found": "Error: Check Note Toolbar setting or URI for this folder. Folder not found: {{folder}}",
         "error-item-menu-not-found": "Error: Check Note Toolbar setting or URI for this menu item. Toolbar not found: {{toolbar}}",
         "error-scripting-not-enabled": "Error: Enable Scripting in Note Toolbar settings to use this item.",
