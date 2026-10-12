@@ -312,13 +312,13 @@
     "notice": {
         "cta-click": "(click)",
         "cta-tap": "(tap)",
-        "error-command-not-found": "Note Toolbar: Error: Command not found: {{command}}",
-        "error-file-not-found": "Note Toolbar: Error: File not found: {{-filename}}",
-        "error-folder-not-found": "Note Toolbar: Error: Folder not found: {{folder}}",
-        "error-item-menu-not-found": "Note Toolbar: Error with menu setting or URI: Toolbar not found: {{toolbar}}",
+        "error-command-not-found": "Note Toolbar: Command not found: {{command}}",
+        "error-file-not-found": "Note Toolbar: File not found: {{-filename}}",
+        "error-folder-not-found": "Note Toolbar: Folder not found: {{folder}}",
+        "error-item-menu-not-found": "Note Toolbar: Check menu setting or URI. Toolbar not found: {{toolbar}}",
         "error-scripting-not-enabled": "Error: Enable Note Toolbar settings → Scripting, to use this item.",
         "error-scripting-plugin-not-enabled": "Error: Toggle the Scripting setting after installing and enabling plugin: {{plugin}}",
-        "error-toolbar-not-found": "Note Toolbar: Error with toolbar setting or URI: Toolbar not found: {{toolbar}}",
+        "error-toolbar-not-found": "Note Toolbar: Check toolbar setting or URI. Toolbar not found: {{toolbar}}",
         "error-uri-params-not-supported": "Error: Invalid Note Toolbar URI. One or more of these parameters is not supported or is empty: {{params}}",
         "warning-no-matching-toolbar": "Note Toolbar: No matching toolbar: {{toolbar}}\nClick/Tap here to create it."
     },
