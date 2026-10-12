@@ -1270,8 +1270,14 @@ export default class ToolbarRenderer {
 				}
 
 				// update li active-file property, to allow tab-like styling
-				if (activeFile && itemSetting.linkAttr.type === ItemType.File) {
-					itemSpanEl.parentElement?.toggleAttribute('data-active-file', activeFile.path === itemSetting.link);
+				if (activeFile) {
+					if (itemSetting.linkAttr.type === ItemType.File) {
+						itemSpanEl.parentElement?.toggleAttribute('data-active-file', activeFile.path === itemSetting.link);
+					}
+					else if (itemSetting.linkAttr.type === ItemType.Uri) {
+						const resolvedFile = this.ntb.app.metadataCache.getFirstLinkpathDest(itemSetting.link, activeFile.path);
+						itemSpanEl.parentElement?.toggleAttribute('data-active-file', resolvedFile?.path === activeFile.path);
+					}
 				}
 
 			}
