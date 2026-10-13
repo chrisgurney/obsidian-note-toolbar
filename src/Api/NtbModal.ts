@@ -50,7 +50,7 @@ export default class NtbModal extends Modal {
                 ? activeFilePath
                 : ((this.content instanceof TFile) ? this.content.path : ''));
 
-        this.modalEl.addClasses(['prompt', 'note-toolbar-ui']);
+        this.modalEl.addClasses(['note-toolbar-ui']);
         if (this.class) this.modalEl.addClasses([...this.class.split(' ')]);
         this.modalEl.setAttr('data-ntb-ui-type', 'modal');
         if (!this.title) this.modalEl.setAttr('data-ntb-ui-mode', 'noheader');
