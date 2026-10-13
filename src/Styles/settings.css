@@ -716,7 +716,6 @@
     }
     & .note-toolbar-setting-item-preview-code {
         font-family: var(--font-monospace);
-        white-space: nowrap;
         overflow-wrap: anywhere;
     }
     + .note-toolbar-setting-field-error {
