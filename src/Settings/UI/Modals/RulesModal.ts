@@ -543,10 +543,11 @@ export default class RulesModal extends Modal {
         );
 
         if (operatorDefinition) {
+            let defaultValue: string | undefined;
             switch (operatorDefinition.editor) {
                 case 'editormode':
-                    if (!condition.value || this.previousEditor !== operatorDefinition.editor) {
-                        condition.value = ViewType.Preview;
+                    if (!condition.value && this.previousEditor !== operatorDefinition.editor) {
+                        defaultValue = ViewType.Preview;
                         void this.saveAndUpdateActiveRule();
                     }
                     new Setting(operatorValueContainerEl)
@@ -554,7 +555,7 @@ export default class RulesModal extends Modal {
                         .addDropdown((dropdown) => {
                             dropdown
                                 .addOptions(this.toDropdownOptions(VIEW_MODE_OPTIONS))
-                                .setValue(condition.value as string)
+                                .setValue(condition.value as string ?? defaultValue)
                                 .onChange(async (value) => {
                                     condition.value = value;
                                     await this.saveAndUpdateActiveRule();
@@ -563,8 +564,8 @@ export default class RulesModal extends Modal {
                     break;
 
                 case 'file':
-                    if (!['file', 'folder', 'string', undefined].includes(this.previousEditor)) {
-                        condition.value = undefined;
+                    if (!condition.value && !['file', 'folder', 'string', undefined].includes(this.previousEditor)) {
+                        defaultValue = '';
                         void this.saveAndUpdateActiveRule();
                     }
                     new Setting(operatorValueContainerEl)
@@ -577,7 +578,7 @@ export default class RulesModal extends Modal {
                                 ['note-toolbar-suggestion-small']);
                             cb
                                 .setPlaceholder(t('setting.rules.condition-value-file-placeholder'))
-                                .setValue((condition.value as string) ?? '')
+                                .setValue(condition.value as string ?? defaultValue)
                                 .onChange(debounce(async (value) => {
                                     condition.value = value;
                                     void this.ntb.settingsUtils.updateItemComponentStatus(
@@ -592,8 +593,8 @@ export default class RulesModal extends Modal {
                     break;
 
                 case 'filetype':
-                    if (!condition.value || this.previousEditor !== operatorDefinition.editor) {
-                        condition.value = FileType.Bases;
+                    if (!condition.value && this.previousEditor !== operatorDefinition.editor) {
+                        defaultValue = FileType.Bases;
                         void this.saveAndUpdateActiveRule();
                     }
                     new Setting(operatorValueContainerEl)
@@ -604,7 +605,7 @@ export default class RulesModal extends Modal {
                                     ...this.toDropdownOptions(FILE_TYPE_OPTIONS),
                                     [RULE_VALUE_TYPE_OTHER]: t('setting.rules.option-other'),
                                 })
-                                .setValue(condition.value as string)
+                                .setValue(condition.value as string ?? defaultValue)
                                 .onChange(debounce(async (value) => {
                                     condition.value = value;
                                     if (value !== RULE_VALUE_TYPE_OTHER) {
@@ -623,8 +624,8 @@ export default class RulesModal extends Modal {
                     break;
 
                 case 'folder':
-                    if (!['file', 'folder', 'string', undefined].includes(this.previousEditor)) {
-                        condition.value = undefined;
+                    if (!condition.value && !['file', 'folder', 'string', undefined].includes(this.previousEditor)) {
+                        defaultValue = '';
                         void this.saveAndUpdateActiveRule();
                     }
                     new Setting(operatorValueContainerEl)
@@ -633,7 +634,7 @@ export default class RulesModal extends Modal {
                             new FolderSuggester(this.ntb, cb.inputEl, ['note-toolbar-suggestion-small']);
                             cb
                                 .setPlaceholder(t('setting.rules.condition-value-folder-placeholder'))
-                                .setValue((condition.value as string) ?? '')
+                                .setValue(condition.value as string ?? defaultValue)
                                 .onChange(debounce(async (value) => {
                                     condition.value = value;
                                     await this.saveAndUpdateActiveRule();
@@ -646,16 +647,16 @@ export default class RulesModal extends Modal {
                     break;
 
                 case 'platform':
-                    if (!condition.value || this.previousEditor !== operatorDefinition.editor) {
-                        condition.value = PlatformType.Mobile;
-                         void this.saveAndUpdateActiveRule();
+                    if (!condition.value && this.previousEditor !== operatorDefinition.editor) {
+                        defaultValue = PlatformType.Mobile;
+                        void this.saveAndUpdateActiveRule();
                     }
                     new Setting(operatorValueContainerEl)
                         .setClass('note-toolbar-setting-mapping-value')
                         .addDropdown((dropdown) => {
                             dropdown
                                 .addOptions(this.toDropdownOptions(PLATFORM_OPTIONS))
-                                .setValue(condition.value as string)
+                                .setValue(condition.value as string ?? defaultValue)
                                 .onChange(async (value) => {
                                     condition.value = value;
                                     await this.saveAndUpdateActiveRule();
@@ -664,8 +665,8 @@ export default class RulesModal extends Modal {
                     break;
 
                 case 'tags':
-                    if (!condition.value || this.previousEditor !== operatorDefinition.editor) {
-                        condition.value = '';
+                    if (!condition.value && this.previousEditor !== operatorDefinition.editor) {
+                        defaultValue = '';
                         void this.saveAndUpdateActiveRule();
                     }
                     new Setting(operatorValueContainerEl)
@@ -674,7 +675,7 @@ export default class RulesModal extends Modal {
                             new TagSuggester(this.ntb, cb.inputEl, ['note-toolbar-suggestion-small']);
                             cb
                                 .setPlaceholder(t('setting.rules.condition-value-tags-placeholder'))
-                                .setValue((condition.value as string) ?? '')
+                                .setValue(condition.value as string ?? defaultValue)
                                 .onChange(debounce(async (value) => {
                                     condition.value = value;
                                     await this.saveAndUpdateActiveRule();
@@ -683,16 +684,16 @@ export default class RulesModal extends Modal {
                     break;
 
                 case 'string':
-                    if (!['file', 'folder', 'string', undefined].includes(this.previousEditor)) {
-                        condition.value = '';
-                         void this.saveAndUpdateActiveRule();
+                    if (!condition.value && !['file', 'folder', 'string', undefined].includes(this.previousEditor)) {
+                        defaultValue = '';
+                        void this.saveAndUpdateActiveRule();
                     }
                     new Setting(operatorValueContainerEl)
                         .setClass('note-toolbar-setting-mapping-value')
                         .addText((cb) => {
                             cb
                                 .setPlaceholder(t('setting.rules.condition-value-string-placeholder'))
-                                .setValue((condition.value as string) ?? '')
+                                .setValue(condition.value as string ?? defaultValue)
                                 .onChange(debounce(async (value) => {
                                     condition.value = value;
                                     await this.saveAndUpdateActiveRule();
