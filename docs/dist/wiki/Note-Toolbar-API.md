@@ -844,7 +844,7 @@ For example, use this to return functions for use in other scripts.
 
 | Type Parameter | Default type |
 | ------ | ------ |
-| `T` | `Record`\<`string`, `unknown`\> |
+| <a id="type-parameter-t-1"></a> `T` | `Record`\<`string`, `unknown`\> |
 
 #### Parameters
 
