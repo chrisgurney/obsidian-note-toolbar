@@ -472,6 +472,9 @@ export default class ToolbarRenderer {
 					}
 				}
 
+				// update li active-file property, to allow tab-like styling
+				await this.updateActiveFileTab(noteToolbarLi, item, file);
+
 				// add it to the list container
 				noteToolbarLi.append(toolbarItem);
 				noteToolbarLiArray.push(noteToolbarLi);
@@ -1256,16 +1259,7 @@ export default class ToolbarRenderer {
 				}
 
 				// update li active-file property, to allow tab-like styling
-				if (activeFile) {
-					if (itemSetting.linkAttr.type === ItemType.File) {
-						itemSpanEl.parentElement?.toggleAttribute('data-active-file', activeFile.path === itemSetting.link);
-					}
-					else if (itemSetting.linkAttr.type === ItemType.Uri) {
-						const resolvedLink = await this.ntb.vars.replaceVars(itemSetting.link, activeFile, errorContext);
-						const resolvedFile = this.ntb.app.metadataCache.getFirstLinkpathDest(resolvedLink, activeFile.path);
-						itemSpanEl.parentElement?.toggleAttribute('data-active-file', resolvedFile?.path === activeFile.path);
-					}
-				}
+				await this.updateActiveFileTab(itemEl, itemSetting, activeFile);
 
 			}
 
@@ -1289,6 +1283,22 @@ export default class ToolbarRenderer {
 			const frontmatter = this.ntb.app.metadataCache.getFileCache(activeFile)?.frontmatter;
 			const [toolbar] = this.ntb.rules.getMappedToolbar(frontmatter, activeFile);
 			if (toolbar) await this.update(toolbar, activeFile);
+		}
+	}
+
+	/**
+	 * Updates the item element's `data-active-file` property, to allow tab-like styling.
+	 */
+	async updateActiveFileTab(itemLiEl: Element, item: ToolbarItemSettings, activeFile: TFile | null): Promise<void> {
+		if (!activeFile) return;
+		const errorContext = { errorBehavior: ErrorBehavior.Ignore };
+		if (item.linkAttr.type === ItemType.File) {
+			itemLiEl.toggleAttribute('data-active-file', activeFile.path === item.link);
+		}
+		else if (item.linkAttr.type === ItemType.Uri) {
+			const resolvedLink = await this.ntb.vars.replaceVars(item.link, activeFile, errorContext);
+			const resolvedFile = this.ntb.app.metadataCache.getFirstLinkpathDest(resolvedLink, activeFile.path);
+			itemLiEl.toggleAttribute('data-active-file', resolvedFile?.path === activeFile.path);
 		}
 	}
 
