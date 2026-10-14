@@ -1261,7 +1261,8 @@ export default class ToolbarRenderer {
 						itemSpanEl.parentElement?.toggleAttribute('data-active-file', activeFile.path === itemSetting.link);
 					}
 					else if (itemSetting.linkAttr.type === ItemType.Uri) {
-						const resolvedFile = this.ntb.app.metadataCache.getFirstLinkpathDest(itemSetting.link, activeFile.path);
+						const resolvedLink = await this.ntb.vars.replaceVars(itemSetting.link, activeFile, errorContext);
+						const resolvedFile = this.ntb.app.metadataCache.getFirstLinkpathDest(resolvedLink, activeFile.path);
 						itemSpanEl.parentElement?.toggleAttribute('data-active-file', resolvedFile?.path === activeFile.path);
 					}
 				}
