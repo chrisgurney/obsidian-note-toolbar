@@ -569,7 +569,7 @@ export interface NtbMenuOptions {
      * 
      * @since 1.27
      */
-    position: 'cursor' | 'pointer' | 'toolbar';
+    position?: 'cursor' | 'pointer' | 'toolbar';
 }
 
 /**
@@ -751,7 +751,7 @@ export interface NtbToolbarOptions {
 	 * `pointer`: mouse/pointer position;
 	 * `toolbar`: last clicked toolbar element position (falls back to pointer position)
      */
-    position: 'cursor' | 'pointer' | 'toolbar';
+    position?: 'cursor' | 'pointer' | 'toolbar';
 }
 
 /**
