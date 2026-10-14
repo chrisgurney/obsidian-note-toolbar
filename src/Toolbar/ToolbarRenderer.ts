@@ -1,7 +1,7 @@
 import { Rect } from "@codemirror/view";
 import NoteToolbarPlugin from "main";
 import { FrontMatterCache, getIcon, ItemView, MarkdownView, Menu, MenuItem, MenuPositionDef, Notice, Platform, setIcon, setTooltip, TFile, TFolder } from "obsidian";
-import { DefaultStyleType, ItemType, LocalVar, MobileStyleType, OBSIDIAN_UI_ELEMENTS, PositionType, t, ToggleUiStateType, ToolbarItemSettings, ToolbarSettings, ToolbarStyle } from "Settings/NoteToolbarSettings";
+import { DefaultStyleType, ErrorBehavior, ItemType, LocalVar, MobileStyleType, OBSIDIAN_UI_ELEMENTS, PositionType, t, ToggleUiStateType, ToolbarItemSettings, ToolbarSettings, ToolbarStyle } from "Settings/NoteToolbarSettings";
 import { calcComponentVisToggles, getViewId, hasStyle, isValidUri, putFocusInMenu } from "Utils/Utils";
 
 // note: make sure CSS is updated if these are changed
@@ -1291,12 +1291,11 @@ export default class ToolbarRenderer {
 	 */
 	async updateActiveFileTab(itemLiEl: Element, item: ToolbarItemSettings, activeFile: TFile | null): Promise<void> {
 		if (!activeFile) return;
-		const errorContext = { errorBehavior: ErrorBehavior.Ignore };
 		if (item.linkAttr.type === ItemType.File) {
 			itemLiEl.toggleAttribute('data-active-file', activeFile.path === item.link);
 		}
 		else if (item.linkAttr.type === ItemType.Uri) {
-			const resolvedLink = await this.ntb.vars.replaceVars(item.link, activeFile, errorContext);
+			const resolvedLink = await this.ntb.vars.replaceVars(item.link, activeFile, ErrorBehavior.Ignore);
 			const resolvedFile = this.ntb.app.metadataCache.getFirstLinkpathDest(resolvedLink, activeFile.path);
 			itemLiEl.toggleAttribute('data-active-file', resolvedFile?.path === activeFile.path);
 		}
