@@ -328,9 +328,9 @@ const context = await esbuild.context({
 		copyToWikiPlugin, 
 		buildEnd
 	],
-	sourcemap: build_prod ? false : "inline",
+	sourcemap: (build_prod || build_analyze) ? false : "inline",
 	treeShaking: true,
-	minify: build_prod ? true : false,
+	minify: (build_prod || build_analyze) ? true : false,
 	outfile: "main.js",
 });
 
