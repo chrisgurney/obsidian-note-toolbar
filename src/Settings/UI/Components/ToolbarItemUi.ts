@@ -908,6 +908,14 @@ export default class ToolbarItemUi {
                     this.ntb.settingsUtils.handleKeyClick(button.extraSettingsEl);      
                 });
 
+                // adds link to reveal or open the file
+                const fileInputEl = fileSetting.controlEl.querySelector('input');
+                if (fileInputEl) {
+                    const revealLinkFr = this.revealFileFr(fileInputEl);
+                    if (revealLinkFr) helpTextFr.append(' ', revealLinkFr);
+                    const openFileFr = this.openFileFr(fileInputEl);
+                    if (openFileFr) helpTextFr.append(' ', openFileFr);
+                }
                 setFieldHelp(fileSetting.settingEl, helpTextFr);
                 break;
             }
