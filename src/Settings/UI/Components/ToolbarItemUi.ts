@@ -184,7 +184,7 @@ export default class ToolbarItemUi {
                                 itemLinkFieldDiv.empty();
                                 toolbarItem.link = '';
                                 this.getLinkSettingForType(toolbarItem.linkAttr.type, itemLinkFieldDiv, toolbarItem);
-                                await this.ntb.settingsManager.save(false);
+                                await this.ntb.settingsManager.save();
                                 this.renderPreview(toolbarItem);
                                 // for case where icon/label/tooltip fields are not used, disable them
                                 const disableFields = toolbarItem.linkAttr.type === ItemType.Group;
@@ -769,7 +769,7 @@ export default class ToolbarItemUi {
                             toolbarItem.link = command.name;
                             toolbarItem.linkAttr.commandId = command.id;
                             toolbarItem.linkAttr.type = type;
-                            void this.ntb.settingsManager.save(false).then(() => {
+                            void this.ntb.settingsManager.save().then(() => {
                                 this.renderPreview(toolbarItem);
                             });
                         });
@@ -783,7 +783,7 @@ export default class ToolbarItemUi {
                                 toolbarItem.link = isValid && commandName ? commandName : '';
                                 toolbarItem.linkAttr.commandId = isValid && commandId ? commandId : '';
                                 toolbarItem.linkAttr.type = type;
-                                await this.ntb.settingsManager.save(false);
+                                await this.ntb.settingsManager.save();
                                 this.renderPreview(toolbarItem);
                             }, 500));
                         void this.ntb.settingsUtils.updateItemComponentStatus(this.parent, toolbarItem.linkAttr.commandId, SettingType.Command, cb.inputEl.parentElement);
@@ -888,7 +888,7 @@ export default class ToolbarItemUi {
                                 toolbarItem.link = isValid ? normalizePath(value) : '';
                                 toolbarItem.linkAttr.commandId = '';
                                 toolbarItem.linkAttr.type = type;
-                                await this.ntb.settingsManager.save(false);
+                                await this.ntb.settingsManager.save();
                                 this.renderPreview(toolbarItem);
                             }, 500));
                         void this.ntb.settingsUtils.updateItemComponentStatus(this.parent, toolbarItem.link, SettingType.File, cb.inputEl.parentElement);
@@ -961,7 +961,7 @@ export default class ToolbarItemUi {
                                 toolbarItem.link = menuToolbar ? menuToolbar.uuid : '';
                                 toolbarItem.linkAttr.commandId = '';
                                 toolbarItem.linkAttr.type = type;
-                                await this.ntb.settingsManager.save(false);
+                                await this.ntb.settingsManager.save();
                                 this.renderPreview(toolbarItem);
                                 // update this item's icon if it's non-empty and the selected toolbar has one
                                 if (toolbarItem.icon === '' && menuToolbar?.icon) {
@@ -998,7 +998,7 @@ export default class ToolbarItemUi {
                                     toolbarItem.linkAttr.commandId = '';
                                     toolbarItem.linkAttr.type = type;
                                     this.toolbar.updated = new Date().toISOString();
-                                    await this.ntb.settingsManager.save(false);
+                                    await this.ntb.settingsManager.save();
                                     this.renderPreview(toolbarItem);
                                 }, 500));
                         void this.ntb.settingsUtils.updateItemComponentStatus(this.parent, toolbarItem.link, SettingType.TextWithVars, cb.inputEl.parentElement);
