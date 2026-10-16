@@ -6,6 +6,7 @@
   "description": "Obsidian plugin that adds customizable toolbars to your notes.",
   "main": "main.js",
   "scripts": {
+    "analyze": "tsc --noEmit --skipLibCheck && node esbuild.config.mjs analyze",
     "build": "tsc --noEmit --skipLibCheck && node esbuild.config.mjs production",
     "dev": "npm run prebuild && node esbuild.config.mjs",
     "lint": "npx eslint .",
