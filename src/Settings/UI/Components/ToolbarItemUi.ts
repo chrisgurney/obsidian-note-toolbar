@@ -1129,6 +1129,7 @@ export default class ToolbarItemUi {
     {
         if (toolbarItem.scriptConfig) {
             let outputContainerSettingEl: HTMLElement | undefined = undefined;
+            let settingInputEl: HTMLInputElement;
             const config = toolbarItem.scriptConfig;
             const selectedFunction = adapter.getFunctions().get(toolbarItem.scriptConfig.pluginFunction);
             selectedFunction?.parameters.forEach(param => {
@@ -1166,6 +1167,7 @@ export default class ToolbarItemUi {
                                     showFileNamesOnly: false,
                                     fileExtension: (toolbarItem.linkAttr.type === ItemType.Templater) ? undefined : '.js',
                                 });
+                                settingInputEl = cb.inputEl;
                                 cb.setPlaceholder(param.label)
                                     .setValue(initialValue ? initialValue : '')
                                     .onChange(debounce(async (value) => {
@@ -1225,11 +1227,11 @@ export default class ToolbarItemUi {
                     fieldHelp.setText(param.description);
                     fieldHelp.addClass('note-toolbar-setting-field-help');
 
-                    // adds link to reveal the script file in the file explorer
+                    // adds link to reveal or open the file
                     if (param.type === SettingType.File) {
-                        const revealLinkFr = this.revealFileFr(config[param.parameter]);
+                        const revealLinkFr = this.revealFileFr(settingInputEl);
                         if (revealLinkFr) fieldHelp.append(' ', revealLinkFr);
-                        const openFileFr = this.openFileFr(config[param.parameter]);
+                        const openFileFr = this.openFileFr(settingInputEl);
                         if (openFileFr) fieldHelp.append(' ', openFileFr);
                     }
 
@@ -1376,12 +1378,12 @@ export default class ToolbarItemUi {
 
     /**
      * Returns a clickable link that reveals the given file in the file explorer (if enabled).
-     * @param filename 
+     * @param settingInputEl input element for the file setting 
      * @returns DocumentFragment
      */
-    revealFileFr(filename: string | undefined): DocumentFragment | undefined {
+    revealFileFr(settingInputEl: HTMLInputElement): DocumentFragment | undefined {
         let revealLink: DocumentFragment | undefined;
-        if (filename && this.ntb.adapters.isInternalPluginEnabled('file-explorer')) {
+        if (this.ntb.adapters.isInternalPluginEnabled('file-explorer')) {
             revealLink = new DocumentFragment();
             revealLink.createEl('a', { 
                 cls: "note-toolbar-setting-focussable-link", 
@@ -1389,7 +1391,8 @@ export default class ToolbarItemUi {
                 attr: { 'aria-label': t('setting.button-reveal-file-tooltip'), tabindex: '0' }
             }, el => {
                 const reveal = () => {
-                  const file = this.ntb.app.vault.getFileByPath(filename);
+                    const filename = settingInputEl.value;
+                    const file = this.ntb.app.vault.getFileByPath(filename);
                     if (!file) {
                         new Notice(t('adapter.error.file-not-found', { filename })).containerEl.addClass('mod-warning');
                         return;
@@ -1411,12 +1414,12 @@ export default class ToolbarItemUi {
 
     /**
      * Returns a clickable link that opens the given file via Obsidian.
-     * @param filename 
+     * @param settingInputEl input element for the file setting 
      * @returns DocumentFragment
      */
-    openFileFr(filename: string | undefined): DocumentFragment | undefined {
+    openFileFr(settingInputEl: HTMLInputElement): DocumentFragment | undefined {
         let openFileLink: DocumentFragment | undefined;
-        if (filename && this.ntb.adapters.isInternalPluginEnabled('file-explorer')) {
+        if (this.ntb.adapters.isInternalPluginEnabled('file-explorer')) {
             openFileLink = new DocumentFragment();
             openFileLink.createEl('a', { 
                 cls: "note-toolbar-setting-focussable-link", 
@@ -1424,7 +1427,8 @@ export default class ToolbarItemUi {
                 attr: { 'aria-label': t('setting.button-open-file-tooltip'), tabindex: '0' }
             }, el => {
                 const open = () => {
-                  const file = this.ntb.app.vault.getFileByPath(filename);
+                    const filename = settingInputEl.value;
+                    const file = this.ntb.app.vault.getFileByPath(filename);
                     if (!file) {
                         new Notice(t('adapter.error.file-not-found', { filename })).containerEl.addClass('mod-warning');
                         return;
