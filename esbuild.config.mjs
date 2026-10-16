@@ -2,6 +2,7 @@ import { builtinModules } from 'node:module'
 import { spawn } from 'child_process';
 import chokidar from "chokidar";
 import esbuild from "esbuild";
+import { analyzeMetafile } from 'esbuild';
 import fs, { existsSync } from 'fs';
 import { copyFile, mkdir, readFile } from 'fs/promises';
 import { dirname, join } from 'path';
@@ -19,7 +20,8 @@ if you want to view the source, please visit the github repository of this plugi
 
 let isDocsChange = false;
 let isWikiRepoWarningShown = false;
-const prod = (process.argv[2] === "production");
+const build_analyze = (process.argv[2] === "analyze");
+const build_prod = (process.argv[2] === "production");
 
 const DOC_OUTPUT = "docs/dist";
 const DOC_WIKI_INPUT = "docs/wiki";
@@ -313,6 +315,7 @@ const context = await esbuild.context({
 		'.md': 'text',
 	},
 	logLevel: "info",
+	metafile: false,
 	plugins: [
 		buildStart,
 		stylesPlugin, 
@@ -325,16 +328,23 @@ const context = await esbuild.context({
 		copyToWikiPlugin, 
 		buildEnd
 	],
-	sourcemap: prod ? false : "inline",
+	sourcemap: build_prod ? false : "inline",
 	treeShaking: true,
-	minify: prod ? true : false,
+	minify: build_prod ? true : false,
 	outfile: "main.js",
 });
 
-if (prod) {
+if (build_prod) {
 	await context.rebuild();
 	process.exit(0);
-} else {
+} 
+else if (build_analyze) {
+	// enable `metafile: true` in the context above
+	let build = await context.rebuild();
+	console.log(await analyzeMetafile(build.metafile));
+	process.exit(0);
+} 
+else {
 	await context.watch();
 
 	// watch for changes to files outside the build process
