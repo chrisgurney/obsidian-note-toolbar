@@ -1,8 +1,8 @@
 import { Adapter } from "Adapters/Adapter";
 import NoteToolbarPlugin from "main";
 import { ButtonComponent, debounce, DropdownComponent, ExtraButtonComponent, FileExplorerPlugin, MarkdownViewModeType, Menu, MenuItem, normalizePath, Notice, PaneType, Platform, setIcon, Setting, SettingGroup, ToggleComponent } from "obsidian";
-import { ComponentType, ItemType, LINK_OPTIONS, RibbonItem, SETTINGS_DISCLAIMERS, SettingType, t, TARGET_OPTIONS, ToolbarItemSettings, ToolbarSettings, ViewModeType } from "Settings/NoteToolbarSettings";
-import { addComponentVisibility, getElementPosition, removeComponentVisibility } from "Utils/Utils";
+import { ComponentType, ErrorBehavior, ItemType, LINK_OPTIONS, RibbonItem, SETTINGS_DISCLAIMERS, SettingType, t, TARGET_OPTIONS, ToolbarItemSettings, ToolbarSettings, ViewModeType } from "Settings/NoteToolbarSettings";
+import { addComponentVisibility, getElementPosition, isValidUri, removeComponentVisibility } from "Utils/Utils";
 import CopyTextModal from "../Modals/CopyTextModal";
 import IconSuggestModal from "../Modals/IconSuggestModal";
 import ItemModal from "../Modals/ItemModal";
@@ -913,7 +913,7 @@ export default class ToolbarItemUi {
                 if (fileInputEl) {
                     const revealLinkFr = this.revealFileFr(fileInputEl);
                     if (revealLinkFr) helpTextFr.append(' ', revealLinkFr);
-                    const openFileFr = this.openFileFr(fileInputEl);
+                    const openFileFr = this.openFileLinkFr(fileInputEl);
                     if (openFileFr) helpTextFr.append(' ', openFileFr);
                 }
                 setFieldHelp(fileSetting.settingEl, helpTextFr);
@@ -1019,6 +1019,13 @@ export default class ToolbarItemUi {
                         });
                     this.ntb.settingsUtils.handleKeyClick(button.extraSettingsEl);
                 });
+
+                // adds link to open
+                const uriInputEl = uriSetting.controlEl.querySelector('input');
+                if (uriInputEl) {
+                    const openFileFr = this.openFileLinkFr(uriInputEl, true);
+                    if (openFileFr) helpTextFr.append(' ', openFileFr);
+                }
                 setFieldHelp(uriSetting.settingEl, helpTextFr);
                 break;
             }
@@ -1239,7 +1246,7 @@ export default class ToolbarItemUi {
                     if (param.type === SettingType.File) {
                         const revealLinkFr = this.revealFileFr(settingInputEl);
                         if (revealLinkFr) fieldHelp.append(' ', revealLinkFr);
-                        const openFileFr = this.openFileFr(settingInputEl);
+                        const openFileFr = this.openFileLinkFr(settingInputEl);
                         if (openFileFr) fieldHelp.append(' ', openFileFr);
                     }
 
@@ -1425,30 +1432,45 @@ export default class ToolbarItemUi {
      * @param settingInputEl input element for the file setting 
      * @returns DocumentFragment
      */
-    openFileFr(settingInputEl: HTMLInputElement): DocumentFragment | undefined {
+    openFileLinkFr(settingInputEl: HTMLInputElement, isUri = false): DocumentFragment | undefined {
         let openFileLink: DocumentFragment | undefined;
-        if (this.ntb.adapters.isInternalPluginEnabled('file-explorer')) {
+        if (this.ntb.adapters.isInternalPluginEnabled('file-explorer') || isUri) {
             openFileLink = new DocumentFragment();
             openFileLink.createEl('a', { 
                 cls: "note-toolbar-setting-focussable-link", 
                 text: t('setting.button-open-file'), 
-                attr: { 'aria-label': t('setting.button-open-file-tooltip'), tabindex: '0' }
+                attr: { 'aria-label': isUri ? t('setting.button-open-link-tooltip') : t('setting.button-open-file-tooltip'), tabindex: '0' }
             }, el => {
-                const open = () => {
+                const open = async () => {
+                    const activeFile = this.ntb.app.workspace.getActiveFile();
                     const filename = settingInputEl.value;
-                    const file = this.ntb.app.vault.getFileByPath(filename);
+                    let file;
+                    if (isUri) {
+                        const resolvedLink = await this.ntb.vars.replaceVars(filename, activeFile, { 
+                            errorBehavior: ErrorBehavior.Display 
+                        });
+                        if (isValidUri(resolvedLink)) {
+                            await this.ntb.items.handleLinkUri(resolvedLink);
+                            this.parent.close();
+                            return;
+                        }
+                        file = this.ntb.app.metadataCache.getFirstLinkpathDest(resolvedLink, activeFile?.path ?? '');
+                    }
+                    else {
+                        file = this.ntb.app.vault.getFileByPath(filename);
+                    }
                     if (!file) {
                         new Notice(t('adapter.error.file-not-found', { filename })).containerEl.addClass('mod-warning');
                         return;
                     }
-                    void this.ntb.app.workspace.getLeaf(false).openFile(file);
+                    void this.ntb.app.workspace.getLeaf(true).openFile(file);
                     this.parent.close();
                 }
                 this.ntb.registerDomEvent(el, 'click', open);
-                this.ntb.registerDomEvent(el, 'keydown', event => {
+                this.ntb.registerDomEvent(el, 'keydown', async (event) => {
                     if (event.key === 'Enter' || event.key === ' ') {
                         event.preventDefault();
-                        open();
+                        await open();
                     }
                 });
             });
