@@ -246,6 +246,11 @@ export default class DataviewAdapter extends Adapter {
         // }
         // const args = importedArgs.value;
         
+        const systemArgs = {
+            _scriptFile: scriptFile // lets scripts know where they're being executed from
+        };
+        Object.assign(args, systemArgs);
+        
         const activeFilePath = this.ntb.app.workspace.getActiveFile()?.path || '';
 
         // if (contents.includes("await")) contents = "(async () => { " + contents + " })()";

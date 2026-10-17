@@ -269,6 +269,12 @@ export default class JsEngineAdapter extends Adapter {
         errorContext['scriptFile'] = filename;
         const scriptFile = this.ntb.adapters.utils.checkFile(filename, errorContext);
         if (!scriptFile) return;
+
+        const systemArgs = {
+            _scriptFile: scriptFile // lets scripts know where they're being executed from
+        };
+        Object.assign(args, systemArgs);
+
         const scriptFilePath = scriptFile?.path || filename;
         errorContext['scriptFile'] = scriptFile;
 

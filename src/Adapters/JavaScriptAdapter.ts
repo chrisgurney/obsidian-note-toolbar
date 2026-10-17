@@ -96,7 +96,8 @@ export default class JavaScriptAdapter extends Adapter {
      * console.log(`Hello ${args['name']}`);
      * new Notice(`Hello ${args['name']}`);
      * 
-     * @param filename 
+     * @param filename
+     * @param errorContext 
      * @param argsJson
      * @param containerEl 
      * @returns 
@@ -123,23 +124,23 @@ export default class JavaScriptAdapter extends Adapter {
         }
 
         this.ntb.debug('Note Toolbar: Executing:', scriptFilePath);
-        return await this.evaluate(contents, errorContext, argsJson, containerEl);
+        const systemArgs = {
+            _scriptFile: scriptFile // lets scripts know where they're being executed from
+        };
+        return await this.evaluate(contents, errorContext, argsJson, containerEl, systemArgs);
 
     }
 
     /**
      * Evaluates the given JavaScript expression.
-     * 
-     * @param expression 
-     * @param containerEl 
-     * @param errorBehavior 
-     * @returns 
+     * @returns evaluation result
      */    
     private evaluate = async (
         expression: string,
         errorContext: ScriptContext,
         argsJson?: string,
-        containerEl?: HTMLElement
+        containerEl?: HTMLElement,
+        systemArgs?: Record<string, unknown>
     ): Promise<string> => {
                 
         let result;
@@ -147,6 +148,7 @@ export default class JavaScriptAdapter extends Adapter {
 
         const args = this.ntb.adapters.utils.checkArgs(argsJson, errorContext, containerEl);
         if (!args) return '';
+        Object.assign(args, systemArgs);
 
         const activeFilePath = this.ntb.app.workspace.getActiveFile()?.path || '';
 
