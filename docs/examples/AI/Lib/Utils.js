@@ -3,13 +3,18 @@
  */
 
 /**
- * Returns the contents of the active file.
+ * Returns the contents of the text selection, active file, or nothing.
+ * @returns { content, context }
  */
-async function getActiveFile() {
-    const file = ntb.app.workspace.getActiveFile();
+async function getContent() {
+    let content = ntb.getSelection({ wordAtCursor: false });
+    if (content) return { content, file: null };
 
-    if (!file) throw new Error('No active file');
-    return file;
+    const file = ntb.app.workspace.getActiveFile();
+    if (!file) return { content: '', file: null };
+
+    content = await ntb.app.vault.cachedRead(file);
+    return { content, file };
 }
 
 /**
@@ -22,7 +27,7 @@ async function getPrompt(promptsFolder) {
 
     const promptFile = await ntb.fileSuggester(prompts, {
         allowCustomInput: true,
-        placeholder: 'Choose a prompt'
+        placeholder: 'Type or choose a prompt (uses open note for content)'
     });
 
     if (!promptFile) return null;
@@ -32,6 +37,6 @@ async function getPrompt(promptsFolder) {
 
 // make these functions available to scripts
 return {
-    getActiveFile,
+    getContent,
     getPrompt
 };
