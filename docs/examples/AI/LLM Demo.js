@@ -12,9 +12,9 @@
  */
 
 // CHANGE: if needed
-const LLM = await ntb.loadScript('AI/Lib/Gemini.js');
-const PROMPTS_FOLDER = 'AI/Prompts/';
-const UTILS = await ntb.loadScript('AI/Lib/Utils.js');
+const PROMPTS_FOLDER = 'x/AI/Prompts/';
+const LLM = await ntb.loadScript('x/AI/Lib/Gemini.js');
+const UTILS = await ntb.loadScript('x/AI/Lib/Utils.js');
 
 // ask the user which prompt file to use (or to manually enter one)
 const prompt = await UTILS.getPrompt(PROMPTS_FOLDER);
@@ -49,7 +49,9 @@ try {
         // });
     
         // option 4: display in a sidebar
-        ntb.sidebar(`${heading}\n\n${response}`);
+        ntb.sidebar(`${heading}\n\n${response}`, {
+            viewIcon: 'astroid', viewTitle: 'Gemini'
+        });
     }
 }
 catch (error) {
