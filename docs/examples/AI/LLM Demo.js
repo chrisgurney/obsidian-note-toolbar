@@ -9,17 +9,18 @@
  * 3. Review the paths below.
  * 4. Review how you would like the response to be displayed.
  * 5. In a toolbar, add an item: **JavaScript → Execute JavaScript file** select this file.
+ * 6. Note Toolbar 1.35: Provide a "scriptPath" argument to let this script know where the libraries are located
  */
 
-let scriptPath = '/AI';
-if (input) {
-    ({ _scriptFile} = input);
-    scriptPath = _scriptFile.parent.path;
+let scriptPath = input?.scriptPath ?? '/AI';
+if (input?._scriptFile) {
+    // Note Toolbar 1.36 or later: path is provided automatically 
+    scriptPath = input._scriptFile.parent?.path ?? scriptPath;
 }
 
 // CHANGE: if needed
-const LLM = await ntb.loadScript(`${scriptPath}/Lib/Gemini.js`);
 const PROMPTS_FOLDER = `${scriptPath}/Prompts/`;
+const LLM = await ntb.loadScript(`${scriptPath}/Lib/Gemini.js`);
 const UTILS = await ntb.loadScript(`${scriptPath}/Lib/Utils.js`);
 
 // ask the user which prompt file to use (or to manually enter one)
