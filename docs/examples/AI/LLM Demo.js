@@ -11,10 +11,16 @@
  * 5. In a toolbar, add an item: **JavaScript → Execute JavaScript file** select this file.
  */
 
+let scriptPath = '/AI';
+if (input) {
+    ({ _scriptFile} = input);
+    scriptPath = _scriptFile.parent.path;
+}
+
 // CHANGE: if needed
-const PROMPTS_FOLDER = 'x/AI/Prompts/';
-const LLM = await ntb.loadScript('x/AI/Lib/Gemini.js');
-const UTILS = await ntb.loadScript('x/AI/Lib/Utils.js');
+const LLM = await ntb.loadScript(`${scriptPath}/Lib/Gemini.js`);
+const PROMPTS_FOLDER = `${scriptPath}/Prompts/`;
+const UTILS = await ntb.loadScript(`${scriptPath}/Lib/Utils.js`);
 
 // ask the user which prompt file to use (or to manually enter one)
 const prompt = await UTILS.getPrompt(PROMPTS_FOLDER);
