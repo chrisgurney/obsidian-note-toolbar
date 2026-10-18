@@ -22,6 +22,7 @@ if (input?._scriptFile) {
 const PROMPTS_FOLDER = `${scriptPath}/Prompts/`;
 const LLM = await ntb.loadScript(`${scriptPath}/Lib/Gemini.js`);
 const UTILS = await ntb.loadScript(`${scriptPath}/Lib/Utils.js`);
+const RESPONSE_FOLDER = `${scriptPath}/Responses`; // optional, if outputting to files
 
 // ask the user which prompt file to use (or to manually enter one)
 const prompt = await UTILS.getPrompt(PROMPTS_FOLDER);
@@ -44,21 +45,28 @@ try {
         const heading = `${headingContext}_✨ AI response:_`;
 
         // option 1: append to the end of the originating note
-        // ntb.append(response, { linePrefix: '> ', file: file } );
+        // ntb.append(response.text, { linePrefix: '> ', file: file } );
     
         // option 2: replace currently selected text, or insert at the cursor if there's no selection
         // (not feasible if response takes a while and you've moved on to other notes)
-        // ntb.setSelection(response);
+        // ntb.setSelection(response.text);
         
         // option 3: display in a modal
-        // await ntb.modal(response, {
+        // await ntb.modal(response.text, {
         //     title: heading, editable: true
         // });
     
         // option 4: display in a sidebar
-        ntb.sidebar(`${heading}\n\n${response}`, {
+        ntb.sidebar(`${heading}\n\n${response.text}`, {
             viewIcon: 'astroid', viewTitle: 'Gemini'
         });
+
+        // option 5: save to a new Markdown file
+        // const responseFile = await UTILS.saveResponse(response, file, heading, RESPONSE_FOLDER);
+        // void ntb.app.workspace.getLeaf().openFile(responseFile);
+        // await ntb.sidebar(responseFile, {
+        //     viewIcon: 'astroid', viewTitle: 'Gemini'
+        // });
     }
 }
 catch (error) {

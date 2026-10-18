@@ -12,36 +12,29 @@ const GEMINI_MODEL = 'gemini-3.5-flash-lite';
 const GEMINI_SECRET = 'gemini-api-key';
 const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta';
 
-async function generate(prompt, content, context) {
+async function generate(prompt, content, context = {}) {
     const apiKey = ntb.app.secretStorage.getSecret(GEMINI_SECRET);
 
     if (!apiKey) {
         throw new Error(`Gemini: API key not found in Obsidian Keychain settings: ${GEMINI_SECRET}`);
     }
 
-    const res = await geminiRequest(apiKey, prompt, content, GEMINI_MODEL, context);
-    return res && getGeminiResponseText(res);
-}
+    const body = {
+        model: GEMINI_MODEL,
+        input: content?.trim() || prompt,
+        ...(prompt && content?.trim()
+            ? { system_instruction: prompt }
+            : {}),
+        ...(context.conversationId
+            ? { previous_interaction_id: context.conversationId }
+            : {})
+    };
 
-/**
- * Submits the provided prompt + content to the given model.
- */
-async function geminiRequest(apiKey, prompt, content, model, context) {
-
-    const body = content?.trim()
-        ? {
-            systemInstruction: { parts: [{ text: prompt }] },
-            contents: [{ parts: [{ text: content }] }]
-        }
-        : {
-            contents: [{ parts: [{ text: prompt }] }]
-        };
-    
-    console.log('Gemini: Sending request:', body, 'for file:', context);
+    console.log('Gemini: Sending request:', body, 'for file:', context.file);
 
     try {
         const res = await requestUrl({
-            url: `${GEMINI_API_URL}/models/${model}:generateContent`,
+            url: `${GEMINI_API_URL}/interactions`,
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -49,42 +42,36 @@ async function geminiRequest(apiKey, prompt, content, model, context) {
             },
             body: JSON.stringify(body)
         });
-        console.log('Gemini: Response received', res);
-        return res.json;
+
+        const data = res.json;
+        const text = data.steps
+            ?.filter(step => step.type === 'model_output')
+            .flatMap(step => step.content ?? [])
+            .filter(part => part.type === 'text')
+            .map(part => part.text)
+            .join('');
+
+        if (!text) {
+            throw new Error(
+                data.status === 'failed'
+                    ? 'Gemini: Interaction failed'
+                    : 'Gemini: Returned no text'
+            );
+        }
+
+        return {
+            text,
+            conversationId: data.id,
+            history: undefined
+        };
     }
     catch (error) {
         console.error('Gemini: Request failed:', error);
-        console.error('Gemini: Request body:', body);
         throw error;
     }
 }
 
-/**
- * Parses the JSON response from Gemini to get the result text. 
- */
-function getGeminiResponseText(data) {
-    //console.log('getResponseText:', data);
-
-    if (!data.candidates?.length) {
-        if (data.promptFeedback?.blockReason) {
-            throw new Error(`Gemini: Blocked the prompt: ${data.promptFeedback.blockReason}`);
-        }
-        throw new Error('Gemini: Returned no response');
-    }
-
-    const text = data.candidates[0].content?.parts
-        ?.map(part => part.text)
-        .filter(Boolean)
-        .join('');
-
-    if (!text) {
-        throw new Error('Gemini: Returned no text');
-    }
-
-    return text;
-}
-
 // make these functions available to scripts
-return { 
-    generate 
+return {
+    generate
 };
