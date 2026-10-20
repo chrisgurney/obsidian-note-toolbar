@@ -683,6 +683,11 @@ body .workspace .callout[data-callout="note-toolbar"] {
             border-radius: unset;
         }
     }
+
+    /* fix: source button showing on Note Toolbar Callouts (and with Callout Copy Button plugin #633) */
+    & .callout-action-buttons {
+        display: none;
+    }
     
 }
 
