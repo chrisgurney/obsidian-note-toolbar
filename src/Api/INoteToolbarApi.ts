@@ -645,10 +645,12 @@ export interface NtbSidebarOptions {
     /**
      * Append text content using a provided separator string, instead of replacing it.
      * Only applies when a sidebar is being reused.
+     * @since 1.36
      */
     append?: string;
     /**
      * Optional CSS class(es) to add to the sidebar, separated by spaces.
+     * @since 1.36
      */
     class?: string;
     /**
@@ -657,6 +659,7 @@ export interface NtbSidebarOptions {
     id?: string;
     /**
      * Shows navigation (clear + close buttons) in the sidebar. Can only be set once per sidebar. Defaults to `false`.
+     * @since 1.36
      */
     navigation?: boolean;
     /**
