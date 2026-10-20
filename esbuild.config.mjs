@@ -41,6 +41,10 @@ const WIKI_FILES = [
 	{ src: `${DOC_OUTPUT}/api/INoteToolbarApi.Interface.NtbMenuItem.md`, dest: "INoteToolbarApi.Interface.NtbMenuItem.md.md" },
 ];
 
+// build cache
+const CACHE_DIR = 'node_modules/.cache';
+fs.mkdirSync(CACHE_DIR, { recursive: true });
+
 /* ****************************************************************************
  * PLUGINS
  * ************************************************************************** */
@@ -51,7 +55,12 @@ const typecheckPlugin = {
 		build.onEnd(async () => {
 			return new Promise((resolve) => {
 				console.log('[typecheck] running...');
-				const tsc = spawn('tsc', ['--noEmit', '--skipLibCheck'], {
+				const tsc = spawn('tsc', [
+					'--noEmit',
+					'--skipLibCheck',
+					'--incremental',
+					'--tsBuildInfoFile', `${CACHE_DIR}/tsconfig.tsbuildinfo`
+				], {
 					stdio: 'inherit' // pipes stdout/stderr directly, preserving colors
 				});
 				tsc.on('close', (code) => {
@@ -117,7 +126,10 @@ const eslintPlugin = {
 		build.onEnd(async () => {
 			return new Promise((resolve) => {
 				console.log('[eslint] running...');
-				const eslint = spawn('npx', ['eslint', '.', '--ext', '.ts'], {
+				const eslint = spawn('npx', [
+					'eslint', '.', '--ext', '.ts',
+					'--cache', '--cache-location', `${CACHE_DIR}/.eslintcache`
+				], {
 					stdio: 'inherit',
 					shell: true // needed for Windows
 				});
@@ -140,7 +152,10 @@ const stylelintPlugin = {
 		build.onEnd(async () => {
 			return new Promise((resolve) => {
 				console.log('[stylelint] running...');
-				const stylelint = spawn('npx', ['stylelint', '**/*.css'], {
+				const stylelint = spawn('npx', [
+					'stylelint', '**/*.css',
+					'--cache', '--cache-location', `${CACHE_DIR}/.stylelintcache`
+				], {
 					stdio: 'inherit',
 					shell: true, // needed for Windows
 					env: {
