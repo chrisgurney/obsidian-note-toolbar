@@ -479,7 +479,7 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
             content: viewContent,
             class: options?.class ?? '',
             id: options?.id ?? '',
-            navigation: options?.navigation ?? false,
+            navigation: options?.navigation ?? [],
             viewIcon: options?.viewIcon ?? this.ntb.settings.icon,
             viewTitle: options?.viewTitle ?? t('plugin.note-toolbar')
         };

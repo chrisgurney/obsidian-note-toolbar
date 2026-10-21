@@ -7,7 +7,7 @@ export interface NtbSidebarViewState {
     content: string | TFile;
     class: string;
     id: string;
-    navigation: boolean;
+    navigation: ('clear' | 'close')[];
     viewIcon: string;
     viewTitle: string;
 }
@@ -126,7 +126,7 @@ export class NtbSidebarView extends ItemView {
      */
     private renderNavigation(): void {
         // make sure it's only rendered once
-        if (this.navigationRendered) return;
+        if (this.navigationRendered || !this.state.navigation.length) return;
 
         const navHeaderEl = createDiv('nav-header');
         const navButtonsEl = navHeaderEl.createDiv('nav-buttons-container');
@@ -144,8 +144,16 @@ export class NtbSidebarView extends ItemView {
             this.ntb.registerDomEvent(button, 'click', callback);
         };
 
-        addNavButton('eraser', t('api.ui.sidebar-clear'), () => this.clear());
-        addNavButton('x', t('api.ui.sidebar-close'), () => this.leaf.detach());
+        for (const option of this.state.navigation) {
+            switch (option) {
+                case 'clear':
+                    addNavButton('eraser', t('api.ui.sidebar-clear'), () => this.clear());
+                    break;
+                case 'close':
+                    addNavButton('x', t('api.ui.sidebar-close'), () => this.leaf.detach());
+                    break;
+            }
+        }
 
         this.containerEl.insertAdjacentElement('afterbegin', navHeaderEl);
 

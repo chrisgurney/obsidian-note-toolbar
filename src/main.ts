@@ -1,6 +1,6 @@
 import { ViewPlugin } from '@codemirror/view';
 import AdapterManager from 'Adapters/AdapterManager';
-import INoteToolbarApi from "Api/INoteToolbarApi";
+import INoteToolbarApi, { NtbSidebarOptions } from "Api/INoteToolbarApi";
 import NoteToolbarApi from 'Api/NoteToolbarApi';
 import { NtbSidebarView } from 'Api/NtbSidebarView';
 import CliManager from 'Cli/CliManager';
@@ -255,12 +255,12 @@ export default class NoteToolbarPlugin extends Plugin {
 		if (Platform.isMobile) {
 			// cleanup old leaves; this fixes the extra view on first debug message on reload
 			NtbSidebarView.removeSidebars(this, NtbSidebarView.NTB_ERROR_SIDEBAR);
-			const sidebarOptions = {
+			const sidebarOptions: NtbSidebarOptions = {
 				active: false,
 				append: '',
 				class: 'ntb-error-sidebar',
 				id: NtbSidebarView.NTB_ERROR_SIDEBAR,
-				navigation: true,
+				navigation: ['clear', 'close'],
 				viewTitle: 'Note Toolbar errors'
 			};
 			// debug + warning messages
