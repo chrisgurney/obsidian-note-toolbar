@@ -316,6 +316,7 @@
         "error-file-not-found": "Note Toolbar: File not found: {{-filename}}",
         "error-folder-not-found": "Note Toolbar: Folder not found: {{folder}}",
         "error-item-menu-not-found": "Note Toolbar: Check menu setting or URI. Toolbar not found: {{toolbar}}",
+        "error-save-settings-failed": "Note Toolbar: Failed to save settings after a file rename. Updated links may be lost when Obsidian is restarted; please check the console for details.",
         "error-scripting-not-enabled": "Error: Enable Note Toolbar settings → Scripting, to use this item.",
         "error-scripting-plugin-not-enabled": "Error: Toggle the Scripting setting after installing and enabling plugin: {{plugin}}",
         "error-toolbar-not-found": "Note Toolbar: Check toolbar setting or URI. Toolbar not found: {{toolbar}}",
