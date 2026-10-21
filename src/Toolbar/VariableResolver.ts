@@ -36,7 +36,7 @@ export default class VariableResolver {
     }
 
 	replaceVar(s: string, varKey: string, replaceText?: string): string {
-		if (!replaceText) return '';
+		if (!replaceText) return s;
 		const regex = new RegExp(`{{\\s*(encode:)?\\s*${varKey}\\s*}}`);
 		return s.replace(regex, (_, encode) => encode ? encodeURIComponent(replaceText) : replaceText);
 	}
@@ -54,7 +54,7 @@ export default class VariableResolver {
 		context: ScriptContext
 	): Promise<string> {
 
-		if (!this.hasVars(s)) return s;
+		if (!s.trim() || !this.hasVars(s)) return s;
 
 		const hasVar = (varKey: string) => new RegExp(`\\{\\{\\s*(?:encode:)?\\s*${varKey}\\s*\\}\\}`).test(s);
 

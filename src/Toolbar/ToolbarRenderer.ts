@@ -1180,7 +1180,7 @@ export default class ToolbarRenderer {
 	 */
 	async update(toolbar: ToolbarSettings, activeFile: TFile | null, view?: ItemView) {
 
-		this.ntb.debug(`updateToolbar: ${toolbar.name}`);
+		this.ntb.debug(`update: ${toolbar.name}`);
 
 		if (this.ntb.settings.keepPropsState) {
 			// restore properties to the state they were before
