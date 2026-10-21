@@ -19,6 +19,9 @@
   "keywords": [],
   "author": "Chris Gurney",
   "license": "GPL-3.0",
+  "engines": {
+    "node": ">=24"
+  },
   "devDependencies": {
     "@types/node": "^26.6.4",
     "@types/sortablejs": "^1.15.8",
