@@ -299,7 +299,7 @@ export default class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> 
         }
 
         // sort the results
-        const recentItems = JSON.parse(this.ntb.app.loadLocalStorage(LocalVar.RecentItems) as string || '[]') as string[];
+        const recentItems = this.ntb.settingsManager.loadRecentList(LocalVar.RecentItems);
         sortedSuggestions.sort((a, b) => {
             const aItemNameRaw = this.cleanString(a.label || a.tooltip || '');
             const bItemNameRaw = this.cleanString(b.label || b.tooltip || '');
