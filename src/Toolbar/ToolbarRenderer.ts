@@ -1014,7 +1014,16 @@ export default class ToolbarRenderer {
 		// if we don't have a position yet, try to get it from the previous menu
 		if (!menuPos) {
 			const previousPosData = this.ntb.app.loadLocalStorage(LocalVar.MenuPos) as string;
-			if (previousPosData) menuPos = JSON.parse(previousPosData) as MenuPositionDef;
+			if (previousPosData) {
+				try {
+					menuPos = JSON.parse(previousPosData) as MenuPositionDef;
+				}
+				catch (error) {
+					this.ntb.warn('Error loading saved menu position from local storage; clearing.', error);
+					// clear the value if it's problematic
+					this.ntb.app.saveLocalStorage(LocalVar.MenuPos, null);
+				}
+			}
 		}
 
 		// position (and potentially offset) the menu, and then set focus in it if necessary
