@@ -131,7 +131,7 @@ const eslintPlugin = {
 					'--cache', '--cache-location', `${CACHE_DIR}/.eslintcache`
 				], {
 					stdio: 'inherit',
-					shell: true // needed for Windows
+					shell: process.platform === 'win32' // needed for Windows
 				});
 				eslint.on('close', (code) => {
 					if (code === 0) {
@@ -157,7 +157,7 @@ const stylelintPlugin = {
 					'--cache', '--cache-location', `${CACHE_DIR}/.stylelintcache`
 				], {
 					stdio: 'inherit',
-					shell: true, // needed for Windows
+					shell: process.platform === 'win32', // needed for Windows
 					env: {
 						...process.env,
 						NODE_OPTIONS: '--no-warnings'
