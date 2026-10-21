@@ -182,7 +182,13 @@ export default class GalleryView extends ItemView {
 					this.ntb.error('Invalid toolbar IDs or toolbar name:', addToolbarItemIds, addToolbarName);
 					return;
 				}
-				const itemIds: string[] = JSON.parse(addToolbarItemIds) as string[];
+				let itemIds: string[] = [];
+				try {
+					itemIds = JSON.parse(addToolbarItemIds) as string[];
+				}
+				catch (error) {
+					this.ntb.warn('Error parsing toolbar item IDs.', error);
+				}
 				const galleryItems = this.ntb.gallery.getItemsById(itemIds);
 				if (galleryItems) await this.ntb.gallery.addItems(galleryItems, addToolbarName);
 				return;
