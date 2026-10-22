@@ -345,7 +345,7 @@ const context = await esbuild.context({
 		'.md': 'text',
 	},
 	logLevel: "info",
-	metafile: false,
+	metafile: build_analyze,
 	plugins: [
 		buildStart,
 		stylesPlugin, 
@@ -369,7 +369,6 @@ if (build_prod) {
 	process.exit(0);
 } 
 else if (build_analyze) {
-	// enable `metafile: true` in the context above
 	let build = await context.rebuild();
 	console.log(await analyzeMetafile(build.metafile));
 	process.exit(0);
