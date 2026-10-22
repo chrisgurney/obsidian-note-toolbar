@@ -390,6 +390,12 @@ export default interface INoteToolbarApi<T> {
      * // show a string, creating a new sidebar view each time
      * await ntb.sidebar(`*It is now:*\n${new Date()}`, { reuse: false });
      * 
+     * @example
+     * // show a string, in the same sidebar, with an icon, title, and navigation
+     * ntb.sidebar(`*It is now:*\n${new Date()}`, {
+     *   append: '', viewIcon: 'calendar', viewTitle: 'Dates', navigation: ['clear', 'export', 'close']
+     * });
+     * 
      * @since 1.35
      * @group UI Components
      */

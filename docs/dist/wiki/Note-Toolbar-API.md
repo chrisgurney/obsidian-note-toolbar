@@ -618,6 +618,13 @@ await ntb.sidebar(new URL('https://obsidian.md'));
 await ntb.sidebar(`*It is now:*\n${new Date()}`, { reuse: false });
 ```
 
+```ts
+// show a string, in the same sidebar, with an icon, title, and navigation
+ntb.sidebar(`*It is now:*\n${new Date()}`, {
+  append: '', viewIcon: 'calendar', viewTitle: 'Dates', navigation: ['clear', 'export', 'close']
+});
+```
+
 #### Since
 
 1.35
