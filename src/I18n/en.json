@@ -141,6 +141,7 @@
             "button-submit": "Submit",
             "error-cancelled": "Cancelled prompt",
             "error-file-unsupported": "Unsupported filetype: {{filetype}}",
+            "error-export-no-contents": "Unable to export sidebar contents.",
             "error-missing-property": "Note Toolbar API missing required property: {{property}}\nRefer to the documentation.",
             "error-undefined": "Undefined item",
             "error-unsupported-property": "Unsupported property provided to Note Toolbar API: {{property}}\nRefer to the documentation.",
@@ -151,12 +152,15 @@
             "instruction-dismiss": "to dismiss",
             "instruction-navigate": "to navigate",
             "instruction-select": "to select item",
+            "prompt-label-file": "Type a filename",
             "prompt-placeholder": "Type text and press enter",
             "prompt-placeholder-large": "Type text",
+            "prompt-placeholder-sidebar-export": "Sidebar export {{filename}}",            
             "prompt-placeholder-url": "Type a URL",
             "sidebar-clear": "Clear content",
             "sidebar-close": "Close sidebar",
             "sidebar-empty": "Sidebar is empty",
+            "sidebar-export": "Export contents",
             "suggester-placeholder": "Select an option...",
             "suggester-placeholder-no-values": "Type something..."
         }

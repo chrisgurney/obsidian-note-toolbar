@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from "main";
-import { ItemView, MarkdownRenderer, setIcon, TFile, ViewStateResult, WorkspaceLeaf } from "obsidian";
+import { ItemView, MarkdownRenderer, normalizePath, Notice, setIcon, TFile, ViewStateResult, WorkspaceLeaf } from "obsidian";
 import { t } from "Settings/NoteToolbarSettings";
 import { NtbSidebarOptions } from "./INoteToolbarApi";
 
@@ -7,7 +7,7 @@ export interface NtbSidebarViewState {
     content: string | TFile;
     class: string;
     id: string;
-    navigation: ('clear' | 'close')[];
+    navigation: ('clear' | 'close' | 'export')[];
     viewIcon: string;
     viewTitle: string;
 }
@@ -134,7 +134,7 @@ export class NtbSidebarView extends ItemView {
         const addNavButton = (
             icon: string,
             label: string,
-            callback: () => void
+            callback: () => void | Promise<void>
         ): void => {
             const button = navButtonsEl.createDiv({
                 cls: ['clickable-icon', 'nav-action-button']
@@ -151,6 +151,9 @@ export class NtbSidebarView extends ItemView {
                     break;
                 case 'close':
                     addNavButton('x', t('api.ui.sidebar-close'), () => this.leaf.detach());
+                    break;
+                case 'export':
+                    addNavButton('file-down', t('api.ui.sidebar-export'), async () => await this.exportContents());
                     break;
             }
         }
@@ -172,6 +175,35 @@ export class NtbSidebarView extends ItemView {
     /*************************************************************************
      * HELPERS
      *************************************************************************/
+
+    /**
+     * Exports the sidebar's contents to a Markdown file, prompting for a filename.
+     */
+    private async exportContents(): Promise<void> {
+        const { content } = this.state;
+
+        const text = typeof content === 'string'
+            ? content
+            : content instanceof TFile
+                ? await this.ntb.app.vault.read(content)
+                : null;
+
+        if (text === null) {
+            new Notice(t('api.ui.error-export-no-contents'));
+            return;
+        }
+
+        const filename = await this.ntb.api.prompt({
+            label: t('api.ui.prompt-label-file'),
+            default: t('api.ui.prompt-placeholder-sidebar-export', { filename: `${window.moment().format('YYYY-MM-DD HH-mm-ss')}.md` })
+        });
+        if (!filename) return;
+
+        const path = normalizePath(filename.endsWith('.md') ? filename : `${filename}.md`);
+        const file = await this.ntb.app.vault.create(path, text);
+
+        new Notice(t('api.msg.file-created', { filename: file.path }));
+    }
 
     /**
      * Checks if the provided NtbSidebarView leaf matches the provided ID.

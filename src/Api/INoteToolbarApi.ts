@@ -661,7 +661,7 @@ export interface NtbSidebarOptions {
      * Navigation buttons to show in the sidebar. Can only be set once per sidebar. Defaults to adding no buttons.
      * @since 1.36
      */
-    navigation?: ('clear' | 'close')[];
+    navigation?: ('clear' | 'close' | 'export')[];
     /**
      * Reuse an existing sidebar view instead of creating a new one. Ignored when `id` is set. Defaults to `true`.
      */
