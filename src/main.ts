@@ -235,17 +235,16 @@ export default class NoteToolbarPlugin extends Plugin {
 	 * Toggle debugging, based on user setting.
 	 */
 	toggleDebugging() {
-		// all errors should be logged
+		// all warnings + errors should be logged
 		this.error = console.error.bind(console);
+		this.warn = console.warn.bind(console);
 		// setup debug functions, preserving line numbers
 		if (this.settings.debugEnabled) {
 			this.debug = console.debug.bind(console);
-			this.warn = console.warn.bind(console);
 		}
 		// otherwise do nothing when debug functions are called
 		else {
 			this.debug = (..._args: unknown[]) => {};
-			this.warn = (..._args: unknown[]) => {};
 		}
 	}
 
