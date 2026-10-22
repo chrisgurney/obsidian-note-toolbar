@@ -58,14 +58,14 @@ try {
     
         // option 4: display in a sidebar
         ntb.sidebar(`${heading}\n\n${response.text}`, {
-            viewIcon: 'astroid', viewTitle: 'Gemini', navigation: true
+            viewIcon: 'astroid', viewTitle: 'Gemini', navigation: ['clear', 'export', 'close']
         });
 
         // option 5: save to a new Markdown file
         // const responseFile = await UTILS.saveResponse(response, file, heading, RESPONSE_FOLDER);
         // void ntb.app.workspace.getLeaf().openFile(responseFile);
         // await ntb.sidebar(responseFile, {
-        //     viewIcon: 'astroid', viewTitle: 'Gemini', navigation: true
+        //     viewIcon: 'astroid', viewTitle: 'Gemini', navigation: ['close']
         // });
     }
 }
