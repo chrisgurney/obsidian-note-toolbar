@@ -68,7 +68,7 @@ export default class TemplaterAdapter extends Adapter {
     private adapterPlugin: { 
         templater: unknown; 
         settings: Record<string, string>;
-    } & Plugin | null;
+    } | null;
 
     constructor(ntb: NoteToolbarPlugin) {
         const plugin = ntb.app.plugins.plugins[ItemType.Templater] as { templater: unknown, settings: unknown } & Plugin;

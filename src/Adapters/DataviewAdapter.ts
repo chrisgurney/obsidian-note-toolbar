@@ -75,10 +75,10 @@ export default class DataviewAdapter extends Adapter {
         api: unknown;
         localApi: (path: string, component: Component, el: HTMLElement) => unknown;
         settings: Record<string, string>;
-    } & Plugin | null;
+    } | null;
 
     constructor(ntb: NoteToolbarPlugin) {
-        const plugin = ntb.app.plugins.plugins[ItemType.Dataview] as { api: unknown, settings: unknown } & Plugin;
+        const plugin = ntb.app.plugins.plugins[ItemType.Dataview] as { api: unknown, localApi: unknown, settings: unknown } & Plugin;
         super(ntb);
         this.adapterPlugin = plugin as typeof this.adapterPlugin;
         this.adapterApi = this.adapterPlugin?.api as typeof this.adapterApi;

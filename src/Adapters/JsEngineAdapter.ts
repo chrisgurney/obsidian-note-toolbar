@@ -97,7 +97,7 @@ export default class JsEngineAdapter extends Adapter {
     private adapterPlugin: { 
         api: unknown;
         settings: Record<string, string>;
-    } & Plugin | null;
+    } | null;
 
     constructor(ntb: NoteToolbarPlugin) {
         const plugin = ntb.app.plugins.plugins[ItemType.JsEngine] as { api: unknown, settings: unknown } & Plugin;
