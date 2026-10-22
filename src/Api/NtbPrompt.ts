@@ -61,10 +61,10 @@ export default class NtbPrompt extends Modal {
         this.createForm();
     }
 
-    onClose(): void {
-        this.contentEl.empty();
-        if (!this.submitted) this.reject(new Error(t('api.ui.error-cancelled')));
-    }
+    // onClose(): void {
+    //     this.contentEl.empty();
+    //     if (!this.submitted) this.reject(new Error(t('api.ui.error-cancelled')));
+    // }
 
     createForm(): void {
         const div = this.contentEl.createDiv();
