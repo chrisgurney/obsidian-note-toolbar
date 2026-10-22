@@ -1,14 +1,14 @@
-import { builtinModules } from 'node:module'
 import { spawn } from 'child_process';
 import chokidar from "chokidar";
-import esbuild from "esbuild";
-import { analyzeMetafile } from 'esbuild';
+import esbuild, { analyzeMetafile } from "esbuild";
 import fs, { existsSync } from 'fs';
 import { copyFile, mkdir, readFile } from 'fs/promises';
+import { createHash } from 'node:crypto';
+import { builtinModules } from 'node:module';
 import { dirname, join } from 'path';
 import process from "process";
-import { fileInliner } from "./build/file-inliner.mjs";
 import { cliDocs } from "./build/cli-docs.mjs";
+import { fileInliner } from "./build/file-inliner.mjs";
 import { galleryDocs } from "./build/gallery-docs.mjs";
 
 const banner =
@@ -80,7 +80,19 @@ const apiDocsPlugin = {
 	name: 'api-docs',
 	setup(build) {
 		build.onEnd(async () => {
-			await new Promise((resolve, reject) => {
+			// skip typedoc regeneration when the API hasn't changed
+			const stampPath = `${CACHE_DIR}/typedoc.stamp`;
+			const apiHash = createHash('sha256');
+			for (const file of ['src/Api/INoteToolbarApi.ts', 'src/Api/IToolbar.ts', 'src/Api/IItem.ts', 'typedoc.json']) {
+				apiHash.update(fs.readFileSync(file));
+			}
+			const digest = apiHash.digest('hex');
+			let typedocStale = true;
+			try {
+				typedocStale = fs.readFileSync(stampPath, 'utf8') !== digest;
+			} catch { /* no stamp yet */ }
+
+			const runTypedoc = () => new Promise((resolve, reject) => {
 				const typedoc = spawn('typedoc', [
 					'src/Api/INoteToolbarApi.ts',
 					'src/Api/IToolbar.ts',
@@ -102,6 +114,8 @@ const apiDocsPlugin = {
 					}
 				});
 			});
+			if (typedocStale) await runTypedoc();
+
 			// generate wiki output
 			try {
 				// inline linked files
@@ -116,6 +130,7 @@ const apiDocsPlugin = {
 				// console.error(`\x1b[31m[typedocPlugin] ✗ error generating API docs: ${error.message}\x1b[0m`);
 				process.exit(1);
 			}
+			if (typedocStale) fs.writeFileSync(stampPath, digest);
 		});
 	},
 };
