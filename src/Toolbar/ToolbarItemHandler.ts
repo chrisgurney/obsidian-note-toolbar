@@ -151,7 +151,9 @@ export default class ToolbarItemHandler {
                             if (event instanceof KeyboardEvent) putFocusInMenu();
                         }
                         else {
-                            this.ntb.error('No last clicked position available.');
+                            this.ntb.adapters.utils.handleError(
+                                new Error('No last clicked position available.'), { errorBehavior: ErrorBehavior.Console, item: item, toolbar: toolbar }
+                            );
                         }
                     });
                 }
