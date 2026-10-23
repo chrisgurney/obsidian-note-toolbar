@@ -262,22 +262,27 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
                         .setTitle(item.label)
                         .setIcon(item.icon ? item.icon : null)
                         .onClick(async () => {
-                            switch (item.type) {
-                                case 'command':
-                                    this.ntb.items.handleLinkCommand(item.value);
-                                    break;
-                                case 'file': {
-                                    const activeFile = this.ntb.app.workspace.getActiveFile();
-                                    const activeFilePath = activeFile ? activeFile.path : '';
-                                    await this.ntb.app.workspace.openLinkText(item.value, activeFilePath);
-                                    break;
+                            try {
+                                switch (item.type) {
+                                    case 'command':
+                                        this.ntb.items.handleLinkCommand(item.value);
+                                        break;
+                                    case 'file': {
+                                        const activeFile = this.ntb.app.workspace.getActiveFile();
+                                        const activeFilePath = activeFile ? activeFile.path : '';
+                                        await this.ntb.app.workspace.openLinkText(item.value, activeFilePath);
+                                        break;
+                                    }
+                                    case 'uri':
+                                        await this.ntb.items.handleLinkUri(item.value);
+                                        break;
+                                    default:
+                                        this.reportError(new Error(t('api.ui.error-unsupported-property', {property: item.type})), 'ntb.menu()');
+                                        break;
                                 }
-                                case 'uri':
-                                    await this.ntb.items.handleLinkUri(item.value);
-                                    break;
-                                default:
-                                    new Notice(t('api.ui.error-unsupported-property', {property: item.type})).containerEl.addClass('mod-warning');
-                                    break;
+                            }
+                            catch (error) {
+                                this.reportError(error, 'ntb.menu()');
                             }
                         });
                     // add an ID if provided, for styling purposes
@@ -309,7 +314,7 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
                 );
             }
             else {
-                this.ntb.error('Not opening window - No toolbar position available.');
+                this.reportError(new Error('Not opening window - No toolbar position available.'), 'ntb.menu()');
             }
         }
 
