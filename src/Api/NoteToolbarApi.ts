@@ -3,7 +3,7 @@ import NoteToolbarPlugin from "main";
 import { ScriptLoader } from "Adapters/ScriptLoader";
 import * as Obsidian from "obsidian";
 import { App, Menu, MenuItem, Modal, normalizePath, Notice, TAbstractFile, TFile, TFolder, WorkspaceLeaf } from "obsidian";
-import { LocalVar, PositionType, t } from "Settings/NoteToolbarSettings";
+import { ErrorBehavior, LocalVar, PositionType, t } from "Settings/NoteToolbarSettings";
 import { exportToCalloutById } from "Utils/ImportExport";
 import { putFocusInMenu } from "Utils/Utils";
 import INoteToolbarApi, { AppendOptions, GetSelectionOptions, NtbFileSuggesterOptions, NtbMenuItem, NtbMenuOptions, NtbModalOptions, NtbPromptOptions, NtbSidebarOptions, NtbSuggesterOptions, NtbToolbarOptions } from "./INoteToolbarApi";
@@ -11,7 +11,7 @@ import Item from "./Item";
 import { IToolbar } from "./IToolbar";
 import NtbModal from "./NtbModal";
 import NtbPrompt from "./NtbPrompt";
-import { NtbSidebarView } from "./NtbSidebarView";
+import { NtbSidebarView, NtbSidebarViewState } from "./NtbSidebarView";
 import NtbSuggester from "./NtbSuggester";
 import Toolbar from "./Toolbar";
 
@@ -45,7 +45,13 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
     async append(content: string, options?: AppendOptions): Promise<void> {
         const file = options?.file ?? this.app.workspace.getActiveFile();
 
-        if (!(file instanceof TFile) || file.extension !== 'md') return;
+        if (!(file instanceof TFile)) {
+            throw new Error(t('api.error.no-active-file'));
+        }
+
+        if (file.extension !== 'md') {
+            throw new Error(t('api.error.file-not-markdown', { filename: file.path }));
+        }
 
         const separator = file.stat.size > 0
             ? options?.separator ?? '\n\n'
@@ -94,7 +100,7 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
     ): Promise<TAbstractFile | null> {
 
         if (!Array.isArray(files)) {
-            new Notice(t('api.ui.error-missing-property', {property: 'files'}), 5000).containerEl.addClass('mod-warning');
+            this.reportError(new Error(t('api.ui.error-missing-property', {property: 'files'})), 'ntb.fileSuggester()');
             return null;
         }
 
@@ -151,7 +157,8 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
         try {
             return await promise;
         } 
-        catch {
+        catch (error) {
+            this.reportError(error, 'ntb.fileSuggester()', ErrorBehavior.Console);
             return null;
         }
 
@@ -248,35 +255,40 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
                 menu = await this.ntb.render.renderAsMenu(toolbar, activeFile);
             }
             else {
-                new Notice(t('api.msg.toolbar-not-found', {toolbar: toolbarOrItems})).containerEl.addClass('mod-warning');
+                this.reportError(new Error(t('api.msg.toolbar-not-found', {toolbar: toolbarOrItems})), 'ntb.menu()');
                 return;
             }
         }
         else {
             toolbarOrItems.map((item: NtbMenuItem) => {
                 const missingProp = requiredProps.find(p => !item[p]);
-                if (missingProp) new Notice(t('api.ui.error-missing-property', {property: item.type}), 5000).containerEl.addClass('mod-warning');
+                if (missingProp) this.reportError(new Error(t('api.ui.error-missing-property', {property: missingProp})), 'ntb.menu()');
                 menu.addItem((menuItem: MenuItem) => {
                     menuItem
                         .setTitle(item.label)
                         .setIcon(item.icon ? item.icon : null)
                         .onClick(async () => {
-                            switch (item.type) {
-                                case 'command':
-                                    this.ntb.items.handleLinkCommand(item.value);
-                                    break;
-                                case 'file': {
-                                    const activeFile = this.ntb.app.workspace.getActiveFile();
-                                    const activeFilePath = activeFile ? activeFile.path : '';
-                                    await this.ntb.app.workspace.openLinkText(item.value, activeFilePath);
-                                    break;
+                            try {
+                                switch (item.type) {
+                                    case 'command':
+                                        this.ntb.items.handleLinkCommand(item.value);
+                                        break;
+                                    case 'file': {
+                                        const activeFile = this.ntb.app.workspace.getActiveFile();
+                                        const activeFilePath = activeFile ? activeFile.path : '';
+                                        await this.ntb.app.workspace.openLinkText(item.value, activeFilePath);
+                                        break;
+                                    }
+                                    case 'uri':
+                                        await this.ntb.items.handleLinkUri(item.value);
+                                        break;
+                                    default:
+                                        this.reportError(new Error(t('api.ui.error-unsupported-property', {property: item.type})), 'ntb.menu()');
+                                        break;
                                 }
-                                case 'uri':
-                                    await this.ntb.items.handleLinkUri(item.value);
-                                    break;
-                                default:
-                                    new Notice(t('api.ui.error-unsupported-property', {property: item.type})).containerEl.addClass('mod-warning');
-                                    break;
+                            }
+                            catch (error) {
+                                this.reportError(error, 'ntb.menu()');
                             }
                         });
                     // add an ID if provided, for styling purposes
@@ -308,7 +320,7 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
                 );
             }
             else {
-                this.ntb.error('Not opening window - No toolbar position available.');
+                this.reportError(new Error('Not opening window - No toolbar position available.'), 'ntb.menu()');
             }
         }
 
@@ -354,7 +366,7 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
             return await promise;
         }
         catch (error) {
-            this.ntb.error(error);
+            this.reportError(error, 'ntb.prompt()', ErrorBehavior.Console);
             return null;
         }
 
@@ -373,15 +385,17 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
      */
     async setProperty(property: string, value: unknown) {
         const activeFile = this.ntb.app.workspace.getActiveFile();
-        if (activeFile) {
-            await this.ntb.app.fileManager.processFrontMatter(activeFile, (frontmatter: Record<string, unknown>) => {
-                (value === null) ? delete frontmatter[property] : frontmatter[property] = value;
-                // update the toolbar immediately
-                if (property === this.ntb.settings.toolbarProp) {
-                    void this.ntb.listeners.metadata.renderToolbar(activeFile, frontmatter);
-                }
-            });
+        if (!activeFile) {
+            this.reportError(new Error(t('api.error.no-active-file')), 'ntb.setProperty()');
+            return;
         }
+        await this.ntb.app.fileManager.processFrontMatter(activeFile, (frontmatter: Record<string, unknown>) => {
+            (value === null) ? delete frontmatter[property] : frontmatter[property] = value;
+            // update the toolbar immediately
+            if (property === this.ntb.settings.toolbarProp) {
+                void this.ntb.listeners.metadata.renderToolbar(activeFile, frontmatter);
+            }
+        });
     }
 
     /**
@@ -391,7 +405,9 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
      */
     setSelection(replacement: string) {
         const editor = this.ntb.app.workspace.activeEditor?.editor;
-        if (!editor) return;
+        if (!editor) {
+            throw new Error(t('api.error.no-active-editor'));
+        }
         
         const selection = editor.getSelection();
 
@@ -407,15 +423,35 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
         }
     }
 
+    private sidebarQueue: Promise<void> = Promise.resolve();
+
     /**
      * Shows a sidebar view with the given content.
      * 
      * @see INoteToolbarApi.sidebar
      */
     async sidebar(
-        content: string | TFile,
+        content: string | TFile | URL,
         options?: NtbSidebarOptions
     ): Promise<void> {
+        this.sidebarQueue = this.sidebarQueue
+            .catch(() => {})
+            .then(() => this.renderSidebar(content, options));
+
+        await this.sidebarQueue;
+    }
+
+    /**
+     * Shows a sidebar view with the given content.
+     * 
+     * @see INoteToolbarApi.sidebar
+     */
+    private async renderSidebar(
+        content: string | TFile | URL,
+        options?: NtbSidebarOptions
+    ): Promise<void> {
+        if (!content) throw new Error(t('api.error.sidebar-content-undefined'));
+
         this.registerSidebarView(options);
 
         // get existing leaf (default); create a new one if the `reuse` option is set
@@ -426,18 +462,18 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
                 .getLeavesOfType(NtbSidebarView.VIEW_TYPE_SIDEBAR)
                 .find(leaf => leaf.view.getState().id === options.id) ?? null;
         } else if (options?.reuse ?? true) {
-            leaf = this.app.workspace.getLeavesOfType(
-                NtbSidebarView.VIEW_TYPE_SIDEBAR
-            )[0] ?? null;
+            leaf = this.app.workspace
+                .getLeavesOfType(NtbSidebarView.VIEW_TYPE_SIDEBAR)
+                .find(leaf =>
+                    options?.append === undefined ||
+                    !NtbSidebarView.hasId(leaf, NtbSidebarView.NTB_ERROR_SIDEBAR)
+                ) ?? null;
         }
 
         // check which view type to use
         const viewType = content instanceof URL
             ? 'webviewer'
-            : content instanceof TFile
-                ? this.app.viewRegistry.getTypeByExtension(content.extension)
-                    ?? NtbSidebarView.VIEW_TYPE_SIDEBAR
-                : NtbSidebarView.VIEW_TYPE_SIDEBAR;
+            : NtbSidebarView.VIEW_TYPE_SIDEBAR;
 
         if (!leaf) {
             leaf = options?.side === 'left'
@@ -445,21 +481,45 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
                 : this.app.workspace.getRightLeaf(options?.split ?? false);
             
             if (!leaf) {
-                return;
+                throw new Error(t('api.error.sidebar-no-leaf'));
             }
         }
 
-        const viewState = content instanceof URL
-            ? { content: content.toString(), id: options?.id ?? '' }
-            : content instanceof TFile
-                ? { content: content.path, id: options?.id ?? '' }
-                : { content, id: options?.id ?? '' };
+        // setup the view content
+        const viewContent = content instanceof URL
+            ? content.toString()
+            : content;
 
-        await leaf.setViewState({
-            type: viewType,
-            state: { ...viewState },
-            active: options?.active ?? true
-        });
+        // set the view state
+        const viewState: NtbSidebarViewState = {
+            content: viewContent,
+            class: options?.class ?? '',
+            id: options?.id ?? '',
+            navigation: options?.navigation ?? [],
+            viewIcon: options?.viewIcon ?? this.ntb.settings.icon,
+            viewTitle: options?.viewTitle ?? t('plugin.note-toolbar')
+        };
+
+        if (options?.append !== undefined && leaf.view instanceof NtbSidebarView) {
+            if (viewContent instanceof TFile) {
+                throw new Error(t('api.error.sidebar-append-file'));
+            }
+            else {
+                await leaf.view.append(viewContent, options.append);
+            }
+        } 
+        else {
+            if (leaf.view instanceof NtbSidebarView) {
+                leaf.view.clear();
+            }
+            await leaf.setViewState({
+                type: viewType,
+                state: content instanceof URL
+                    ? { url: content.toString() }
+                    : { ...viewState },
+                active: options?.active ?? true
+            });
+        }
 
         if (options?.active ?? true) {
             await this.app.workspace.revealLeaf(leaf);
@@ -490,7 +550,7 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
             return await promise;
         } 
         catch (error) {
-            this.ntb.error(error);
+            this.reportError(error, 'ntb.suggester()', ErrorBehavior.Console);
             return null as unknown as T;
         }
 
@@ -512,7 +572,7 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
 
         const toolbar = this.ntb.settingsManager.getToolbar(toolbarNameOrId);
         if (!toolbar) {
-            new Notice(t('api.msg.toolbar-not-found', {toolbar: toolbarNameOrId})).containerEl.addClass('mod-warning');
+            this.reportError(new Error(t('api.msg.toolbar-not-found', {toolbar: toolbarNameOrId})), 'ntb.toolbar()');
             return;
         }
 
@@ -548,6 +608,14 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
         );
 
         this.sidebarRegistered = true;
+    }
+
+    /**
+     * Reports an error the API itself owns (i.e. there is no executing script context to report it)
+     * through the standard error handling path, using the API function as the context.
+     */
+    private reportError(error: unknown, adapterFunction: string, errorBehavior: ErrorBehavior = ErrorBehavior.Report) {
+        this.ntb.adapters.utils.handleError(error, { adapterFunction: adapterFunction, errorBehavior: errorBehavior });
     }
 
 }

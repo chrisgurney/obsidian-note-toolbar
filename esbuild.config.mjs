@@ -1,14 +1,14 @@
-import { builtinModules } from 'node:module'
 import { spawn } from 'child_process';
 import chokidar from "chokidar";
-import esbuild from "esbuild";
-import { analyzeMetafile } from 'esbuild';
+import esbuild, { analyzeMetafile } from "esbuild";
 import fs, { existsSync } from 'fs';
 import { copyFile, mkdir, readFile } from 'fs/promises';
+import { createHash } from 'node:crypto';
+import { builtinModules } from 'node:module';
 import { dirname, join } from 'path';
 import process from "process";
-import { fileInliner } from "./build/file-inliner.mjs";
 import { cliDocs } from "./build/cli-docs.mjs";
+import { fileInliner } from "./build/file-inliner.mjs";
 import { galleryDocs } from "./build/gallery-docs.mjs";
 
 const banner =
@@ -41,6 +41,10 @@ const WIKI_FILES = [
 	{ src: `${DOC_OUTPUT}/api/INoteToolbarApi.Interface.NtbMenuItem.md`, dest: "INoteToolbarApi.Interface.NtbMenuItem.md.md" },
 ];
 
+// build cache
+const CACHE_DIR = 'node_modules/.cache';
+fs.mkdirSync(CACHE_DIR, { recursive: true });
+
 /* ****************************************************************************
  * PLUGINS
  * ************************************************************************** */
@@ -51,7 +55,12 @@ const typecheckPlugin = {
 		build.onEnd(async () => {
 			return new Promise((resolve) => {
 				console.log('[typecheck] running...');
-				const tsc = spawn('tsc', ['--noEmit', '--skipLibCheck'], {
+				const tsc = spawn('tsc', [
+					'--noEmit',
+					'--skipLibCheck',
+					'--incremental',
+					'--tsBuildInfoFile', `${CACHE_DIR}/tsconfig.tsbuildinfo`
+				], {
 					stdio: 'inherit' // pipes stdout/stderr directly, preserving colors
 				});
 				tsc.on('close', (code) => {
@@ -71,7 +80,19 @@ const apiDocsPlugin = {
 	name: 'api-docs',
 	setup(build) {
 		build.onEnd(async () => {
-			await new Promise((resolve, reject) => {
+			// skip typedoc regeneration when the API hasn't changed
+			const stampPath = `${CACHE_DIR}/typedoc.stamp`;
+			const apiHash = createHash('sha256');
+			for (const file of ['src/Api/INoteToolbarApi.ts', 'src/Api/IToolbar.ts', 'src/Api/IItem.ts', 'typedoc.json']) {
+				apiHash.update(fs.readFileSync(file));
+			}
+			const digest = apiHash.digest('hex');
+			let typedocStale = true;
+			try {
+				typedocStale = fs.readFileSync(stampPath, 'utf8') !== digest;
+			} catch { /* no stamp yet */ }
+
+			const runTypedoc = () => new Promise((resolve, reject) => {
 				const typedoc = spawn('typedoc', [
 					'src/Api/INoteToolbarApi.ts',
 					'src/Api/IToolbar.ts',
@@ -93,6 +114,8 @@ const apiDocsPlugin = {
 					}
 				});
 			});
+			if (typedocStale) await runTypedoc();
+
 			// generate wiki output
 			try {
 				// inline linked files
@@ -107,6 +130,7 @@ const apiDocsPlugin = {
 				// console.error(`\x1b[31m[typedocPlugin] ✗ error generating API docs: ${error.message}\x1b[0m`);
 				process.exit(1);
 			}
+			if (typedocStale) fs.writeFileSync(stampPath, digest);
 		});
 	},
 };
@@ -117,9 +141,12 @@ const eslintPlugin = {
 		build.onEnd(async () => {
 			return new Promise((resolve) => {
 				console.log('[eslint] running...');
-				const eslint = spawn('npx', ['eslint', '.', '--ext', '.ts'], {
+				const eslint = spawn('npx', [
+					'eslint', '.', '--ext', '.ts',
+					'--cache', '--cache-location', `${CACHE_DIR}/.eslintcache`
+				], {
 					stdio: 'inherit',
-					shell: true // needed for Windows
+					shell: process.platform === 'win32' // needed for Windows
 				});
 				eslint.on('close', (code) => {
 					if (code === 0) {
@@ -140,9 +167,12 @@ const stylelintPlugin = {
 		build.onEnd(async () => {
 			return new Promise((resolve) => {
 				console.log('[stylelint] running...');
-				const stylelint = spawn('npx', ['stylelint', '**/*.css'], {
+				const stylelint = spawn('npx', [
+					'stylelint', '**/*.css',
+					'--cache', '--cache-location', `${CACHE_DIR}/.stylelintcache`
+				], {
 					stdio: 'inherit',
-					shell: true, // needed for Windows
+					shell: process.platform === 'win32', // needed for Windows
 					env: {
 						...process.env,
 						NODE_OPTIONS: '--no-warnings'
@@ -315,7 +345,7 @@ const context = await esbuild.context({
 		'.md': 'text',
 	},
 	logLevel: "info",
-	metafile: false,
+	metafile: build_analyze,
 	plugins: [
 		buildStart,
 		stylesPlugin, 
@@ -339,7 +369,6 @@ if (build_prod) {
 	process.exit(0);
 } 
 else if (build_analyze) {
-	// enable `metafile: true` in the context above
 	let build = await context.rebuild();
 	console.log(await analyzeMetafile(build.metafile));
 	process.exit(0);

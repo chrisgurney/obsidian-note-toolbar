@@ -415,11 +415,36 @@ export function calcComponentVisToggles(visibility: Visibility) {
 }
 
 /**
+ * Returns an error's args into callout text.
+ * @param args 
+ * @param callout 
+ * @returns 
+ */
+export function formatSidebarError(args: unknown[], callout?: string): string {
+
+	const formatError = (args: unknown[]): string => args.map(arg => {
+		if (arg instanceof Error) { return arg.stack ?? arg.message; }
+		if (typeof arg === 'string') { return arg; }
+		try {
+			return JSON.stringify(arg, null, 2);
+		} catch {
+			return String(arg);
+		}
+	}).join(' ');
+
+	const content = formatError(args);
+
+	return callout
+		? `> [!${callout}] ${callout}\n> ${content.replace(/\n/g, '\n> ')}`
+		: content;
+};
+
+/**
  * Returns the text for a toolbar item.
  * @param ntb Plugin instance.
  * @param toolbarItem Item to return text for.
- * @param ignoreVars If true, function tries to return any text that does not include vars/expressions.
- * @returns The resolved text for the toolbar item.
+ * @param ignoreVars If true, function tries to return any text that does not include vars/expressions. Default is `false`.
+ * @returns The resolved text for the toolbar item, or an empty string.
  */
 export function getItemText(ntb: NoteToolbarPlugin, toolbarItem: ToolbarItemSettings, ignoreVars: boolean = false): string {
 	if (ignoreVars) {

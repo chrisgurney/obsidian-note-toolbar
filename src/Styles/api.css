@@ -73,6 +73,9 @@
             width: 100%;
         }
     }
+    &[data-ntb-ui-type="prompt"] {
+        top: unset;
+    }
     &[data-ntb-ui-type="suggester"] {
         &.ntb-suggester-collapse {
             & .prompt-results {
@@ -138,4 +141,17 @@
 
 .note-toolbar-ui-input {
     flex-grow: 1;
+}
+
+.workspace-leaf-content[data-type="note-toolbar-sidebar"] {
+    & .view-content {
+        padding-top: var(--size-4-1);
+        user-select: text;
+        -webkit-user-select: text;
+    }
+    &.ntb-error-sidebar {
+        & .view-content {
+            font-family: monospace;
+        }
+    }
 }

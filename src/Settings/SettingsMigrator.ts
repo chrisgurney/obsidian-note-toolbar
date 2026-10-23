@@ -247,7 +247,7 @@ export default class SettingsMigrator {
         // MIGRATION: set gallery flag on existing items
         if (old_version === 20250302.1) {
             new_version = 20250313.1;
-            this.ntb.debug("| - starting migration: " + old_version + " -> " + new_version);
+            this.ntb.debug("> - starting migration: " + old_version + " -> " + new_version);
             loaded_settings.toolbars?.forEach((tb: ToolbarSettings, index: number) => {
                 tb.items.forEach((_item: ToolbarItemSettings, item_index: number) => {
                     this.ntb.settings.toolbars[index].items[item_index].inGallery = false;
@@ -260,7 +260,7 @@ export default class SettingsMigrator {
         // MIGRATION: separated view `mode` visibility setting (remove "allViews" level)
         if (old_version === 20250313.1) {
             new_version = 20260122.1;
-            this.ntb.debug("| starting migration: " + old_version + " -> " + new_version);
+            this.ntb.debug("> starting migration: " + old_version + " -> " + new_version);
             loaded_settings.toolbars?.forEach((tb: ToolbarSettings, index: number) => {
                 tb.items.forEach((_item: ToolbarItemSettings, item_index: number) => {
                     const visibility = this.ntb.settings.toolbars[index].items[item_index].visibility as unknown as Record<string, { allViews?: unknown }>;
@@ -279,7 +279,7 @@ export default class SettingsMigrator {
         // MIGRATION: removed deprecated recent* settings (no longer needed) #542
         if (old_version === 20260122.1) {
             new_version = 20260428.1;
-            this.ntb.debug("| starting migration: " + old_version + " -> " + new_version);
+            this.ntb.debug("> starting migration: " + old_version + " -> " + new_version);
             //@ts-expect-error: property may not exist
             delete this.ntb.settings.recentFiles;
             //@ts-expect-error: property may not exist
@@ -293,7 +293,7 @@ export default class SettingsMigrator {
         // MIGRATION: removed deprecated ribbon* settings (using new ribbon settings for toolbars and toolbar items) #567
         if (old_version === 20260428.1) {
             new_version = 20260703.1;
-            this.ntb.debug("| starting migration: " + old_version + " -> " + new_version);
+            this.ntb.debug("> starting migration: " + old_version + " -> " + new_version);
             delete this.ntb.settings.ribbonAction;
             delete this.ntb.settings.ribbonToolbar;
             // for the next migration to run
@@ -303,12 +303,12 @@ export default class SettingsMigrator {
         // MIGRATION: folder mappings to rules
         if (old_version === 20260703.1) {
             new_version = 20260812.1;
-            this.ntb.debug("| starting migration: " + old_version + " -> " + new_version);
+            this.ntb.debug("> starting migration: " + old_version + " -> " + new_version);
 
             // for each folder mapping
             loaded_settings.folderMappings?.forEach((mapping, index) => {
                 if (!mapping.toolbar || !mapping.folder) {
-                    this.ntb.debug("| ", index, mapping, "⚠️ SKIPPED: no toolbar or folder defined");
+                    this.ntb.debug("> ", index, mapping, "⚠️ SKIPPED: no toolbar or folder defined");
                     return;
                 }
                 // create a rule with a folder condition
@@ -324,7 +324,7 @@ export default class SettingsMigrator {
                     toolbar: mapping.toolbar
                 };
                 loaded_settings.rules.push(newRule);
-                this.ntb.debug('| ', index, mapping, '->', newRule);
+                this.ntb.debug('> ', index, mapping, '->', newRule);
             });
             // keep the mappings for now; do not delete
             // delete this.ntb.settings.folderMappings;
@@ -336,7 +336,7 @@ export default class SettingsMigrator {
         // COMMENT THIS OUT while testing new migration code
         this.ntb.settings.version = SETTINGS_VERSION;
 
-        this.ntb.debug("| migrated settings:", this.ntb.settings);
+        this.ntb.debug("> migrated settings:", this.ntb.settings);
 
     }
     

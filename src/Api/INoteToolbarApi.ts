@@ -371,7 +371,7 @@ export default interface INoteToolbarApi<T> {
     /**
      * Opens a sidebar view with the given content.
      * 
-     * @param content Text or file content to display.
+     * @param content Text content (rendered as markdown), file, or URL to display.
      * @param options Optional display options.
      * @returns Nothing.
      * 
@@ -390,10 +390,16 @@ export default interface INoteToolbarApi<T> {
      * // show a string, creating a new sidebar view each time
      * await ntb.sidebar(`*It is now:*\n${new Date()}`, { reuse: false });
      * 
+     * @example
+     * // show a string, in the same sidebar, with an icon, title, and navigation
+     * ntb.sidebar(`*It is now:*\n${new Date()}`, {
+     *   append: '', viewIcon: 'calendar', viewTitle: 'Dates', navigation: ['clear', 'export', 'close']
+     * });
+     * 
      * @since 1.35
      * @group UI Components
      */
-    sidebar: (content: string | TFile, options?: NtbSidebarOptions) => Promise<void>;
+    sidebar: (content: string | TFile | URL, options?: NtbSidebarOptions) => Promise<void>;
 
     /**
      * Shows a suggester modal and waits for the user's selection.
@@ -548,7 +554,7 @@ export interface NtbMenuItem {
  */
 export interface NtbMenuOptions {
     /**
-     * Optional CSS class(es) to add to the component.
+     * Optional CSS class(es) to add to the component, separated by spaces.
      */
     class?: string;
     /**
@@ -578,7 +584,7 @@ export interface NtbMenuOptions {
  */
 export interface NtbModalOptions {
     /**
-     * Optional CSS class(es) to add to the component.
+     * Optional CSS class(es) to add to the component, separated by spaces.
      */
     class?: string;
     /**
@@ -628,7 +634,7 @@ export interface NtbPromptOptions {
      */
     default?: string;
     /**
-     * Optional CSS class(es) to add to the component.
+     * Optional CSS class(es) to add to the component, separated by spaces.
      */
     class?: string;
 }
@@ -643,11 +649,27 @@ export interface NtbSidebarOptions {
      */
     active?: boolean;
     /**
+     * Append text content using a provided separator string, instead of replacing it.
+     * Only applies when a sidebar is being reused.
+     * @since 1.36
+     */
+    append?: string;
+    /**
+     * Optional CSS class(es) to add to the sidebar, separated by spaces.
+     * @since 1.36
+     */
+    class?: string;
+    /**
      * Uniquely identify the sidebar view for reuse. When set, only a sidebar with the same ID is reused.
      */
     id?: string;
     /**
-     * Reuse an existing sidebar view instead of creating a new one. Ignored when `id` is set.
+     * Navigation buttons to show in the sidebar. Can only be set once per sidebar. Defaults to adding no buttons.
+     * @since 1.36
+     */
+    navigation?: ('clear' | 'close' | 'export')[];
+    /**
+     * Reuse an existing sidebar view instead of creating a new one. Ignored when `id` is set. Defaults to `true`.
      */
     reuse?: boolean;
     /**
@@ -659,11 +681,11 @@ export interface NtbSidebarOptions {
      */
     split?: boolean;
     /**
-     * Sets the icon for the sidebar view. Can only be set once.
+     * Sets the icon for the sidebar view. Can only be set once per sidebar.
      */
     viewIcon?: string;
     /**
-     * Sets the title for the sidebar view. Can only be set once.
+     * Sets the title for the sidebar view. Can only be set once per sidebar.
      */
     viewTitle?: string;
 }
@@ -678,7 +700,7 @@ export interface NtbSuggesterOptions {
      */
     allowCustomInput?: boolean;
     /**
-     * Optional CSS class(es) to add to the component.
+     * Optional CSS class(es) to add to the component, separated by spaces.
      */
     class?: string;
     /**
@@ -742,7 +764,7 @@ export interface NtbSuggesterOptions {
  */
 export interface NtbToolbarOptions {
     /**
-     * Optional CSS class(es) to add to the component.
+     * Optional CSS class(es) to add to the component, separated by spaces.
      */
     class?: string;
     /**

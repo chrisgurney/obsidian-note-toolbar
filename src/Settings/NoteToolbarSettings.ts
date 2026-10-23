@@ -1,4 +1,4 @@
-import { getLanguage, PaneType } from "obsidian";
+import { getLanguage, PaneType, TFile } from "obsidian";
 import { SETTINGS_VERSION } from "version";
 
 // *****************************************************************************
@@ -125,6 +125,7 @@ export const enum SettingType {
 	Ignore = 'ignore',
 	Script = 'script',
 	Text = 'text',
+	TextWithVars = 'textwithvars',
 	TextArea = 'textarea',
 	Toolbar = 'toolbar',
 }
@@ -228,9 +229,17 @@ export const enum ToolbarStyle {
 	ItemFocused = 'tbar-item-focused'
 }
 
+/**
+ * Defines how to handle errors from user scripts.
+ */
 export const enum ErrorBehavior {
+	/** Shows a notice, outputs to console, and may return error as a result. */
 	Display = 'display',
+	/** Shows a notice, and outputs to console. */
 	Report = 'report',
+	/** outputs to console. */
+	Console = 'console',
+	/** Ignores error. */
 	Ignore = 'ignore'
 }
 
@@ -718,6 +727,21 @@ export interface ScriptConfig {
 	outputFile?: string;
 	postCommand?: string;
 };
+
+/**
+ * Used to indicate more precisely what triggered script and variable errors.
+ */
+export interface ScriptContext {
+	adapterFunction?: string;
+	/** callout, or part of an item where variables can be used */
+	component?: 'callout' | 'label' | 'tooltip' | 'URI';
+	errorBehavior: ErrorBehavior;
+	/** error object from adapter, if provided, e.g., `JsExecution` */
+	errorObject?: unknown;
+	item?: ToolbarItemSettings;
+	scriptFile?: TFile | string;
+	toolbar?: ToolbarSettings;
+}
 
 export const COMMAND_DOES_NOT_EXIST = 'COMMAND_DOES_NOT_EXIST';
 
