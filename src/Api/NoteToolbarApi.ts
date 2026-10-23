@@ -94,7 +94,7 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
     ): Promise<TAbstractFile | null> {
 
         if (!Array.isArray(files)) {
-            new Notice(t('api.ui.error-missing-property', {property: 'files'}), 5000).containerEl.addClass('mod-warning');
+            this.reportError(new Error(t('api.ui.error-missing-property', {property: 'files'})), 'ntb.fileSuggester()');
             return null;
         }
 
@@ -249,14 +249,14 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
                 menu = await this.ntb.render.renderAsMenu(toolbar, activeFile);
             }
             else {
-                new Notice(t('api.msg.toolbar-not-found', {toolbar: toolbarOrItems})).containerEl.addClass('mod-warning');
+                this.reportError(new Error(t('api.msg.toolbar-not-found', {toolbar: toolbarOrItems})), 'ntb.menu()');
                 return;
             }
         }
         else {
             toolbarOrItems.map((item: NtbMenuItem) => {
                 const missingProp = requiredProps.find(p => !item[p]);
-                if (missingProp) new Notice(t('api.ui.error-missing-property', {property: item.type}), 5000).containerEl.addClass('mod-warning');
+                if (missingProp) this.reportError(new Error(t('api.ui.error-missing-property', {property: missingProp})), 'ntb.menu()');
                 menu.addItem((menuItem: MenuItem) => {
                     menuItem
                         .setTitle(item.label)
@@ -487,7 +487,7 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
 
         if (options?.append !== undefined && leaf.view instanceof NtbSidebarView) {
             if (viewContent instanceof TFile) {
-                throw new Error('sidebar: Unable to open files with `append` option.');
+                throw new Error(t('api.error.sidebar-append-file'));
             }
             else {
                 await leaf.view.append(viewContent, options.append);
@@ -557,7 +557,7 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
 
         const toolbar = this.ntb.settingsManager.getToolbar(toolbarNameOrId);
         if (!toolbar) {
-            new Notice(t('api.msg.toolbar-not-found', {toolbar: toolbarNameOrId})).containerEl.addClass('mod-warning');
+            this.reportError(new Error(t('api.msg.toolbar-not-found', {toolbar: toolbarNameOrId})), 'ntb.toolbar()');
             return;
         }
 
