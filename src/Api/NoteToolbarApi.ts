@@ -45,7 +45,13 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
     async append(content: string, options?: AppendOptions): Promise<void> {
         const file = options?.file ?? this.app.workspace.getActiveFile();
 
-        if (!(file instanceof TFile) || file.extension !== 'md') return;
+        if (!(file instanceof TFile)) {
+            throw new Error(t('api.error.no-active-file'));
+        }
+
+        if (file.extension !== 'md') {
+            throw new Error(t('api.error.file-not-markdown', { filename: file.path }));
+        }
 
         const separator = file.stat.size > 0
             ? options?.separator ?? '\n\n'
@@ -379,15 +385,17 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
      */
     async setProperty(property: string, value: unknown) {
         const activeFile = this.ntb.app.workspace.getActiveFile();
-        if (activeFile) {
-            await this.ntb.app.fileManager.processFrontMatter(activeFile, (frontmatter: Record<string, unknown>) => {
-                (value === null) ? delete frontmatter[property] : frontmatter[property] = value;
-                // update the toolbar immediately
-                if (property === this.ntb.settings.toolbarProp) {
-                    void this.ntb.listeners.metadata.renderToolbar(activeFile, frontmatter);
-                }
-            });
+        if (!activeFile) {
+            this.reportError(new Error(t('api.error.no-active-file')), 'ntb.setProperty()');
+            return;
         }
+        await this.ntb.app.fileManager.processFrontMatter(activeFile, (frontmatter: Record<string, unknown>) => {
+            (value === null) ? delete frontmatter[property] : frontmatter[property] = value;
+            // update the toolbar immediately
+            if (property === this.ntb.settings.toolbarProp) {
+                void this.ntb.listeners.metadata.renderToolbar(activeFile, frontmatter);
+            }
+        });
     }
 
     /**
@@ -397,7 +405,9 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
      */
     setSelection(replacement: string) {
         const editor = this.ntb.app.workspace.activeEditor?.editor;
-        if (!editor) return;
+        if (!editor) {
+            throw new Error(t('api.error.no-active-editor'));
+        }
         
         const selection = editor.getSelection();
 
@@ -471,7 +481,7 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
                 : this.app.workspace.getRightLeaf(options?.split ?? false);
             
             if (!leaf) {
-                return;
+                throw new Error(t('api.error.sidebar-no-leaf'));
             }
         }
 

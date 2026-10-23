@@ -122,8 +122,12 @@
     },
     "api": {
         "error": {
+            "file-not-markdown": "File must be markdown: {{filename}}",
+            "no-active-editor": "No active editor.",
+            "no-active-file": "No active file.",
             "sidebar-append-file": "ntb.sidebar: Unable to open files with `append` option.",
-            "sidebar-content-undefined": "ntb.sidebar: No content provided to render."
+            "sidebar-content-undefined": "ntb.sidebar: No content provided to render.",
+            "sidebar-no-leaf": "Unable to create a sidebar."
         },
         "item": {
             "error-invalid-icon": "Invalid icon ID: {{iconId}}"
