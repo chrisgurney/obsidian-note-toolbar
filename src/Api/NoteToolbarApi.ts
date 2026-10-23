@@ -3,7 +3,7 @@ import NoteToolbarPlugin from "main";
 import { ScriptLoader } from "Adapters/ScriptLoader";
 import * as Obsidian from "obsidian";
 import { App, Menu, MenuItem, Modal, normalizePath, Notice, TAbstractFile, TFile, TFolder, WorkspaceLeaf } from "obsidian";
-import { LocalVar, PositionType, t } from "Settings/NoteToolbarSettings";
+import { ErrorBehavior, LocalVar, PositionType, t } from "Settings/NoteToolbarSettings";
 import { exportToCalloutById } from "Utils/ImportExport";
 import { putFocusInMenu } from "Utils/Utils";
 import INoteToolbarApi, { AppendOptions, GetSelectionOptions, NtbFileSuggesterOptions, NtbMenuItem, NtbMenuOptions, NtbModalOptions, NtbPromptOptions, NtbSidebarOptions, NtbSuggesterOptions, NtbToolbarOptions } from "./INoteToolbarApi";
@@ -151,7 +151,8 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
         try {
             return await promise;
         } 
-        catch {
+        catch (error) {
+            this.reportError(error, 'ntb.fileSuggester()', ErrorBehavior.Console);
             return null;
         }
 
@@ -354,7 +355,7 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
             return await promise;
         }
         catch (error) {
-            this.ntb.error(error);
+            this.reportError(error, 'ntb.prompt()', ErrorBehavior.Console);
             return null;
         }
 
@@ -534,7 +535,7 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
             return await promise;
         } 
         catch (error) {
-            this.ntb.error(error);
+            this.reportError(error, 'ntb.suggester()', ErrorBehavior.Console);
             return null as unknown as T;
         }
 
@@ -592,6 +593,14 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
         );
 
         this.sidebarRegistered = true;
+    }
+
+    /**
+     * Reports an error the API itself owns (i.e. there is no executing script context to report it)
+     * through the standard error handling path, using the API function as the context.
+     */
+    private reportError(error: unknown, adapterFunction: string, errorBehavior: ErrorBehavior = ErrorBehavior.Report) {
+        this.ntb.adapters.utils.handleError(error, { adapterFunction: adapterFunction, errorBehavior: errorBehavior });
     }
 
 }

@@ -28,7 +28,7 @@ export default class AdapterManager {
 	jsEngine: JsEngineAdapter | undefined;
 	tp: TemplaterAdapter | undefined;
 
-    utils: AdapterUtils;
+    public utils: AdapterUtils;
 
     constructor(
         private ntb: NoteToolbarPlugin
