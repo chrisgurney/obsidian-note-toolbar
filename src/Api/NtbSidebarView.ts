@@ -170,11 +170,6 @@ export class NtbSidebarView extends ItemView {
         this.state = state;
         await this.render();
     }
-    
-    async setState(state: NtbSidebarViewState, _result: ViewStateResult): Promise<void> {
-        this.state = state;
-        await this.display(this.state.content);
-    }
 
     async onOpen(): Promise<void> {}
 
