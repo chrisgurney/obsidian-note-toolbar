@@ -8,6 +8,7 @@
   "scripts": {
     "analyze": "tsc --noEmit --skipLibCheck && node esbuild.config.mjs analyze",
     "build": "tsc --noEmit --skipLibCheck && node esbuild.config.mjs production",
+    "check-install": "npm ci --dry-run",
     "dev": "npm run prebuild && node esbuild.config.mjs",
     "lint": "npx eslint .",
     "prebuild": "node build/generate-version.mjs",
