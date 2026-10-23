@@ -20,7 +20,15 @@ export class ScriptLoader {
         if (!file) {
             throw new Error(t('adapter.error.file-not-found_load', { filename: path }));
         }
-        const contents = await this.ntb.app.vault.cachedRead(file);
+        let contents: string;
+        try {
+            contents = await this.ntb.app.vault.cachedRead(file);
+        }
+        catch (error) {
+            throw this.ntb.adapters.utils.getScriptError(error, file, 
+                'Error in script loaded by ntb.loadScript(): '
+            );
+        }
         // this.ntb.debug('evaluating:', contents);
         return this.evaluate<T>(contents, file);
     }
@@ -47,8 +55,9 @@ export class ScriptLoader {
             return await func(this.ntb.api) as T;
         }
         catch (error) {
-            const notes = 'Error in script loaded by ntb.loadScript(): ';
-            throw this.ntb.adapters.utils.getScriptError(error, sourceFile, notes);
+            throw this.ntb.adapters.utils.getScriptError(error, sourceFile, 
+                'Error in script loaded by ntb.loadScript(): '
+            );
         }
     }
 

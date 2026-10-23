@@ -231,7 +231,15 @@ export default class DataviewAdapter extends Adapter {
             return;
         }
 
-        let contents = await this.ntb.app.vault.cachedRead(scriptFile);
+        let contents: string;
+        try {
+            contents = await this.ntb.app.vault.cachedRead(scriptFile);
+        }
+        catch (error) {
+            // the file may have been deleted or moved since checkFile above
+            this.ntb.adapters.utils.handleError(error, errorContext);
+            return;
+        }
         if (!contents.trim()) {
             this.ntb.adapters.utils.handleError(t('adapter.error.file-empty', { filename: filename }), errorContext);
             return;

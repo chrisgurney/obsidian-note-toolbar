@@ -230,19 +230,24 @@ export default class ToolbarItemHandler {
             return;
         }
         let result;
-        switch (type) {
-            case ItemType.Dataview:
-                result = await this.ntb.adapters.dv?.use(scriptConfig, context);
-                break;
-            case ItemType.JavaScript:
-                result = await this.ntb.adapters.js?.use(scriptConfig, context);
-                break;
-            case ItemType.JsEngine:
-                result = await this.ntb.adapters.jsEngine?.use(scriptConfig, context);
-                break;
-            case ItemType.Templater:
-                result = await this.ntb.adapters.tp?.use(scriptConfig, context);
-                break;
+        try {
+            switch (type) {
+                case ItemType.Dataview:
+                    result = await this.ntb.adapters.dv?.use(scriptConfig, context);
+                    break;
+                case ItemType.JavaScript:
+                    result = await this.ntb.adapters.js?.use(scriptConfig, context);
+                    break;
+                case ItemType.JsEngine:
+                    result = await this.ntb.adapters.jsEngine?.use(scriptConfig, context);
+                    break;
+                case ItemType.Templater:
+                    result = await this.ntb.adapters.tp?.use(scriptConfig, context);
+                    break;
+            }
+        }
+        catch (error) {
+            this.ntb.adapters.utils.handleError(error, { ...context, adapterFunction: `${type} ${scriptConfig.pluginFunction}` });
         }
         if (result) insertTextAtCursor(this.ntb.app, result);
 

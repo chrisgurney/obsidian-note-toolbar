@@ -132,7 +132,12 @@ export default class TemplaterAdapter extends Adapter {
         }
 
         if (config.postCommand) {
-            await this.ntb.app.commands.executeCommandById(config.postCommand);
+            try {
+                await this.ntb.app.commands.executeCommandById(config.postCommand);
+            }
+            catch (error) {
+                this.ntb.adapters.utils.handleError(error, errorContext);
+            }
         }
 
         return result;
@@ -153,7 +158,12 @@ export default class TemplaterAdapter extends Adapter {
             // showing notice as errors are not thrown from Templater's code, and there's no feasible way to check success
             new Notice(t('adapter.templater.append-function') + ':\n' + templateFile.path);
             this.ntb.debug('Note Toolbar: Using:', this.ntb.adapters.utils.formatContext(errorContext));
-            await this.adapterApi.append_template_to_active_file(templateFile);
+            try {
+                await this.adapterApi.append_template_to_active_file(templateFile);
+            }
+            catch (error) {
+                this.ntb.adapters.utils.handleError(error, errorContext);
+            }
         }
 
         return ''; // required to satisfy function signature
@@ -193,7 +203,12 @@ export default class TemplaterAdapter extends Adapter {
             // showing notice as errors are not thrown from Templater's code, and there's no feasible way to check success
             new Notice(t('adapter.templater.create-function') + ':\n' + templateFile.path);
             this.ntb.debug('Note Toolbar: Using:', this.ntb.adapters.utils.formatContext(errorContext));
-            await this.adapterApi.create_new_note_from_template(templateFile, outputFolder, outputFilename);
+            try {
+                await this.adapterApi.create_new_note_from_template(templateFile, outputFolder, outputFilename);
+            }
+            catch (error) {
+                this.ntb.adapters.utils.handleError(error, errorContext);
+            }
         }
 
         return ''; // required to satisfy function signature
