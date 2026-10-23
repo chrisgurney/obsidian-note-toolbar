@@ -28,7 +28,7 @@ Out of scope:
 Please **do not** open a public GitHub issue for security vulnerabilities.
 
 Instead, report them via one of:
-- **GitHub private vulnerability reporting**: use the "Report a vulnerability" button under the Security tab of this repo
+- **GitHub private vulnerability reporting**: use the [Report a vulnerability](https://github.com/chrisgurney/obsidian-note-toolbar/security/advisories/new) button under the Security tab of this repo
 - **Google form**: [Submit the issue here](https://docs.google.com/forms/d/e/1FAIpQLSf_cABJLmNqPm-2DjH6vcxyuYKNoP-mmeyk8_vph8KMZHDSyg/viewform) if you don't have a GitHub account
 
 Include as much detail as you can:

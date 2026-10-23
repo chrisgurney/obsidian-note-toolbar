@@ -241,10 +241,12 @@ export default class NoteToolbarPlugin extends Plugin {
 		// setup debug functions, preserving line numbers
 		if (this.settings.debugEnabled) {
 			this.debug = console.debug.bind(console);
+			this.warn = console.warn.bind(console);
 		}
 		// otherwise do nothing when debug functions are called
 		else {
 			this.debug = (..._args: unknown[]) => {};
+			this.warn = (..._args: unknown[]) => {};
 		}
 	}
 
