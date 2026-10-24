@@ -1,7 +1,7 @@
 import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, DEFAULT_ITEM_SETTINGS, DEFAULT_SETTINGS, ItemType, LocalVar, NONE_TOOLBAR, NONE_TOOLBAR_ID, NoteToolbarSettings, Position, PositionType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { getUUID, isUuid } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
-import { Platform } from "obsidian";
+import { normalizePath, Notice, Platform } from "obsidian";
 import { PLUGIN_VERSION, SETTINGS_VERSION } from "version";
 import SettingsMigrator from "./SettingsMigrator";
 import ToolbarSettingsModal from "./UI/Modals/ToolbarSettingsModal";
@@ -541,6 +541,71 @@ export default class SettingsManager {
 		}
 
 		this.ntb.debug("SETTINGS SAVED: " + new Date().getTime());
+	}
+
+	/**
+	 * Copies the plugin's settings file (data.json), exactly as it is on disk, into the vault, 
+	 * so it can be attached to a support report or restored manually. 
+	 * Current settings are NOT saved first, so the copy captures the stored file as-is.
+	 * Used by the settings UI, and exposed to scripts as `ntb.exportSettings()`.
+	 * @param filename optional file name, or vault-relative path, for the copy.
+	 * A name without a folder is placed in the default backups folder, and `.json` is added if 
+	 * no extension is provided. If omitted, a timestamped name in the default backups folder is used.
+	 * An existing file is never overwritten: a number is appended to the name instead.
+	 * @returns the vault path of the backup copy
+	 */
+	public async exportSettings(filename?: string): Promise<string> {
+
+		const adapter = this.ntb.app.vault.adapter;
+
+		const pluginFolder = this.ntb.manifest.dir ?? `${this.ntb.app.vault.configDir}/plugins/${this.ntb.manifest.id}`;
+		const dataFilePath = normalizePath(`${pluginFolder}/data.json`);
+		if (!(await adapter.exists(dataFilePath))) {
+			throw new Error('Note Toolbar settings file was not found.');
+		}
+
+		const backupFolder = 'Note Toolbar Backups';
+		let backupPath: string;
+		const requestedName = filename?.trim();
+		if (requestedName) {
+			const normalized = normalizePath(requestedName);
+			if (normalized.split('/').some(part => part === '..')) {
+				throw new Error('Note Toolbar backup filename must be a path inside the vault.');
+			}
+			const withExtension = normalized.toLowerCase().endsWith('.json') ? normalized : `${normalized}.json`;
+			backupPath = withExtension.includes('/') ? withExtension : `${backupFolder}/${withExtension}`;
+		}
+		else {
+			const timestamp = new Date().toISOString().replace('T', '-').replace(/[:.]/g, '-');
+			backupPath = `${backupFolder}/note-toolbar-settings-${timestamp}.json`;
+		}
+
+		// create the folder the copy is going into, if it doesn't exist yet
+		const targetFolder = backupPath.split('/').slice(0, -1).join('/');
+		if (targetFolder) {
+			let currentPath = '';
+			for (const part of targetFolder.split('/')) {
+				currentPath = currentPath ? `${currentPath}/${part}` : part;
+				const stat = await adapter.stat(currentPath);
+				if (stat?.type === 'file') {
+					throw new Error(`Note Toolbar backup folder cannot be created because ${currentPath} is a file.`);
+				}
+				if (!stat) await adapter.mkdir(currentPath);
+			}
+		}
+
+		// never overwrite an existing file
+		const fileBase = backupPath.slice(0, -'.json'.length);
+		let uniquePath = backupPath;
+		let copyNumber = 2;
+		while (await adapter.exists(uniquePath)) {
+			uniquePath = `${fileBase}-${copyNumber}.json`;
+			copyNumber++;
+		}
+
+		await adapter.copy(dataFilePath, uniquePath);
+		return uniquePath;
+
 	}
 
 }

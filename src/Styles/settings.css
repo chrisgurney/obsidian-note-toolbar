@@ -75,6 +75,10 @@
     & .setting-item-name {
         color: var(--text-error);
     }
+    &.setting-group {
+        padding: 0;
+        margin-bottom: var(--size-4-4);
+    }
 }
 
 .note-toolbar-setting-plugin-onboarding,

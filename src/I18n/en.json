@@ -505,10 +505,15 @@
             "description": "Define which notes to display toolbars on.",
             "name": "Display rules"
         },
-        "error-old-settings-description": "Old settings file loaded ({{oldVersion}}) but latest is {{currentVersion}}",
-        "error-old-settings-name": "⚠️ Error: Please disable and re-enable Note Toolbar, or restart Obsidian.",
+        "error-backup-settings-description": "Back up your Note Toolbar settings to a folder in your vault. If restarting Obsidian doesn't help and you need to report this problem, attach this to your issue to help us investigate the issue.",
+        "error-backup-settings-button": "Back up settings",
+        "error-backup-settings-success": "Note Toolbar: Settings backed up to:\n{{-path}}",
+        "error-backup-settings-failed": "Note Toolbar: Failed to back up settings; please check the console for details.",
         "error-invalid-floating-toolbar": "Note Toolbar: Floating toolbar does not exist. Check your settings.",
         "error-invalid-text-toolbar": "Note Toolbar: Selected text toolbar does not exist. Check your settings.",
+        "error-migration-failed": "Note Toolbar: Failed to update settings to the latest version. Your existing settings have been kept. Please open Note Toolbar's settings for more information.",
+        "error-old-settings-description": "Old settings file loaded ({{oldVersion}}) but latest is {{currentVersion}}",
+        "error-old-settings-name": "⚠️ Error: Please disable and re-enable Note Toolbar, or restart Obsidian.",
         "help": {
             "button-close": "Close",
             "button-donate": "Donate ↗",

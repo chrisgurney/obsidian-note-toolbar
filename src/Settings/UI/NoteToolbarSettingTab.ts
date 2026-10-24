@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from 'main';
-import { ButtonComponent, debounce, Menu, MenuItem, Platform, PluginSettingTab, setIcon, Setting, SettingGroup, ToggleComponent } from 'obsidian';
+import { ButtonComponent, debounce, Menu, MenuItem, Notice, Platform, PluginSettingTab, setIcon, Setting, SettingGroup, ToggleComponent } from 'obsidian';
 import { FILE_TYPE_OPTIONS, OBSIDIAN_UI_ELEMENTS, OBSIDIAN_UI_MOBILE_NAVBAR_OPTIONS, SettingType, t, VIEW_TYPE_GALLERY } from 'Settings/NoteToolbarSettings';
 import IconSuggestModal from 'Settings/UI/Modals/IconSuggestModal';
 import ToolbarSuggester from 'Settings/UI/Suggesters/ToolbarSuggester';
@@ -57,11 +57,30 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		containerEl.addClass('note-toolbar-setting-ui');
 
 		if (this.ntb.settings.version !== SETTINGS_VERSION) {
-			new Setting(containerEl)
-				.setName(t('setting.error-old-settings-name'))
-				.setDesc(t('setting.error-old-settings-description', { oldVersion: this.ntb.settings.version + '', currentVersion: SETTINGS_VERSION + '' }))
-				.setClass('note-toolbar-setting-plugin-error')
-				.setHeading();
+			const errorGroup = new SettingGroup(containerEl);
+			errorGroup.addClass('note-toolbar-setting-plugin-error');
+			errorGroup.addSetting((setting) => {
+				setting
+					.setName(t('setting.error-old-settings-name'))
+					.setDesc(t('setting.error-old-settings-description', { oldVersion: this.ntb.settings.version + '', currentVersion: SETTINGS_VERSION + '' }));
+			});
+			errorGroup.addSetting((setting) => {
+				setting
+					.setDesc(t('setting.error-backup-settings-description'))
+					.addButton((button: ButtonComponent) => button
+						.setButtonText(t('setting.error-backup-settings-button'))
+						.setCta()
+						.onClick(async () => {
+							try {
+								const backupPath = await this.ntb.settingsManager.exportSettings();
+								new Notice(t('setting.error-backup-settings-success', { path: backupPath }), 10000).containerEl.addClass('mod-success');
+							}
+							catch (error) {
+								this.ntb.error('Note Toolbar: failed to back up settings.', error);
+								new Notice(t('setting.error-backup-settings-failed'), 10000).containerEl.addClass('mod-warning');
+							}
+						}));
+			});
 		}
 
 		// update status of installed plugins, for any settings that depend on them
