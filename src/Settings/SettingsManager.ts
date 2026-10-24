@@ -497,7 +497,7 @@ export default class SettingsManager {
 		}
 		catch (error) {
 			// could not read the stored settings at all; fall back to defaults below, without overwriting what's on disk;
-			// using conosle as ntb.error isn't guaranteed to exist yet
+			// using console.error, as ntb.error isn't guaranteed to exist yet
 			console.error('Note Toolbar: failed to load settings; starting with defaults.', error);
 		}
 		this.ntb.settings = Object.assign({}, DEFAULT_SETTINGS, loaded_settings);
