@@ -661,6 +661,7 @@ export interface NtbPromptOptions {
     class?: string;
     /**
      * Optional text shown above the text field. Same as `label`.
+     * @since 1.36
      */
     title?: string;
 }
@@ -784,6 +785,7 @@ export interface NtbSuggesterOptions {
     rendermd?: boolean;
     /**
      * Optional text shown above the input field. Same as `label`.
+     * @since 1.36
      */
     title?: string;
 }
