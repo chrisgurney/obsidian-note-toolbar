@@ -323,11 +323,16 @@ export default class SettingsMigrator {
                     }],
                     toolbar: mapping.toolbar
                 };
+                // settings from before `rules` existed have no rules array to push to
+                loaded_settings.rules ??= [];
                 loaded_settings.rules.push(newRule);
                 this.ntb.debug('> ', index, mapping, '->', newRule);
             });
             // keep the mappings for now; do not delete
             // delete this.ntb.settings.folderMappings;
+
+            // if a rules array had to be created above, settings still points at the default (empty) one
+            this.ntb.settings.rules = loaded_settings.rules;
 
             // for the next migration to run
             old_version = new_version;
