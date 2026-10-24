@@ -491,7 +491,15 @@ export default class SettingsManager {
 	 */
 	async load(): Promise<void> {
 
-		const loaded_settings = await this.ntb.loadData() as NoteToolbarSettings;
+		let loaded_settings: NoteToolbarSettings | null = null;
+		try {
+			loaded_settings = await this.ntb.loadData() as NoteToolbarSettings;
+		}
+		catch (error) {
+			// could not read the stored settings at all; fall back to defaults below, without overwriting what's on disk;
+			// using conosle as ntb.error isn't guaranteed to exist yet
+			console.error('Note Toolbar: failed to load settings; starting with defaults.', error);
+		}
 		this.ntb.settings = Object.assign({}, DEFAULT_SETTINGS, loaded_settings);
 		
 		// initialize debugging based on user preference
@@ -503,8 +511,18 @@ export default class SettingsManager {
 		// if we actually have existing settings for this plugin, and the old version does not match the current...
 		if (loaded_settings && (old_version !== SETTINGS_VERSION)) {
 			this.ntb.debug("SettingsManager: versions do not match: data.json: ", old_version, " !== latest: ", SETTINGS_VERSION);
-			const migrator = new SettingsMigrator(this.ntb);
-			migrator.run(loaded_settings, old_version);
+			try {
+				const migrator = new SettingsMigrator(this.ntb);
+				migrator.run(loaded_settings, loaded_settings.version);
+			}
+			catch (error) {
+				// a failed migration must not stop the plugin from loading, or destroy the user's settings:
+				// keep the settings as loaded (the migrator only stamps the new version once it completes),
+				// and don't save here, so the stored settings are left untouched for the next attempt
+				this.ntb.error('Note Toolbar: failed to migrate settings from version ' + old_version + '; continuing with settings as loaded.', error);
+				new Notice(t('setting.error-migration-failed'), 10000).containerEl.addClass('mod-warning');
+				return;
+			}
 			// don't render the initial toolbar, as managers + helpers may not be initialized yet
 			await this.save(false);
 		}
