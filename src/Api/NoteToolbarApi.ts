@@ -90,6 +90,17 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
     }
 
     /**
+     * Copies the plugin's settings file (`data.json`), exactly as it is stored,
+     * into the vault. Without a filename, the copy is given a timestamped name
+     * in the `Note Toolbar Backups` folder.
+     * 
+     * @see INoteToolbarApi.exportSettings
+     */
+    async exportSettings(filename?: string): Promise<string> {
+        return await this.ntb.settingsManager.exportSettings(filename);
+    }
+
+    /**
      * Shows a file suggester modal and waits for the user's selection. 
      * 
      * @see INoteToolbarApi.fileSuggester

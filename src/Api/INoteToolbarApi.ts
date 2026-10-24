@@ -85,6 +85,28 @@ export default interface INoteToolbarApi<T> {
     export: (toolbar: IToolbar) => Promise<string | null>;
 
     /**
+     * Copies the plugin's settings file (`data.json`), exactly as it is stored, into the vault.
+     * The current settings are not saved first, so the copy captures the stored file as-is.
+     * 
+     * @param filename Optional file name, or vault-relative path, for the copy. 
+     * A name without a folder is placed in the `Note Toolbar Backups` folder, and `.json` is added if no extension is provided.
+     * If omitted, a timestamped name in the `Note Toolbar Backups` folder is used. An existing file is never overwritten: 
+     * a number is appended to the name instead.
+     * @returns The vault path of the backup copy.
+     * 
+     * @example
+     * const backupPath = await ntb.exportSettings();
+     * 
+     * @example
+     * const name = await ntb.prompt({ label: 'Note Toolbar backup filename' });
+     * if (name) await ntb.exportSettings(name);
+     * 
+     * @group Utilities
+     * @since 1.36
+     */
+    exportSettings: (filename?: string) => Promise<string>;
+
+    /**
      * Shows a file suggester modal for the provided files and waits for the user's selection. Files are sorted by recency.
      * 
      * @param options Optional display options.

@@ -751,6 +751,42 @@ Since 1.33. Use `await activeWindow.navigator.clipboard.readText()` instead.
 
 ***
 
+### exportSettings
+
+> **exportSettings**: (`filename?`) => `Promise`\<`string`\>
+
+Copies the plugin's settings file (`data.json`), exactly as it is stored, into the vault.
+The current settings are not saved first, so the copy captures the stored file as-is.
+
+#### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `filename?` | `string` | Optional file name, or vault-relative path, for the copy. A name without a folder is placed in the `Note Toolbar Backups` folder, and `.json` is added if no extension is provided. If omitted, a timestamped name in the `Note Toolbar Backups` folder is used. An existing file is never overwritten: a number is appended to the name instead. |
+
+#### Returns
+
+`Promise`\<`string`\>
+
+The vault path of the backup copy.
+
+#### Examples
+
+```ts
+const backupPath = await ntb.exportSettings();
+```
+
+```ts
+const name = await ntb.prompt({ label: 'Note Toolbar backup filename' });
+if (name) await ntb.exportSettings(name);
+```
+
+#### Since
+
+1.36
+
+***
+
 ### o
 
 > **o**: `__module`
