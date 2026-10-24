@@ -637,6 +637,10 @@ export interface NtbPromptOptions {
      * Optional CSS class(es) to add to the component, separated by spaces.
      */
     class?: string;
+    /**
+     * Optional text shown above the text field. Same as `label`.
+     */
+    title?: string;
 }
 
 /**
@@ -756,6 +760,10 @@ export interface NtbSuggesterOptions {
      * Set to `false` to disable rendering of suggestions as markdown. Default is `true`.
      */
     rendermd?: boolean;
+    /**
+     * Optional text shown above the input field. Same as `label`.
+     */
+    title?: string;
 }
 
 /**

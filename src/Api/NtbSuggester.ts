@@ -58,7 +58,7 @@ export default class NtbSuggester<T> extends FuzzySuggestModal<T> {
         this.exact = options?.exact ?? false;
         this.icon = options?.icon ?? '';
         this.keymap = options?.keymap ?? [];
-        this.label = options?.label ?? '';
+        this.label = options?.label || options?.title || '';
         if (options?.limit) this.limit = options.limit;
         this.prefixes = options?.prefixes ?? {};
         this.rendermd = options?.rendermd ?? (hasValues ? true : false);

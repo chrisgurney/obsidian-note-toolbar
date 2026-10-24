@@ -38,10 +38,11 @@ export default class NtbPrompt extends Modal {
             large: multi_line = false,
             placeholder = multi_line ? t('api.ui.prompt-placeholder-large') : t('api.ui.prompt-placeholder'),
             default: default_value = '',
-            class: css_classes = ''
+            class: css_classes = '',
+            title: title_text = ''
         } = this.options || {};
 
-        this.label = label_text;
+        this.label = label_text || title_text;
         this.large = multi_line;
         this.placeholder = placeholder;
         this.default = default_value;
