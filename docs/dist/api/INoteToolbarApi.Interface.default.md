@@ -171,7 +171,7 @@ await ntb.setProperty('Delete Me', null);
 
 Replaces the selection, the word at the cursor, or inserts at the cursor if neither exists.
 
-Error behavior: throws synchronously with no active editor.
+Error behavior: throws with no active editor.
 
 #### Parameters
 

@@ -381,7 +381,7 @@ export default interface INoteToolbarApi<T> {
     /**
      * Replaces the selection, the word at the cursor, or inserts at the cursor if neither exists.
      * 
-     * Error behavior: throws synchronously with no active editor.
+     * Error behavior: throws with no active editor.
      * 
      * @param replacement The text to replace the selection with.
      * @remarks This does not do anything in Reading mode.
