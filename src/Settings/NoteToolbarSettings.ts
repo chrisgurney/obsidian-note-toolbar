@@ -68,17 +68,17 @@ export const enum FileType {
 }
 // note: can't make this a constant as it's used in Object.values()
 export enum ItemType {
-	Additional = 'additional', // used for Gallery items that are provided as examples externally
+	Additional = 'additional', // internal: used for Gallery items that are provided as examples externally
 	Break = 'break',
 	Command = 'command',
 	Dataview = 'dataview',
 	File = 'file',
-	Folder = 'folder',
+	Folder = 'folder', // internal
 	Group = 'group',
 	JavaScript = 'javascript',
 	JsEngine = 'js-engine',
 	Menu = 'menu',
-	Plugin = 'plugin', // used for Gallery items that rely on plugins
+	Plugin = 'plugin', // internal: used for Gallery items that rely on plugins
 	Separator = 'separator',
 	Spreader = 'spreader',
 	Templater = 'templater-obsidian',
