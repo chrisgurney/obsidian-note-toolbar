@@ -348,7 +348,7 @@ const context = await esbuild.context({
 		apiDocsPlugin, 
 		cliDocsPlugin,
 		galleryDocsPlugin, 
-		typecheckPlugin, 
+		...(build_prod ? [] : [typecheckPlugin]),
 		eslintPlugin, 
 		stylelintPlugin,
 		copyToWikiPlugin, 
