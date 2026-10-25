@@ -16,6 +16,8 @@ Functions for reading and manipulating notes in the vault.
 
 Appends the given content to the current file.
 
+Error behavior: throws with no active file, or if the file is not markdown. Await it (or catch it).
+
 #### Parameters
 
 | Parameter | Type | Description |
@@ -137,6 +139,8 @@ new Notice(selected);
 
 Sets the given property's value in the active note. Set the property to `null` to remove it.
 
+Error behavior: does not throw. With no active note, it reports the error and returns.
+
 #### Parameters
 
 | Parameter | Type | Description |
@@ -166,6 +170,8 @@ await ntb.setProperty('Delete Me', null);
 > **setSelection**: (`replacement`) => `void`
 
 Replaces the selection, the word at the cursor, or inserts at the cursor if neither exists.
+
+Error behavior: throws synchronously with no active editor.
 
 #### Parameters
 
@@ -536,6 +542,8 @@ new Notice(result);
 > **sidebar**: (`content`, `options?`) => `Promise`\<`void`\>
 
 Opens a sidebar view with the given content.
+
+Error behavior: throws with no content, no sidebar leaf, or `append` with file content. Await it (or catch it).
 
 #### Parameters
 
