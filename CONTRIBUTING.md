@@ -240,3 +240,19 @@ Cover each item in the pull request description. The template uses the same chec
 - [ ] No release steps: do not push tags to upstream, and do not run `npm run release`.
 
 The UI item applies only when the UI changed. Put the desktop-only note, known limitations, and follow-up work under Additional context in the template.
+
+## Commit messages
+
+Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/), loosely.
+
+| Type | Use |
+| --- | --- |
+| `build:` | Build, CI, and tooling |
+| `chore:` | Small maintenance |
+| `docs:` | Documentation |
+| `feat:` | New feature |
+| `fix:` | Bug fix |
+| `refactor:` | Code change with no behaviour change |
+| `style:` | Formatting only |
+
+A scope such as `API:` after the type is common. Strict Conventional Commits uses parentheses, such as `feat(api):`, but either form is acceptable. This is a convention only, not checked by CI.
