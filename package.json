@@ -12,6 +12,7 @@
     "dev": "npm run prebuild && node esbuild.config.mjs",
     "lint": "npx eslint .",
     "prebuild": "node build/generate-version.mjs",
+    "prelint": "node build/generate-version.mjs",
     "pretypecheck": "node build/generate-version.mjs",
     "release": "node build/release.mjs",
     "stylelint": "npx stylelint '**/*.css'",
