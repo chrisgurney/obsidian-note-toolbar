@@ -118,13 +118,9 @@ const apiDocsPlugin = {
 
 			// generate wiki output
 			try {
-				// inline linked files
-				if (fileInliner(`${DOC_WIKI_INPUT}/Note-Toolbar-API.md`, `${DOC_OUTPUT}/wiki/Note-Toolbar-API.md`)) isDocsChange = true;
-				// replace auto-generated heading
-				const apiDocPath = `${DOC_OUTPUT}/wiki/Note-Toolbar-API.md`;
-				const apiDocContent = fs.readFileSync(apiDocPath, 'utf8');
-				const apiDocCleaned = apiDocContent.replace(/\[obsidian-note-toolbar\][\s\S]*?(?=## Notes\n\n)/, '');
-				fs.writeFileSync(apiDocPath, apiDocCleaned);
+				// inline linked files, replacing the auto-generated heading
+				if (fileInliner(`${DOC_WIKI_INPUT}/Note-Toolbar-API.md`, `${DOC_OUTPUT}/wiki/Note-Toolbar-API.md`,
+					(content) => content.replace(/\[obsidian-note-toolbar\][\s\S]*?(?=## Notes\n\n)/, ''))) isDocsChange = true;
 			}
 			catch (error) {
 				// console.error(`\x1b[31m[typedocPlugin] ✗ error generating API docs: ${error.message}\x1b[0m`);

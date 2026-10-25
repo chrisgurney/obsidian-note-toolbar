@@ -1,9 +1,16 @@
 import fs from 'fs';
 import path from 'path';
 
-// inlines @import/@include directives in the input file and writes the result to the output file
-// returns true if the output file was written, false if unchanged
-export function fileInliner(inputPath, outputPath) {
+/**
+ * Inlines @import/@include directives in the input file and writes the result to the output file.
+ * An optional transform is applied to the expanded content before it is compared with the existing output,
+ * so post-processing can't make the file look changed.
+ * @param inputPath Path to the input file.
+ * @param outputPath Path to write the expanded content to.
+ * @param transform Optional transform applied to the expanded content before comparison.
+ * @returns true if the output file was written, false if unchanged.
+ */
+export function fileInliner(inputPath, outputPath, transform) {
   try {
     let content = fs.readFileSync(inputPath, 'utf8');
 
@@ -14,6 +21,8 @@ export function fileInliner(inputPath, outputPath) {
       const fileContent = fs.readFileSync(fullPath, 'utf8');
       content = content.replace(match[0], fileContent);
     }
+
+    if (transform) content = transform(content);
 
     const dir = path.dirname(outputPath);
     if (!fs.existsSync(dir)) {
