@@ -89,7 +89,7 @@ Fix every failure before opening a pull request. If a check fails only on your m
 
 ## Manual smoke checklist
 
-In your test vault, with the development build:
+Automated checks do not prove the plugin works in Obsidian. In your test vault, with the development build:
 
 1. Create a toolbar and check it renders in a note.
 2. Map a folder to a toolbar and check it appears for a note in that folder.
@@ -228,12 +228,15 @@ If there's a Lucide icon that doesn't quite fit the plugin's use case, here's ho
 
 ## Submitting a pull request
 
-Cover each item in the pull request description:
+Cover each item in the pull request description. The template uses the same checklist.
 
-- [ ] One concern per PR.
+- [ ] One concern per PR. Link the issue or discussion this closes, if there is one.
 - [ ] `npm run check` passes.
 - [ ] Manual smoke test done, as above. Note any failures or skipped steps.
 - [ ] Tested on desktop and mobile where possible, noting any `Platform.isPhone`-specific behaviour. If desktop only, say so.
-- [ ] i18n keys added for any new user-facing strings.
+- [ ] User-facing text: `en.json` keys added for any new user-facing strings. Other locales fall back to English until translated.
+- [ ] UI changes: screenshots or GIF attached.
 - [ ] No generated files: no changes to `src/version.ts`, `docs/dist/`, `main.js`, or `styles.css`.
 - [ ] No release steps: do not push tags to upstream, and do not run `npm run release`.
+
+The UI item applies only when the UI changed. Put the desktop-only note, known limitations, and follow-up work under Additional context in the template.
