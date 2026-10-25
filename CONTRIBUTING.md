@@ -136,7 +136,7 @@ Creating a custom Lucide-derived icon is covered in [Custom icons](docs/contribu
 
 ## Submitting a pull request
 
-Cover each item in the pull request description. The template uses the same checklist.
+Cover each item in the pull request description.
 
 - [ ] One concern per PR. Link the issue or discussion this closes, if there is one.
 - [ ] `npm run check` passes.
