@@ -36,6 +36,8 @@ export default interface INoteToolbarApi<T> {
     /**
      * Appends the given content to the current file.
      * 
+     * Error behavior: throws with no active file, or if the file is not markdown. Await it (or catch it).
+     * 
      * @param content content to append
      * @param options 
      * @returns Nothing.
@@ -359,6 +361,8 @@ export default interface INoteToolbarApi<T> {
     /**
      * Sets the given property's value in the active note. Set the property to `null` to remove it.
      * 
+     * Error behavior: does not throw. With no active note, it reports the error and returns.
+     * 
      * @param property Propety to set in the frontmatter.
      * @param value Value to set for the property.
      * 
@@ -377,6 +381,8 @@ export default interface INoteToolbarApi<T> {
     /**
      * Replaces the selection, the word at the cursor, or inserts at the cursor if neither exists.
      * 
+     * Error behavior: throws synchronously with no active editor.
+     * 
      * @param replacement The text to replace the selection with.
      * @remarks This does not do anything in Reading mode.
      * 
@@ -392,6 +398,8 @@ export default interface INoteToolbarApi<T> {
 
     /**
      * Opens a sidebar view with the given content.
+     * 
+     * Error behavior: throws with no content, no sidebar leaf, or `append` with file content. Await it (or catch it).
      * 
      * @param content Text content (rendered as markdown), file, or URL to display.
      * @param options Optional display options.
