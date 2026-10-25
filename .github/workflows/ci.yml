@@ -25,6 +25,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Generate version
+        run: npm run prebuild
+
       - name: Lint
         run: npm run lint
 
