@@ -68,17 +68,20 @@ export const enum FileType {
 }
 // note: can't make this a constant as it's used in Object.values()
 export enum ItemType {
-	Additional = 'additional', // internal: used for Gallery items that are provided as examples externally
+	/** Internal use only: used for Gallery items that are provided as examples externally. */
+	Additional = 'additional',
 	Break = 'break',
 	Command = 'command',
 	Dataview = 'dataview',
 	File = 'file',
-	Folder = 'folder', // internal
+	/** Internal use only. */
+	Folder = 'folder',
 	Group = 'group',
 	JavaScript = 'javascript',
 	JsEngine = 'js-engine',
 	Menu = 'menu',
-	Plugin = 'plugin', // internal: used for Gallery items that rely on plugins
+	/** Internal use only: used for Gallery items that rely on plugins. */
+	Plugin = 'plugin',
 	Separator = 'separator',
 	Spreader = 'spreader',
 	Templater = 'templater-obsidian',
@@ -102,13 +105,17 @@ export const enum PositionType {
 	Bottom = 'bottom',
 	FabLeft = 'fabl',
 	FabRight = 'fabr',
-	Floating = 'float', // internal use only
+	/** Internal use only. Not a selectable position. */
+	Floating = 'float',
 	Hidden = 'hidden',
-	Menu = 'menu', // internal use only
+	/** Internal use only. Not a selectable position. */
+	Menu = 'menu',
 	Props = 'props',
-	QuickTools = 'quicktools', // internal use only
+	/** Internal use only. Not a selectable position. */
+	QuickTools = 'quicktools',
 	TabBar = 'tabbar',
-	Text = 'text', // internal use only
+	/** Internal use only. Not a selectable position. */
+	Text = 'text',
 	Top = 'top'
 }
 /** deprecated: In 1.34 replaced with ribbon settings for toolbars and toolbar items */
@@ -237,7 +244,7 @@ export const enum ErrorBehavior {
 	Display = 'display',
 	/** Shows a notice, and outputs to console. */
 	Report = 'report',
-	/** outputs to console. */
+	/** Outputs to console. */
 	Console = 'console',
 	/** Ignores error. */
 	Ignore = 'ignore'
