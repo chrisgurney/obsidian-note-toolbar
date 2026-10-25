@@ -19,7 +19,6 @@ if you want to view the source, please visit the github repository of this plugi
 `;
 
 let isDocsChange = false;
-let isWikiRepoWarningShown = false;
 const build_analyze = (process.argv[2] === "analyze");
 const build_prod = (process.argv[2] === "production");
 
@@ -28,6 +27,11 @@ const DOC_WIKI_INPUT = "docs/wiki";
 
 // directory of the external repo to copy files into
 const WIKI_REPO = "../obsidian-note-toolbar-wiki";
+
+const WIKI_REPO_EXISTS = existsSync(WIKI_REPO);
+if (!WIKI_REPO_EXISTS) {
+	console.log(`\x1b[33m[copy-to-wiki] wiki repo folder not found, skipping wiki copies to: ${WIKI_REPO} (clone it as a sibling folder and restart dev to enable copies)\x1b[0m`);
+}
 
 // files to copy into the external repo after build
 // each entry: { src: <source path>, dest: <path relative to WIKI_REPO> }
@@ -192,13 +196,6 @@ const copyToWikiPlugin = {
 	name: 'copy-to-wiki',
 	setup(build) {
 		build.onEnd(async () => {
-			if (!existsSync(WIKI_REPO)) {
-				if (!isWikiRepoWarningShown) {
-					console.warn(`\x1b[33m[copy-to-wiki] ⚠ wiki repo folder not found, skipping copies to: ${WIKI_REPO}\x1b[0m`);
-					isWikiRepoWarningShown = true;
-				}
-				return;
-			}
 			for (const { src, dest } of WIKI_FILES) {
 				const destPath = join(WIKI_REPO, dest);
 				try {
@@ -351,7 +348,7 @@ const context = await esbuild.context({
 		...(build_prod ? [] : [typecheckPlugin]),
 		eslintPlugin, 
 		stylelintPlugin,
-		copyToWikiPlugin, 
+		...(WIKI_REPO_EXISTS ? [copyToWikiPlugin] : []),
 		buildEnd
 	],
 	sourcemap: (build_prod || build_analyze) ? false : "inline",
