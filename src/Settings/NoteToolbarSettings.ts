@@ -102,13 +102,13 @@ export const enum PositionType {
 	Bottom = 'bottom',
 	FabLeft = 'fabl',
 	FabRight = 'fabr',
-	Floating = 'float',
+	Floating = 'float', // internal use only
 	Hidden = 'hidden',
-	Menu = 'menu',
+	Menu = 'menu', // internal use only
 	Props = 'props',
-	QuickTools = 'quicktools',
+	QuickTools = 'quicktools', // internal use only
 	TabBar = 'tabbar',
-	Text = 'text',
+	Text = 'text', // internal use only
 	Top = 'top'
 }
 /** deprecated: In 1.34 replaced with ribbon settings for toolbars and toolbar items */
