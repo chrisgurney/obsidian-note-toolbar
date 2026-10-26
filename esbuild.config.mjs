@@ -341,6 +341,7 @@ const context = await esbuild.context({
 		"@lezer/lr",
 		...builtinModules],
 	format: "cjs",
+	charset: "utf8",
 	target: "es2018",
 	loader: {
 		'.md': 'text',
