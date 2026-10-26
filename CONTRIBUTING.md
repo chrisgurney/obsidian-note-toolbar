@@ -2,6 +2,8 @@
 
 Thanks for your interest in contributing! This document covers how to build, develop, and extend the plugin.
 
+For how the plugin is put together, see [ARCHITECTURE.md](ARCHITECTURE.md).
+
 ## Development setup
 
 ### Prerequisites
