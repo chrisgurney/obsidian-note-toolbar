@@ -1,7 +1,8 @@
 import { ViewPlugin } from '@codemirror/view';
 import AdapterManager from 'Adapters/AdapterManager';
-import INoteToolbarApi from "Api/INoteToolbarApi";
+import INoteToolbarApi, { NtbSidebarOptions } from "Api/INoteToolbarApi";
 import NoteToolbarApi from 'Api/NoteToolbarApi';
+import { NtbSidebarView } from 'Api/NtbSidebarView';
 import CliManager from 'Cli/CliManager';
 import CommandManager from 'Commands/CommandManager';
 import GalleryManager from 'Gallery/GalleryManager';
@@ -34,7 +35,7 @@ import ToolbarItemHandler from 'Toolbar/ToolbarItemHandler';
 import ToolbarRenderer from 'Toolbar/ToolbarRenderer';
 import VariableResolver from 'Toolbar/VariableResolver';
 import HotkeyHelper from 'Utils/Hotkeys';
-import PluginUtils from 'Utils/Utils';
+import PluginUtils, { formatSidebarError } from 'Utils/Utils';
 
 export default class NoteToolbarPlugin extends Plugin {
 
@@ -130,6 +131,9 @@ export default class NoteToolbarPlugin extends Plugin {
 		// });
 
 		this.app.workspace.onLayoutReady(async () => {
+
+			// toggle mobile debug sidebar
+			this.toggleDebugSidebar();
 
 			// make API available
 			window["ntb"] = this.api;
@@ -228,11 +232,12 @@ export default class NoteToolbarPlugin extends Plugin {
     // *****************************************************************************
 
 	/** 
-	 * Toggle debugging based on user setting.
+	 * Toggle debugging, based on user setting.
 	 */
 	toggleDebugging() {
-		// all errors should be logged
+		// all warnings + errors should be logged
 		this.error = console.error.bind(console);
+		this.warn = console.warn.bind(console);
 		// setup debug functions, preserving line numbers
 		if (this.settings.debugEnabled) {
 			this.debug = console.debug.bind(console);
@@ -242,6 +247,45 @@ export default class NoteToolbarPlugin extends Plugin {
 		else {
 			this.debug = (..._args: unknown[]) => {};
 			this.warn = (..._args: unknown[]) => {};
+		}
+	}
+
+	/**
+	 * Toggles debug sidebar on mobile, based on user setting.
+	 */
+	toggleDebugSidebar() {
+		if (Platform.isMobile) {
+			// cleanup old leaves; this fixes the extra view on first debug message on reload
+			NtbSidebarView.removeSidebars(this, NtbSidebarView.NTB_ERROR_SIDEBAR);
+			const sidebarOptions: NtbSidebarOptions = {
+				active: false,
+				append: '',
+				class: 'ntb-error-sidebar',
+				id: NtbSidebarView.NTB_ERROR_SIDEBAR,
+				navigation: ['clear', 'close'],
+				viewTitle: 'Note Toolbar errors'
+			};
+			// debug messages
+			if (this.settings.debugEnabled) {
+				const debug = console.debug.bind(console);
+				this.debug = (...args: unknown[]): void => {
+					debug(...args);
+					void this.api?.sidebar(formatSidebarError(args), sidebarOptions);
+				}
+			}
+			// error messages
+			const error = console.error.bind(console);
+			this.error = (...args: unknown[]): void => {
+				// note that this adds to the error stack, so console line numbers won't be accurate
+				error(...args);
+				void this.api?.sidebar(formatSidebarError(args, 'error'), sidebarOptions);
+			};
+			// warnings
+			const warn = console.warn.bind(console);
+			this.warn = (...args: unknown[]): void => {
+				warn(...args);
+				void this.api?.sidebar(formatSidebarError(args, 'warning'), sidebarOptions);
+			}
 		}
 	}
 

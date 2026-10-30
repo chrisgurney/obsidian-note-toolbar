@@ -1,16 +1,19 @@
 {
   "name": "obsidian-note-toolbar",
-  "version": "1.35.22",
-  "releaseVersion": "1.35",
+  "version": "1.36.06",
+  "releaseVersion": "1.36",
   "settingsVersion": 20260812.1,
   "description": "Obsidian plugin that adds customizable toolbars to your notes.",
   "main": "main.js",
   "scripts": {
     "analyze": "tsc --noEmit --skipLibCheck && node esbuild.config.mjs analyze",
     "build": "tsc --noEmit --skipLibCheck && node esbuild.config.mjs production",
+    "check": "npm run lint && npm run typecheck && npm run stylelint && npm run build",
+    "check-install": "npm ci --dry-run",
     "dev": "npm run prebuild && node esbuild.config.mjs",
     "lint": "npx eslint .",
     "prebuild": "node build/generate-version.mjs",
+    "prelint": "node build/generate-version.mjs",
     "pretypecheck": "node build/generate-version.mjs",
     "release": "node build/release.mjs",
     "stylelint": "npx stylelint '**/*.css'",
@@ -19,6 +22,9 @@
   "keywords": [],
   "author": "Chris Gurney",
   "license": "GPL-3.0",
+  "engines": {
+    "node": ">=24"
+  },
   "devDependencies": {
     "@types/node": "^26.6.4",
     "@types/sortablejs": "^1.15.8",

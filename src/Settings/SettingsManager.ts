@@ -1,7 +1,7 @@
 import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, DEFAULT_ITEM_SETTINGS, DEFAULT_SETTINGS, ItemType, LocalVar, NONE_TOOLBAR, NONE_TOOLBAR_ID, NoteToolbarSettings, Position, PositionType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 import { getUUID, isUuid } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
-import { Platform } from "obsidian";
+import { normalizePath, Notice, Platform } from "obsidian";
 import { PLUGIN_VERSION, SETTINGS_VERSION } from "version";
 import SettingsMigrator from "./SettingsMigrator";
 import ToolbarSettingsModal from "./UI/Modals/ToolbarSettingsModal";
@@ -32,7 +32,8 @@ export default class SettingsManager {
 	public async addToolbarItem(
 		toolbar: ToolbarSettings,
 		items: ToolbarItemSettings | ToolbarItemSettings[],
-		insertIndex?: number
+		insertIndex?: number,
+		isEmptyItem = false
 	): Promise<void> {
 		const itemsToAdd = Array.isArray(items) ? items : [items];
 		if (insertIndex !== undefined && insertIndex >= 0) {
@@ -42,7 +43,7 @@ export default class SettingsManager {
 			toolbar.items.push(...itemsToAdd);
 		}
 		toolbar.updated = new Date().toISOString();
-		await this.save();
+		await this.save(!isEmptyItem);
 	}
 
 	/**
@@ -115,13 +116,14 @@ export default class SettingsManager {
 	 * @returns the new item.
 	 */
 	public async duplicateToolbarItem(toolbar: ToolbarSettings, item: ToolbarItemSettings, insertIndex?: number): Promise<ToolbarItemSettings> {
-		const newItem = JSON.parse(JSON.stringify(item)) as ToolbarItemSettings;
-		newItem.description = undefined;
-		newItem.hasCommand = false;
-		newItem.inGallery = false;
-		newItem.uuid = getUUID();
-		await this.addToolbarItem(toolbar, newItem, insertIndex);
-		return newItem;
+		const dupeItem = JSON.parse(JSON.stringify(item)) as ToolbarItemSettings;
+		const isEmptyItem = item.uuid === 'NEW_ITEM';
+		dupeItem.description = undefined;
+		dupeItem.hasCommand = false;
+		dupeItem.inGallery = false;
+		dupeItem.uuid = getUUID();
+		await this.addToolbarItem(toolbar, dupeItem, insertIndex, isEmptyItem);
+		return dupeItem;
 	}
 
 	/**
@@ -489,7 +491,15 @@ export default class SettingsManager {
 	 */
 	async load(): Promise<void> {
 
-		const loaded_settings = await this.ntb.loadData() as NoteToolbarSettings;
+		let loaded_settings: NoteToolbarSettings | null = null;
+		try {
+			loaded_settings = await this.ntb.loadData() as NoteToolbarSettings;
+		}
+		catch (error) {
+			// could not read the stored settings at all; fall back to defaults below, without overwriting what's on disk;
+			// using console.error, as ntb.error isn't guaranteed to exist yet
+			console.error('Note Toolbar: failed to load settings; starting with defaults.', error);
+		}
 		this.ntb.settings = Object.assign({}, DEFAULT_SETTINGS, loaded_settings);
 		
 		// initialize debugging based on user preference
@@ -501,8 +511,18 @@ export default class SettingsManager {
 		// if we actually have existing settings for this plugin, and the old version does not match the current...
 		if (loaded_settings && (old_version !== SETTINGS_VERSION)) {
 			this.ntb.debug("SettingsManager: versions do not match: data.json: ", old_version, " !== latest: ", SETTINGS_VERSION);
-			const migrator = new SettingsMigrator(this.ntb);
-			migrator.run(loaded_settings, old_version);
+			try {
+				const migrator = new SettingsMigrator(this.ntb);
+				migrator.run(loaded_settings, loaded_settings.version);
+			}
+			catch (error) {
+				// a failed migration must not stop the plugin from loading, or destroy the user's settings:
+				// keep the settings as loaded (the migrator only stamps the new version once it completes),
+				// and don't save here, so the stored settings are left untouched for the next attempt
+				this.ntb.error('Note Toolbar: failed to migrate settings from version ' + old_version + '; continuing with settings as loaded.', error);
+				new Notice(t('setting.error-migration-failed'), 10000).containerEl.addClass('mod-warning');
+				return;
+			}
 			// don't render the initial toolbar, as managers + helpers may not be initialized yet
 			await this.save(false);
 		}
@@ -521,6 +541,71 @@ export default class SettingsManager {
 		}
 
 		this.ntb.debug("SETTINGS SAVED: " + new Date().getTime());
+	}
+
+	/**
+	 * Copies the plugin's settings file (data.json), exactly as it is on disk, into the vault, 
+	 * so it can be attached to a support report or restored manually. 
+	 * Current settings are NOT saved first, so the copy captures the stored file as-is.
+	 * Used by the settings UI, and exposed to scripts as `ntb.exportSettings()`.
+	 * @param filename optional file name, or vault-relative path, for the copy.
+	 * A name without a folder is placed in the default backups folder, and `.json` is added if 
+	 * no extension is provided. If omitted, a timestamped name in the default backups folder is used.
+	 * An existing file is never overwritten: a number is appended to the name instead.
+	 * @returns the vault path of the backup copy
+	 */
+	public async exportSettings(filename?: string): Promise<string> {
+
+		const adapter = this.ntb.app.vault.adapter;
+
+		const pluginFolder = this.ntb.manifest.dir ?? `${this.ntb.app.vault.configDir}/plugins/${this.ntb.manifest.id}`;
+		const dataFilePath = normalizePath(`${pluginFolder}/data.json`);
+		if (!(await adapter.exists(dataFilePath))) {
+			throw new Error('Note Toolbar settings file was not found.');
+		}
+
+		const backupFolder = 'Note Toolbar Backups';
+		let backupPath: string;
+		const requestedName = filename?.trim();
+		if (requestedName) {
+			const normalized = normalizePath(requestedName);
+			if (normalized.split('/').some(part => part === '..')) {
+				throw new Error('Note Toolbar backup filename must be a path inside the vault.');
+			}
+			const withExtension = normalized.toLowerCase().endsWith('.json') ? normalized : `${normalized}.json`;
+			backupPath = withExtension.includes('/') ? withExtension : `${backupFolder}/${withExtension}`;
+		}
+		else {
+			const timestamp = new Date().toISOString().replace('T', '-').replace(/[:.]/g, '-');
+			backupPath = `${backupFolder}/note-toolbar-settings-${timestamp}.json`;
+		}
+
+		// create the folder the copy is going into, if it doesn't exist yet
+		const targetFolder = backupPath.split('/').slice(0, -1).join('/');
+		if (targetFolder) {
+			let currentPath = '';
+			for (const part of targetFolder.split('/')) {
+				currentPath = currentPath ? `${currentPath}/${part}` : part;
+				const stat = await adapter.stat(currentPath);
+				if (stat?.type === 'file') {
+					throw new Error(`Note Toolbar backup folder cannot be created because ${currentPath} is a file.`);
+				}
+				if (!stat) await adapter.mkdir(currentPath);
+			}
+		}
+
+		// never overwrite an existing file
+		const fileBase = backupPath.slice(0, -'.json'.length);
+		let uniquePath = backupPath;
+		let copyNumber = 2;
+		while (await adapter.exists(uniquePath)) {
+			uniquePath = `${fileBase}-${copyNumber}.json`;
+			copyNumber++;
+		}
+
+		await adapter.copy(dataFilePath, uniquePath);
+		return uniquePath;
+
 	}
 
 }

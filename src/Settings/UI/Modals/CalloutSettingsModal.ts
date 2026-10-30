@@ -35,7 +35,7 @@ export default class CalloutSettingsModal extends Modal {
                     .setValue(this.ntb.settings.export.includeIcons)
                     .onChange(async (value) => {
                         this.ntb.settings.export.includeIcons = value;
-                        await this.ntb.settingsManager.save();
+                        await this.ntb.settingsManager.save(false);
                         if (this.callback) await this.callback();
                     });
                 fixToggleTab(toggle);
@@ -49,7 +49,7 @@ export default class CalloutSettingsModal extends Modal {
                     .setValue(this.ntb.settings.export.replaceVars)
                     .onChange(async (value) => {
                         this.ntb.settings.export.replaceVars = value;
-                        await this.ntb.settingsManager.save();
+                        await this.ntb.settingsManager.save(false);
                         if (this.callback) await this.callback();
                     });
                 fixToggleTab(toggle);
@@ -63,7 +63,7 @@ export default class CalloutSettingsModal extends Modal {
                     .setValue(this.ntb.settings.export.useIds)
                     .onChange(async (value) => {
                         this.ntb.settings.export.useIds = value;
-                        await this.ntb.settingsManager.save();
+                        await this.ntb.settingsManager.save(false);
                         if (this.callback) await this.callback();
                     });
                 fixToggleTab(toggle);
@@ -77,7 +77,7 @@ export default class CalloutSettingsModal extends Modal {
                     .setValue(this.ntb.settings.export.useDataEls)
                     .onChange(async (value) => {
                         this.ntb.settings.export.useDataEls = value;
-                        await this.ntb.settingsManager.save();
+                        await this.ntb.settingsManager.save(false);
                         if (this.callback) await this.callback();
                     });
                 fixToggleTab(toggle);
@@ -90,7 +90,7 @@ export default class CalloutSettingsModal extends Modal {
                     .setCta()
                     .setTooltip(t('setting.copy-as-callout.button-close-description'))
                     .onClick(async () => {
-                        await this.ntb.settingsManager.save();
+                        await this.ntb.settingsManager.save(false);
                         this.close();
                         if (this.callback) await this.callback();
                     });

@@ -1,5 +1,5 @@
 import NoteToolbarPlugin from 'main';
-import { ButtonComponent, debounce, Menu, MenuItem, Platform, PluginSettingTab, setIcon, Setting, SettingGroup, ToggleComponent } from 'obsidian';
+import { ButtonComponent, debounce, Menu, MenuItem, Notice, Platform, PluginSettingTab, setIcon, Setting, SettingGroup, ToggleComponent } from 'obsidian';
 import { FILE_TYPE_OPTIONS, OBSIDIAN_UI_ELEMENTS, OBSIDIAN_UI_MOBILE_NAVBAR_OPTIONS, SettingType, t, VIEW_TYPE_GALLERY } from 'Settings/NoteToolbarSettings';
 import IconSuggestModal from 'Settings/UI/Modals/IconSuggestModal';
 import ToolbarSuggester from 'Settings/UI/Suggesters/ToolbarSuggester';
@@ -57,11 +57,30 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		containerEl.addClass('note-toolbar-setting-ui');
 
 		if (this.ntb.settings.version !== SETTINGS_VERSION) {
-			new Setting(containerEl)
-				.setName(t('setting.error-old-settings-name'))
-				.setDesc(t('setting.error-old-settings-description', { oldVersion: this.ntb.settings.version + '', currentVersion: SETTINGS_VERSION + '' }))
-				.setClass('note-toolbar-setting-plugin-error')
-				.setHeading();
+			const errorGroup = new SettingGroup(containerEl);
+			errorGroup.addClass('note-toolbar-setting-plugin-error');
+			errorGroup.addSetting((setting) => {
+				setting
+					.setName(t('setting.error-old-settings-name'))
+					.setDesc(t('setting.error-old-settings-description', { oldVersion: this.ntb.settings.version + '', currentVersion: SETTINGS_VERSION + '' }));
+			});
+			errorGroup.addSetting((setting) => {
+				setting
+					.setDesc(t('setting.error-backup-settings-description'))
+					.addButton((button: ButtonComponent) => button
+						.setButtonText(t('setting.error-backup-settings-button'))
+						.setCta()
+						.onClick(async () => {
+							try {
+								const backupPath = await this.ntb.settingsManager.exportSettings();
+								new Notice(t('setting.error-backup-settings-success', { path: backupPath }), 10000).containerEl.addClass('mod-success');
+							}
+							catch (error) {
+								this.ntb.error('Note Toolbar: failed to back up settings.', error);
+								new Notice(t('setting.error-backup-settings-failed'), 10000).containerEl.addClass('mod-warning');
+							}
+						}));
+			});
 		}
 
 		// update status of installed plugins, for any settings that depend on them
@@ -729,7 +748,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 						cb.setPlaceholder(t('setting.display-locations.option-editor-menu-placeholder'))
 							.setValue(existingEditorMenuToolbar ? existingEditorMenuToolbar.name : '')
 							.onChange(debounce(async (name) => {
-								const isValid = await this.ntb.settingsUtils.updateItemComponentStatus(this, name, SettingType.Toolbar, editorMenuSetting.controlEl, undefined, 'beforeend');
+								const isValid = this.ntb.settingsUtils.updateItemComponentStatus(this, name, SettingType.Toolbar, editorMenuSetting.controlEl, undefined, 'beforeend');
 								const newToolbar = isValid ? this.ntb.settingsManager.getToolbarByName(name) : undefined;
 								this.ntb.settings.editorMenuToolbar = newToolbar?.uuid ?? null;
 								// toggle editor menu as toolbar setting
@@ -739,7 +758,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 								this.ntb.settingsUtils.setFieldPreview(editorMenuSetting, newToolbar);
 								await this.ntb.settingsManager.save();
 							}, 250));
-						await this.ntb.settingsUtils.updateItemComponentStatus(this, existingEditorMenuToolbar ? existingEditorMenuToolbar.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend');
+						this.ntb.settingsUtils.updateItemComponentStatus(this, existingEditorMenuToolbar ? existingEditorMenuToolbar.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend');
 					});
 				this.ntb.settingsUtils.setFieldPreview(editorMenuSetting, existingEditorMenuToolbar);
 			});
@@ -798,7 +817,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 					cb.setPlaceholder(t('setting.display-locations.option-emptyview-tbar-placeholder'))
 						.setValue(existingEmptyViewToolbar ? existingEmptyViewToolbar.name : '')
 						.onChange(debounce(async (name) => {
-							const isValid = await this.ntb.settingsUtils.updateItemComponentStatus(this, name, SettingType.Toolbar, emptyViewSetting.controlEl, undefined, 'beforeend');
+							const isValid = this.ntb.settingsUtils.updateItemComponentStatus(this, name, SettingType.Toolbar, emptyViewSetting.controlEl, undefined, 'beforeend');
 							const newToolbar = isValid ? this.ntb.settingsManager.getToolbarByName(name) : undefined;
 							this.ntb.settings.emptyViewToolbar = newToolbar?.uuid ?? null;
 							// toggle launchpad setting
@@ -809,7 +828,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 							this.ntb.settingsUtils.setFieldPreview(emptyViewSetting, newToolbar);
 							await this.ntb.settingsManager.save();
 						}, 250));
-					await this.ntb.settingsUtils.updateItemComponentStatus(this, existingEmptyViewToolbar ? existingEmptyViewToolbar.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend');
+					this.ntb.settingsUtils.updateItemComponentStatus(this, existingEmptyViewToolbar ? existingEmptyViewToolbar.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend');
 				});
 			this.ntb.settingsUtils.setFieldPreview(emptyViewSetting, existingEmptyViewToolbar);
 		});
@@ -848,7 +867,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 					cb.setPlaceholder(t('setting.display-locations.option-text-placeholder'))
 						.setValue(existingTextToolbar ? existingTextToolbar.name : '')
 						.onChange(debounce(async (name) => {
-							const isValid = await this.ntb.settingsUtils.updateItemComponentStatus(this, name, SettingType.Toolbar, textToolbarSetting.controlEl, undefined, 'beforeend');
+							const isValid = this.ntb.settingsUtils.updateItemComponentStatus(this, name, SettingType.Toolbar, textToolbarSetting.controlEl, undefined, 'beforeend');
 							const newToolbar = isValid ? this.ntb.settingsManager.getToolbarByName(name) : undefined;
 							this.ntb.settings.textToolbar = newToolbar?.uuid ?? null;
 							if (this.ntb.settings.textToolbar && !this.ntb.textToolbar) {
@@ -863,7 +882,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 							this.ntb.settingsUtils.setFieldPreview(textToolbarSetting, newToolbar);
 							await this.ntb.settingsManager.save();
 						}, 250));
-					await this.ntb.settingsUtils.updateItemComponentStatus(this, existingTextToolbar ? existingTextToolbar.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend');
+					this.ntb.settingsUtils.updateItemComponentStatus(this, existingTextToolbar ? existingTextToolbar.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend');
 				});
 			this.ntb.settingsUtils.setFieldPreview(textToolbarSetting, existingTextToolbar);
 		});
@@ -904,13 +923,13 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 							cb.setPlaceholder(t('setting.display-locations.option-webviewer-placeholder'))
 								.setValue(existingWebToolbar ? existingWebToolbar.name : '')
 								.onChange(debounce(async (name) => {
-									const isValid = await this.ntb.settingsUtils.updateItemComponentStatus(this, name, SettingType.Toolbar, webToolbarSetting.controlEl, undefined, 'beforeend');
+									const isValid = this.ntb.settingsUtils.updateItemComponentStatus(this, name, SettingType.Toolbar, webToolbarSetting.controlEl, undefined, 'beforeend');
 									const newToolbar = isValid ? this.ntb.settingsManager.getToolbarByName(name) : undefined;
 									this.ntb.settings.webviewerToolbar = newToolbar?.uuid ?? null;
 									this.ntb.settingsUtils.setFieldPreview(webToolbarSetting, newToolbar);
 									await this.ntb.settingsManager.save();
 								}, 250));
-							await this.ntb.settingsUtils.updateItemComponentStatus(this, existingWebToolbar ? existingWebToolbar.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend');
+							this.ntb.settingsUtils.updateItemComponentStatus(this, existingWebToolbar ? existingWebToolbar.name : '', SettingType.Toolbar, cb.inputEl.parentElement, undefined, 'beforeend');
 						});
 					this.ntb.settingsUtils.setFieldPreview(webToolbarSetting, existingWebToolbar);
 				});
@@ -1090,6 +1109,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 					toggle.onChange(async (value) => {
 						this.ntb.settings.debugEnabled = value;
 						this.ntb.toggleDebugging();
+						this.ntb.toggleDebugSidebar();
 						this.ntb.debug('Note Toolbar debugging:', value); // should not output if debugging is disabled
 						await this.ntb.settingsManager.save();
 					});
