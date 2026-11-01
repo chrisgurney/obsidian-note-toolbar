@@ -136,6 +136,13 @@ Tips are help articles built into the plugin, shown in the Help view and linkabl
 
 Creating a custom Lucide-derived icon is covered in [Custom icons](docs/contributing/custom-icons.md).
 
+## First contribution
+
+1. Pick a `good first issue` on GitHub, or a bug you found yourself. Starter issues are small: one concern, no settings migration, no API breaking change, no large refactor, and no open design decision.
+2. Claim an issue first: comment on it and wait for acknowledgement, so two people do not do the same work. Ask questions there.
+3. Branch off `master` and name it `issue-<number>-<short-description>`, or `feat-`, `fix-`, or `docs-<short-description>` for work with no issue. Use lowercase and hyphens only.
+4. Submit a pull request. The maintainer reviews it against the checklist below, the check output, and the smoke test; push follow-ups to the same pull request. Review happens as time allows.
+
 ## Submitting a pull request
 
 Cover each item in the pull request description.
