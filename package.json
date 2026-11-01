@@ -28,9 +28,9 @@
   "devDependencies": {
     "@types/node": "^26.6.4",
     "@types/sortablejs": "^1.15.8",
-    "chokidar": "^5.0.0",
+    "chokidar": "^6.0.0",
     "esbuild": "^0.28.2",
-    "eslint": "^10.8.1",
+    "eslint": "^10.13.0",
     "eslint-plugin-obsidianmd": "latest",
     "obsidian": "latest",
     "stylelint": "^17.16.0",
@@ -38,7 +38,7 @@
     "typedoc": "^0.28.14",
     "typedoc-plugin-markdown": "^4.13.1",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.71.0"
+    "typescript-eslint": "^8.72.0"
   },
   "dependencies": {
     "@codemirror/view": "6.43.13",
