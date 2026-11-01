@@ -555,6 +555,13 @@
     }
 }
 
+.note-toolbar-notice-ctas {
+    border-top: solid 1px var(--background-modifier-border);
+    display: block;
+    margin-bottom: 0;
+    padding-top: 0.5em;
+}
+
 .note-toolbar-notice-pointer {
     cursor: pointer;
 }

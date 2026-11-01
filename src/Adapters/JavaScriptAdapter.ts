@@ -1,9 +1,8 @@
 import NoteToolbarPlugin from "main";
 import { Component, MarkdownRenderer } from "obsidian";
-import { ErrorBehavior, ScriptConfig, SettingType, t } from "Settings/NoteToolbarSettings";
+import { ScriptConfig, ScriptContext, SettingType, t } from "Settings/NoteToolbarSettings";
 import { learnMoreFr } from "Settings/UI/Utils/SettingsUIUtils";
 import { AdapterFunction } from "Types/interfaces";
-import { importArgs } from "Utils/Utils";
 import { Adapter } from "./Adapter";
 
 /**
@@ -37,8 +36,8 @@ export default class JavaScriptAdapter extends Adapter {
         ];
     }
 
-    constructor(noteToolbar: NoteToolbarPlugin) {
-        super(noteToolbar);
+    constructor(ntb: NoteToolbarPlugin) {
+        super(ntb);
     }
 
     disable() {
@@ -49,49 +48,40 @@ export default class JavaScriptAdapter extends Adapter {
     }
 
     /**
-     * @see Adapter.use
+     * @see {@link Adapter.use}
      */
-    async use(config: ScriptConfig): Promise<string | void> {
+    async use(config: ScriptConfig, errorContext: ScriptContext): Promise<string | void> {
         
         let result;
 
-        let containerEl;
-        if (config.outputContainer) {
-            containerEl = this.ntb.el.getOutputEl(config.outputContainer);
-            if (!containerEl) {
-                this.displayScriptError(t('adapter.error.callout-not-found', { id: config.outputContainer }));
-                return;
-            }
-        }
+        const containerEl = this.ntb.adapters.utils.checkContainer(config.outputContainer, errorContext);
+        if (!containerEl && config.outputContainer) return;
 
         switch (config.pluginFunction) {
             case 'evaluate':
                 result = config.expression
-                    ? await this.evaluate(config.expression, undefined, containerEl)
-                    : t('adapter.javascript.eval-expr-error-required');
+                    ? await this.evaluate(config.expression, errorContext, undefined, containerEl)
+                    : this.ntb.adapters.utils.handleError(t('adapter.javascript.eval-expr-error-required'), errorContext);
                 break;
             // internal function for inline evaluations in which errors should be reported
             case 'evaluateInline':
                 result = config.expression
-                    ? await this.evaluate(config.expression, undefined, containerEl, ErrorBehavior.Report)
-                    : t('adapter.javascript.eval-expr-error-required');
+                    ? await this.evaluate(config.expression, errorContext, undefined, containerEl)
+                    : this.ntb.adapters.utils.handleError(t('adapter.javascript.eval-expr-error-required'), errorContext);
                 break;
             // internal function for inline evaluations in which errors can be ignored
             case 'evaluateIgnore':
                 result = config.expression
-                    ? await this.evaluate(config.expression, undefined, containerEl, ErrorBehavior.Ignore)
-                    : t('adapter.javascript.eval-expr-error-required');
+                    ? await this.evaluate(config.expression, errorContext, undefined, containerEl)
+                    : this.ntb.adapters.utils.handleError(t('adapter.javascript.eval-expr-error-required'), errorContext);
                 break;
             case 'exec':
                 result = config.sourceFile
-                    ? await this.exec(config.sourceFile, config.sourceArgs, containerEl)
-                    : t('adapter.javascript.exec-error-required');
-                break;
-            case '':
-                // do nothing
+                    ? await this.exec(config.sourceFile, errorContext, config.sourceArgs, containerEl)
+                    : this.ntb.adapters.utils.handleError(t('adapter.javascript.exec-error-required'), errorContext);
                 break;
             default:
-                result = t('adapter.error.function-invalid', { function: config.pluginFunction });
+                this.ntb.adapters.utils.handleError(t('adapter.error.function-invalid', { function: config.pluginFunction }), errorContext);
                 break;
         }
 
@@ -106,69 +96,80 @@ export default class JavaScriptAdapter extends Adapter {
      * console.log(`Hello ${args['name']}`);
      * new Notice(`Hello ${args['name']}`);
      * 
-     * @param filename 
+     * @param filename
+     * @param errorContext 
      * @param argsJson
      * @param containerEl 
      * @returns 
      */
-    private exec = async (filename: string, argsJson?: string, containerEl?: HTMLElement): Promise<string | undefined> => {
+    private exec = async (
+        filename: string,
+        errorContext: ScriptContext,
+        argsJson?: string,
+        containerEl?: HTMLElement,
+    ): Promise<string | undefined> => {
 
-        if (!filename) {
+        if (!filename) return;
+
+        errorContext['scriptFile'] = filename;
+        const scriptFile = this.ntb.adapters.utils.checkFile(filename, errorContext);
+        if (!scriptFile) return;
+        const scriptFilePath = scriptFile?.path || filename;
+        errorContext['scriptFile'] = scriptFile;
+
+        let contents: string;
+        try {
+            contents = await this.ntb.app.vault.cachedRead(scriptFile);
+        }
+        catch (error) {
+            // the file may have been deleted or moved since checkFile above
+            this.ntb.adapters.utils.handleError(error, errorContext);
             return;
         }
-        
-        const activeFilePath = this.ntb.app.workspace.getActiveFile()?.path || '';
-
-        const viewFile = this.ntb.app.metadataCache.getFirstLinkpathDest(filename, activeFilePath);
-        if (!viewFile) {
-            this.displayScriptError(t('adapter.error.file-not-found', { filename: filename }));
+        if (!contents.trim()) {
+            this.ntb.adapters.utils.handleError(t('adapter.error.file-empty', { filename: filename }), errorContext);
             return;
         }
 
-        const contents = await this.ntb.app.vault.cachedRead(viewFile);
-        if (contents) {
-            return await this.evaluate(contents, argsJson, containerEl, ErrorBehavior.Report);
-        }
+        this.ntb.debug('Note Toolbar: Executing:', scriptFilePath);
+        const systemArgs = {
+            _scriptFile: scriptFile // lets scripts know where they're being executed from
+        };
+        return await this.evaluate(contents, errorContext, argsJson, containerEl, systemArgs);
 
     }
 
     /**
      * Evaluates the given JavaScript expression.
-     * 
-     * @param expression 
-     * @param containerEl 
-     * @param errorBehavior 
-     * @returns 
+     * @returns evaluation result
      */    
     private evaluate = async (
         expression: string,
+        errorContext: ScriptContext,
         argsJson?: string,
         containerEl?: HTMLElement,
-        errorBehavior: ErrorBehavior = ErrorBehavior.Display
+        systemArgs?: Record<string, unknown>
     ): Promise<string> => {
                 
         let result;
         const resultEl = containerEl || createSpan();
 
-        const importedArgs = argsJson ? importArgs(argsJson) : { value: {} };
-        if (importedArgs.value === null) {
-            this.displayScriptError(importedArgs.error, t('adapter.error.args-parsing'), containerEl);
-            return '';
-        }
-        const args = importedArgs.value;
+        const args = this.ntb.adapters.utils.checkArgs(argsJson, errorContext, containerEl);
+        if (!args) return '';
+        Object.assign(args, systemArgs);
 
-        const activeFile = this.ntb.app.workspace.getActiveFile();
-        const activeFilePath = activeFile?.path || '';
+        const activeFilePath = this.ntb.app.workspace.getActiveFile()?.path || '';
 
         if (expression) {
-            const func = new JavaScriptAdapter.AsyncFunction("input", expression);
             const component = new Component();
             component.load();
             try {
+                const func = new JavaScriptAdapter.AsyncFunction("input", expression);
                 resultEl.empty();
-                this.ntb.debug(expression);
+                this.ntb.debug('Note Toolbar: Evaluating:\n', this.ntb.adapters.utils.formatExpression(expression));
                 // may directly render, in which case it will likely return undefined or null
                 result = await Promise.resolve((func as (...args: unknown[]) => unknown)(args));
+                this.ntb.debug('Note Toolbar: Result:', result);
                 if (containerEl && result && this.ntb) {
                     await MarkdownRenderer.render(
                         this.ntb.app,
@@ -180,19 +181,7 @@ export default class JavaScriptAdapter extends Adapter {
                 }
             }
             catch (error) {
-                switch (errorBehavior) {
-                    case ErrorBehavior.Display:
-                        this.displayScriptError(error, t('adapter.error.expr-failed', { expression: expression }), containerEl);
-                        result = t('adapter.error.general', { error: error }) + '\n';
-                        break;
-                    case ErrorBehavior.Report:
-                        result = expression;
-                        console.error(t('adapter.error.expr-failed', { expression: expression }) + " • ", error);
-                        break;
-                    case ErrorBehavior.Ignore:
-                        // do nothing
-                        break;
-                }
+                result = this.ntb.adapters.utils.handleError(error, errorContext, expression, containerEl) ?? result;
             }
             finally {
                 component.unload();
@@ -200,7 +189,7 @@ export default class JavaScriptAdapter extends Adapter {
 
         }
 
-        return result as string;
+        return containerEl ? '' : result as string;
 
     }
 

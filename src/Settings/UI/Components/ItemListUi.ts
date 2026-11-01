@@ -150,7 +150,7 @@ export default class ItemListUi {
                 // check if item previews are valid (non-empty + valid), and highlight if not
                 const itemPreviewEl = itemPreviewContainer.querySelector('.note-toolbar-setting-item-preview') as HTMLElement;
                 if (itemPreviewEl) {
-                    void this.ntb.settingsUtils.updateItemComponentStatus(
+                    this.ntb.settingsUtils.updateItemComponentStatus(
                         this.parent,
                         (toolbarItem.linkAttr.type === ItemType.Command) ? toolbarItem.linkAttr.commandId : toolbarItem.link, 
                         SettingFieldItemMap[toolbarItem.linkAttr.type], 
@@ -541,7 +541,7 @@ export default class ItemListUi {
      * Adds a new empty item to the given container (and settings).
      * @param itemContainer optional HTMLElement to add the new item to.
      */
-    async addItemHandler(itemType: ItemType, itemContainer?: HTMLElement) {
+    async addItemHandler(itemType: ItemType, itemContainer?: HTMLElement, isEmptyItem = false) {
 
         // removes the item list empty state message before we add anything to it
         if (itemContainer && (this.toolbar.items.length === 0)) {
@@ -552,7 +552,7 @@ export default class ItemListUi {
 
         // create the new item, with the given type
         const newToolbarItem = this.ntb.settingsManager.getDefaultItem(itemType);
-        await this.ntb.settingsManager.addToolbarItem(this.toolbar, newToolbarItem);
+        await this.ntb.settingsManager.addToolbarItem(this.toolbar, newToolbarItem, undefined, isEmptyItem);
 
         // show the modal on phones and return
         if (Platform.isPhone) {

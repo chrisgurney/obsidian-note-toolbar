@@ -1,9 +1,9 @@
 ---
-name: note-toolbar-gallery-discovery
+name: note-toolbar-gallery
 description: "Discover and evaluate existing Note Toolbar Gallery items before recommending, designing, or creating Obsidian Note Toolbar toolbars. Use when a user wants a toolbar, formatting actions, navigation shortcuts, existing Gallery items, or reusable Note Toolbar configurations."
 ---
 
-# Note Toolbar Gallery Discovery
+# Note Toolbar Gallery
 
 ## Purpose
 

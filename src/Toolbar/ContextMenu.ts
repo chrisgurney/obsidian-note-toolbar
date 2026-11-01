@@ -192,7 +192,7 @@ export default class ContextMenu {
 							.setIcon(EMPTY_VIEW_POSITIONS.icon)
 							.onClick(async () => {
 								await this.ntb.settingsManager.updatePosition(toolbarSettings, EMPTY_VIEW_POSITIONS.types[0]);
-								contextMenu.close();
+								contextMenu.hide();
 							});
 					});
 				}
@@ -212,7 +212,7 @@ export default class ContextMenu {
 									.setIcon(option.icon)
 									.onClick(async () => {
 										await this.ntb.settingsManager.updatePosition(toolbarSettings, option.types[0]);
-										contextMenu.close();
+										contextMenu.hide();
 									});
 							});
 						});
@@ -228,7 +228,7 @@ export default class ContextMenu {
 								.setIcon(icon)
 								.onClick(async () => {
 									await this.ntb.settingsManager.updatePosition(toolbarSettings, type);
-									contextMenu.close();
+									contextMenu.hide();
 								});
 						});
 					}
@@ -247,7 +247,7 @@ export default class ContextMenu {
 							.setIcon(icon)
 							.onClick(async () => {
 								await this.ntb.settingsManager.updatePosition(toolbarSettings, type);
-								contextMenu.close();
+								contextMenu.hide();
 							});
 					});
 				}

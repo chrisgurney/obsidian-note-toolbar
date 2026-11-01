@@ -1,7 +1,7 @@
 import NoteToolbarPlugin from "main";
-import { DEFAULT_ITEM_VISIBILITY_SETTINGS, DEFAULT_STYLE_OPTIONS, ExportSettings, ItemType, MOBILE_STYLE_OPTIONS, PositionType, SCRIPT_ATTRIBUTE_MAP, ScriptConfig, t, ToolbarItemSettings, ToolbarSettings, Visibility } from "Settings/NoteToolbarSettings";
-import { getUUID } from "./Utils";
 import { getIcon, Notice, TFile, TFolder } from "obsidian";
+import { DEFAULT_ITEM_VISIBILITY_SETTINGS, DEFAULT_STYLE_OPTIONS, ErrorBehavior, ExportSettings, ItemType, MOBILE_STYLE_OPTIONS, PositionType, SCRIPT_ATTRIBUTE_MAP, ScriptConfig, ScriptContext, t, ToolbarItemSettings, ToolbarSettings, Visibility } from "Settings/NoteToolbarSettings";
+import { getUUID } from "./Utils";
 
 const toIconizeFormat = (s: string) => 
     `:Li${s.replace(/^lucide-/, '')
@@ -117,14 +117,15 @@ export async function exportItemToCallout(
     let itemIcon = (options.includeIcons && item.icon) ? toIconizeFormat(item.icon) : '';
     itemIcon = (itemIcon && item.label) ? itemIcon + ' ' : itemIcon; // trailing space if needed
 
+    const varErrorContext: ScriptContext = { errorBehavior: ErrorBehavior.Report };
     let itemText = options.replaceVars 
-        ? await ntb.vars.replaceVars(item.label, activeFile) 
+        ? await ntb.vars.replaceVars(item.label, activeFile, varErrorContext) 
         : replaceScriptDelimiters(ntb, item.label);
     let itemLink = options.replaceVars 
-        ? await ntb.vars.replaceVars(item.link, activeFile) 
+        ? await ntb.vars.replaceVars(item.link, activeFile, varErrorContext) 
         : replaceScriptDelimiters(ntb, item.link);
     let itemTooltip = options.replaceVars 
-        ? await ntb.vars.replaceVars(item.tooltip, activeFile) 
+        ? await ntb.vars.replaceVars(item.tooltip, activeFile, varErrorContext) 
         : replaceScriptDelimiters(ntb, item.tooltip);
 
     itemText = escapeTextForCallout(itemText);
@@ -177,7 +178,7 @@ export async function exportItemToCallout(
         case ItemType.File: {
             // check if the provided file links to a folder, and if so replace with a folder
             let resolvedItemLink = itemLink;
-            await ntb.vars.replaceVars(itemLink, activeFile).then((resolvedLink) => {
+            await ntb.vars.replaceVars(itemLink, activeFile, varErrorContext).then((resolvedLink) => {
                 resolvedItemLink = resolvedLink;
             });
             const fileOrFolder = ntb.app.vault.getAbstractFileByPath(resolvedItemLink);
@@ -389,10 +390,10 @@ export function importFromCallout(
                     style && !DEFAULT_STYLE_KEYS.includes(style) && !MOBILE_STYLE_KEYS.includes(style)
                 );
     
-                ntb.debug('| • name?', name);
-                ntb.debug('| • styles?', validDefaultStyles, validMobileStyles);
+                ntb.debug('> • name?', name);
+                ntb.debug('> • styles?', validDefaultStyles, validMobileStyles);
                 if (invalidStyles.length > 0) {
-                    ntb.debug('|   • invalid:', invalidStyles);
+                    ntb.debug('>   • invalid:', invalidStyles);
                     warningLog += `- ${t('import.errorlog-invalid-styles', { styles: invalidStyles })}\n`;
                 }
             
@@ -408,7 +409,7 @@ export function importFromCallout(
     // parse the rest
     lines.map((line, index) => {
 
-        ntb.debug('| ', index + 1);
+        ntb.debug('> ', index + 1);
         
         let itemType: ItemType | undefined = undefined;
 
@@ -437,11 +438,11 @@ export function importFromCallout(
             const linkMatch = linkText.trim().match(/\[(.*?)\]\(<?(.*?)>?\)$|\[\[(.*?)(?:\|(.*?))?\]\]/);
 
             ntb.debug('! ', line);
-            ntb.debug('| dataMatch:', dataMatch);
-            ntb.debug('| uriMatch:', uriMatch);
-            ntb.debug('| tooltipMatch:', tooltipMatch);
-            ntb.debug('| linkText:', linkText);
-            ntb.debug('| linkMatch:', linkMatch);
+            ntb.debug('> dataMatch:', dataMatch);
+            ntb.debug('> uriMatch:', uriMatch);
+            ntb.debug('> tooltipMatch:', tooltipMatch);
+            ntb.debug('> linkText:', linkText);
+            ntb.debug('> linkMatch:', linkMatch);
 
             if (linkMatch) {
 
@@ -487,7 +488,7 @@ export function importFromCallout(
                 if (dataMatch || uriMatch) {
                     const dataUriType = dataMatch ? dataMatch[1] : (uriMatch ? uriMatch[1] : '');
                     const dataUriValue = dataMatch ? dataMatch[2] : (uriMatch ? uriMatch[2] : '');
-                    ntb.debug('| • data?', dataUriType, link);
+                    ntb.debug('> • data?', dataUriType, link);
         
                     switch (dataUriType as ItemType) {
                         case ItemType.Command: {
@@ -505,7 +506,7 @@ export function importFromCallout(
                         case ItemType.Templater: {
                             itemType = dataUriType as ItemType;
                             const dataEl = line.match(/<data\s[^>]*\/?>/);
-                            ntb.debug('| ', dataUriType, dataEl);
+                            ntb.debug('> ', dataUriType, dataEl);
                             
                             if (dataEl) {
                                 const parser = new DOMParser();
@@ -544,13 +545,13 @@ export function importFromCallout(
         }
 
         ntb.debug('RESULT →');
-        ntb.debug('| icon?', icon);
-        ntb.debug('| label?', label);
-        ntb.debug('| tooltip?', tooltip);
-        ntb.debug('| link?', link);
-        ntb.debug('| commandId?', commandId);
-        ntb.debug('| scriptConfig?', scriptConfig);
-        ntb.debug(`| => ${itemType?.toUpperCase()}`);
+        ntb.debug('> icon?', icon);
+        ntb.debug('> label?', label);
+        ntb.debug('> tooltip?', tooltip);
+        ntb.debug('> link?', link);
+        ntb.debug('> commandId?', commandId);
+        ntb.debug('> scriptConfig?', scriptConfig);
+        ntb.debug(`> => ${itemType?.toUpperCase()}`);
 
         errorLog += itemType ? '' : `- ${t('import.errorlog-line', { number: index + 1 })} ${t('import.errorlog-invalid-format', { line: line })}\n`;
 

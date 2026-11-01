@@ -1,7 +1,7 @@
 import {Component, MarkdownRenderer, Modal, normalizePath, Notice, TFile, WorkspaceLeaf} from "obsidian";
 import { NtbModalOptions } from "./INoteToolbarApi";
 import NoteToolbarPlugin from "main";
-import { t } from "Settings/NoteToolbarSettings";
+import { ErrorBehavior, t } from "Settings/NoteToolbarSettings";
 
 /**
  * Provides a modal that can be accessed from the Note Toolbar API.
@@ -143,7 +143,7 @@ export default class NtbModal extends Modal {
                 };
             }
             catch (error) {
-                new Notice(error instanceof Error ? error.message : String(error)).containerEl.addClass('mod-warning');
+                this.ntb.adapters.utils.handleError(error, { adapterFunction: 'ntb.modal()', errorBehavior: ErrorBehavior.Report });
             }
         }
 

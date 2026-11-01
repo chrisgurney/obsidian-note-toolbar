@@ -56,6 +56,8 @@ Functions for reading and manipulating notes in the vault.
 
 Appends the given content to the current file.
 
+Error behavior: throws with no active file, or if the file is not markdown. Await it (or catch it).
+
 #### Parameters
 
 | Parameter | Type | Description |
@@ -177,6 +179,8 @@ new Notice(selected);
 
 Sets the given property's value in the active note. Set the property to `null` to remove it.
 
+Error behavior: does not throw. With no active note, it reports the error and returns.
+
 #### Parameters
 
 | Parameter | Type | Description |
@@ -206,6 +210,8 @@ await ntb.setProperty('Delete Me', null);
 > **setSelection**: (`replacement`) => `void`
 
 Replaces the selection, the word at the cursor, or inserts at the cursor if neither exists.
+
+Error behavior: throws with no active editor.
 
 #### Parameters
 
@@ -346,9 +352,9 @@ Shows a file suggester modal for the provided files and waits for the user's sel
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `files` | `TAbstractFile`[] | - |
-| `options?` | \{ `allowCustomInput?`: `boolean`; `class?`: `string`; `collapse?`: `boolean`; `default?`: `string`; `exact?`: `boolean`; `filesonly?`: `boolean`; `folder?`: `string`; `foldersonly?`: `boolean`; `icon?`: `string`; `keymap?`: `object`[]; `label?`: `string`; `limit?`: `number`; `placeholder?`: `string`; `prefixes?`: `Record`\<`string`, `unknown`[] \| (() => `unknown`[] \| `Promise`\<`unknown`\>)\>; `rendermd?`: `boolean`; \} | Optional display options. |
+| `options?` | \{ `allowCustomInput?`: `boolean`; `class?`: `string`; `collapse?`: `boolean`; `default?`: `string`; `exact?`: `boolean`; `filesonly?`: `boolean`; `folder?`: `string`; `foldersonly?`: `boolean`; `icon?`: `string`; `keymap?`: `object`[]; `label?`: `string`; `limit?`: `number`; `placeholder?`: `string`; `prefixes?`: `Record`\<`string`, `unknown`[] \| (() => `unknown`[] \| `Promise`\<`unknown`\>)\>; `rendermd?`: `boolean`; `title?`: `string`; \} | Optional display options. |
 | `options.allowCustomInput?` | `boolean` | If set to `true`, the user can input a custom value that is not in the list of suggestions. Default is `false`. |
-| `options.class?` | `string` | Optional CSS class(es) to add to the component. |
+| `options.class?` | `string` | Optional CSS class(es) to add to the component, separated by spaces. |
 | `options.collapse?` | `boolean` | If set to `true`, the results and suggester instructions are hidden until input is provided. Default is `false`. **Since** 1.29.14 |
 | `options.default?` | `string` | Optionally pre-set the suggester's input with this value. Matching results will be shown, as if you typed in that string yourself (assuming the string appears in the list of options provided). If not provided, no default is set. |
 | `options.exact?` | `boolean` | Set to `true` to use substring matching instead of fuzzy matching, prioritizing results that start with the input string. Default is `false`. **Since** 1.30.10 |
@@ -362,6 +368,7 @@ Shows a file suggester modal for the provided files and waits for the user's sel
 | `options.placeholder?` | `string` | Optional placeholder text for input field; defaults to preset message. |
 | `options.prefixes?` | `Record`\<`string`, `unknown`[] \| (() => `unknown`[] \| `Promise`\<`unknown`\>)\> | Maps input prefixes to arrays or functions that return suggestions, or a Promise (e.g. another suggester) that resolves to a value which is injected into the input. **Examples** `{ '#': ['tag1', 'tag2'], '[[': () => getFiles() }` `{ '#': async () => await ntb.suggester(lorem, ipsum) }` **Since** 1.30.0 |
 | `options.rendermd?` | `boolean` | Set to `false` to disable rendering of suggestions as markdown. Default is `true`. |
+| `options.title?` | `string` | Optional text shown above the input field. Same as `label`. **Since** 1.36 |
 
 #### Returns
 
@@ -409,7 +416,7 @@ Shows a menu with the provided items.
 | ------ | ------ | ------ |
 | `toolbarOrItems` | `string` \| [`NtbMenuItem`](INoteToolbarApi.Interface.NtbMenuItem.md)[] | Toolbar name or [ID](Developer-IDs); or an array of items to display. See [NtbMenuItem](INoteToolbarApi.Interface.NtbMenuItem.md). |
 | `options?` | \{ `class?`: `string`; `focusInMenu?`: `boolean`; `id?`: `string`; `position?`: `"cursor"` \| `"pointer"` \| `"toolbar"`; \} | Optional display options. |
-| `options.class?` | `string` | Optional CSS class(es) to add to the component. |
+| `options.class?` | `string` | Optional CSS class(es) to add to the component, separated by spaces. |
 | `options.focusInMenu?` | `boolean` | If `true`, the menu item will be focused when the menu opens; defaults to `false`. |
 | `options.id?` | `string` | Optional ID to add to the menu when it's rendered. **Since** 1.27 |
 | `options.position?` | `"cursor"` \| `"pointer"` \| `"toolbar"` | Sets the position in which the menu will appear; defaults to `toolbar`. `cursor`: editor cursor or selected text position (falls back to pointer position, e.g., if editor is not in focus); `pointer`: mouse/pointer position; `toolbar`: last clicked toolbar element position (falls back to pointer position) **Since** 1.27 |
@@ -466,7 +473,7 @@ Shows a modal with the provided content.
 | ------ | ------ | ------ |
 | `content` | `string` \| `TFile` | Content to display in the modal, either as a string or a file within the vault. |
 | `options?` | \{ `class?`: `string`; `contextPath?`: `string`; `originAsContext?`: `boolean`; `title?`: `string`; `webpage?`: `boolean`; \} | Optional display options. |
-| `options.class?` | `string` | Optional CSS class(es) to add to the component. |
+| `options.class?` | `string` | Optional CSS class(es) to add to the component, separated by spaces. |
 | `options.contextPath?` | `string` | Optionally specify which file rendered content should use as context. For example, Bases queries that use `this.file` will refer to this file. |
 | `options.originAsContext?` | `boolean` | Use the file that opened the modal as context (assumes the active file); defaults to `false`. Ignored when `contextPath` is provided. |
 | `options.title?` | `string` | Optional title for the modal, with markdown formatting supported. |
@@ -529,12 +536,13 @@ Shows the prompt modal and waits for the user's input.
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `options?` | \{ `class?`: `string`; `default?`: `string`; `label?`: `string`; `large?`: `boolean`; `placeholder?`: `string`; \} | Optional display options. |
-| `options.class?` | `string` | Optional CSS class(es) to add to the component. |
+| `options?` | \{ `class?`: `string`; `default?`: `string`; `label?`: `string`; `large?`: `boolean`; `placeholder?`: `string`; `title?`: `string`; \} | Optional display options. |
+| `options.class?` | `string` | Optional CSS class(es) to add to the component, separated by spaces. |
 | `options.default?` | `string` | Optional default value for text field. If not provided, no default value is set. |
 | `options.label?` | `string` | Optional text shown above the text field, with markdown formatting supported. Default is no label. |
 | `options.large?` | `boolean` | If set to `true`, the input field will be multi line. If not provided, defaults to `false`. |
 | `options.placeholder?` | `string` | Optional text inside text field. Defaults to a preset message. |
+| `options.title?` | `string` | Optional text shown above the text field. Same as `label`. **Since** 1.36 |
 
 #### Returns
 
@@ -575,19 +583,24 @@ new Notice(result);
 
 Opens a sidebar view with the given content.
 
+Error behavior: throws with no content, no sidebar leaf, or `append` with file content. Await it (or catch it).
+
 #### Parameters
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `content` | `string` \| `TFile` | Text or file content to display. |
-| `options?` | \{ `active?`: `boolean`; `id?`: `string`; `reuse?`: `boolean`; `side?`: `"left"` \| `"right"`; `split?`: `boolean`; `viewIcon?`: `string`; `viewTitle?`: `string`; \} | Optional display options. |
+| `content` | `string` \| `TFile` \| `URL` | Text content (rendered as markdown), file, or URL to display. |
+| `options?` | \{ `active?`: `boolean`; `append?`: `string`; `class?`: `string`; `id?`: `string`; `navigation?`: (`"clear"` \| `"close"` \| `"export"`)[]; `reuse?`: `boolean`; `side?`: `"left"` \| `"right"`; `split?`: `boolean`; `viewIcon?`: `string`; `viewTitle?`: `string`; \} | Optional display options. |
 | `options.active?` | `boolean` | Activate the sidebar after opening or updating it. Defaults to `true`. |
+| `options.append?` | `string` | Append text content using a provided separator string, instead of replacing it. Only applies when a sidebar is being reused. **Since** 1.36 |
+| `options.class?` | `string` | Optional CSS class(es) to add to the sidebar, separated by spaces. **Since** 1.36 |
 | `options.id?` | `string` | Uniquely identify the sidebar view for reuse. When set, only a sidebar with the same ID is reused. |
-| `options.reuse?` | `boolean` | Reuse an existing sidebar view instead of creating a new one. Ignored when `id` is set. |
+| `options.navigation?` | (`"clear"` \| `"close"` \| `"export"`)[] | Navigation buttons to show in the sidebar. Can only be set once per sidebar. Defaults to adding no buttons. **Since** 1.36 |
+| `options.reuse?` | `boolean` | Reuse an existing sidebar view instead of creating a new one. Ignored when `id` is set. Defaults to `true`. |
 | `options.side?` | `"left"` \| `"right"` | Indicates which side to open the sidebar on. Default is `right`. |
 | `options.split?` | `boolean` | Indicates whether to create the sidebar in a new split. Default is `false`. |
-| `options.viewIcon?` | `string` | Sets the icon for the sidebar view. Can only be set once. |
-| `options.viewTitle?` | `string` | Sets the title for the sidebar view. Can only be set once. |
+| `options.viewIcon?` | `string` | Sets the icon for the sidebar view. Can only be set once per sidebar. |
+| `options.viewTitle?` | `string` | Sets the title for the sidebar view. Can only be set once per sidebar. |
 
 #### Returns
 
@@ -615,6 +628,13 @@ await ntb.sidebar(new URL('https://obsidian.md'));
 await ntb.sidebar(`*It is now:*\n${new Date()}`, { reuse: false });
 ```
 
+```ts
+// show a string, in the same sidebar, with an icon, title, and navigation
+ntb.sidebar(`*It is now:*\n${new Date()}`, {
+  append: '', viewIcon: 'calendar', viewTitle: 'Dates', navigation: ['clear', 'export', 'close']
+});
+```
+
 #### Since
 
 1.35
@@ -633,9 +653,9 @@ Shows a suggester modal and waits for the user's selection.
 | ------ | ------ | ------ |
 | `values?` | `string`[] \| ((`value`) => `string`) | Array of strings representing the text that will be displayed for each item in the suggester prompt. This can also be a function that maps an item to its text representation. Markdown formatting is supported: optionally mix in Obsidian and plugin markdown (e.g., Iconize) to have it rendered |
 | `keys?` | `T`[] | Optional array containing the keys of each item in the correct order. If not provided or `null`, values are returned on selection. |
-| `options?` | \{ `allowCustomInput?`: `boolean`; `class?`: `string`; `collapse?`: `boolean`; `default?`: `string`; `exact?`: `boolean`; `icon?`: `string`; `keymap?`: `object`[]; `label?`: `string`; `limit?`: `number`; `placeholder?`: `string`; `prefixes?`: `Record`\<`string`, `unknown`[] \| (() => `unknown`[] \| `Promise`\<`unknown`\>)\>; `rendermd?`: `boolean`; \} | Optional display options. |
+| `options?` | \{ `allowCustomInput?`: `boolean`; `class?`: `string`; `collapse?`: `boolean`; `default?`: `string`; `exact?`: `boolean`; `icon?`: `string`; `keymap?`: `object`[]; `label?`: `string`; `limit?`: `number`; `placeholder?`: `string`; `prefixes?`: `Record`\<`string`, `unknown`[] \| (() => `unknown`[] \| `Promise`\<`unknown`\>)\>; `rendermd?`: `boolean`; `title?`: `string`; \} | Optional display options. |
 | `options.allowCustomInput?` | `boolean` | If set to `true`, the user can input a custom value that is not in the list of suggestions. Default is `false`. |
-| `options.class?` | `string` | Optional CSS class(es) to add to the component. |
+| `options.class?` | `string` | Optional CSS class(es) to add to the component, separated by spaces. |
 | `options.collapse?` | `boolean` | If set to `true`, the results and suggester instructions are hidden until input is provided. Default is `false`. **Since** 1.29.14 |
 | `options.default?` | `string` | Optionally pre-set the suggester's input with this value. Matching results will be shown, as if you typed in that string yourself (assuming the string appears in the list of options provided). If not provided, no default is set. |
 | `options.exact?` | `boolean` | Set to `true` to use substring matching instead of fuzzy matching, prioritizing results that start with the input string. Default is `false`. **Since** 1.30.10 |
@@ -646,6 +666,7 @@ Shows a suggester modal and waits for the user's selection.
 | `options.placeholder?` | `string` | Optional placeholder text for input field; defaults to preset message. |
 | `options.prefixes?` | `Record`\<`string`, `unknown`[] \| (() => `unknown`[] \| `Promise`\<`unknown`\>)\> | Maps input prefixes to arrays or functions that return suggestions, or a Promise (e.g. another suggester) that resolves to a value which is injected into the input. **Examples** `{ '#': ['tag1', 'tag2'], '[[': () => getFiles() }` `{ '#': async () => await ntb.suggester(lorem, ipsum) }` **Since** 1.30.0 |
 | `options.rendermd?` | `boolean` | Set to `false` to disable rendering of suggestions as markdown. Default is `true`. |
+| `options.title?` | `string` | Optional text shown above the input field. Same as `label`. **Since** 1.36 |
 
 #### Returns
 
@@ -714,7 +735,7 @@ Shows a (floating) toolbar. Defaults to the 'toolbar' position.
 | ------ | ------ | ------ |
 | `toolbarNameOrId` | `string` | Toolbar name or [ID](Developer-IDs). |
 | `options?` | \{ `class?`: `string`; `position?`: `"cursor"` \| `"pointer"` \| `"toolbar"`; \} | Optional display options. |
-| `options.class?` | `string` | Optional CSS class(es) to add to the component. |
+| `options.class?` | `string` | Optional CSS class(es) to add to the component, separated by spaces. |
 | `options.position?` | `"cursor"` \| `"pointer"` \| `"toolbar"` | Sets the position in which the toolbar will appear; defaults to `toolbar`. `cursor`: editor cursor or selected text position (falls back to pointer position, e.g., if editor is not in focus); `pointer`: mouse/pointer position; `toolbar`: last clicked toolbar element position (falls back to pointer position) |
 
 #### Returns
@@ -775,6 +796,42 @@ The clipboard value or `null`.
 #### Deprecated
 
 Since 1.33. Use `await activeWindow.navigator.clipboard.readText()` instead.
+
+***
+
+### exportSettings
+
+> **exportSettings**: (`filename?`) => `Promise`\<`string`\>
+
+Copies the plugin's settings file (`data.json`), exactly as it is stored, into the vault.
+The current settings are not saved first, so the copy captures the stored file as-is.
+
+#### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `filename?` | `string` | Optional file name, or vault-relative path, for the copy. A name without a folder is placed in the `Note Toolbar Backups` folder, and `.json` is added if no extension is provided. If omitted, a timestamped name in the `Note Toolbar Backups` folder is used. An existing file is never overwritten: a number is appended to the name instead. |
+
+#### Returns
+
+`Promise`\<`string`\>
+
+The vault path of the backup copy.
+
+#### Examples
+
+```ts
+const backupPath = await ntb.exportSettings();
+```
+
+```ts
+const name = await ntb.prompt({ label: 'Note Toolbar backup filename' });
+if (name) await ntb.exportSettings(name);
+```
+
+#### Since
+
+1.36
 
 ***
 

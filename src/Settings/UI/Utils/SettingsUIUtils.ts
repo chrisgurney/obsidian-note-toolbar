@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { ButtonComponent, Component, getIcon, ItemView, MarkdownRenderer, Notice, Platform, requireApiVersion, setIcon, Setting, setTooltip, TFile, TFolder, ToggleComponent } from "obsidian";
-import { COMMAND_DOES_NOT_EXIST, ComponentType, DEFAULT_ITEM_VISIBILITY_SETTINGS, IGNORE_PLUGIN_IDS, ItemComponentVisibility, ItemType, NONE_TOOLBAR_ID, SettingType, t, ToolbarItemSettings, ToolbarSettings, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_WHATS_NEW, ViewModeType, Visibility } from "Settings/NoteToolbarSettings";
+import { COMMAND_DOES_NOT_EXIST, ComponentType, DEFAULT_ITEM_VISIBILITY_SETTINGS, ErrorBehavior, IGNORE_PLUGIN_IDS, ItemComponentVisibility, ItemType, NONE_TOOLBAR_ID, ScriptContext, SettingType, t, ToolbarItemSettings, ToolbarSettings, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_WHATS_NEW, ViewModeType, Visibility } from "Settings/NoteToolbarSettings";
 import SettingsManager from "Settings/SettingsManager";
 import { URLS } from "Utils/Urls";
 import { hasVisibleComponents, importArgs } from "Utils/Utils";
@@ -140,7 +140,7 @@ export default class SettingsUIUtils {
 		const dismissMessage = async (setting: Setting) => {
 			setting.settingEl.remove();
 			this.ntb.settings.onboarding[messageId] = forVersion ?? true;
-			await this.ntb.settingsManager.save();
+			await this.ntb.settingsManager.save(false);
 		}
 
 		const containerEl = createDiv();
@@ -600,7 +600,7 @@ export default class SettingsUIUtils {
 					if (isEmptyItem && parent) {
 						const itemContainer = parent.contentEl.querySelector('.note-toolbar-sortablejs-list') as HTMLElement;
 						if (itemContainer) {
-							void parent.itemListUi.addItemHandler(selectedItem.linkAttr.type, itemContainer);
+							void parent.itemListUi.addItemHandler(selectedItem.linkAttr.type, itemContainer, true);
 							return;
 						}
 					}
@@ -629,7 +629,7 @@ export default class SettingsUIUtils {
 					if (selectedItem.inGallery && !(await this.ntb.settingsManager.resolveGalleryItem(newItem))) return;
 					
 					toolbar.updated = new Date().toISOString();
-					await this.ntb.settingsManager.save();
+					await this.ntb.settingsManager.save(!isEmptyItem);
 
 					if (isEmptyItem) new ItemModal(this.ntb, toolbar, newItem).open()
 					else new Notice(t('setting.add-item.notice-item-added', { toolbarName: toolbar.name, interpolation: { escapeValue: false } })).containerEl.addClass('mod-success');
@@ -754,7 +754,8 @@ export default class SettingsUIUtils {
 		// replace variables in labels (or tooltip, if no label set)
 		const activeFile = this.ntb.app.workspace.getActiveFile();
 		if (replaceVars) {
-			void this.ntb.vars.replaceVars(itemName, activeFile).then((resolvedName: string) => {
+			const errorContext: ScriptContext = { errorBehavior: ErrorBehavior.Ignore };
+			void this.ntb.vars.replaceVars(itemName, activeFile, errorContext).then((resolvedName: string) => {
 				itemLabelEl.setText(resolvedName);
 			});
 		}
@@ -873,7 +874,7 @@ export default class SettingsUIUtils {
 	async runOnboarding(onboardingId: string, callback: () => void | Promise<void>): Promise<void> {
 		if (!this.ntb.settings.onboarding[onboardingId]) {
 			this.ntb.settings.onboarding[onboardingId] = true;
-			await this.ntb.settingsManager.save();
+			await this.ntb.settingsManager.save(false);
 			await callback();
 		}
 	}
@@ -990,13 +991,13 @@ export default class SettingsUIUtils {
 	 * @param [errorPosition='afterend'] where to add the error relative to the given componentEl
 	 * @returns true if the item is valid; false otherwise
 	 */
-	async updateItemComponentStatus(
+	updateItemComponentStatus(
 		parent: NoteToolbarSettingTab | ToolbarSettingsModal | ItemModal | RulesModal,
 		itemValue: string, 
 		fieldType: SettingType, 
 		componentEl: HTMLElement | null, 
 		toolbarItem?: ToolbarItemSettings,
-		errorPosition: 'beforeend' | 'afterend' = 'afterend'): Promise<boolean> 
+		errorPosition: 'beforeend' | 'afterend' = 'afterend'): boolean 
 	{
 
 		const enum Status {
@@ -1024,7 +1025,7 @@ export default class SettingsUIUtils {
 			switch(fieldType) {
 				case SettingType.Args: {
 					const parsedArgs = importArgs(itemValue);
-					this.ntb.debug('validating args:', itemValue, parsedArgs);
+					// this.ntb.debug('validating args:', itemValue, parsedArgs);
 					if (parsedArgs.value === null) {
 						status = Status.Invalid;
 						statusMessage = t('adapter.error.args-parsing-field-error', { error: parsedArgs.error });
@@ -1069,12 +1070,20 @@ export default class SettingsUIUtils {
 					break;
 				}
 				case SettingType.Text:
-					// if (plugin.hasVars(itemValue)) {
-					// 	plugin.debug('VALIDATING TEXT', itemValue);
-					// 	const activeFile = plugin.app.workspace.getActiveFile();
-					// 	plugin.replaceVars(itemValue, activeFile).then((resolvedText) => {
-							
-					// 	});
+					// do nothing
+					break;
+				case SettingType.TextWithVars:
+					// REMOVED below as this may execute unsafe code
+					// TODO? perhaps just check that variable is closed + basic check for supported variables?
+					// validate variables (for just labels, tooltips, and URIs)
+					// if (this.ntb.vars.hasVars(itemValue)) {
+					// 	const activeFile = this.ntb.app.workspace.getActiveFile();
+					// 	try {
+					// 		void this.ntb.vars.replaceVars(itemValue, activeFile, { errorBehavior: ErrorBehavior.Console });
+					// 	}
+					// 	catch (error) {
+					// 		this.ntb.error('Error parsing variable:', error);
+					// 	}
 					// }
 					break;
 				case SettingType.Toolbar: {
@@ -1105,8 +1114,9 @@ export default class SettingsUIUtils {
 									// TODO? error if required parameter is empty?
 									const value = toolbarItem.scriptConfig?.[param.parameter] ?? null;
 									if (value) {
-										const subfieldValid = await this.updateItemComponentStatus(parent, value, param.type, componentEl);
+										const subfieldValid = this.updateItemComponentStatus(parent, value, param.type, componentEl);
 										status = subfieldValid ? Status.Valid : Status.Invalid;
+										if (status === Status.Invalid) break;
 									}
 								}
 							}
@@ -1129,7 +1139,7 @@ export default class SettingsUIUtils {
 			}
 		}
 
-		removeFieldError(componentEl, errorPosition);
+		if (status !== Status.Invalid) removeFieldError(componentEl, errorPosition);
 		switch (status) {
 			case Status.Empty:
 				// TODO? flag for whether empty should show as an error or not
@@ -1143,6 +1153,35 @@ export default class SettingsUIUtils {
 
 		return isValid;
 
+	}
+
+	/**
+	 * Async check for validity of variables in text fields.
+	 */
+	async updateVarComponentStatus(parent: ItemModal, itemValue: string, componentEl: HTMLElement): Promise<boolean> {
+		let isValid = true;
+		let statusMessage;
+		const errorPosition = 'beforeend';
+
+		// validate variables (for just labels, tooltips, and URIs)
+		if (this.ntb.vars.hasVars(itemValue)) {
+			const activeFile = this.ntb.app.workspace.getActiveFile();
+			try {
+				await this.ntb.vars.replaceVars(itemValue, activeFile, { errorBehavior: ErrorBehavior.Console });
+			}
+			catch (error) {
+				this.ntb.error('Error parsing variable:', error);
+				isValid = false;
+				statusMessage = 'Error parsing variable.';
+			}
+		}
+
+		if (isValid) removeFieldError(componentEl, errorPosition);
+		if (!isValid) {
+			this.setFieldError(parent, componentEl, errorPosition, statusMessage);
+			isValid = false;
+		}
+		return isValid;
 	}
 
 	/**
@@ -1368,16 +1407,16 @@ export function removeFieldError(el: HTMLElement | null, position: 'beforeend' |
  * Removes any errors on fields in the given container.
  * @param containerEl HTMLElement to check for errors to remove
  */
-export function removeFieldErrors(containerEl: HTMLElement) {
-	const fieldErrorEls = containerEl?.querySelectorAll('.note-toolbar-setting-field-error');
-	fieldErrorEls.forEach((el) => {
-		el.remove();
-	});
-	const errorEls = containerEl?.querySelectorAll('.note-toolbar-setting-error');
-	errorEls.forEach((el) => {
-		el.toggleClass('note-toolbar-setting-error', false);
-	});
-}
+// export function removeFieldErrors(containerEl: HTMLElement) {
+// 	const fieldErrorEls = containerEl?.querySelectorAll('.note-toolbar-setting-field-error');
+// 	fieldErrorEls.forEach((el) => {
+// 		el.remove();
+// 	});
+// 	const errorEls = containerEl?.querySelectorAll('.note-toolbar-setting-error');
+// 	errorEls.forEach((el) => {
+// 		el.toggleClass('note-toolbar-setting-error', false);
+// 	});
+// }
 
 /**
  * Removes help from the given element, if it exists.

@@ -1,5 +1,4 @@
 import { DEFAULT_STYLE_DISCLAIMERS, DEFAULT_STYLE_OPTIONS, DefaultStyleType, MOBILE_STYLE_DISCLAIMERS, MOBILE_STYLE_OPTIONS, MobileStyleType, PositionType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
-import { arraymove } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
 import { debounce, ItemView, MarkdownView, Setting, SettingGroup } from "obsidian";
 import StyleModal from "../Modals/StyleModal";
@@ -310,14 +309,6 @@ export default class ToolbarStyleUi {
     ): Promise<void> {
         if (keyEvent) {
             switch (keyEvent.key) {
-                case 'ArrowUp':
-                    keyEvent.preventDefault();
-                    action = 'up';
-                    break;
-                case 'ArrowDown':
-                    keyEvent.preventDefault();
-                    action = 'down';
-                    break;
                 case 'Delete':
                 case 'Backspace':
                     keyEvent.preventDefault();
@@ -332,14 +323,6 @@ export default class ToolbarStyleUi {
             }
         }
         switch (action) {
-            case 'up':
-                arraymove(itemArray, index, index - 1);
-                this.toolbar.updated = new Date().toISOString();
-                break;
-            case 'down':
-                arraymove(itemArray, index, index + 1);
-                this.toolbar.updated = new Date().toISOString();
-                break;
             case 'delete':
                 itemArray.splice(index, 1);
                 this.toolbar.updated = new Date().toISOString();

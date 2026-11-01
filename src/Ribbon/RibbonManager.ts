@@ -17,7 +17,7 @@ export class RibbonManager {
     add(item: RibbonItem): void {
         this.addRibbonItem(item);
         this.ntb.settings.ribbon.push(item);
-        void this.ntb.settingsManager.save();
+        void this.ntb.settingsManager.save(false);
     }
 
     /**
@@ -71,7 +71,7 @@ export class RibbonManager {
         this.remove(item.uuid);
         this.ntb.settings.ribbon.splice(index, 0, item);
         this.addRibbonItem(item);
-        void this.ntb.settingsManager.save();
+        void this.ntb.settingsManager.save(false);
     }
 
     /**
@@ -115,7 +115,7 @@ export class RibbonManager {
 
     private removeFromSettings(uuid: string): void {
         this.ntb.settings.ribbon = this.ntb.settings.ribbon.filter(ribbonItem => ribbonItem.uuid !== uuid);
-        void this.ntb.settingsManager.save();
+        void this.ntb.settingsManager.save(false);
     }
 
 	/**

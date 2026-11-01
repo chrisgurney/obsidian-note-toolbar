@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
-import { TAbstractFile } from "obsidian";
-import { ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { Notice, TAbstractFile } from "obsidian";
+import { t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
 
 
 export default class VaultListeners {
@@ -24,18 +24,27 @@ export default class VaultListeners {
         this.ntb.settings.toolbars.forEach((toolbar: ToolbarSettings) => {
             toolbar.items.forEach((item: ToolbarItemSettings) => {
                 if (item.link === oldPath) {
-                    this.ntb.debug('| changing', item.link, 'to', file.path);
+                    this.ntb.debug('> changing', item.link, 'to', file.path);
                     item.link = file.path;
                     settingsChanged = true;
                 }
                 if (item.scriptConfig?.sourceFile === oldPath) {
-                    this.ntb.debug('| changing', item.scriptConfig?.sourceFile, 'to', file.path);
+                    this.ntb.debug('> changing', item.scriptConfig?.sourceFile, 'to', file.path);
                     item.scriptConfig.sourceFile = file.path;
                     settingsChanged = true;
                 }
             });
         });
-        if (settingsChanged) await this.ntb.settingsManager.save();
+        if (settingsChanged) {
+            try {
+                await this.ntb.settingsManager.save(false);
+            }
+            catch (error) {
+                // a failed save leaves the settings on disk out of sync
+                this.ntb.error('Note Toolbar: Error saving settings after file rename.', error);
+                new Notice(t('notice.error-save-settings-failed'), 10000).containerEl.addClass('mod-warning');
+            }
+        }
     }
 
 }

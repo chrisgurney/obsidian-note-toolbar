@@ -5,13 +5,14 @@
 - [ ] Create and update the latest _What's New_ documentation in `src/Help/Releases/en`.
   - If you're working in a beta branch, make sure this done is in the `master` branch (or cherry picked from the branch).
 - [ ] Update versions in `package.json`:
-  - [ ] releaseVersion: updates reference to release notes for the What's New view
-  - [ ] settingsVersion: update when settings structure changes to trigger migrations
+  - [ ] `releaseVersion`: updates reference to release notes for the What's New view
+  - [ ] `settingsVersion`: update when settings structure changes to trigger migrations
 
 ## Release process
 
-1. Run `npm run release VERSIONNUMBER`.
-2. Edit and publish the release [on GitHub](https://github.com/chrisgurney/obsidian-note-toolbar/releases).
+1. Run `npm run check-install` if any dependencies were updated since the latest release.
+2. Run `npm run release VERSIONNUMBER`.
+3. Edit and publish the release [on GitHub](https://github.com/chrisgurney/obsidian-note-toolbar/releases).
 
 ## Betas
 
@@ -22,7 +23,7 @@ Test with the [BRAT plugin ↗](https://github.com/TfTHacker/obsidian42-brat). S
 1. Create a new branch.
 1. Make changes.
 1. Update `releaseVersion` in `package.json`.
-1. In the feature branch, run `npm run release 1.xx-beta-01`
+1. In the feature branch, run `npm run release 1.x.yy`
 1. [Edit the release on GitHub](https://github.com/chrisgurney/obsidian-note-toolbar/releases) and **Set as a pre-release**.
 1. Use the [BRAT plugin](https://github.com/TfTHacker/obsidian42-brat/) to get the latest version.
 
@@ -31,7 +32,7 @@ Test with the [BRAT plugin ↗](https://github.com/TfTHacker/obsidian42-brat). S
 1. Make changes.
 1. Update `releaseVersion` in `package.json`.
 1. Create `manifest-beta.json` a copy of `manifest.json`.
-    1. Set the `version` as `X.Y-beta-01`.
+    1. Set the `version` as `1.x.yy`.
 1. Update the `package.json` with the beta version. _Do not_ run `npm run release`.
 1. Commit and push.
 1. Tag the release.

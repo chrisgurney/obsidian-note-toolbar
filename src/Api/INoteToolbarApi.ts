@@ -36,6 +36,8 @@ export default interface INoteToolbarApi<T> {
     /**
      * Appends the given content to the current file.
      * 
+     * Error behavior: throws with no active file, or if the file is not markdown. Await it (or catch it).
+     * 
      * @param content content to append
      * @param options 
      * @returns Nothing.
@@ -83,6 +85,28 @@ export default interface INoteToolbarApi<T> {
      * @since 1.29
      */
     export: (toolbar: IToolbar) => Promise<string | null>;
+
+    /**
+     * Copies the plugin's settings file (`data.json`), exactly as it is stored, into the vault.
+     * The current settings are not saved first, so the copy captures the stored file as-is.
+     * 
+     * @param filename Optional file name, or vault-relative path, for the copy. 
+     * A name without a folder is placed in the `Note Toolbar Backups` folder, and `.json` is added if no extension is provided.
+     * If omitted, a timestamped name in the `Note Toolbar Backups` folder is used. An existing file is never overwritten: 
+     * a number is appended to the name instead.
+     * @returns The vault path of the backup copy.
+     * 
+     * @example
+     * const backupPath = await ntb.exportSettings();
+     * 
+     * @example
+     * const name = await ntb.prompt({ label: 'Note Toolbar backup filename' });
+     * if (name) await ntb.exportSettings(name);
+     * 
+     * @group Utilities
+     * @since 1.36
+     */
+    exportSettings: (filename?: string) => Promise<string>;
 
     /**
      * Shows a file suggester modal for the provided files and waits for the user's selection. Files are sorted by recency.
@@ -337,6 +361,8 @@ export default interface INoteToolbarApi<T> {
     /**
      * Sets the given property's value in the active note. Set the property to `null` to remove it.
      * 
+     * Error behavior: does not throw. With no active note, it reports the error and returns.
+     * 
      * @param property Propety to set in the frontmatter.
      * @param value Value to set for the property.
      * 
@@ -355,6 +381,8 @@ export default interface INoteToolbarApi<T> {
     /**
      * Replaces the selection, the word at the cursor, or inserts at the cursor if neither exists.
      * 
+     * Error behavior: throws with no active editor.
+     * 
      * @param replacement The text to replace the selection with.
      * @remarks This does not do anything in Reading mode.
      * 
@@ -371,7 +399,9 @@ export default interface INoteToolbarApi<T> {
     /**
      * Opens a sidebar view with the given content.
      * 
-     * @param content Text or file content to display.
+     * Error behavior: throws with no content, no sidebar leaf, or `append` with file content. Await it (or catch it).
+     * 
+     * @param content Text content (rendered as markdown), file, or URL to display.
      * @param options Optional display options.
      * @returns Nothing.
      * 
@@ -390,10 +420,16 @@ export default interface INoteToolbarApi<T> {
      * // show a string, creating a new sidebar view each time
      * await ntb.sidebar(`*It is now:*\n${new Date()}`, { reuse: false });
      * 
+     * @example
+     * // show a string, in the same sidebar, with an icon, title, and navigation
+     * ntb.sidebar(`*It is now:*\n${new Date()}`, {
+     *   append: '', viewIcon: 'calendar', viewTitle: 'Dates', navigation: ['clear', 'export', 'close']
+     * });
+     * 
      * @since 1.35
      * @group UI Components
      */
-    sidebar: (content: string | TFile, options?: NtbSidebarOptions) => Promise<void>;
+    sidebar: (content: string | TFile | URL, options?: NtbSidebarOptions) => Promise<void>;
 
     /**
      * Shows a suggester modal and waits for the user's selection.
@@ -548,7 +584,7 @@ export interface NtbMenuItem {
  */
 export interface NtbMenuOptions {
     /**
-     * Optional CSS class(es) to add to the component.
+     * Optional CSS class(es) to add to the component, separated by spaces.
      */
     class?: string;
     /**
@@ -578,7 +614,7 @@ export interface NtbMenuOptions {
  */
 export interface NtbModalOptions {
     /**
-     * Optional CSS class(es) to add to the component.
+     * Optional CSS class(es) to add to the component, separated by spaces.
      */
     class?: string;
     /**
@@ -628,9 +664,14 @@ export interface NtbPromptOptions {
      */
     default?: string;
     /**
-     * Optional CSS class(es) to add to the component.
+     * Optional CSS class(es) to add to the component, separated by spaces.
      */
     class?: string;
+    /**
+     * Optional text shown above the text field. Same as `label`.
+     * @since 1.36
+     */
+    title?: string;
 }
 
 /**
@@ -643,11 +684,27 @@ export interface NtbSidebarOptions {
      */
     active?: boolean;
     /**
+     * Append text content using a provided separator string, instead of replacing it.
+     * Only applies when a sidebar is being reused.
+     * @since 1.36
+     */
+    append?: string;
+    /**
+     * Optional CSS class(es) to add to the sidebar, separated by spaces.
+     * @since 1.36
+     */
+    class?: string;
+    /**
      * Uniquely identify the sidebar view for reuse. When set, only a sidebar with the same ID is reused.
      */
     id?: string;
     /**
-     * Reuse an existing sidebar view instead of creating a new one. Ignored when `id` is set.
+     * Navigation buttons to show in the sidebar. Can only be set once per sidebar. Defaults to adding no buttons.
+     * @since 1.36
+     */
+    navigation?: ('clear' | 'close' | 'export')[];
+    /**
+     * Reuse an existing sidebar view instead of creating a new one. Ignored when `id` is set. Defaults to `true`.
      */
     reuse?: boolean;
     /**
@@ -659,11 +716,11 @@ export interface NtbSidebarOptions {
      */
     split?: boolean;
     /**
-     * Sets the icon for the sidebar view. Can only be set once.
+     * Sets the icon for the sidebar view. Can only be set once per sidebar.
      */
     viewIcon?: string;
     /**
-     * Sets the title for the sidebar view. Can only be set once.
+     * Sets the title for the sidebar view. Can only be set once per sidebar.
      */
     viewTitle?: string;
 }
@@ -678,7 +735,7 @@ export interface NtbSuggesterOptions {
      */
     allowCustomInput?: boolean;
     /**
-     * Optional CSS class(es) to add to the component.
+     * Optional CSS class(es) to add to the component, separated by spaces.
      */
     class?: string;
     /**
@@ -734,6 +791,11 @@ export interface NtbSuggesterOptions {
      * Set to `false` to disable rendering of suggestions as markdown. Default is `true`.
      */
     rendermd?: boolean;
+    /**
+     * Optional text shown above the input field. Same as `label`.
+     * @since 1.36
+     */
+    title?: string;
 }
 
 /**
@@ -742,7 +804,7 @@ export interface NtbSuggesterOptions {
  */
 export interface NtbToolbarOptions {
     /**
-     * Optional CSS class(es) to add to the component.
+     * Optional CSS class(es) to add to the component, separated by spaces.
      */
     class?: string;
     /**

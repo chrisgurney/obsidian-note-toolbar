@@ -28,7 +28,7 @@ export default class WorkspaceListeners {
 		// if the active file is the one that changed,
 		// and the file was modified after it was created (fix for a duplicate toolbar on Create new note)
 		if (activeFile === file && (file.stat.mtime > file.stat.ctime)) {
-			this.ntb.debug('===== METADATA-CHANGE ===== ', file.name);
+			// this.ntb.debug('--- METADATA-CHANGE --- ', file.name);
 			debounce(async () => {
 				await this.renderToolbar(file, cache.frontmatter);
 			}, 300)();

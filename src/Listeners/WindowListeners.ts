@@ -10,8 +10,8 @@ export default class WindowListeners {
 
     public register() {
         if (Platform.isPhone) {
-            window.addEventListener('keyboardWillHide', this.onKeyboardHide);
-            window.addEventListener('keyboardWillShow', this.onKeyboardShow);
+            this.ntb.registerDomEvent(window, 'keyboardWillHide', this.onKeyboardHide);
+            this.ntb.registerDomEvent(window, 'keyboardWillShow', this.onKeyboardShow);
         }
     }
 

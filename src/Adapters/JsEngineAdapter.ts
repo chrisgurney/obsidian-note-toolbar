@@ -1,10 +1,9 @@
 import NoteToolbarPlugin from "main";
 import { Component, Plugin, TFile } from "obsidian";
-import { ErrorBehavior, ItemType, ScriptConfig, SettingType, t } from "Settings/NoteToolbarSettings";
-import { AdapterFunction } from "Types/interfaces";
-import { importArgs } from "Utils/Utils";
-import { Adapter } from "./Adapter";
+import { ItemType, ScriptConfig, ScriptContext, SettingType, t } from "Settings/NoteToolbarSettings";
 import { learnMoreFr } from "Settings/UI/Utils/SettingsUIUtils";
+import { AdapterFunction } from "Types/interfaces";
+import { Adapter } from "./Adapter";
 
 type JsEngineResult = {
     functionBuildError?: Error;
@@ -13,6 +12,12 @@ type JsEngineResult = {
         apiInstance: unknown;
         content?: string;
         markdownElements?: [];
+        message?: {
+            code: string;
+            content: string;
+            title: string;
+            type: string;
+        };
     };
 }
 
@@ -85,18 +90,18 @@ export default class JsEngineAdapter extends Adapter {
         importJs: (path: string) => Promise<unknown>;
         internal: {
             createRenderer: ( container: HTMLElement, sourcePath: string, component: Component ) => ResultRenderer;
-            execute: ( params: EngineExecutionParams) => Promise<JsExecution>;
-            executeFile: ( filename: string, config: { container: HTMLElement | undefined, component: Component }) => Promise<JsEngineResult>;
+            execute: ( params: EngineExecutionParams ) => Promise<JsExecution>;
+            executeFile: ( filename: string, config: { container: HTMLElement | undefined, component: Component } ) => Promise<JsEngineResult>;
         };
     } | null;
     private adapterPlugin: { 
         api: unknown;
         settings: Record<string, string>;
-    } & Plugin | null;
+    } | null;
 
-    constructor(noteToolbar: NoteToolbarPlugin) {
-        const plugin = noteToolbar.app.plugins.plugins[ItemType.JsEngine] as { api: unknown, settings: unknown } & Plugin;
-        super(noteToolbar);
+    constructor(ntb: NoteToolbarPlugin) {
+        const plugin = ntb.app.plugins.plugins[ItemType.JsEngine] as { api: unknown, settings: unknown } & Plugin;
+        super(ntb);
         this.adapterPlugin = plugin as typeof this.adapterPlugin;
         this.adapterApi = this.adapterPlugin?.api as typeof this.adapterApi;
     }
@@ -111,53 +116,45 @@ export default class JsEngineAdapter extends Adapter {
     }
 
     /**
-     * @see Adapter.use
+     * @see {@link Adapter.use}
      */    
-    async use(config: ScriptConfig): Promise<string | void> {
+    async use(config: ScriptConfig, errorContext: ScriptContext): Promise<string | void> {
+
         let result;
         
-        let containerEl;
-        if (config.outputContainer) {
-            containerEl = this.ntb.el.getOutputEl(config.outputContainer);
-            if (!containerEl) {
-                this.displayScriptError(t('adapter.error.callout-not-found', { id: config.outputContainer }));
-                return;
-            }
-        }
+        const containerEl = this.ntb.adapters.utils.checkContainer(config.outputContainer, errorContext);
+        if (!containerEl && config.outputContainer) return;
 
         switch (config.pluginFunction) {
             case 'evaluate':
                 result = config.expression
-                    ? await this.evaluate(config.expression, containerEl)
-                    : t('adapter.js-engine.eval-expr-error-required');
+                    ? await this.evaluate(config.expression, errorContext, containerEl)
+                    : this.ntb.adapters.utils.handleError(t('adapter.js-engine.eval-expr-error-required'), errorContext);
                 break;
             // internal function for inline evaluations in which errors should be reported
             case 'evaluateInline':
                 result = config.expression
-                    ? await this.evaluate(config.expression, containerEl, ErrorBehavior.Report)
-                    : t('adapter.js-engine.eval-expr-error-required');
+                    ? await this.evaluate(config.expression, errorContext, containerEl)
+                    : this.ntb.adapters.utils.handleError(t('adapter.js-engine.eval-expr-error-required'), errorContext);
                 break;
             // internal function for inline evaluations in which errors can be ignored
             case 'evaluateIgnore':
                 result = config.expression
-                    ? await this.evaluate(config.expression, containerEl, ErrorBehavior.Ignore)
-                    : t('adapter.js-engine.eval-expr-error-required');
+                    ? await this.evaluate(config.expression, errorContext, containerEl)
+                    : this.ntb.adapters.utils.handleError(t('adapter.js-engine.eval-expr-error-required'), errorContext);
                 break;
             case 'exec':
                 result = config.sourceFile
-                    ? await this.exec(config.sourceFile, containerEl)
-                    : t('adapter.js-engine.exec-sourcefile-error-required');
+                    ? await this.exec(config.sourceFile, errorContext, containerEl)
+                    : this.ntb.adapters.utils.handleError(t('adapter.js-engine.exec-sourcefile-error-required'), errorContext);
                 break;
             case 'importExec':
                 result = config.sourceFile
-                    ? await this.importExec(config.sourceFile, config.sourceFunction, config.sourceArgs)
-                    : t('adapter.js-engine.importexec-sourcefile-error-required');
-                break;
-            case '':
-                // do nothing
+                    ? await this.importExec(config.sourceFile, errorContext, config.sourceFunction, config.sourceArgs)
+                    : this.ntb.adapters.utils.handleError(t('adapter.js-engine.importexec-sourcefile-error-required'), errorContext);
                 break;
             default:
-                result = t('adapter.error.function-invalid', { function: config.pluginFunction });
+                this.ntb.adapters.utils.handleError(t('adapter.error.function-invalid', { function: config.pluginFunction }), errorContext);
                 break;
         }
 
@@ -173,7 +170,11 @@ export default class JsEngineAdapter extends Adapter {
      * @param displayErrors
      * @returns
      */
-    evaluate = async (expression: string, containerEl?: HTMLElement, errorBehavior: ErrorBehavior = ErrorBehavior.Display): Promise<string> => {
+    evaluate = async (
+        expression: string,
+        errorContext: ScriptContext,
+        containerEl?: HTMLElement,
+    ): Promise<string | undefined> => {
 
         if (!this.adapterApi) return '';
 
@@ -181,15 +182,16 @@ export default class JsEngineAdapter extends Adapter {
         const resultEl = containerEl || createSpan();
 
         const activeFile = this.ntb.app.workspace.getActiveFile();
+        if (!activeFile) {
+            this.ntb.adapters.utils.handleError(t('adapter.error.expr-note-not-open'), errorContext);
+            return;
+        }
+        const activeFilePath = activeFile.path;
 
         const component = new Component();
 		component.load();
         try {
-            containerEl?.empty();
-            if (!activeFile) {
-                this.displayScriptError(t('adapter.error.query-note-not-open'));
-                return t('adapter.error.query-note-not-open');
-            }            
+            resultEl.empty();
             const context: ExecutionContext = {
                 executionSource: 'markdown-other',
                 file: activeFile
@@ -200,29 +202,34 @@ export default class JsEngineAdapter extends Adapter {
                 component: component,
                 context: context
             };
+            this.ntb.debug('Note Toolbar: Evaluating:\n', this.ntb.adapters.utils.formatExpression(expression));
             const execution = await this.adapterApi?.internal.execute(params);
+            this.ntb.debug('Note Toolbar: Result:', execution);
             if (execution.functionBuildError) throw execution.functionBuildError;
             if (execution.functionRunError) throw execution.functionRunError;
             result = execution.result as string;
+            if (containerEl) {
+                const renderer = this.adapterApi?.internal.createRenderer(resultEl, activeFilePath, component);
+                await renderer?.render(execution?.result);
+            }
+            // else {
+            //     const jsExecution = execution as JsEngineResult;
+            //     if (jsExecution.result.message?.type === 'error') {
+            //         errorContext['errorObject'] = jsExecution.result.message;
+            //         this.ntb.adapters.utils.handleError(jsExecution.result.message.code, errorContext, '', containerEl);
+            //         return;
+            //     }
+            //     result = execution?.result?.content || (execution?.result || '') as string;
+            // }
         }
         catch (error) {
-            switch (errorBehavior) {
-                case ErrorBehavior.Display:
-                    this.displayScriptError(error);
-                    break;
-                case ErrorBehavior.Report:
-                    console.error(t('adapter.error.expr-failed', { expression: expression }) + " • ", error);
-                    break;
-                case ErrorBehavior.Ignore:
-                    // do nothing
-                    break;
-            }
+            result = this.ntb.adapters.utils.handleError(error, errorContext, expression, containerEl) ?? result;
         } 
         finally {
             component.unload();
         }
 
-        return result;
+        return containerEl ? '' : result;
 
     }
 
@@ -243,37 +250,61 @@ export default class JsEngineAdapter extends Adapter {
      * @param argsJson 
      * @returns 
      */
-    importExec = async (filename: string, functionName?: string, argsJson?: string): Promise<string> => {
+    importExec = async (
+        filename: string, 
+        errorContext: ScriptContext,
+        functionName?: string, 
+        argsJson?: string
+    ): Promise<string | undefined> => {
 
         let result;
 
-        const importedArgs = argsJson ? importArgs(argsJson) : { value: {} };
-        if (importedArgs.value === null) {
-            this.displayScriptError(importedArgs.error, t('adapter.error.args-parsing', { filename }) );
-            return t('adapter.error.args-parsing-script-error', { filename: filename, error: importedArgs.error });
-        }
-        const args = importedArgs.value;
+        const args = this.ntb.adapters.utils.checkArgs(argsJson, errorContext);
+        if (!args) return '';
+        // ^ was previously:
+        // if (importedArgs.value === null) {
+        //     return t('adapter.error.args-parsing-script-error', { filename: filename, error: importedArgs.error });
+        // }
+
+        errorContext['scriptFile'] = filename;
+        const scriptFile = this.ntb.adapters.utils.checkFile(filename, errorContext);
+        if (!scriptFile) return;
+
+        const systemArgs = {
+            _scriptFile: scriptFile // lets scripts know where they're being executed from
+        };
+        Object.assign(args, systemArgs);
+
+        const scriptFilePath = scriptFile?.path || filename;
+        errorContext['scriptFile'] = scriptFile;
 
         if (this.adapterApi) {
-            // const module = await this.adapterApi.importJs(filename);
-            const module = await this.adapterApi.importJs(filename) as Record<string, unknown>;
+            this.ntb.debug('Note Toolbar: Executing:', scriptFilePath, functionName ?? '');
+            let module;
+            try {
+                module = await this.adapterApi.importJs(scriptFilePath) as Record<string, unknown>;
+            }
+            catch (error) {
+                this.ntb.adapters.utils.handleError(error, errorContext);
+                return;
+            }
             if (module && functionName) {
-                if (module[functionName] && (typeof module[functionName] === 'function')) {
-                    try {
-                        if (args) {
-                            result = (module[functionName] as (...args: unknown[]) => unknown)(this.adapterApi, args);
-                        }
-                        else {
-                            result = (module[functionName] as (...args: unknown[]) => unknown)(this.adapterApi);
-                        }
-                        this.ntb.debug('importExec() result:', result);
-                    }
-                    catch (error) {
-                        this.displayScriptError(error, t('adapter.error.exec-failed', { filename: filename }));
-                    }
+                const isFunction = module[functionName] && (typeof module[functionName] === 'function');
+                if (!isFunction) {
+                    this.ntb.adapters.utils.handleError(t('adapter.error.function-not-found', { function: functionName }), errorContext);
+                    return;
                 }
-                else {
-                    this.displayScriptError(t('adapter.error.function-not-found', { function: functionName }));
+                try {
+                    if (args) {
+                        result = (module[functionName] as (...args: unknown[]) => unknown)(this.adapterApi, args);
+                    }
+                    else {
+                        result = (module[functionName] as (...args: unknown[]) => unknown)(this.adapterApi);
+                    }
+                    this.ntb.debug('Note Toolbar: Result', result);
+                }
+                catch (error) {
+                    result = this.ntb.adapters.utils.handleError(error, errorContext, String(module[functionName])) ?? result;
                 }
             }
         }
@@ -287,40 +318,72 @@ export default class JsEngineAdapter extends Adapter {
      * @param containerEl 
      * @returns 
      */
-    exec = async (filename: string, containerEl?: HTMLElement): Promise<string> => {
+    exec = async (
+        filename: string,
+        errorContext: ScriptContext,
+        containerEl?: HTMLElement
+    ): Promise<string | undefined> => {
 
-        let result = '';
+        let result;
         const resultEl = containerEl || createSpan();
 
-        const activeFile = this.ntb.app.workspace.getActiveFile();
-        const activeFilePath = activeFile?.path ?? '';
+        const activeFilePath = this.ntb.app.workspace.getActiveFile()?.path ?? '';
+
+        if (!filename) return;
+
+        errorContext['scriptFile'] = filename;
+        const scriptFile = this.ntb.adapters.utils.checkFile(filename, errorContext);
+        if (!scriptFile) return;
+        const scriptFilePath = scriptFile?.path || filename;
+        errorContext['scriptFile'] = scriptFile;
+
+        let contents: string;
+        try {
+            contents = await this.ntb.app.vault.cachedRead(scriptFile);
+        }
+        catch (error) {
+            // the file may have been deleted or moved since checkFile above
+            this.ntb.adapters.utils.handleError(error, errorContext);
+            return;
+        }
+        if (!contents.trim()) {
+            this.ntb.adapters.utils.handleError(t('adapter.error.file-empty', { filename: filename }), errorContext);
+            return;
+        }
 
         const component = new Component();
         component.load();
         try {
-            containerEl?.empty();
-            const execution = await this.adapterApi?.internal.executeFile(filename, {
+            resultEl?.empty();
+            this.ntb.debug(`Note Toolbar: Executing:\n${scriptFilePath}`);
+            const execution = await this.adapterApi?.internal.executeFile(scriptFilePath, {
                 container: resultEl,
                 component: component,
             });
-            this.ntb.debug('exec() result:', execution?.result);
+            this.ntb.debug('Note Toolbar: Result:', execution);
             if (containerEl) {
                 const renderer = this.adapterApi?.internal.createRenderer(resultEl, activeFilePath, component);
                 await renderer?.render(execution?.result);
-                // await MarkdownRenderer.render(this.plugin.app, execution.result, resultEl, activeFilePath, this.plugin);
             }
             else {
+                const jsExecution = execution as JsEngineResult;
+                if (jsExecution.result.message?.type === 'error') {
+                    errorContext['errorObject'] = jsExecution.result.message;
+                    this.ntb.adapters.utils.handleError(jsExecution.result.message.code, errorContext, '', containerEl);
+                    return;
+                }
                 result = execution?.result?.content || (execution?.result || '') as string;
             }
         }
         catch (error) {
-            this.displayScriptError(error, t('adapter.error.exec-failed', { filename: filename }), containerEl);
+            // NOTE: it appears errors from JS Engine's executeFile are not thrown up to here...
+            result = this.ntb.adapters.utils.handleError(error, errorContext, '', containerEl) ?? result;
         }
         finally {
             component.unload();
         }
 
-        return result;
+        return containerEl ? '' : result;
 
     }
 

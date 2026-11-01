@@ -21,6 +21,12 @@ async function getContent() {
  * Prompts the user to select a prompt file from the provided folder. 
  */
 async function getPrompt(promptsFolder) {
+    if (!ntb.app.workspace.getActiveFile()) {
+        return await ntb.prompt({
+            label: 'Have a question?', placeholder: 'Type a prompt'
+        });
+    }
+
     const prompts = ntb.app.vault
         .getMarkdownFiles()
         .filter(file => file.path.startsWith(promptsFolder));

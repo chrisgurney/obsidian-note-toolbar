@@ -4,7 +4,7 @@ Skills provide context for AI coding agents to let them interact with [Note Tool
 
 ## Installation
 
-Clone or download the skills from this repository, then copy them to the appropriate directory for your agent (e.g., `.claude/skills/` or `~/.codex/skills/`).
+Clone or download the skills from this repository, then copy them to the appropriate directory for your agent (e.g., `.agents/skills` or `.claude/skills/`).
 
 Alternately, try asking:
 ```
@@ -26,5 +26,5 @@ Once installed, the agent will automatically select the appropriate skill when y
 | [`note-toolbar-api`](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/skills/note-toolbar-api/SKILL.md) | Write, edit, or debug JavaScript using the Note Toolbar `ntb` API inside Obsidian. |
 | [`note-toolbar-callouts`](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/skills/note-toolbar-callouts/SKILL.md) | Create and edit Note Toolbar Callouts (toolbars within `.md` files). |
 | [`note-toolbar-cli`](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/skills/note-toolbar-cli/SKILL.md) | Create and manage toolbars, add and use items via the Note Toolbar CLI. |
-| [`note-toolbar-gallery-discovery`](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/skills/note-toolbar-gallery-discovery/SKILL.md) | Discover and evaluate existing Note Toolbar Gallery items before recommending, designing, or creating Obsidian Note Toolbar toolbars. |
+| [`note-toolbar-gallery`](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/skills/note-toolbar-gallery/SKILL.md) | Discover and evaluate existing Note Toolbar Gallery items before recommending, designing, or creating Obsidian Note Toolbar toolbars. |
 | [`note-toolbar-variables`](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/skills/note-toolbar-variables/SKILL.md) | Specifications for variable parts of item labels, tooltips, or URI fields. |

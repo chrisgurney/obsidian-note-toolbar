@@ -70,35 +70,35 @@ export default class ToolbarSettingsModal extends Modal {
 	}
 
 	/* TODO: possibly remove promptForDefault, now that CTAs are in the onboarding message */
-	async promptForDefault(): Promise<boolean> {
-		// if this is the only toolbar, prompt once to make this the Default
-		const onboardingId = `default-${this.toolbar.uuid}`;
-		const promptForDefault = this.ntb.settings.toolbars.length === 1 
-			&& !this.ntb.settings.defaultToolbar 
-			&& !this.ntb.settings.onboarding[onboardingId];
-		if (promptForDefault) {
-			this.ntb.settings.onboarding[onboardingId] = true;
-			await this.ntb.settingsManager.save().then(() => {
-				return confirmWithModal(this.ntb.app, { 
-					title: t('setting.toolbars.label-set-default', { toolbar: this.toolbar.name, interpolation: { escapeValue: false } }),
-					questionLabel: t('setting.toolbars.label-set-default-confirm'),
-					notes: t('setting.toolbars.label-set-default-notes'),
-					approveLabel: t('setting.toolbars.button-set-default'),
-					denyLabel: t('setting.toolbars.button-no')
-				}).then((setAsDefault) => {
-					if (setAsDefault) {
-						this.ntb.settings.defaultToolbar = this.toolbar.uuid;
-						void this.ntb.settingsManager.save().then(() => {
-							// refresh the parent window again, so we can see the updated Default setting
-							this.parent?.render();
-						});
-						return true;
-					}
-				});
-			});
-		}
-		return false;
-	}
+	// async promptForDefault(): Promise<boolean> {
+	// 	// if this is the only toolbar, prompt once to make this the Default
+	// 	const onboardingId = `default-${this.toolbar.uuid}`;
+	// 	const promptForDefault = this.ntb.settings.toolbars.length === 1 
+	// 		&& !this.ntb.settings.defaultToolbar 
+	// 		&& !this.ntb.settings.onboarding[onboardingId];
+	// 	if (promptForDefault) {
+	// 		this.ntb.settings.onboarding[onboardingId] = true;
+	// 		await this.ntb.settingsManager.save().then(() => {
+	// 			return confirmWithModal(this.ntb.app, { 
+	// 				title: t('setting.toolbars.label-set-default', { toolbar: this.toolbar.name, interpolation: { escapeValue: false } }),
+	// 				questionLabel: t('setting.toolbars.label-set-default-confirm'),
+	// 				notes: t('setting.toolbars.label-set-default-notes'),
+	// 				approveLabel: t('setting.toolbars.button-set-default'),
+	// 				denyLabel: t('setting.toolbars.button-no')
+	// 			}).then((setAsDefault) => {
+	// 				if (setAsDefault) {
+	// 					this.ntb.settings.defaultToolbar = this.toolbar.uuid;
+	// 					void this.ntb.settingsManager.save().then(() => {
+	// 						// refresh the parent window again, so we can see the updated Default setting
+	// 						this.parent?.render();
+	// 					});
+	// 					return true;
+	// 				}
+	// 			});
+	// 		});
+	// 	}
+	// 	return false;
+	// }
 
 	promptForProp(): void {
 		if (this.toolbar.items.length === 0) return;
@@ -487,12 +487,12 @@ export default class ToolbarSettingsModal extends Modal {
 						if (isInRibbon) {
 							const ribbonItem: RibbonItem = { uuid: this.toolbar.uuid, showAt: PositionType.Menu };
 							this.ntb.ribbon.add(ribbonItem);
-							await this.ntb.settingsManager.save();
+							await this.ntb.settingsManager.save(false);
 							new Notice(t('setting.ribbon.notice-ribbon-added'), 10000).containerEl.addClass('mod-success');
 						}
 						else {
 							this.ntb.ribbon.remove(this.toolbar.uuid);
-							await this.ntb.settingsManager.save();
+							await this.ntb.settingsManager.save(false);
 							new Notice(t('setting.ribbon.notice-ribbon-removed'), 10000).containerEl.addClass('mod-success');
 						}
 					});
@@ -519,7 +519,7 @@ export default class ToolbarSettingsModal extends Modal {
 							this.ntb.debug('update ribbon action:', ribbonItemToUpdate);
 							if (ribbonItemToUpdate) {
 								ribbonItemToUpdate.showAt = val as PositionType;
-								await this.ntb.settingsManager.save();
+								await this.ntb.settingsManager.save(false);
 							}
 							else {
 								this.ntb.error('Ribbon item not found for:', this.toolbar.uuid);
@@ -622,7 +622,7 @@ export default class ToolbarSettingsModal extends Modal {
 						.setValue(initialCommandPosition)
 						.onChange(async (val: string) => {
 							this.toolbar.commandPosition = val as PositionType;
-							await this.ntb.settingsManager.save();
+							await this.ntb.settingsManager.save(false);
 						});
 					});
 		});

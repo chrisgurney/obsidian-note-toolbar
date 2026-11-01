@@ -1,19 +1,14 @@
-## What this changes
+### What this changes
+_One concern per PR. Link the issue or discussion this closes._
 
-<!-- One concern per PR. Link the issue or discussion this closes: Fixes #123 -->
+### How it was tested
+_Include the smoke test, desktop and mobile testing, and any Platform.isPhone-specific behaviour. Say here if desktop only._
 
-## How it was tested
+### User-facing text (if applicable):
+_Add en.json keys for any new user-facing strings. Other locales fall back to English until translated._
 
-- [ ] `npm run build` passes
-- [ ] Tested on desktop
-- [ ] Tested on mobile (or desktop only, noted below)
+### Screenshots (if applicable):
+_Attach screenshots for UI changes._
 
-## Checklist
-
-- [ ] User-facing text: `en.json` keys added (other locales fall back to English until translated)
-- [ ] Settings shape changed: `settingsVersion` bumped in `package.json` and a migration step added in `SettingsMigrator`
-- [ ] UI changes: screenshots or GIF attached
-
-## Additional context
-
-<!-- Desktop-only testing, known limitations, follow-up work: anything the reviewer should know -->
+### Additional context
+_Add any other context about the change here, including known limitations and follow-up work._

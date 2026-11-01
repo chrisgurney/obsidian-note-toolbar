@@ -1,16 +1,19 @@
 {
   "name": "obsidian-note-toolbar",
-  "version": "1.35.22",
-  "releaseVersion": "1.35",
+  "version": "1.36.06",
+  "releaseVersion": "1.36",
   "settingsVersion": 20260812.1,
   "description": "Obsidian plugin that adds customizable toolbars to your notes.",
   "main": "main.js",
   "scripts": {
     "analyze": "tsc --noEmit --skipLibCheck && node esbuild.config.mjs analyze",
     "build": "tsc --noEmit --skipLibCheck && node esbuild.config.mjs production",
+    "check": "npm run lint && npm run typecheck && npm run stylelint && npm run build",
+    "check-install": "npm ci --dry-run",
     "dev": "npm run prebuild && node esbuild.config.mjs",
     "lint": "npx eslint .",
     "prebuild": "node build/generate-version.mjs",
+    "prelint": "node build/generate-version.mjs",
     "pretypecheck": "node build/generate-version.mjs",
     "release": "node build/release.mjs",
     "stylelint": "npx stylelint '**/*.css'",
@@ -19,20 +22,23 @@
   "keywords": [],
   "author": "Chris Gurney",
   "license": "GPL-3.0",
+  "engines": {
+    "node": ">=24"
+  },
   "devDependencies": {
     "@types/node": "^26.6.4",
     "@types/sortablejs": "^1.15.8",
-    "chokidar": "^5.0.0",
+    "chokidar": "^6.0.0",
     "esbuild": "^0.28.2",
-    "eslint": "^10.8.1",
-    "eslint-plugin-obsidianmd": "latest",
-    "obsidian": "latest",
+    "eslint": "^10.13.0",
+    "eslint-plugin-obsidianmd": "^0.4.2",
+    "obsidian": "^1.14.4",
     "stylelint": "^17.16.0",
     "stylelint-config-standard": "^40.0.0",
     "typedoc": "^0.28.14",
     "typedoc-plugin-markdown": "^4.13.1",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.71.0"
+    "typescript-eslint": "^8.72.0"
   },
   "dependencies": {
     "@codemirror/view": "6.43.13",

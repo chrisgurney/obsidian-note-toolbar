@@ -9,6 +9,12 @@ declare global {
         ntb?: INoteToolbarApi<unknown>;
     }
 
+    // mobile keyboard events fired on window, not in the standard WindowEventMap
+    interface WindowEventMap {
+        'keyboardWillHide': Event;
+        'keyboardWillShow': Event;
+    }
+
     // provides access to Obsidian's translation framework
     let i18next: {
         createInstance(options?: object): typeof i18next;
