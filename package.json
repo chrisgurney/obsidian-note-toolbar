@@ -43,5 +43,9 @@
   "dependencies": {
     "@codemirror/view": "6.43.13",
     "sortablejs": "^1.15.2"
+  },
+  "overrides": {
+    "moment": "2.31.0",
+    "minimatch": "11.0.1"
   }
 }
