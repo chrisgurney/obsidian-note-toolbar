@@ -44,6 +44,14 @@ const REFERENCES = [
         src: 'docs/dist/wiki/Gallery.md',
         dest: 'skills/note-toolbar-gallery/references/gallery-reference.md',
     },
+    {
+        src: 'src/Gallery/gallery.json',
+        dest: 'skills/note-toolbar-gallery/references/gallery.json',
+    },
+    {
+        src: 'src/Gallery/gallery-items.json',
+        dest: 'skills/note-toolbar-gallery/references/gallery-items.json',
+    },
 ];
 
 const generatedNote = (src) =>
@@ -64,7 +72,9 @@ for (const { src, dest } of REFERENCES) {
         continue;
     }
 
-    const generated = generatedNote(src) + source;
+    // JSON destinations are copied verbatim; a generated header would
+    // corrupt the JSON. Markdown destinations get the header, as before.
+    const generated = dest.endsWith('.json') ? source : generatedNote(src) + source;
 
     if (checkOnly) {
         let existing = null;

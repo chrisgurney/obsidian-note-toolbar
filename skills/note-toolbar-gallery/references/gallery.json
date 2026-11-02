@@ -1,0 +1,386 @@
+{
+    "title": { 
+        "en": "Note Toolbar Gallery",
+        "ja": "Note Toolbar ギャラリー",
+        "zh": "Note Toolbar 示例库",
+        "uk": "Галерея Note Toolbar"
+    },
+    "overview": { 
+        "en": "Browse examples of items, and click/tap to add them to a toolbar.",
+        "ja": "アイテムの例を閲覧し、クリック/タップでツールバーに追加します。",
+        "zh": "浏览项目示例，点击以将其添加到工具栏。",
+        "uk": "Перегляньте приклади елементів, та натисніть щоб додати їх до панелі."
+    },
+    "pluginNote": { 
+        "en": "Some items require plugins for more sophisticated behavior. ",
+        "ja": "一部のアイテムは、より高度な動作のためにプラグインが必要です。 ",
+        "zh": "某些项目需要特定插件以实现更复杂的功能。",
+        "uk": "Деякі елементи потребують наявність додатків для більш функціональної обробки. "
+    },
+    "categories": [
+        {
+            "name": { 
+                "en": "Editor Tools",
+                "uk": "Інструменти редактора"
+            },
+            "description": { 
+                "en": "Obsidian's built-in editor toolbar.",
+                "uk": "Вбудована панель інструментів редактора Obsidian."
+            },
+            "featured": true,
+            "itemIds": [
+                "undo", "redo", "insert-wikilink", "insert-embed", "insert-tag", "attach-file", "toggle-heading", "toggle-bold", "toggle-italic", "toggle-strikethrough", "toggle-highlight", "toggle-color-highlight", "toggle-code", "toggle-blockquote", "insert-link", "toggle-bullet-list", "toggle-numbered-list", "toggle-checklist-status", "indent", "unindent", "note-toolbar-tbar-settings"
+            ]
+        },
+        { 
+            "name": { 
+                "en": "Clipboard",
+                "uk": "Буфер обміну"
+            },
+            "addAsToolbar": false,
+            "description": { 
+                "en": "Items that use the clipboard. Learn how to add these to Obsidian on the [Additional Gallery items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Additional-Gallery-items) page.",
+                "uk": "Елементи, які використовують для буфера обміну. Дізнайтеся, як додати їх до Obsidian, на сторінці [Додаткові елементи галереї](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Additional-Gallery-items)."
+            },
+            "itemIds": [
+                "copy", "cut", "paste", "copy-block-link", "copy-note-content", "paste-external-embed"
+            ]
+        },
+        {
+            "name": { 
+                "en": "Daily Notes",
+                "ja": "デイリーノート",
+                "zh": "Daily Notes 每日笔记",
+                "uk": "Щоденні нотатки"
+            },
+            "description": { 
+                "en": "Quickly navigate between daily notes. Requires the _Daily Notes_ core plugin.",
+                "ja": "デイリーノート間をすばやく移動します。コアプラグイン「Daily Notes」が必要です。",
+                "zh": "快速在每日笔记之间导航。需要启用 _日记_ 核心插件。",
+                "uk": "Швидко переміщуйтесь між щоденними нотатками. Потрібен вбудований додаток _Щоденні нотатки_."
+            },
+            "itemIds": [
+                "daily-notes-prev", "daily-notes-today", "daily-notes-next"
+            ]
+        },
+        {
+            "name": { 
+                "en": "Editing",
+                "ja": "編集",
+                "zh": "编辑",
+                "uk": "Редактор"
+            },
+            "description": { 
+                "en": "Adjust the order and arrangement of content.",
+                "ja": "内容の順序や配置を調整します。",
+                "zh": "调整内容的顺序和格式。",
+                "uk": "Працюйте швидше з текстовим редактором."
+            },
+            "itemIds": [
+                "swap-line-up", "swap-line-down", "toggle-comments", "toggle-inline-math", "add-cursor-above", "add-cursor-below"
+            ]
+        },
+        {
+            "name": { 
+                "en": "Editor Navigation",
+                "uk": "Навігація редактора"
+            },
+            "description": { 
+                "en": "Get around the text editor faster.",
+                "ja": "テキストエディター内を素早く移動します。",
+                "zh": "更快地在文本编辑器中导航。",
+                "uk": "Швидше працюйте з текстовим редактором."
+            },
+            "itemIds": [
+                "go-next-heading", "go-prev-heading", "go-top", "go-bottom", "go-next-callout", "toggle-vim-mode"
+            ]
+        },
+        {
+            "name": { 
+                "en": "Files",
+                "ja": "ファイル",
+                "zh": "文件",
+                "uk": "Файли"
+            },
+            "description": { 
+                "en": "Tools for working with files.",
+                "ja": "ファイル操作のためのツール。",
+                "zh": "用于处理文件的工具。",
+                "uk": "Інструменти роботи з файлами."
+            },
+            "itemIds": [
+                "file-new", "obsidian-kanban-create", "canvas-new", "file-move", "file-in-explorer", "file-in-system", "vscode-open"
+            ]
+        },
+        {
+            "name": {
+                "en": "Focus",
+                "uk": "Зусередження"
+            },
+            "description": {
+                "en": "Remove Obsidian's UI and focus on your writing.",
+                "uk": "Виключить зайвий інтерфейс Obsidian і зосередьтеся на своїх нотатках."
+            },
+            "itemIds": [
+                "note-toolbar-toggle-properties", "toggle-status-bar", "toggle-ui", "load-workspace", "toggle-keyboard"
+            ]
+        },
+        { 
+            "name": { 
+                "en": "Folding",
+                "uk": "Згортання"
+            },
+            "description": { 
+                "en": "Collapse and expand sections of your note for easier navigation.",
+                "uk": "Згортайте та розгортайте розділи нотатки для зручнішої навігації."
+            },
+            "itemIds": [
+                "toggle-fold", "fold-all", "unfold-all", "fold-less", "fold-more"
+            ]
+        },
+        {
+            "name": { 
+                "en": "Formatting",
+                "ja": "書式",
+                "zh": "格式化",
+                "uk": "Форматування"
+            },
+            "description": { 
+                "en": "Change how text looks.",
+                "ja": "テキストの見た目を変更します。",
+                "zh": "更改文本的外观。",
+                "uk": "Змініть вигляд тексту."
+            },
+            "itemIds": [
+                "toggle-blockquote", "toggle-bold", "toggle-code", "toggle-heading", "remove-heading", "set-heading-1", "set-heading-2", "set-heading-3", "set-heading-4", "set-heading-5", "set-heading-6", "toggle-highlight", "toggle-italics", "toggle-strikethrough", "clear-formatting"
+            ]
+        },
+        {
+            "name": { 
+                "en": "Lists & Indentation",
+                "ja": "リストとインデント",
+                "zh": "列表与缩进",
+                "uk": "Списки та відступи"
+            },
+            "description": { 
+                "en": "Organize items into lists and adjust structure.",
+                "ja": "項目をリストに整理し、構造を調整します。",
+                "zh": "将项目组织成列表并调整结构。",
+                "uk": "Упорядкуйте елементи у списки та налаштуйте структуру."
+            },
+            "itemIds": [
+                "toggle-bullet-list", "toggle-checklist-status", "toggle-numbered-list", "indent", "unindent", "cycle-list-checklist"
+            ]
+        },
+        {
+            "name": { 
+                "en": "Insertions",
+                "ja": "挿入",
+                "zh": "插入",
+                "uk": "Вставки"
+            },
+            "description": { 
+                "en": "Add various types of content like links or media.",
+                "ja": "リンクやメディアなど、さまざまなコンテンツを追加します。",
+                "zh": "添加各种类型的内容，如链接或媒体。",
+                "uk": "Додайте різні типи вмісту, такі як посилання, або медіа."
+            },
+            "itemIds": [
+                "insert-codeblock", "insert-callout", "insert-footnote", "insert-link", "insert-tag", "insert-horizontal-rule", "insert-wikilink", "insert-table", "insert-embed", "attach-file", "insert-mathblock"
+            ]
+        },
+        {
+            "name": { 
+                "en": "Mobile Navigation",
+                "uk": "Мобільна навігація"
+            },
+            "description": { 
+                "en": "Helpful for navigating within the app and around the editor on mobile.",
+                "uk": "Корисно для навігації по програмі та редактору на мобільному пристрої."
+            },
+            "itemIds": [
+                "tab-prev", "tab-next", "file-switcher-open", "tab-new", "tab-switcher-open", "toggle-keyboard"
+            ]
+        },
+        {
+            "name": { 
+                "en": "New Tab View",
+                "ja": "新しいタブビュー",
+                "zh": "新标签页视图",
+                "uk": "Вигляд Нової вкладки"
+            },
+            "description": {
+                "en": "Replace the new tab view with a toolbar. [Learn more](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/New-tab-view)",
+                "ja": "新しいタブビューをツールバーに置き換えます。 [詳細](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/New-tab-view)",
+                "zh": "使用工具栏替换新标签页视图。  [了解更多](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/New-tab-view)"
+            },
+            "itemIds": [
+                "go-home", "daily-notes-today", "file-new", "templater-new-note-from-template", "bookmarks-open"
+            ]
+        },
+        {
+            "name": { 
+                "en": "Note Toolbar",
+                "ja": "Note Toolbar",
+                "zh": "笔记工具栏"
+            },
+            "description": { 
+                "en": "Get access to Note Toolbar settings and tools quickly.",
+                "ja": "Note Toolbar の設定やツールへ素早くアクセスします。",
+                "zh": "快速访问笔记工具栏设置和工具。",
+                "uk": "Отримайте швидкий доступ до налаштувань та інструментів Note Toolbar."
+            },
+            "itemIds": [
+                "note-toolbar-quick-toolbars", "note-toolbar-quick-tools", "note-toolbar-tbar-settings", "note-toolbar-user-guide"
+            ]
+        },
+        {
+            "name": { 
+                "en": "Obsidian Support",
+                "ja": "Obsidian サポート",
+                "zh": "Obsidian 支持",
+                "uk": "Підтримка Obsidian"
+            },
+            "description": { 
+                "en": "Get help from Obsidian community resources.",
+                "ja": "Obsidian コミュニティのリソースからヘルプを得ます。",
+                "zh": "从 Obsidian 社区资源中获取帮助。",
+                "uk": "Отримайте допомогу від спільноти Obsidian."
+            },
+            "itemIds": [
+                "obsidian-help-site", "obsidian-markdown-reference"
+            ]
+        },
+        {
+            "name": { 
+                "en": "Search",
+                "ja": "検索",
+                "zh": "搜索",
+                "uk": "Пошук"
+            },
+            "description": { 
+                "en": "Search in notes and across your vault.",
+                "ja": "ノートやボールト全体を検索します。",
+                "zh": "在笔记和整个库中搜索。",
+                "uk": "Шукайте в нотатках і по всьому сховищу."
+            },
+            "itemIds": [
+                "search-selection", "search-replace-open", "global-search-open", "folder-search"
+            ]
+        },
+        {
+            "name": { 
+                "en": "Vault Files",
+                "uk": "Файли сховища"
+            },
+            "addAsToolbar": false,
+            "description": { 
+                "en": "Items that require access to vault files. Learn how to add these to Obsidian on the [Additional Gallery items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Additional-Gallery-items) page.",
+                "uk": "Елементи, які потребують доступу до сховища файлів. Дізнайтеся, як додати їх до Obsidian, на сторінці [Додаткові елементи галереї](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Additional-Gallery-items)."
+            },
+            "itemIds": [
+                "file-new-tab", "file-append", "note-toolbar-export", "note-toolbar-backup-data"
+            ]
+        },
+        {
+            "name": { 
+                "en": "Vault Navigation",
+                "ja": "ボールトのナビゲーション",
+                "zh": "库导航",
+                "uk": "Навігація по сховищу"
+            },
+            "description": { 
+                "en": "Navigate between notes and files.",
+                "ja": "ファイルやディレクトリ間を移動します。",
+                "zh": "在不同的文件和目录之间导航。",
+                "uk": "Переміщуйтесь між файлами та каталогами."
+            },
+            "itemIds": [
+                "go-back", "go-forward","file-prev", "file-next", "file-switcher-open", "tab-prev", "tab-next", "tab-switcher-open", "tab-new", "tab-close", "go-home", "go-up", "bookmarks-open", "system-vault-open"
+            ]
+        },
+        {
+            "name": { 
+                "en": "Views & Themes",
+                "ja": "ビューとテーマ",
+                "zh": "视图与主题",
+                "uk": "Теми та режими перегляду"
+            },
+            "description": { 
+                "en": "Switch themes and toggle views.",
+                "ja": "テーマ切り替えや表示モードの切替。",
+                "zh": "切换主题和视图。",
+                "uk": "Перемикайте теми та режими перегляду."
+            },
+            "itemIds": [
+                "theme-switch", "theme-toggle-light-dark", "cycle-themes", "toggle-css-class", "editor-toggle-preview", "editor-toggle-source", "system-snippets-open"
+            ]
+        },
+        {
+            "name": { 
+                "en": "Workspaces",
+                "ja": "ワークスペース",
+                "zh": "工作区",
+                "uk": "Простори"
+            },
+            "description": { 
+                "en": "Switch between workspaces. Requires the _Workspaces_ core plugin.",
+                "ja": "ワークスペースを切り替えます。コアプラグイン「Workspaces」が必要です。",
+                "zh": "在工作区之间切换。需要启用 _工作区_ 核心插件。",
+                "uk": "Перемикання між робочими просторами. Потрібен вбудований додаток _Простори_."
+            },
+            "itemIds": [
+                "load-workspace", "cycle-workspace", "set-workspace"
+            ]
+        },
+        {
+            "name": { 
+                "en": "Periodic Notes",
+                "ja": "Periodic Notes（周期ノート）",
+                "zh": "Periodic Notes 周期性笔记"
+            },
+            "description": { 
+                "en": "Navigate weekly, monthly, and yearly notes. Requires the [Periodic Notes](obsidian://show-plugin?id=periodic-notes) plugin.",
+                "ja": "週次・月次・年次ノートをナビゲートします。必要なプラグイン：[Periodic Notes](obsidian://show-plugin?id=periodic-notes)。",
+                "zh": "导航到每周、每月和每年的笔记。需要 [Periodic Notes](obsidian://show-plugin?id=periodic-notes) 插件。",
+                "uk": "Перехід до щотижневих, щомісячних та річних нотаток. Потрібен додаток [Periodic Notes](obsidian://show-plugin?id=periodic-notes)."
+            },
+            "itemIds": [
+                "periodic-notes-daily-prev", "periodic-notes-daily-open", "periodic-notes-daily-next", "periodic-notes-weekly-prev", "periodic-notes-weekly-open", "periodic-notes-weekly-next", "periodic-notes-monthly-prev", "periodic-notes-monthly-open", "periodic-notes-monthly-next", "periodic-notes-yearly-prev", "periodic-notes-yearly-open", "periodic-notes-yearly-next"
+            ]
+        },
+        {
+            "name": { 
+                "en": "Templater",
+                "ja": "Templater（テンプレート）",
+                "zh": "Templater 模板"
+            },
+            "description": { 
+                "en": "Insert or create notes from templates. Requires the [Templater](obsidian://show-plugin?id=templater-obsidian) plugin. See the user guide for even [more ways to use Templater](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater).",
+                "ja": "テンプレートからノートを挿入/作成します。必要なプラグイン：[Templater](obsidian://show-plugin?id=templater-obsidian)。ユーザーガイドではさらに多くの使い方を紹介しています。",
+                "zh": "从模板中插入或创建笔记。需要 [Templater](obsidian://show-plugin?id=templater-obsidian) 插件。请参阅用户指南以了解 [更多使用 Templater 的方法](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater)。",
+                "uk": "Вставляйте, або створюйте нотатки з шаблонів. Потрібен додаток [Templater](obsidian://show-plugin?id=templater-obsidian) plugin. See the user guide for even [more ways to use Templater](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater)."
+            },
+            "itemIds": [
+                "templater-insert-template", "templater-new-note-from-template"
+            ]
+        },
+        {
+            "name": { 
+                "en": "Plugins",
+                "ja": "プラグイン",
+                "zh": "探索更多",
+                "uk": "Додатки"
+            },
+            "description": { 
+                "en": "Do even more with other Obsidian plugins.",
+                "ja": "Obsidian のプラグインでできることを広げましょう。",
+                "zh": "通过 Obsidian 的插件实现更多妙妙功能。",
+                "uk": "Робіть більше з додатками Obsidian."
+            },
+            "itemIds": [
+                "obsidian-sync-version-history", "obsidian-excalidraw-create", "obsidian-tasks-edit"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,2384 @@
+[
+    {
+        "id": "add-cursor-above",
+        "commandId": "editor:add-cursor-above",
+        "description": {
+            "en": "Add another cursor above the current cursor.",
+            "uk": "Додати ще один курсор над поточним курсором."
+        },
+        "focus": "editor",
+        "icon": "mouse-pointer-click",
+        "tooltip": {
+            "en": "Add cursor above",
+            "uk": "Додати курсор вище"
+        },
+        "type": "command"
+    },
+    {
+        "id": "add-cursor-below",
+        "commandId": "editor:add-cursor-below",
+        "description": {
+            "en": "Add another cursor below the current cursor.",
+            "uk": "Додати ще один курсор під поточним курсором."
+        },
+        "focus": "editor",
+        "icon": "mouse-pointer-click",
+        "tooltip": {
+            "en": "Add cursor below",
+            "uk": "Додати курсор нижче"
+        },
+        "type": "command"
+    },
+    {
+        "id": "attach-file",
+        "commandId": "editor:attach-file",
+        "description": {
+            "en": "Insert a file attachment.",
+            "zh": "插入附件文件。",
+            "uk": "Виберіть файл для вставки.",
+            "ja": "ファイルを添付します。"
+        },
+        "focus": "editor",
+        "icon": "paperclip",
+        "tooltip": {
+            "en": "Insert attachment",
+            "ja": "添付ファイルを挿入",
+            "zh": "插入附件",
+            "uk": "Вкладення"
+        },
+        "type": "command"
+    },
+    {
+        "id": "bookmarks-open",
+        "commandId": "bookmarks:open",
+        "description": {
+            "en": "Opens the bookmarks sidebar.",
+            "ja": "ブックマークのサイドバーを開きます。",
+            "zh": "打开书签侧边栏。",
+            "uk": "Відкрийте бічну панель закладок."
+        },
+        "icon": "bookmark",
+        "tooltip": {
+            "en": "Show bookmarks",
+            "ja": "ブックマークを表示",
+            "zh": "显示书签",
+            "uk": "Показати закладки"
+        },
+        "type": "command"
+    },
+    {
+        "id": "canvas-new",
+        "commandId": "canvas:new-file",
+        "description": {
+            "en": "Create a new canvas file.",
+            "ja": "新しいキャンバスファイルを作成します。",
+            "zh": "创建一个新的画布文件。",
+            "uk": "Створіть новий файл полотна."
+        },
+        "icon": "network",
+        "target": "tab",
+        "tooltip": {
+            "en": "New canvas",
+            "ja": "新しいキャンバス",
+            "zh": "新建画布（Canvas）",
+            "uk": "Нове полотно"
+        },
+        "type": "command"
+    },
+    {
+        "id": "clear-formatting",
+        "commandId": "editor:clear-formatting",
+        "description": {
+            "en": "Remove all text formatting.",
+            "ja": "すべてのテキスト書式を削除します。",
+            "zh": "移除所有文本格式。",
+            "uk": "Видаліть все форматування тексту."
+        },
+        "focus": "editor",
+        "icon": "eraser",
+        "tooltip": {
+            "en": "Clear formatting",
+            "ja": "書式をクリア",
+            "zh": "清除格式",
+            "uk": "Скинути форматування"
+        },
+        "type": "command"
+    },
+    {
+        "id": "copy",
+        "description": {
+            "en": "Copies the selected text to the clipboard.",
+            "ja": "選択したテキストをクリップボードにコピーします。",
+            "zh": "将选中文本复制到剪贴板。",
+            "uk": "Копіює вибраний текст у буфер обміну."
+        },
+        "icon": "clipboard-copy",
+        "tooltip": {
+            "en": "Copy",
+            "ja": "コピー",
+            "zh": "复制",
+            "uk": "Копіювати"
+        },
+        "type": "additional"
+    },
+    {
+        "id": "copy-block-link",
+        "description": {
+            "en": "Copies a link to the current block to the clipboard.",
+            "ja": "現在のブロックへのリンクをクリップボードにコピーします。",
+            "zh": "复制当前块的链接到剪贴板。",
+            "uk": "Копіює посилання на поточний блок до буфера обміну."
+        },
+        "icon": "link-2",
+        "tooltip": {
+            "en": "Copy link to block",
+            "ja": "ブロックへのリンクをコピー",
+            "zh": "复制块链接（Block ID）",
+            "uk": "Посилання на блок"
+        },
+        "type": "additional"
+    },
+    {
+        "id": "copy-note-content",
+        "description": {
+            "en": "Copy body of the note to the clipboard, ignoring frontmatter.",
+            "ja": "フロントマターを除いたノートの本文をクリップボードにコピーします。",
+            "zh": "复制笔记正文到剪贴板，忽略 frontmatter。",
+            "uk": "Копіюйте вміст поточної нотатки до буфера обміну, ігноруючи властивості."
+        },
+        "icon": "clipboard-check",
+        "tooltip": {
+            "en": "Copy note content",
+            "ja": "ノートの内容をコピー",
+            "zh": "复制笔记内容",
+            "uk": "Скопіювати вміст нотатки"
+        },
+        "type": "additional"
+    },
+    {
+        "id": "copy-obsidian-url",
+        "commandId": "workspace:copy-url",
+        "description": {
+            "en": "Copy the Obsidian URL for the current note to the clipboard.",
+            "ja": "現在のノートのObsidian URLをクリップボードにコピーします。",
+            "zh": "将当前笔记的 Obsidian URL 复制到剪贴板。",
+            "uk": "Копіюйте Obsidian URL поточної нотатки в буфер обміну."
+        },
+        "icon": "share",
+        "tooltip": {
+            "en": "Copy Obsidian URL",
+            "ja": "Obsidian URLをコピー",
+            "zh": "复制 Obsidian URL",
+            "uk": "Скопіювати Obsidian URL"
+        },
+        "type": "command"
+    },
+    {
+        "id": "cut",
+        "description": {
+            "en": "Cuts the selected text to the clipboard.",
+            "ja": "選択したテキストをクリップボードに切り取ります。",
+            "zh": "将选中文本剪切到剪贴板。",
+            "uk": "Вирізає вибраний текст у буфер обміну."
+        },
+        "icon": "scissors",
+        "tooltip": {
+            "en": "Cut",
+            "ja": "切り取り",
+            "zh": "剪切",
+            "uk": "Вирізати"
+        },
+        "type": "additional"
+    },
+    {
+        "id": "cycle-list-checklist",
+        "commandId": "editor:cycle-list-checklist",
+        "description": {
+            "en": "Changes to bullet, checkbox, or unchecked.",
+            "ja": "箇条書き、チェックボックス、未チェックを切り替えます。",
+            "zh": "在项目符号、复选框（勾选和未勾选）之间切换。",
+            "uk": "Змінює на маркер, прапорець, або знімає позначку."
+        },
+        "focus": "editor",
+        "icon": "check-square",
+        "tooltip": {
+            "en": "Cycle bullet/checkbox",
+            "ja": "箇条書き/チェックボックスを切替",
+            "zh": "切换项目符号/复选框",
+            "uk": "Список/прапорець"
+        },
+        "type": "command"
+    },
+    {
+        "id": "cycle-themes",
+        "description": {
+            "en": "Cycles between installed themes, including the default.",
+            "ja": "デフォルトを含むインストール済みのテーマを順に切り替えます。",
+            "zh": "在已安装的主题之间循环切换，包括默认主题。",
+            "uk": "Циклічно перемикає теми, включаючи тему за замовчуванням."
+        },
+        "icon": "venetian-mask",
+        "script": "const i = ntb.getActiveItem();\nconst t = [...Object.values(ntb.app.customCss.themes), { name: '' }];\nconst n = t[(t.findIndex(theme => theme.name === ntb.app.vault.getConfig('cssTheme')) + 1) % t.length].name;\nntb.app.customCss.setTheme(n);\nif (n) new Notice(n);",
+        "tooltip": {
+            "en": "Cycle themes",
+            "ja": "テーマを切替",
+            "zh": "切换主题",
+            "uk": "Перемкнути тему"
+        },
+        "type": "javascript"
+    },
+    {
+        "id": "cycle-workspace",
+        "description": {
+            "en": "Cycles between workspaces.",
+            "ja": "ワークスペースを順に切り替えます。",
+            "zh": "在工作区之间循环切换。",
+            "uk": "Циклічно перемикає простори."
+        },
+        "icon": "layout-grid",
+        "script": "const p = ntb.app.internalPlugins.getPluginById('workspaces');\nconst ws = Object.keys(p?.instance.workspaces);\nconst a = p?.instance.activeWorkspace;\nconst i = (ws.indexOf(a) + 1) % ws.length;\np?.instance.loadWorkspace(ws[i]);\nnew Notice(ws[i]);",
+        "tooltip": {
+            "en": "Cycle workspaces",
+            "ja": "ワークスペースを切替",
+            "zh": "切换工作区",
+            "uk": "Перемкнути простір"
+        },
+        "type": "javascript"
+    },
+    {
+        "id": "daily-notes-prev",
+        "commandId": "daily-notes:goto-prev",
+        "description": {
+            "en": "Go to the previous daily note.",
+            "ja": "前のデイリーノートに移動します。",
+            "zh": "转到上一条每日笔记。",
+            "uk": "Перейти до попередньої щоденної нотатки."
+        },
+        "icon": "arrow-left",
+        "tooltip": {
+            "en": "Previous daily note",
+            "ja": "前のデイリーノート",
+            "zh": "上一条每日笔记",
+            "uk": "Попередня щоденна нотатка"
+        },
+        "type": "command"
+    },
+    {
+        "id": "daily-notes-today",
+        "commandId": "daily-notes",
+        "description": {
+            "en": "Go to today's daily note.",
+            "ja": "今日のデイリーノートに移動します。",
+            "zh": "转到今天的每日笔记。",
+            "uk": "Перейти до сьогоднішньої щоденної нотатки."
+        },
+        "icon": "calendar",
+        "tooltip": {
+            "en": "Today's daily note",
+            "ja": "今日のデイリーノート",
+            "zh": "今天的每日笔记",
+            "uk": "Сьогоднішня щоденна нотатка"
+        },
+        "type": "command"
+    },
+    {
+        "id": "daily-notes-next",
+        "commandId": "daily-notes:goto-next",
+        "description": {
+            "en": "Go to the next daily note.",
+            "ja": "次のデイリーノートに移動します。",
+            "zh": "转到下一条每日笔记。",
+            "uk": "Перейти до наступної щоденної нотатки."
+        },
+        "icon": "arrow-right",
+        "tooltip": {
+            "en": "Next daily note",
+            "ja": "次のデイリーノート",
+            "zh": "下一条每日笔记",
+            "uk": "Наступна щоденна нотатка"
+        },
+        "type": "command"
+    },
+    {
+        "id": "delete-paragraph",
+        "commandId": "editor:delete-paragraph",
+        "description": {
+            "en": "Delete the current paragraph.",
+            "uk": "Видалити поточний абзац."
+        },
+        "focus": "editor",
+        "icon": "pilcrow",
+        "tooltip": {
+            "en": "Delete paragraph",
+            "uk": "Видалити абзац"
+        },
+        "type": "command"
+    },
+    {
+        "id": "editor-toggle-preview",
+        "commandId": "markdown:toggle-preview",
+        "description": {
+            "en": "Change between the editor's Preview and Reading modes.",
+            "ja": "エディターのプレビューモードと閲覧モードを切り替えます。",
+            "zh": "在编辑器的预览和阅读模式之间切换。",
+            "uk": "Перемикайте до режиму Читання."
+        },
+        "icon": "book-open",
+        "tooltip": {
+            "en": "Toggle Reading view",
+            "ja": "閲覧ビューを切替",
+            "zh": "切换阅读视图",
+            "uk": "Режим читання"
+        },
+        "type": "command"
+    },
+    {
+        "id": "editor-toggle-source",
+        "commandId": "editor:toggle-source",
+        "description": {
+            "en": "Turn Source mode on and off.",
+            "ja": "ソースモードのオン・オフを切り替えます。",
+            "zh": "打开和关闭源码模式。",
+            "uk": "Перемикайте до Джерельного відодображення."
+        },
+        "icon": "code-2",
+        "tooltip": {
+            "en": "Toggle Source mode",
+            "ja": "ソースモードを切替",
+            "zh": "切换源码模式",
+            "uk": "Джерельний режим"
+        },
+        "type": "command"
+    },
+    {
+        "id": "file-append",
+        "description": {
+            "en": "Appends the prompted text to a file you specify.",
+            "ja": "入力したテキストを指定したファイルに追加します。",
+            "zh": "将提示框输入的文本附加到您指定的文件中。",
+            "uk": "Додайте текст через запит до вказаного файлу."
+        },
+        "icon": "file-plus-2",
+        "tooltip": {
+            "en": "Append text",
+            "ja": "テキストを追加",
+            "zh": "附加文本",
+            "uk": "Додати текст"
+        },
+        "type": "additional"
+    },
+    {
+        "id": "file-in-explorer",
+        "commandId": "file-explorer:reveal-active-file",
+        "description": {
+            "en": "Reveal the active file in navigation.",
+            "ja": "ナビゲーションでアクティブなファイルを表示します。",
+            "zh": "在导航中显示当前文件。",
+            "uk": "Показати поточний файл у проводнику."
+        },
+        "icon": "folder-tree",
+        "tooltip": {
+            "en": "Show file in navigation",
+            "ja": "ナビゲーションでファイルを表示",
+            "zh": "在导航中显示文件",
+            "uk": "Відкрити у проводнику"
+        },
+        "type": "command"
+    },
+    {
+        "id": "file-in-system",
+        "commandId": "open-with-default-app:show",
+        "description": {
+            "en": "Reveal the active file in the system's file explorer.",
+            "ja": "システムのファイルエクスプローラーでアクティブなファイルを表示します。",
+            "zh": "在系统的文件资源管理器中显示当前文件。",
+            "uk": "Відкрийте поточний файл у файловому менеджері."
+        },
+        "excludeOn": "mobile",
+        "icon": "folder-search",
+        "tooltip": {
+            "en": "Show file in system",
+            "ja": "システムでファイルを表示",
+            "zh": "在系统中显示文件",
+            "uk": "Показати у файловому менеджері"
+        },
+        "type": "command"
+    },
+    {
+        "id": "file-move",
+        "commandId": "file-explorer:move-file",
+        "description": {
+            "en": "Move current file to a chosen folder.",
+            "ja": "現在のファイルを選択したフォルダに移動します。",
+            "zh": "将当前文件移动到选定的文件夹。",
+            "uk": "Перемістіть файл до вказаної теки."
+        },
+        "icon": "folder-input",
+        "tooltip": {
+            "en": "Move file to folder",
+            "ja": "ファイルをフォルダに移動",
+            "zh": "将文件移动到文件夹",
+            "uk": "Перемістити файл у..."
+        },
+        "type": "command"
+    },
+    {
+        "id": "file-new",
+        "commandId": "file-explorer:new-file",
+        "description": {
+            "en": "Creates a new note.",
+            "ja": "新しいノートを作成します。",
+            "zh": "创建一个新笔记。",
+            "uk": "Створіть нову нотатку."
+        },
+        "icon": "file-plus",
+        "tooltip": {
+            "en": "New note",
+            "ja": "新しいノート",
+            "zh": "新笔记",
+            "uk": "Нова нотатка"
+        },
+        "type": "command"
+    },
+    {
+        "id": "file-new-tab",
+        "description": {
+            "en": "Opens the selected file in a new tab.",
+            "ja": "選択したファイルを新しいタブで開きます。",
+            "zh": "在新标签页中打开选定的文件。",
+            "uk": "Відкрийте обраний файл в новій вкладці."
+        },
+        "icon": "file-plus",
+        "tooltip": {
+            "en": "Open file in new tab",
+            "ja": "新しいタブでファイルを開く",
+            "zh": "在新标签页中打开文件",
+            "uk": "Відкрити в новій вкладці"
+        },
+        "type": "additional"
+    },
+    {
+        "id": "file-next",
+        "description": {
+            "en": "Open next file in the folder, sorted A-Z. Loops to the first file.",
+            "ja": "フォルダ内の次のファイルをA-Z順で開きます。最後のファイルに達したら最初に戻ります。",
+            "zh": "打开文件夹中的下一个文件，按 A-Z 排序。超过范围时，将重新循环到第一个文件。",
+            "uk": "Відкрийте наступний файл у теці згідно сортировки за алфавітом (А–Я). Повертається до першого файлу."
+        },
+        "icon": "square-arrow-right",
+        "script": "const go = s => { const cf = app.workspace.getActiveFile(), fs = cf?.parent?.children?.filter(f => !f.children).sort((a, b) => a.basename.localeCompare(b.basename, undefined, {numeric: true, sensitivity: 'base'})) || [], ci = fs.findIndex(f => f.path === cf.path); if (fs.length > 1) app.workspace.activeLeaf.openFile(fs[((ci + s) % fs.length + fs.length) % fs.length]); }; go(1);",
+        "tooltip": {
+            "en": "Next file",
+            "ja": "次のファイル",
+            "zh": "下一个文件",
+            "uk": "Наступний файл"
+        },
+        "type": "javascript"
+    },
+    {
+        "id": "file-prev",
+        "description": {
+            "en": "Open previous file in the folder, sorted A-Z. Loops to the last file.",
+            "ja": "フォルダ内の前のファイルをA-Z順で開きます。最初のファイルに達したら最後に戻ります。",
+            "zh": "打开文件夹中的上一个文件，按 A-Z 排序。超过范围时，将重新循环回到最后一个文件。",
+            "uk": "Відкрийте попередній файл у теці згідно сортировки за алфавітом (А–Я). Повертається до останнього файлу."
+        },
+        "icon": "square-arrow-left",
+        "script": "const go = s => { const cf = app.workspace.getActiveFile(), fs = cf?.parent?.children?.filter(f => !f.children).sort((a, b) => a.basename.localeCompare(b.basename, undefined, {numeric: true, sensitivity: 'base'})) || [], ci = fs.findIndex(f => f.path === cf.path); if (fs.length > 1) app.workspace.activeLeaf.openFile(fs[((ci + s) % fs.length + fs.length) % fs.length]); }; go(-1);",
+        "tooltip": {
+            "en": "Previous file",
+            "ja": "前のファイル",
+            "zh": "上一个文件",
+            "uk": "Попередній файл"
+        },
+        "type": "javascript"
+    },
+    {
+        "id": "file-switcher-open",
+        "description": {
+            "en": "Open the file switcher.",
+            "uk": "Відкрити перемикач файлів."
+        },
+        "icon": "search",
+        "script": "ntb.app.internalPlugins.getPluginById('switcher')?.instance?.onOpen();",
+        "tooltip": {
+            "en": "File switcher",
+            "uk": "Перемикач файлів"
+        },
+        "type": "javascript"
+    },
+    {
+        "id": "folder-search",
+        "description": {
+            "en": "Search in the current folder, or all files if currently in the root.",
+            "ja": "現在のフォルダ内を検索します。ルートにいる場合はすべてのファイルを検索します。",
+            "zh": "打开基于当前文件夹的搜索，如果文件在根目录中，则搜索所有文件。",
+            "uk": "Відкрийте пошук у поточній теці, або серед усіх файлів у її корені."
+        },
+        "icon": "folder-search",
+        "script": "const p = ntb.app.workspace.getActiveFile()?.parent.path ?? '/';\nawait ntb.app.workspace.getLeaf(true).setViewState({ type: 'search' });\nconst l = ntb.app.workspace.getLeavesOfType('search')[0];\nconst se = l.containerEl.querySelector('.search-input-container > input');\nse.value = (p === '/') ? '' : 'path:\"'+p+'\" ';\nse.trigger('input');\nse.focus();",
+        "tooltip": {
+            "en": "Search folder",
+            "ja": "フォルダを検索",
+            "zh": "搜索文件夹",
+            "uk": "Пошук теки"
+        },
+        "type": "javascript"
+    },
+    {
+        "id": "global-search-open",
+        "commandId": "global-search:open",
+        "description": {
+            "en": "Opens the search sidebar.",
+            "ja": "検索サイドバーを開きます。",
+            "zh": "打开搜索侧边栏。",
+            "uk": "Відкрийте бічну панель пошуку."
+        },
+        "icon": "search",
+        "tooltip": {
+            "en": "Search all files",
+            "ja": "すべてのファイルを検索",
+            "zh": "搜索所有文件",
+            "uk": "Пошук у всіх файлах"
+        },
+        "type": "command"
+    },
+    {
+        "id": "go-back",
+        "commandId": "app:go-back",
+        "description": {
+            "en": "Go backwards.",
+            "uk": "Перехід назад."
+        },
+        "icon": "arrow-left",
+        "tooltip": {
+            "en": "Navigate back",
+            "uk": "Навігація назад"
+        },
+        "type": "command"
+    },
+    {
+        "id": "go-bottom",
+        "description": {
+            "en": "Moves the cursor to the bottom of the current note.",
+            "ja": "カーソルを現在のノートの一番下に移動します。",
+            "zh": "将光标移动到当前笔记的底部。",
+            "uk": "Перемістіть курсор у кінець поточної нотатки."
+        },
+        "icon": "arrow-down-to-line",
+        "script": "const {editor, currentMode} = ntb.app.workspace.activeLeaf?.view; currentMode.applyScroll(editor.lineCount()-1);",
+        "tooltip": {
+            "en": "Jump to bottom",
+            "ja": "最下部にジャンプ",
+            "zh": "跳到底部",
+            "uk": "Перейти до кінця"
+        },
+        "type": "javascript"
+    },
+    {
+        "id": "go-forward",
+        "commandId": "app:go-forward",
+        "description": {
+            "en": "Go forwards.",
+            "uk": "Перехід вперед."
+        },
+        "icon": "arrow-right",
+        "tooltip": {
+            "en": "Navigate forward",
+            "uk": "Навігація вперед"
+        },
+        "type": "command"
+    },
+    {
+        "id": "go-home",
+        "description": {
+            "en": "Go to your home note. (Enter your home note in the URL.)",
+            "ja": "ホームノートに移動します。（URLにホームノートを入力してください。）",
+            "zh": "转到您的主页笔记（在 URL 中输入您的主页笔记）",
+            "uk": "Перейдіть до вашої домашньої нотатки (вкажіть домашню нотатку в URL-адресі)."
+        },
+        "icon": "home",
+        "tooltip": {
+            "en": "Home",
+            "ja": "ホーム",
+            "zh": "主页",
+            "uk": "Додому"
+        },
+        "uri": "",
+        "type": "uri"
+    },
+    {
+        "id": "go-top",
+        "description": {
+            "en": "Moves the cursor to the top of the current note.",
+            "ja": "カーソルを現在のノートの一番上に移動します。",
+            "zh": "将光标移动到当前笔记的顶部。",
+            "uk": "Перемістіть курсор на початок поточної нотатки."
+        },
+        "icon": "arrow-up-to-line",
+        "script": "ntb.app.workspace.activeLeaf?.view.currentMode.applyScroll(1);",
+        "tooltip": {
+            "en": "Jump to top",
+            "ja": "最上部にジャンプ",
+            "zh": "跳到顶部",
+            "uk": "Перейти на початок"
+        },
+        "type": "javascript"
+    },
+    {
+        "id": "go-up",
+        "description": {
+            "en": "Uses your note's \"up\" property to link to a parent note.",
+            "ja": "ノートの\"up\"プロパティを使用して親ノートにリンクします。",
+            "zh": "使用您的笔记的 \"up\" 属性导航到您的库中的父笔记。",
+            "uk": "Перейдіть на рівень вище (використовується властивість нотатки \"up\")."
+        },
+        "icon": "arrow-up-left",
+        "tooltip": {
+            "en": "Go up",
+            "ja": "上に移動",
+            "zh": "向上",
+            "uk": "Вгору"
+        },
+        "uri": "{{prop_up}}",
+        "type": "uri"
+    },
+    {
+        "id": "go-next-callout",
+        "description": {
+            "en": "Moves the cursor to the next callout in the note.",
+            "ja": "カーソルをノート内の次のコールアウトに移動します。",
+            "zh": "将光标移动到笔记中的下一个标注。",
+            "uk": "Перемістіть курсор до наступної виноски в нотатці."
+        },
+        "icon": "chevrons-down",
+        "script": "const ed = ntb.app.workspace.activeEditor?.editor;\nconst ln = ed.getValue().split('\\n');\nlet idx = ed.getCursor().line;\nconst r = /^\\s*>/;\nwhile (idx < ln.length && r.test(ln[idx])) idx++;\nwhile (idx < ln.length && !r.test(ln[idx])) idx++;\nif (idx >= ln.length) { idx = 0; while (idx < ln.length && !r.test(ln[idx])) idx++; }\nif (idx < ln.length) { ed.setCursor({ line: idx, ch: 0 }); }",
+        "tooltip": {
+            "en": "Next callout",
+            "ja": "次のコールアウト",
+            "zh": "下一个标注（Callout）",
+            "uk": "Наступна виноска"
+        },
+        "type": "javascript"
+    },
+    {
+        "id": "go-next-heading",
+        "description": {
+            "en": "Moves the cursor to the next heading in the note.",
+            "ja": "カーソルをノート内の次の見出しに移動します。",
+            "zh": "将光标移动到笔记中的下一个标题。",
+            "uk": "Перемістіть курсор до наступного заголовка в нотатці."
+        },
+        "icon": "a-arrow-down",
+        "script": "const e = ntb.app.workspace.activeEditor?.editor;\nconst c = e.getCursor();\nconst lines = e.getValue().split('\\n');\nfor (let i = c.line + 1; i !== c.line; i = (i + 1) % lines.length) { if (/^#{1,6}\\s/.test(lines[i])) { e.setCursor({ line: i, ch: 0 }); break; } }",
+        "tooltip": {
+            "en": "Next heading",
+            "ja": "次の見出し",
+            "zh": "下一个标题",
+            "uk": "Наступний заголовок"
+        },
+        "type": "javascript"
+    },
+    {
+        "id": "go-prev-heading",
+        "description": {
+            "en": "Moves the cursor to the previous heading in the note.",
+            "ja": "カーソルをノート内の前の見出しに移動します。",
+            "zh": "将光标移动到笔记中的上一个标题。",
+            "uk": "Перемістіть курсор до попереднього заголовка в нотатці."
+        },
+        "icon": "a-arrow-up",
+        "script": "const e = ntb.app.workspace.activeEditor?.editor;\nconst c = e.getCursor();\nconst lines = e.getValue().split('\\n');\nfor (let i = (c.line - 1 + lines.length) % lines.length; i !== c.line; i = (i - 1 + lines.length) % lines.length) { if (/^#{1,6}\\s/.test(lines[i])) { e.setCursor({ line: i, ch: 0 }); break; } }",
+        "tooltip": {
+            "en": "Previous heading",
+            "ja": "前の見出し",
+            "zh": "上一个标题",
+            "uk": "Попередній заголовок"
+        },
+        "type": "javascript"
+    },
+    {
+        "id": "indent",
+        "commandId": "editor:indent-list",
+        "description": {
+            "en": "Increases indentation on the current line.",
+            "ja": "現在の行のインデントを増やします。",
+            "zh": "增加当前行的缩进。",
+            "uk": "Збільшує відступ на поточному рядку."
+        },
+        "icon": "indent-increase",
+        "tooltip": {
+            "en": "Indent list item",
+            "ja": "インデントを増やす",
+            "zh": "缩进",
+            "uk": "Відступ"
+        },
+        "type": "command"
+    },
+    {
+        "id": "insert-callout",
+        "commandId": "editor:insert-callout",
+        "description": {
+            "en": "Insert a callout block.",
+            "ja": "コールアウトブロックを挿入します。",
+            "zh": "插入一个标注块。",
+            "uk": "Додайте блок виноски."
+        },
+        "focus": "editor",
+        "icon": "quote",
+        "tooltip": {
+            "en": "Insert callout",
+            "ja": "コールアウトを挿入",
+            "zh": "插入标注（Callout）",
+            "uk": "Виноска"
+        },
+        "type": "command"
+    },
+    {
+        "id": "insert-codeblock",
+        "commandId": "editor:insert-codeblock",
+        "description": {
+            "en": "Insert a code block.",
+            "ja": "コードブロックを挿入します。",
+            "zh": "插入一个代码块。",
+            "uk": "Додайте блок коду."
+        },
+        "focus": "editor",
+        "icon": "code-square",
+        "tooltip": {
+            "en": "Insert code block",
+            "ja": "コードブロックを挿入",
+            "zh": "插入代码块（Code Block）",
+            "uk": "Блок коду"
+        },
+        "type": "command"
+    },
+    {
+        "id": "insert-footnote",
+        "commandId": "editor:insert-footnote",
+        "description": {
+            "en": "Insert a footnote.",
+            "uk": "Вставити виноску."
+        },
+        "focus": "editor",
+        "icon": "file-signature",
+        "tooltip": {
+            "en": "Insert footnote",
+            "uk": "Вставити виноску"
+        },
+        "type": "command"
+    },
+    {
+        "id": "insert-embed",
+        "commandId": "editor:insert-embed",
+        "description": {
+            "en": "Add an embedded file or note.",
+            "ja": "埋め込みファイルまたはノートを追加します。",
+            "zh": "添加一个嵌入的文件或笔记。",
+            "uk": "Додайте вбудований файл, або нотатку."
+        },
+        "focus": "editor",
+        "icon": "sticky-note",
+        "tooltip": {
+            "en": "Add embed",
+            "ja": "埋め込みを追加",
+            "zh": "添加嵌入",
+            "uk": "Вбудування"
+        },
+        "type": "command"
+    },
+    {
+        "id": "paste-external-embed",
+        "description": {
+            "en": "Pastes an embedded external link.",
+            "uk": "Вставляє вбудоване зовнішнє посилання."
+        },
+        "focus": "editor",
+        "icon": "image-play",
+        "tooltip": {
+            "en": "Paste external embed",
+            "uk": "Вставити зовнішню вбудовану частину"
+        },
+        "type": "additional"
+    },
+    {
+        "id": "insert-horizontal-rule",
+        "commandId": "editor:insert-horizontal-rule",
+        "description": {
+            "en": "Insert a horizontal rule to separate sections.",
+            "ja": "セクションを区切る水平線を挿入します。",
+            "zh": "插入一条分隔线。",
+            "uk": "Додайте горизонтальну лінію для розділення секцій."
+        },
+        "focus": "editor",
+        "icon": "line-horizontal",
+        "tooltip": {
+            "en": "Insert horizontal rule",
+            "ja": "水平線を挿入",
+            "zh": "插入分隔线",
+            "uk": "Горизонтальна лінія"
+        },
+        "type": "command"
+    },
+    {
+        "id": "insert-link",
+        "commandId": "editor:insert-link",
+        "description": {
+            "en": "Insert a Markdown link.",
+            "ja": "Markdownリンクを挿入します。",
+            "zh": "插入一个 Markdown 链接。",
+            "uk": "Додайте посилання Markdown."
+        },
+        "focus": "editor",
+        "icon": "link",
+        "tooltip": {
+            "en": "Insert Markdown link",
+            "ja": "Markdownリンクを挿入",
+            "zh": "插入 markdown 链接",
+            "uk": "Посилання Markdown"
+        },
+        "type": "command"
+    },
+    {
+        "id": "insert-mathblock",
+        "commandId": "editor:insert-mathblock",
+        "description": {
+            "en": "Insert a math block.",
+            "ja": "数式ブロックを挿入します。",
+            "zh": "插入一个数学块。",
+            "uk": "Додайте блок формул."
+        },
+        "focus": "editor",
+        "icon": "sigma-square",
+        "tooltip": {
+            "en": "Insert math block",
+            "ja": "数式ブロックを挿入",
+            "zh": "插入数学块",
+            "uk": "Блок формул"
+        },
+        "type": "command"
+    },
+    {
+        "id": "insert-table",
+        "commandId": "editor:insert-table",
+        "description": {
+            "en": "Insert a table.",
+            "ja": "表を挿入します。",
+            "zh": "插入一个表格。",
+            "uk": "Додайте таблицю."
+        },
+        "focus": "editor",
+        "icon": "table",
+        "tooltip": {
+            "en": "Insert table",
+            "ja": "表を挿入",
+            "zh": "插入表格",
+            "uk": "Таблиця"
+        },
+        "type": "command"
+    },
+    {
+        "id": "insert-tag",
+        "commandId": "editor:insert-tag",
+        "description": {
+            "en": "Insert a tag in the note.",
+            "ja": "ノートにタグを挿入します。",
+            "zh": "给笔记添加一个标签。",
+            "uk": "Додайте мітку до нотатки."
+        },
+        "focus": "editor",
+        "icon": "tag",
+        "tooltip": {
+            "en": "Insert tag",
+            "ja": "タグを挿入",
+            "zh": "添加标签",
+            "uk": "Нова мітка"
+        },
+        "type": "command"
+    },
+    {
+        "id": "insert-wikilink",
+        "commandId": "editor:insert-wikilink",
+        "description": {
+            "en": "Add an internal link.",
+            "ja": "内部リンクを追加します。",
+            "zh": "添加一个内部链接。",
+            "uk": "Додайте внутрішнє посилання."
+        },
+        "focus": "editor",
+        "icon": "brackets",
+        "tooltip": {
+            "en": "Add internal link",
+            "ja": "内部リンクを追加",
+            "zh": "添加内部链接",
+            "uk": "Внутрішнє посилання"
+        },
+        "type": "command"
+    },
+    {
+        "id": "load-workspace",
+        "commandId": "workspaces:load",
+        "description": {
+            "en": "Select and load a configured workspace.",
+            "ja": "設定されたワークスペースを選択して読み込みます。",
+            "zh": "选择并加载一个配置的工作区。",
+            "uk": "Завантажуйте власний варіант компонування робочого простору."
+        },
+        "icon": "layout-template",
+        "tooltip": {
+            "en": "Load workspace",
+            "ja": "ワークスペースを読み込み",
+            "zh": "加载工作区",
+            "uk": "Завантажити простір"
+        },
+        "type": "command"
+    },
+    {
+        "id": "move-caret-up",
+        "commandId": "editor:move-caret-up",
+        "description": {
+            "en": "Move the caret up.",
+            "uk": "Перемістити каретку вгору."
+        },
+        "excludeOn": "desktop",
+        "focus": "editor",
+        "icon": "chevron-up",
+        "tooltip": {
+            "en": "Move caret up",
+            "uk": "Перемістити каретку вгору"
+        },
+        "type": "command"
+    },
+    {
+        "id": "move-caret-down",
+        "commandId": "editor:move-caret-down",
+        "description": {
+            "en": "Move the caret down.",
+            "uk": "Перемістити каретку вниз."
+        },
+        "excludeOn": "desktop",
+        "focus": "editor",
+        "icon": "chevron-down",
+        "tooltip": {
+            "en": "Move caret down",
+            "uk": "Перемістити каретку вниз"
+        },
+        "type": "command"
+    },
+    {
+        "id": "move-caret-left",
+        "commandId": "editor:move-caret-left",
+        "description": {
+            "en": "Move the caret left.",
+            "uk": "Перемістити каретку ліворуч."
+        },
+        "excludeOn": "desktop",
+        "focus": "editor",
+        "icon": "chevron-left",
+        "tooltip": {
+            "en": "Move caret left",
+            "uk": "Перемістити каретку ліворуч"
+        },
+        "type": "command"
+    },
+    {
+        "id": "move-caret-right",
+        "commandId": "editor:move-caret-right",
+        "description": {
+            "en": "Move the caret right.",
+            "uk": "Перемістити каретку праворуч."
+        },
+        "excludeOn": "desktop",
+        "focus": "editor",
+        "icon": "chevron-right",
+        "tooltip": {
+            "en": "Move caret right",
+            "uk": "Перемістити каретку праворуч"
+        },
+        "type": "command"
+    },
+    {
+        "id": "new-note",
+        "commandId": "file-explorer:new-file",
+        "description": {
+            "en": "Create a new note.",
+            "ja": "新しいノートを作成します。",
+            "zh": "创建一个新笔记。",
+            "uk": "Створіть нову нотатку."
+        },
+        "icon": "file",
+        "tooltip": {
+            "en": "New note",
+            "ja": "新しいノート",
+            "zh": "新笔记",
+            "uk": "Нова нотатка"
+        },
+        "type": "command"
+    },
+    {
+        "id": "note-toolbar-backup-data",
+        "description": {
+            "en": "Copy Note Toolbar's settings (data.json) file into the vault.",
+            "ja": "Note Toolbarの設定(data.json)ファイルを保管庫にコピーします。",
+            "zh": "将 Note Toolbar 的设置（data.json）文件复制到库中。",
+            "uk": "Зберігайте до сховища резервну копію файлу налаштунків Note Toolbar (data.json)."
+        },
+        "icon": "file-stack",
+        "tooltip": {
+            "en": "Backup Note Toolbar data",
+            "ja": "Note Toolbar設定をバックアップ",
+            "zh": "备份 Note Toolbar 配置",
+            "uk": "Резервна копія Note Toolbar"
+        },
+        "type": "additional"
+    },
+    {
+        "id": "note-toolbar-export",
+        "description": {
+            "en": "Writes an export file containing all toolbars as callouts.",
+            "uk": "Записує файл експорту, що містить усі панелі інструментів як виноски."
+        },
+        "icon": "file-spreadsheet",
+        "tooltip": {
+            "en": "Export all toolbars as callouts",
+            "uk": "Експортувати всі панелі інструментів як виноски"
+        },
+        "type": "additional"
+    },
+    {
+        "id": "note-toolbar-quick-toolbars",
+        "commandId": "note-toolbar:open-toolbar-suggester",
+        "description": {
+            "en": "Opens a window with access to all of your Note Toolbars.",
+            "ja": "すべてのNote Toolbarにアクセスできるウィンドウを開きます。",
+            "zh": "打开一个窗口，以访问所有的笔记工具栏。",
+            "uk": "Відкрийте вікно з доступом до всіх ваших панелей Note Toolbar."
+        },
+        "icon": "package-search",
+        "tooltip": {
+            "en": "Quick Toolbars",
+            "ja": "クイックツールバー",
+            "zh": "快速工具栏",
+            "uk": "Швидкі панелі"
+        },
+        "type": "command"
+    },
+    {
+        "id": "note-toolbar-quick-tools",
+        "commandId": "note-toolbar:open-item-suggester",
+        "description": {
+            "en": "Opens a searchable window with access to all toolbar items.",
+            "ja": "すべてのツールバーアイテムにアクセスできる検索可能なウィンドウを開きます。",
+            "zh": "打开一个可搜索的窗口，访问所有的笔记工具栏项目。",
+            "uk": "Відкрийте вікно пошуку з доступом до всіх елементів Note Toolbar."
+        },
+        "icon": "rocket",
+        "tooltip": {
+            "en": "Quick Tools",
+            "ja": "クイックツール",
+            "zh": "快速工具",
+            "uk": "Швидкі інструменти"
+        },
+        "type": "command"
+    },
+    {
+        "id": "note-toolbar-tbar-settings",
+        "commandId": "note-toolbar:open-toolbar-settings",
+        "description": {
+            "en": "Opens the active toolbar's settings.",
+            "ja": "アクティブなNote Toolbarの設定を開いてツールバーをカスタマイズします。",
+            "zh": "打开活动的笔记工具栏设置，以自定义您的工具栏。",
+            "uk": "Відкрийте налаштування активної панелі Note Toolbar для персоналізації."
+        },
+        "icon": "wrench",
+        "tooltip": {
+            "en": "Toolbar settings",
+            "ja": "ツールバー設定",
+            "zh": "（当前）工具栏设置",
+            "uk": "Налаштування панелі"
+        },
+        "type": "command"
+    },
+    {
+        "id": "note-toolbar-toggle-properties",
+        "commandId": "note-toolbar:toggle-properties",
+        "description": {
+            "en": "Toggle the visibility of note properties.",
+            "ja": "ノートのプロパティの表示を切り替えます。",
+            "zh": "切换笔记属性区的可见性。",
+            "uk": "Перемикайте видимість властивостей нотатки."
+        },
+        "icon": "table-properties",
+        "tooltip": {
+            "en": "Toggle Properties",
+            "ja": "プロパティを切替",
+            "zh": "切换属性（Property）",
+            "uk": "Перемкнути властивості"
+        },
+        "type": "command"
+    },
+    {
+        "id": "note-toolbar-user-guide",
+        "description": {
+            "en": "Access the Note Toolbar User Guide for help and tips.",
+            "ja": "ヘルプやヒントについてNote Toolbarユーザーガイドにアクセスします。",
+            "zh": "访问笔记工具栏用户指南，获取帮助和提示。",
+            "uk": "Відкрийте посібник користувача Note Toolbar для отримання допомоги та порад."
+        },
+        "icon": "book",
+        "tooltip": {
+            "en": "Note Toolbar User Guide",
+            "ja": "Note Toolbarユーザーガイド",
+            "zh": "笔记工具栏用户指南",
+            "uk": "Довідка Note Toolbar"
+        },
+        "uri": "https://github.com/chrisgurney/obsidian-note-toolbar/wiki",
+        "type": "uri"
+    },
+    {
+        "id": "obsidian-excalidraw-create",
+        "commandId": "obsidian-excalidraw-plugin:excalidraw-autocreate-newtab",
+        "description": {
+            "en": "Create a new Excalidraw drawing.",
+            "ja": "新しいExcalidrawドローイングを作成します。",
+            "zh": "创建一个新的 Excalidraw 绘图。",
+            "uk": "Створіть новий малюнок Excalidraw."
+        },
+        "icon": "pencil-line",
+        "tooltip": {
+            "en": "New drawing",
+            "ja": "新しいドローイング",
+            "zh": "新建绘图",
+            "uk": "Новий малюнок"
+        },
+        "type": "command"
+    },
+    {
+        "id": "obsidian-hotkeys",
+        "description": {
+            "en": "Opens Obsidian's hotkeys settings.",
+            "uk": "Відкриває налаштування гарячих клавіш Obsidian."
+        },
+        "icon": "keyboard",
+        "script": "ntb.ntb.commands.openHotkeySettings()",
+        "tooltip": {
+            "en": "Obsidian hotkeys",
+            "uk": "Гарячі клавіші Obsidian"
+        },
+        "uri": "https://help.obsidian.md/",
+        "type": "javascript"
+    },
+    {
+        "id": "obsidian-help-site",
+        "description": {
+            "en": "Opens the official Obsidian Help site.",
+            "ja": "Obsidian公式ヘルプサイトを開きます。",
+            "zh": "打开官方的 Obsidian 帮助网站。",
+            "uk": "Відкрийте офіційний сайт довідки Obsidian."
+        },
+        "icon": "book",
+        "tooltip": {
+            "en": "Obsidian Help",
+            "ja": "Obsidianヘルプ",
+            "zh": "Obsidian 帮助",
+            "uk": "Довідка Obsidian"
+        },
+        "uri": "https://help.obsidian.md/",
+        "type": "uri"
+    },
+    {
+        "id": "obsidian-kanban-create",
+        "commandId": "obsidian-kanban:create-new-kanban-board",
+        "description": {
+            "en": "Create a new kanban board.",
+            "ja": "新しいカンバンボードを作成します。",
+            "zh": "创建一个新的看板。",
+            "uk": "Створіть нову дошку Kanban."
+        },
+        "icon": "square-kanban",
+        "target": "tab",
+        "tooltip": {
+            "en": "New kanban",
+            "ja": "新しいカンバン",
+            "zh": "新建看板",
+            "uk": "Нова дошка"
+        },
+        "type": "command"
+    },
+    {
+        "id": "obsidian-markdown-reference",
+        "description": {
+            "en": "Opens Obsidian's Markdown formatting guide.",
+            "ja": "ObsidianのMarkdown書式ガイドを開きます。",
+            "zh": "打开 Obsidian 的 Markdown 格式指南。",
+            "uk": "Відкрийте посібник з форматування Markdown Obsidian."
+        },
+        "icon": "book-down",
+        "tooltip": {
+            "en": "Markdown reference",
+            "ja": "Markdownリファレンス",
+            "zh": "Markdown 参考",
+            "uk": "Довідка Markdown"
+        },
+        "uri": "https://help.obsidian.md/Editing+and+formatting/Basic+formatting+syntax",
+        "type": "uri"
+    },
+    {
+        "id": "obsidian-sync-version-history",
+        "commandId": "sync:view-version-history",
+        "description": {
+            "en": "View the version history for the current file.",
+            "ja": "現在のファイルのバージョン履歴を表示します。",
+            "zh": "查看当前文件的版本历史。",
+            "uk": "Перегляньте історію версій поточного файлу."
+        },
+        "icon": "file-clock",
+        "tooltip": {
+            "en": "Version history",
+            "ja": "バージョン履歴",
+            "zh": "版本历史",
+            "uk": "Історія версій"
+        },
+        "type": "command"
+    },
+    {
+        "id": "obsidian-tasks-edit",
+        "commandId": "obsidian-tasks-plugin:edit-task",
+        "description": {
+            "en": "Create a new task.",
+            "ja": "新しいタスクを作成します。",
+            "zh": "创建一个新任务。",
+            "uk": "Створіть нове завдання."
+        },
+        "icon": "check-square-2",
+        "tooltip": {
+            "en": "Create/Edit task",
+            "ja": "タスクを作成/編集",
+            "zh": "创建/编辑任务",
+            "uk": "Нове завдання"
+        },
+        "type": "command"
+    },
+    {
+        "id": "paste",
+        "description": {
+            "en": "Pastes the text from the clipboard.",
+            "ja": "クリップボードからテキストを貼り付けます。",
+            "zh": "粘贴剪贴板中的文本。",
+            "uk": "Вставте текст з буфера обміну."
+        },
+        "icon": "clipboard-paste",
+        "tooltip": {
+            "en": "Paste",
+            "ja": "貼り付け",
+            "zh": "粘贴",
+            "uk": "Вставити"
+        },
+        "type": "additional"
+    },
+    {
+        "id": "periodic-notes-daily-next",
+        "commandId": "periodic-notes:next-daily-note",
+        "description": {
+            "en": "Go to next daily note. (Must be in a daily note.)",
+            "uk": "Наступна щоденна нотатка."
+        },
+        "icon": "arrow-right",
+        "tooltip": {
+            "en": "Next daily note",
+            "uk": "Наступна щоденна нотатка"
+        },
+        "type": "command"
+    },
+    {
+        "id": "periodic-notes-daily-prev",
+        "commandId": "periodic-notes:prev-daily-note",
+        "description": {
+            "en": "Go to previous daily note. (Must be in a daily note.)",
+            "uk": "Перехід до попередньої щоденної нотатки. (Має бути в щоденній нотатці)"
+        },
+        "icon": "arrow-left",
+        "tooltip": {
+            "en": "Previous daily note",
+            "uk": "Попередня щоденна нотатка"
+        },
+        "type": "command"
+    },
+    {
+        "id": "periodic-notes-daily-open",
+        "commandId": "periodic-notes:open-daily-note",
+        "description": {
+            "en": "Go to today's daily note.",
+            "uk": "Перехід до сьогоднішньої щоденної нотатки."
+        },
+        "icon": "calendar",
+        "tooltip": {
+            "en": "Today's daily note",
+            "uk": "Сьогоднішня щоденна нотатка"
+        },
+        "type": "command"
+    },
+    {
+        "id": "periodic-notes-monthly-next",
+        "commandId": "periodic-notes:next-monthly-note",
+        "description": {
+            "en": "Open next monthly note. (Must be in a monthly note.)",
+            "ja": "次の月次ノートを開きます。（月次ノート内にいる必要があります。）",
+            "zh": "打开下一个月度笔记（当前位于一个月度笔记中时才有效）",
+            "uk": "Відкрийте наступну місячну нотатку. (Потрібно бути у місячній нотатці)."
+        },
+        "icon": "lucide-calendar-plus",
+        "tooltip": {
+            "en": "Next monthly note",
+            "ja": "次の月次ノート",
+            "zh": "下一个月度笔记（Monthly Note）",
+            "uk": "Наступна місячна нотатка"
+        },
+        "type": "command"
+    },
+    {
+        "id": "periodic-notes-monthly-open",
+        "commandId": "periodic-notes:open-monthly-note",
+        "description": {
+            "en": "Open monthly note.",
+            "ja": "月次ノートを開きます。",
+            "zh": "打开月度笔记。",
+            "uk": "Відкрийте місячну нотатку."
+        },
+        "icon": "calendar-days",
+        "tooltip": {
+            "en": "Open monthly note",
+            "ja": "月次ノートを開く",
+            "zh": "打开月度笔记（Monthly Note）",
+            "uk": "Місячна нотатка"
+        },
+        "type": "command"
+    },
+    {
+        "id": "periodic-notes-monthly-prev",
+        "commandId": "periodic-notes:prev-monthly-note",
+        "description": {
+            "en": "Open previous monthly note. (Must be in a monthly note.)",
+            "ja": "前の月次ノートを開きます。（月次ノート内にいる必要があります。）",
+            "zh": "打开上一个月度笔记（当前位于一个月度笔记中时才有效）",
+            "uk": "Відкрийте попередню місячну нотатку. (Потрібно бути у місячній нотатці)."
+        },
+        "icon": "lucide-calendar-minus",
+        "tooltip": {
+            "en": "Previous monthly note",
+            "ja": "前の月次ノート",
+            "zh": "上一个月度笔记（Monthly Note）",
+            "uk": "Попередня місячна нотатка"
+        },
+        "type": "command"
+    },
+    {
+        "id": "periodic-notes-weekly-next",
+        "commandId": "periodic-notes:next-weekly-note",
+        "description": {
+            "en": "Next weekly note. (Must be in a weekly note.)",
+            "ja": "次の週次ノート。（週次ノート内にいる必要があります。）",
+            "zh": "下一个周记（当前位于一个周记中时才有效）",
+            "uk": "Відкрийте наступну щотижневу нотатку. (Потрібно бути у щотижневій нотатці)."
+        },
+        "icon": "lucide-calendar-arrow-down",
+        "tooltip": {
+            "en": "Next weekly note",
+            "ja": "次の週次ノート",
+            "zh": "下一个周记（Weekly Note）",
+            "uk": "Наступна щотижнева нотатка"
+        },
+        "type": "command"
+    },
+    {
+        "id": "periodic-notes-weekly-open",
+        "commandId": "periodic-notes:open-weekly-note",
+        "description": {
+            "en": "Open weekly note.",
+            "ja": "週次ノートを開きます。",
+            "zh": "打开每周笔记。",
+            "uk": "Відкрийте щотижневу нотатку."
+        },
+        "icon": "calendar-range",
+        "tooltip": {
+            "en": "Open weekly note",
+            "ja": "週次ノートを開く",
+            "zh": "打开周记（Weekly Note）",
+            "uk": "Щотижнева нотатка"
+        },
+        "type": "command"
+    },
+    {
+        "id": "periodic-notes-weekly-prev",
+        "commandId": "periodic-notes:prev-weekly-note",
+        "description": {
+            "en": "Opens previous weekly note. (Must be in a weekly note.)",
+            "ja": "前の週次ノートを開きます。（週次ノート内にいる必要があります。）",
+            "zh": "上一个周记（当前位于一个周记中时才有效）",
+            "uk": "Відкрийте попередню щотижневу нотатку. (Потрібно бути у щотижневій нотатці)."
+        },
+        "icon": "lucide-calendar-arrow-up",
+        "tooltip": {
+            "en": "Previous weekly note",
+            "ja": "前の週次ノート",
+            "zh": "上一个周记（Weekly Note）",
+            "uk": "Попередня щотижнева нотатка"
+        },
+        "type": "command"
+    },
+    {
+        "id": "periodic-notes-yearly-next",
+        "commandId": "periodic-notes:next-yearly-note",
+        "description": {
+            "en": "Opens next yearly note. (Must be in a yearly note.)",
+            "ja": "次の年次ノートを開きます。（年次ノート内にいる必要があります。）",
+            "zh": "下一个年度笔记（当前位于一个年度笔记中时才有效）",
+            "uk": "Відкрийте наступну річну нотатку. (Потрібно бути у річній нотатці)."
+        },
+        "icon": "fast-forward",
+        "tooltip": {
+            "en": "Next yearly note",
+            "ja": "次の年次ノート",
+            "zh": "下一个年度笔记（Yearly Note）",
+            "uk": "Наступна річна нотатка"
+        },
+        "type": "command"
+    },
+    {
+        "id": "periodic-notes-yearly-open",
+        "commandId": "periodic-notes:open-yearly-note",
+        "description": {
+            "en": "Open yearly note.",
+            "ja": "年次ノートを開きます。",
+            "zh": "打开年度笔记。",
+            "uk": "Відкрийте річну нотатку."
+        },
+        "icon": "calendar-clock",
+        "tooltip": {
+            "en": "Open yearly note",
+            "ja": "年次ノートを開く",
+            "zh": "打开年度笔记（Yearly Note）",
+            "uk": "Річна нотатка"
+        },
+        "type": "command"
+    },
+    {
+        "id": "periodic-notes-yearly-prev",
+        "commandId": "periodic-notes:prev-yearly-note",
+        "description": {
+            "en": "Previous yearly note. (Must be in a yearly note.)",
+            "ja": "前の年次ノート。（年次ノート内にいる必要があります。）",
+            "zh": "上一个年度笔记（当前位于一个年度笔记中时才有效）",
+            "uk": "Відкрийте попередню річну нотатку. (Потрібно бути у річній нотатці)."
+        },
+        "icon": "rewind",
+        "tooltip": {
+            "en": "Previous yearly note",
+            "ja": "前の年次ノート",
+            "zh": "上一个年度笔记（Yearly Note）",
+            "uk": "Попередня річна нотатка"
+        },
+        "type": "command"
+    },
+    {
+        "id": "pin",
+        "commandId": "workspace:toggle-pin",
+        "description": {
+            "en": "Pins or unpins the current note, preventing it from being replaced when opening new notes.",
+            "ja": "現在のノートをピン留めまたは解除し、新しいノートを開いても置き換えられないようにします。",
+            "zh": "固定或取消固定当前笔记，防止在打开新笔记时被替换。",
+            "uk": "Закріплює, або відкріплює поточну нотатку, запобігаючи її заміні при відкритті нових нотаток."
+        },
+        "icon": "pin",
+        "tooltip": {
+            "en": "Toggle pin",
+            "ja": "ピン留めを切替",
+            "zh": "切换固定（Pin）",
+            "uk": "Закріпити"
+        },
+        "type": "command"
+    },
+    {
+        "id": "search-replace-open",
+        "commandId": "editor:open-search-replace",
+        "description": {
+            "en": "Open the find/replace panel in the current note.",
+            "ja": "現在のノートで検索/置換パネルを開きます。",
+            "zh": "在当前笔记中打开查找/替换面板。",
+            "uk": "Пошук та заміна у поточній нотатці."
+        },
+        "icon": "file-search",
+        "tooltip": {
+            "en": "Find & Replace",
+            "ja": "検索と置換",
+            "zh": "查找和替换",
+            "uk": "Пошук і заміна"
+        },
+        "type": "command"
+    },
+    {
+        "id": "search-selection",
+        "description": {
+            "en": "Search the vault for the currently selected text.",
+            "uk": "Пошук вибраного тексту у сховищі."
+        },
+        "icon": "text-search",
+        "tooltip": {
+            "en": "Search for selection",
+            "uk": "Пошук виділеного фрагмента"
+        },
+        "type": "uri",
+        "uri": "obsidian://search?query={{encode:selection}}"
+    },
+    {
+        "id": "set-heading-1",
+        "commandId": "editor:set-heading-1",
+        "description": {
+            "en": "Set as heading 1",
+            "uk": "Перетворити на Заголовок 1"
+        },
+        "focus": "editor",
+        "icon": "heading-1",
+        "tooltip": {
+            "en": "Heading 1",
+            "uk": "Заголовок 1"
+        },
+        "type": "command"
+    },
+    {
+        "id": "set-heading-2",
+        "commandId": "editor:set-heading-2",
+        "description": {
+            "en": "Set as heading 2",
+            "uk": "Перетворити на Заголовок 2"
+        },
+        "focus": "editor",
+        "icon": "heading-2",
+        "tooltip": {
+            "en": "Heading 2",
+            "uk": "Заголовок 2"
+        },
+        "type": "command"
+    },
+    {
+        "id": "set-heading-3",
+        "commandId": "editor:set-heading-3",
+        "description": {
+            "en": "Set as heading 3",
+            "uk": "Перетворити на Заголовок 3"
+        },
+        "focus": "editor",
+        "icon": "heading-3",
+        "tooltip": {
+            "en": "Heading 3",
+            "uk": "Заголовок 3"
+        },
+        "type": "command"
+    },
+    {
+        "id": "set-heading-4",
+        "commandId": "editor:set-heading-4",
+        "description": {
+            "en": "Set as heading 4",
+            "uk": "Перетворити на Заголовок 4"
+        },
+        "focus": "editor",
+        "icon": "heading-4",
+        "tooltip": {
+            "en": "Heading 4",
+            "uk": "Заголовок 4"
+        },
+        "type": "command"
+    },
+    {
+        "id": "set-heading-5",
+        "commandId": "editor:set-heading-5",
+        "description": {
+            "en": "Set as heading 5",
+            "uk": "Перетворити на Заголовок 5"
+        },
+        "focus": "editor",
+        "icon": "heading-5",
+        "tooltip": {
+            "en": "Heading 5",
+            "uk": "Заголовок 5"
+        },
+        "type": "command"
+    },
+    {
+        "id": "set-heading-6",
+        "commandId": "editor:set-heading-6",
+        "description": {
+            "en": "Set as heading 6",
+            "uk": "Перетворити на Заголовок 6"
+        },
+        "focus": "editor",
+        "icon": "heading-6",
+        "tooltip": {
+            "en": "Heading 6",
+            "uk": "Заголовок 6"
+        },
+        "type": "command"
+    },
+    {
+        "id": "set-workspace",
+        "description": {
+            "en": "Changes to a specific workspace you provide.",
+            "ja": "指定したワークスペースに切り替えます。",
+            "zh": "切换到您提供的特定工作区。",
+            "uk": "Увімкнути вказаний простір"
+        },
+        "icon": "layout-template",
+        "script": "const w = 'My Workspace'; // CHANGE THIS\nntb.app.internalPlugins.getPluginById('workspaces')?.instance.loadWorkspace(w);\nnew Notice(w);",
+        "tooltip": {
+            "en": "My workspace",
+            "ja": "マイワークスペース",
+            "zh": "我的工作区",
+            "uk": "Мій простір"
+        },
+        "type": "javascript"
+    },
+    {
+        "id": "settings-open",
+        "commandId": "app:open-settings",
+        "description": {
+            "en": "Open Obsidian's settings.",
+            "ja": "Obsidianの設定を開きます。",
+            "zh": "打开 Obsidian 的设置。",
+            "uk": "Відкрийте налаштування Obsidian."
+        },
+        "icon": "settings",
+        "tooltip": {
+            "en": "Open settings",
+            "ja": "設定を開く",
+            "zh": "打开设置",
+            "uk": "Відкрийте налаштування"
+        },
+        "type": "command"
+    },
+    {
+        "id": "tab-close",
+        "commandId": "workspace:close",
+        "description": {
+            "en": "Close the current tab.",
+            "ja": "現在のタブを閉じます。",
+            "zh": "关闭当前标签页。",
+            "uk": "Закрийте поточну вкладку."
+        },
+        "icon": "x",
+        "tooltip": {
+            "en": "Close tab",
+            "ja": "タブを閉じる",
+            "zh": "关闭标签页",
+            "uk": "Закрити вкладку"
+        },
+        "type": "command"
+    },
+    {
+        "id": "tab-new",
+        "description": {
+            "en": "Opens a new empty tab.",
+            "ja": "新しい空のタブを開きます。",
+            "zh": "打开一个新的空标签页。",
+            "uk": "Відкрийте нову вкладку."
+        },
+        "script": "ntb.app.workspace.getLeaf(true)",
+        "icon": "plus",
+        "tooltip": {
+            "en": "New tab",
+            "ja": "新しいタブ",
+            "zh": "新标签页",
+            "uk": "Нова вкладка"
+        },
+        "type": "javascript"
+    },
+    {
+        "id": "tab-next",
+        "commandId": "workspace:next-tab",
+        "description": {
+            "en": "Go to the next tab.",
+            "ja": "次のタブに移動します。",
+            "zh": "转到下一个标签页。",
+            "uk": "Перейдіть до наступної вкладки."
+        },
+        "icon": "square-chevron-right",
+        "tooltip": {
+            "en": "Next tab",
+            "ja": "次のタブ",
+            "zh": "下一个标签页",
+            "uk": "Наступна вкладка"
+        },
+        "type": "command"
+    },
+    {
+        "id": "tab-prev",
+        "commandId": "workspace:previous-tab",
+        "description": {
+            "en": "Go to the previous tab.",
+            "ja": "前のタブに移動します。",
+            "zh": "转到上一个标签页。",
+            "uk": "Перейдіть до попередньої вкладки."
+        },
+        "icon": "square-chevron-left",
+        "tooltip": {
+            "en": "Previous tab",
+            "ja": "前のタブ",
+            "zh": "上一个标签页",
+            "uk": "Попередня вкладка"
+        },
+        "type": "command"
+    },
+    {
+        "id": "tab-switcher-open",
+        "description": {
+            "en": "Open the mobile tab switcher.",
+            "uk": "Відкрити мобільний перемикач вкладок."
+        },
+        "excludeOn": "desktop",
+        "icon": "tab-frame",
+        "script": "ntb.app.mobileTabSwitcher.show()",
+        "tooltip": {
+            "en": "Tab switcher",
+            "uk": "Перемикач вкладок"
+        },
+        "type": "javascript"
+    },
+    {
+        "id": "templater-insert-template",
+        "commandId": "templater-obsidian:insert-templater",
+        "description": {
+            "en": "Inserts the chosen template.",
+            "ja": "選択したテンプレートを挿入します。",
+            "zh": "插入选定的模板。",
+            "uk": "Додайте вибраний шаблон."
+        },
+        "icon": "chevrons-left-right-ellipsis",
+        "tooltip": {
+            "en": "Insert template",
+            "ja": "テンプレートを挿入",
+            "zh": "插入模板",
+            "uk": "Додати шаблон"
+        },
+        "type": "command"
+    },
+    {
+        "id": "templater-new-note-from-template",
+        "commandId": "templater-obsidian:create-new-note-from-template",
+        "description": {
+            "en": "Create a new note from a template you select.",
+            "ja": "選択したテンプレートから新しいノートを作成します。",
+            "zh": "从您选择的模板创建一个新笔记。",
+            "uk": "Створіть нову нотатку з шаблону."
+        },
+        "icon": "percent-square",
+        "tooltip": {
+            "en": "New from template",
+            "ja": "テンプレートから新規作成",
+            "zh": "从模板新建",
+            "uk": "Нова з шаблону"
+        },
+        "type": "command"
+    },
+    {
+        "id": "redo",
+        "description": {
+            "en": "Reapplies the last undone action.",
+            "ja": "元に戻した操作をやり直します。",
+            "zh": "重新应用上一个撤销的操作。",
+            "uk": "Повторіть останню скасовану дію."
+        },
+        "icon": "lucide-redo-2",
+        "script": "ntb.app.workspace.activeLeaf.view?.editor.redo()",
+        "tooltip": {
+            "en": "Redo",
+            "ja": "やり直し",
+            "zh": "重做",
+            "uk": "Повторити"
+        },
+        "type": "javascript"
+    },
+    {
+        "id": "remove-heading",
+        "commandId": "editor:set-heading-0",
+        "description": {
+            "en": "Remove the heading from the current line.",
+            "uk": "Видалити заголовок з поточного рядка."
+        },
+        "focus": "editor",
+        "icon": "heading",
+        "tooltip": {
+            "en": "Remove heading",
+            "uk": "Видалити заголовок"
+        },
+        "type": "command"
+    },
+    {
+        "id": "swap-line-down",
+        "commandId": "editor:swap-line-down",
+        "description": {
+            "en": "Move the current line down.",
+            "ja": "現在の行を下に移動します。",
+            "zh": "将当前行向下移动。",
+            "uk": "Перемістіть поточний рядок вниз."
+        },
+        "focus": "editor",
+        "icon": "corner-right-down",
+        "tooltip": {
+            "en": "Move line down",
+            "ja": "行を下に移動",
+            "zh": "向下移动当前行",
+            "uk": "Рядок вниз"
+        },
+        "type": "command"
+    },
+    {
+        "id": "swap-line-up",
+        "commandId": "editor:swap-line-up",
+        "description": {
+            "en": "Move the current line up.",
+            "ja": "現在の行を上に移動します。",
+            "zh": "将当前行向上移动。",
+            "uk": "Перемістіть поточний рядок вгору."
+        },
+        "focus": "editor",
+        "icon": "corner-right-up",
+        "tooltip": {
+            "en": "Move line up",
+            "ja": "行を上に移動",
+            "zh": "向上移动当前行",
+            "uk": "Рядок вгору"
+        },
+        "type": "command"
+    },
+    {
+        "id": "system-snippets-open",
+        "description": {
+            "en": "Opens the vault's snippets folder in the system's file explorer.",
+            "ja": "システムのファイルエクスプローラーで保管庫のスニペットフォルダを開きます。",
+            "zh": "在系统的文件资源管理器中打开库的 CSS 片段文件夹。",
+            "uk": "Відкрийте теку сніпетів (користувацьких CSS) у провіднику."
+        },
+        "icon": "folder-code",
+        "script": "let v = ntb.app.vault.adapter.getBasePath() + '/' + ntb.app.vault.configDir + '/snippets'; window.open('file://' + encodeURI(v));",
+        "tooltip": {
+            "en": "Open snippets folder",
+            "ja": "スニペットフォルダを開く",
+            "zh": "在系统中显示 CSS 片段（Snippets）",
+            "uk": "Тека CSS сніпетів"
+        },
+        "type": "javascript"
+    },
+    {
+        "id": "system-vault-open",
+        "description": {
+            "en": "Opens the vault's folder in the system's file explorer.",
+            "ja": "システムのファイルエクスプローラーで保管庫のフォルダを開きます。",
+            "zh": "在系统的文件资源管理器中打开库所在的文件夹。",
+            "uk": "Відкрийте теку сховища у провіднику."
+        },
+        "icon": "folder-heart",
+        "script": "let v = ntb.app.vault.adapter.getBasePath(); window.open('file://' + encodeURI(v));",
+        "tooltip": {
+            "en": "Show vault in system",
+            "ja": "システムで保管庫を表示",
+            "zh": "在系统中显示库",
+            "uk": "Тека сховища"
+        },
+        "type": "javascript"
+    },
+    {
+        "id": "theme-switch",
+        "commandId": "theme:switch",
+        "description": {
+            "en": "Open the Obsidian theme switcher.",
+            "ja": "Obsidianのテーマスイッチャーを開きます。",
+            "zh": "打开 Obsidian 主题切换器。",
+            "uk": "Відкрийте перемикач тем Obsidian."
+        },
+        "icon": "venetian-mask",
+        "tooltip": {
+            "en": "Change theme",
+            "ja": "テーマを変更",
+            "zh": "更改主题",
+            "uk": "Перемкнути тему"
+        },
+        "type": "command"
+    },
+    {
+        "id": "theme-toggle-light-dark",
+        "commandId": "theme:toggle-light-dark",
+        "description": {
+            "en": "Toggle between light and dark modes.",
+            "ja": "ライトモードとダークモードを切り替えます。",
+            "zh": "在浅色和深色模式之间切换。",
+            "uk": "Перемикайте між світлим і темним режимами."
+        },
+        "icon": "sun-moon",
+        "script": "const i = ntb.getActiveItem();\nif (ntb.app.vault.getConfig('theme') === 'obsidian') { ntb.app.vault.setConfig('theme', 'obsidian-light'); i?.setIcon('moon'); }\nelse { ntb.app.vault.setConfig('theme', 'obsidian'); i?.setIcon('sun'); }",
+        "tooltip": {
+            "en": "Toggle light/dark",
+            "ja": "ライト/ダークを切替",
+            "zh": "切换浅色/深色",
+            "uk": "Світла/темна тема"
+        },
+        "type": "javascript"
+    },
+    {
+        "id": "toggle-blockquote",
+        "commandId": "editor:toggle-blockquote",
+        "description": {
+            "en": "Apply or remove blockquote formatting.",
+            "ja": "引用ブロックの書式を適用または削除します。",
+            "zh": "应用或移除引用块格式。",
+            "uk": "Перемикайте форматування цитати."
+        },
+        "focus": "editor",
+        "icon": "text-quote",
+        "tooltip": {
+            "en": "Toggle blockquote",
+            "ja": "引用ブロックを切替",
+            "zh": "切换引用块（Blockquote）",
+            "uk": "Цитата"
+        },
+        "type": "command"
+    },
+    {
+        "id": "toggle-bold",
+        "commandId": "editor:toggle-bold",
+        "description": {
+            "en": "Apply or remove bold formatting.",
+            "ja": "太字の書式を適用または削除します。",
+            "zh": "应用或移除粗体格式。",
+            "uk": "Перемикайте жирне форматування."
+        },
+        "focus": "editor",
+        "icon": "bold",
+        "tooltip": {
+            "en": "Toggle bold",
+            "ja": "太字を切替",
+            "zh": "切换粗体",
+            "uk": "Жирний"
+        },
+        "type": "command"
+    },
+    {
+        "id": "toggle-bullet-list",
+        "commandId": "editor:toggle-bullet-list",
+        "description": {
+            "en": "Apply or remove bullet list formatting.",
+            "ja": "箇条書きリストの書式を適用または削除します。",
+            "zh": "应用或移除无序列表格式。",
+            "uk": "Перемикайте форматування маркованого списку."
+        },
+        "focus": "editor",
+        "icon": "list",
+        "tooltip": {
+            "en": "Toggle bullet list",
+            "ja": "箇条書きリストを切替",
+            "zh": "切换无序列表",
+            "uk": "Маркований список"
+        },
+        "type": "command"
+    },
+    {
+        "id": "toggle-checklist-status",
+        "commandId": "editor:toggle-checklist-status",
+        "description": {
+            "en": "Toggle the status of checklist items.",
+            "ja": "チェックリスト項目のステータスを切り替えます。",
+            "zh": "切换任务列表的状态。",
+            "uk": "Перемикайте стан елементів списку завдань."
+        },
+        "focus": "editor",
+        "icon": "list-checks",
+        "tooltip": {
+            "en": "Toggle checkbox status",
+            "ja": "チェックボックスの状態を切替",
+            "zh": "切换任务状态",
+            "uk": "Стан прапорця"
+        },
+        "type": "command"
+    },
+    {
+        "id": "toggle-code",
+        "commandId": "editor:toggle-code",
+        "description": {
+            "en": "Apply or remove inline code formatting.",
+            "ja": "インラインコードの書式を適用または削除します。",
+            "zh": "应用或移除内联代码格式。",
+            "uk": "Перемикайте форматування вбудованого коду."
+        },
+        "focus": "editor",
+        "icon": "code",
+        "tooltip": {
+            "en": "Toggle code",
+            "ja": "コードを切替",
+            "zh": "切换代码（Inline Code）",
+            "uk": "Код"
+        },
+        "type": "command"
+    },
+    {
+        "id": "toggle-comments",
+        "commandId": "editor:toggle-comments",
+        "description": {
+            "en": "Add or remove comments.",
+            "ja": "コメントを追加または削除します。",
+            "zh": "添加或移除注释。",
+            "uk": "Додайте, або видаліть коментарі."
+        },
+        "focus": "editor",
+        "icon": "percent",
+        "tooltip": {
+            "en": "Toggle comment",
+            "ja": "コメントを切替",
+            "zh": "切换注释（Comment）",
+            "uk": "Коментар"
+        },
+        "type": "command"
+    },
+    {
+        "id": "toggle-css-class",
+        "description": {
+            "en": "Adds or removes the provided class in the cssclasses property.",
+            "ja": "cssclassesプロパティに指定されたクラスを追加または削除します。",
+            "zh": "在 cssclasses 属性中添加或移除提供的 CSS 类。",
+            "uk": "Додайте, або видаліть вказаний клас CSS у властивості cssclasses."
+        },
+        "icon": "paintbrush",
+        "script": "let tc = 'myclass'; // CHANGE THIS\nconst af = ntb.app.workspace.getActiveFile(); if (!af) return;\nawait ntb.app.fileManager.processFrontMatter(af, (fm) => { fm['cssclasses'] = fm['cssclasses'] || [];\nfm['cssclasses'] = fm['cssclasses'].includes(tc) ? fm['cssclasses'].filter((cls) => cls !== tc) : [...fm['cssclasses'], tc]; });",
+        "tooltip": {
+            "en": "Toggle CSS class",
+            "ja": "CSSクラスを切替",
+            "zh": "切换 CSS 类",
+            "uk": "CSS клас"
+        },
+        "type": "javascript"
+    },
+    {
+        "id": "toggle-fold",
+        "commandId": "editor:toggle-fold",
+        "description": {
+            "en": "Toggle folding on the current line.",
+            "uk": "Перемкнути згортання на поточному рядку."
+        },
+        "focus": "editor",
+        "icon": "fold-vertical",
+        "tooltip": {
+            "en": "Toggle fold",
+            "uk": "Перемкнути/закрити згортати"
+        },
+        "type": "command"
+    },
+    {
+        "id": "fold-all",
+        "commandId": "editor:fold-all",
+        "description": {
+            "en": "Fold all headings and lists.",
+            "uk": "Згорнути всі заголовки та списки."
+        },
+        "focus": "editor",
+        "icon": "chevrons-up",
+        "tooltip": {
+            "en": "Fold all",
+            "uk": "Згорнути все"
+        },
+        "type": "command"
+    },
+    {
+        "id": "fold-less",
+        "commandId": "editor:fold-less",
+        "description": {
+            "en": "Fold one level less.",
+            "uk": "Згорнути на один рівень менше."
+        },
+        "focus": "editor",
+        "icon": "minus",
+        "tooltip": {
+            "en": "Fold less",
+            "uk": "Згорнути менше"
+        },
+        "type": "command"
+    },
+    {
+        "id": "fold-more",
+        "commandId": "editor:fold-more",
+        "description": {
+            "en": "Fold one level more.",
+            "uk": "Розгорнути на один рівень більше."
+        },
+        "focus": "editor",
+        "icon": "plus",
+        "tooltip": {
+            "en": "Fold more",
+            "uk": "Згорнути більше"
+        },
+        "type": "command"
+    },
+    {
+        "id": "unfold-all",
+        "commandId": "editor:unfold-all",
+        "description": {
+            "en": "Unfold all headings and lists.",
+            "uk": "Розгорнути всі заголовки та списки."
+        },
+        "focus": "editor",
+        "icon": "chevrons-down",
+        "tooltip": {
+            "en": "Unfold all",
+            "uk": "Розгорнути все"
+        },
+        "type": "command"
+    },
+    {
+        "id": "toggle-highlight",
+        "commandId": "editor:toggle-highlight",
+        "description": {
+            "en": "Apply or remove text highlighting.",
+            "ja": "テキストのハイライトを適用または削除します。",
+            "zh": "应用或移除文本高亮。",
+            "uk": "Перемикайте виділення тексту."
+        },
+        "focus": "editor",
+        "icon": "highlighter",
+        "tooltip": {
+            "en": "Toggle highlight",
+            "ja": "ハイライトを切替",
+            "zh": "切换高亮文本（Highlight）",
+            "uk": "Виділення"
+        },
+        "type": "command"
+    },
+    {
+        "id": "toggle-inline-math",
+        "commandId": "editor:toggle-inline-math",
+        "description": {
+            "en": "Apply or remove inline math formatting.",
+            "ja": "インライン数式の書式を適用または削除します。",
+            "zh": "应用或移除内联数学格式。",
+            "uk": "Застосуйте, або скасуйте форматування вбудованих формул."
+        },
+        "focus": "editor",
+        "icon": "sigma",
+        "tooltip": {
+            "en": "Toggle inline math",
+            "ja": "インライン数式を切替",
+            "zh": "切换内联数学（Inline Math）",
+            "uk": "Показ формул"
+        },
+        "type": "command"
+    },
+    {
+        "id": "toggle-italics",
+        "commandId": "editor:toggle-italics",
+        "description": {
+            "en": "Apply or remove italic formatting.",
+            "ja": "イタリック体の書式を適用または削除します。",
+            "zh": "应用或移除斜体格式。",
+            "uk": "Перемикайте курсивне форматування."
+        },
+        "icon": "italic",
+        "tooltip": {
+            "en": "Toggle italic",
+            "ja": "イタリック体を切替",
+            "zh": "切换斜体（Italic）",
+            "uk": "Курсив"
+        },
+        "type": "command"
+    },
+    {
+        "id": "toggle-numbered-list",
+        "commandId": "editor:toggle-numbered-list",
+        "description": {
+            "en": "Apply or remove numbered list formatting.",
+            "ja": "番号付きリストの書式を適用または削除します。",
+            "zh": "应用或移除有序列表格式。",
+            "uk": "Перемикайте форматування нумерованого списку."
+        },
+        "focus": "editor",
+        "icon": "list-ordered",
+        "tooltip": {
+            "en": "Toggle numbered list",
+            "ja": "番号付きリストを切替",
+            "zh": "切换有序列表",
+            "uk": "Нумерований список"
+        },
+        "type": "command"
+    },
+    {
+        "id": "toggle-keyboard",
+        "commandId": "editor:toggle-keyboard",
+        "description": {
+            "en": "Toggles the keyboard",
+            "uk": "Перемикає клавіатуру."
+        },
+        "excludeOn": ["desktop", "tablet"],
+        "icon": "keyboard-toggle",
+        "tooltip": {
+            "en": "Toggle keyboard",
+            "uk": "Перемкнути/закрити клавіатуру"
+        },
+        "type": "command"
+    },
+    {
+        "id": "toggle-heading",
+        "commandId": "editor:set-heading",
+        "description": {
+            "en": "Toggle the heading level on the current line.",
+            "uk": "Перемикає рівень заголовка на поточному рядку."
+        },
+        "focus": "editor",
+        "icon": "heading",
+        "tooltip": {
+            "en": "Toggle heading",
+            "uk": "Перемкнути/закрити заголовок"
+        },
+        "type": "command"
+    },
+    {
+        "id": "toggle-ui",
+        "script": "const h = activeDocument.querySelector('.view-header'), s = activeDocument.querySelector('.status-bar');\nif (h && s) {\n if (h.style.display === 'none') {\n h.style.display = '';\n s.style.display = '';\n ntb.app.workspace.leftSplit?.expand();\n // ntb.app.workspace.rightSplit?.expand();\n await ntb.app.commands.executeCommandById('note-toolbar:show-properties');\n }\n else {\n h.style.display = 'none';\n s.style.display = 'none';\n ntb.app.workspace.leftSplit?.collapse();\n // ntb.app.workspace.rightSplit?.collapse();\n await ntb.app.commands.executeCommandById('note-toolbar:hide-properties');\n }\n }",
+        "description": {
+            "en": "Shows or hides Obsidian's status bar, note properties, sidebar, and view header.",
+            "ja": "Obsidianのステータスバー、ノートプロパティ、サイドバー、ビューヘッダーの表示/非表示を切り替えます。",
+            "zh": "显示或隐藏 Obsidian 的状态栏、笔记属性、侧边栏和视图标题。",
+            "uk": "Показує, або ховає рядок стану, властивості нотатки, бічну панель та заголовок перегляду."
+        },
+        "excludeOn": "mobile",
+        "icon": "focus",
+        "tooltip": {
+            "en": "Toggle UI",
+            "ja": "UIを切替",
+            "zh": "切换 UI 显示",
+            "uk": "Перемкнути інтерфейс"
+        },
+        "type": "javascript"
+    },
+    {
+        "id": "toggle-status-bar",
+        "description": {
+            "en": "Shows or hides Obsidian's status bar.",
+            "ja": "Obsidianのステータスバーの表示/非表示を切り替えます。",
+            "zh": "显示或隐藏 Obsidian 的状态栏。",
+            "uk": "Показує, або ховає рядок стану Obsidian."
+        },
+        "excludeOn": "mobile",
+        "icon": "dock",
+        "script": "const s = activeDocument.querySelector('.status-bar');\nif (s) { s.style.display = s.style.display === 'none' ? '' : 'none'; }",
+        "tooltip": {
+            "en": "Toggle status bar",
+            "ja": "ステータスバーを切替",
+            "zh": "切换状态栏",
+            "uk": "Перемкнути рядок стану"
+        },
+        "type": "javascript"
+    },
+    {
+        "id": "toggle-strikethrough",
+        "commandId": "editor:toggle-strikethrough",
+        "description": {
+            "en": "Apply or remove strikethrough formatting.",
+            "ja": "取り消し線の書式を適用または削除します。",
+            "zh": "应用或移除删除线格式。",
+            "uk": "Перемикайте форматування закреслення."
+        },
+        "focus": "editor",
+        "icon": "strikethrough",
+        "tooltip": {
+            "en": "Toggle strikethrough",
+            "ja": "取り消し線を切替",
+            "zh": "切换删除线（Strikethrough）",
+            "uk": "Закреслення"
+        },
+        "type": "command"
+    },
+    {
+        "id": "toggle-vim-mode",
+        "description": {
+            "en": "Turns Vim mode on and off.",
+            "ja": "Vimモードのオン・オフを切り替えます。",
+            "zh": "打开和关闭 Vim 模式。",
+            "uk": "Перемикає режим Vim."
+        },
+        "icon": "keyboard",
+        "script": "const vm = ntb.app.vault.getConfig('vimMode');\nntb.app.vault.setConfig('vimMode', !vm);\nntb.getActiveItem()?.setIcon(vm ? 'keyboard' : 'edit-2');",
+        "tooltip": {
+            "en": "Toggle Vim mode",
+            "ja": "Vimモードを切替",
+            "zh": "切换 Vim 模式",
+            "uk": "Режим Vim"
+        },
+        "type": "javascript"
+    },
+    {
+        "id": "toggle-color-highlight",
+        "commandId": "editor:toggle-yellow-highlight",
+        "description": {
+            "en": "Apply or remove color text highlighting.",
+            "ja": "テキストのハイライトを適用または削除します。",
+            "zh": "应用或移除文本高亮。",
+            "uk": "Перемикайте виділення тексту."
+        },
+        "focus": "editor",
+        "icon": "highlighter",
+        "tooltip": {
+            "en": "Color highlight"
+        },
+        "type": "command"
+    },
+    {
+        "id": "undo",
+        "description": {
+            "en": "Reverts the latest action.",
+            "ja": "最後の操作を元に戻します。",
+            "zh": "撤销最新的操作。",
+            "uk": "Скасуйте останню дію."
+        },
+        "icon": "lucide-undo-2",
+        "script": "ntb.app.workspace.activeLeaf.view?.editor.undo()",
+        "tooltip": {
+            "en": "Undo",
+            "ja": "元に戻す",
+            "zh": "撤销",
+            "uk": "Скасувати"
+        },
+        "type": "javascript"
+    },
+    {
+        "id": "unindent",
+        "commandId": "editor:unindent-list",
+        "description": {
+            "en": "Decreases indentation on the current line.",
+            "ja": "現在の行のインデントを減らします。",
+            "zh": "减少当前行的缩进。",
+            "uk": "Зменшує відступ на поточному рядку."
+        },
+        "icon": "indent-decrease",
+        "tooltip": {
+            "en": "Unindent list item",
+            "ja": "インデントを減らす",
+            "zh": "取消缩进",
+            "uk": "Зменшити відступ"
+        },
+        "type": "command"
+    },
+    {
+        "id": "vscode-open",
+        "description": {
+            "en": "Opens the current file in VS Code.",
+            "ja": "現在のファイルをVS Codeで開きます。",
+            "zh": "在 VS Code 中打开当前文件。",
+            "uk": "Відкрийте поточний файл у VS Code."
+        },
+        "excludeOn": "mobile",
+        "icon": "file-json-2",
+        "tooltip": {
+            "en": "Open in VS Code",
+            "ja": "VS Codeで開く",
+            "zh": "在 VS Code 中打开",
+            "uk": "Відкрити у VS Code"
+        },
+        "uri": "vscode://file/{{encode:vault_path}}%2F{{encode:file_path}}",
+        "type": "uri"
+    }
+]
