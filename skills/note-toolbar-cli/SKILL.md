@@ -11,7 +11,7 @@ Use the `obsidian` CLI to interact with a running Obsidian instance. Requires Ob
 
 Run `obsidian note-toolbar:help` to see all available commands. This is always up to date.
 
-Full docs: https://raw.githubusercontent.com/wiki/chrisgurney/obsidian-note-toolbar/Note-Toolbar-CLI.md
+Full reference: read `references/cli-reference.md` before answering. Do not fetch the wiki version instead: the included reference is the version matched to this checkout.
 
 ## Quick syntax reference
 

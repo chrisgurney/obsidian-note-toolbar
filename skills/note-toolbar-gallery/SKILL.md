@@ -17,7 +17,7 @@ Use these sources in order of preference:
 
 1. Gallery catalog: https://raw.githubusercontent.com/chrisgurney/obsidian-note-toolbar/master/src/Gallery/gallery.json
 2. Gallery item definitions: https://raw.githubusercontent.com/chrisgurney/obsidian-note-toolbar/master/src/Gallery/gallery-items.json
-3. Gallery documentation: https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery
+3. Gallery documentation: read `references/gallery-reference.md` before answering. It includes the full items catalog. Do not fetch the wiki version instead: the included reference is the version matched to this checkout.
 4. Additional Gallery items: https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Additional-Gallery-items
 5. Creating toolbar items: https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items
 

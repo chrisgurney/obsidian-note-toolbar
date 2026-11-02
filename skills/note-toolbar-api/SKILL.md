@@ -5,9 +5,7 @@ description: "Write, edit, or debug JavaScript that uses the Note Toolbar `ntb` 
 
 # Note Toolbar API
 
-Full reference: https://raw.githubusercontent.com/wiki/chrisgurney/obsidian-note-toolbar/Note-Toolbar-API.md
-
-Fetch the full reference before writing or editing any script.
+Read `references/api-reference.md` before writing or editing any script. Use it as the authoritative reference for the `ntb` API. Do not fetch the wiki version instead: the included reference is the version matched to this checkout.
 
 ## Code conventions
 
@@ -15,5 +13,5 @@ Fetch the full reference before writing or editing any script.
 - Use `activeWindow.navigator` (not bare `navigator`) for clipboard/permission-sensitive APIs.
 - Use `normalizePath()` for vault paths.
 - Keep scripts minimal; avoid unnecessary variables.
-- Null-check all UI method results — every `ntb` UI call returns `null` if dismissed: `if (!result) return;`
+- Null-check all UI method results; every `ntb` UI call returns `null` if dismissed: `if (!result) return;`
 - Inline scripts are plain JS; no type annotations.

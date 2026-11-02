@@ -1,0 +1,348 @@
+<!-- Generated from docs/dist/wiki/Gallery.md by build/copy-skill-references.mjs. Do not edit by hand. To update, run: npm run build:skills -->
+
+The **Note Toolbar Gallery** is a curated list of 130+ items that can be added to your toolbars _in just a couple clicks_. The gallery includes pre-made items that use Obsidian's commands, but also plenty of helpful tools that Obsidian does not provide out of the box.
+
+<img src="https://raw.githubusercontent.com/chrisgurney/obsidian-note-toolbar/refs/heads/master/docs/images/gallery.png" width="700"/>
+
+## Using the Gallery
+
+**To open the Gallery**:
+
+- In Note Toolbar's settings look for the _Gallery_ button/link at the top; OR 
+- when searching existing items to add to the toolbar, Gallery items will also appear in search results; OR
+- run the `Note Toolbar: Open Gallery` command.
+
+Then:
+
+- Browse though the categories (see the full list below), or search for items at the top.
+- To add an item to a toolbar, just click/tap on it. You will be prompted to select a toolbar to add it to, or you can create a new toolbar.
+- Once the item is added to your toolbar, you can edit it however you see fit.
+
+## What's in the Gallery?
+
+Here's what's currently available, grouped by category. If you're missing any of these, make sure you've updated to the latest version of Note Toolbar.
+
+See the [[Additional Gallery items]] page for items which require access to the clipboard (such as _Copy_, _Paste_), external resources, or vault content.
+
+> [!note]
+> If you have an idea for what you would like to see in the Gallery, please use [this Google form ↗](https://forms.gle/sa75KNAQiWTtAY4P8). If you're having an issue with a particular plugin, please refer to their help documentation.
+
+---
+
+## Editor Tools
+
+Obsidian's built-in editor toolbar.
+
+| Item | Description |
+| --- | --- |
+| Undo | Reverts the latest action. |
+| Redo | Reapplies the last undone action. |
+| Add internal link | Add an internal link. |
+| Add embed | Add an embedded file or note. |
+| Insert tag | Insert a tag in the note. |
+| Insert attachment | Insert a file attachment. |
+| Toggle heading | Toggle the heading level on the current line. |
+| Toggle bold | Apply or remove bold formatting. |
+| Toggle strikethrough | Apply or remove strikethrough formatting. |
+| Toggle highlight | Apply or remove text highlighting. |
+| Color highlight | Apply or remove color text highlighting. |
+| Toggle code | Apply or remove inline code formatting. |
+| Toggle blockquote | Apply or remove blockquote formatting. |
+| Insert Markdown link | Insert a Markdown link. |
+| Toggle bullet list | Apply or remove bullet list formatting. |
+| Toggle numbered list | Apply or remove numbered list formatting. |
+| Toggle checkbox status | Toggle the status of checklist items. |
+| Indent list item | Increases indentation on the current line. |
+| Unindent list item | Decreases indentation on the current line. |
+| Toolbar settings | Opens the active toolbar's settings. |
+
+## Clipboard
+
+Items that use the clipboard. Learn how to add these to Obsidian on the [Additional Gallery items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Additional-Gallery-items) page.
+
+| Item | Description |
+| --- | --- |
+| Copy | Copies the selected text to the clipboard. *Add from: [[Additional Gallery items]]* |
+| Cut | Cuts the selected text to the clipboard. *Add from: [[Additional Gallery items]]* |
+| Paste | Pastes the text from the clipboard. *Add from: [[Additional Gallery items]]* |
+| Copy link to block | Copies a link to the current block to the clipboard. *Add from: [[Additional Gallery items]]* |
+| Copy note content | Copy body of the note to the clipboard, ignoring frontmatter. *Add from: [[Additional Gallery items]]* |
+| Paste external embed | Pastes an embedded external link. *Add from: [[Additional Gallery items]]* |
+
+## Daily Notes
+
+Quickly navigate between daily notes. Requires the _Daily Notes_ core plugin.
+
+| Item | Description |
+| --- | --- |
+| Previous daily note | Go to the previous daily note. |
+| Today's daily note | Go to today's daily note. |
+| Next daily note | Go to the next daily note. |
+
+## Editing
+
+Adjust the order and arrangement of content.
+
+| Item | Description |
+| --- | --- |
+| Move line up | Move the current line up. |
+| Move line down | Move the current line down. |
+| Toggle comment | Add or remove comments. |
+| Toggle inline math | Apply or remove inline math formatting. |
+| Add cursor above | Add another cursor above the current cursor. |
+| Add cursor below | Add another cursor below the current cursor. |
+
+## Editor Navigation
+
+Get around the text editor faster.
+
+| Item | Description |
+| --- | --- |
+| Next heading | Moves the cursor to the next heading in the note. |
+| Previous heading | Moves the cursor to the previous heading in the note. |
+| Jump to top | Moves the cursor to the top of the current note. |
+| Jump to bottom | Moves the cursor to the bottom of the current note. |
+| Next callout | Moves the cursor to the next callout in the note. |
+| Toggle Vim mode | Turns Vim mode on and off. |
+
+## Files
+
+Tools for working with files.
+
+| Item | Description |
+| --- | --- |
+| New note | Creates a new note. |
+| New kanban | Create a new kanban board. |
+| New canvas | Create a new canvas file. |
+| Move file to folder | Move current file to a chosen folder. |
+| Show file in navigation | Reveal the active file in navigation. |
+| Show file in system | Reveal the active file in the system's file explorer. *Not supported on: mobile* |
+| Open in VS Code | Opens the current file in VS Code. *Not supported on: mobile* |
+
+## Focus
+
+Remove Obsidian's UI and focus on your writing.
+
+| Item | Description |
+| --- | --- |
+| Toggle Properties | Toggle the visibility of note properties. |
+| Toggle status bar | Shows or hides Obsidian's status bar. *Not supported on: mobile* |
+| Toggle UI | Shows or hides Obsidian's status bar, note properties, sidebar, and view header. *Not supported on: mobile* |
+| Load workspace | Select and load a configured workspace. |
+| Toggle keyboard | Toggles the keyboard *Not supported on: desktop, tablet* |
+
+## Folding
+
+Collapse and expand sections of your note for easier navigation.
+
+| Item | Description |
+| --- | --- |
+| Toggle fold | Toggle folding on the current line. |
+| Fold all | Fold all headings and lists. |
+| Unfold all | Unfold all headings and lists. |
+| Fold less | Fold one level less. |
+| Fold more | Fold one level more. |
+
+## Formatting
+
+Change how text looks.
+
+| Item | Description |
+| --- | --- |
+| Toggle blockquote | Apply or remove blockquote formatting. |
+| Toggle bold | Apply or remove bold formatting. |
+| Toggle code | Apply or remove inline code formatting. |
+| Toggle heading | Toggle the heading level on the current line. |
+| Remove heading | Remove the heading from the current line. |
+| Heading 1 | Set as heading 1 |
+| Heading 2 | Set as heading 2 |
+| Heading 3 | Set as heading 3 |
+| Heading 4 | Set as heading 4 |
+| Heading 5 | Set as heading 5 |
+| Heading 6 | Set as heading 6 |
+| Toggle highlight | Apply or remove text highlighting. |
+| Toggle italic | Apply or remove italic formatting. |
+| Toggle strikethrough | Apply or remove strikethrough formatting. |
+| Clear formatting | Remove all text formatting. |
+
+## Lists & Indentation
+
+Organize items into lists and adjust structure.
+
+| Item | Description |
+| --- | --- |
+| Toggle bullet list | Apply or remove bullet list formatting. |
+| Toggle checkbox status | Toggle the status of checklist items. |
+| Toggle numbered list | Apply or remove numbered list formatting. |
+| Indent list item | Increases indentation on the current line. |
+| Unindent list item | Decreases indentation on the current line. |
+| Cycle bullet/checkbox | Changes to bullet, checkbox, or unchecked. |
+
+## Insertions
+
+Add various types of content like links or media.
+
+| Item | Description |
+| --- | --- |
+| Insert code block | Insert a code block. |
+| Insert callout | Insert a callout block. |
+| Insert footnote | Insert a footnote. |
+| Insert Markdown link | Insert a Markdown link. |
+| Insert tag | Insert a tag in the note. |
+| Insert horizontal rule | Insert a horizontal rule to separate sections. |
+| Add internal link | Add an internal link. |
+| Insert table | Insert a table. |
+| Add embed | Add an embedded file or note. |
+| Insert attachment | Insert a file attachment. |
+| Insert math block | Insert a math block. |
+
+## Mobile Navigation
+
+Helpful for navigating within the app and around the editor on mobile.
+
+| Item | Description |
+| --- | --- |
+| Previous tab | Go to the previous tab. |
+| Next tab | Go to the next tab. |
+| File switcher | Open the file switcher. |
+| New tab | Opens a new empty tab. |
+| Tab switcher | Open the mobile tab switcher. *Not supported on: desktop* |
+| Toggle keyboard | Toggles the keyboard *Not supported on: desktop, tablet* |
+
+## New Tab View
+
+Replace the new tab view with a toolbar. [Learn more](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/New-tab-view)
+
+| Item | Description |
+| --- | --- |
+| Home | Go to your home note. (Enter your home note in the URL.) |
+| Today's daily note | Go to today's daily note. |
+| New note | Creates a new note. |
+| New from template | Create a new note from a template you select. |
+| Show bookmarks | Opens the bookmarks sidebar. |
+
+## Note Toolbar
+
+Get access to Note Toolbar settings and tools quickly.
+
+| Item | Description |
+| --- | --- |
+| Quick Toolbars | Opens a window with access to all of your Note Toolbars. |
+| Quick Tools | Opens a searchable window with access to all toolbar items. |
+| Toolbar settings | Opens the active toolbar's settings. |
+| Note Toolbar User Guide | Access the Note Toolbar User Guide for help and tips. |
+
+## Obsidian Support
+
+Get help from Obsidian community resources.
+
+| Item | Description |
+| --- | --- |
+| Obsidian Help | Opens the official Obsidian Help site. |
+| Markdown reference | Opens Obsidian's Markdown formatting guide. |
+
+## Search
+
+Search in notes and across your vault.
+
+| Item | Description |
+| --- | --- |
+| Search for selection | Search the vault for the currently selected text. |
+| Find & Replace | Open the find/replace panel in the current note. |
+| Search all files | Opens the search sidebar. |
+| Search folder | Search in the current folder, or all files if currently in the root. |
+
+## Vault Files
+
+Items that require access to vault files. Learn how to add these to Obsidian on the [Additional Gallery items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Additional-Gallery-items) page.
+
+| Item | Description |
+| --- | --- |
+| Open file in new tab | Opens the selected file in a new tab. *Add from: [[Additional Gallery items]]* |
+| Append text | Appends the prompted text to a file you specify. *Add from: [[Additional Gallery items]]* |
+| Export all toolbars as callouts | Writes an export file containing all toolbars as callouts. *Add from: [[Additional Gallery items]]* |
+| Backup Note Toolbar data | Copy Note Toolbar's settings (data.json) file into the vault. *Add from: [[Additional Gallery items]]* |
+
+## Vault Navigation
+
+Navigate between notes and files.
+
+| Item | Description |
+| --- | --- |
+| Navigate back | Go backwards. |
+| Navigate forward | Go forwards. |
+| Previous file | Open previous file in the folder, sorted A-Z. Loops to the last file. |
+| Next file | Open next file in the folder, sorted A-Z. Loops to the first file. |
+| File switcher | Open the file switcher. |
+| Previous tab | Go to the previous tab. |
+| Next tab | Go to the next tab. |
+| Tab switcher | Open the mobile tab switcher. *Not supported on: desktop* |
+| New tab | Opens a new empty tab. |
+| Close tab | Close the current tab. |
+| Home | Go to your home note. (Enter your home note in the URL.) |
+| Go up | Uses your note's "up" property to link to a parent note. |
+| Show bookmarks | Opens the bookmarks sidebar. |
+| Show vault in system | Opens the vault's folder in the system's file explorer. |
+
+## Views & Themes
+
+Switch themes and toggle views.
+
+| Item | Description |
+| --- | --- |
+| Change theme | Open the Obsidian theme switcher. |
+| Toggle light/dark | Toggle between light and dark modes. |
+| Cycle themes | Cycles between installed themes, including the default. |
+| Toggle CSS class | Adds or removes the provided class in the cssclasses property. |
+| Toggle Reading view | Change between the editor's Preview and Reading modes. |
+| Toggle Source mode | Turn Source mode on and off. |
+| Open snippets folder | Opens the vault's snippets folder in the system's file explorer. |
+
+## Workspaces
+
+Switch between workspaces. Requires the _Workspaces_ core plugin.
+
+| Item | Description |
+| --- | --- |
+| Load workspace | Select and load a configured workspace. |
+| Cycle workspaces | Cycles between workspaces. |
+| My workspace | Changes to a specific workspace you provide. |
+
+## Periodic Notes
+
+Navigate weekly, monthly, and yearly notes. Requires the [Periodic Notes](obsidian://show-plugin?id=periodic-notes) plugin.
+
+| Item | Description |
+| --- | --- |
+| Previous daily note | Go to previous daily note. (Must be in a daily note.) |
+| Today's daily note | Go to today's daily note. |
+| Next daily note | Go to next daily note. (Must be in a daily note.) |
+| Previous weekly note | Opens previous weekly note. (Must be in a weekly note.) |
+| Open weekly note | Open weekly note. |
+| Next weekly note | Next weekly note. (Must be in a weekly note.) |
+| Previous monthly note | Open previous monthly note. (Must be in a monthly note.) |
+| Open monthly note | Open monthly note. |
+| Next monthly note | Open next monthly note. (Must be in a monthly note.) |
+| Previous yearly note | Previous yearly note. (Must be in a yearly note.) |
+| Open yearly note | Open yearly note. |
+| Next yearly note | Opens next yearly note. (Must be in a yearly note.) |
+
+## Templater
+
+Insert or create notes from templates. Requires the [Templater](obsidian://show-plugin?id=templater-obsidian) plugin. See the user guide for even [more ways to use Templater](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater).
+
+| Item | Description |
+| --- | --- |
+| Insert template | Inserts the chosen template. |
+| New from template | Create a new note from a template you select. |
+
+## Plugins
+
+Do even more with other Obsidian plugins.
+
+| Item | Description |
+| --- | --- |
+| Version history | View the version history for the current file. |
+| New drawing | Create a new Excalidraw drawing. |
+| Create/Edit task | Create a new task. |
+

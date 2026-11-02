@@ -1,9 +1,10 @@
-// Copies canonical reference documentation into each skill folder, so a skill
-// is self-contained and does not need to fetch its reference from the wiki:
+// Copies reference documentation into each skill folder, so a skill
+// is self-contained and does not need to fetch its reference from the wiki.
 //
-//   skills/note-toolbar-features/references/features-reference.md
-//     <- docs/wiki/Note-Toolbar-Features.md
-//
+// API, CLI, and Gallery references are copied from the generated docs/dist
+// outputs, so run the docs build (npm run docs, or any plugin build) before
+// regenerating them standalone, or they will reflect the last docs build.
+
 // To add a skill, add one entry to REFERENCES below. No other code change is
 // needed. The script is deliberately separate from esbuild: references are
 // committed files, not main.js build output, so they are refreshed on demand
@@ -30,6 +31,18 @@ const REFERENCES = [
     {
         src: 'docs/wiki/Note-Toolbar-Features.md',
         dest: 'skills/note-toolbar-features/references/features-reference.md',
+    },
+    {
+        src: 'docs/dist/wiki/Note-Toolbar-API.md',
+        dest: 'skills/note-toolbar-api/references/api-reference.md',
+    },
+    {
+        src: 'docs/dist/wiki/Note-Toolbar-CLI.md',
+        dest: 'skills/note-toolbar-cli/references/cli-reference.md',
+    },
+    {
+        src: 'docs/dist/wiki/Gallery.md',
+        dest: 'skills/note-toolbar-gallery/references/gallery-reference.md',
     },
 ];
 
