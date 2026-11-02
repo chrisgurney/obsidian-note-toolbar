@@ -39,7 +39,7 @@ Before hard-coding dates or note names in toolbar items, check whether the item 
 
 Relevant docs:
 - Variables: https://raw.githubusercontent.com/wiki/chrisgurney/obsidian-note-toolbar/Variables.md
-- Note Toolbar API: https://raw.githubusercontent.com/wiki/chrisgurney/obsidian-note-toolbar/Note-Toolbar-API.md
+- Note Toolbar API: use the `note-toolbar-api` skill.
 
 URI items can use variables such as `{{note_title}}`, `{{file_path}}`, `{{prop_NAME}}`, and expressions such as `{{js: ...}}`, `{{dv: ...}}`, and `{{tp: ...}}`.
 
