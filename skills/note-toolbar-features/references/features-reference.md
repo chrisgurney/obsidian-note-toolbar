@@ -1,4 +1,4 @@
-<!-- Generated from docs/wiki/Note-Toolbar-Features.md by build/copy-skill-references.mjs. Do not edit by hand. To update, run: npm run generate:skill-references -->
+<!-- Generated from docs/wiki/Note-Toolbar-Features.md by build/copy-skill-references.mjs. Do not edit by hand. To update, run: npm run build:skills -->
 
 Note Toolbar adds customizable toolbars to notes and other parts of Obsidian. Users build toolbars from items (commands, links, scripts, menus), control where each toolbar appears with display rules, and style them per platform (desktop, phone, tablet). It works on desktop and mobile. Configuration lives in the plugin's settings (`data.json` in the vault's config folder); toolbars can also be embedded directly in notes as [Note Toolbar Callouts](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-Callouts).
 

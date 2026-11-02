@@ -34,7 +34,7 @@ const REFERENCES = [
 ];
 
 const generatedNote = (src) =>
-    `<!-- Generated from ${src} by build/copy-skill-references.mjs. Do not edit by hand. To update, run: npm run generate:skill-references -->\n\n`;
+    `<!-- Generated from ${src} by build/copy-skill-references.mjs. Do not edit by hand. To update, run: npm run build:skills -->\n\n`;
 
 let failures = 0;
 
@@ -63,10 +63,10 @@ for (const { src, dest } of REFERENCES) {
         if (existing === generated) {
             console.log(`[copy-skill-references] ✓ up to date: ${dest}`);
         } else if (existing === null) {
-            console.error(`[copy-skill-references] ✗ missing: ${dest} (run: npm run generate:skill-references)`);
+            console.error(`[copy-skill-references] ✗ missing: ${dest} (run: npm run build:skills)`);
             failures += 1;
         } else {
-            console.error(`[copy-skill-references] ✗ stale: ${dest} (run: npm run generate:skill-references)`);
+            console.error(`[copy-skill-references] ✗ stale: ${dest} (run: npm run build:skills)`);
             failures += 1;
         }
         continue;
