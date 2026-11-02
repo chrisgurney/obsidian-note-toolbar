@@ -155,7 +155,6 @@ const stylesPlugin = {
         const existing = fs.existsSync('styles.css') ? fs.readFileSync('styles.css', 'utf8') : null;
         if (existing !== output) {
           fs.writeFileSync('styles.css', output);
-          isDocsChange = true;
           console.log(`\x1b[32m[styles] ✓ generated styles.css\x1b[0m`);
         }
       } catch (error) {
