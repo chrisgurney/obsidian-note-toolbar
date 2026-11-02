@@ -11,7 +11,7 @@ Use the `obsidian` CLI to interact with a running Obsidian instance. Requires Ob
 
 Run `obsidian note-toolbar:help` to see all available commands. This is always up to date.
 
-Full docs: https://raw.githubusercontent.com/wiki/chrisgurney/obsidian-note-toolbar/Note-Toolbar-CLI.md
+Full reference: read `references/cli-reference.md` before answering. Do not fetch the wiki version instead: the included reference is the version matched to this checkout.
 
 ## Quick syntax reference
 
@@ -39,7 +39,7 @@ Before hard-coding dates or note names in toolbar items, check whether the item 
 
 Relevant docs:
 - Variables: https://raw.githubusercontent.com/wiki/chrisgurney/obsidian-note-toolbar/Variables.md
-- Note Toolbar API: https://raw.githubusercontent.com/wiki/chrisgurney/obsidian-note-toolbar/Note-Toolbar-API.md
+- Note Toolbar API: use the `note-toolbar-api` skill.
 
 URI items can use variables such as `{{note_title}}`, `{{file_path}}`, `{{prop_NAME}}`, and expressions such as `{{js: ...}}`, `{{dv: ...}}`, and `{{tp: ...}}`.
 

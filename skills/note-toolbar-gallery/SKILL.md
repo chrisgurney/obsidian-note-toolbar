@@ -15,13 +15,13 @@ The Gallery is the preferred starting point for toolbar design. Do not recreate 
 
 Use these sources in order of preference:
 
-1. Gallery catalog: https://raw.githubusercontent.com/chrisgurney/obsidian-note-toolbar/master/src/Gallery/gallery.json
-2. Gallery item definitions: https://raw.githubusercontent.com/chrisgurney/obsidian-note-toolbar/master/src/Gallery/gallery-items.json
-3. Gallery documentation: https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Gallery
+1. Gallery catalog: read `references/gallery.json` before answering. Do not fetch the repo version instead: the included reference is the version matched to this checkout.
+2. Gallery item definitions: read `references/gallery-items.json` before answering. Do not fetch the repo version instead: the included reference is the version matched to this checkout.
+3. Gallery documentation: read `references/gallery-reference.md` before answering. It includes the full items catalog. Do not fetch the wiki version instead: the included reference is the version matched to this checkout.
 4. Additional Gallery items: https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Additional-Gallery-items
 5. Creating toolbar items: https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items
 
-The JSON files in the repository are the primary source for current Gallery metadata and configurations. Documentation provides descriptions and usage context, especially for items not included in the built-in catalog.
+The included JSON references are the primary source for Gallery metadata and configurations. Documentation provides descriptions and usage context, especially for items not included in the built-in catalog.
 
 If a source is unavailable, do not invent its contents. Use another accessible source and disclose any relevant limitations.
 
@@ -40,7 +40,7 @@ Ask only for details that materially affect the recommendation. If reasonable de
 
 ### 2. Load and inspect the Gallery data
 
-Retrieve both JSON files from the source repository or inspect local copies if available.
+Read both JSON references included with this skill (`references/gallery.json` and `references/gallery-items.json`).
 
 Before querying the data:
 
@@ -181,9 +181,9 @@ For a small request, answer directly without a large table.
 
 ## Maintenance
 
-The Gallery changes over time. Retrieve the current data when possible rather than relying on memorized item names, categories, icons, or counts.
+The Gallery changes over time. The included references match this checkout; do not rely on memorized item names, categories, icons, or counts.
 
-When working from a local checkout, identify the checked-out revision if relevant. When working from a remote source, note that the current default branch may not match the user's installed plugin version.
+When working from a local checkout, identify the checked-out revision if relevant, since the included references match that checkout.
 
 If catalog entries and item definitions disagree, report the discrepancy and avoid presenting uncertain configuration as verified.
 

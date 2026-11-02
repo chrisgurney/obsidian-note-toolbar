@@ -1,0 +1,944 @@
+<!-- Generated from docs/dist/wiki/Note-Toolbar-API.md by build/copy-skill-references.mjs. Do not edit by hand. To update, run: npm run build:skills -->
+
+The Note Toolbar API can be [executed from Note Toolbar items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Executing-scripts) to get toolbar access, and to show UI (suggesters, prompts, menus, and modals). The latter enables Dataview JS, JS Engine, or Templater scripts to ask for information, or to show helpful text.
+
+_I would appreciate your feedback, which you can leave in [the discussions](https://github.com/chrisgurney/obsidian-note-toolbar/discussions)._
+
+## Getting started
+
+Even if you're not a developer, getting started with the API is easy:
+
+1. Create a new toolbar item with a **JavaScript type**.
+2. **Select function... → Evaluate JavaScript**.
+3. Copy/Paste one of the examples provided into the **JavaScript expression** field.
+
+## `ntb` API
+
+- **[Notes](#Notes)**
+    - [[ntb.append|Note-Toolbar-API#append]]
+    - [[ntb.getProperty|Note-Toolbar-API#getproperty]]
+    - [[ntb.setProperty|Note-Toolbar-API#setproperty]]
+    - [[ntb.getSelection|Note-Toolbar-API#getselection]]
+    - [[ntb.setSelection|Note-Toolbar-API#setselection]]
+    - [[ntb.getTags|Note-Toolbar-API#gettags]]
+- **[Toolbars](#Toolbars)**
+    - [[ntb.export|Note-Toolbar-API#export]]
+    - [[ntb.getActiveItem|Note-Toolbar-API#getactiveitem]]
+    - [[ntb.getItem|Note-Toolbar-API#getitem]]
+    - [[ntb.getToolbars|Note-Toolbar-API#gettoolbars]]
+- **[UI Components](#UI-Components)**
+    - [[ntb.fileSuggester|Note-Toolbar-API#filesuggester]]
+    - [[ntb.menu|Note-Toolbar-API#menu]]
+    - [[ntb.modal|Note-Toolbar-API#modal]]
+    - [[ntb.prompt|Note-Toolbar-API#prompt]]
+    - [[ntb.sidebar|Note-Toolbar-API#sidebar]]
+    - [[ntb.suggester|Note-Toolbar-API#suggester]]
+    - [[ntb.toolbar|Note-Toolbar-API#toolbar]]
+- **[Utilities](#Utilities)**
+    - [[ntb.app|Note-Toolbar-API#app]]
+    - [[ntb.clipboard|Note-Toolbar-API#clipboard]]
+    - [[ntb.loadScript|Note-Toolbar-API#loadscript]]
+    - [[ntb.o|Note-Toolbar-API#o]]
+    - [[ntb.t|Note-Toolbar-API#t]]
+
+---
+
+> [!warning]
+> While you could directly access Note Toolbar's settings via `app.plugins.getPlugin("note-toolbar").settings`, be aware that these are subject to change and may break your scripts. The API will be the official way to access and change information about toolbars.
+
+---
+
+## Notes
+
+Functions for reading and manipulating notes in the vault.
+
+### append
+
+> **append**: (`content`, `options?`) => `Promise`\<`void`\>
+
+Appends the given content to the current file.
+
+Error behavior: throws with no active file, or if the file is not markdown. Await it (or catch it).
+
+#### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `content` | `string` | content to append |
+| `options?` | \{ `file?`: `TFile`; `linePrefix?`: `string`; `separator?`: `string`; \} | - |
+| `options.file?` | `TFile` | File to append to. Defaults to active file. |
+| `options.linePrefix?` | `string` | Text to prepend to each line of the content, such as `'> '` for a blockquote. |
+| `options.separator?` | `string` | Text to insert between the existing file content and the appended content. Defaults to `'\n\n'`. |
+
+#### Returns
+
+`Promise`\<`void`\>
+
+Nothing.
+
+#### Examples
+
+```ts
+// append text to the current note
+ntb.append('New text added to note.');
+```
+
+```ts
+// append text to the current note, add a divider, and quote it
+ntb.append('New text added to note.', { 
+  separator: '\n\n---\n', 
+  linePrefix: '> ' 
+} );
+```
+
+#### Since
+
+1.35
+
+***
+
+### getProperty
+
+> **getProperty**: (`property`) => `string` \| `undefined`
+
+Gets the value of the given property in the active note.
+
+#### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `property` | `string` | The property to get the frontmatter for. |
+
+#### Returns
+
+`string` \| `undefined`
+
+The frontmatter value for the given property, or `undefined` if it does not exist.
+
+#### Example
+
+```ts
+const createdDate = ntb.getProperty('created');
+```
+
+***
+
+### getSelection
+
+> **getSelection**: (`options?`) => `string`
+
+Gets the currently selected text, or the word at the current cursor position, if nothing's selected.  Only works in markdown editing or reading modes.
+
+#### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `options?` | \{ `wordAtCursor?`: `boolean`; \} | - |
+| `options.wordAtCursor?` | `boolean` | Return the word at the cursor, if there's no selection. If set to `false`, text must be selected in order for a non-empty string to be returned. Default is `true`. **Since** 1.35 |
+
+#### Returns
+
+`string`
+
+The selected text, or the word at the current cursor position. Otherwise returns an empty string.
+
+#### Since
+
+1.26
+
+***
+
+### getTags
+
+> **getTags**: () => `string`[]
+
+Returns list of tags in the vault, sorted alphabetically.
+
+#### Returns
+
+`string`[]
+
+List of tags in the vault.
+
+#### Example
+
+```ts
+// gets all tags, then shows a suggester with those tags
+const tags = ntb.getTags();
+const selected = await ntb.suggester(tags);
+new Notice(selected);
+```
+
+#### Since
+
+1.35
+
+***
+
+### setProperty
+
+> **setProperty**: (`property`, `value`) => `Promise`\<`void`\>
+
+Sets the given property's value in the active note. Set the property to `null` to remove it.
+
+Error behavior: does not throw. With no active note, it reports the error and returns.
+
+#### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `property` | `string` | Propety to set in the frontmatter. |
+| `value` | `unknown` | Value to set for the property. |
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Example
+
+```ts
+await ntb.setProperty('Created', moment().format('YYYY-MM-DD'));
+await ntb.setProperty('cssclasses', 'myclass');
+await ntb.setProperty('A Link', '[[Some Note]]');
+await ntb.setProperty('A Number', 1234);
+await ntb.setProperty('A List', ['asdf', 'asdf2']);
+await ntb.setProperty('Delete Me', null);
+```
+
+***
+
+### setSelection
+
+> **setSelection**: (`replacement`) => `void`
+
+Replaces the selection, the word at the cursor, or inserts at the cursor if neither exists.
+
+Error behavior: throws with no active editor.
+
+#### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `replacement` | `string` | The text to replace the selection with. |
+
+#### Returns
+
+`void`
+
+#### Remarks
+
+This does not do anything in Reading mode.
+
+#### Example
+
+```ts
+// makes the selected text or the current word red
+ntb.setSelection(`<span style="color: var(--color-red)">${ntb.getSelection()}</span>`);
+```
+
+#### Since
+
+1.26
+
+## Toolbars
+
+Methods for creating and updating toolbars.
+
+### export
+
+> **export**: (`toolbar`) => `Promise`\<`string` \| `null`\>
+
+Exports the given toolbar as a [Note Toolbar callout](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Note-Toolbar-Callouts).
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `toolbar` | [`IToolbar`](IToolbar.Interface.IToolbar.md) |
+
+#### Returns
+
+`Promise`\<`string` \| `null`\>
+
+Toolbar as a callout or `null` if the toolbar is undefined.
+
+#### Example
+
+```ts
+const toolbars = ntb.getToolbars();
+for (let toolbar of toolbars) {
+    console.log(`\n## ${toolbar.getName()}\n\n`);
+    console.log(await ntb.export(toolbar));
+}
+```
+
+#### See
+
+`NtbExport.js` in the [docs/examples/scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/docs/examples/scripts).
+
+#### Since
+
+1.29
+
+***
+
+### getActiveItem
+
+> **getActiveItem**: () => [`IItem`](IItem.Interface.IItem.md) \| `undefined`
+
+Gets the active (last activated) toolbar item.
+
+#### Returns
+
+[`IItem`](IItem.Interface.IItem.md) \| `undefined`
+
+The active (last activated) item.
+
+#### Remarks
+
+This does not work with Note Toolbar Callouts.
+
+***
+
+### getItem
+
+> **getItem**: (`id`) => [`IItem`](IItem.Interface.IItem.md) \| `undefined`
+
+Gets an item by its [ID](Developer-IDs), if it exists.
+
+#### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `id` | `string` | The [ID](Developer-IDs) of the item. |
+
+#### Returns
+
+[`IItem`](IItem.Interface.IItem.md) \| `undefined`
+
+The item, or undefined.
+
+#### Example
+
+```js
+// to get the ID, edit an item's settings and use _Copy developer ID_
+const item = ntb.getItem('112c7ed3-d5c2-4750-b95d-75bc84e23513');
+```
+
+***
+
+### getToolbars
+
+> **getToolbars**: () => [`IToolbar`](IToolbar.Interface.IToolbar.md)[]
+
+Gets all toolbars.
+
+#### Returns
+
+[`IToolbar`](IToolbar.Interface.IToolbar.md)[]
+
+All toolbars.
+
+## UI Components
+
+Functions for showing various UI components, such as menus, modals, toolbars, and suggesters.
+
+### fileSuggester
+
+> **fileSuggester**: (`files`, `options?`) => `Promise`\<`TAbstractFile` \| `null`\>
+
+Shows a file suggester modal for the provided files and waits for the user's selection. Files are sorted by recency.
+
+#### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `files` | `TAbstractFile`[] | - |
+| `options?` | \{ `allowCustomInput?`: `boolean`; `class?`: `string`; `collapse?`: `boolean`; `default?`: `string`; `exact?`: `boolean`; `filesonly?`: `boolean`; `folder?`: `string`; `foldersonly?`: `boolean`; `icon?`: `string`; `keymap?`: `object`[]; `label?`: `string`; `limit?`: `number`; `placeholder?`: `string`; `prefixes?`: `Record`\<`string`, `unknown`[] \| (() => `unknown`[] \| `Promise`\<`unknown`\>)\>; `rendermd?`: `boolean`; `title?`: `string`; \} | Optional display options. |
+| `options.allowCustomInput?` | `boolean` | If set to `true`, the user can input a custom value that is not in the list of suggestions. Default is `false`. |
+| `options.class?` | `string` | Optional CSS class(es) to add to the component, separated by spaces. |
+| `options.collapse?` | `boolean` | If set to `true`, the results and suggester instructions are hidden until input is provided. Default is `false`. **Since** 1.29.14 |
+| `options.default?` | `string` | Optionally pre-set the suggester's input with this value. Matching results will be shown, as if you typed in that string yourself (assuming the string appears in the list of options provided). If not provided, no default is set. |
+| `options.exact?` | `boolean` | Set to `true` to use substring matching instead of fuzzy matching, prioritizing results that start with the input string. Default is `false`. **Since** 1.30.10 |
+| `options.filesonly?` | `boolean` | If set to true, only files are shown. If not provided, defaults to `false`. |
+| `options.folder?` | `string` | Limit results to this folder. **Since** 1.30.14 |
+| `options.foldersonly?` | `boolean` | If set to true, only folders are shown. If not provided, defaults to `false`. |
+| `options.icon?` | `string` | Optional icon to place before the input field. **Since** 1.29.14 |
+| `options.keymap?` | `object`[] | Optionally replace key bindings. **See** [NtbKeyBinding](INoteToolbarApi.Interface.NtbKeyBinding.md) for available actions and modifier options. **Since** 1.30.06 |
+| `options.label?` | `string` | Optional text shown above the input field, with markdown formatting supported. Default is no label. |
+| `options.limit?` | `number` | Optional limit of the number of items rendered at once (useful to improve performance when displaying large lists). |
+| `options.placeholder?` | `string` | Optional placeholder text for input field; defaults to preset message. |
+| `options.prefixes?` | `Record`\<`string`, `unknown`[] \| (() => `unknown`[] \| `Promise`\<`unknown`\>)\> | Maps input prefixes to arrays or functions that return suggestions, or a Promise (e.g. another suggester) that resolves to a value which is injected into the input. **Examples** `{ '#': ['tag1', 'tag2'], '[[': () => getFiles() }` `{ '#': async () => await ntb.suggester(lorem, ipsum) }` **Since** 1.30.0 |
+| `options.rendermd?` | `boolean` | Set to `false` to disable rendering of suggestions as markdown. Default is `true`. |
+| `options.title?` | `string` | Optional text shown above the input field. Same as `label`. **Since** 1.36 |
+
+#### Returns
+
+`Promise`\<`TAbstractFile` \| `null`\>
+
+The selected [TAbstractFile](https://docs.obsidian.md/Reference/TypeScript+API/TAbstractFile).
+
+#### Remarks
+
+This function replaces the old fileSuggester(options?).
+
+#### Examples
+
+```ts
+const fileOrFolder = await ntb.fileSuggester(
+  ntb.app.vault.getAllLoadedFiles()
+);
+if (fileOrFolder) new Notice(fileOrFolder.name);
+```
+
+```ts
+// show only folders
+const folder = await ntb.fileSuggester(
+  ntb.app.vault.getAllLoadedFiles(),
+  { foldersonly: true }
+);
+if (folder) new Notice(folder.name);
+```
+
+#### Since
+
+1.33.15
+
+***
+
+### menu
+
+> **menu**: (`toolbarOrItems`, `options?`) => `Promise`\<`void`\>
+
+Shows a menu with the provided items.
+
+#### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `toolbarOrItems` | `string` \| [`NtbMenuItem`](INoteToolbarApi.Interface.NtbMenuItem.md)[] | Toolbar name or [ID](Developer-IDs); or an array of items to display. See [NtbMenuItem](INoteToolbarApi.Interface.NtbMenuItem.md). |
+| `options?` | \{ `class?`: `string`; `focusInMenu?`: `boolean`; `id?`: `string`; `position?`: `"cursor"` \| `"pointer"` \| `"toolbar"`; \} | Optional display options. |
+| `options.class?` | `string` | Optional CSS class(es) to add to the component, separated by spaces. |
+| `options.focusInMenu?` | `boolean` | If `true`, the menu item will be focused when the menu opens; defaults to `false`. |
+| `options.id?` | `string` | Optional ID to add to the menu when it's rendered. **Since** 1.27 |
+| `options.position?` | `"cursor"` \| `"pointer"` \| `"toolbar"` | Sets the position in which the menu will appear; defaults to `toolbar`. `cursor`: editor cursor or selected text position (falls back to pointer position, e.g., if editor is not in focus); `pointer`: mouse/pointer position; `toolbar`: last clicked toolbar element position (falls back to pointer position) **Since** 1.27 |
+
+#### Returns
+
+`Promise`\<`void`\>
+
+Nothing. Displays the menu.
+
+#### Examples
+
+```ts
+// show the "Daily Notes" toolbar as a menu
+await ntb.menu('Daily Notes');
+```
+
+```ts
+// create a menu from scratch
+await ntb.menu([
+  { type: 'command', value: 'editor:toggle-bold', label: 'Toggle Bold', icon: 'bold' },
+  { type: 'file', value: 'Home.md', label: 'Open File' },
+  { type: 'uri', value: 'https://example.com', label: 'Visit Site' }
+]);
+```
+
+```ts
+// shows bookmarks in a menu
+const b = ntb.app.internalPlugins.plugins['bookmarks'];
+if (!b?.enabled) return;
+const i = b.instance?.getBookmarks();
+const mi = i
+  .filter(b => b.type === 'file' || b.type === 'folder')
+  .map(b => ({
+      type: 'file',
+      value: b.path,
+      label: b.title ? b.title : b.path,
+      icon: b.type === 'folder' ? 'folder' : 'file'
+  }));
+ntb.menu(mi);
+```
+
+***
+
+### modal
+
+> **modal**: (`content`, `options?`) => `Promise`\<`Modal`\>
+
+Shows a modal with the provided content.
+
+#### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `content` | `string` \| `TFile` | Content to display in the modal, either as a string or a file within the vault. |
+| `options?` | \{ `class?`: `string`; `contextPath?`: `string`; `originAsContext?`: `boolean`; `title?`: `string`; `webpage?`: `boolean`; \} | Optional display options. |
+| `options.class?` | `string` | Optional CSS class(es) to add to the component, separated by spaces. |
+| `options.contextPath?` | `string` | Optionally specify which file rendered content should use as context. For example, Bases queries that use `this.file` will refer to this file. |
+| `options.originAsContext?` | `boolean` | Use the file that opened the modal as context (assumes the active file); defaults to `false`. Ignored when `contextPath` is provided. |
+| `options.title?` | `string` | Optional title for the modal, with markdown formatting supported. |
+| `options.webpage?` | `boolean` | If `true`, the modal will show the web page URL in `content` using the Web Viewer core plugin (if enabled); defaults to `false`. |
+
+#### Returns
+
+`Promise`\<`Modal`\>
+
+A `Modal`, in case you want to manipulate it further; can be ignored otherwise.
+
+#### Examples
+
+```ts
+// shows a modal with the provided string
+await ntb.modal("_Hello_ world!");
+```
+
+```ts
+// shows a modal with the rendered contents of a file
+const filename = "Welcome.md";
+const file = ntb.app.vault.getAbstractFileByPath(filename);
+
+if (file) {
+  await ntb.modal(file, {
+    title: `**${file.basename}**`
+  });
+}
+else {
+  new Notice(`File not found: ${filename}`);
+}
+```
+
+```ts
+// renders a Base for the current file
+const fn = "Bases/Backlinks.base";
+const f = ntb.app.vault.getAbstractFileByPath(fn);
+if (f) { 
+  await ntb.modal(f, {
+    originAsContext: true,
+    // ...or remove the above line and render for a completely different file:
+    //contextPath: "Other File.md"  
+  });
+}
+```
+
+#### See
+
+`NtbModal.js` in the [docs/examples/scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/docs/examples/scripts).
+
+***
+
+### prompt
+
+> **prompt**: (`options?`) => `Promise`\<`string` \| `null`\>
+
+Shows the prompt modal and waits for the user's input.
+
+#### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `options?` | \{ `class?`: `string`; `default?`: `string`; `label?`: `string`; `large?`: `boolean`; `placeholder?`: `string`; `title?`: `string`; \} | Optional display options. |
+| `options.class?` | `string` | Optional CSS class(es) to add to the component, separated by spaces. |
+| `options.default?` | `string` | Optional default value for text field. If not provided, no default value is set. |
+| `options.label?` | `string` | Optional text shown above the text field, with markdown formatting supported. Default is no label. |
+| `options.large?` | `boolean` | If set to `true`, the input field will be multi line. If not provided, defaults to `false`. |
+| `options.placeholder?` | `string` | Optional text inside text field. Defaults to a preset message. |
+| `options.title?` | `string` | Optional text shown above the text field. Same as `label`. **Since** 1.36 |
+
+#### Returns
+
+`Promise`\<`string` \| `null`\>
+
+The user's input.
+
+#### Examples
+
+```ts
+// default (one-line) prompt with default placeholder message
+const result = await ntb.prompt();
+
+new Notice(result);
+```
+
+```ts
+// large prompt with message, overridden placeholder, and default value 
+const result = await ntb.prompt({
+  label: "Enter some text",
+  large: true,
+  placeholder: "Placeholder",
+  default: "Default"
+});
+
+new Notice(result);
+```
+
+#### See
+
+`NtbPrompt.js` in the [docs/examples/scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/docs/examples/scripts).
+
+***
+
+### sidebar
+
+> **sidebar**: (`content`, `options?`) => `Promise`\<`void`\>
+
+Opens a sidebar view with the given content.
+
+Error behavior: throws with no content, no sidebar leaf, or `append` with file content. Await it (or catch it).
+
+#### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `content` | `string` \| `TFile` \| `URL` | Text content (rendered as markdown), file, or URL to display. |
+| `options?` | \{ `active?`: `boolean`; `append?`: `string`; `class?`: `string`; `id?`: `string`; `navigation?`: (`"clear"` \| `"close"` \| `"export"`)[]; `reuse?`: `boolean`; `side?`: `"left"` \| `"right"`; `split?`: `boolean`; `viewIcon?`: `string`; `viewTitle?`: `string`; \} | Optional display options. |
+| `options.active?` | `boolean` | Activate the sidebar after opening or updating it. Defaults to `true`. |
+| `options.append?` | `string` | Append text content using a provided separator string, instead of replacing it. Only applies when a sidebar is being reused. **Since** 1.36 |
+| `options.class?` | `string` | Optional CSS class(es) to add to the sidebar, separated by spaces. **Since** 1.36 |
+| `options.id?` | `string` | Uniquely identify the sidebar view for reuse. When set, only a sidebar with the same ID is reused. |
+| `options.navigation?` | (`"clear"` \| `"close"` \| `"export"`)[] | Navigation buttons to show in the sidebar. Can only be set once per sidebar. Defaults to adding no buttons. **Since** 1.36 |
+| `options.reuse?` | `boolean` | Reuse an existing sidebar view instead of creating a new one. Ignored when `id` is set. Defaults to `true`. |
+| `options.side?` | `"left"` \| `"right"` | Indicates which side to open the sidebar on. Default is `right`. |
+| `options.split?` | `boolean` | Indicates whether to create the sidebar in a new split. Default is `false`. |
+| `options.viewIcon?` | `string` | Sets the icon for the sidebar view. Can only be set once per sidebar. |
+| `options.viewTitle?` | `string` | Sets the title for the sidebar view. Can only be set once per sidebar. |
+
+#### Returns
+
+`Promise`\<`void`\>
+
+Nothing.
+
+#### Examples
+
+```ts
+// show the selected file
+const file = await ntb.fileSuggester(
+  ntb.app.vault.getAllLoadedFiles(), { filesonly: true }
+);
+await ntb.sidebar(file);
+```
+
+```ts
+// show a web page
+await ntb.sidebar(new URL('https://obsidian.md'));
+```
+
+```ts
+// show a string, creating a new sidebar view each time
+await ntb.sidebar(`*It is now:*\n${new Date()}`, { reuse: false });
+```
+
+```ts
+// show a string, in the same sidebar, with an icon, title, and navigation
+ntb.sidebar(`*It is now:*\n${new Date()}`, {
+  append: '', viewIcon: 'calendar', viewTitle: 'Dates', navigation: ['clear', 'export', 'close']
+});
+```
+
+#### Since
+
+1.35
+
+***
+
+### suggester
+
+> **suggester**: (`values?`, `keys?`, `options?`) => `Promise`\<`T` \| `null`\>
+
+Shows a suggester modal and waits for the user's selection.
+
+#### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `values?` | `string`[] \| ((`value`) => `string`) | Array of strings representing the text that will be displayed for each item in the suggester prompt. This can also be a function that maps an item to its text representation. Markdown formatting is supported: optionally mix in Obsidian and plugin markdown (e.g., Iconize) to have it rendered |
+| `keys?` | `T`[] | Optional array containing the keys of each item in the correct order. If not provided or `null`, values are returned on selection. |
+| `options?` | \{ `allowCustomInput?`: `boolean`; `class?`: `string`; `collapse?`: `boolean`; `default?`: `string`; `exact?`: `boolean`; `icon?`: `string`; `keymap?`: `object`[]; `label?`: `string`; `limit?`: `number`; `placeholder?`: `string`; `prefixes?`: `Record`\<`string`, `unknown`[] \| (() => `unknown`[] \| `Promise`\<`unknown`\>)\>; `rendermd?`: `boolean`; `title?`: `string`; \} | Optional display options. |
+| `options.allowCustomInput?` | `boolean` | If set to `true`, the user can input a custom value that is not in the list of suggestions. Default is `false`. |
+| `options.class?` | `string` | Optional CSS class(es) to add to the component, separated by spaces. |
+| `options.collapse?` | `boolean` | If set to `true`, the results and suggester instructions are hidden until input is provided. Default is `false`. **Since** 1.29.14 |
+| `options.default?` | `string` | Optionally pre-set the suggester's input with this value. Matching results will be shown, as if you typed in that string yourself (assuming the string appears in the list of options provided). If not provided, no default is set. |
+| `options.exact?` | `boolean` | Set to `true` to use substring matching instead of fuzzy matching, prioritizing results that start with the input string. Default is `false`. **Since** 1.30.10 |
+| `options.icon?` | `string` | Optional icon to place before the input field. **Since** 1.29.14 |
+| `options.keymap?` | `object`[] | Optionally replace key bindings. **See** [NtbKeyBinding](INoteToolbarApi.Interface.NtbKeyBinding.md) for available actions and modifier options. **Since** 1.30.06 |
+| `options.label?` | `string` | Optional text shown above the input field, with markdown formatting supported. Default is no label. |
+| `options.limit?` | `number` | Optional limit of the number of items rendered at once (useful to improve performance when displaying large lists). |
+| `options.placeholder?` | `string` | Optional placeholder text for input field; defaults to preset message. |
+| `options.prefixes?` | `Record`\<`string`, `unknown`[] \| (() => `unknown`[] \| `Promise`\<`unknown`\>)\> | Maps input prefixes to arrays or functions that return suggestions, or a Promise (e.g. another suggester) that resolves to a value which is injected into the input. **Examples** `{ '#': ['tag1', 'tag2'], '[[': () => getFiles() }` `{ '#': async () => await ntb.suggester(lorem, ipsum) }` **Since** 1.30.0 |
+| `options.rendermd?` | `boolean` | Set to `false` to disable rendering of suggestions as markdown. Default is `true`. |
+| `options.title?` | `string` | Optional text shown above the input field. Same as `label`. **Since** 1.36 |
+
+#### Returns
+
+`Promise`\<`T` \| `null`\>
+
+The selected value, or corresponding key if keys are provided.
+
+#### Examples
+
+```ts
+// shows a suggester that returns the selected value 
+const values = ["value `1`", "value `2`"];
+const selectedValue = await ntb.suggester(values);
+new Notice(selectedValue);
+```
+
+```ts
+// shows a suggester that returns a key corresponding to the selected value, and overrides placeholder text
+const values = ["value `1`", "value `2`"];
+const keys = ["key1", "key2"];
+const selectedKey = await ntb.suggester(values, keys, {
+  placeholder: "Pick something"
+});
+new Notice(selectedKey);
+```
+
+```ts
+// shows a suggester with no existing values that can be typed in; displays tag and file suggestions when those prefixes are entered
+const selected = await ntb.suggester(null, null, {
+  prefixes: {
+    "#": () => ntb.getTags(),
+    "[[": () => this.ntb.app.vault.getAllLoadedFiles().map(f => `[[${f.extension === 'md' ? f.basename : f.name}]]`)
+  }
+});
+new Notice(selected);
+```
+
+```ts
+// displays a suggester with the key mappings overridden
+const values = ['cat', 'dog'];
+const selected = await ntb.suggester(values, null, {
+    keymap: [
+        { key: 'Tab', action: 'navigateNext' },
+        { modifiers: ['Ctrl'], key: 'Tab', action: 'select' },
+        { key: 'ArrowRight', action: 'autofill' },
+    ],
+});
+new Notice(selected);
+```
+
+#### See
+
+`NtbSuggester.js` in the [docs/examples/scripts folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/docs/examples/scripts).
+
+***
+
+### toolbar
+
+> **toolbar**: (`toolbarNameOrId`, `options?`) => `Promise`\<`void`\>
+
+Shows a (floating) toolbar. Defaults to the 'toolbar' position.
+
+#### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `toolbarNameOrId` | `string` | Toolbar name or [ID](Developer-IDs). |
+| `options?` | \{ `class?`: `string`; `position?`: `"cursor"` \| `"pointer"` \| `"toolbar"`; \} | Optional display options. |
+| `options.class?` | `string` | Optional CSS class(es) to add to the component, separated by spaces. |
+| `options.position?` | `"cursor"` \| `"pointer"` \| `"toolbar"` | Sets the position in which the toolbar will appear; defaults to `toolbar`. `cursor`: editor cursor or selected text position (falls back to pointer position, e.g., if editor is not in focus); `pointer`: mouse/pointer position; `toolbar`: last clicked toolbar element position (falls back to pointer position) |
+
+#### Returns
+
+`Promise`\<`void`\>
+
+Nothing. Displays the toolbar.
+
+#### Examples
+
+```ts
+// show the "Daily Notes" toolbar at the toolbar button (default)
+ntb.toolbar('Daily Notes');
+```
+
+```ts
+// show the "Daily Notes" toolbar at the cursor position (or above the text selection)
+ntb.toolbar('Daily Notes', { position: 'cursor' });
+```
+
+#### Since
+
+1.27
+
+## Utilities
+
+### app
+
+> **app**: `App`
+
+The [Obsidian app instance](https://docs.obsidian.md/Reference/TypeScript+API/App). Use this instead of the global `app` when writing JavaScript.
+
+#### Example
+
+```ts
+const currentFile = ntb.app.workspace.getActiveFile();
+new Notice(currentFile.name);
+```
+
+#### Since
+
+1.26
+
+***
+
+### ~~clipboard~~
+
+> **clipboard**: () => `string` \| `null`
+
+Gets the clipboard value.
+
+#### Returns
+
+`string` \| `null`
+
+The clipboard value or `null`.
+
+#### Deprecated
+
+Since 1.33. Use `await activeWindow.navigator.clipboard.readText()` instead.
+
+***
+
+### exportSettings
+
+> **exportSettings**: (`filename?`) => `Promise`\<`string`\>
+
+Copies the plugin's settings file (`data.json`), exactly as it is stored, into the vault.
+The current settings are not saved first, so the copy captures the stored file as-is.
+
+#### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `filename?` | `string` | Optional file name, or vault-relative path, for the copy. A name without a folder is placed in the `Note Toolbar Backups` folder, and `.json` is added if no extension is provided. If omitted, a timestamped name in the `Note Toolbar Backups` folder is used. An existing file is never overwritten: a number is appended to the name instead. |
+
+#### Returns
+
+`Promise`\<`string`\>
+
+The vault path of the backup copy.
+
+#### Examples
+
+```ts
+const backupPath = await ntb.exportSettings();
+```
+
+```ts
+const name = await ntb.prompt({ label: 'Note Toolbar backup filename' });
+if (name) await ntb.exportSettings(name);
+```
+
+#### Since
+
+1.36
+
+***
+
+### o
+
+> **o**: `__module`
+
+Reference to the [Obsidian API module](https://github.com/obsidianmd/obsidian-api/blob/master/obsidian.d.ts) for accessing Obsidian classes and utilities from scripts.
+
+#### Example
+
+```ts
+// get the current markdown view
+const view = ntb.app.workspace.getActiveViewOfType(ntb.o.MarkdownView);
+```
+
+#### Since
+
+1.26
+
+***
+
+### t
+
+> **t**: (`key`, ...`args`) => `string`
+
+This is the [i18next translation function](https://www.i18next.com/translation-function/essentials), scoped to Note Toolbar's localized strings.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `key` | `string` |
+| ...`args` | `unknown`[] |
+
+#### Returns
+
+`string`
+
+The string translation corresponding with the provided key, if it exists, with a fallback to English. If the key does not exist, the key is returned.
+
+#### Example
+
+```ts
+// shows "Copied to clipboard" if the language is English, or in another langauge if the translation exists
+new Notice(ntb.t('api.msg.clipboard-copied'));
+```
+
+#### See
+
+ - For usage, see the [i18next documentation](https://www.i18next.com/translation-function/essentials).
+ - `en.json` and other translations in the [src/I18n folder](https://github.com/chrisgurney/obsidian-note-toolbar/tree/master/src/I18n).
+
+***
+
+### loadScript()
+
+> **loadScript**\<`T`\>(`path`): `Promise`\<`T`\>
+
+Loads a user script from the vault and returns its result.
+For example, use this to return functions for use in other scripts.
+
+#### Type Parameters
+
+| Type Parameter | Default type |
+| ------ | ------ |
+| <a id="type-parameter-t-1"></a> `T` | `Record`\<`string`, `unknown`\> |
+
+#### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `path` | `string` | The path to the script file. |
+
+#### Returns
+
+`Promise`\<`T`\>
+
+A promise resolving to the loaded script.
+
+#### Since
+
+1.35
+
+#### Examples
+
+```ts
+// create a library script in your vault: Scripts/NTB Library.js
+async function myFunction() {
+  await ntb.setProperty('SomeProperty', true);
+}
+
+function anotherFunction() {
+  console.log('Hello from anotherFunction');
+}
+
+return {
+  myFunction,
+  anotherFunction
+};
+```
+
+```ts
+// ...then load the library, and call its functions
+const lib = await ntb.loadScript('Scripts/NTB Library.js');
+await lib.myFunction();
+lib.anotherFunction();
+```
