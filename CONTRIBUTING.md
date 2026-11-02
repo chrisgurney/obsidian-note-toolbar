@@ -103,7 +103,7 @@ Test on desktop and mobile if you can, and note any `Platform.isPhone`-specific 
 
 ## CI
 
-CI (`.github/workflows/ci.yml`) runs the same checks on every push and pull request, including pull requests from forks. You do not need special access. Open the pull request and CI runs.
+CI (`.github/workflows/ci.yml`) runs the same checks on every push and pull request, including pull requests from forks. You do not need special access. Open the pull request and CI runs. CI must pass before merging: the `build` check is a required status check on `master`.
 
 To reproduce it locally, run `npm run check`. CI runs the same four commands as separate steps, so a failure is labelled by check in GitHub. If CI fails and your local run passes, check the Node version first (CI uses `.nvmrc`), then check you ran `npm ci` rather than `npm install`.
 
