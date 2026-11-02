@@ -1,37 +1,10 @@
 import { spawn } from 'child_process';
 import chokidar from "chokidar";
 import esbuild, { analyzeMetafile } from "esbuild";
-import fs, { existsSync } from 'fs';
-import { copyFile, mkdir, readFile } from 'fs/promises';
-import { createHash } from 'node:crypto';
+import fs from 'fs';
 import { builtinModules } from 'node:module';
-import { dirname, join } from 'path';
 import process from "process";
-import { cliDocs } from "./build/cli-docs.mjs";
 import { fileInliner } from "./build/file-inliner.mjs";
-import { galleryDocs } from "./build/gallery-docs.mjs";
-
-/* ****************************************************************************
- * BUILD PATHS
- * ************************************************************************** */
-
-const DOC_OUTPUT = "docs/dist";
-const DOC_WIKI_INPUT = "docs/wiki";
-
-// directory of the external repo to copy files into
-const WIKI_REPO = "../obsidian-note-toolbar-wiki";
-
-// files to copy into the external repo after build
-// each entry: { src: <source path>, dest: <path relative to WIKI_REPO> }
-const WIKI_FILES = [
-	{ src: `${DOC_OUTPUT}/wiki/Gallery.md`, dest: "Gallery.md" },
-	{ src: `${DOC_OUTPUT}/wiki/Note-Toolbar-API.md`, dest: "Note-Toolbar-API.md" },
-	{ src: `${DOC_OUTPUT}/wiki/Note-Toolbar-CLI.md`, dest: "Note-Toolbar-CLI.md" },
-	{ src: `${DOC_OUTPUT}/api/IItem.Interface.IItem.md`, dest: "IItem.Interface.IItem.md.md" },
-	{ src: `${DOC_OUTPUT}/api/IToolbar.Interface.IToolbar.md`, dest: "IToolbar.Interface.IToolbar.md.md" },
-	{ src: `${DOC_OUTPUT}/api/INoteToolbarApi.Interface.NtbKeyBinding.md`, dest: "INoteToolbarApi.Interface.NtbKeyBinding.md.md" },
-	{ src: `${DOC_OUTPUT}/api/INoteToolbarApi.Interface.NtbMenuItem.md`, dest: "INoteToolbarApi.Interface.NtbMenuItem.md.md" },
-];
 
 // build cache
 const CACHE_DIR = 'node_modules/.cache';
@@ -50,16 +23,26 @@ if you want to view the source, please visit the github repository of this plugi
 
 const isBuildAnalyzeMode = (process.argv[2] === "analyze");
 const isBuildProdMode = (process.argv[2] === "production");
-let isDocsChange = false;
-
-const wikiRepoExists = existsSync(WIKI_REPO);
-if (!wikiRepoExists) {
-	console.log(`\x1b[33m[copy-to-wiki] wiki repo folder not found, skipping wiki copies to: ${WIKI_REPO} (clone it as a sibling folder and restart dev to enable copies)\x1b[0m`);
-}
 
 /* ****************************************************************************
  * PLUGINS
  * ************************************************************************** */
+
+const docsPlugin = {
+	name: 'docs',
+	setup(build) {
+		build.onStart(async () => {
+			await new Promise((resolve, reject) => {
+				const docs = spawn(process.execPath, ['build/docs.mjs'], { stdio: 'inherit' });
+				docs.on('close', (code) => {
+					if (code === 0) resolve();
+					else reject(new Error(`docs build failed with code ${code}`));
+				});
+				docs.on('error', (error) => reject(new Error(`docs build failed to start: ${error.message}`)));
+			});
+		});
+	},
+};
 
 const typecheckPlugin = {
 	name: 'typecheck',
@@ -84,61 +67,6 @@ const typecheckPlugin = {
 					resolve();
 				});
 			});
-		});
-	},
-};
-
-const apiDocsPlugin = {
-	name: 'api-docs',
-	setup(build) {
-		build.onEnd(async () => {
-			// skip typedoc regeneration when the API hasn't changed
-			const stampPath = `${CACHE_DIR}/typedoc.stamp`;
-			const apiHash = createHash('sha256');
-			for (const file of ['src/Api/INoteToolbarApi.ts', 'src/Api/IToolbar.ts', 'src/Api/IItem.ts', 'typedoc.json']) {
-				apiHash.update(fs.readFileSync(file));
-			}
-			const digest = apiHash.digest('hex');
-			let typedocStale = true;
-			try {
-				typedocStale = fs.readFileSync(stampPath, 'utf8') !== digest;
-			} catch { /* no stamp yet */ }
-
-			const runTypedoc = () => new Promise((resolve, reject) => {
-				const typedoc = spawn('typedoc', [
-					'src/Api/INoteToolbarApi.ts',
-					'src/Api/IToolbar.ts',
-					'src/Api/IItem.ts',
-					'--readme',
-					'none'
-				]);
-				let errorOutput = '';
-				typedoc.stderr.on('data', (data) => {
-					errorOutput += data;
-				});
-				typedoc.on('close', (code) => {
-					if (code === 0) {
-						// console.log(`[api-docs] API docs generated in: ${DOC_OUTPUT}/api`);
-						resolve();
-					} 
-					else {
-						reject(new Error(`typedoc exited with code ${code}${errorOutput ? `:\n${errorOutput.trim()}` : ''}`));
-					}
-				});
-			});
-			if (typedocStale) await runTypedoc();
-
-			// generate wiki output
-			try {
-				// inline linked files, replacing the auto-generated heading
-				if (fileInliner(`${DOC_WIKI_INPUT}/Note-Toolbar-API.md`, `${DOC_OUTPUT}/wiki/Note-Toolbar-API.md`,
-					(content) => content.replace(/\[obsidian-note-toolbar\][\s\S]*?(?=## Notes\n\n)/, ''))) isDocsChange = true;
-			}
-			catch (error) {
-				// console.error(`\x1b[31m[typedocPlugin] ✗ error generating API docs: ${error.message}\x1b[0m`);
-				process.exit(1);
-			}
-			if (typedocStale) fs.writeFileSync(stampPath, digest);
 		});
 	},
 };
@@ -199,33 +127,6 @@ const stylelintPlugin = {
 	},
 };
 
-// copy configured files into the external wiki repo, only if contents changed
-const copyToWikiPlugin = {
-	name: 'copy-to-wiki',
-	setup(build) {
-		build.onEnd(async () => {
-			for (const { src, dest } of WIKI_FILES) {
-				const destPath = join(WIKI_REPO, dest);
-				try {
-					const [srcContent, destContent] = await Promise.all([
-						readFile(src),
-						readFile(destPath).catch(() => null), // null if dest doesn't exist yet
-					]);
-					if (destContent && srcContent.equals(destContent)) {
-						// console.log(`[copy-to-wiki] no change: ${src}`);
-						continue;
-					}
-					await mkdir(dirname(destPath), { recursive: true });
-					await copyFile(src, destPath);
-					console.log(`\x1b[32m[copy-to-wiki] ✓ ${src} → ${destPath}\x1b[0m`);
-				} catch (error) {
-					console.error(`\x1b[31m[copy-to-wiki] ✗ failed to copy ${src}: ${error.message}\x1b[0m`);
-				}
-			}
-		});
-	},
-};
-
 // intermediate file, so the published styles.css can differ from the inlined source
 const STYLES_INLINED = 'node_modules/.cache/styles-inlined.css';
 
@@ -275,70 +176,6 @@ const stylesPlugin = {
   },
 };
 
-const cliDocsPlugin = {
-	name: 'cli-docs',
-	setup(build) {
-	  build.onEnd(async () => {
-		try {
-			if (cliDocs('src/Cli/cli.json', `${DOC_OUTPUT}/cli/cli.md`)) isDocsChange = true;
-		}
-		catch (error) {
-			console.error("\x1b[31m[cli-docs] Error:\x1b[0m", error);
-			process.exit(1);
-		}
-		// generate wiki output
-		try {
-			if (fileInliner(`${DOC_WIKI_INPUT}/Note-Toolbar-CLI.md`, `${DOC_OUTPUT}/wiki/Note-Toolbar-CLI.md`)) isDocsChange = true;
-		}
-		catch (error) {
-			process.exit(1);
-		}
-	  });
-	},
-  };
-
-const galleryDocsPlugin = {
-	name: 'gallery-docs',
-	setup(build) {
-	  build.onEnd(async () => {
-		try {
-			if (galleryDocs('src/Gallery/gallery-items.json', 'src/Gallery/gallery.json', `${DOC_OUTPUT}/gallery/items.md`)) isDocsChange = true;
-		} 
-		catch (error) {
-			console.error("\x1b[31m[gallery-docs] Error:\x1b[0m", error);
-			process.exit(1);
-		}
-		// generate wiki output
-		try {
-			if (fileInliner(`${DOC_WIKI_INPUT}/Gallery.md`, `${DOC_OUTPUT}/wiki/Gallery.md`)) isDocsChange = true;
-		}
-		catch (error) {
-			process.exit(1);
-		}
-	  });
-	},
-  };
-
-const buildStart = {
-    name: 'build-start',
-    setup(build) {
-        build.onStart(() => {
-			isDocsChange = false; 
-		});
-    },
-}
-
-const buildEnd = {
-	name: 'build end',
-	setup(build) {
-		build.onEnd(() => {
-			if (!isDocsChange) {
-				console.log('[docs] up to date');
-			}
-		});
-	},
-};
-
 /* ****************************************************************************
  * EXECUTE BUILD
  * ************************************************************************** */
@@ -373,16 +210,11 @@ const context = await esbuild.context({
 	logLevel: "info",
 	metafile: isBuildAnalyzeMode,
 	plugins: [
-		buildStart,
-		stylesPlugin, 
-		apiDocsPlugin, 
-		cliDocsPlugin,
-		galleryDocsPlugin, 
+		docsPlugin,
+		stylesPlugin,
 		...(isBuildProdMode ? [] : [typecheckPlugin]),
-		eslintPlugin, 
+		eslintPlugin,
 		stylelintPlugin,
-		...(wikiRepoExists ? [copyToWikiPlugin] : []),
-		buildEnd
 	],
 	sourcemap: (isBuildProdMode || isBuildAnalyzeMode) ? false : "inline",
 	treeShaking: true,
@@ -403,7 +235,7 @@ else {
 	await context.watch();
 
 	// watch for changes to files outside the build process
-	const watcher = chokidar.watch(['docs/wiki', 'src/Api', 'src/Cli/cli.json', 'src/Styles']);
+	const watcher = chokidar.watch(['docs/wiki', 'src/Api', 'src/Cli/cli.json', 'src/Gallery/gallery.json', 'src/Gallery/gallery-items.json', 'src/Styles', 'build/docs.mjs', 'build/copy-skill-references.mjs']);
 	watcher.on('ready', () => {
 		console.log('[watch] watching for changes...');
 	});
