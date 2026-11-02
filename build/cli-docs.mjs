@@ -1,5 +1,7 @@
-// generates the markdown documentation for CLI commands for publishing in the User Guide.
-// returns true if the output file was written, false if unchanged
+/** 
+ * Generates the markdown documentation for CLI commands for publishing in the User Guide.
+ * Returns true if the output file was written, false if unchanged.
+ */
 
 import fs from 'fs';
 import path from 'path';
