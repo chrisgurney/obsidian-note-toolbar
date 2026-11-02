@@ -10,7 +10,7 @@
 
 ## Release process
 
-1. Run `npm run check-install` if any dependencies were updated since the latest release.
+1. Run `npm run check:install` if any dependencies were updated since the latest release.
 2. Run `npm run release VERSIONNUMBER`.
 3. Edit and publish the release [on GitHub](https://github.com/chrisgurney/obsidian-note-toolbar/releases).
 
