@@ -226,30 +226,54 @@ const copyToWikiPlugin = {
 	},
 };
 
-// inline files into CSS, and validates it
+// intermediate file, so the published styles.css can differ from the inlined source
+const STYLES_INLINED = 'node_modules/.cache/styles-inlined.css';
+
+// matches the Style Settings plugin's config comment
+const STYLE_SETTINGS_REGEX = /\/\*\s*@settings[\s\S]*?\*\//;
+
+// inline files into CSS, lower native nesting (#648), and validate it
 const stylesPlugin = {
-	name: 'styles',
-	setup(build) {
-	  build.onEnd(async () => {
-		try {
-			if (fileInliner('src/Styles/styles.css', 'styles.css')) isDocsChange = true;
-			if (isDocsChange) console.log(`\x1b[32m[styles] ✓ generated styles.css\x1b[0m`);
-		} catch (error) {
-			console.error("\x1b[31m[styles] Error:\x1b[0m", error);
-			process.exit(1);
-		}
-		// use esbuild to report CSS syntax errors
-		await esbuild.build({
-			entryPoints: ['styles.css'],
-			bundle: false,
-			write: false,
-		}).catch((error) => {
-			console.error("\x1b[31m[styles] Error:\x1b[0m", error);
-			process.exit(1)
-		});
-	  });
-	},
-  };
+  name: 'styles',
+  setup(build) {
+    build.onEnd(async () => {
+      try {
+        fileInliner('src/Styles/styles.css', STYLES_INLINED);
+        const inlined = fs.readFileSync(STYLES_INLINED, 'utf8');
+
+        // esbuild strips all comments, but Style Settings reads its config from one, so set it aside
+        const settingsBlock = inlined.match(STYLE_SETTINGS_REGEX)?.[0] ?? '';
+
+        // targets without native nesting support force esbuild to flatten the & rules
+        const lowered = await esbuild.transform(inlined.replace(STYLE_SETTINGS_REGEX, ''), {
+          loader: 'css',
+          target: ['chrome100', 'safari15'],
+        });
+        const output = settingsBlock + '\n\n' + lowered.code;
+
+        const existing = fs.existsSync('styles.css') ? fs.readFileSync('styles.css', 'utf8') : null;
+        if (existing !== output) {
+          fs.writeFileSync('styles.css', output);
+          isDocsChange = true;
+          console.log(`\x1b[32m[styles] ✓ generated styles.css\x1b[0m`);
+        }
+      } catch (error) {
+        console.error("\x1b[31m[styles] Error:\x1b[0m", error);
+        process.exit(1);
+      }
+
+      // use esbuild to report CSS syntax errors
+      await esbuild.build({
+        entryPoints: ['styles.css'],
+        bundle: false,
+        write: false,
+      }).catch((error) => {
+        console.error("\x1b[31m[styles] Error:\x1b[0m", error);
+        process.exit(1);
+      });
+    });
+  },
+};
 
 const cliDocsPlugin = {
 	name: 'cli-docs',
