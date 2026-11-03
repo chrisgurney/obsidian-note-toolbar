@@ -686,7 +686,7 @@ export default class ItemListUi {
         focusSelector: string = '.sortable-handle'
     ): Promise<void> {	
         const itemIndex = this.getIndexByUuid(itemUuid);
-        this.ntb.debug("listMoveHandlerById: moving index:", itemIndex);
+        // this.ntb.debug("listMoveHandlerById: moving index:", itemIndex);
         await this.listMoveHandler(keyEvent, itemArray, itemIndex, action);
         // keep focus on the item that was moved, or on the item now at that position if it was deleted
         if (keyEvent) {
