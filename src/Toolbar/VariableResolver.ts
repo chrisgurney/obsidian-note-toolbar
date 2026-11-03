@@ -2,6 +2,23 @@ import NoteToolbarPlugin from "main";
 import { TFile, FileSystemAdapter } from "obsidian";
 import { ErrorBehavior, ItemType, ScriptContext, ToolbarSettings } from "Settings/NoteToolbarSettings";
 
+export interface SimpleVariable {
+	name: string;
+	resolve: (ctx: { ntb: NoteToolbarPlugin; file: TFile | null }) => string | undefined;
+}
+
+export const SIMPLE_VARIABLES: SimpleVariable[] = [
+	{ name: 'selection', resolve: ({ ntb }) => ntb.api.getSelection() },
+	{ name: 'note_title', resolve: ({ file }) => file?.basename },
+	{ name: 'file_path', resolve: ({ file }) => file?.path },
+	{
+		name: 'vault_path',
+		resolve: ({ ntb }) => ntb.app.vault.adapter instanceof FileSystemAdapter
+			? ntb.app.vault.adapter.getBasePath()
+			: undefined,
+	},
+];
+
 /**
  * Provides utilities to resolve variables.
  */
@@ -122,24 +139,11 @@ export default class VariableResolver {
 
 		}
 
-		// SELECTION
-		if (hasVar('selection')) {
-			const selection = this.ntb.api.getSelection();
-			s = this.replaceVar(s, 'selection', selection);
-		}
-
-		// NOTE_TITLE
-		const noteTitle = file?.basename;
-		s = this.replaceVar(s, 'note_title', noteTitle);
-	
-		// FILE_PATH
-		const filePath = file?.path;
-		s = this.replaceVar(s, 'file_path', filePath);
-		
-		// VAULT_PATH
-		if (this.ntb.app.vault.adapter instanceof FileSystemAdapter) {
-			const vaultPath = this.ntb.app.vault.adapter.getBasePath();
-			s = this.replaceVar(s, 'vault_path', vaultPath);
+		// SIMPLE VARIABLES
+		for (const variable of SIMPLE_VARIABLES) {
+			if (hasVar(variable.name)) {
+				s = this.replaceVar(s, variable.name, variable.resolve({ ntb: this.ntb, file }));
+			}
 		}
 
 		// PROP_ VARIABLES
