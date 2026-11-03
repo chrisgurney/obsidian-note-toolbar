@@ -7,9 +7,7 @@ description: "Create and edit Note Toolbar Callouts. Use to create toolbars with
 
 Create and edit valid Note Toolbar Callouts in Obsidian `.md` files.
 
-Full documentation: https://raw.githubusercontent.com/wiki/chrisgurney/obsidian-note-toolbar/Note-Toolbar-Callouts.md
-
-Fetch the full reference before generating any callouts.
+Read `references/callouts-reference.md` before generating any callouts. Do not fetch the wiki version instead: the included reference is the version matched to this checkout.
 
 ## Key constraints
 
