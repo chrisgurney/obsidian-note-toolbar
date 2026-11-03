@@ -339,6 +339,13 @@ export default class ItemListUi {
                 cb.extraSettingsEl.tabIndex = 0;
                 this.ntb.registerDomEvent(
                     cb.extraSettingsEl,	'keydown', async (e) => {
+                        if (e.key === 'd') {
+                            const modifierPressed = (Platform.isWin || Platform.isLinux) ? e?.ctrlKey : e?.metaKey;
+                            if (modifierPressed) {
+                                await this.duplicateItem(toolbarItem);
+                                return;
+                            }
+                        }
                         await this.listMoveHandlerById(e, this.toolbar.items, toolbarItem.uuid);
                     } );
             });
@@ -353,13 +360,7 @@ export default class ItemListUi {
                 switch (e.key) {
                     case "d": {
                         const modifierPressed = (Platform.isWin || Platform.isLinux) ? e?.ctrlKey : e?.metaKey;
-                        if (modifierPressed) {        
-                            const index = this.toolbar.items.indexOf(toolbarItem);
-                            const itemIndex = index >= 0 ? index + 1 : undefined;
-                            const newItem = await this.ntb.settingsManager.duplicateToolbarItem(this.toolbar, toolbarItem, itemIndex);
-                            await this.ntb.settingsManager.save();
-                            this.parent.display(newItem.uuid);
-                        }
+                        if (modifierPressed) await this.duplicateItem(toolbarItem);
                         break;
                     }
                     case "Enter":
@@ -599,6 +600,18 @@ export default class ItemListUi {
 
         return newToolbarItem;
         
+    }
+
+    /**
+     * Duplicates an item directly after itself, and focuses the new copy's preview.
+     * @param toolbarItem Item to duplicate.
+     */
+    private async duplicateItem(toolbarItem: ToolbarItemSettings): Promise<void> {
+        const index = this.toolbar.items.indexOf(toolbarItem);
+        const itemIndex = index >= 0 ? index + 1 : undefined;
+        const newItem = await this.ntb.settingsManager.duplicateToolbarItem(this.toolbar, toolbarItem, itemIndex);
+        await this.ntb.settingsManager.save();
+        this.parent.display(newItem.uuid);
     }
 
     /**
