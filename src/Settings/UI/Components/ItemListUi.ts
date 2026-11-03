@@ -366,6 +366,13 @@ export default class ItemListUi {
                     case " ":
                         e.preventDefault();
                         this.toggleItemView(itemPreviewContainer, 'form');
+                        break;
+                    case "ArrowUp":
+                    case "ArrowDown":
+                    case "Delete":
+                    case "Backspace":
+                        await this.listMoveHandlerById(e, this.toolbar.items, toolbarItem.uuid, undefined, '.note-toolbar-setting-item-preview');
+                        break;
                 }
             });
         this.ntb.registerDomEvent(
@@ -662,7 +669,8 @@ export default class ItemListUi {
         keyEvent: KeyboardEvent | null, 
         itemArray: ToolbarItemSettings[] | string[],
         itemUuid: string,
-        action?: 'up' | 'down' | 'delete'
+        action?: 'up' | 'down' | 'delete',
+        focusSelector: string = '.sortable-handle'
     ): Promise<void> {	
         const itemIndex = this.getIndexByUuid(itemUuid);
         this.ntb.debug("listMoveHandlerById: moving index:", itemIndex);
@@ -672,12 +680,12 @@ export default class ItemListUi {
             if (keyEvent.key === 'Delete' || keyEvent.key === 'Backspace') {
                 const rows = this.getItemListEls();
                 const rowEl = rows[Math.min(itemIndex, rows.length - 1)];
-                rowEl?.querySelector<HTMLElement>('.sortable-handle')?.focus();
+                rowEl?.querySelector<HTMLElement>(focusSelector)?.focus();
             }
             else {
                 const rowEl = this.getItemRowEl(itemUuid);
-                const handleEl = rowEl?.querySelector<HTMLElement>('.sortable-handle');
-                handleEl?.focus();
+                const focusEl = rowEl?.querySelector<HTMLElement>(focusSelector);
+                focusEl?.focus();
             }
         }
     }
