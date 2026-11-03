@@ -470,6 +470,7 @@ export default class ToolbarRenderer {
 					const isCommandAvailable = view ? this.ntb.items.isCommandItemAvailable(item, view) : true;
 					if (!isCommandAvailable) {
 						noteToolbarLi.ariaDisabled = 'true';
+						toolbarItem.ariaDisabled = 'true';
 						setTooltip(
 							toolbarItem, 
 							item.tooltip ? `${item.tooltip} (${t('toolbar.item-unavailable-tooltip')})` : t('toolbar.item-unavailable-tooltip')
@@ -477,6 +478,7 @@ export default class ToolbarRenderer {
 					}
 					else {
 						noteToolbarLi.ariaDisabled = 'false';
+						toolbarItem.ariaDisabled = 'false';
 						setTooltip(toolbarItem, item.tooltip ?? '');
 					}
 				}
@@ -1269,6 +1271,7 @@ export default class ToolbarRenderer {
 					const isCommandAvailable = this.ntb.items.isCommandItemAvailable(itemSetting, currentView);
 					if (isCommandAvailable) {
 						itemEl.ariaDisabled = 'false';
+						itemSpanEl.ariaDisabled = 'false';
 						setTooltip(
 							itemSpanEl, 
 							itemTooltip ?? ''
@@ -1276,6 +1279,7 @@ export default class ToolbarRenderer {
 					}
 					else {
 						itemEl.ariaDisabled = 'true';
+						itemSpanEl.ariaDisabled = 'true';
 						setTooltip(
 							itemSpanEl, 
 							itemTooltip ? `${itemTooltip} (${t('toolbar.item-unavailable-tooltip')})` : t('toolbar.item-unavailable-tooltip')
