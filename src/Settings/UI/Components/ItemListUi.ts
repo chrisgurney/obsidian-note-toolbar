@@ -667,6 +667,12 @@ export default class ItemListUi {
         const itemIndex = this.getIndexByUuid(itemUuid);
         this.ntb.debug("listMoveHandlerById: moving index:", itemIndex);
         await this.listMoveHandler(keyEvent, itemArray, itemIndex, action);
+        // keep focus on the item that was moved
+        if (keyEvent) {
+            const rowEl = this.getItemRowEl(itemUuid);
+            const handleEl = rowEl?.querySelector<HTMLElement>('.sortable-handle');
+            handleEl?.focus();
+        }
     }
 
 	/*************************************************************************
