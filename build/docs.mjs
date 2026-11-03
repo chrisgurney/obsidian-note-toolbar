@@ -22,13 +22,29 @@ const DOC_WIKI_INPUT = 'docs/wiki';
 // directory of the external repo to copy files into
 const WIKI_REPO = '../obsidian-note-toolbar-wiki';
 
-// files to copy into the external repo after build
-// each entry: { src: <source path>, dest: <path relative to WIKI_REPO> }
+// every .md file in docs/wiki is a wiki page: inlined to docs/dist/wiki
+// by buildDocs() and mirrored to the wiki repo by copyToWiki();
+// files starting with _ are drafts and are skipped.
+function wikiPages() {
+    return fs.readdirSync(path.join(rootDir, DOC_WIKI_INPUT))
+        .filter((file) => file.endsWith('.md') && !file.startsWith('_'))
+        .sort();
+}
+
+// Per-page transforms, by filename. Only the API page needs one.
+const PAGE_TRANSFORMS = {
+    'Note-Toolbar-API.md': (content) => content.replace(/\[obsidian-note-toolbar\][\s\S]*?(?=## Notes\n\n)/, ''),
+};
+
+// files to copy into the external wiki repo after build: every wiki page
+// (derived from wikiPages(), so a new page needs no entry here), plus the
+// TypeDoc outputs, which have no wiki input page.
+// { src: <source path>, dest: <path relative to WIKI_REPO> }
 const WIKI_FILES = [
-    { src: `${DOC_OUTPUT}/wiki/Gallery.md`, dest: 'Gallery.md' },
-    { src: `${DOC_OUTPUT}/wiki/Note-Toolbar-API.md`, dest: 'Note-Toolbar-API.md' },
-    { src: `${DOC_OUTPUT}/wiki/Note-Toolbar-CLI.md`, dest: 'Note-Toolbar-CLI.md' },
-    { src: `${DOC_OUTPUT}/wiki/Note-Toolbar-Features.md`, dest: 'Note-Toolbar-Features.md' },
+    ...wikiPages().map((file) => ({
+        src: `${DOC_OUTPUT}/wiki/${file}`,
+        dest: file,
+    })),
     { src: `${DOC_OUTPUT}/api/IItem.Interface.IItem.md`, dest: 'IItem.Interface.IItem.md.md' },
     { src: `${DOC_OUTPUT}/api/IToolbar.Interface.IToolbar.md`, dest: 'IToolbar.Interface.IToolbar.md.md' },
     { src: `${DOC_OUTPUT}/api/INoteToolbarApi.Interface.NtbKeyBinding.md`, dest: 'INoteToolbarApi.Interface.NtbKeyBinding.md.md' },
@@ -39,9 +55,7 @@ const CACHE_DIR = 'node_modules/.cache';
 
 function runCommand(command, args, label) {
     return new Promise((resolve, reject) => {
-        // Prepend node_modules/.bin to PATH, so direct runs like
-        // node build/docs.mjs find typedoc without npm's PATH setup.
-        // When run via npm, npm already adds .bin, so this is a no-op there.
+        // when run via npm, npm already adds .bin, so this is a no-op there
         const binDir = path.join(rootDir, 'node_modules/.bin');
         const env = {
             ...process.env,
@@ -107,43 +121,29 @@ async function buildDocs() {
     let changed = false;
     fs.mkdirSync(path.join(rootDir, CACHE_DIR), { recursive: true });
 
-    // 1. API docs
+    // wiki pages include their outputs (the API page includes TypeDoc 
+    // output, CLI includes cli.md, Gallery includes items.md), 
+    // so all three must run before any page is inlined; pages
+    // never include each other, so inlining order between pages is free.
     const { stampPath, digest, typedocStale } = await runTypedocIfStale();
-    if (fileInliner(
-        path.join(rootDir, `${DOC_WIKI_INPUT}/Note-Toolbar-API.md`),
-        path.join(rootDir, `${DOC_OUTPUT}/wiki/Note-Toolbar-API.md`),
-        (content) => content.replace(/\[obsidian-note-toolbar\][\s\S]*?(?=## Notes\n\n)/, ''),
-    )) changed = true;
     if (typedocStale) fs.writeFileSync(stampPath, digest);
-
-    // 2. CLI docs
     if (cliDocs(path.join(rootDir, 'src/Cli/cli.json'), path.join(rootDir, `${DOC_OUTPUT}/cli/cli.md`))) changed = true;
-    if (fileInliner(
-        path.join(rootDir, `${DOC_WIKI_INPUT}/Note-Toolbar-CLI.md`),
-        path.join(rootDir, `${DOC_OUTPUT}/wiki/Note-Toolbar-CLI.md`),
-    )) changed = true;
-
-    // 3. Gallery docs
     if (galleryDocs(
         path.join(rootDir, 'src/Gallery/gallery-items.json'),
         path.join(rootDir, 'src/Gallery/gallery.json'),
         path.join(rootDir, `${DOC_OUTPUT}/gallery/items.md`),
     )) changed = true;
-    if (fileInliner(
-        path.join(rootDir, `${DOC_WIKI_INPUT}/Gallery.md`),
-        path.join(rootDir, `${DOC_OUTPUT}/wiki/Gallery.md`),
-    )) changed = true;
 
-    // 4. Features wiki page (no generation step, body is hand-authored)
-    if (fileInliner(
-        path.join(rootDir, `${DOC_WIKI_INPUT}/Note-Toolbar-Features.md`),
-        path.join(rootDir, `${DOC_OUTPUT}/wiki/Note-Toolbar-Features.md`),
-    )) changed = true;
+    for (const file of wikiPages()) {
+        if (fileInliner(
+            path.join(rootDir, `${DOC_WIKI_INPUT}/${file}`),
+            path.join(rootDir, `${DOC_OUTPUT}/wiki/${file}`),
+            PAGE_TRANSFORMS[file],
+        )) changed = true;
+    }
 
-    // 5. Skill references (features is the first use case in that script)
+    // skill references, then wiki copies, last, only after all generation succeeded
     await runCommand(process.execPath, ['build/copy-skill-references.mjs'], 'copy-skill-references');
-
-    // 6. Copy to wiki, last, only after all generation succeeded
     await copyToWiki();
 
     if (!changed) {
