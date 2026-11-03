@@ -667,11 +667,18 @@ export default class ItemListUi {
         const itemIndex = this.getIndexByUuid(itemUuid);
         this.ntb.debug("listMoveHandlerById: moving index:", itemIndex);
         await this.listMoveHandler(keyEvent, itemArray, itemIndex, action);
-        // keep focus on the item that was moved
+        // keep focus on the item that was moved, or on the item now at that position if it was deleted
         if (keyEvent) {
-            const rowEl = this.getItemRowEl(itemUuid);
-            const handleEl = rowEl?.querySelector<HTMLElement>('.sortable-handle');
-            handleEl?.focus();
+            if (keyEvent.key === 'Delete' || keyEvent.key === 'Backspace') {
+                const rows = this.getItemListEls();
+                const rowEl = rows[Math.min(itemIndex, rows.length - 1)];
+                rowEl?.querySelector<HTMLElement>('.sortable-handle')?.focus();
+            }
+            else {
+                const rowEl = this.getItemRowEl(itemUuid);
+                const handleEl = rowEl?.querySelector<HTMLElement>('.sortable-handle');
+                handleEl?.focus();
+            }
         }
     }
 
