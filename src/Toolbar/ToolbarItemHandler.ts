@@ -1,7 +1,7 @@
 import NoteToolbarPlugin from "main";
 import { Command, FileExplorerPlugin, ItemView, MarkdownView, Notice, PaneType, TFile, TFolder, WebViewerPlugin } from "obsidian";
 import { ErrorBehavior, ItemFocusType, ItemType, LINK_OPTIONS, ScriptConfig, ScriptContext, t, ToolbarItemSettings } from "Settings/NoteToolbarSettings";
-import { getLinkUiTarget, insertTextAtCursor, isValidUri, putFocusInMenu } from "Utils/Utils";
+import { getItemFallbackName, getLinkUiTarget, insertTextAtCursor, isValidUri, putFocusInMenu } from "Utils/Utils";
 
 /**
  * Handles interactions with toolbar items.
@@ -384,6 +384,7 @@ export default class ToolbarItemHandler {
         else {
             itemText = toolbarItem.label || toolbarItem.tooltip || '';
         }
+		if (!itemText) itemText = getItemFallbackName(this.ntb, toolbarItem);
 		if (truncate) itemText = itemText.slice(0, 24);
 		return itemText;
 	}

@@ -2,7 +2,7 @@ import { Rect } from "@codemirror/view";
 import NoteToolbarPlugin from "main";
 import { FrontMatterCache, getIcon, ItemView, MarkdownView, Menu, MenuItem, MenuPositionDef, Notice, Platform, setIcon, setTooltip, TFile, TFolder } from "obsidian";
 import { DefaultStyleType, ErrorBehavior, ItemType, LocalVar, MobileStyleType, OBSIDIAN_UI_ELEMENTS, PositionType, ScriptContext, t, ToggleUiStateType, ToolbarItemSettings, ToolbarSettings, ToolbarStyle } from "Settings/NoteToolbarSettings";
-import { calcComponentVisToggles, getViewId, hasStyle, isValidUri, putFocusInMenu } from "Utils/Utils";
+import { calcComponentVisToggles, getItemFallbackName, getViewId, hasStyle, isValidUri, putFocusInMenu } from "Utils/Utils";
 
 // note: make sure CSS is updated if these are changed
 export enum TbarData {
@@ -479,6 +479,15 @@ export default class ToolbarRenderer {
 						noteToolbarLi.ariaDisabled = 'false';
 						setTooltip(toolbarItem, item.tooltip ?? '');
 					}
+				}
+
+				// setTooltip() names the item after its tooltip on non-phone platforms;
+				// otherwise give the item a name of its own, on the item element itself
+				const itemLabel = resolvedLabels ? (resolvedLabels[item.uuid] ?? item.label) : item.label;
+				const itemTooltip = resolvedTooltips ? (resolvedTooltips[item.uuid] ?? item.tooltip) : item.tooltip;
+				if (!(itemTooltip && !Platform.isPhone)) {
+					const accessibleName = itemLabel || itemTooltip || getItemFallbackName(this.ntb, item);
+					if (accessibleName) toolbarItem.ariaLabel = accessibleName;
 				}
 
 				// update li active-file property, to allow tab-like styling
@@ -1230,22 +1239,29 @@ export default class ToolbarRenderer {
 
 				// update tooltip + label
 				let itemTooltip = itemSetting.tooltip;
+				let itemLabel = itemSetting.label;
 				const errorContext = { errorBehavior: ErrorBehavior.Ignore };
 				if (this.ntb.vars.hasVars(itemSetting.tooltip)) {
 					itemTooltip = await this.ntb.vars.replaceVars(itemSetting.tooltip, activeFile, errorContext);
 					setTooltip(itemSpanEl, itemTooltip, { placement: "top" });
 				}
 				if (this.ntb.vars.hasVars(itemSetting.label)) {
-					const newLabel = await this.ntb.vars.replaceVars(itemSetting.label, activeFile, errorContext);
+					itemLabel = await this.ntb.vars.replaceVars(itemSetting.label, activeFile, errorContext);
 					const itemElLabel = itemEl.querySelector('.cg-note-toolbar-item-label');
-					if (newLabel) {
+					if (itemLabel) {
 						itemElLabel?.removeClass('hide');
-						itemElLabel?.setText(newLabel);
+						itemElLabel?.setText(itemLabel);
 					}
 					else {
 						itemElLabel?.addClass('hide');
 						itemElLabel?.setText('');
 					}
+				}
+
+				// keep the item's accessible name in sync with its label + tooltip
+				if (!(itemTooltip && !Platform.isPhone)) {
+					const accessibleName = itemLabel || itemTooltip || getItemFallbackName(this.ntb, itemSetting);
+					if (accessibleName) itemSpanEl.ariaLabel = accessibleName;
 				}
 
 				// disable/re-enable any command items based on availability

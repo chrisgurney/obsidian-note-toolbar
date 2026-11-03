@@ -456,6 +456,49 @@ export function getItemText(ntb: NoteToolbarPlugin, toolbarItem: ToolbarItemSett
 }
 
 /**
+ * Derives a fallback name for an item from what it does: the name of the
+ * command it runs, or of what it opens; falling back to its icon's name.
+ * Used when an item has neither a label nor a tooltip.
+ * @param ntb NoteToolbarPlugin instance.
+ * @param item ToolbarItemSettings to derive a name for.
+ * @returns derived name, or an empty string if nothing usable is available.
+ */
+export function getItemFallbackName(ntb: NoteToolbarPlugin, item: ToolbarItemSettings): string {
+
+	if (item.linkAttr.type === ItemType.Command && item.linkAttr.commandId) {
+		return ntb.app.commands.commands[item.linkAttr.commandId]?.name ?? '';
+	}
+
+	switch (item.linkAttr.type) {
+		case ItemType.Group:
+		case ItemType.Menu: {
+			return ntb.settingsManager.getToolbar(item.link)?.name ?? '';
+		}
+		case ItemType.File:
+		case ItemType.Folder: {
+			const baseName = item.link.split('#')[0].split('/').filter(part => part !== '').last() ?? '';
+			return item.linkAttr.type === ItemType.File ? baseName.replace(/\.md$/, '') : baseName;
+		}
+		case ItemType.Uri: {
+			try {
+				const url = new URL(item.link);
+				return (url.protocol === 'http:' || url.protocol === 'https:') ? url.hostname : '';
+			}
+			catch {
+				return '';
+			}
+		}
+		default: {
+			break;
+		}
+	}
+
+	// last resort: the icon's name, as words (e.g. "arrow-up" reads as "Arrow up")
+	return item.icon ? item.icon.replace(/-/g, ' ').replace(/^./, char => char.toLocaleUpperCase()) : '';
+
+}
+
+/**
  * Gets a new UUID.
  * @returns string UUID
  */
