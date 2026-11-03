@@ -66,6 +66,7 @@ const generatedNote = (src) =>
     `<!-- Generated from ${src} by build/copy-skill-references.mjs. Do not edit by hand. To update, run: npm run build:skills -->\n\n`;
 
 let failures = 0;
+let unchanged = 0;
 
 for (const { src, dest } of REFERENCES) {
     const srcPath = path.join(rootDir, src);
@@ -92,7 +93,7 @@ for (const { src, dest } of REFERENCES) {
             // missing file is a failure, reported below
         }
         if (existing === generated) {
-            console.log(`[copy-skill-references] ✓ up to date: ${dest}`);
+            unchanged += 1;
         } else if (existing === null) {
             console.error(`[copy-skill-references] ✗ missing: ${dest} (run: npm run build:skills)`);
             failures += 1;
@@ -113,11 +114,21 @@ for (const { src, dest } of REFERENCES) {
     }
 
     if (existing === generated) {
-        console.log(`[copy-skill-references] unchanged: ${dest}`);
+        unchanged += 1;
     } else {
         fs.writeFileSync(destPath, generated);
         console.log(`[copy-skill-references] ✓ wrote: ${dest}`);
     }
+}
+
+if (checkOnly && failures === 0) {
+    console.log(`[copy-skill-references] ✓ ${unchanged} references up to date`);
+} else if (unchanged > 0) {
+    console.log(`[copy-skill-references] ${unchanged} unchanged`);
+}
+if (checkOnly && failures > 0) {
+    const noun = failures === 1 ? 'reference' : 'references';
+    console.log(`[copy-skill-references] ✗ ${failures} ${noun} to update (run: npm run build:skills)`);
 }
 
 if (failures > 0) {
