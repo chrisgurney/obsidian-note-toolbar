@@ -20,7 +20,7 @@ import WorkspaceListeners from 'Listeners/WorkspaceListeners';
 import { Platform, Plugin, WorkspaceLeaf, WorkspacesPlugin } from 'obsidian';
 import ProtocolManager from 'Protocol/ProtocolManager';
 import { RibbonManager } from 'Ribbon/RibbonManager';
-import { NoteToolbarSettings, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_TIP, VIEW_TYPE_WHATS_NEW } from 'Settings/NoteToolbarSettings';
+import { ErrorBehavior, NoteToolbarSettings, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_TIP, VIEW_TYPE_WHATS_NEW } from 'Settings/NoteToolbarSettings';
 import SettingsIcons from 'Settings/SettingsIcons';
 import SettingsManager from 'Settings/SettingsManager';
 import NoteToolbarSettingTab from 'Settings/UI/NoteToolbarSettingTab';
@@ -152,7 +152,12 @@ export default class NoteToolbarPlugin extends Plugin {
 
 			// render the initial toolbar
 			if (Platform.isPhone) {
-				await this.render.renderForView();
+				try {
+					await this.render.renderForView();
+				}
+				catch (error) {
+					this.adapters.utils.handleError(error, { errorBehavior: ErrorBehavior.Report });
+				}
 			}
 			else {
 				this.render.renderForAllLeaves();
