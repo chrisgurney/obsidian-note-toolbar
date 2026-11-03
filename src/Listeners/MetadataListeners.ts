@@ -29,9 +29,7 @@ export default class WorkspaceListeners {
 		// and the file was modified after it was created (fix for a duplicate toolbar on Create new note)
 		if (activeFile === file && (file.stat.mtime > file.stat.ctime)) {
 			// this.ntb.debug('--- METADATA-CHANGE --- ', file.name);
-			debounce(async () => {
-				await this.renderToolbar(file, cache.frontmatter);
-			}, 300)();
+			this.debouncedRenderToolbar(file, cache.frontmatter);
 		}
 	};
 
@@ -67,5 +65,16 @@ export default class WorkspaceListeners {
 		this.lastNtbPropValue = ntbPropValue;
 		this.lastFileOpenedOnCacheChange = file;
 	}
+
+	private debouncedRenderToolbar = debounce(async (file: TFile, frontmatter: FrontMatterCache | undefined) => {
+		try {
+			await this.renderToolbar(file, frontmatter);
+		}
+		catch (error) {
+			// this runs fire-and-forget from a metadata event, so catch here to keep a
+			// render failure from surfacing as an unhandled promise rejection
+			this.ntb.error('Note Toolbar: error rendering toolbar on metadata change.', error);
+		}
+	}, 300);
 
 }
