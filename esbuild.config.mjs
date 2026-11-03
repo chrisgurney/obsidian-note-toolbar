@@ -202,7 +202,7 @@ const context = await esbuild.context({
 		...builtinModules],
 	format: "cjs",
 	charset: "utf8",
-	target: "es2018",
+	target: "es2022",
 	loader: {
 		'.md': 'text',
 	},
