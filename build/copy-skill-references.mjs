@@ -33,6 +33,14 @@ const REFERENCES = [
         dest: 'skills/note-toolbar-features/references/features-reference.md',
     },
     {
+        src: 'docs/wiki/Variables.md',
+        dest: 'skills/note-toolbar-variables/references/variables-reference.md',
+    },
+    {
+        src: 'docs/wiki/Note-Toolbar-Callouts.md',
+        dest: 'skills/note-toolbar-callouts/references/callouts-reference.md',
+    },
+    {
         src: 'docs/dist/wiki/Note-Toolbar-API.md',
         dest: 'skills/note-toolbar-api/references/api-reference.md',
     },
