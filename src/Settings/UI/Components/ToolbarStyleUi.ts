@@ -47,16 +47,19 @@ export default class ToolbarStyleUi {
             this.toolbar.defaultStyles.forEach(
                 (style, index) => {
                     const styleDisclaimer = getValueForKey(DEFAULT_STYLE_DISCLAIMERS, style);
-                    new Setting(defaultStyleDiv)
+                    const styleSetting = new Setting(defaultStyleDiv)
                         .setName(getValueForKey(DEFAULT_STYLE_OPTIONS, style) || style)
-                        .setTooltip((styleDisclaimer ? styleDisclaimer + ' ' : '') + t('setting.styles.style-tooltip-use-class', { class: style }))
-                        .addExtraButton((cb) => {
+                        .setTooltip((styleDisclaimer ? styleDisclaimer + ' ' : '') + t('setting.styles.style-tooltip-use-class', { class: style }));
+                    styleSetting.addExtraButton((cb) => {
                             cb.setIcon("cross")
                                 .setTooltip(t('setting.styles.style-remove-tooltip'))
                                 .onClick(async () => this.listMoveHandler(null, this.toolbar.defaultStyles, index, "delete"));
                             cb.extraSettingsEl.setAttribute("tabindex", "0");
                             this.ntb.registerDomEvent(
                                 cb.extraSettingsEl, 'keydown', (e) => this.listMoveHandler(e, this.toolbar.defaultStyles, index, "delete"));
+                            // clicking anywhere on the chip focuses the remove button, so its shortcuts work
+                            this.ntb.registerDomEvent(
+                                styleSetting.settingEl, 'click', (evt) => cb.extraSettingsEl.focus());
                         });
             });
 
@@ -124,16 +127,19 @@ export default class ToolbarStyleUi {
             this.toolbar.mobileStyles.forEach(
                 (style, index) => {
                     const styleDisclaimer = getValueForKey(MOBILE_STYLE_DISCLAIMERS, style);
-                    new Setting(mobileStyleDiv)
+                    const styleSetting = new Setting(mobileStyleDiv)
                         .setName(getValueForKey(MOBILE_STYLE_OPTIONS, style) || style)
-                        .setTooltip((styleDisclaimer ? styleDisclaimer + ' ' : '') + t('setting.styles.style-tooltip-use-class', { class: style }))
-                        .addExtraButton((cb) => {
+                        .setTooltip((styleDisclaimer ? styleDisclaimer + ' ' : '') + t('setting.styles.style-tooltip-use-class', { class: style }));
+                    styleSetting.addExtraButton((cb) => {
                             cb.setIcon("cross")
                                 .setTooltip("Remove")
                                 .onClick(async () => this.listMoveHandler(null, this.toolbar.mobileStyles, index, "delete"));
                             cb.extraSettingsEl.setAttribute("tabindex", "0");
                             this.ntb.registerDomEvent(
                                 cb.extraSettingsEl, 'keydown', (e) => this.listMoveHandler(e, this.toolbar.mobileStyles, index, "delete"));
+                            // clicking anywhere on the chip focuses the remove button, so its shortcuts work
+                            this.ntb.registerDomEvent(
+                                styleSetting.settingEl, 'click', () => cb.extraSettingsEl.focus());
                         });
             });
 
