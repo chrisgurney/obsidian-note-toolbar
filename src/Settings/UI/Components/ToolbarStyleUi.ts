@@ -336,6 +336,14 @@ export default class ToolbarStyleUi {
         }
         await this.ntb.settingsManager.save();
         this.parent.display();
+        // move focus to the next chip, if one was deleted by keyboard
+        if (keyEvent && action === 'delete') {
+            const styleLists = this.parent.contentEl.querySelectorAll('.note-toolbar-setting-item-style');
+            const listEl = styleLists[itemArray === this.toolbar.defaultStyles ? 0 : 1];
+            const removeButtons = listEl?.querySelectorAll('.extra-setting-button');
+            const button = removeButtons?.[Math.min(index, removeButtons.length - 1)];
+            if (button?.instanceOf(HTMLElement)) button.focus();
+        }
     }
 
 }

@@ -58,6 +58,8 @@ export default class StyleModal extends Modal {
 		// set initial keyboard focus on the relvant dropdown
 		if (Platform.isDesktop) {
 			window.setTimeout(() => {
+				// don't steal focus if it's already inside the modal (e.g., on a chip after a delete)
+				if (this.contentEl.contains(activeDocument.activeElement)) return;
 				const dropdown = this.contentEl.querySelector(`#default-style-dropdown > select`) as HTMLElement;
 				dropdown.focus();
 			}, 50);
