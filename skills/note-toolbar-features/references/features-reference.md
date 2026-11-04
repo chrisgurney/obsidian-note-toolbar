@@ -70,7 +70,7 @@ The [[Gallery]] is a built-in catalog of ready-made items (137 items in v1.35), 
 
 ## Note Toolbar Callouts
 
-Toolbars can be defined inside a note as a special callout containing links and self-closing `<data>` elements, instead of (or in addition to) settings-defined toolbars. Callouts can be created from existing toolbars and vice versa ("Copy as callout item"). A **Lock Note Toolbar Callouts** setting prevents accidental edits.
+Toolbars can be defined inside a note as a special callout containing links and self-closing `<data>` elements, instead of (or in addition to) settings-defined toolbars. Callouts can be created from existing toolbars and vice versa ("Copy / Share..."). A **Lock Note Toolbar Callouts** setting prevents accidental edits.
 
 ## Scripting and extensibility
 
