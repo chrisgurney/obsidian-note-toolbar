@@ -132,7 +132,7 @@ export default class ToolbarStyleUi {
                         .setTooltip((styleDisclaimer ? styleDisclaimer + ' ' : '') + t('setting.styles.style-tooltip-use-class', { class: style }));
                     styleSetting.addExtraButton((cb) => {
                             cb.setIcon("cross")
-                                .setTooltip("Remove")
+                                .setTooltip(t('setting.styles.style-remove-tooltip'))
                                 .onClick(async () => this.listMoveHandler(null, this.toolbar.mobileStyles, index, "delete"));
                             cb.extraSettingsEl.setAttribute("tabindex", "0");
                             this.ntb.registerDomEvent(
