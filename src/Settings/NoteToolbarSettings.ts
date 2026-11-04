@@ -14,6 +14,13 @@ import * as ja from 'I18n/ja.json';
 import * as uk from 'I18n/uk.json';
 import * as zh_CN from 'I18n/zh-CN.json';
 
+// used to validate internal translation keys
+type DottedKeys<T> = {
+	[K in keyof T & string]: T[K] extends Record<string, unknown> ? `${K}.${DottedKeys<T[K]>}` : K;
+}[keyof T & string];
+
+export type TranslationKey = DottedKeys<typeof en> | `plugin.${string}` | `setting.whats-new.${string}`;
+
 /* create a new i18next instance that will be garbage-collected once the plugin was unloaded */
 const Locales = i18next.createInstance({
 	lng: getLanguage(),
@@ -29,7 +36,7 @@ const Locales = i18next.createInstance({
 
 void Locales.init();
 
-export const t: (key: string, ...args: unknown[]) => string = Locales.getFixedT(null, 'plugin-note-toolbar', null); // string translation function
+export const t: (key: TranslationKey, ...args: unknown[]) => string = Locales.getFixedT(null, 'plugin-note-toolbar', null); // typed translation function; Obsidian's string-accepting function safely serves the narrower TranslationKey type
 
 // *****************************************************************************
 // CONSTANTS

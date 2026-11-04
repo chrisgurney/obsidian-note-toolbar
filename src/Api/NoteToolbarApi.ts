@@ -3,7 +3,7 @@ import NoteToolbarPlugin from "main";
 import { ScriptLoader } from "Adapters/ScriptLoader";
 import * as Obsidian from "obsidian";
 import { App, Menu, MenuItem, Modal, normalizePath, Notice, TAbstractFile, TFile, TFolder, WorkspaceLeaf } from "obsidian";
-import { ErrorBehavior, LocalVar, PositionType, t } from "Settings/NoteToolbarSettings";
+import { ErrorBehavior, LocalVar, PositionType, t, TranslationKey } from "Settings/NoteToolbarSettings";
 import { exportToCalloutById } from "Utils/ImportExport";
 import { putFocusInMenu } from "Utils/Utils";
 import INoteToolbarApi, { AppendOptions, GetSelectionOptions, NtbFileSuggesterOptions, NtbMenuItem, NtbMenuOptions, NtbModalOptions, NtbPromptOptions, NtbSidebarOptions, NtbSuggesterOptions, NtbToolbarOptions } from "./INoteToolbarApi";
@@ -572,7 +572,7 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
      * 
      * @see INoteToolbarApi.t
      */
-    t: typeof t = t;
+    t: (key: string, ...args: unknown[]) => string = (key, ...args) => t(key as TranslationKey, ...args); // public API stays string for user scripts; cast at the typed t boundary
 
     /**
      * Shows a toolbar by its name or ID.
