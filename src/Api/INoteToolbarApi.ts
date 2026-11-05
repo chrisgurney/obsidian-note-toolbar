@@ -39,7 +39,7 @@ export default interface INoteToolbarApi<T> {
      * Error behavior: throws with no active file, or if the file is not markdown. Await it (or catch it).
      * 
      * @param content content to append
-     * @param options 
+     * @param options See `AppendOptions`.
      * @returns Nothing.
      * 
      * @example
@@ -111,8 +111,9 @@ export default interface INoteToolbarApi<T> {
     /**
      * Shows a file suggester modal for the provided files and waits for the user's selection. Files are sorted by recency.
      * 
-     * @param options Optional display options.
-     * @returns The selected [TAbstractFile](https://docs.obsidian.md/Reference/TypeScript+API/TAbstractFile).
+     * @param files Files to choose from, such as `ntb.app.vault.getAllLoadedFiles()`. Narrow them with `filesonly`, `foldersonly`, or `folder` in `options`.
+     * @param options See `NtbFileSuggesterOptions`.
+     * @returns The selected [TAbstractFile](https://docs.obsidian.md/Reference/TypeScript+API/TAbstractFile), or `null` if dismissed.
      * @remarks This function replaces the old fileSuggester(options?).
      * 
      * @example
@@ -165,6 +166,7 @@ export default interface INoteToolbarApi<T> {
      * 
      * @param property The property to get the frontmatter for.
      * @returns The frontmatter value for the given property, or `undefined` if it does not exist.
+     * @remarks For list properties, the value returned at runtime is the array from the frontmatter, even though the declared type is `string | undefined`.
      * 
      * @example
      * const createdDate = ntb.getProperty('created');
@@ -176,6 +178,7 @@ export default interface INoteToolbarApi<T> {
     /**
      * Gets the currently selected text, or the word at the current cursor position, if nothing's selected.  Only works in markdown editing or reading modes.
      * 
+     * @param options See `GetSelectionOptions`.
      * @returns The selected text, or the word at the current cursor position. Otherwise returns an empty string.
      * @since 1.26
      * @group Notes
@@ -334,7 +337,7 @@ export default interface INoteToolbarApi<T> {
      * Shows the prompt modal and waits for the user's input.
      * 
      * @param options Optional display options.
-     * @returns The user's input.
+     * @returns The user's input, or `null` if dismissed.
      * 
      * @example
      * // default (one-line) prompt with default placeholder message
@@ -363,7 +366,7 @@ export default interface INoteToolbarApi<T> {
      * 
      * Error behavior: does not throw. With no active note, it reports the error and returns.
      * 
-     * @param property Propety to set in the frontmatter.
+     * @param property Property to set in the frontmatter.
      * @param value Value to set for the property.
      * 
      * @example
@@ -373,6 +376,15 @@ export default interface INoteToolbarApi<T> {
      * await ntb.setProperty('A Number', 1234);
      * await ntb.setProperty('A List', ['asdf', 'asdf2']);
      * await ntb.setProperty('Delete Me', null);
+     * 
+     * @example
+     * // append a value to a list property
+     * const current = ntb.getProperty('tags');
+     * const values = Array.isArray(current) ? [...current] : (current ? [current] : []);
+     * if (!values.includes('new-tag')) {
+     *   values.push('new-tag');
+     *   await ntb.setProperty('tags', values);
+     * }
      * 
      * @group Notes
      */
@@ -437,7 +449,7 @@ export default interface INoteToolbarApi<T> {
      * @param values Array of strings representing the text that will be displayed for each item in the suggester prompt. This can also be a function that maps an item to its text representation. Markdown formatting is supported: optionally mix in Obsidian and plugin markdown (e.g., Iconize) to have it rendered
      * @param keys Optional array containing the keys of each item in the correct order. If not provided or `null`, values are returned on selection.
      * @param options Optional display options.
-     * @returns The selected value, or corresponding key if keys are provided.
+     * @returns The selected value, or corresponding key if keys are provided, or `null` if dismissed.
      * 
      * @example
      * // shows a suggester that returns the selected value 
@@ -656,7 +668,7 @@ export interface NtbPromptOptions {
      */
     large?: boolean;
     /**
-     * Optional text inside text field. Defaults to a preset message.
+     * Optional text inside text field. Defaults to a preset message. Hint text only; it does not pre-fill the input.
      */
     placeholder?: string;
     /**
@@ -776,7 +788,7 @@ export interface NtbSuggesterOptions {
      */
     limit?: number;
     /**
-     * Optional placeholder text for input field; defaults to preset message.
+     * Optional placeholder text for input field; defaults to preset message. Hint text only; it does not pre-fill the input or pre-search.
      */
     placeholder?: string;
     /**

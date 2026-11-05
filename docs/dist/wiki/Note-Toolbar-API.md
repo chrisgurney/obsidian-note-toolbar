@@ -63,7 +63,7 @@ Error behavior: throws with no active file, or if the file is not markdown. Awai
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `content` | `string` | content to append |
-| `options?` | \{ `file?`: `TFile`; `linePrefix?`: `string`; `separator?`: `string`; \} | - |
+| `options?` | \{ `file?`: `TFile`; `linePrefix?`: `string`; `separator?`: `string`; \} | See `AppendOptions`. |
 | `options.file?` | `TFile` | File to append to. Defaults to active file. |
 | `options.linePrefix?` | `string` | Text to prepend to each line of the content, such as `'> '` for a blockquote. |
 | `options.separator?` | `string` | Text to insert between the existing file content and the appended content. Defaults to `'\n\n'`. |
@@ -113,6 +113,10 @@ Gets the value of the given property in the active note.
 
 The frontmatter value for the given property, or `undefined` if it does not exist.
 
+#### Remarks
+
+For list properties, the value returned at runtime is the array from the frontmatter, even though the declared type is `string | undefined`.
+
 #### Example
 
 ```ts
@@ -131,7 +135,7 @@ Gets the currently selected text, or the word at the current cursor position, if
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `options?` | \{ `wordAtCursor?`: `boolean`; \} | - |
+| `options?` | \{ `wordAtCursor?`: `boolean`; \} | See `GetSelectionOptions`. |
 | `options.wordAtCursor?` | `boolean` | Return the word at the cursor, if there's no selection. If set to `false`, text must be selected in order for a non-empty string to be returned. Default is `true`. **Since** 1.35 |
 
 #### Returns
@@ -185,14 +189,14 @@ Error behavior: does not throw. With no active note, it reports the error and re
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `property` | `string` | Propety to set in the frontmatter. |
+| `property` | `string` | Property to set in the frontmatter. |
 | `value` | `unknown` | Value to set for the property. |
 
 #### Returns
 
 `Promise`\<`void`\>
 
-#### Example
+#### Examples
 
 ```ts
 await ntb.setProperty('Created', moment().format('YYYY-MM-DD'));
@@ -201,6 +205,16 @@ await ntb.setProperty('A Link', '[[Some Note]]');
 await ntb.setProperty('A Number', 1234);
 await ntb.setProperty('A List', ['asdf', 'asdf2']);
 await ntb.setProperty('Delete Me', null);
+```
+
+```ts
+// append a value to a list property
+const current = ntb.getProperty('tags');
+const values = Array.isArray(current) ? [...current] : (current ? [current] : []);
+if (!values.includes('new-tag')) {
+  values.push('new-tag');
+  await ntb.setProperty('tags', values);
+}
 ```
 
 ***
@@ -351,8 +365,8 @@ Shows a file suggester modal for the provided files and waits for the user's sel
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `files` | `TAbstractFile`[] | - |
-| `options?` | \{ `allowCustomInput?`: `boolean`; `class?`: `string`; `collapse?`: `boolean`; `default?`: `string`; `exact?`: `boolean`; `filesonly?`: `boolean`; `folder?`: `string`; `foldersonly?`: `boolean`; `icon?`: `string`; `keymap?`: `object`[]; `label?`: `string`; `limit?`: `number`; `placeholder?`: `string`; `prefixes?`: `Record`\<`string`, `unknown`[] \| (() => `unknown`[] \| `Promise`\<`unknown`\>)\>; `rendermd?`: `boolean`; `title?`: `string`; \} | Optional display options. |
+| `files` | `TAbstractFile`[] | Files to choose from, such as `ntb.app.vault.getAllLoadedFiles()`. Narrow them with `filesonly`, `foldersonly`, or `folder` in `options`. |
+| `options?` | \{ `allowCustomInput?`: `boolean`; `class?`: `string`; `collapse?`: `boolean`; `default?`: `string`; `exact?`: `boolean`; `filesonly?`: `boolean`; `folder?`: `string`; `foldersonly?`: `boolean`; `icon?`: `string`; `keymap?`: `object`[]; `label?`: `string`; `limit?`: `number`; `placeholder?`: `string`; `prefixes?`: `Record`\<`string`, `unknown`[] \| (() => `unknown`[] \| `Promise`\<`unknown`\>)\>; `rendermd?`: `boolean`; `title?`: `string`; \} | See `NtbFileSuggesterOptions`. |
 | `options.allowCustomInput?` | `boolean` | If set to `true`, the user can input a custom value that is not in the list of suggestions. Default is `false`. |
 | `options.class?` | `string` | Optional CSS class(es) to add to the component, separated by spaces. |
 | `options.collapse?` | `boolean` | If set to `true`, the results and suggester instructions are hidden until input is provided. Default is `false`. **Since** 1.29.14 |
@@ -365,7 +379,7 @@ Shows a file suggester modal for the provided files and waits for the user's sel
 | `options.keymap?` | `object`[] | Optionally replace key bindings. **See** [NtbKeyBinding](INoteToolbarApi.Interface.NtbKeyBinding.md) for available actions and modifier options. **Since** 1.30.06 |
 | `options.label?` | `string` | Optional text shown above the input field, with markdown formatting supported. Default is no label. |
 | `options.limit?` | `number` | Optional limit of the number of items rendered at once (useful to improve performance when displaying large lists). |
-| `options.placeholder?` | `string` | Optional placeholder text for input field; defaults to preset message. |
+| `options.placeholder?` | `string` | Optional placeholder text for input field; defaults to preset message. Hint text only; it does not pre-fill the input or pre-search. |
 | `options.prefixes?` | `Record`\<`string`, `unknown`[] \| (() => `unknown`[] \| `Promise`\<`unknown`\>)\> | Maps input prefixes to arrays or functions that return suggestions, or a Promise (e.g. another suggester) that resolves to a value which is injected into the input. **Examples** `{ '#': ['tag1', 'tag2'], '[[': () => getFiles() }` `{ '#': async () => await ntb.suggester(lorem, ipsum) }` **Since** 1.30.0 |
 | `options.rendermd?` | `boolean` | Set to `false` to disable rendering of suggestions as markdown. Default is `true`. |
 | `options.title?` | `string` | Optional text shown above the input field. Same as `label`. **Since** 1.36 |
@@ -374,7 +388,7 @@ Shows a file suggester modal for the provided files and waits for the user's sel
 
 `Promise`\<`TAbstractFile` \| `null`\>
 
-The selected [TAbstractFile](https://docs.obsidian.md/Reference/TypeScript+API/TAbstractFile).
+The selected [TAbstractFile](https://docs.obsidian.md/Reference/TypeScript+API/TAbstractFile), or `null` if dismissed.
 
 #### Remarks
 
@@ -541,14 +555,14 @@ Shows the prompt modal and waits for the user's input.
 | `options.default?` | `string` | Optional default value for text field. If not provided, no default value is set. |
 | `options.label?` | `string` | Optional text shown above the text field, with markdown formatting supported. Default is no label. |
 | `options.large?` | `boolean` | If set to `true`, the input field will be multi line. If not provided, defaults to `false`. |
-| `options.placeholder?` | `string` | Optional text inside text field. Defaults to a preset message. |
+| `options.placeholder?` | `string` | Optional text inside text field. Defaults to a preset message. Hint text only; it does not pre-fill the input. |
 | `options.title?` | `string` | Optional text shown above the text field. Same as `label`. **Since** 1.36 |
 
 #### Returns
 
 `Promise`\<`string` \| `null`\>
 
-The user's input.
+The user's input, or `null` if dismissed.
 
 #### Examples
 
@@ -663,7 +677,7 @@ Shows a suggester modal and waits for the user's selection.
 | `options.keymap?` | `object`[] | Optionally replace key bindings. **See** [NtbKeyBinding](INoteToolbarApi.Interface.NtbKeyBinding.md) for available actions and modifier options. **Since** 1.30.06 |
 | `options.label?` | `string` | Optional text shown above the input field, with markdown formatting supported. Default is no label. |
 | `options.limit?` | `number` | Optional limit of the number of items rendered at once (useful to improve performance when displaying large lists). |
-| `options.placeholder?` | `string` | Optional placeholder text for input field; defaults to preset message. |
+| `options.placeholder?` | `string` | Optional placeholder text for input field; defaults to preset message. Hint text only; it does not pre-fill the input or pre-search. |
 | `options.prefixes?` | `Record`\<`string`, `unknown`[] \| (() => `unknown`[] \| `Promise`\<`unknown`\>)\> | Maps input prefixes to arrays or functions that return suggestions, or a Promise (e.g. another suggester) that resolves to a value which is injected into the input. **Examples** `{ '#': ['tag1', 'tag2'], '[[': () => getFiles() }` `{ '#': async () => await ntb.suggester(lorem, ipsum) }` **Since** 1.30.0 |
 | `options.rendermd?` | `boolean` | Set to `false` to disable rendering of suggestions as markdown. Default is `true`. |
 | `options.title?` | `string` | Optional text shown above the input field. Same as `label`. **Since** 1.36 |
@@ -672,7 +686,7 @@ Shows a suggester modal and waits for the user's selection.
 
 `Promise`\<`T` \| `null`\>
 
-The selected value, or corresponding key if keys are provided.
+The selected value, or corresponding key if keys are provided, or `null` if dismissed.
 
 #### Examples
 
