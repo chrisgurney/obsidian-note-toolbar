@@ -65,7 +65,7 @@ Error behavior: throws with no active file, or if the file is not markdown. Awai
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `content` | `string` | content to append |
-| `options?` | \{ `file?`: `TFile`; `linePrefix?`: `string`; `separator?`: `string`; \} | Optional options (see `AppendOptions`): `separator`, `linePrefix`, and `file`. |
+| `options?` | \{ `file?`: `TFile`; `linePrefix?`: `string`; `separator?`: `string`; \} | See `AppendOptions`. |
 | `options.file?` | `TFile` | File to append to. Defaults to active file. |
 | `options.linePrefix?` | `string` | Text to prepend to each line of the content, such as `'> '` for a blockquote. |
 | `options.separator?` | `string` | Text to insert between the existing file content and the appended content. Defaults to `'\n\n'`. |
@@ -137,7 +137,7 @@ Gets the currently selected text, or the word at the current cursor position, if
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `options?` | \{ `wordAtCursor?`: `boolean`; \} | Optional options; set `wordAtCursor: false` to require an actual selection. |
+| `options?` | \{ `wordAtCursor?`: `boolean`; \} | See `GetSelectionOptions`. |
 | `options.wordAtCursor?` | `boolean` | Return the word at the cursor, if there's no selection. If set to `false`, text must be selected in order for a non-empty string to be returned. Default is `true`. **Since** 1.35 |
 
 #### Returns
@@ -368,7 +368,7 @@ Shows a file suggester modal for the provided files and waits for the user's sel
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `files` | `TAbstractFile`[] | Files to choose from, such as `ntb.app.vault.getAllLoadedFiles()`. Narrow them with `filesonly`, `foldersonly`, or `folder` in `options`. |
-| `options?` | \{ `allowCustomInput?`: `boolean`; `class?`: `string`; `collapse?`: `boolean`; `default?`: `string`; `exact?`: `boolean`; `filesonly?`: `boolean`; `folder?`: `string`; `foldersonly?`: `boolean`; `icon?`: `string`; `keymap?`: `object`[]; `label?`: `string`; `limit?`: `number`; `placeholder?`: `string`; `prefixes?`: `Record`\<`string`, `unknown`[] \| (() => `unknown`[] \| `Promise`\<`unknown`\>)\>; `rendermd?`: `boolean`; `title?`: `string`; \} | Optional display options. |
+| `options?` | \{ `allowCustomInput?`: `boolean`; `class?`: `string`; `collapse?`: `boolean`; `default?`: `string`; `exact?`: `boolean`; `filesonly?`: `boolean`; `folder?`: `string`; `foldersonly?`: `boolean`; `icon?`: `string`; `keymap?`: `object`[]; `label?`: `string`; `limit?`: `number`; `placeholder?`: `string`; `prefixes?`: `Record`\<`string`, `unknown`[] \| (() => `unknown`[] \| `Promise`\<`unknown`\>)\>; `rendermd?`: `boolean`; `title?`: `string`; \} | See `NtbFileSuggesterOptions`. |
 | `options.allowCustomInput?` | `boolean` | If set to `true`, the user can input a custom value that is not in the list of suggestions. Default is `false`. |
 | `options.class?` | `string` | Optional CSS class(es) to add to the component, separated by spaces. |
 | `options.collapse?` | `boolean` | If set to `true`, the results and suggester instructions are hidden until input is provided. Default is `false`. **Since** 1.29.14 |

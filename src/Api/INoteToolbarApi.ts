@@ -39,7 +39,7 @@ export default interface INoteToolbarApi<T> {
      * Error behavior: throws with no active file, or if the file is not markdown. Await it (or catch it).
      * 
      * @param content content to append
-     * @param options Optional options (see `AppendOptions`): `separator`, `linePrefix`, and `file`.
+     * @param options See `AppendOptions`.
      * @returns Nothing.
      * 
      * @example
@@ -112,7 +112,7 @@ export default interface INoteToolbarApi<T> {
      * Shows a file suggester modal for the provided files and waits for the user's selection. Files are sorted by recency.
      * 
      * @param files Files to choose from, such as `ntb.app.vault.getAllLoadedFiles()`. Narrow them with `filesonly`, `foldersonly`, or `folder` in `options`.
-     * @param options Optional display options.
+     * @param options See `NtbFileSuggesterOptions`.
      * @returns The selected [TAbstractFile](https://docs.obsidian.md/Reference/TypeScript+API/TAbstractFile), or `null` if dismissed.
      * @remarks This function replaces the old fileSuggester(options?).
      * 
@@ -178,7 +178,7 @@ export default interface INoteToolbarApi<T> {
     /**
      * Gets the currently selected text, or the word at the current cursor position, if nothing's selected.  Only works in markdown editing or reading modes.
      * 
-     * @param options Optional options; set `wordAtCursor: false` to require an actual selection.
+     * @param options See `GetSelectionOptions`.
      * @returns The selected text, or the word at the current cursor position. Otherwise returns an empty string.
      * @since 1.26
      * @group Notes
