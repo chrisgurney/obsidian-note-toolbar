@@ -14,23 +14,30 @@ import * as ja from 'I18n/ja.json';
 import * as uk from 'I18n/uk.json';
 import * as zh_CN from 'I18n/zh-CN.json';
 
+// Gallery translations, merged into the same namespace below
+import * as galleryDe from 'I18n/gallery/de.json';
+import * as galleryEn from 'I18n/gallery/en.json';
+import * as galleryJa from 'I18n/gallery/ja.json';
+import * as galleryUk from 'I18n/gallery/uk.json';
+import * as galleryZhCN from 'I18n/gallery/zh-CN.json';
+
 // used to validate internal translation keys
 type DottedKeys<T> = {
 	[K in keyof T & string]: T[K] extends Record<string, unknown> ? `${K}.${DottedKeys<T[K]>}` : K;
 }[keyof T & string];
 
-export type TranslationKey = DottedKeys<typeof en> | `plugin.${string}` | `setting.whats-new.${string}`;
+export type TranslationKey = DottedKeys<typeof en> | DottedKeys<typeof galleryEn> | `plugin.${string}` | `setting.whats-new.${string}` | `gallery.${string}`;
 
 /* create a new i18next instance that will be garbage-collected once the plugin was unloaded */
 const Locales = i18next.createInstance({
 	lng: getLanguage(),
 	fallbackLng: 'en',
 	resources: {
-		de: { 'plugin-note-toolbar': de }, // German
-		en: { 'plugin-note-toolbar': en }, // English
-		ja: { 'plugin-note-toolbar': ja }, // Japanese
-		uk: { 'plugin-note-toolbar': uk }, // Ukrainian
-		zh: { 'plugin-note-toolbar': zh_CN } // Chinese Simplified
+		de: { 'plugin-note-toolbar': { ...de, gallery: { ...de.gallery, ...galleryDe.gallery } } }, // German
+		en: { 'plugin-note-toolbar': { ...en, gallery: { ...en.gallery, ...galleryEn.gallery } } }, // English
+		ja: { 'plugin-note-toolbar': { ...ja, gallery: { ...ja.gallery, ...galleryJa.gallery } } }, // Japanese
+		uk: { 'plugin-note-toolbar': { ...uk, gallery: { ...uk.gallery, ...galleryUk.gallery } } }, // Ukrainian
+		zh: { 'plugin-note-toolbar': { ...zh_CN, gallery: { ...zh_CN.gallery, ...galleryZhCN.gallery } } } // Chinese Simplified
 	}
 });
 

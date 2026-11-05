@@ -7,17 +7,13 @@ import { iconTextFr } from 'Settings/UI/Utils/SettingsUIUtils';
 import { URLS } from "Utils/Urls";
 
 interface Category {
-	name: { [key: string]: string };
+	id: string;
 	addAsToolbar?: boolean;
-	description: { [key: string]: string };
 	featured?: boolean;
 	itemIds: string[];
 }
 
 interface Gallery {
-	title: { [key: string]: string };
-	overview: { [key: string]: string };
-	pluginNote: { [key: string]: string };
 	categories: Category[];
 }
 
@@ -64,27 +60,26 @@ export default class GalleryView extends ItemView {
 		const markdownEl = contentDiv.createDiv();
 		markdownEl.addClass('markdown-preview-view', 'note-toolbar-setting-gallery-content', 'is-readable-line-width');
 
-		const language = (typeof i18next.language === 'string' && i18next.language.trim()) || 'en';
 
 		const bannerEl = markdownEl.createDiv();
 		bannerEl.addClass('note-toolbar-setting-view-banner', 'is-readable-line-width');
 		const bannerIconEl = bannerEl.createDiv();
 		setIcon(bannerIconEl, 'layout-grid');
-		const title = (gallery as Gallery).title[language] || gallery.title['en'];
+		const title = t('gallery.bannerTitle');
 		const bannerTitleEl = bannerEl.createDiv();
 		const bannerTitleComponent = new Component();
 		await MarkdownRenderer.render(this.ntb.app, `# ${title}`, bannerTitleEl, '/', bannerTitleComponent);
 
 		const overviewEl = markdownEl.createDiv();
 		overviewEl.addClass('note-toolbar-gallery-view-plugin-overview');
-		const overview = (gallery as Gallery).overview[language] || gallery.overview['en'];
+		const overview = t('gallery.overview');
 		const overviewComponent = new Component();
 		await MarkdownRenderer.render(this.ntb.app, overview, overviewEl, '/', overviewComponent);
 
 		const pluginNoteEl = markdownEl.createDiv();
 		pluginNoteEl.addClass('note-toolbar-gallery-view-note');
 		setIcon(pluginNoteEl.createSpan(), 'puzzle');
-		const pluginNoteText = (gallery as Gallery).pluginNote[language] || (gallery as Gallery).pluginNote['en'];
+		const pluginNoteText = t('gallery.pluginNote');
 		const pluginNoteComponent = new Component();
 		await MarkdownRenderer.render(this.ntb.app, pluginNoteText, pluginNoteEl, '/', pluginNoteComponent);
 
@@ -115,15 +110,15 @@ export default class GalleryView extends ItemView {
 		sortedCategories = (gallery as Gallery).categories.sort((a, b) => {
 			// featured categories first
 			if (!!a.featured !== !!b.featured) return a.featured ? -1 : 1;
-			const nameA = (a.name[language] || a.name['en']).toLowerCase();
-			const nameB = (b.name[language] || b.name['en']).toLowerCase();
+			const nameA = t(`gallery.category.${a.id}.name`).toLowerCase();
+			const nameB = t(`gallery.category.${b.id}.name`).toLowerCase();
 			return nameA.localeCompare(nameB);
 		});
 		
 		for (const [i, category] of sortedCategories.entries()) {
 
 			if (category.itemIds.length === 0) {
-				this.ntb.debug('GalleryManager: SKIPPING No items defined for category:', category.name.en);
+				this.ntb.debug('GalleryManager: SKIPPING No items defined for category:', category.id);
 				continue;
 			}
 
@@ -136,13 +131,13 @@ export default class GalleryView extends ItemView {
 
 			const catNameEl = catEl.createDiv();
 			catNameEl.addClass('note-toolbar-gallery-view-cat-title');
-			const catName = category.name[language] || category.name['en'];
+			const catName = t(`gallery.category.${category.id}.name`);
 			const catComponent = new Component();
 			await MarkdownRenderer.render(this.ntb.app, `## ${catName}`, catNameEl, '/', catComponent);
 
 			const catDescEl = catEl.createDiv();
 			catDescEl.addClass('note-toolbar-gallery-view-cat-description');
-			const catDescText = category.description[language] || category.description['en'];
+			const catDescText = t(`gallery.category.${category.id}.description`);
 			const catDescComponent = new Component();
 			await MarkdownRenderer.render(this.ntb.app, catDescText, catDescEl, '/', catDescComponent);
 
