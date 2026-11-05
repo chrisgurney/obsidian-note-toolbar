@@ -18,7 +18,7 @@ Read `references/api-reference.md` before writing or editing any script. Use it 
 
 ## Script arguments (`input`)
 
-Scripts receive their arguments as `input`: the object parsed from the item's Arguments field, from `data-args` on a callout item, or from `args=` on a CLI `add-js` item. The format is JSON-like: outer braces are optional, keys may be unquoted, and values may be strings (quoted or unquoted), numbers, booleans, `null`, or arrays. Invalid args show an error and the script does not run; with no args, `input` carries only the added `_scriptFile`. Note Toolbar also adds `input._scriptFile`, the `TFile` of the script being executed.
+Scripts receive their arguments as `input`: the object parsed from the item's _Arguments_ field, from `data-args` on a callout item, or from `args=` on a CLI `add-js` item. The format is JSON-like: outer braces are optional, keys may be unquoted, and values may be strings (quoted or unquoted), numbers, booleans, `null`, or arrays. Invalid args show an error and the script does not run; with no args, `input` carries only the added `_scriptFile`. Note Toolbar also adds `input._scriptFile`, the `TFile` of the script being executed.
 
 ```js
 // args field: property: "type", mode: "list"
