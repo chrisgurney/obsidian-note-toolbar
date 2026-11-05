@@ -373,7 +373,7 @@ export default class ToolbarRenderer {
             this.ntb.registerDomEvent(noteToolbarCallout, 'mouseover', async (evt: MouseEvent) => {
                 const target = (evt.target as HTMLElement)?.closest('.external-link');
                 const type = target?.getAttribute('data-toolbar-link-attr-type');
-                if (target && type && [ItemType.File, ItemType.Uri].contains(type as ItemType)) {
+                if (target && type && [ItemType.File, ItemType.Uri].includes(type as ItemType)) {
                     let itemLink = target.getAttribute('href') || '';
 					const errorContext: ScriptContext = { errorBehavior: ErrorBehavior.Ignore, component: 'URI', toolbar };
                     itemLink = await this.ntb.vars.replaceVars(itemLink, this.ntb.app.workspace.getActiveFile(), errorContext);

@@ -362,7 +362,7 @@ export default class CommandManager {
             }
             ['--metadata-display-reading', '--metadata-display-editing'].forEach((prop) => {
                 propsEl.style.setProperty(
-                    prop, ['show', 'fold'].contains(visibility) ? 'block' : 'none');
+                    prop, ['show', 'fold'].includes(visibility) ? 'block' : 'none');
             });
 
             if (component === 'props') {

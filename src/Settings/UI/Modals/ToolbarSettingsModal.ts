@@ -359,8 +359,8 @@ export default class ToolbarSettingsModal extends Modal {
 
 		positionGroup.addSetting((desktopPosSetting) => {
 
-			this.hasMobileFabPosition = [PositionType.FabLeft, PositionType.FabRight].contains(initialMobilePosition);
-			this.hasDesktopFabPosition = [PositionType.FabLeft, PositionType.FabRight].contains(initialDesktopPosition);
+			this.hasMobileFabPosition = [PositionType.FabLeft, PositionType.FabRight].includes(initialMobilePosition);
+			this.hasDesktopFabPosition = [PositionType.FabLeft, PositionType.FabRight].includes(initialDesktopPosition);
 
 			desktopPosSetting
 				.setName(t('setting.option-platform-desktop'))
@@ -375,7 +375,7 @@ export default class ToolbarSettingsModal extends Modal {
 							const posVal = val as PositionType;
 							this.toolbar.position.desktop = { allViews: { position: posVal } };
 							this.toolbar.updated = new Date().toISOString();
-							this.hasDesktopFabPosition = [PositionType.FabLeft, PositionType.FabRight].contains(posVal);
+							this.hasDesktopFabPosition = [PositionType.FabLeft, PositionType.FabRight].includes(posVal);
 							// toggle display of the default item setting
 							const defaultItemSettingEl = this.containerEl.querySelector('#note-toolbar-default-item');
 							if (!this.hasMobileFabPosition) {
@@ -408,7 +408,7 @@ export default class ToolbarSettingsModal extends Modal {
 							this.toolbar.position.mobile = { allViews: { position: posVal } };
 							this.toolbar.position.tablet = { allViews: { position: posVal } };
 							this.toolbar.updated = new Date().toISOString();
-							this.hasMobileFabPosition = [PositionType.FabLeft, PositionType.FabRight].contains(posVal);
+							this.hasMobileFabPosition = [PositionType.FabLeft, PositionType.FabRight].includes(posVal);
 							// toggle display of the default item setting
 							const defaultItemSettingEl = this.containerEl.querySelector('#note-toolbar-default-item');
 							if (!this.hasDesktopFabPosition) {
