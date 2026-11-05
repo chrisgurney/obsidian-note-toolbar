@@ -1,0 +1,651 @@
+{
+  "gallery": {
+    "bannerTitle": "Note Toolbar Gallery",
+    "overview": "Browse examples of items, and click/tap to add them to a toolbar.",
+    "pluginNote": "Some items require plugins for more sophisticated behavior. ",
+    "category": {
+      "editor-tools": {
+        "name": "Editor Tools",
+        "description": "Obsidian's built-in editor toolbar."
+      },
+      "clipboard": {
+        "name": "Clipboard",
+        "description": "Items that use the clipboard. Learn how to add these to Obsidian on the [Additional Gallery items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Additional-Gallery-items) page."
+      },
+      "daily-notes": {
+        "name": "Daily Notes",
+        "description": "Quickly navigate between daily notes. Requires the _Daily Notes_ core plugin."
+      },
+      "editing": {
+        "name": "Editing",
+        "description": "Adjust the order and arrangement of content."
+      },
+      "editor-navigation": {
+        "name": "Editor Navigation",
+        "description": "Get around the text editor faster."
+      },
+      "files": {
+        "name": "Files",
+        "description": "Tools for working with files."
+      },
+      "focus": {
+        "name": "Focus",
+        "description": "Remove Obsidian's UI and focus on your writing."
+      },
+      "folding": {
+        "name": "Folding",
+        "description": "Collapse and expand sections of your note for easier navigation."
+      },
+      "formatting": {
+        "name": "Formatting",
+        "description": "Change how text looks."
+      },
+      "lists-indentation": {
+        "name": "Lists & Indentation",
+        "description": "Organize items into lists and adjust structure."
+      },
+      "insertions": {
+        "name": "Insertions",
+        "description": "Add various types of content like links or media."
+      },
+      "mobile-navigation": {
+        "name": "Mobile Navigation",
+        "description": "Helpful for navigating within the app and around the editor on mobile."
+      },
+      "new-tab-view": {
+        "name": "New Tab View",
+        "description": "Replace the new tab view with a toolbar. [Learn more](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/New-tab-view)"
+      },
+      "note-toolbar": {
+        "name": "Note Toolbar",
+        "description": "Get access to Note Toolbar settings and tools quickly."
+      },
+      "obsidian-support": {
+        "name": "Obsidian Support",
+        "description": "Get help from Obsidian community resources."
+      },
+      "search": {
+        "name": "Search",
+        "description": "Search in notes and across your vault."
+      },
+      "vault-files": {
+        "name": "Vault Files",
+        "description": "Items that require access to vault files. Learn how to add these to Obsidian on the [Additional Gallery items](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Additional-Gallery-items) page."
+      },
+      "vault-navigation": {
+        "name": "Vault Navigation",
+        "description": "Navigate between notes and files."
+      },
+      "views-themes": {
+        "name": "Views & Themes",
+        "description": "Switch themes and toggle views."
+      },
+      "workspaces": {
+        "name": "Workspaces",
+        "description": "Switch between workspaces. Requires the _Workspaces_ core plugin."
+      },
+      "periodic-notes": {
+        "name": "Periodic Notes",
+        "description": "Navigate weekly, monthly, and yearly notes. Requires the [Periodic Notes](obsidian://show-plugin?id=periodic-notes) plugin."
+      },
+      "templater": {
+        "name": "Templater",
+        "description": "Insert or create notes from templates. Requires the [Templater](obsidian://show-plugin?id=templater-obsidian) plugin. See the user guide for even [more ways to use Templater](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater)."
+      },
+      "plugins": {
+        "name": "Plugins",
+        "description": "Do even more with other Obsidian plugins."
+      }
+    },
+    "item": {
+      "add-cursor-above": {
+        "description": "Add another cursor above the current cursor.",
+        "tooltip": "Add cursor above"
+      },
+      "add-cursor-below": {
+        "description": "Add another cursor below the current cursor.",
+        "tooltip": "Add cursor below"
+      },
+      "attach-file": {
+        "description": "Insert a file attachment.",
+        "tooltip": "Insert attachment"
+      },
+      "bookmarks-open": {
+        "description": "Opens the bookmarks sidebar.",
+        "tooltip": "Show bookmarks"
+      },
+      "canvas-new": {
+        "description": "Create a new canvas file.",
+        "tooltip": "New canvas"
+      },
+      "clear-formatting": {
+        "description": "Remove all text formatting.",
+        "tooltip": "Clear formatting"
+      },
+      "copy": {
+        "description": "Copies the selected text to the clipboard.",
+        "tooltip": "Copy"
+      },
+      "copy-block-link": {
+        "description": "Copies a link to the current block to the clipboard.",
+        "tooltip": "Copy link to block"
+      },
+      "copy-note-content": {
+        "description": "Copy body of the note to the clipboard, ignoring frontmatter.",
+        "tooltip": "Copy note content"
+      },
+      "copy-obsidian-url": {
+        "description": "Copy the Obsidian URL for the current note to the clipboard.",
+        "tooltip": "Copy Obsidian URL"
+      },
+      "cut": {
+        "description": "Cuts the selected text to the clipboard.",
+        "tooltip": "Cut"
+      },
+      "cycle-list-checklist": {
+        "description": "Changes to bullet, checkbox, or unchecked.",
+        "tooltip": "Cycle bullet/checkbox"
+      },
+      "cycle-themes": {
+        "description": "Cycles between installed themes, including the default.",
+        "tooltip": "Cycle themes"
+      },
+      "cycle-workspace": {
+        "description": "Cycles between workspaces.",
+        "tooltip": "Cycle workspaces"
+      },
+      "daily-notes-prev": {
+        "description": "Go to the previous daily note.",
+        "tooltip": "Previous daily note"
+      },
+      "daily-notes-today": {
+        "description": "Go to today's daily note.",
+        "tooltip": "Today's daily note"
+      },
+      "daily-notes-next": {
+        "description": "Go to the next daily note.",
+        "tooltip": "Next daily note"
+      },
+      "delete-paragraph": {
+        "description": "Delete the current paragraph.",
+        "tooltip": "Delete paragraph"
+      },
+      "editor-toggle-preview": {
+        "description": "Change between the editor's Preview and Reading modes.",
+        "tooltip": "Toggle Reading view"
+      },
+      "editor-toggle-source": {
+        "description": "Turn Source mode on and off.",
+        "tooltip": "Toggle Source mode"
+      },
+      "file-append": {
+        "description": "Appends the prompted text to a file you specify.",
+        "tooltip": "Append text"
+      },
+      "file-in-explorer": {
+        "description": "Reveal the active file in navigation.",
+        "tooltip": "Show file in navigation"
+      },
+      "file-in-system": {
+        "description": "Reveal the active file in the system's file explorer.",
+        "tooltip": "Show file in system"
+      },
+      "file-move": {
+        "description": "Move current file to a chosen folder.",
+        "tooltip": "Move file to folder"
+      },
+      "file-new": {
+        "description": "Creates a new note.",
+        "tooltip": "New note"
+      },
+      "file-new-tab": {
+        "description": "Opens the selected file in a new tab.",
+        "tooltip": "Open file in new tab"
+      },
+      "file-next": {
+        "description": "Open next file in the folder, sorted A-Z. Loops to the first file.",
+        "tooltip": "Next file"
+      },
+      "file-prev": {
+        "description": "Open previous file in the folder, sorted A-Z. Loops to the last file.",
+        "tooltip": "Previous file"
+      },
+      "file-switcher-open": {
+        "description": "Open the file switcher.",
+        "tooltip": "File switcher"
+      },
+      "folder-search": {
+        "description": "Search in the current folder, or all files if currently in the root.",
+        "tooltip": "Search folder"
+      },
+      "global-search-open": {
+        "description": "Opens the search sidebar.",
+        "tooltip": "Search all files"
+      },
+      "go-back": {
+        "description": "Go backwards.",
+        "tooltip": "Navigate back"
+      },
+      "go-bottom": {
+        "description": "Moves the cursor to the bottom of the current note.",
+        "tooltip": "Jump to bottom"
+      },
+      "go-forward": {
+        "description": "Go forwards.",
+        "tooltip": "Navigate forward"
+      },
+      "go-home": {
+        "description": "Go to your home note. (Enter your home note in the URL.)",
+        "tooltip": "Home"
+      },
+      "go-top": {
+        "description": "Moves the cursor to the top of the current note.",
+        "tooltip": "Jump to top"
+      },
+      "go-up": {
+        "description": "Uses your note's \"up\" property to link to a parent note.",
+        "tooltip": "Go up"
+      },
+      "go-next-callout": {
+        "description": "Moves the cursor to the next callout in the note.",
+        "tooltip": "Next callout"
+      },
+      "go-next-heading": {
+        "description": "Moves the cursor to the next heading in the note.",
+        "tooltip": "Next heading"
+      },
+      "go-prev-heading": {
+        "description": "Moves the cursor to the previous heading in the note.",
+        "tooltip": "Previous heading"
+      },
+      "indent": {
+        "description": "Increases indentation on the current line.",
+        "tooltip": "Indent list item"
+      },
+      "insert-callout": {
+        "description": "Insert a callout block.",
+        "tooltip": "Insert callout"
+      },
+      "insert-codeblock": {
+        "description": "Insert a code block.",
+        "tooltip": "Insert code block"
+      },
+      "insert-footnote": {
+        "description": "Insert a footnote.",
+        "tooltip": "Insert footnote"
+      },
+      "insert-embed": {
+        "description": "Add an embedded file or note.",
+        "tooltip": "Add embed"
+      },
+      "paste-external-embed": {
+        "description": "Pastes an embedded external link.",
+        "tooltip": "Paste external embed"
+      },
+      "insert-horizontal-rule": {
+        "description": "Insert a horizontal rule to separate sections.",
+        "tooltip": "Insert horizontal rule"
+      },
+      "insert-link": {
+        "description": "Insert a Markdown link.",
+        "tooltip": "Insert Markdown link"
+      },
+      "insert-mathblock": {
+        "description": "Insert a math block.",
+        "tooltip": "Insert math block"
+      },
+      "insert-table": {
+        "description": "Insert a table.",
+        "tooltip": "Insert table"
+      },
+      "insert-tag": {
+        "description": "Insert a tag in the note.",
+        "tooltip": "Insert tag"
+      },
+      "insert-wikilink": {
+        "description": "Add an internal link.",
+        "tooltip": "Add internal link"
+      },
+      "load-workspace": {
+        "description": "Select and load a configured workspace.",
+        "tooltip": "Load workspace"
+      },
+      "move-caret-up": {
+        "description": "Move the caret up.",
+        "tooltip": "Move caret up"
+      },
+      "move-caret-down": {
+        "description": "Move the caret down.",
+        "tooltip": "Move caret down"
+      },
+      "move-caret-left": {
+        "description": "Move the caret left.",
+        "tooltip": "Move caret left"
+      },
+      "move-caret-right": {
+        "description": "Move the caret right.",
+        "tooltip": "Move caret right"
+      },
+      "new-note": {
+        "description": "Create a new note.",
+        "tooltip": "New note"
+      },
+      "note-toolbar-backup-data": {
+        "description": "Copy Note Toolbar's settings (data.json) file into the vault.",
+        "tooltip": "Backup Note Toolbar data"
+      },
+      "note-toolbar-export": {
+        "description": "Writes an export file containing all toolbars as callouts.",
+        "tooltip": "Export all toolbars as callouts"
+      },
+      "note-toolbar-quick-toolbars": {
+        "description": "Opens a window with access to all of your Note Toolbars.",
+        "tooltip": "Quick Toolbars"
+      },
+      "note-toolbar-quick-tools": {
+        "description": "Opens a searchable window with access to all toolbar items.",
+        "tooltip": "Quick Tools"
+      },
+      "note-toolbar-tbar-settings": {
+        "description": "Opens the active toolbar's settings.",
+        "tooltip": "Toolbar settings"
+      },
+      "note-toolbar-toggle-properties": {
+        "description": "Toggle the visibility of note properties.",
+        "tooltip": "Toggle Properties"
+      },
+      "note-toolbar-user-guide": {
+        "description": "Access the Note Toolbar User Guide for help and tips.",
+        "tooltip": "Note Toolbar User Guide"
+      },
+      "obsidian-excalidraw-create": {
+        "description": "Create a new Excalidraw drawing.",
+        "tooltip": "New drawing"
+      },
+      "obsidian-hotkeys": {
+        "description": "Opens Obsidian's hotkeys settings.",
+        "tooltip": "Obsidian hotkeys"
+      },
+      "obsidian-help-site": {
+        "description": "Opens the official Obsidian Help site.",
+        "tooltip": "Obsidian Help"
+      },
+      "obsidian-kanban-create": {
+        "description": "Create a new kanban board.",
+        "tooltip": "New kanban"
+      },
+      "obsidian-markdown-reference": {
+        "description": "Opens Obsidian's Markdown formatting guide.",
+        "tooltip": "Markdown reference"
+      },
+      "obsidian-sync-version-history": {
+        "description": "View the version history for the current file.",
+        "tooltip": "Version history"
+      },
+      "obsidian-tasks-edit": {
+        "description": "Create a new task.",
+        "tooltip": "Create/Edit task"
+      },
+      "paste": {
+        "description": "Pastes the text from the clipboard.",
+        "tooltip": "Paste"
+      },
+      "periodic-notes-daily-next": {
+        "description": "Go to next daily note. (Must be in a daily note.)",
+        "tooltip": "Next daily note"
+      },
+      "periodic-notes-daily-prev": {
+        "description": "Go to previous daily note. (Must be in a daily note.)",
+        "tooltip": "Previous daily note"
+      },
+      "periodic-notes-daily-open": {
+        "description": "Go to today's daily note.",
+        "tooltip": "Today's daily note"
+      },
+      "periodic-notes-monthly-next": {
+        "description": "Open next monthly note. (Must be in a monthly note.)",
+        "tooltip": "Next monthly note"
+      },
+      "periodic-notes-monthly-open": {
+        "description": "Open monthly note.",
+        "tooltip": "Open monthly note"
+      },
+      "periodic-notes-monthly-prev": {
+        "description": "Open previous monthly note. (Must be in a monthly note.)",
+        "tooltip": "Previous monthly note"
+      },
+      "periodic-notes-weekly-next": {
+        "description": "Next weekly note. (Must be in a weekly note.)",
+        "tooltip": "Next weekly note"
+      },
+      "periodic-notes-weekly-open": {
+        "description": "Open weekly note.",
+        "tooltip": "Open weekly note"
+      },
+      "periodic-notes-weekly-prev": {
+        "description": "Opens previous weekly note. (Must be in a weekly note.)",
+        "tooltip": "Previous weekly note"
+      },
+      "periodic-notes-yearly-next": {
+        "description": "Opens next yearly note. (Must be in a yearly note.)",
+        "tooltip": "Next yearly note"
+      },
+      "periodic-notes-yearly-open": {
+        "description": "Open yearly note.",
+        "tooltip": "Open yearly note"
+      },
+      "periodic-notes-yearly-prev": {
+        "description": "Previous yearly note. (Must be in a yearly note.)",
+        "tooltip": "Previous yearly note"
+      },
+      "pin": {
+        "description": "Pins or unpins the current note, preventing it from being replaced when opening new notes.",
+        "tooltip": "Toggle pin"
+      },
+      "search-replace-open": {
+        "description": "Open the find/replace panel in the current note.",
+        "tooltip": "Find & Replace"
+      },
+      "search-selection": {
+        "description": "Search the vault for the currently selected text.",
+        "tooltip": "Search for selection"
+      },
+      "set-heading-1": {
+        "description": "Set as heading 1",
+        "tooltip": "Heading 1"
+      },
+      "set-heading-2": {
+        "description": "Set as heading 2",
+        "tooltip": "Heading 2"
+      },
+      "set-heading-3": {
+        "description": "Set as heading 3",
+        "tooltip": "Heading 3"
+      },
+      "set-heading-4": {
+        "description": "Set as heading 4",
+        "tooltip": "Heading 4"
+      },
+      "set-heading-5": {
+        "description": "Set as heading 5",
+        "tooltip": "Heading 5"
+      },
+      "set-heading-6": {
+        "description": "Set as heading 6",
+        "tooltip": "Heading 6"
+      },
+      "set-workspace": {
+        "description": "Changes to a specific workspace you provide.",
+        "tooltip": "My workspace"
+      },
+      "settings-open": {
+        "description": "Open Obsidian's settings.",
+        "tooltip": "Open settings"
+      },
+      "tab-close": {
+        "description": "Close the current tab.",
+        "tooltip": "Close tab"
+      },
+      "tab-new": {
+        "description": "Opens a new empty tab.",
+        "tooltip": "New tab"
+      },
+      "tab-next": {
+        "description": "Go to the next tab.",
+        "tooltip": "Next tab"
+      },
+      "tab-prev": {
+        "description": "Go to the previous tab.",
+        "tooltip": "Previous tab"
+      },
+      "tab-switcher-open": {
+        "description": "Open the mobile tab switcher.",
+        "tooltip": "Tab switcher"
+      },
+      "templater-insert-template": {
+        "description": "Inserts the chosen template.",
+        "tooltip": "Insert template"
+      },
+      "templater-new-note-from-template": {
+        "description": "Create a new note from a template you select.",
+        "tooltip": "New from template"
+      },
+      "redo": {
+        "description": "Reapplies the last undone action.",
+        "tooltip": "Redo"
+      },
+      "remove-heading": {
+        "description": "Remove the heading from the current line.",
+        "tooltip": "Remove heading"
+      },
+      "swap-line-down": {
+        "description": "Move the current line down.",
+        "tooltip": "Move line down"
+      },
+      "swap-line-up": {
+        "description": "Move the current line up.",
+        "tooltip": "Move line up"
+      },
+      "system-snippets-open": {
+        "description": "Opens the vault's snippets folder in the system's file explorer.",
+        "tooltip": "Open snippets folder"
+      },
+      "system-vault-open": {
+        "description": "Opens the vault's folder in the system's file explorer.",
+        "tooltip": "Show vault in system"
+      },
+      "theme-switch": {
+        "description": "Open the Obsidian theme switcher.",
+        "tooltip": "Change theme"
+      },
+      "theme-toggle-light-dark": {
+        "description": "Toggle between light and dark modes.",
+        "tooltip": "Toggle light/dark"
+      },
+      "toggle-blockquote": {
+        "description": "Apply or remove blockquote formatting.",
+        "tooltip": "Toggle blockquote"
+      },
+      "toggle-bold": {
+        "description": "Apply or remove bold formatting.",
+        "tooltip": "Toggle bold"
+      },
+      "toggle-bullet-list": {
+        "description": "Apply or remove bullet list formatting.",
+        "tooltip": "Toggle bullet list"
+      },
+      "toggle-checklist-status": {
+        "description": "Toggle the status of checklist items.",
+        "tooltip": "Toggle checkbox status"
+      },
+      "toggle-code": {
+        "description": "Apply or remove inline code formatting.",
+        "tooltip": "Toggle code"
+      },
+      "toggle-comments": {
+        "description": "Add or remove comments.",
+        "tooltip": "Toggle comment"
+      },
+      "toggle-css-class": {
+        "description": "Adds or removes the provided class in the cssclasses property.",
+        "tooltip": "Toggle CSS class"
+      },
+      "toggle-fold": {
+        "description": "Toggle folding on the current line.",
+        "tooltip": "Toggle fold"
+      },
+      "fold-all": {
+        "description": "Fold all headings and lists.",
+        "tooltip": "Fold all"
+      },
+      "fold-less": {
+        "description": "Fold one level less.",
+        "tooltip": "Fold less"
+      },
+      "fold-more": {
+        "description": "Fold one level more.",
+        "tooltip": "Fold more"
+      },
+      "unfold-all": {
+        "description": "Unfold all headings and lists.",
+        "tooltip": "Unfold all"
+      },
+      "toggle-highlight": {
+        "description": "Apply or remove text highlighting.",
+        "tooltip": "Toggle highlight"
+      },
+      "toggle-inline-math": {
+        "description": "Apply or remove inline math formatting.",
+        "tooltip": "Toggle inline math"
+      },
+      "toggle-italics": {
+        "description": "Apply or remove italic formatting.",
+        "tooltip": "Toggle italic"
+      },
+      "toggle-numbered-list": {
+        "description": "Apply or remove numbered list formatting.",
+        "tooltip": "Toggle numbered list"
+      },
+      "toggle-keyboard": {
+        "description": "Toggles the keyboard",
+        "tooltip": "Toggle keyboard"
+      },
+      "toggle-heading": {
+        "description": "Toggle the heading level on the current line.",
+        "tooltip": "Toggle heading"
+      },
+      "toggle-ui": {
+        "description": "Shows or hides Obsidian's status bar, note properties, sidebar, and view header.",
+        "tooltip": "Toggle UI"
+      },
+      "toggle-status-bar": {
+        "description": "Shows or hides Obsidian's status bar.",
+        "tooltip": "Toggle status bar"
+      },
+      "toggle-strikethrough": {
+        "description": "Apply or remove strikethrough formatting.",
+        "tooltip": "Toggle strikethrough"
+      },
+      "toggle-vim-mode": {
+        "description": "Turns Vim mode on and off.",
+        "tooltip": "Toggle Vim mode"
+      },
+      "toggle-color-highlight": {
+        "description": "Apply or remove color text highlighting.",
+        "tooltip": "Color highlight"
+      },
+      "undo": {
+        "description": "Reverts the latest action.",
+        "tooltip": "Undo"
+      },
+      "unindent": {
+        "description": "Decreases indentation on the current line.",
+        "tooltip": "Unindent list item"
+      },
+      "vscode-open": {
+        "description": "Opens the current file in VS Code.",
+        "tooltip": "Open in VS Code"
+      }
+    }
+  }
+}
