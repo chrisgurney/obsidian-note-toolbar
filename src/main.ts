@@ -154,6 +154,9 @@ export default class NoteToolbarPlugin extends Plugin {
 			if (Platform.isPhone) {
 				try {
 					await this.render.renderForView();
+
+					// apply the configured phone navbar visibility, even when no toolbar renders
+					this.render.updatePhoneNavbarVisibility();
 				}
 				catch (error) {
 					this.adapters.utils.handleError(error, { errorBehavior: ErrorBehavior.Report });

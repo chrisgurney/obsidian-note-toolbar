@@ -538,6 +538,9 @@ export default class SettingsManager {
 		if (renderToolbar) {
 			this.ntb.render.removeActive();
 			await this.ntb.render.renderForView();
+
+			// apply the configured phone navbar visibility, even when no toolbar renders
+			this.ntb.render.updatePhoneNavbarVisibility();
 		}
 
 		this.ntb.debug("SETTINGS SAVED: " + new Date().getTime());

@@ -1,7 +1,7 @@
 import { Rect } from "@codemirror/view";
 import NoteToolbarPlugin from "main";
 import { FrontMatterCache, getIcon, ItemView, MarkdownView, Menu, MenuItem, MenuPositionDef, Notice, Platform, setIcon, setTooltip, TFile, TFolder } from "obsidian";
-import { DefaultStyleType, ErrorBehavior, ItemType, LocalVar, MobileStyleType, OBSIDIAN_UI_ELEMENTS, PositionType, ScriptContext, t, ToggleUiStateType, ToolbarItemSettings, ToolbarSettings, ToolbarStyle } from "Settings/NoteToolbarSettings";
+import { DefaultStyleType, ErrorBehavior, ItemType, LocalVar, MobileStyleType, OBSIDIAN_UI_ELEMENTS, PositionType, ScriptContext, t, ToggleUiStateType, ToolbarItemSettings, ToolbarSettings, ToolbarStyle, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_WHATS_NEW } from "Settings/NoteToolbarSettings";
 import { calcComponentVisToggles, getItemFallbackName, getViewId, hasStyle, isValidUri, putFocusInMenu } from "Utils/Utils";
 
 // note: make sure CSS is updated if these are changed
@@ -1362,26 +1362,51 @@ export default class ToolbarRenderer {
 
 		if (!Platform.isPhone || !toolbarPosition) return;
 
-		//
-		// top navigation bar (view header)
-		//
-
-		const hideViewHeader = this.ntb.settings.obsidianUiVisibility['view-header'] === false;
-		activeDocument.body.toggleClass('ntb-remove-view-header', hideViewHeader);
+		// apply the configured navbar visibility (top bar + bottom actions)
+		this.updatePhoneNavbarVisibility();
 
 		//
-		// bottom navigation bar
+		// bottom navigation bar: make room for the FAB
 		//
-		
+
 		const navbarEl = activeDocument.querySelector('.mobile-navbar') as HTMLElement;
 		if (!navbarEl) return;
-		
+
 		// navbarEl.style.marginBottom = ''; // reset spacing
 		navbarEl.setCssProps({ marginBottom: '' }); // reset spacing
 
 		// move Navbar left/right to make room for the FAB
 		navbarEl.toggleClass('note-toolbar-navbar-right', toolbarPosition === PositionType.FabLeft);
 		navbarEl.toggleClass('note-toolbar-navbar-left', toolbarPosition === PositionType.FabRight);
+
+	}
+
+	/**
+	 * Applies the configured phone navigation bar visibility, independent of
+	 * whether a toolbar is rendered. The top bar is always shown on the
+	 * plugin's own views (Help, Gallery, What's New), which need it to close.
+	 */
+	updatePhoneNavbarVisibility(): void {
+
+		if (!Platform.isPhone) return;
+
+		//
+		// top navigation bar (view header)
+		//
+
+		const activeView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
+		const isPluginView = activeView !== null && [
+			VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_WHATS_NEW
+		].includes(activeView.getViewType());
+		const hideViewHeader = this.ntb.settings.obsidianUiVisibility?.['view-header'] === false && !isPluginView;
+		activeDocument.body.toggleClass('ntb-remove-view-header', hideViewHeader);
+
+		//
+		// bottom navigation bar
+		//
+
+		const navbarEl = activeDocument.querySelector('.mobile-navbar') as HTMLElement;
+		if (!navbarEl) return;
 
 		// hide actions on the navbar
 		if (this.ntb.settings.obsidianUiVisibility) {
