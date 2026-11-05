@@ -131,6 +131,7 @@ async function buildDocs() {
     if (galleryDocs(
         path.join(rootDir, 'src/Gallery/gallery-items.json'),
         path.join(rootDir, 'src/Gallery/gallery.json'),
+        path.join(rootDir, 'src/I18n/gallery/en.json'),
         path.join(rootDir, `${DOC_OUTPUT}/gallery/items.md`),
     )) changed = true;
 
@@ -185,6 +186,7 @@ if (watchMode) {
         'src/Cli/cli.json',
         'src/Gallery/gallery.json',
         'src/Gallery/gallery-items.json',
+        'src/I18n/gallery/en.json',
         'build/docs.mjs',
         'build/copy-skill-references.mjs',
     ], { cwd: rootDir });

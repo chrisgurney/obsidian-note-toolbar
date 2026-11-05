@@ -572,7 +572,7 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
      * 
      * @see INoteToolbarApi.t
      */
-    t: (key: string, ...args: unknown[]) => string = (key, ...args) => t(key as TranslationKey, ...args); // public API stays string for user scripts; cast at the typed t boundary
+    t: (key: string, ...args: unknown[]) => string = (key, ...args) => t(key as TranslationKey, ...args);
 
     /**
      * Shows a toolbar by its name or ID.

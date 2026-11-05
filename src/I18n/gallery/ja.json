@@ -1,0 +1,493 @@
+{
+  "gallery": {
+    "bannerTitle": "Note Toolbar ギャラリー",
+    "overview": "アイテムの例を閲覧し、クリック/タップでツールバーに追加します。",
+    "pluginNote": "一部のアイテムは、より高度な動作のためにプラグインが必要です。 ",
+    "category": {
+      "daily-notes": {
+        "name": "デイリーノート",
+        "description": "デイリーノート間をすばやく移動します。コアプラグイン「Daily Notes」が必要です。"
+      },
+      "editing": {
+        "name": "編集",
+        "description": "内容の順序や配置を調整します。"
+      },
+      "editor-navigation": {
+        "description": "テキストエディター内を素早く移動します。"
+      },
+      "files": {
+        "name": "ファイル",
+        "description": "ファイル操作のためのツール。"
+      },
+      "formatting": {
+        "name": "書式",
+        "description": "テキストの見た目を変更します。"
+      },
+      "lists-indentation": {
+        "name": "リストとインデント",
+        "description": "項目をリストに整理し、構造を調整します。"
+      },
+      "insertions": {
+        "name": "挿入",
+        "description": "リンクやメディアなど、さまざまなコンテンツを追加します。"
+      },
+      "new-tab-view": {
+        "name": "新しいタブビュー",
+        "description": "新しいタブビューをツールバーに置き換えます。 [詳細](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/New-tab-view)"
+      },
+      "note-toolbar": {
+        "name": "Note Toolbar",
+        "description": "Note Toolbar の設定やツールへ素早くアクセスします。"
+      },
+      "obsidian-support": {
+        "name": "Obsidian サポート",
+        "description": "Obsidian コミュニティのリソースからヘルプを得ます。"
+      },
+      "search": {
+        "name": "検索",
+        "description": "ノートやボールト全体を検索します。"
+      },
+      "vault-navigation": {
+        "name": "ボールトのナビゲーション",
+        "description": "ファイルやディレクトリ間を移動します。"
+      },
+      "views-themes": {
+        "name": "ビューとテーマ",
+        "description": "テーマ切り替えや表示モードの切替。"
+      },
+      "workspaces": {
+        "name": "ワークスペース",
+        "description": "ワークスペースを切り替えます。コアプラグイン「Workspaces」が必要です。"
+      },
+      "periodic-notes": {
+        "name": "Periodic Notes（周期ノート）",
+        "description": "週次・月次・年次ノートをナビゲートします。必要なプラグイン：[Periodic Notes](obsidian://show-plugin?id=periodic-notes)。"
+      },
+      "templater": {
+        "name": "Templater（テンプレート）",
+        "description": "テンプレートからノートを挿入/作成します。必要なプラグイン：[Templater](obsidian://show-plugin?id=templater-obsidian)。ユーザーガイドではさらに多くの使い方を紹介しています。"
+      },
+      "plugins": {
+        "name": "プラグイン",
+        "description": "Obsidian のプラグインでできることを広げましょう。"
+      }
+    },
+    "item": {
+      "attach-file": {
+        "description": "ファイルを添付します。",
+        "tooltip": "添付ファイルを挿入"
+      },
+      "bookmarks-open": {
+        "description": "ブックマークのサイドバーを開きます。",
+        "tooltip": "ブックマークを表示"
+      },
+      "canvas-new": {
+        "description": "新しいキャンバスファイルを作成します。",
+        "tooltip": "新しいキャンバス"
+      },
+      "clear-formatting": {
+        "description": "すべてのテキスト書式を削除します。",
+        "tooltip": "書式をクリア"
+      },
+      "copy": {
+        "description": "選択したテキストをクリップボードにコピーします。",
+        "tooltip": "コピー"
+      },
+      "copy-block-link": {
+        "description": "現在のブロックへのリンクをクリップボードにコピーします。",
+        "tooltip": "ブロックへのリンクをコピー"
+      },
+      "copy-note-content": {
+        "description": "フロントマターを除いたノートの本文をクリップボードにコピーします。",
+        "tooltip": "ノートの内容をコピー"
+      },
+      "copy-obsidian-url": {
+        "description": "現在のノートのObsidian URLをクリップボードにコピーします。",
+        "tooltip": "Obsidian URLをコピー"
+      },
+      "cut": {
+        "description": "選択したテキストをクリップボードに切り取ります。",
+        "tooltip": "切り取り"
+      },
+      "cycle-list-checklist": {
+        "description": "箇条書き、チェックボックス、未チェックを切り替えます。",
+        "tooltip": "箇条書き/チェックボックスを切替"
+      },
+      "cycle-themes": {
+        "description": "デフォルトを含むインストール済みのテーマを順に切り替えます。",
+        "tooltip": "テーマを切替"
+      },
+      "cycle-workspace": {
+        "description": "ワークスペースを順に切り替えます。",
+        "tooltip": "ワークスペースを切替"
+      },
+      "daily-notes-prev": {
+        "description": "前のデイリーノートに移動します。",
+        "tooltip": "前のデイリーノート"
+      },
+      "daily-notes-today": {
+        "description": "今日のデイリーノートに移動します。",
+        "tooltip": "今日のデイリーノート"
+      },
+      "daily-notes-next": {
+        "description": "次のデイリーノートに移動します。",
+        "tooltip": "次のデイリーノート"
+      },
+      "editor-toggle-preview": {
+        "description": "エディターのプレビューモードと閲覧モードを切り替えます。",
+        "tooltip": "閲覧ビューを切替"
+      },
+      "editor-toggle-source": {
+        "description": "ソースモードのオン・オフを切り替えます。",
+        "tooltip": "ソースモードを切替"
+      },
+      "file-append": {
+        "description": "入力したテキストを指定したファイルに追加します。",
+        "tooltip": "テキストを追加"
+      },
+      "file-in-explorer": {
+        "description": "ナビゲーションでアクティブなファイルを表示します。",
+        "tooltip": "ナビゲーションでファイルを表示"
+      },
+      "file-in-system": {
+        "description": "システムのファイルエクスプローラーでアクティブなファイルを表示します。",
+        "tooltip": "システムでファイルを表示"
+      },
+      "file-move": {
+        "description": "現在のファイルを選択したフォルダに移動します。",
+        "tooltip": "ファイルをフォルダに移動"
+      },
+      "file-new": {
+        "description": "新しいノートを作成します。",
+        "tooltip": "新しいノート"
+      },
+      "file-new-tab": {
+        "description": "選択したファイルを新しいタブで開きます。",
+        "tooltip": "新しいタブでファイルを開く"
+      },
+      "file-next": {
+        "description": "フォルダ内の次のファイルをA-Z順で開きます。最後のファイルに達したら最初に戻ります。",
+        "tooltip": "次のファイル"
+      },
+      "file-prev": {
+        "description": "フォルダ内の前のファイルをA-Z順で開きます。最初のファイルに達したら最後に戻ります。",
+        "tooltip": "前のファイル"
+      },
+      "folder-search": {
+        "description": "現在のフォルダ内を検索します。ルートにいる場合はすべてのファイルを検索します。",
+        "tooltip": "フォルダを検索"
+      },
+      "global-search-open": {
+        "description": "検索サイドバーを開きます。",
+        "tooltip": "すべてのファイルを検索"
+      },
+      "go-bottom": {
+        "description": "カーソルを現在のノートの一番下に移動します。",
+        "tooltip": "最下部にジャンプ"
+      },
+      "go-home": {
+        "description": "ホームノートに移動します。（URLにホームノートを入力してください。）",
+        "tooltip": "ホーム"
+      },
+      "go-top": {
+        "description": "カーソルを現在のノートの一番上に移動します。",
+        "tooltip": "最上部にジャンプ"
+      },
+      "go-up": {
+        "description": "ノートの\"up\"プロパティを使用して親ノートにリンクします。",
+        "tooltip": "上に移動"
+      },
+      "go-next-callout": {
+        "description": "カーソルをノート内の次のコールアウトに移動します。",
+        "tooltip": "次のコールアウト"
+      },
+      "go-next-heading": {
+        "description": "カーソルをノート内の次の見出しに移動します。",
+        "tooltip": "次の見出し"
+      },
+      "go-prev-heading": {
+        "description": "カーソルをノート内の前の見出しに移動します。",
+        "tooltip": "前の見出し"
+      },
+      "indent": {
+        "description": "現在の行のインデントを増やします。",
+        "tooltip": "インデントを増やす"
+      },
+      "insert-callout": {
+        "description": "コールアウトブロックを挿入します。",
+        "tooltip": "コールアウトを挿入"
+      },
+      "insert-codeblock": {
+        "description": "コードブロックを挿入します。",
+        "tooltip": "コードブロックを挿入"
+      },
+      "insert-embed": {
+        "description": "埋め込みファイルまたはノートを追加します。",
+        "tooltip": "埋め込みを追加"
+      },
+      "insert-horizontal-rule": {
+        "description": "セクションを区切る水平線を挿入します。",
+        "tooltip": "水平線を挿入"
+      },
+      "insert-link": {
+        "description": "Markdownリンクを挿入します。",
+        "tooltip": "Markdownリンクを挿入"
+      },
+      "insert-mathblock": {
+        "description": "数式ブロックを挿入します。",
+        "tooltip": "数式ブロックを挿入"
+      },
+      "insert-table": {
+        "description": "表を挿入します。",
+        "tooltip": "表を挿入"
+      },
+      "insert-tag": {
+        "description": "ノートにタグを挿入します。",
+        "tooltip": "タグを挿入"
+      },
+      "insert-wikilink": {
+        "description": "内部リンクを追加します。",
+        "tooltip": "内部リンクを追加"
+      },
+      "load-workspace": {
+        "description": "設定されたワークスペースを選択して読み込みます。",
+        "tooltip": "ワークスペースを読み込み"
+      },
+      "new-note": {
+        "description": "新しいノートを作成します。",
+        "tooltip": "新しいノート"
+      },
+      "note-toolbar-backup-data": {
+        "description": "Note Toolbarの設定(data.json)ファイルを保管庫にコピーします。",
+        "tooltip": "Note Toolbar設定をバックアップ"
+      },
+      "note-toolbar-quick-toolbars": {
+        "description": "すべてのNote Toolbarにアクセスできるウィンドウを開きます。",
+        "tooltip": "クイックツールバー"
+      },
+      "note-toolbar-quick-tools": {
+        "description": "すべてのツールバーアイテムにアクセスできる検索可能なウィンドウを開きます。",
+        "tooltip": "クイックツール"
+      },
+      "note-toolbar-tbar-settings": {
+        "description": "アクティブなNote Toolbarの設定を開いてツールバーをカスタマイズします。",
+        "tooltip": "ツールバー設定"
+      },
+      "note-toolbar-toggle-properties": {
+        "description": "ノートのプロパティの表示を切り替えます。",
+        "tooltip": "プロパティを切替"
+      },
+      "note-toolbar-user-guide": {
+        "description": "ヘルプやヒントについてNote Toolbarユーザーガイドにアクセスします。",
+        "tooltip": "Note Toolbarユーザーガイド"
+      },
+      "obsidian-excalidraw-create": {
+        "description": "新しいExcalidrawドローイングを作成します。",
+        "tooltip": "新しいドローイング"
+      },
+      "obsidian-help-site": {
+        "description": "Obsidian公式ヘルプサイトを開きます。",
+        "tooltip": "Obsidianヘルプ"
+      },
+      "obsidian-kanban-create": {
+        "description": "新しいカンバンボードを作成します。",
+        "tooltip": "新しいカンバン"
+      },
+      "obsidian-markdown-reference": {
+        "description": "ObsidianのMarkdown書式ガイドを開きます。",
+        "tooltip": "Markdownリファレンス"
+      },
+      "obsidian-sync-version-history": {
+        "description": "現在のファイルのバージョン履歴を表示します。",
+        "tooltip": "バージョン履歴"
+      },
+      "obsidian-tasks-edit": {
+        "description": "新しいタスクを作成します。",
+        "tooltip": "タスクを作成/編集"
+      },
+      "paste": {
+        "description": "クリップボードからテキストを貼り付けます。",
+        "tooltip": "貼り付け"
+      },
+      "periodic-notes-monthly-next": {
+        "description": "次の月次ノートを開きます。（月次ノート内にいる必要があります。）",
+        "tooltip": "次の月次ノート"
+      },
+      "periodic-notes-monthly-open": {
+        "description": "月次ノートを開きます。",
+        "tooltip": "月次ノートを開く"
+      },
+      "periodic-notes-monthly-prev": {
+        "description": "前の月次ノートを開きます。（月次ノート内にいる必要があります。）",
+        "tooltip": "前の月次ノート"
+      },
+      "periodic-notes-weekly-next": {
+        "description": "次の週次ノート。（週次ノート内にいる必要があります。）",
+        "tooltip": "次の週次ノート"
+      },
+      "periodic-notes-weekly-open": {
+        "description": "週次ノートを開きます。",
+        "tooltip": "週次ノートを開く"
+      },
+      "periodic-notes-weekly-prev": {
+        "description": "前の週次ノートを開きます。（週次ノート内にいる必要があります。）",
+        "tooltip": "前の週次ノート"
+      },
+      "periodic-notes-yearly-next": {
+        "description": "次の年次ノートを開きます。（年次ノート内にいる必要があります。）",
+        "tooltip": "次の年次ノート"
+      },
+      "periodic-notes-yearly-open": {
+        "description": "年次ノートを開きます。",
+        "tooltip": "年次ノートを開く"
+      },
+      "periodic-notes-yearly-prev": {
+        "description": "前の年次ノート。（年次ノート内にいる必要があります。）",
+        "tooltip": "前の年次ノート"
+      },
+      "pin": {
+        "description": "現在のノートをピン留めまたは解除し、新しいノートを開いても置き換えられないようにします。",
+        "tooltip": "ピン留めを切替"
+      },
+      "search-replace-open": {
+        "description": "現在のノートで検索/置換パネルを開きます。",
+        "tooltip": "検索と置換"
+      },
+      "set-workspace": {
+        "description": "指定したワークスペースに切り替えます。",
+        "tooltip": "マイワークスペース"
+      },
+      "settings-open": {
+        "description": "Obsidianの設定を開きます。",
+        "tooltip": "設定を開く"
+      },
+      "tab-close": {
+        "description": "現在のタブを閉じます。",
+        "tooltip": "タブを閉じる"
+      },
+      "tab-new": {
+        "description": "新しい空のタブを開きます。",
+        "tooltip": "新しいタブ"
+      },
+      "tab-next": {
+        "description": "次のタブに移動します。",
+        "tooltip": "次のタブ"
+      },
+      "tab-prev": {
+        "description": "前のタブに移動します。",
+        "tooltip": "前のタブ"
+      },
+      "templater-insert-template": {
+        "description": "選択したテンプレートを挿入します。",
+        "tooltip": "テンプレートを挿入"
+      },
+      "templater-new-note-from-template": {
+        "description": "選択したテンプレートから新しいノートを作成します。",
+        "tooltip": "テンプレートから新規作成"
+      },
+      "redo": {
+        "description": "元に戻した操作をやり直します。",
+        "tooltip": "やり直し"
+      },
+      "swap-line-down": {
+        "description": "現在の行を下に移動します。",
+        "tooltip": "行を下に移動"
+      },
+      "swap-line-up": {
+        "description": "現在の行を上に移動します。",
+        "tooltip": "行を上に移動"
+      },
+      "system-snippets-open": {
+        "description": "システムのファイルエクスプローラーで保管庫のスニペットフォルダを開きます。",
+        "tooltip": "スニペットフォルダを開く"
+      },
+      "system-vault-open": {
+        "description": "システムのファイルエクスプローラーで保管庫のフォルダを開きます。",
+        "tooltip": "システムで保管庫を表示"
+      },
+      "theme-switch": {
+        "description": "Obsidianのテーマスイッチャーを開きます。",
+        "tooltip": "テーマを変更"
+      },
+      "theme-toggle-light-dark": {
+        "description": "ライトモードとダークモードを切り替えます。",
+        "tooltip": "ライト/ダークを切替"
+      },
+      "toggle-blockquote": {
+        "description": "引用ブロックの書式を適用または削除します。",
+        "tooltip": "引用ブロックを切替"
+      },
+      "toggle-bold": {
+        "description": "太字の書式を適用または削除します。",
+        "tooltip": "太字を切替"
+      },
+      "toggle-bullet-list": {
+        "description": "箇条書きリストの書式を適用または削除します。",
+        "tooltip": "箇条書きリストを切替"
+      },
+      "toggle-checklist-status": {
+        "description": "チェックリスト項目のステータスを切り替えます。",
+        "tooltip": "チェックボックスの状態を切替"
+      },
+      "toggle-code": {
+        "description": "インラインコードの書式を適用または削除します。",
+        "tooltip": "コードを切替"
+      },
+      "toggle-comments": {
+        "description": "コメントを追加または削除します。",
+        "tooltip": "コメントを切替"
+      },
+      "toggle-css-class": {
+        "description": "cssclassesプロパティに指定されたクラスを追加または削除します。",
+        "tooltip": "CSSクラスを切替"
+      },
+      "toggle-highlight": {
+        "description": "テキストのハイライトを適用または削除します。",
+        "tooltip": "ハイライトを切替"
+      },
+      "toggle-inline-math": {
+        "description": "インライン数式の書式を適用または削除します。",
+        "tooltip": "インライン数式を切替"
+      },
+      "toggle-italics": {
+        "description": "イタリック体の書式を適用または削除します。",
+        "tooltip": "イタリック体を切替"
+      },
+      "toggle-numbered-list": {
+        "description": "番号付きリストの書式を適用または削除します。",
+        "tooltip": "番号付きリストを切替"
+      },
+      "toggle-ui": {
+        "description": "Obsidianのステータスバー、ノートプロパティ、サイドバー、ビューヘッダーの表示/非表示を切り替えます。",
+        "tooltip": "UIを切替"
+      },
+      "toggle-status-bar": {
+        "description": "Obsidianのステータスバーの表示/非表示を切り替えます。",
+        "tooltip": "ステータスバーを切替"
+      },
+      "toggle-strikethrough": {
+        "description": "取り消し線の書式を適用または削除します。",
+        "tooltip": "取り消し線を切替"
+      },
+      "toggle-vim-mode": {
+        "description": "Vimモードのオン・オフを切り替えます。",
+        "tooltip": "Vimモードを切替"
+      },
+      "toggle-color-highlight": {
+        "description": "テキストのハイライトを適用または削除します。"
+      },
+      "undo": {
+        "description": "最後の操作を元に戻します。",
+        "tooltip": "元に戻す"
+      },
+      "unindent": {
+        "description": "現在の行のインデントを減らします。",
+        "tooltip": "インデントを減らす"
+      },
+      "vscode-open": {
+        "description": "現在のファイルをVS Codeで開きます。",
+        "tooltip": "VS Codeで開く"
+      }
+    }
+  }
+}
