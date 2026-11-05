@@ -18,9 +18,6 @@ function flagsBlock(commandId, flags, commonFlags, cliLang) {
         const flagVal = flags[flagKey] ?? commonFlags[flagKey];
         if (!flagVal || Array.isArray(flagVal)) continue;
         const value = (typeof flagVal.value === 'string' ? flagVal.value : flagVal.value?.en) ?? '';
-        // Flag descriptions live in the cli language file: per command for
-        // flags defined on the command, shared for common flags. Command
-        // ids are keyed with ':' replaced by '-', as in CliDefinition.
         const descKey = Object.prototype.hasOwnProperty.call(flags, flagKey)
             ? cliLang.command[commandId.replace(/:/g, '-')].flag[flagKey].description
             : cliLang.flag[flagKey].description;

@@ -34,9 +34,7 @@ interface CliCommandDef {
     flags: CliFlags | null; 
 }
 
-// Command ids contain ':', which i18next would read as its namespace
-// separator, so language keys use the id with ':' replaced by '-',
-// the same sanitizing the cli language files were generated with.
+// language keys use command IDs with ':' replaced by '-'
 const commandIdKey = (id: string) => id.replace(/:/g, '-');
 
 /**
@@ -93,10 +91,6 @@ export default class CliDefinition {
                         if (!flagDef || Array.isArray(flagDef)) return null; 
                         const value = flagDef.value ?? '';
                         const flagStr = value ? `${flag}=${value}` : flag;
-                        // Flag descriptions are keyed per command for flags
-                        // defined on the command, and shared for common flags.
-                        // A flag name is only a key of `flags` when the command
-                        // defines it itself; shared names arrive via $before/$after.
                         const description = flag in flags
                             ? t(`cli.command.${commandIdKey(id)}.flag.${flag}.description`)
                             : t(`cli.flag.${flag}.description`);
@@ -143,12 +137,6 @@ export default class CliDefinition {
                 key,
                 {
                     ...flag,
-                    // The winning entry is the object that survived the spread
-                    // above, so identity says which description key applies:
-                    // the command's own flag object means the per-command key,
-                    // a shared flag object means the common flag key. A name
-                    // check alone would be wrong here: note-toolbar:copy
-                    // defines its own `item` flag and also lists it in $before.
                     description: orderedFlags[key] === resolvedOwn[key]
                         ? t(`cli.command.${san}.flag.${key}.description`)
                         : t(`cli.flag.${key}.description`),

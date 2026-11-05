@@ -35,9 +35,7 @@ type DottedKeys<T> = {
 
 export type TranslationKey = DottedKeys<typeof en> | DottedKeys<typeof galleryEn> | DottedKeys<typeof cliEn> | `plugin.${string}` | `setting.whats-new.${string}` | `gallery.${string}` | `cli.${string}`;
 
-// Not every language file has a top-level `cli` object: de and ja have no
-// cli strings in their main file, all CLI strings live in src/I18n/cli/.
-// The merge therefore reads it optionally.
+// not every language file has a top-level `cli` object, so this reads it optionally
 const cliFor = (base: Record<string, unknown>, file: { cli: Record<string, unknown> }) => ({ ...((base.cli as Record<string, unknown> | undefined) ?? {}), ...file.cli });
 
 /* create a new i18next instance that will be garbage-collected once the plugin was unloaded */
