@@ -83,7 +83,7 @@ export default class CliHandlers {
             item.linkAttr.commandId = args.command;
             if (args.focus === 'true') item.linkAttr.focus = 'editor';
             if (args.target) {
-                if (!['split', 'tab'].contains(args.target)) return t('cli.error-invalid-target', { target: args.target });
+                if (!['split', 'tab'].includes(args.target)) return t('cli.error-invalid-target', { target: args.target });
                 item.linkAttr.target = args.target as 'split' | 'tab';
             }
         });
@@ -127,7 +127,7 @@ export default class CliHandlers {
             if (!file) return t('cli.error-file-or-path-required');
             item.link = file.path;
             if (args.target) {
-                if (!['modal', 'split', 'tab', 'window'].contains(args.target)) return t('cli.error-invalid-target', { target: args.target });
+                if (!['modal', 'split', 'tab', 'window'].includes(args.target)) return t('cli.error-invalid-target', { target: args.target });
                 item.linkAttr.target = args.target as PaneType | 'modal';
             }
         });
@@ -194,7 +194,7 @@ export default class CliHandlers {
         if (!pluginFunction) return this.cliDefinition.formatCommandList('note-toolbar:add-tp:');
         // check for file/path argument when required
         let file: TFile | null;
-        if (['appendTemplate', 'createFrom', 'parseTemplateFile'].contains(pluginFunction)) {
+        if (['appendTemplate', 'createFrom', 'parseTemplateFile'].includes(pluginFunction)) {
             if (!hasValue(args.file) && !hasValue(args.path)) {
                 return t('cli.error-file-or-path-required');
             }
@@ -217,7 +217,7 @@ export default class CliHandlers {
         return await this.addItemHelper(args, ItemType.Uri, (item) => {
             item.link = args.uri;
             if (args.target) {
-                if (!['modal', 'split', 'tab', 'window'].contains(args.target)) return t('cli.error-invalid-target', { target: args.target });
+                if (!['modal', 'split', 'tab', 'window'].includes(args.target)) return t('cli.error-invalid-target', { target: args.target });
                 item.linkAttr.target = args.target as PaneType | 'modal';
             }
         });
@@ -588,7 +588,7 @@ export default class CliHandlers {
         const itemError = populateItem(item);
         if (itemError) return itemError;
         // apply the label, icon, and tooltip
-        if (![ItemType.Break, ItemType.Group, ItemType.Separator, ItemType.Spreader].contains(itemType)) {
+        if (![ItemType.Break, ItemType.Group, ItemType.Separator, ItemType.Spreader].includes(itemType)) {
             const labelIconTooltipError = this.addItemArgs(item, args);
             if (labelIconTooltipError) return labelIconTooltipError;
         }

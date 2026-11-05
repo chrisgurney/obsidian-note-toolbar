@@ -162,7 +162,7 @@ export default class ItemListUi {
             // support up/down arrow keys
             this.ntb.registerDomEvent(
                 itemsSortableContainer, 'keydown', (keyEvent) => {
-                    if (!['ArrowUp', 'ArrowDown'].contains(keyEvent.key)) return;
+                    if (!['ArrowUp', 'ArrowDown'].includes(keyEvent.key)) return;
                     const currentFocussed = activeDocument.activeElement as HTMLElement;
                     if (currentFocussed) {
                         const itemSelector = currentFocussed.hasClass('sortable-handle') 

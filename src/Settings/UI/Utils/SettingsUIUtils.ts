@@ -650,7 +650,7 @@ export default class SettingsUIUtils {
 	 */
 	async openScriptPrompt(items: ToolbarItemSettings[]): Promise<boolean> {
 		const isScript = items.some(item =>
-			[ItemType.Dataview, ItemType.JavaScript, ItemType.JsEngine, ItemType.Templater].contains(item.linkAttr.type)
+			[ItemType.Dataview, ItemType.JavaScript, ItemType.JsEngine, ItemType.Templater].includes(item.linkAttr.type)
 		);
 
 		if (isScript && !this.ntb.settings.scriptingEnabled) {
@@ -815,7 +815,7 @@ export default class SettingsUIUtils {
 			itemDescEl.setText(item.description);
 
 			// show the plugin(s) supported, or the command ID used
-			if ([ItemType.Command, ItemType.Dataview, ItemType.JsEngine, ItemType.Plugin, ItemType.Templater].contains(item.linkAttr.type)) {
+			if ([ItemType.Command, ItemType.Dataview, ItemType.JsEngine, ItemType.Plugin, ItemType.Templater].includes(item.linkAttr.type)) {
 				const itemPluginText = this.getPluginNames(item);
 				if (itemPluginText) {
 					const pluginDescEl = el.createDiv();

@@ -375,7 +375,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 			// support up/down arrow keys
 			this.ntb.registerDomEvent(
 				toolbarListDiv, 'keydown', (keyEvent) => {
-					if (!['ArrowUp', 'ArrowDown'].contains(keyEvent.key)) return;
+					if (!['ArrowUp', 'ArrowDown'].includes(keyEvent.key)) return;
 					const currentFocussed = activeDocument.activeElement as HTMLElement;
 					if (currentFocussed) {
 						const buttonSelector = `.setting-item-control > button.${currentFocussed.className}`;

@@ -354,7 +354,7 @@ export default class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> 
             if (item?.inGallery) {
                 el.addClass('note-toolbar-gallery-item-suggestion');
             }
-            if ([this.NEW_ITEM, this.BROWSE_GALLERY_ITEM, this.BREAK_ITEM, this.SEPARATOR_ITEM, this.SPREADER_ITEM].contains(item)) {
+            if ([this.NEW_ITEM, this.BROWSE_GALLERY_ITEM, this.BREAK_ITEM, this.SEPARATOR_ITEM, this.SPREADER_ITEM].includes(item)) {
                 el.addClass('cm-em');
             }
             if (!this.hasResults && item === this.NEW_ITEM) {

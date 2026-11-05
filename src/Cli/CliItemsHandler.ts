@@ -347,7 +347,7 @@ export default class CliItemsHandler {
         return cols
             .map((c, i) => {
                 const padded = c.padEnd(widths[i]);
-                if (['toolbar', 'uuid'].contains(schema[i])) return color(padded, 'green'); 
+                if (['toolbar', 'uuid'].includes(schema[i])) return color(padded, 'green'); 
                 return padded;
             })
             .join('\t')
