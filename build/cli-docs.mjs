@@ -6,7 +6,7 @@
 import fs from 'fs';
 import path from 'path';
 
-function flagsBlock(flags, commonFlags) {
+function flagsBlock(commandId, flags, commonFlags, cliLang) {
     const ordered = [
         ...(flags.$before ?? []),
         ...Object.keys(flags).filter(k => !k.startsWith('$')),
@@ -18,7 +18,13 @@ function flagsBlock(flags, commonFlags) {
         const flagVal = flags[flagKey] ?? commonFlags[flagKey];
         if (!flagVal || Array.isArray(flagVal)) continue;
         const value = (typeof flagVal.value === 'string' ? flagVal.value : flagVal.value?.en) ?? '';
-        let desc  = (flagVal.description?.en ?? '') + (flagVal.required ? ' (required)' : '');
+        // Flag descriptions live in the cli language file: per command for
+        // flags defined on the command, shared for common flags. Command
+        // ids are keyed with ':' replaced by '-', as in CliDefinition.
+        const descKey = Object.prototype.hasOwnProperty.call(flags, flagKey)
+            ? cliLang.command[commandId.replace(/:/g, '-')].flag[flagKey].description
+            : cliLang.flag[flagKey].description;
+        let desc  = (descKey ?? '') + (flagVal.required ? ' (required)' : '');
         if (flagVal.available) desc += ` (${flagVal.available})`;
         rows.push([`${flagKey}${value ? `=${value}` : ''}`, desc]);
     }
@@ -34,14 +40,15 @@ function flagsBlock(flags, commonFlags) {
     return block;
 }
 
-export function cliDocs(cliJsonPath, outputFile) {
+export function cliDocs(cliJsonPath, cliLangPath, outputFile) {
     const cli = JSON.parse(fs.readFileSync(cliJsonPath, 'utf-8'));
+    const cliLang = JSON.parse(fs.readFileSync(cliLangPath, 'utf-8')).cli;
 
     let markdown = '';
 
     // display commands by category
     for (const [categoryId, category] of Object.entries(cli.categories ?? {})) {
-        markdown += `## ${category.heading}\n\n`;
+        markdown += `## ${cliLang.category[categoryId].heading}\n\n`;
         if (category.docs) markdown += `${category.docs}\n\n`;
         const commands = Object.entries(cli.commands).filter(([, c]) => c.category === categoryId);
         for (const [id, command] of commands) {
@@ -50,7 +57,7 @@ export function cliDocs(cliJsonPath, outputFile) {
             markdown += `### \`${id}\`\n\n`;
             if (command.available) markdown += `> Available in \`${command.available}\`\n\n`;
             if (command.docs) markdown += `${command.docs}\n\n`;
-            markdown += flagsBlock(command.flags ?? {}, cli.commonFlags ?? {});
+            markdown += flagsBlock(id, command.flags ?? {}, cli.commonFlags ?? {}, cliLang);
             if (command.examples) {
                 markdown += '#### Examples\n\n```sh\n';
                 markdown += `${command.examples}\n`;
@@ -64,7 +71,7 @@ export function cliDocs(cliJsonPath, outputFile) {
     for (const [id, command] of uncategorized) {
         markdown += `### \`${id}\`\n\n`;
         if (command.docs) markdown += `${command.docs}\n\n`;
-        markdown += flagsBlock(command.flags ?? {}, cli.commonFlags ?? {});
+        markdown += flagsBlock(id, command.flags ?? {}, cli.commonFlags ?? {}, cliLang);
     }
 
     //

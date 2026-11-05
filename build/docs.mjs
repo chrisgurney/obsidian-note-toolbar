@@ -127,10 +127,11 @@ async function buildDocs() {
     // never include each other, so inlining order between pages is free.
     const { stampPath, digest, typedocStale } = await runTypedocIfStale();
     if (typedocStale) fs.writeFileSync(stampPath, digest);
-    if (cliDocs(path.join(rootDir, 'src/Cli/cli.json'), path.join(rootDir, `${DOC_OUTPUT}/cli/cli.md`))) changed = true;
+    if (cliDocs(path.join(rootDir, 'src/Cli/cli.json'), path.join(rootDir, 'src/I18n/cli/en.json'), path.join(rootDir, `${DOC_OUTPUT}/cli/cli.md`))) changed = true;
     if (galleryDocs(
         path.join(rootDir, 'src/Gallery/gallery-items.json'),
         path.join(rootDir, 'src/Gallery/gallery.json'),
+        path.join(rootDir, 'src/I18n/gallery/en.json'),
         path.join(rootDir, `${DOC_OUTPUT}/gallery/items.md`),
     )) changed = true;
 
@@ -183,8 +184,10 @@ if (watchMode) {
         'docs/wiki',
         'src/Api',
         'src/Cli/cli.json',
+        'src/I18n/cli/en.json',
         'src/Gallery/gallery.json',
         'src/Gallery/gallery-items.json',
+        'src/I18n/gallery/en.json',
         'build/docs.mjs',
         'build/copy-skill-references.mjs',
     ], { cwd: rootDir });
