@@ -35,7 +35,7 @@ interface CliCommandDef {
 }
 
 // language keys use command IDs with ':' replaced by '-'
-const commandIdKey = (id: string) => id.replace(/:/g, '-');
+const cmdLangKey = (id: string) => id.replace(/:/g, '-');
 
 /**
  * Describes the CLI commands defined in `cli.json`, and provides helpers for formatting command lists and flag descriptions.
@@ -58,7 +58,7 @@ export default class CliDefinition {
         this.commands.push(...Object.entries(this.cliDef.commands)
             .map(([id, command]: [string, CliAction]) => ({
                 id,
-                description: t(`cli.command.${commandIdKey(id)}.description`),
+                description: t(`cli.command.${cmdLangKey(id)}.description`),
                 flags: command.flags ? this.toCliFlags(id, command.flags) : null,
             }))
         );
@@ -77,7 +77,7 @@ export default class CliDefinition {
             // filter out commands that just list commands, and by prefix if provided
             .filter(([id]) => id !== 'note-toolbar:add-tp' && (!prefix || id.startsWith(prefix)))
             .map(([id, cmd]: [string, CliAction]) => {
-                const cmdLine = color(id.padEnd(COL_WIDTH) + t(`cli.command.${commandIdKey(id)}.description`), 'green');
+                const cmdLine = color(id.padEnd(COL_WIDTH) + t(`cli.command.${cmdLangKey(id)}.description`), 'green');
                 if (!cmd.flags) return `${INDENT}${cmdLine}\n`;
                 const flags = cmd.flags;
                 const flagsOrdered = [
@@ -92,7 +92,7 @@ export default class CliDefinition {
                         const value = flagDef.value ?? '';
                         const flagStr = value ? `${flag}=${value}` : flag;
                         const description = flag in flags
-                            ? t(`cli.command.${commandIdKey(id)}.flag.${flag}.description`)
+                            ? t(`cli.command.${cmdLangKey(id)}.flag.${flag}.description`)
                             : t(`cli.flag.${flag}.description`);
                         return `${INDENT}${INDENT}${color(flagStr, 'black')}` 
                             + ' '.repeat(Math.max(0, COL_WIDTH - 2 - flagStr.length)) 
@@ -131,7 +131,7 @@ export default class CliDefinition {
             ...resolveShared($after),
         };
 
-        const san = commandIdKey(id);
+        const san = cmdLangKey(id);
         return Object.fromEntries(
             Object.entries(orderedFlags).map(([key, flag]) => [
                 key,
