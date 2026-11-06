@@ -2,6 +2,7 @@ import * as Obsidian from "obsidian";
 import { App, Modal, Modifier, TAbstractFile, TFile } from "obsidian";
 import { IItem } from "./IItem";
 import { IToolbar } from "./IToolbar";
+import type { NtbSidebarView } from "./NtbSidebarView";
 
 /**
  * @privateRemarks
@@ -438,6 +439,40 @@ export default interface INoteToolbarApi<T> {
      *   append: '', viewIcon: 'calendar', viewTitle: 'Dates', navigation: ['clear', 'export', 'close']
      * });
      * 
+     * @example
+     * // add a custom copy button to a sidebar that collects selected text
+     * const editor = app.workspace.activeLeaf.view?.editor;
+     * const selection = editor.getSelection();
+     * ntb.sidebar(selection, {
+     *   id: 'multi-copy', append: '', viewIcon: 'copy', viewTitle: 'Multiple Copy',
+     *   navigation: ['clear',
+     *     {
+     *       icon: 'copy', tooltip: 'Copy',
+     *       onClick: async ({ content }) => {
+     *         const text = typeof content === 'string' ? content : content.path;
+     *         await navigator.clipboard.writeText(text);
+     *         new Notice(ntb.t('api.msg.clipboard-copied'));
+     *       }
+     *     },
+     *     'export', 'close']
+     * });
+     * 
+     * @example
+     * // add a custom button that closes both the sidebar view and the sidebar itself
+     * const editor = app.workspace.activeLeaf.view?.editor;
+     * const selection = editor.getSelection();
+     * ntb.sidebar(selection, {
+     *   id: 'multi-copy', viewIcon: 'copy', viewTitle: 'Multiple Copy',
+     *   navigation: ['clear', 'export', 'close',
+     *     {
+     *       icon: 'panel-right-close', tooltip: 'Close sidebar',
+     *       onClick: ({ view }) => {
+     *         view.leaf.detach();
+     *         app.workspace.rightSplit?.collapse();
+     *       }
+     *     }]
+     * });
+     * 
      * @since 1.35
      * @group UI Components
      */
@@ -687,6 +722,60 @@ export interface NtbPromptOptions {
 }
 
 /**
+ * Context passed to a custom sidebar navigation button's `onClick` handler.
+ *
+ * @inline
+ * @hidden
+ */
+export interface NtbSidebarButtonContext {
+    /**
+     * Current sidebar content: the text shown in the sidebar, or the file shown.
+     * Read this inside the handler, so a copy button copies what is in the sidebar
+     * now, including text added with `append`, not what was passed when the script first ran.
+     */
+    content: string | TFile;
+    /**
+     * The sidebar view the button belongs to. Use `view.leaf.detach()` to close it.
+     */
+    view: NtbSidebarView;
+}
+
+/**
+ * Callback run when a custom sidebar navigation button is clicked.
+ *
+ * @inline
+ * @hidden
+ */
+export type NtbSidebarCustomButtonCallback = (context: NtbSidebarButtonContext) => void | Promise<void>;
+
+/**
+ * A custom navigation button for a sidebar opened with `ntb.sidebar()`.
+ * Place it anywhere in the `navigation` array; buttons are shown in array order.
+ *
+ * Custom buttons are session only: their `onClick` callback is kept in memory, not
+ * saved with the sidebar, so it works until Obsidian is shut down or restarted, or
+ * the plugin is reloaded. Re-run the `ntb.sidebar()` call to register the button again.
+ * Set `id` on the sidebar, so the button can be found again reliably.
+ *
+ * @inline
+ * @hidden
+ */
+export interface NtbSidebarCustomButton {
+    /**
+     * Icon name to show on the button.
+     */
+    icon: string;
+    /**
+     * Text shown as the button tooltip when hovered.
+     */
+    tooltip: string;
+    /**
+     * Called when the button is clicked.
+     */
+    onClick: NtbSidebarCustomButtonCallback;
+}
+
+/**
  * @inline
  * @hidden
  */
@@ -708,13 +797,20 @@ export interface NtbSidebarOptions {
     class?: string;
     /**
      * Uniquely identify the sidebar view for reuse. When set, only a sidebar with the same ID is reused.
+     * Effectively required when `navigation` has custom buttons, so their callbacks can be found again.
      */
     id?: string;
     /**
-     * Navigation buttons to show in the sidebar. Can only be set once per sidebar. Defaults to adding no buttons.
+     * Navigation buttons to show in the sidebar, in the order they are shown.
+     * Use `'clear'`, `'close'`, or `'export'` for the built-in buttons, or a custom
+     * button object with an icon, tooltip, and `onClick` handler. Custom buttons are
+     * session only: they work until Obsidian is shut down or restarted, or the plugin
+     * is reloaded, and must be re-registered by re-running the `ntb.sidebar()` call.
+     * Set `id`, so a custom button can be found again reliably. Can only be set once per sidebar.
+     * Defaults to adding no buttons.
      * @since 1.36
      */
-    navigation?: ('clear' | 'close' | 'export')[];
+    navigation?: ('clear' | 'close' | 'export' | NtbSidebarCustomButton)[];
     /**
      * Reuse an existing sidebar view instead of creating a new one. Ignored when `id` is set. Defaults to `true`.
      */

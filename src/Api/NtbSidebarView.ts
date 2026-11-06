@@ -1,13 +1,21 @@
 import NoteToolbarPlugin from "main";
 import { ItemView, MarkdownRenderer, normalizePath, Notice, setIcon, TFile, ViewStateResult, WorkspaceLeaf } from "obsidian";
 import { t } from "Settings/NoteToolbarSettings";
-import { NtbSidebarOptions } from "./INoteToolbarApi";
+import { NtbSidebarCustomButtonCallback, NtbSidebarOptions } from "./INoteToolbarApi";
+
+/**
+ * Serializable form of a sidebar navigation entry, as stored in view state.
+ * Built-in buttons are stored by name. Custom buttons store only their icon and
+ * tooltip; their `onClick` callback cannot be stored here and lives in the API
+ * registry for the current session instead.
+ */
+export type NtbSidebarNavigation = 'clear' | 'close' | 'export' | { icon: string; tooltip: string };
 
 export interface NtbSidebarViewState {
     content: string | TFile;
     class: string;
     id: string;
-    navigation: ('clear' | 'close' | 'export')[];
+    navigation: NtbSidebarNavigation[];
     viewIcon: string;
     viewTitle: string;
 }
@@ -28,7 +36,11 @@ export class NtbSidebarView extends ItemView {
     constructor(
         private ntb: NoteToolbarPlugin, 
         leaf: WorkspaceLeaf, 
-        options?: NtbSidebarOptions) 
+        options?: NtbSidebarOptions,
+        private customButtons?: {
+            get: (id: string, index: number) => NtbSidebarCustomButtonCallback | undefined;
+            remove: (id: string) => void;
+        }) 
     {
         super(leaf);
     }
@@ -147,17 +159,39 @@ export class NtbSidebarView extends ItemView {
             this.ntb.registerDomEvent(button, 'click', callback);
         };
 
+        // position of the next custom button among the custom buttons only,
+        // used to look up its callback in the registry
+        let customIndex = 0;
+
         for (const option of this.state.navigation) {
-            switch (option) {
-                case 'clear':
-                    addNavButton('eraser', t('api.ui.sidebar-clear'), () => this.clear());
-                    break;
-                case 'close':
-                    addNavButton('x', t('api.ui.sidebar-close'), () => this.leaf.detach());
-                    break;
-                case 'export':
-                    addNavButton('file-down', t('api.ui.sidebar-export'), async () => await this.exportContents());
-                    break;
+            if (typeof option === 'string') {
+                switch (option) {
+                    case 'clear':
+                        addNavButton('eraser', t('api.ui.sidebar-clear'), () => this.clear());
+                        break;
+                    case 'close':
+                        addNavButton('x', t('api.ui.sidebar-close'), () => this.leaf.detach());
+                        break;
+                    case 'export':
+                        addNavButton('file-down', t('api.ui.sidebar-export'), async () => await this.exportContents());
+                        break;
+                }
+            } else {
+                // custom button: omit it when its callback is not registered, for
+                // example when the view was restored after a restart and no script
+                // has re-run the ntb.sidebar() call yet
+                const callback = this.customButtons?.get(this.state.id, customIndex);
+                customIndex++;
+                if (!callback) continue;
+
+                const { icon, tooltip } = option;
+                addNavButton(icon, tooltip, async () => {
+                    try {
+                        await callback({ content: this.state.content, view: this });
+                    } catch (error) {
+                        console.error('Note Toolbar: sidebar button failed.', error);
+                    }
+                });
             }
         }
 
@@ -173,7 +207,14 @@ export class NtbSidebarView extends ItemView {
 
     async onOpen(): Promise<void> {}
 
-    async onClose(): Promise<void> {}
+    onClose(): Promise<void> {
+        // drop this sidebar's custom button callbacks, so they do not keep the
+        // variables they close over in memory after the sidebar is closed
+        if (this.state?.id) {
+            this.customButtons?.remove(this.state.id);
+        }
+        return Promise.resolve();
+    }
 
     /*************************************************************************
      * HELPERS
