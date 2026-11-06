@@ -12,7 +12,7 @@
         "attach-file",
         "toggle-heading",
         "toggle-bold",
-        "toggle-italic",
+        "toggle-italics",
         "toggle-strikethrough",
         "toggle-highlight",
         "toggle-color-highlight",
