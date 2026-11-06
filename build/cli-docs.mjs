@@ -18,6 +18,7 @@ function flagsBlock(commandId, flags, commonFlags, cliLang) {
         const flagVal = flags[flagKey] ?? commonFlags[flagKey];
         if (!flagVal || Array.isArray(flagVal)) continue;
         const value = (typeof flagVal.value === 'string' ? flagVal.value : flagVal.value?.en) ?? '';
+        // to use command IDs as lang keys we need to replace ':' with '-'
         const descKey = Object.prototype.hasOwnProperty.call(flags, flagKey)
             ? cliLang.command[commandId.replace(/:/g, '-')].flag[flagKey].description
             : cliLang.flag[flagKey].description;
