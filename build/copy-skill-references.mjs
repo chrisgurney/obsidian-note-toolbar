@@ -60,6 +60,10 @@ const REFERENCES = [
         src: 'src/Gallery/gallery-items.json',
         dest: 'skills/note-toolbar-gallery/references/gallery-items.json',
     },
+    {
+        src: 'src/I18n/gallery/en.json',
+        dest: 'skills/note-toolbar-gallery/references/gallery-en.json',
+    },
 ];
 
 const generatedNote = (src) =>

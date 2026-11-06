@@ -1,0 +1,646 @@
+{
+  "gallery": {
+    "bannerTitle": "Галерея Note Toolbar",
+    "overview": "Перегляньте приклади елементів, та натисніть щоб додати їх до панелі.",
+    "pluginNote": "Деякі елементи потребують наявність додатків для більш функціональної обробки. ",
+    "category": {
+      "editor-tools": {
+        "name": "Інструменти редактора",
+        "description": "Вбудована панель інструментів редактора Obsidian."
+      },
+      "clipboard": {
+        "name": "Буфер обміну",
+        "description": "Елементи, які використовують для буфера обміну. Дізнайтеся, як додати їх до Obsidian, на сторінці [Додаткові елементи галереї](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Additional-Gallery-items)."
+      },
+      "daily-notes": {
+        "name": "Щоденні нотатки",
+        "description": "Швидко переміщуйтесь між щоденними нотатками. Потрібен вбудований додаток _Щоденні нотатки_."
+      },
+      "editing": {
+        "name": "Редактор",
+        "description": "Працюйте швидше з текстовим редактором."
+      },
+      "editor-navigation": {
+        "name": "Навігація редактора",
+        "description": "Швидше працюйте з текстовим редактором."
+      },
+      "files": {
+        "name": "Файли",
+        "description": "Інструменти роботи з файлами."
+      },
+      "focus": {
+        "name": "Зусередження",
+        "description": "Виключить зайвий інтерфейс Obsidian і зосередьтеся на своїх нотатках."
+      },
+      "folding": {
+        "name": "Згортання",
+        "description": "Згортайте та розгортайте розділи нотатки для зручнішої навігації."
+      },
+      "formatting": {
+        "name": "Форматування",
+        "description": "Змініть вигляд тексту."
+      },
+      "lists-indentation": {
+        "name": "Списки та відступи",
+        "description": "Упорядкуйте елементи у списки та налаштуйте структуру."
+      },
+      "insertions": {
+        "name": "Вставки",
+        "description": "Додайте різні типи вмісту, такі як посилання, або медіа."
+      },
+      "mobile-navigation": {
+        "name": "Мобільна навігація",
+        "description": "Корисно для навігації по програмі та редактору на мобільному пристрої."
+      },
+      "new-tab-view": {
+        "name": "Вигляд Нової вкладки"
+      },
+      "note-toolbar": {
+        "description": "Отримайте швидкий доступ до налаштувань та інструментів Note Toolbar."
+      },
+      "obsidian-support": {
+        "name": "Підтримка Obsidian",
+        "description": "Отримайте допомогу від спільноти Obsidian."
+      },
+      "search": {
+        "name": "Пошук",
+        "description": "Шукайте в нотатках і по всьому сховищу."
+      },
+      "vault-files": {
+        "name": "Файли сховища",
+        "description": "Елементи, які потребують доступу до сховища файлів. Дізнайтеся, як додати їх до Obsidian, на сторінці [Додаткові елементи галереї](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Additional-Gallery-items)."
+      },
+      "vault-navigation": {
+        "name": "Навігація по сховищу",
+        "description": "Переміщуйтесь між файлами та каталогами."
+      },
+      "views-themes": {
+        "name": "Теми та режими перегляду",
+        "description": "Перемикайте теми та режими перегляду."
+      },
+      "workspaces": {
+        "name": "Простори",
+        "description": "Перемикання між робочими просторами. Потрібен вбудований додаток _Простори_."
+      },
+      "periodic-notes": {
+        "description": "Перехід до щотижневих, щомісячних та річних нотаток. Потрібен додаток [Periodic Notes](obsidian://show-plugin?id=periodic-notes)."
+      },
+      "templater": {
+        "description": "Вставляйте, або створюйте нотатки з шаблонів. Потрібен додаток [Templater](obsidian://show-plugin?id=templater-obsidian) plugin. See the user guide for even [more ways to use Templater](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater)."
+      },
+      "plugins": {
+        "name": "Додатки",
+        "description": "Робіть більше з додатками Obsidian."
+      }
+    },
+    "item": {
+      "add-cursor-above": {
+        "description": "Додати ще один курсор над поточним курсором.",
+        "tooltip": "Додати курсор вище"
+      },
+      "add-cursor-below": {
+        "description": "Додати ще один курсор під поточним курсором.",
+        "tooltip": "Додати курсор нижче"
+      },
+      "attach-file": {
+        "description": "Виберіть файл для вставки.",
+        "tooltip": "Вкладення"
+      },
+      "bookmarks-open": {
+        "description": "Відкрийте бічну панель закладок.",
+        "tooltip": "Показати закладки"
+      },
+      "canvas-new": {
+        "description": "Створіть новий файл полотна.",
+        "tooltip": "Нове полотно"
+      },
+      "clear-formatting": {
+        "description": "Видаліть все форматування тексту.",
+        "tooltip": "Скинути форматування"
+      },
+      "copy": {
+        "description": "Копіює вибраний текст у буфер обміну.",
+        "tooltip": "Копіювати"
+      },
+      "copy-block-link": {
+        "description": "Копіює посилання на поточний блок до буфера обміну.",
+        "tooltip": "Посилання на блок"
+      },
+      "copy-note-content": {
+        "description": "Копіюйте вміст поточної нотатки до буфера обміну, ігноруючи властивості.",
+        "tooltip": "Скопіювати вміст нотатки"
+      },
+      "copy-obsidian-url": {
+        "description": "Копіюйте Obsidian URL поточної нотатки в буфер обміну.",
+        "tooltip": "Скопіювати Obsidian URL"
+      },
+      "cut": {
+        "description": "Вирізає вибраний текст у буфер обміну.",
+        "tooltip": "Вирізати"
+      },
+      "cycle-list-checklist": {
+        "description": "Змінює на маркер, прапорець, або знімає позначку.",
+        "tooltip": "Список/прапорець"
+      },
+      "cycle-themes": {
+        "description": "Циклічно перемикає теми, включаючи тему за замовчуванням.",
+        "tooltip": "Перемкнути тему"
+      },
+      "cycle-workspace": {
+        "description": "Циклічно перемикає простори.",
+        "tooltip": "Перемкнути простір"
+      },
+      "daily-notes-prev": {
+        "description": "Перейти до попередньої щоденної нотатки.",
+        "tooltip": "Попередня щоденна нотатка"
+      },
+      "daily-notes-today": {
+        "description": "Перейти до сьогоднішньої щоденної нотатки.",
+        "tooltip": "Сьогоднішня щоденна нотатка"
+      },
+      "daily-notes-next": {
+        "description": "Перейти до наступної щоденної нотатки.",
+        "tooltip": "Наступна щоденна нотатка"
+      },
+      "delete-paragraph": {
+        "description": "Видалити поточний абзац.",
+        "tooltip": "Видалити абзац"
+      },
+      "editor-toggle-preview": {
+        "description": "Перемикайте до режиму Читання.",
+        "tooltip": "Режим читання"
+      },
+      "editor-toggle-source": {
+        "description": "Перемикайте до Джерельного відодображення.",
+        "tooltip": "Джерельний режим"
+      },
+      "file-append": {
+        "description": "Додайте текст через запит до вказаного файлу.",
+        "tooltip": "Додати текст"
+      },
+      "file-in-explorer": {
+        "description": "Показати поточний файл у проводнику.",
+        "tooltip": "Відкрити у проводнику"
+      },
+      "file-in-system": {
+        "description": "Відкрийте поточний файл у файловому менеджері.",
+        "tooltip": "Показати у файловому менеджері"
+      },
+      "file-move": {
+        "description": "Перемістіть файл до вказаної теки.",
+        "tooltip": "Перемістити файл у..."
+      },
+      "file-new": {
+        "description": "Створіть нову нотатку.",
+        "tooltip": "Нова нотатка"
+      },
+      "file-new-tab": {
+        "description": "Відкрийте обраний файл в новій вкладці.",
+        "tooltip": "Відкрити в новій вкладці"
+      },
+      "file-next": {
+        "description": "Відкрийте наступний файл у теці згідно сортировки за алфавітом (А–Я). Повертається до першого файлу.",
+        "tooltip": "Наступний файл"
+      },
+      "file-prev": {
+        "description": "Відкрийте попередній файл у теці згідно сортировки за алфавітом (А–Я). Повертається до останнього файлу.",
+        "tooltip": "Попередній файл"
+      },
+      "file-switcher-open": {
+        "description": "Відкрити перемикач файлів.",
+        "tooltip": "Перемикач файлів"
+      },
+      "folder-search": {
+        "description": "Відкрийте пошук у поточній теці, або серед усіх файлів у її корені.",
+        "tooltip": "Пошук теки"
+      },
+      "global-search-open": {
+        "description": "Відкрийте бічну панель пошуку.",
+        "tooltip": "Пошук у всіх файлах"
+      },
+      "go-back": {
+        "description": "Перехід назад.",
+        "tooltip": "Навігація назад"
+      },
+      "go-bottom": {
+        "description": "Перемістіть курсор у кінець поточної нотатки.",
+        "tooltip": "Перейти до кінця"
+      },
+      "go-forward": {
+        "description": "Перехід вперед.",
+        "tooltip": "Навігація вперед"
+      },
+      "go-home": {
+        "description": "Перейдіть до вашої домашньої нотатки (вкажіть домашню нотатку в URL-адресі).",
+        "tooltip": "Додому"
+      },
+      "go-top": {
+        "description": "Перемістіть курсор на початок поточної нотатки.",
+        "tooltip": "Перейти на початок"
+      },
+      "go-up": {
+        "description": "Перейдіть на рівень вище (використовується властивість нотатки \"up\").",
+        "tooltip": "Вгору"
+      },
+      "go-next-callout": {
+        "description": "Перемістіть курсор до наступної виноски в нотатці.",
+        "tooltip": "Наступна виноска"
+      },
+      "go-next-heading": {
+        "description": "Перемістіть курсор до наступного заголовка в нотатці.",
+        "tooltip": "Наступний заголовок"
+      },
+      "go-prev-heading": {
+        "description": "Перемістіть курсор до попереднього заголовка в нотатці.",
+        "tooltip": "Попередній заголовок"
+      },
+      "indent": {
+        "description": "Збільшує відступ на поточному рядку.",
+        "tooltip": "Відступ"
+      },
+      "insert-callout": {
+        "description": "Додайте блок виноски.",
+        "tooltip": "Виноска"
+      },
+      "insert-codeblock": {
+        "description": "Додайте блок коду.",
+        "tooltip": "Блок коду"
+      },
+      "insert-footnote": {
+        "description": "Вставити виноску.",
+        "tooltip": "Вставити виноску"
+      },
+      "insert-embed": {
+        "description": "Додайте вбудований файл, або нотатку.",
+        "tooltip": "Вбудування"
+      },
+      "paste-external-embed": {
+        "description": "Вставляє вбудоване зовнішнє посилання.",
+        "tooltip": "Вставити зовнішню вбудовану частину"
+      },
+      "insert-horizontal-rule": {
+        "description": "Додайте горизонтальну лінію для розділення секцій.",
+        "tooltip": "Горизонтальна лінія"
+      },
+      "insert-link": {
+        "description": "Додайте посилання Markdown.",
+        "tooltip": "Посилання Markdown"
+      },
+      "insert-mathblock": {
+        "description": "Додайте блок формул.",
+        "tooltip": "Блок формул"
+      },
+      "insert-table": {
+        "description": "Додайте таблицю.",
+        "tooltip": "Таблиця"
+      },
+      "insert-tag": {
+        "description": "Додайте мітку до нотатки.",
+        "tooltip": "Нова мітка"
+      },
+      "insert-wikilink": {
+        "description": "Додайте внутрішнє посилання.",
+        "tooltip": "Внутрішнє посилання"
+      },
+      "load-workspace": {
+        "description": "Завантажуйте власний варіант компонування робочого простору.",
+        "tooltip": "Завантажити простір"
+      },
+      "move-caret-up": {
+        "description": "Перемістити каретку вгору.",
+        "tooltip": "Перемістити каретку вгору"
+      },
+      "move-caret-down": {
+        "description": "Перемістити каретку вниз.",
+        "tooltip": "Перемістити каретку вниз"
+      },
+      "move-caret-left": {
+        "description": "Перемістити каретку ліворуч.",
+        "tooltip": "Перемістити каретку ліворуч"
+      },
+      "move-caret-right": {
+        "description": "Перемістити каретку праворуч.",
+        "tooltip": "Перемістити каретку праворуч"
+      },
+      "new-note": {
+        "description": "Створіть нову нотатку.",
+        "tooltip": "Нова нотатка"
+      },
+      "note-toolbar-backup-data": {
+        "description": "Зберігайте до сховища резервну копію файлу налаштунків Note Toolbar (data.json).",
+        "tooltip": "Резервна копія Note Toolbar"
+      },
+      "note-toolbar-export": {
+        "description": "Записує файл експорту, що містить усі панелі інструментів як виноски.",
+        "tooltip": "Експортувати всі панелі інструментів як виноски"
+      },
+      "note-toolbar-quick-toolbars": {
+        "description": "Відкрийте вікно з доступом до всіх ваших панелей Note Toolbar.",
+        "tooltip": "Швидкі панелі"
+      },
+      "note-toolbar-quick-tools": {
+        "description": "Відкрийте вікно пошуку з доступом до всіх елементів Note Toolbar.",
+        "tooltip": "Швидкі інструменти"
+      },
+      "note-toolbar-tbar-settings": {
+        "description": "Відкрийте налаштування активної панелі Note Toolbar для персоналізації.",
+        "tooltip": "Налаштування панелі"
+      },
+      "note-toolbar-toggle-properties": {
+        "description": "Перемикайте видимість властивостей нотатки.",
+        "tooltip": "Перемкнути властивості"
+      },
+      "note-toolbar-user-guide": {
+        "description": "Відкрийте посібник користувача Note Toolbar для отримання допомоги та порад.",
+        "tooltip": "Довідка Note Toolbar"
+      },
+      "obsidian-excalidraw-create": {
+        "description": "Створіть новий малюнок Excalidraw.",
+        "tooltip": "Новий малюнок"
+      },
+      "obsidian-hotkeys": {
+        "description": "Відкриває налаштування гарячих клавіш Obsidian.",
+        "tooltip": "Гарячі клавіші Obsidian"
+      },
+      "obsidian-help-site": {
+        "description": "Відкрийте офіційний сайт довідки Obsidian.",
+        "tooltip": "Довідка Obsidian"
+      },
+      "obsidian-kanban-create": {
+        "description": "Створіть нову дошку Kanban.",
+        "tooltip": "Нова дошка"
+      },
+      "obsidian-markdown-reference": {
+        "description": "Відкрийте посібник з форматування Markdown Obsidian.",
+        "tooltip": "Довідка Markdown"
+      },
+      "obsidian-sync-version-history": {
+        "description": "Перегляньте історію версій поточного файлу.",
+        "tooltip": "Історія версій"
+      },
+      "obsidian-tasks-edit": {
+        "description": "Створіть нове завдання.",
+        "tooltip": "Нове завдання"
+      },
+      "paste": {
+        "description": "Вставте текст з буфера обміну.",
+        "tooltip": "Вставити"
+      },
+      "periodic-notes-daily-next": {
+        "description": "Наступна щоденна нотатка.",
+        "tooltip": "Наступна щоденна нотатка"
+      },
+      "periodic-notes-daily-prev": {
+        "description": "Перехід до попередньої щоденної нотатки. (Має бути в щоденній нотатці)",
+        "tooltip": "Попередня щоденна нотатка"
+      },
+      "periodic-notes-daily-open": {
+        "description": "Перехід до сьогоднішньої щоденної нотатки.",
+        "tooltip": "Сьогоднішня щоденна нотатка"
+      },
+      "periodic-notes-monthly-next": {
+        "description": "Відкрийте наступну місячну нотатку. (Потрібно бути у місячній нотатці).",
+        "tooltip": "Наступна місячна нотатка"
+      },
+      "periodic-notes-monthly-open": {
+        "description": "Відкрийте місячну нотатку.",
+        "tooltip": "Місячна нотатка"
+      },
+      "periodic-notes-monthly-prev": {
+        "description": "Відкрийте попередню місячну нотатку. (Потрібно бути у місячній нотатці).",
+        "tooltip": "Попередня місячна нотатка"
+      },
+      "periodic-notes-weekly-next": {
+        "description": "Відкрийте наступну щотижневу нотатку. (Потрібно бути у щотижневій нотатці).",
+        "tooltip": "Наступна щотижнева нотатка"
+      },
+      "periodic-notes-weekly-open": {
+        "description": "Відкрийте щотижневу нотатку.",
+        "tooltip": "Щотижнева нотатка"
+      },
+      "periodic-notes-weekly-prev": {
+        "description": "Відкрийте попередню щотижневу нотатку. (Потрібно бути у щотижневій нотатці).",
+        "tooltip": "Попередня щотижнева нотатка"
+      },
+      "periodic-notes-yearly-next": {
+        "description": "Відкрийте наступну річну нотатку. (Потрібно бути у річній нотатці).",
+        "tooltip": "Наступна річна нотатка"
+      },
+      "periodic-notes-yearly-open": {
+        "description": "Відкрийте річну нотатку.",
+        "tooltip": "Річна нотатка"
+      },
+      "periodic-notes-yearly-prev": {
+        "description": "Відкрийте попередню річну нотатку. (Потрібно бути у річній нотатці).",
+        "tooltip": "Попередня річна нотатка"
+      },
+      "pin": {
+        "description": "Закріплює, або відкріплює поточну нотатку, запобігаючи її заміні при відкритті нових нотаток.",
+        "tooltip": "Закріпити"
+      },
+      "search-replace-open": {
+        "description": "Пошук та заміна у поточній нотатці.",
+        "tooltip": "Пошук і заміна"
+      },
+      "search-selection": {
+        "description": "Пошук вибраного тексту у сховищі.",
+        "tooltip": "Пошук виділеного фрагмента"
+      },
+      "set-heading-1": {
+        "description": "Перетворити на Заголовок 1",
+        "tooltip": "Заголовок 1"
+      },
+      "set-heading-2": {
+        "description": "Перетворити на Заголовок 2",
+        "tooltip": "Заголовок 2"
+      },
+      "set-heading-3": {
+        "description": "Перетворити на Заголовок 3",
+        "tooltip": "Заголовок 3"
+      },
+      "set-heading-4": {
+        "description": "Перетворити на Заголовок 4",
+        "tooltip": "Заголовок 4"
+      },
+      "set-heading-5": {
+        "description": "Перетворити на Заголовок 5",
+        "tooltip": "Заголовок 5"
+      },
+      "set-heading-6": {
+        "description": "Перетворити на Заголовок 6",
+        "tooltip": "Заголовок 6"
+      },
+      "set-workspace": {
+        "description": "Увімкнути вказаний простір",
+        "tooltip": "Мій простір"
+      },
+      "settings-open": {
+        "description": "Відкрийте налаштування Obsidian.",
+        "tooltip": "Відкрийте налаштування"
+      },
+      "tab-close": {
+        "description": "Закрийте поточну вкладку.",
+        "tooltip": "Закрити вкладку"
+      },
+      "tab-new": {
+        "description": "Відкрийте нову вкладку.",
+        "tooltip": "Нова вкладка"
+      },
+      "tab-next": {
+        "description": "Перейдіть до наступної вкладки.",
+        "tooltip": "Наступна вкладка"
+      },
+      "tab-prev": {
+        "description": "Перейдіть до попередньої вкладки.",
+        "tooltip": "Попередня вкладка"
+      },
+      "tab-switcher-open": {
+        "description": "Відкрити мобільний перемикач вкладок.",
+        "tooltip": "Перемикач вкладок"
+      },
+      "templater-insert-template": {
+        "description": "Додайте вибраний шаблон.",
+        "tooltip": "Додати шаблон"
+      },
+      "templater-new-note-from-template": {
+        "description": "Створіть нову нотатку з шаблону.",
+        "tooltip": "Нова з шаблону"
+      },
+      "redo": {
+        "description": "Повторіть останню скасовану дію.",
+        "tooltip": "Повторити"
+      },
+      "remove-heading": {
+        "description": "Видалити заголовок з поточного рядка.",
+        "tooltip": "Видалити заголовок"
+      },
+      "swap-line-down": {
+        "description": "Перемістіть поточний рядок вниз.",
+        "tooltip": "Рядок вниз"
+      },
+      "swap-line-up": {
+        "description": "Перемістіть поточний рядок вгору.",
+        "tooltip": "Рядок вгору"
+      },
+      "system-snippets-open": {
+        "description": "Відкрийте теку сніпетів (користувацьких CSS) у провіднику.",
+        "tooltip": "Тека CSS сніпетів"
+      },
+      "system-vault-open": {
+        "description": "Відкрийте теку сховища у провіднику.",
+        "tooltip": "Тека сховища"
+      },
+      "theme-switch": {
+        "description": "Відкрийте перемикач тем Obsidian.",
+        "tooltip": "Перемкнути тему"
+      },
+      "theme-toggle-light-dark": {
+        "description": "Перемикайте між світлим і темним режимами.",
+        "tooltip": "Світла/темна тема"
+      },
+      "toggle-blockquote": {
+        "description": "Перемикайте форматування цитати.",
+        "tooltip": "Цитата"
+      },
+      "toggle-bold": {
+        "description": "Перемикайте жирне форматування.",
+        "tooltip": "Жирний"
+      },
+      "toggle-bullet-list": {
+        "description": "Перемикайте форматування маркованого списку.",
+        "tooltip": "Маркований список"
+      },
+      "toggle-checklist-status": {
+        "description": "Перемикайте стан елементів списку завдань.",
+        "tooltip": "Стан прапорця"
+      },
+      "toggle-code": {
+        "description": "Перемикайте форматування вбудованого коду.",
+        "tooltip": "Код"
+      },
+      "toggle-comments": {
+        "description": "Додайте, або видаліть коментарі.",
+        "tooltip": "Коментар"
+      },
+      "toggle-css-class": {
+        "description": "Додайте, або видаліть вказаний клас CSS у властивості cssclasses.",
+        "tooltip": "CSS клас"
+      },
+      "toggle-fold": {
+        "description": "Перемкнути згортання на поточному рядку.",
+        "tooltip": "Перемкнути/закрити згортати"
+      },
+      "fold-all": {
+        "description": "Згорнути всі заголовки та списки.",
+        "tooltip": "Згорнути все"
+      },
+      "fold-less": {
+        "description": "Згорнути на один рівень менше.",
+        "tooltip": "Згорнути менше"
+      },
+      "fold-more": {
+        "description": "Розгорнути на один рівень більше.",
+        "tooltip": "Згорнути більше"
+      },
+      "unfold-all": {
+        "description": "Розгорнути всі заголовки та списки.",
+        "tooltip": "Розгорнути все"
+      },
+      "toggle-highlight": {
+        "description": "Перемикайте виділення тексту.",
+        "tooltip": "Виділення"
+      },
+      "toggle-inline-math": {
+        "description": "Застосуйте, або скасуйте форматування вбудованих формул.",
+        "tooltip": "Показ формул"
+      },
+      "toggle-italics": {
+        "description": "Перемикайте курсивне форматування.",
+        "tooltip": "Курсив"
+      },
+      "toggle-numbered-list": {
+        "description": "Перемикайте форматування нумерованого списку.",
+        "tooltip": "Нумерований список"
+      },
+      "toggle-keyboard": {
+        "description": "Перемикає клавіатуру.",
+        "tooltip": "Перемкнути/закрити клавіатуру"
+      },
+      "toggle-heading": {
+        "description": "Перемикає рівень заголовка на поточному рядку.",
+        "tooltip": "Перемкнути/закрити заголовок"
+      },
+      "toggle-ui": {
+        "description": "Показує, або ховає рядок стану, властивості нотатки, бічну панель та заголовок перегляду.",
+        "tooltip": "Перемкнути інтерфейс"
+      },
+      "toggle-status-bar": {
+        "description": "Показує, або ховає рядок стану Obsidian.",
+        "tooltip": "Перемкнути рядок стану"
+      },
+      "toggle-strikethrough": {
+        "description": "Перемикайте форматування закреслення.",
+        "tooltip": "Закреслення"
+      },
+      "toggle-vim-mode": {
+        "description": "Перемикає режим Vim.",
+        "tooltip": "Режим Vim"
+      },
+      "toggle-color-highlight": {
+        "description": "Перемикайте виділення тексту."
+      },
+      "undo": {
+        "description": "Скасуйте останню дію.",
+        "tooltip": "Скасувати"
+      },
+      "unindent": {
+        "description": "Зменшує відступ на поточному рядку.",
+        "tooltip": "Зменшити відступ"
+      },
+      "vscode-open": {
+        "description": "Відкрийте поточний файл у VS Code.",
+        "tooltip": "Відкрити у VS Code"
+      }
+    }
+  }
+}

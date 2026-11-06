@@ -11,14 +11,12 @@ export type GalleryItemSettings = {
     id: string;
     commandCheck?: boolean;
     commandId?: string;
-    description?: Record<string, string>;
     excludeOn?: string | string[];
     focus?: ItemFocusType;
     icon: string;
     plugin?: string | string[];
     script?: string;
     target?: PaneType | 'modal';
-    tooltip?: Record<string, string>;
     type: ItemType;
     uri?: string;
 }
@@ -198,7 +196,6 @@ export default class GalleryManager {
     private loadItems() {
         const loadStartTime = performance.now();
         
-        const language = (typeof i18next.language === 'string' && i18next.language.trim()) || 'en';
         const typedGalleryItems = galleryItems as GalleryItemSettings[];
 
         let debugLog = '';
@@ -236,9 +233,7 @@ export default class GalleryManager {
 
             this.items.push({
                 uuid: item.id ?? '',
-                description: item.description
-                    ? (item.description[language] || item.description['en'])
-                    : '',
+                description: item.id ? t(`gallery.item.${item.id}.description`) : '',
                 hasCommand: false,
                 icon: item.icon ?? '',
                 inGallery: true,
@@ -259,9 +254,7 @@ export default class GalleryManager {
                         pluginFunction: 'TBD'
                     }
                     : undefined,
-                tooltip: item.tooltip
-                    ? (item.tooltip[language] || item.tooltip['en'])
-                    : '',
+                tooltip: item.id ? t(`gallery.item.${item.id}.tooltip`) : '',
                 visibility: { ...DEFAULT_ITEM_VISIBILITY_SETTINGS }
             });
         }
