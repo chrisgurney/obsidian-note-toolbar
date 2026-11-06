@@ -94,9 +94,6 @@ export default class CliHandlers {
             if (!(hasValue(args.eval) || hasValue(args.query)) && !(hasValue(args.file) || hasValue(args.path))) {
                 return t('cli.error-dv-code-or-file-required');
             }
-            // if (hasValue(args.eval) && (hasValue(args.file) || hasValue(args.path))) {
-            //     return t('cli.error-dv-code-and-file-exclusive');
-            // }
             const fileResult = this.resolveFileArgs(args.file, args.path);
             if (typeof fileResult === 'string') return fileResult; // error resolving file or path
             const file: TFile | null = fileResult;
