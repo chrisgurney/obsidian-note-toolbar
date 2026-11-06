@@ -1,28 +1,22 @@
 import cliDefJson from "Cli/cli.json";
 import NoteToolbarPlugin from "main";
 import { CliFlags } from "obsidian";
-import { tr } from "Utils/Utils";
+import { t } from "Settings/NoteToolbarSettings";
 import { color } from "./CliUtils";
 
-
-interface CliLocalizedString {
-    [locale: string]: string;
-}
-
-interface CliLocalizedFlag {
-    description: CliLocalizedString;
-    value?: string | CliLocalizedString | null;
+interface CliFlag {
+    value?: string | null;
     required?: boolean;
+    available?: string;
 }
 
 interface CliActionFlags {
     $before?: string[];
     $after?: string[];
-    [key: string]: CliLocalizedFlag | string[] | undefined;
+    [key: string]: CliFlag | string[] | undefined;
 }
 
 interface CliAction {
-    description: CliLocalizedString;
     flags?: CliActionFlags;
     since?: string;
     docs?: string;
@@ -30,7 +24,7 @@ interface CliAction {
 }
 
 interface CliDef {
-    commonFlags: Record<string, CliLocalizedFlag>;
+    commonFlags: Record<string, CliFlag>;
     commands: Record<string, CliAction>;
 }
 
@@ -40,6 +34,9 @@ interface CliCommandDef {
     flags: CliFlags | null; 
 }
 
+// language keys use command IDs with ':' replaced by '-'
+const cmdLangKey = (id: string) => id.replace(/:/g, '-');
+
 /**
  * Describes the CLI commands defined in `cli.json`, and provides helpers for formatting command lists and flag descriptions.
  * The actual command handlers are defined in `CliHandlers`.
@@ -47,14 +44,12 @@ interface CliCommandDef {
 export default class CliDefinition {
 
     private cliDef: CliDef = cliDefJson;
-    private language: string;
 
     public commands: CliCommandDef[] = [];
 
     constructor(
         private ntb: NoteToolbarPlugin
     ) {
-        this.language = (typeof i18next.language === 'string' && i18next.language.trim()) || 'en';
     }
 
     public load(): void {
@@ -63,8 +58,8 @@ export default class CliDefinition {
         this.commands.push(...Object.entries(this.cliDef.commands)
             .map(([id, command]: [string, CliAction]) => ({
                 id,
-                description: tr(command.description, this.language) ?? '',
-                flags: command.flags ? this.toCliFlags(command.flags, this.language) : null,
+                description: t(`cli.command.${cmdLangKey(id)}.description`),
+                flags: command.flags ? this.toCliFlags(id, command.flags) : null,
             }))
         );
 
@@ -82,7 +77,7 @@ export default class CliDefinition {
             // filter out commands that just list commands, and by prefix if provided
             .filter(([id]) => id !== 'note-toolbar:add-tp' && (!prefix || id.startsWith(prefix)))
             .map(([id, cmd]: [string, CliAction]) => {
-                const cmdLine = color(id.padEnd(COL_WIDTH) + (tr(cmd.description, this.language) ?? ''), 'green');
+                const cmdLine = color(id.padEnd(COL_WIDTH) + t(`cli.command.${cmdLangKey(id)}.description`), 'green');
                 if (!cmd.flags) return `${INDENT}${cmdLine}\n`;
                 const flags = cmd.flags;
                 const flagsOrdered = [
@@ -92,13 +87,16 @@ export default class CliDefinition {
                 ];
                 const flagList = flagsOrdered
                     .map(flag => {
-                        const flagDef = (flags[flag] ?? commonFlags[flag]) as CliLocalizedFlag | undefined;
+                        const flagDef = (flags[flag] ?? commonFlags[flag]) as CliFlag | undefined;
                         if (!flagDef || Array.isArray(flagDef)) return null; 
-                        const value = flagDef.value ? (typeof flagDef.value === 'string' ? flagDef.value : tr(flagDef.value, this.language)) : '';
+                        const value = flagDef.value ?? '';
                         const flagStr = value ? `${flag}=${value}` : flag;
+                        const description = flag in flags
+                            ? t(`cli.command.${cmdLangKey(id)}.flag.${flag}.description`)
+                            : t(`cli.flag.${flag}.description`);
                         return `${INDENT}${INDENT}${color(flagStr, 'black')}` 
                             + ' '.repeat(Math.max(0, COL_WIDTH - 2 - flagStr.length)) 
-                            + color(`- ${tr(flagDef.description, this.language) ?? ''}`, 'green');
+                            + color(`- ${description}`, 'green');
                     })
                     .filter(line => line !== null)
                     .join('\n');
@@ -115,7 +113,7 @@ export default class CliDefinition {
     /**
      * Gets the localized description for the CLI command flags.
      */
-    private toCliFlags(flags: CliActionFlags, language: string): CliFlags {
+    private toCliFlags(id: string, flags: CliActionFlags): CliFlags {
 
         const resolveShared = (keys: string[]) =>
             keys.reduce((acc, key) => {
@@ -123,23 +121,26 @@ export default class CliDefinition {
                 if (!flag) this.ntb.error(`CliManager: Unknown shared flag: "${key}" when reading cli.json`);
                 else acc[key] = flag;
                 return acc;
-            }, {} as Record<string, CliLocalizedFlag>);
+            }, {} as Record<string, CliFlag>);
 
         const { $before = [], $after = [], ...ownFlags } = flags;
-        const resolvedOwn = ownFlags as Record<string, CliLocalizedFlag>;
-        const orderedFlags: Record<string, CliLocalizedFlag> = {
+        const resolvedOwn = ownFlags as Record<string, CliFlag>;
+        const orderedFlags: Record<string, CliFlag> = {
             ...resolveShared($before),
             ...resolvedOwn,
             ...resolveShared($after),
         };
 
+        const san = cmdLangKey(id);
         return Object.fromEntries(
             Object.entries(orderedFlags).map(([key, flag]) => [
                 key,
                 {
                     ...flag,
-                    description: tr(flag.description, language) ?? '',
-                    value: flag.value ? (typeof flag.value === 'string' ? flag.value : tr(flag.value, this.language)) ?? undefined : undefined,
+                    description: orderedFlags[key] === resolvedOwn[key]
+                        ? t(`cli.command.${san}.flag.${key}.description`)
+                        : t(`cli.flag.${key}.description`),
+                    value: flag.value ?? undefined,
                 }
             ])
         );

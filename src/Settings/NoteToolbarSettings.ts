@@ -14,6 +14,13 @@ import * as ja from 'I18n/ja.json';
 import * as uk from 'I18n/uk.json';
 import * as zh_CN from 'I18n/zh-CN.json';
 
+// CLI translations, merged into the same namespace below
+import * as cliDe from 'I18n/cli/de.json';
+import * as cliEn from 'I18n/cli/en.json';
+import * as cliJa from 'I18n/cli/ja.json';
+import * as cliUk from 'I18n/cli/uk.json';
+import * as cliZhCN from 'I18n/cli/zh-CN.json';
+
 // Gallery translations, merged into the same namespace below
 import * as galleryDe from 'I18n/gallery/de.json';
 import * as galleryEn from 'I18n/gallery/en.json';
@@ -26,18 +33,21 @@ type DottedKeys<T> = {
 	[K in keyof T & string]: T[K] extends Record<string, unknown> ? `${K}.${DottedKeys<T[K]>}` : K;
 }[keyof T & string];
 
-export type TranslationKey = DottedKeys<typeof en> | DottedKeys<typeof galleryEn> | `plugin.${string}` | `setting.whats-new.${string}` | `gallery.${string}`;
+export type TranslationKey = DottedKeys<typeof en> | DottedKeys<typeof galleryEn> | DottedKeys<typeof cliEn> | `plugin.${string}` | `setting.whats-new.${string}` | `gallery.${string}` | `cli.${string}`;
+
+// not every language file has a top-level `cli` object, so this reads it optionally
+const cliFor = (base: Record<string, unknown>, file: { cli: Record<string, unknown> }) => ({ ...((base.cli as Record<string, unknown> | undefined) ?? {}), ...file.cli });
 
 /* create a new i18next instance that will be garbage-collected once the plugin was unloaded */
 const Locales = i18next.createInstance({
 	lng: getLanguage(),
 	fallbackLng: 'en',
 	resources: {
-		de: { 'plugin-note-toolbar': { ...de, gallery: { ...de.gallery, ...galleryDe.gallery } } }, // German
-		en: { 'plugin-note-toolbar': { ...en, gallery: { ...en.gallery, ...galleryEn.gallery } } }, // English
-		ja: { 'plugin-note-toolbar': { ...ja, gallery: { ...ja.gallery, ...galleryJa.gallery } } }, // Japanese
-		uk: { 'plugin-note-toolbar': { ...uk, gallery: { ...uk.gallery, ...galleryUk.gallery } } }, // Ukrainian
-		zh: { 'plugin-note-toolbar': { ...zh_CN, gallery: { ...zh_CN.gallery, ...galleryZhCN.gallery } } } // Chinese Simplified
+		de: { 'plugin-note-toolbar': { ...de, gallery: { ...de.gallery, ...galleryDe.gallery }, cli: cliFor(de, cliDe) } }, // German
+		en: { 'plugin-note-toolbar': { ...en, gallery: { ...en.gallery, ...galleryEn.gallery }, cli: cliFor(en, cliEn) } }, // English
+		ja: { 'plugin-note-toolbar': { ...ja, gallery: { ...ja.gallery, ...galleryJa.gallery }, cli: cliFor(ja, cliJa) } }, // Japanese
+		uk: { 'plugin-note-toolbar': { ...uk, gallery: { ...uk.gallery, ...galleryUk.gallery }, cli: cliFor(uk, cliUk) } }, // Ukrainian
+		zh: { 'plugin-note-toolbar': { ...zh_CN, gallery: { ...zh_CN.gallery, ...galleryZhCN.gallery }, cli: cliFor(zh_CN, cliZhCN) } } // Chinese Simplified
 	}
 });
 

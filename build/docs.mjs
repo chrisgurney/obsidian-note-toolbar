@@ -123,11 +123,10 @@ async function buildDocs() {
 
     // wiki pages include their outputs (the API page includes TypeDoc 
     // output, CLI includes cli.md, Gallery includes items.md), 
-    // so all three must run before any page is inlined; pages
-    // never include each other, so inlining order between pages is free.
+    // so all three must run before any page is inlined
     const { stampPath, digest, typedocStale } = await runTypedocIfStale();
     if (typedocStale) fs.writeFileSync(stampPath, digest);
-    if (cliDocs(path.join(rootDir, 'src/Cli/cli.json'), path.join(rootDir, `${DOC_OUTPUT}/cli/cli.md`))) changed = true;
+    if (cliDocs(path.join(rootDir, 'src/Cli/cli.json'), path.join(rootDir, 'src/I18n/cli/en.json'), path.join(rootDir, `${DOC_OUTPUT}/cli/cli.md`))) changed = true;
     if (galleryDocs(
         path.join(rootDir, 'src/Gallery/gallery-items.json'),
         path.join(rootDir, 'src/Gallery/gallery.json'),
@@ -184,6 +183,7 @@ if (watchMode) {
         'docs/wiki',
         'src/Api',
         'src/Cli/cli.json',
+        'src/I18n/cli/en.json',
         'src/Gallery/gallery.json',
         'src/Gallery/gallery-items.json',
         'src/I18n/gallery/en.json',
