@@ -22,7 +22,8 @@ export default class ProtocolManager {
 		this.ntb.debug('protocolHandler', data);
 		// supports both commandid= and command= for backwards-compatability with Advanced URI
 		if (data.commandid || data.commandId || data.command) {
-			this.ntb.items.handleLinkCommand(decodeURIComponent(data.commandid || data.commandId || data.command));
+			const command = this.decodeUriParam('commandid', data.commandid || data.commandId || data.command);
+			if (command) this.ntb.items.handleLinkCommand(command);
 		}
 		else if (data.folder) {
 			this.ntb.items.handleLinkFolder(data.folder);
@@ -39,7 +40,8 @@ export default class ProtocolManager {
 			if (Platform.isPhone) this.ntb.app.workspace.leftSplit?.collapse();
 		}
         else if (data.import) {
-            const content = decodeURIComponent(data.import);
+            const content = this.decodeUriParam('import', data.import);
+            if (content === undefined) return;
 			// double-check provided text is a Note Toolbar Callout
 			await confirmImportWithModal(
 				this.ntb, 
@@ -133,6 +135,25 @@ export default class ProtocolManager {
 			, 10000).containerEl.addClass('mod-warning');
 		}
 	}
+
+    /**
+     * Decodes a URI parameter value, logging and notifying on malformed encoding
+     * instead of throwing (Obsidian has already decoded the URI once; a second
+     * decode of a malformed % sequence throws URIError).
+     * @param name parameter name, for the error message
+     * @param value raw parameter value
+     * @returns decoded value, or undefined when the encoding is malformed
+     */
+    private decodeUriParam(name: string, value: string): string | undefined {
+        try {
+            return decodeURIComponent(value);
+        }
+        catch (error) {
+            this.ntb.error(`Note Toolbar: Invalid URI parameter encoding for "${name}".`, error);
+            new Notice(t('notice.error-uri-params-not-supported', { params: name }), 10000).containerEl.addClass('mod-warning');
+            return undefined;
+        }
+    }
 
     /**
      * Returns a URI which can be shared with other users, that imports the provided Note Toolbar Callout markdown.
