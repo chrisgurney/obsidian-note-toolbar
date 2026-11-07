@@ -1382,9 +1382,8 @@ export default class ToolbarRenderer {
 	}
 
 	/**
-	 * Applies the configured phone navigation bar visibility, independent of
-	 * whether a toolbar is rendered. The top bar is always shown on the
-	 * plugin's own views (Help, Gallery, What's New), which need it to close.
+	 * Hides or shows the navigation bar based on settings. 
+	 * The top bar is always shown on the plugin views (Help, Gallery, What's New).
 	 */
 	updatePhoneNavbarVisibility(): void {
 
