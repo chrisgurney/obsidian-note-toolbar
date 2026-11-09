@@ -753,8 +753,10 @@ export function renderItemPreviewEl(
             break;
         case ItemType.Group: {
             const groupToolbar = ntb.settingsManager.getToolbar(toolbarItem.link);
-            if (isEditable) setTooltip(itemPreview, 
-                t('setting.items.option-edit-item-group-tooltip', { toolbar: groupToolbar ? groupToolbar.name : '', context: groupToolbar ? '' : 'none' }));
+            if (isEditable) setTooltip(itemPreview,
+                groupToolbar
+                    ? t('setting.items.option-edit-item-group-tooltip', { toolbar: groupToolbar.name })
+                    : t('setting.items.option-edit-item-group-tooltip_none'));
             itemPreviewContent.appendChild(groupToolbar ? ntb.settingsUtils.createToolbarPreviewFr(groupToolbar) : ntb.settingsUtils.emptyMessageFr(t('setting.item.option-item-group-error-invalid')));
             break;
         }

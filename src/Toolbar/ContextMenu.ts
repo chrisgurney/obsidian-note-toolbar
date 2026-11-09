@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { ItemView, Menu, MenuItem, Platform } from "obsidian";
-import { ItemType, PositionType, t, TranslationKey } from "Settings/NoteToolbarSettings";
+import { ItemType, PositionType, t } from "Settings/NoteToolbarSettings";
 import ItemModal from "Settings/UI/Modals/ItemModal";
 import RulesModal from "Settings/UI/Modals/RulesModal";
 import ShareModal from "Settings/UI/Modals/ShareModal";
@@ -182,13 +182,13 @@ export default class ContextMenu {
 			}
 
 			if (currentView?.getViewType() === 'empty') {
-				const EMPTY_VIEW_POSITIONS: { types: PositionType[], titleKey: TranslationKey, icon: string } = this.ntb.settings.showLaunchpad
-					? { types: [PositionType.Props, PositionType.Top], titleKey: 'setting.position.option-centered', icon: 'layout-grid' }
-					: { types: [PositionType.Top], titleKey: 'setting.position.option-top', icon: 'arrow-up-to-line' };
+				const EMPTY_VIEW_POSITIONS = this.ntb.settings.showLaunchpad
+					? { types: [PositionType.Props, PositionType.Top], title: t('setting.position.option-centered'), icon: 'layout-grid' }
+					: { types: [PositionType.Top], title: t('setting.position.option-top'), icon: 'arrow-up-to-line' };
 
 				if (currentPosition && !EMPTY_VIEW_POSITIONS.types.includes(currentPosition)) {
 					positionMenu.addItem((item: MenuItem) => {
-						item.setTitle(t(EMPTY_VIEW_POSITIONS.titleKey))
+						item.setTitle(EMPTY_VIEW_POSITIONS.title)
 							.setIcon(EMPTY_VIEW_POSITIONS.icon)
 							.onClick(async () => {
 								await this.ntb.settingsManager.updatePosition(toolbarSettings, EMPTY_VIEW_POSITIONS.types[0]);
@@ -198,17 +198,17 @@ export default class ContextMenu {
 				}
 			}
 			else if (currentView?.getViewType() === 'webviewer' && this.ntb.settings.webviewerToolbar) {
-				const WEB_VIEWER_POSITIONS: { types: PositionType[], titleKey: TranslationKey, icon: string }[] = [
-					{ types: [PositionType.TabBar], titleKey: 'setting.position.option-addressbar', icon: 'panel-top-close' },
-					{ types: [PositionType.Props], titleKey: 'setting.position.option-below-addressbar', icon: 'panel-top-open' },
-					{ types: [PositionType.Bottom], titleKey: 'setting.position.option-bottom', icon: 'arrow-down-to-line' }
+				const WEB_VIEWER_POSITIONS = [
+					{ types: [PositionType.TabBar], title: t('setting.position.option-addressbar'), icon: 'panel-top-close' },
+					{ types: [PositionType.Props], title: t('setting.position.option-below-addressbar'), icon: 'panel-top-open' },
+					{ types: [PositionType.Bottom], title: t('setting.position.option-bottom'), icon: 'arrow-down-to-line' }
 				];
 				if (currentPosition) {
 					WEB_VIEWER_POSITIONS
 						.filter(option => !option.types.includes(currentPosition))
 						.forEach(option => {
 							positionMenu.addItem((item: MenuItem) => {
-								item.setTitle(t(option.titleKey))
+								item.setTitle(option.title)
 									.setIcon(option.icon)
 									.onClick(async () => {
 										await this.ntb.settingsManager.updatePosition(toolbarSettings, option.types[0]);
@@ -221,10 +221,10 @@ export default class ContextMenu {
 			else {
 				const DEFAULT_POSITIONS = this.getDefaultPositions();
 
-				DEFAULT_POSITIONS.forEach(({ type, titleKey, icon }) => {
+				DEFAULT_POSITIONS.forEach(({ type, title, icon }) => {
 					if (currentPosition !== type) {
 						positionMenu.addItem((item: MenuItem) => {
-							item.setTitle(t(titleKey))
+							item.setTitle(title)
 								.setIcon(icon)
 								.onClick(async () => {
 									await this.ntb.settingsManager.updatePosition(toolbarSettings, type);
@@ -235,15 +235,15 @@ export default class ContextMenu {
 				});
 			}
 
-			const fabPositions: { type: PositionType, titleKey: TranslationKey, icon: string }[] = [
-				{ type: PositionType.FabLeft, titleKey: 'setting.position.option-fabl', icon: 'circle-chevron-left' },
-				{ type: PositionType.FabRight, titleKey: 'setting.position.option-fabr', icon: 'circle-chevron-right' }
+			const fabPositions = [
+				{ type: PositionType.FabLeft, title: t('setting.position.option-fabl'), icon: 'circle-chevron-left' },
+				{ type: PositionType.FabRight, title: t('setting.position.option-fabr'), icon: 'circle-chevron-right' }
 			];
 
-			fabPositions.forEach(({ type, titleKey, icon }) => {
+			fabPositions.forEach(({ type, title, icon }) => {
 				if (currentPosition !== type) {
 					positionMenu.addItem((item: MenuItem) => {
-						item.setTitle(t(titleKey))
+						item.setTitle(title)
 							.setIcon(icon)
 							.onClick(async () => {
 								await this.ntb.settingsManager.updatePosition(toolbarSettings, type);
@@ -348,27 +348,27 @@ export default class ContextMenu {
 	 * Gets the default possible positions for the toolbar.
 	 * @returns array of default positions.
 	 */
-	getDefaultPositions(): { type: PositionType, titleKey: TranslationKey, icon: string }[] {
+	getDefaultPositions(): { type: PositionType, title: string, icon: string }[] {
 		const currentView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
 		const isSourceView = currentView?.editMode?.sourceMode;
 
-		const defaultPositions: { type: PositionType, titleKey: TranslationKey, icon: string }[] = [];
+		const defaultPositions = [];
 		if (Platform.isPhone) {
-			defaultPositions.push({ type: PositionType.Top, titleKey: 'setting.position.option-top', icon: 'arrow-up-to-line' });
+			defaultPositions.push({ type: PositionType.Top, title: t('setting.position.option-top'), icon: 'arrow-up-to-line' });
 			// should not be able to set position to tab bar, if view header is hidden
 			const isViewHeaderHidden = this.ntb.settings.obsidianUiVisibility['view-header'] === false;
 			if (!isViewHeaderHidden) {
-				defaultPositions.push({ type: PositionType.TabBar, titleKey: 'setting.position.option-tabbar', icon: 'panel-top' });
+				defaultPositions.push({ type: PositionType.TabBar, title: t('setting.position.option-tabbar'), icon: 'panel-top' });
 			}
 		}
 		else {
-			defaultPositions.push({ type: PositionType.TabBar, titleKey: 'setting.position.option-tabbar', icon: 'panel-top' });
-			defaultPositions.push({ type: PositionType.Top, titleKey: 'setting.position.option-top', icon: 'arrow-up-to-line' });
+			defaultPositions.push({ type: PositionType.TabBar, title: t('setting.position.option-tabbar'), icon: 'panel-top' });
+			defaultPositions.push({ type: PositionType.Top, title: t('setting.position.option-top'), icon: 'arrow-up-to-line' });
 		}
 		if (this.ntb.utils.hasView('markdown')) {
-			defaultPositions.push({ type: PositionType.Props, titleKey: isSourceView ? 'setting.position.option-below-title' : 'setting.position.option-props', icon: 'arrow-down-narrow-wide' });
+			defaultPositions.push({ type: PositionType.Props, title: isSourceView ? t('setting.position.option-below-title') : t('setting.position.option-props'), icon: 'arrow-down-narrow-wide' });
 		}
-		defaultPositions.push({ type: PositionType.Bottom, titleKey: 'setting.position.option-bottom', icon: 'arrow-down-to-line' });
+		defaultPositions.push({ type: PositionType.Bottom, title: t('setting.position.option-bottom'), icon: 'arrow-down-to-line' });
 		return defaultPositions;
 	}	
 
