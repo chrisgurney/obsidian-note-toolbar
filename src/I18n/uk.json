@@ -21,9 +21,7 @@
             "query-function": "Виконати запит"
         },
         "error": {
-            "args-format": "Невірний формат критерію.",
             "args-parsing": "Не вдалося розібрати аргументи",
-            "args-parsing-error": "Не вдалося розібрати аргументи\n```\n{{- error}}\n```",
             "args-parsing-field-error": "```\n{{- error}}\n```",
             "callout-not-found": "⚠️ Помилка: Не вдалося знайти виноску note-toolbar-output у поточній нотатці з ID: {{id}}",
             "expr-failed": "Не вдалося обчислити вираз: {{expression}}",
@@ -34,7 +32,6 @@
             "general": "⚠️ Помилка: Перевірте консоль для отримання інформації\n```\n{{error}}\n```",
             "plugin-disabled": "⚠️ Увімкніть налаштування Скриптування після встановлення та увімкнення додатка: ",
             "plugin-not-installed": "Додаток не встановлено та не увімкнено.",
-            "query-failed": "Не вдалося виконати запит: {{expression}}",
             "scripting-disabled": "Для використання увімкніть виконування Скриптів у налаштуванні Note Toolbar."
         },
         "javascript": {
@@ -154,7 +151,6 @@
         "success-toolbar-created": "Успішно: Панель створено: {{toolbar}}"
     },
     "command": {
-        "copy-command-notice": "Команду скопійовано до буфера обміну",
         "copy-command-title": "URI команди",
         "callouts-locked-notice": "Заблокувати виноски Note Toolbar",
         "callouts-unlocked-notice": "Розблоковані виноски Note Toolbar",
@@ -182,8 +178,7 @@
     },
     "copy": {
         "description": "Скопіювати текст нижче.",
-        "instructions_desktop": "Нажміть Ctrl/Cmd+C або праву кнопкою миші, щоб скопіювати",
-        "instructions_mobile": "Щоб скопіювати нажміть Ctrl/Cmd+C або утримуйте."
+        "instructions_desktop": "Нажміть Ctrl/Cmd+C або праву кнопкою миші, щоб скопіювати"
     },
     "export": {
         "item-generic": "Елемент {{number}}",
@@ -192,8 +187,6 @@
         "label-callout-description": "Скопіюйте та вставте цю виноску в примітку. Використовуйте налаштування форматування.",
         "label-share-description": "Поширте це посиланням іншому користувачу Note Toolbar, щоб додати Вашу панель до його сховища.",
         "label-share-preview": "перегляд",
-        "notice-completed": "Панель скопійовано до буфера обміну як виноску. Відкрийте налаштування, щоб змінити форматування.",
-        "notice-shared": "Посилання Note Toolbar скопійовано до буфера обміну",
         "option-uri": "Використати Obsidian URI",
         "option-uri-description": "Створює посилання obsidian:// замість URL-адреси https://.",
         "title-share": "Поширення панелі: {{toolbar}}",
@@ -226,7 +219,6 @@
         "errorlog-icon-not-found": "Іконку не знайдено: {{icon}}",
         "errorlog-invalid-format": "Невірний формат: {{line}}",
         "errorlog-invalid-styles": "Проігноровані недійсні стилі: {{styles}}",
-        "errorlog-item": "Елемент {{number}}:",
         "errorlog-menu-not-found": "Меню не знайдено: {{menu}}",
         "label-import": "Вставте текст виноски Note Toolbar для імпорту панелі.",
         "label-import-confirmation": "Підтвердьте, що бажаєте створити нову панель. Після додавання цю панель потрібно буде зіставити з однією, або кількома нотатками.",
@@ -256,11 +248,7 @@
         "warning-no-matching-toolbar": "Note Toolbar: Немає відповідної панелі: {{toolbar}}\nНатисніть тут для створення."
     },
     "onboarding": {
-        "tooltip-dismiss": "Відхилити",
-        "new-toolbar-mapping-content": "Щоб побачити цю панель у вашій нотатці, додайте властивість ({{property}}) з назвою цієї панелі. Або зіставте цю панель з текою, у якій міститься нотатка (Налаштування Note Toolbar → Зіставленні теки).",
-        "new-toolbar-mapping-title": "Як використовувати цю панель",
-        "swap-toolbar-content": "Вибір опції нижче оновить цю нотатку, змінивши або видаливши значення властивості ({{property}}).",
-        "swap-toolbar-title": "Ця нотатка буде змінена"
+        "tooltip-dismiss": "Відхилити"
     },
     "plugin": {
         "canvas": "Полотна",
@@ -382,9 +370,6 @@
         "display-navbar": {
             "bottom": {
                 "description": "Приховує дії в нижній панелі навігації Обсидії.",
-                "label-hidden": "Навігаційна панель прихована",
-                "label-partial": "Деякі дії над навігаційною панеллю приховуються",
-                "label-visible": "Панель навігації видима",
                 "name": "Нижня видимість панелі навігації",
                 "option-hide-all": "Приховати всі дії",
                 "option-unhide-all": "Приховувати всі дії"
@@ -398,13 +383,7 @@
         },
         "display-rules": {
             "description": "Параметри відображення панелей у нотатках, використовуючи: Властивість, Зіставлені теки, або обидва засоби.",
-            "name": "Правила відображення",
-            "option-default": "Панель за замовчуванням",
-            "option-default-description": "Показувати цю панель у всіх нотатках, окрім одного з нижче правил.",
-            "option-default-placeholder": "Виберіть панель...",
-            "option-property": "Властивість",
-            "option-property-description": "Вказана у Властивості панель буде відображатися у нотатці. Виконується з перевагою над зіставленнями тек. Для приховання панелі вкажіть 'none'.",
-            "option-property-placeholder": "Властивість"
+            "name": "Правила відображення"
         },
         "error-old-settings-description": "Завантажено старий файл налаштувань ({{oldVersion}}), найновіший - {{currentVersion}}",
         "error-old-settings-name": "⚠️ Помилка: Вимкніть та увімкніть Note Toolbar, або перезавантажте Obsidian.",
@@ -666,7 +645,6 @@
         },
         "ribbon": {
             "description": "Доступ цієї панелі на стрічці.",
-            "description-migration": "Нове у версії 1.34: використовуйте параметри панелі і елементів для доступу до кожного зі стрічки.",
             "error-item-not-found": "Note Toolbar: Елеменет не знайдено.",
             "error-item-text-empty": "Помилка додавання до стрічки: елементу потрібна мітка або підказка.",
             "error-not-added": "Note Toolbar: Деякі панелі або елементи не вдалося додати до стрічки. Перегляньте консоль для помилок.",
