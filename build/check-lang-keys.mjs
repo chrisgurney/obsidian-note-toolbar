@@ -296,21 +296,6 @@ const languageFiles = fs.readdirSync(i18nDir)
 
 console.log(`[lang] Language keys: base ${baseFileLabels.join(' + ')} (${baseKeys.size} keys), ${languageFiles.length} other languages`);
 
-// Typed t guard: notice only, not a strict finding.
-const settingsPath = path.join(srcDir, 'Settings', 'NoteToolbarSettings.ts');
-let typedTPresent = false;
-try {
-    const settingsText = fs.readFileSync(settingsPath, 'utf8');
-    typedTPresent = settingsText.includes('DottedKeys') && settingsText.includes('TranslationKey');
-} catch {
-    typedTPresent = false;
-}
-if (typedTPresent) {
-    console.log('[lang] Typed t (DottedKeys): present in NoteToolbarSettings.ts, internal t() keys are typechecked against the combined base.');
-} else {
-    console.log('\x1b[33m[lang] Typed t (DottedKeys): not found in NoteToolbarSettings.ts, internal TypeScript typos are not caught at compile time; this script is the only missing-key check.\x1b[0m');
-}
-
 // Abridged by default: counts only. Verbose lists every key.
 function sourceLabel(source) {
     if (source === 'gallery-script') return 'Gallery script';
