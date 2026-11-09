@@ -11,6 +11,7 @@
     "build:skills": "node build/copy-skill-references.mjs",
     "check": "npm run lint && npm run typecheck && npm run stylelint && npm run build",
     "check:install": "npm ci --dry-run",
+    "check:lang": "node build/check-lang.mjs",
     "check:skills": "node build/copy-skill-references.mjs --check",
     "dev": "npm run prebuild && node esbuild.config.mjs",
     "docs": "node build/docs.mjs",
