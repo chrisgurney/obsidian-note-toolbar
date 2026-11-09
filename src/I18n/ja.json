@@ -21,9 +21,7 @@
             "query-function": "クエリを実行"
         },
         "error": {
-            "args-format": "引数の形式が無効です。",
             "args-parsing": "引数の解析に失敗しました",
-            "args-parsing-error": "引数の解析に失敗しました\n```\n{{- error}}\n```",
             "args-parsing-field-error": "```\n{{- error}}\n```",
             "callout-not-found": "エラー: 現在のノートにID: {{id}}のnote-toolbar-outputコールアウトが見つかりません",
             "expr-failed": "式の評価に失敗しました: {{expression}}",
@@ -34,7 +32,6 @@
             "general": "エラー: 詳細はコンソールを確認してください。\n```\n{{error}}\n```",
             "plugin-disabled": "プラグインがインストールされ有効化されていません: ",
             "plugin-not-installed": "このアイテムはインストールされ有効化されていないプラグインを使用しています。",
-            "query-failed": "クエリの評価に失敗しました: {{expression}}",
             "scripting-disabled": "このアイテムを使用するには、Note Toolbar設定でスクリプトを有効にしてください。"
         },
         "javascript": {
@@ -201,10 +198,6 @@
         "warning-no-matching-toolbar": "Note Toolbar: 一致するツールバーがありません: {{toolbar}}\nここをクリック/タップして作成します。"
     },
     "onboarding": {
-        "new-toolbar-mapping-content": "このツールバーをノートで見るには、このツールバーの名前を含むプロパティ（{{property}}）を追加してください。または、このツールバーをノートがあるフォルダにマッピングします（Note Toolbar設定 → フォルダマッピング）。",
-        "new-toolbar-mapping-title": "このツールバーの使い方",
-        "swap-toolbar-content": "下記のオプションを選択すると、プロパティ（{{property}}）の値を変更または削除することで、このノートが更新されます。",
-        "swap-toolbar-title": "このノートは変更されます"
     },
     "plugin": {
         "canvas": "キャンバス",
@@ -266,7 +259,6 @@
             "button-delete": "削除...",
             "button-delete-confirm": "削除",
             "button-delete-tooltip": "このツールバーを削除",
-            "description": "この操作は元に戻せません。",
             "label-delete-confirm": "このツールバーを削除してもよろしいですか？",
             "label-usage-note": "このツールバーは `{{propertyName}}` プロパティで使用されている可能性があります。確認したい場合は、このウィンドウを閉じて `[{{propertyName}}:\u00A0{{toolbarName}}]` を検索してください。",
             "name": "このツールバーを削除",
@@ -314,10 +306,7 @@
         },
         "display-rules": {
             "description": "プロパティ、マッピング、またはその両方を使用して、ツールバーを表示するノートを定義します。",
-            "name": "表示ルール",
-            "option-property": "プロパティ",
-            "option-property-description": "このプロパティでツールバー名が見つかった場合、ツールバーがノートに表示されます。これはフォルダマッピングよりも優先されます。ノートでこのプロパティを 'none' に設定すると、ツールバーが非表示になります。",
-            "option-property-placeholder": "プロパティ"
+            "name": "表示ルール"
         },
         "error-old-settings-description": "古い設定ファイル（{{oldVersion}}）が読み込まれましたが、最新は {{currentVersion}} です",
         "error-old-settings-name": "⚠️ エラー: Note Toolbarを無効化して再度有効化するか、Obsidianを再起動してください。",
@@ -329,14 +318,9 @@
             "button-open-external": "開く ↗",
             "button-open-github": "github.comを開く",
             "button-read": "読む ↗",
-            "description": "ノートのためのコンテキスト対応ツールバー。",
             "error-failed-to-load": "読み込みに失敗しました:\n{{baseUrl}}/{{lang}}/{{name}}.md",
             "heading-donate": "寄付",
             "heading-support": "サポート",
-            "label-article-1": "ツールバーアイテムの作成",
-            "label-article-1-description": "さまざまなタイプのアイテムについて学びます。",
-            "label-article-2": "Note Toolbarコールアウト",
-            "label-article-2-description": "ノート内でツールバーを作成する方法を学びます。",
             "label-bug": "バグを報告",
             "label-donate": "コーヒーをおごる",
             "label-donate-description": "このプラグインが便利だと思い、金銭的にサポートしたい場合は、寄付をご検討ください。ありがとうございます！",
@@ -384,8 +368,6 @@
             "option-command-placeholder": "コマンドを検索",
             "option-command-target": "コマンドを実行する場所",
             "option-command-target-description": "一部のコマンドはこの設定を上書きする場合があります。",
-            "option-component-icon": "アイコン",
-            "option-component-label": "ラベル",
             "option-dataview-help": "Dataviewクエリを実行、式を評価、またはスクリプトを実行します。",
             "option-file": "ファイル",
             "option-file-error-does-not-exist": "このファイルまたはフォルダは存在しません。",
@@ -422,13 +404,6 @@
             "option-uri-target-description": "修飾キーやプラグインの使用により、この設定が上書きされる場合があります。",
             "option-uri-target-disclaimer-device": "このオプションはこのデバイスでは機能しません。",
             "option-uri-target-disclaimer-non-default": "外部リンクでデフォルト以外のオプションを使用するには、Web Viewerプラグインを有効にする必要があります。デスクトップのみで利用可能です。",
-            "option-visibility-component-hidden-platform": "{{component}}は{{platform}}で非表示",
-            "option-visibility-component-visible-platform": "{{component}}は{{platform}}で表示",
-            "option-visibility-hidden": "非表示",
-            "option-visibility-hidden-platform": "{{platform}}で非表示",
-            "option-visibility-platform-desktop": "デスクトップ",
-            "option-visibility-platform-mobile": "モバイル",
-            "option-visibility-visible-platform": "{{platform}}で表示",
             "title": "ツールバーアイテムを編集"
         },
         "item-suggest-modal": {
@@ -632,7 +607,6 @@
             "name-copy": "アイテムのコマンドURIをコピー",
             "name-remove": "アイテムのコマンドを削除",
             "notice-command-added": "コマンドが利用可能になりました:\n{{command}}",
-            "notice-command-added-hotkeys": "ホットキー設定を開く {{cta}} →",
             "notice-command-error-noname": "コマンドを追加できません。アイテムに名前またはラベルが設定されていること、および少なくとも1つに変数または式が含まれていないことを確認してください。",
             "notice-command-error-startup-noname": "Note Toolbar: これらのツールバーの一部のアイテムコマンドは、空のラベルまたはツールチップのため追加されませんでした: {{toolbars}}",
             "notice-command-removed": "コマンドを削除しました:\n{{command}}",

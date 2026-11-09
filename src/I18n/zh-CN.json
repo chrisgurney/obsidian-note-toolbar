@@ -21,10 +21,7 @@
       "query-function": "执行查询"
     },
     "error": {
-      "args-format": "无效的参数格式",
       "args-parsing": "无法解析参数",
-      "args-parsing-error": "无法解析参数\n```\n{{error}}\n```",
-      "args-parsing-script": "编译 {{filename}} 脚本的参数失败",
       "callout-not-found": "错误：在当前笔记中无法找到 ID 为 {{id}} 的 note-toolbar-output 标注",
       "expr-failed": "无法执行表达式：{{expression}}",
       "expr-note-not-open": "该表达式仅支持在打开的笔记中执行。",
@@ -34,7 +31,6 @@
       "general": "错误：查看控制台以获取更多细节\n```\n{{error}}\n```",
       "plugin-disabled": "安装并启用插件后，切换脚本设置：",
       "plugin-not-installed": "尚未安装和启用插件。",
-      "query-failed": "无法执行查询：{{expression}}",
       "scripting-disabled": "在 Note Toolbar 设置中启用脚本功能以使用此项目。"
     },
     "javascript": {
@@ -182,8 +178,7 @@
   },
   "copy": {
     "description": "复制下方文本。",
-    "instructions_desktop": "使用 Ctrl/Cmd+C 或右键复制",
-    "instructions_mobile": "使用 Ctrl/Cmd+C 或长按复制。"
+    "instructions_desktop": "使用 Ctrl/Cmd+C 或右键复制"
   },
   "export": {
     "item-generic": "项目{{number}}",
@@ -264,11 +259,7 @@
     "warning-no-matching-toolbar": "Note Toolbar：没有匹配的 {{toolbar}} 工具栏\n点击/轻触此处创建。"
   },
   "onboarding": {
-    "tooltip-dismiss": "关闭",
-    "new-toolbar-mapping-content": "要在您的笔记中使用此工具栏，请设置一个属性（{{property}}），其值为该工具栏的名称。若要在整个仓库中使用此工具栏，请参阅：Note Toolbar 设置 → 显示规则。",
-    "new-toolbar-mapping-title": "如何使用此工具栏",
-    "swap-toolbar-content": "选择下方的一个选项后，将会以更改/删除属性值（{{property}}）的方式更新此笔记。",
-    "swap-toolbar-title": "该笔记将被修改"
+    "tooltip-dismiss": "关闭"
   },
   "plugin": {
     "canvas": "Canvas 画布",
@@ -390,9 +381,6 @@
     "display-navbar": {
       "bottom": {
         "description": "隐藏 Obsidian 手机端底部导航栏中的操作。",
-        "label-hidden": "导航栏已隐藏",
-        "label-partial": "部分导航栏操作已隐藏",
-        "label-visible": "导航栏可见",
         "name": "底部导航栏可见性",
         "option-hide-all": "隐藏所有操作",
         "option-unhide-all": "取消隐藏所有操作"
@@ -406,13 +394,7 @@
     },
     "display-rules": {
       "description": "定义在哪些笔记上显示工具栏。",
-      "name": "显示规则",
-      "option-default": "默认工具栏",
-      "option-default-description": "在所有笔记上显示此工具栏，除非满足下方某条规则。",
-      "option-default-placeholder": "选择工具栏...",
-      "option-property": "属性",
-      "option-property-description": "如果在此属性中找到工具栏名称，则会在笔记上显示对应的工具栏。此规则优先于默认工具栏或任何文件夹映射。在笔记中将此属性设为 'none' 则会隐藏工具栏。",
-      "option-property-placeholder": "属性"
+      "name": "显示规则"
     },
     "error-old-settings-description": "加载了旧的设置文件（{{oldVersion}}），当前最新版本为 {{currentVersion}}",
     "error-old-settings-name": "⚠️ 错误：请重新启用 Note Toolbar，或重启 Obsidian。",
