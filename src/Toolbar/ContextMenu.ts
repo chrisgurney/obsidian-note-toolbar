@@ -28,7 +28,7 @@ export default class ContextMenu {
 
 		// figure out what item was clicked on (if any)
 		let toolbarItemEl: Element | null;
-		if (event.target instanceof HTMLLIElement) {
+		if (event.targetNode?.instanceOf(HTMLLIElement)) {
 			toolbarItemEl = (event.target as Element).querySelector('.cg-note-toolbar-item');
 		}
 		else {

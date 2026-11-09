@@ -119,7 +119,7 @@ export default class ToolbarSettingsModal extends Modal {
 	 */
 	onEscapeKey() {
 		const focussedElement = activeDocument.activeElement;
-		if (focussedElement instanceof HTMLElement) {
+		if (focussedElement?.instanceOf(HTMLElement)) {
 			const settingForm = focussedElement.closest('.note-toolbar-setting-item');
 			if (settingForm) {
 				const rowEscaped = focussedElement.closest('.note-toolbar-setting-items-container-row');
