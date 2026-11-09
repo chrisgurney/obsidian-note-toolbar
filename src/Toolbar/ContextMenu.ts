@@ -27,7 +27,7 @@ export default class ContextMenu {
 			toolbarEl.getAttribute(TbarData.Position) === PositionType.Text;
 
 		// figure out what item was clicked on (if any)
-		let toolbarItemEl: Element | null = null;
+		let toolbarItemEl: Element | null;
 		if (event.target instanceof HTMLLIElement) {
 			toolbarItemEl = (event.target as Element).querySelector('.cg-note-toolbar-item');
 		}

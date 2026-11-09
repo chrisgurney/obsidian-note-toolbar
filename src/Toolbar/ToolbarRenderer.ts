@@ -109,8 +109,8 @@ export default class ToolbarRenderer {
      */
     renderBottomLeftStyle(toolbarEl: HTMLElement): string {
         const viewPaddingOffset = 0;
-        let activeLeaf: MarkdownView | ItemView | null = this.ntb.app.workspace.getActiveViewOfType(MarkdownView);
-        if (!activeLeaf) activeLeaf = this.ntb.app.workspace.getActiveViewOfType(ItemView);
+        // let activeLeaf: MarkdownView | ItemView | null = this.ntb.app.workspace.getActiveViewOfType(MarkdownView);
+        // if (!activeLeaf) activeLeaf = this.ntb.app.workspace.getActiveViewOfType(ItemView);
         // if (activeLeaf) {
         // 	const contentElStyle = getComputedStyle(activeLeaf?.contentEl);
         // 	viewPaddingOffset = parseFloat(contentElStyle.paddingLeft) || 0;

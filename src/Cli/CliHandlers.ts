@@ -295,8 +295,7 @@ export default class CliHandlers {
             await this.ntb.settingsManager.save();
         }
         
-        let result = '';
-        result = t('import.label-success-heading', { count: toolbarWithImport.items.length, toolbar: toolbarWithImport.name, interpolation: { escapeValue: false } } ) + '\n\n';
+        let result = t('import.label-success-heading', { count: toolbarWithImport.items.length, toolbar: toolbarWithImport.name, interpolation: { escapeValue: false } } ) + '\n\n';
         result += this.cliItemsHandler.formatItemList({ includeEmpty: 'true', verbose: 'true' }, toolbarWithImport);
         if (warningLog) result += `\n\n${t('import.errorlog-warning-heading')}\n\n${warningLog}`;
         return result;
@@ -379,7 +378,7 @@ export default class CliHandlers {
             ],
         ];
 
-        let rowOutput = '';
+        let rowOutput;
         switch (format) {
             case 'csv': {
                 const header = schema.join(',');
