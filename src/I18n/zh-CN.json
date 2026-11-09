@@ -135,7 +135,6 @@
   "cli": {
     "error-callout-or-file-required": "错误：需要提供 callout 或文件/路径",
     "error-cannot-add-additional-item": "错误：该项目（{{item}}）可在用户指南的「附加示例库项目」页面找到，其中包含需要手动设置的可选项目。",
-    "error-dv-code-and-file-exclusive": "错误：请提供 eval、query 或文件/路径",
     "error-dv-code-or-file-required": "错误：需要提供 eval/query 或文件/路径",
     "error-file-not-found": "错误：找不到文件：{{file}}",
     "error-file-or-path-required": "错误：需要提供文件或路径",
@@ -687,10 +686,6 @@
         "description": "如果您使用 Note Toolbar 的选项来切换属性，则将保持笔记中的属性区显示状态。启用时，您必须使用 Note Toolbar 的「显示笔记属性」命令才能重新显示属性。",
         "name": "保持属性区可见状态"
       },
-      "load-settings-changes": {
-        "description": "如果您在多台设备间同步插件设置，请启用此项以自动加载工具栏更新。否则，您需要重启 Obsidian 才能看到其他设备上的更改。",
-        "name": "加载设置变动"
-      },
       "lock-callouts": {
         "description": "启用后，单击 Note Toolbar 标注时不会展开进入编辑状态。此时，请使用标注菜单中的「编辑」选项进行更改。",
         "name": "锁定 Note Toolbar 标注"
@@ -881,8 +876,6 @@
       "error-failed-to-load": "无法加载更新日志：\n{{baseUrl}}/{{lang}}/{{version}}.md",
       "label-release-notes": "发行说明",
       "label-release-notes-description": "最新版本的详细说明位于 GitHub。",
-      "label-show-whatsnew": "显示「更新了啥？」",
-      "label-show-whatsnew-description": "每次安装新的主要版本时显示此标签页。",
       "label-roadmap": "Note Toolbar 的未来？",
       "label-roadmap-description": "查看路线图，预览正在考虑开发的新功能。",
       "placehoder-loading": "加载中…",

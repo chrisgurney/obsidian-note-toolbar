@@ -172,7 +172,6 @@
     "cli": {
         "error-callout-or-file-required": "Error: callout or file/path is required",        
         "error-cannot-add-additional-item": "Error: This item ({{item}}) is available on the Additional Gallery items page in the User Guide, which contains optional items that require manual setup.",
-        "error-dv-code-and-file-exclusive": "Error: Provide eval, query, or file/path",
         "error-dv-code-or-file-required": "Error: eval/query or file/path is required",
         "error-file-not-found": "Error: File not found: {{file}}",
         "error-file-or-path-required": "Error: A value for file or path is required",
@@ -758,10 +757,6 @@
                 "description": "Maintains the visibility state of Properties in notes, if you use Note Toolbar's options to toggle properties. If enabled, you will have to use Note Toolbar's \"Show note properties\" to show properties again.",
                 "name": "Keep properties view state"
             },
-            "load-settings-changes": {
-                "description": "If you’re syncing plugin settings across devices, turn this on to automatically load toolbar updates. If not, you’ll need to restart Obsidian to see changes from other devices.",
-                "name": "Load settings changes"
-            },
             "lock-callouts": {
                 "description": "Note Toolbar Callouts will not be expanded for editing on click. If enabled, use the Edit option in the callout menu to make changes.",
                 "name": "Lock Note Toolbar Callouts"
@@ -1014,8 +1009,6 @@
             "placehoder-loading": "Loading...",
             "label-release-notes": "Release notes",
             "label-release-notes-description": "Detailed notes for the latest releases are on GitHub.",
-            "label-show-whatsnew": "Show What's new",
-            "label-show-whatsnew-description": "Show this tab when each new major release is installed.",
             "label-roadmap": "What's ahead for Note Toolbar?",
             "label-roadmap-description": "Check out the Roadmap to preview the features under consideration.",
             "title": "What's new in Note Toolbar?",

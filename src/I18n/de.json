@@ -514,10 +514,6 @@
                 "description": "Behält den Sichtbarkeitsstatus von Eigenschaften in Notizen bei, wenn Sie die Optionen der Notiz-Toolbar zum Umschalten der Eigenschaften verwenden. Wenn diese Option aktiviert ist, müssen Sie die Option „Notizeigenschaften anzeigen“ der Notiz-Toolbar verwenden, um die Eigenschaften wieder anzuzeigen.",
                 "name": "Zustand der Eigenschaften beibehalten"
             },
-            "load-settings-changes": {
-                "description": "Wenn Sie Plugin-Einstellungen geräteübergreifend synchronisieren, aktivieren Sie diese Option, um Toolbar-Updates automatisch zu laden. Andernfalls müssen Sie Obsidian neu starten, um Änderungen auf anderen Geräten zu sehen.",
-                "name": "Einstellungsänderungen laden"
-            },
             "lock-callouts": {
                 "description": "Notiz Toolbar-Callouts werden beim Klicken nicht zur Bearbeitung erweitert. Wenn diese Option aktiviert ist, können Sie Änderungen über die Option „Bearbeiten“ im Callout-Menü vornehmen.",
                 "name": "Notiz Toolbar-Callouts sperren"
