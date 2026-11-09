@@ -976,6 +976,9 @@ export default class ToolbarRenderer {
 			}
 		}
 
+		// restore the Properties visibility state, even when no toolbar renders for this note
+		this.restorePropsState();
+
 	}
 
 	/**
@@ -1192,6 +1195,24 @@ export default class ToolbarRenderer {
 	}
 
 	/**
+	 * Restores the Properties section to its previously saved visibility state,
+	 * if the "Keep properties view state" setting is enabled. Runs independently
+	 * of whether a toolbar is rendered for the current note, so the saved state
+	 * applies on app open and when opening notes with no toolbar.
+	 */
+	restorePropsState() {
+
+		if (this.ntb.settings.keepPropsState) {
+			// restore properties to the state they were before
+			const propsState = this.ntb.app.loadLocalStorage(LocalVar.TogglePropsState) as ToggleUiStateType;
+			if (propsState && ['toggle', 'show', 'hide', 'fold'].includes(propsState)) {
+				this.ntb.commands.toggleUi('props', propsState, true);
+			}
+		}
+
+	}
+
+	/**
 	 * Updates any toolbar elements that use properties, including labels and tooltips.
 	 * If the item resolves to a URI that's empty, the item is hidden.
 	 * @param toolbar ToolbarSettings to get values from.
@@ -1202,13 +1223,7 @@ export default class ToolbarRenderer {
 
 		this.ntb.debug(`update: ${toolbar.name}`);
 
-		if (this.ntb.settings.keepPropsState) {
-			// restore properties to the state they were before
-			const propsState = this.ntb.app.loadLocalStorage(LocalVar.TogglePropsState) as ToggleUiStateType;
-			if (propsState && ['toggle', 'show', 'hide', 'fold'].includes(propsState)) {
-				this.ntb.commands.toggleUi('props', propsState, true);
-			}
-		}
+		this.restorePropsState();
 
 		const currentView = view ? view : this.ntb.app.workspace.getActiveViewOfType(ItemView);
 		const toolbarEl = this.ntb.el.getToolbarEl(currentView ?? undefined);
