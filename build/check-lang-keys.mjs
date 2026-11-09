@@ -33,7 +33,10 @@
  * warning, not a gate.
  *
  * Reports are counts only by default; --verbose lists the individual
- * keys, --strict exits 1 on any finding.
+ * keys, --strict exits 1 on any finding, and --strict-base exits 1
+ * only on base findings (unused keys and code keys missing from the
+ * base). Missing translations and extra keys never fail --strict-base:
+ * they lag by design.
  */
 
 
@@ -73,14 +76,16 @@ const ESCAPE_HATCH_PREFIXES = ['plugin.', 'setting.whats-new.', 'gallery.', 'cli
 const args = process.argv.slice(2);
 const verbose = args.includes('--verbose');
 const strict = args.includes('--strict');
+const strictBase = args.includes('--strict-base');
 const help = args.includes('--help') || args.includes('-h');
-const unknown = args.filter((arg) => !['--verbose', '--strict', '--help', '-h'].includes(arg));
+const unknown = args.filter((arg) => !['--verbose', '--strict', '--strict-base', '--help', '-h'].includes(arg));
 
 if (help || unknown.length > 0) {
     if (unknown.length > 0) console.error(`[lang] Unknown option: ${unknown.join(' ')}`);
-    console.log('Usage: node build/check-lang-keys.mjs [--verbose] [--strict]');
-    console.log('  --verbose  Also list the individual unused, missing, and extra keys, the escape-hatch keys, and the dynamic t() calls.');
-    console.log('  --strict   Exit 1 if any unused key, out-of-sync language, or code key missing from the base is found. Dynamic calls, escape-hatch keys, and the typed t guard are notice only.');
+    console.log('Usage: node build/check-lang-keys.mjs [--verbose] [--strict] [--strict-base]');
+    console.log('  --verbose     Also list the individual unused, missing, and extra keys, the escape-hatch keys, and the dynamic t() calls.');
+    console.log('  --strict      Exit 1 if any unused key, out-of-sync language, or code key missing from the base is found. Dynamic calls, escape-hatch keys, and the typed t guard are notice only.');
+    console.log('  --strict-base Exit 1 only on base findings: unused keys and code keys missing from the base. Missing translations and extra keys never fail.');
     process.exit(unknown.length > 0 ? 2 : 0);
 }
 
@@ -390,11 +395,22 @@ for (const file of languageFiles) {
 console.log(`[lang] Summary: ${unusedKeys.length} unused keys in base, ${outOfSyncCount} of ${languageFiles.length} languages out of sync`);
 
 const hasFindings = unusedKeys.length > 0 || outOfSyncCount > 0 || codeKeysMissingFromBase.length > 0;
+// Base findings are the gate: keys the English base owns or should own.
+// Missing translations and extra keys are not base findings; they lag
+// by design.
+const hasBaseFindings = unusedKeys.length > 0 || codeKeysMissingFromBase.length > 0;
+if (hasBaseFindings && strictBase) {
+    console.log('\x1b[31m[lang] Check failed in strict-base mode.\x1b[0m');
+    process.exit(1);
+}
 if (hasFindings && strict) {
     console.log('\x1b[31m[lang] Check failed in strict mode.\x1b[0m');
     process.exit(1);
 }
-if (hasFindings && !strict) {
+if (hasFindings && !strict && !strictBase) {
     console.log('[lang] Notice only: exit code 0. Use --strict to fail on any finding.');
+}
+if (hasFindings && strictBase && !hasBaseFindings) {
+    console.log('[lang] Notice only: exit code 0. --strict-base fails only on base findings; missing translations and extra keys never fail.');
 }
 process.exit(0);

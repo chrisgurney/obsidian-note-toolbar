@@ -10,10 +10,12 @@
  * caught here. Run both through `npm run check-lang`.
  *
  * Reports are counts only by default. --verbose lists the missing and
- * orphan keys. --strict exits 1 on any finding. Unknown options exit 2.
- * Skipped (exit 0) on a tree with no gallery/en.json or cli/en.json.
+ * orphan keys. --strict exits 1 on any finding, and --strict-base does
+ * too: id mismatches are base integrity, not translation sync. Unknown
+ * options exit 2. Skipped (exit 0) on a tree with no gallery/en.json
+ * or cli/en.json.
  *
- * Usage: node build/check-lang-ids.mjs [--verbose] [--strict]
+ * Usage: node build/check-lang-ids.mjs [--verbose] [--strict] [--strict-base]
  *   npm run check-lang / npm run check-lang -- --verbose
  */
 
@@ -30,14 +32,16 @@ const baseName = 'en';
 const args = process.argv.slice(2);
 const verbose = args.includes('--verbose');
 const strict = args.includes('--strict');
+const strictBase = args.includes('--strict-base');
 const help = args.includes('--help') || args.includes('-h');
-const unknown = args.filter((arg) => !['--verbose', '--strict', '--help', '-h'].includes(arg));
+const unknown = args.filter((arg) => !['--verbose', '--strict', '--strict-base', '--help', '-h'].includes(arg));
 
 if (help || unknown.length > 0) {
     if (unknown.length > 0) console.error(`[lang] Unknown option: ${unknown.join(' ')}`);
-    console.log('Usage: node build/check-lang-ids.mjs [--verbose] [--strict]');
-    console.log('  --verbose  Also list the individual missing and orphan Gallery/CLI id keys.');
-    console.log('  --strict   Exit 1 if any Gallery/CLI id mismatch is found.');
+    console.log('Usage: node build/check-lang-ids.mjs [--verbose] [--strict] [--strict-base]');
+    console.log('  --verbose     Also list the individual missing and orphan Gallery/CLI id keys.');
+    console.log('  --strict      Exit 1 if any Gallery/CLI id mismatch is found.');
+    console.log('  --strict-base Exit 1 if any Gallery/CLI id mismatch is found; id mismatches are base integrity, not translation sync.');
     process.exit(unknown.length > 0 ? 2 : 0);
 }
 
@@ -237,11 +241,15 @@ const cliIdIssues = cliIdCheck === null ? 0 : cliIdCheck.missing.length + cliIdC
 console.log(`[lang] Summary: ${galleryIdIssues} gallery id issue${galleryIdIssues === 1 ? '' : 's'}, ${cliIdIssues} cli id issue${cliIdIssues === 1 ? '' : 's'}`);
 
 const hasFindings = galleryIdIssues > 0 || cliIdIssues > 0;
+if (hasFindings && strictBase) {
+    console.log('\x1b[31m[lang] Check failed in strict-base mode.\x1b[0m');
+    process.exit(1);
+}
 if (hasFindings && strict) {
     console.log('\x1b[31m[lang] Check failed in strict mode.\x1b[0m');
     process.exit(1);
 }
-if (hasFindings && !strict) {
+if (hasFindings && !strict && !strictBase) {
     console.log('[lang] Notice only: exit code 0. Use --strict to fail on any finding.');
 }
 process.exit(0);
