@@ -152,6 +152,7 @@ Cover each item in the pull request description.
 - [ ] Manual smoke test done, as above. Note any failures or skipped steps.
 - [ ] Tested on desktop and mobile where possible, noting any `Platform.isPhone`-specific behaviour. If desktop only, say so.
 - [ ] User-facing text: `en.json` keys added for any new user-facing strings. Other locales fall back to English until translated.
+  -  Note that language keys passed as literal `t()` arguments: no dynamic templates, no context: options, and no keys stored in data for later translation.
 - [ ] UI changes: screenshots or GIF attached.
 - [ ] No generated files: no changes to `src/version.ts`, `docs/dist/`, `main.js`, or `styles.css`.
 - [ ] No release steps: do not push tags to upstream, and do not run `npm run release`.
