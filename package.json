@@ -37,7 +37,7 @@
     "eslint": "^10.13.0",
     "eslint-plugin-obsidianmd": "^0.5.1",
     "obsidian": "^1.14.4",
-    "stylelint": "^17.16.0",
+    "stylelint": "^18.0.0",
     "stylelint-config-standard": "^40.0.0",
     "tslib": "^2.9.1",
     "typedoc": "^0.28.14",
