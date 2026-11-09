@@ -137,9 +137,7 @@ export default class ProtocolManager {
 	}
 
     /**
-     * Decodes a URI parameter value, logging and notifying on malformed encoding
-     * instead of throwing (Obsidian has already decoded the URI once; a second
-     * decode of a malformed % sequence throws URIError).
+     * Decodes a URI parameter value, logging and notifying on malformed encoding.
      * @param name parameter name, for the error message
      * @param value raw parameter value
      * @returns decoded value, or undefined when the encoding is malformed
