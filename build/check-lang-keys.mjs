@@ -392,9 +392,6 @@ for (const file of languageFiles) {
 console.log(`[lang] Summary: ${unusedKeys.length} unused keys in base, ${outOfSyncCount} of ${languageFiles.length} languages out of sync`);
 
 const hasFindings = unusedKeys.length > 0 || outOfSyncCount > 0 || codeKeysMissingFromBase.length > 0;
-// The gate covers issues in the English-language (base) translations:
-// keys the English base owns or should own. Missing translations and
-// extra keys are not part of the gate; they lag by design.
 const hasEnglishBaseFindings = unusedKeys.length > 0 || codeKeysMissingFromBase.length > 0;
 if (hasEnglishBaseFindings && strict) {
     console.log('\x1b[31m[lang] Check failed in strict mode.\x1b[0m');
