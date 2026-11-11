@@ -2,7 +2,7 @@ import { Rect } from "@codemirror/view";
 import NoteToolbarPlugin from "main";
 import { FrontMatterCache, getIcon, ItemView, MarkdownView, Menu, MenuItem, MenuPositionDef, Notice, Platform, setIcon, setTooltip, TFile, TFolder } from "obsidian";
 import { DefaultStyleType, ErrorBehavior, ItemType, LocalVar, MobileStyleType, OBSIDIAN_UI_ELEMENTS, PositionType, ScriptContext, t, ToggleUiStateType, ToolbarItemSettings, ToolbarSettings, ToolbarStyle, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_WHATS_NEW } from "Settings/NoteToolbarSettings";
-import { calcComponentVisToggles, getItemFallbackName, getViewId, hasStyle, isValidUri, putFocusInMenu } from "Utils/Utils";
+import { calcComponentVisToggles, getItemFallbackName, getViewId, hasStyle, isValidUri, putFocusInMenu, waitFor } from "Utils/Utils";
 
 // note: make sure CSS is updated if these are changed
 export enum TbarData {
@@ -977,7 +977,7 @@ export default class ToolbarRenderer {
 		}
 
 		// restore the Properties visibility state, even when no toolbar renders for this note
-		this.restorePropsState();
+		void this.restorePropsState();
 
 	}
 
@@ -1199,13 +1199,25 @@ export default class ToolbarRenderer {
 	 * if the "Keep properties view state" setting is enabled. Runs independently
 	 * of whether a toolbar is rendered for the current note, so the saved state
 	 * applies on app open and when opening notes with no toolbar.
+	 *
+	 * At app open the Properties element may not be built yet when this runs,
+	 * so getPropsEl() returns null and toggleUi() silently does nothing, with
+	 * no retry. Wait for the element first, using the shared waitFor() utility
+	 * (same delays renderToolbar already uses for this element, #464), then
+	 * apply the state once.
 	 */
-	restorePropsState() {
+	async restorePropsState(): Promise<void> {
 
 		if (this.ntb.settings.keepPropsState) {
 			// restore properties to the state they were before
 			const propsState = this.ntb.app.loadLocalStorage(LocalVar.TogglePropsState) as ToggleUiStateType;
 			if (propsState && ['toggle', 'show', 'hide', 'fold'].includes(propsState)) {
+				// fix: at app open the Properties element may not exist yet; wait for it before applying the state
+				const propsEl = await waitFor(() => this.ntb.el.getPropsEl());
+				if (!propsEl) {
+					this.ntb.debug("> restorePropsState: Unable to find .metadata-container to restore Properties state");
+					return;
+				}
 				this.ntb.commands.toggleUi('props', propsState, true);
 			}
 		}
@@ -1223,7 +1235,7 @@ export default class ToolbarRenderer {
 
 		this.ntb.debug(`update: ${toolbar.name}`);
 
-		this.restorePropsState();
+		void this.restorePropsState();
 
 		const currentView = view ? view : this.ntb.app.workspace.getActiveViewOfType(ItemView);
 		const toolbarEl = this.ntb.el.getToolbarEl(currentView ?? undefined);

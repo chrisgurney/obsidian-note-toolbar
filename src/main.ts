@@ -159,7 +159,7 @@ export default class NoteToolbarPlugin extends Plugin {
 					this.render.updatePhoneNavbarVisibility();
 
 					// apply the saved Properties visibility state, even when no toolbar renders
-					this.render.restorePropsState();
+					void this.render.restorePropsState();
 				}
 				catch (error) {
 					this.adapters.utils.handleError(error, { errorBehavior: ErrorBehavior.Report });
