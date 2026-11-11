@@ -725,9 +725,9 @@ export function toolbarHasMenu(toolbar: ToolbarSettings): boolean {
 /**
  * Repeatedly calls a getter until it returns a value, waiting between attempts.
  * Tries the getter immediately, so there is no delay when the value already exists.
- * @param getValue A function returning the value to wait for, or null/undefined while it is not ready.
- * @param delays Milliseconds to wait between attempts.
- * @returns The first truthy value, or null if the getter never returns one.
+ * @param getValue a function returning the value to wait for, or null/undefined while it is not ready.
+ * @param delays milliseconds to wait between attempts.
+ * @returns the first truthy value, or null if the getter never returns one.
  */
 export async function waitFor<T>(getValue: () => T | null | undefined, delays: number[] = [50, 100, 200, 400]): Promise<T | null> {
 	for (const delay of delays) {
