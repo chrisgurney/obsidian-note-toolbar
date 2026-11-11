@@ -392,9 +392,6 @@ for (const file of languageFiles) {
 console.log(`[lang] Summary: ${unusedKeys.length} unused keys in base, ${outOfSyncCount} of ${languageFiles.length} languages out of sync`);
 
 const hasFindings = unusedKeys.length > 0 || outOfSyncCount > 0 || codeKeysMissingFromBase.length > 0;
-// Base findings are the gate: keys the English base owns or should own.
-// Missing translations and extra keys are not base findings; they lag
-// by design.
 const hasBaseFindings = unusedKeys.length > 0 || codeKeysMissingFromBase.length > 0;
 if (hasBaseFindings && strict) {
     console.log('\x1b[31m[lang] Check failed in strict mode.\x1b[0m');

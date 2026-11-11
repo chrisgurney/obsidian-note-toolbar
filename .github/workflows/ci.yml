@@ -39,3 +39,6 @@ jobs:
 
       - name: Build plugin
         run: npm run build
+
+      - name: Check language keys
+        run: npm run check-lang -- --strict
