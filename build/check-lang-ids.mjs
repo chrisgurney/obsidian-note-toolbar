@@ -10,8 +10,10 @@
  * caught here. Run both through `npm run check-lang`.
  *
  * Reports are counts only by default. --verbose lists the missing and
- * orphan keys. --strict exits 1 on any finding. Unknown options exit 2.
- * Skipped (exit 0) on a tree with no gallery/en.json or cli/en.json.
+ * orphan keys. --strict exits 1 on any finding: id mismatches are
+ * issues in the English-language (base) translations, not translation
+ * sync. Unknown options exit 2. Skipped (exit 0) on a tree with no
+ * gallery/en.json or cli/en.json.
  *
  * Usage: node build/check-lang-ids.mjs [--verbose] [--strict]
  *   npm run check-lang / npm run check-lang -- --verbose
