@@ -41,4 +41,4 @@ jobs:
         run: npm run build
 
       - name: Check language keys
-        run: npm run check-lang -- --strict
+        run: npm run check:lang -- --strict
