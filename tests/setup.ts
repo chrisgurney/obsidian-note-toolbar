@@ -2,13 +2,16 @@
  * Test-environment globals that Obsidian normally provides.
  * Runs before any test file (and therefore before any production
  * module under test) is loaded.
+ *
+ * Add new globals by the gap they fill, not by the test that needs
+ * them, so this file stays short as the suite grows.
  */
 
 const g = globalThis as Record<string, unknown>;
 
-// Settings/NoteToolbarSettings.ts builds its i18next instance at import
-// time. The stub's `t` just echoes the key, which is all the modules
-// under test need.
+// Production modules build an i18next instance at import time. The
+// stub echoes translation keys back, which is all any module under
+// test needs from it.
 g.i18next = {
 	createInstance: () => ({
 		init: () => Promise.resolve(),
@@ -16,15 +19,16 @@ g.i18next = {
 	}),
 };
 
-// Utils.getUUID() uses window.crypto.randomUUID(); Node provides the
-// same Web Crypto global, so point `window` at the global object.
+// Some production code reads browser globals through `window`
+// (for example `window.crypto`). This environment already provides
+// those on the global object, so `window` points at it.
 if (typeof g.window === 'undefined') {
 	g.window = globalThis;
 }
 
-// Node has Event but not MouseEvent; Utils.getLinkUiTarget() does an
-// `instanceof MouseEvent` check. This stub carries just the fields
-// that function (and the tests) read.
+// This environment provides Event but not MouseEvent. The stub
+// carries the standard button and modifier fields, so `instanceof
+// MouseEvent` checks and event handlers behave normally.
 if (typeof g.MouseEvent === 'undefined') {
 	g.MouseEvent = class MouseEvent extends Event {
 		button = 0;
