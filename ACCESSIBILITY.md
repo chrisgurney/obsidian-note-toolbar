@@ -17,6 +17,7 @@ Note Toolbar runs inside Obsidian, so some of the experience depends on Obsidian
 ### Keyboard navigation
 
 - Use the `Note Toolbar: Focus` command to put keyboard focus in a toolbar, then move between items with the arrow keys and activate with Enter or Space. You can assign a shortcut to the command in Obsidian under **Settings → Hotkeys**.
+- Use the `Note Toolbar: Focus in text toolbar` command to put keyboard focus in the text toolbar (the toolbar that appears when text is selected). If the toolbar is not already displayed, the command shows it at the current cursor position and places focus in it.
 - The settings UI is designed to be fully keyboard navigable.
 - Toolbar items show a visible focus ring when navigated by keyboard.
 
@@ -91,7 +92,6 @@ Note Toolbar runs inside Obsidian on desktop (Windows, macOS, Linux) and mobile 
 ## Known limitations
 
 - **Tab stays inside a toolbar.** On position toolbars (top, bottom, properties) and floating toolbars, Tab moves between items instead of leaving the toolbar. In reading mode, Escape moves focus out. In editing mode there is currently no keyboard-only way out; use a mouse or touch to move focus elsewhere.
-- **The text toolbar has no keyboard path in editing mode.** The toolbar that appears when you select text cannot be reached by keyboard while editing. You can reach it with a mouse or touch. The `Note Toolbar: Focus` command reaches position toolbars, not floating ones.
 
 If you find another barrier, please open an accessibility issue using the reporting process above.
 
