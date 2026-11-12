@@ -22,6 +22,7 @@
     "pretypecheck": "node build/generate-version.mjs",
     "release": "node build/release.mjs",
     "stylelint": "npx stylelint '**/*.css'",
+    "test": "vitest run",
     "typecheck": "tsc --noEmit --skipLibCheck"
   },
   "keywords": [],
