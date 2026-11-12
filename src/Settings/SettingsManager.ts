@@ -1,4 +1,5 @@
 import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, DEFAULT_ITEM_SETTINGS, DEFAULT_SETTINGS, ItemType, LocalVar, NONE_TOOLBAR, NONE_TOOLBAR_ID, NoteToolbarSettings, Position, PositionType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { confirmWithModal } from "Settings/UI/Modals/ConfirmModal";
 import { getUUID, isUuid } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
 import { normalizePath, Notice, Platform } from "obsidian";
@@ -8,6 +9,11 @@ import ToolbarSettingsModal from "./UI/Modals/ToolbarSettingsModal";
 import NoteToolbarSettingTab from "./UI/NoteToolbarSettingTab";
 
 export default class SettingsManager {
+
+	// set when settings could not be loaded
+	// while set, save() asks before overwriting the stored file; overwriteConfirmed records a per-session approval
+	private settingsLoadFailed = false;
+	private settingsOverwriteConfirmed = false;
 	
 	constructor(
 		private ntb: NoteToolbarPlugin
@@ -498,7 +504,17 @@ export default class SettingsManager {
 		catch (error) {
 			// could not read the stored settings at all; fall back to defaults below, without overwriting what's on disk;
 			// using console.error, as ntb.error isn't guaranteed to exist yet
+			this.settingsLoadFailed = true;
 			console.error('Note Toolbar: failed to load settings; starting with defaults.', error);
+			// warn now, before anything can save: a later save would persist these defaults over the stored settings
+			new Notice(t('setting.error-load-failed'), 10000).containerEl.addClass('mod-warning');
+		}
+
+		if (loaded_settings !== null && (typeof loaded_settings !== 'object' || Array.isArray(loaded_settings))) {
+			this.settingsLoadFailed = true;
+			console.error('Note Toolbar: stored settings could not be loaded; starting with defaults.', loaded_settings);
+			new Notice(t('setting.error-load-failed'), 10000).containerEl.addClass('mod-warning');
+			loaded_settings = null;
 		}
 		this.ntb.settings = Object.assign({}, DEFAULT_SETTINGS, loaded_settings);
 		
@@ -524,7 +540,16 @@ export default class SettingsManager {
 				return;
 			}
 			// don't render the initial toolbar, as managers + helpers may not be initialized yet
-			await this.save(false);
+			try {
+				await this.save(false);
+			}
+			catch (error) {
+				// a failed save must not stop the plugin from loading: the migrated
+				// settings are kept in memory, and migration will retry on the next load
+				// (the version on disk is still the old one)
+				this.ntb.error('Note Toolbar: failed to save migrated settings.', error);
+				new Notice(t('setting.error-migration-save-failed'), 10000).containerEl.addClass('mod-warning');
+			}
 		}
 
 	}
@@ -533,6 +558,24 @@ export default class SettingsManager {
 	 * Saves settings.
 	 */
 	async save(renderToolbar: boolean = true): Promise<void> {
+		// if settings did not load from disk, confirm before overwriting the stored file
+		if (this.settingsLoadFailed && !this.settingsOverwriteConfirmed) {
+			const confirmed = await confirmWithModal(this.ntb.app, {
+				title: t('setting.confirm-overwrite-title'),
+				questionLabel: t('setting.confirm-overwrite-question'),
+				approveLabel: t('setting.confirm-overwrite-approve'),
+				denyLabel: t('setting.confirm-overwrite-deny'),
+				warning: true,
+			});
+			if (confirmed) {
+				this.settingsOverwriteConfirmed = true;
+			}
+			else {
+				// the user chose not to save: skip both the write and the re-render
+				new Notice(t('setting.save-cancelled-notice'), 10000).containerEl.addClass('mod-warning');
+				return;
+			}
+		}
 		await this.ntb.saveData(this.ntb.settings);
 
 		if (renderToolbar) {
