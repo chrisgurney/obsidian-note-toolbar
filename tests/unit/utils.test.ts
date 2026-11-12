@@ -26,7 +26,7 @@ import {
 	toolbarHasMenu,
 } from 'Utils/Utils';
 import { MarkdownView } from 'obsidian';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const icon = 'icon' as ComponentType;
 const label = 'label' as ComponentType;
@@ -226,8 +226,16 @@ describe('importArgs', () => {
 	});
 
 	it('reports an error instead of throwing on bad input', () => {
-		const result = importArgs('name: "unterminated');
-		expect(result.value).toBeNull();
-		expect(result.error).toBeTruthy();
+		// importArgs logs the error it reports; silence it so the
+		// test run stays clean, and assert the report happened.
+		const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+		try {
+			const result = importArgs('name: "unterminated');
+			expect(result.value).toBeNull();
+			expect(result.error).toBeTruthy();
+			expect(errorSpy).toHaveBeenCalled();
+		} finally {
+			errorSpy.mockRestore();
+		}
 	});
 });
