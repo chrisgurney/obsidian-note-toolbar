@@ -10,11 +10,10 @@ import NoteToolbarSettingTab from "./UI/NoteToolbarSettingTab";
 
 export default class SettingsManager {
 
-	// UE-30: set when settings could not be loaded from disk (loadData() threw, or
-	// returned something that is not a settings object). While set, save() asks before
-	// overwriting the stored file; overwriteConfirmed records a per-session approval.
-	private loadFailed = false;
-	private overwriteConfirmed = false;
+	// set when settings could not be loaded
+	// while set, save() asks before overwriting the stored file; overwriteConfirmed records a per-session approval
+	private settingsLoadFailed = false;
+	private settingsOverwriteConfirmed = false;
 	
 	constructor(
 		private ntb: NoteToolbarPlugin
@@ -505,16 +504,15 @@ export default class SettingsManager {
 		catch (error) {
 			// could not read the stored settings at all; fall back to defaults below, without overwriting what's on disk;
 			// using console.error, as ntb.error isn't guaranteed to exist yet
-			this.loadFailed = true;
+			this.settingsLoadFailed = true;
 			console.error('Note Toolbar: failed to load settings; starting with defaults.', error);
 			// warn now, before anything can save: a later save would persist these defaults over the stored settings
 			new Notice(t('setting.error-load-failed'), 10000).containerEl.addClass('mod-warning');
 		}
-		// a stored file that parses to something other than a settings object (a string,
-		// number, or array) is not usable settings either: treat it like a failed load
+
 		if (loaded_settings !== null && (typeof loaded_settings !== 'object' || Array.isArray(loaded_settings))) {
-			this.loadFailed = true;
-			console.error('Note Toolbar: stored settings are not a settings object; starting with defaults.', loaded_settings);
+			this.settingsLoadFailed = true;
+			console.error('Note Toolbar: stored settings could not be loaded; starting with defaults.', loaded_settings);
 			new Notice(t('setting.error-load-failed'), 10000).containerEl.addClass('mod-warning');
 			loaded_settings = null;
 		}
@@ -560,8 +558,8 @@ export default class SettingsManager {
 	 * Saves settings.
 	 */
 	async save(renderToolbar: boolean = true): Promise<void> {
-		// UE-30: if settings did not load from disk, confirm before overwriting the stored file
-		if (this.loadFailed && !this.overwriteConfirmed) {
+		// if settings did not load from disk, confirm before overwriting the stored file
+		if (this.settingsLoadFailed && !this.settingsOverwriteConfirmed) {
 			const confirmed = await confirmWithModal(this.ntb.app, {
 				title: t('setting.confirm-overwrite-title'),
 				questionLabel: t('setting.confirm-overwrite-question'),
@@ -570,11 +568,10 @@ export default class SettingsManager {
 				warning: true,
 			});
 			if (confirmed) {
-				this.overwriteConfirmed = true;
+				this.settingsOverwriteConfirmed = true;
 			}
 			else {
-				// the user chose not to save: skip both the write and the re-render, so the
-				// visible toolbar stays consistent with "nothing happened"
+				// the user chose not to save: skip both the write and the re-render
 				new Notice(t('setting.save-cancelled-notice'), 10000).containerEl.addClass('mod-warning');
 				return;
 			}
