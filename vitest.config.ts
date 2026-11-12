@@ -34,7 +34,8 @@ export default defineConfig({
 			// vitest-setup (in setupFiles) installs its globals.
 			{ find: /^obsidian$/, replacement: obsidianMocks },
 			{ find: /^main$/, replacement: mock('main.ts') },
-			{ find: /^version$/, replacement: mock('version.ts') },
+			{ find: /^version$/, replacement: fileURLToPath(new URL('./src/version.ts', import.meta.url)) },
+			{ find: /^Help\/Releases\/en\/.*\.md$/, replacement: mock('release-notes.ts') },
 			{ find: /^@codemirror\/view$/, replacement: mock('codemirror-view.ts') },
 			...srcAliases,
 		],
