@@ -626,8 +626,8 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 	): void {
 		this.ntb.registerDomEvent(setting.infoEl, 'click', (event) => {
 			// ignore the "Learn more" link
-			if (!(event.target instanceof HTMLElement && 
-				event.target.matches('a.note-toolbar-setting-focussable-link'))) {
+			if (!(event.targetNode?.instanceOf(HTMLElement) && 
+				event.targetNode.matches('a.note-toolbar-setting-focussable-link'))) {
 				this.handleSettingToggle(containerSelector, section, callback);
 			}
 		});

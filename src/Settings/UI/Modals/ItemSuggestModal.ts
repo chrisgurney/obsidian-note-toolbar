@@ -137,7 +137,7 @@ export default class ItemSuggestModal extends SuggestModal<ToolbarItemSettings> 
         const lowerCaseInputStr = inputStr.trim().toLowerCase();
         const isInputEmpty = lowerCaseInputStr.length === 0;
         let sortedSuggestions: ToolbarItemSettings[] = [];
-        let toolbarsToSearch = [];
+        let toolbarsToSearch;
 
         // scope search to toolbar if applicable
         if (this.toolbarId) {

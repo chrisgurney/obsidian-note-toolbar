@@ -264,7 +264,7 @@ export default class RulesModal extends Modal {
             .addSearch(async (cb) => {
                 new ToolbarSuggester(this.ntb, cb.inputEl, true,
                     async (toolbar) => {
-                        let isValid = false;
+                        let isValid;
                         if (toolbar.uuid === NONE_TOOLBAR_ID) {
                             isValid = true;
                         }

@@ -93,10 +93,10 @@ export default class ToolbarItemHandler {
 
         // determine where event originated from so we know where to position menus
         let eventPos;
-        if (event instanceof MouseEvent) {
+        if (event?.instanceOf(MouseEvent)) {
             eventPos = (event?.currentTarget as HTMLElement)?.getBoundingClientRect();
         }
-        else if (event instanceof KeyboardEvent) {
+        else if (event?.instanceOf(KeyboardEvent)) {
             eventPos = activeDocument.activeElement?.getBoundingClientRect();
         }
         if (eventPos) {

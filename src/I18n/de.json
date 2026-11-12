@@ -21,24 +21,17 @@
             "query-function": "Abfrage ausführen"
         },
         "error": {
-            "args-format": "Ungültiges Argumentformat.",
             "args-parsing": "Argumente konnten nicht geparsed werden",
-            "args-parsing-error": "Argumente konnten nicht geparsed werden\n```\n{{- error}}\n```",
             "args-parsing-field-error": "```\n{{- error}}\n```",
-            "args-parsing-script-error": "Argumente für Skript konnten nicht geparsed werden: {{filename}}\n```\n{{- error}}\n```",
             "callout-not-found": "Fehler: Note-Toolbar-Ausgabe-Callout konnte in der aktuellen Notiz mit der ID {{id}} nicht gefunden werden.",
-            "exec-failed": "Skript konnte nicht ausgeführt werden: {{filename}}",
             "expr-failed": "Ausdruck konnte nicht ausgewertet werden: {{expression}}",
             "expr-note-not-open": "Dieser Ausdruck muss aus einer offenen Note ausgeführt werden.",
             "file-not-found": "Datein nicht gefunden: {{filename}}",
             "function-invalid": "Funktion nicht unterstützt: {{function}}",
             "function-not-found": "Funktion nicht gefunden: {{function}}",
             "general": "Fehler: Weitere Details finden Sie in der Konsole..\n```\n{{error}}\n```",
-            "function-note-not-open": "Dieser Ausdruck muss aus einer offenen Note ausgeführt werden.",
             "plugin-disabled": "Plugin nicht installiert und aktiviert: ",
             "plugin-not-installed": "Dieses Element verwendet ein Plugin, das nicht installiert und aktiviert ist.",
-            "query-failed": "Abfrage konnte nicht ausgewertet werden: {{expression}}",
-            "query-note-not-open": "Diese Abfrage muss aus einer geöffneten Notiz ausgeführt werden.",
             "scripting-disabled": "Aktivieren Sie Scripting in den Einstellungen von Note Toolbar, um dieses Element zu verwenden."
         },
         "javascript": {
@@ -49,8 +42,7 @@
             "exec-error-required": "Fehler: Eine JavaScript-Datei ist erforderlich",
             "exec-function": "JavaScript Datei ausführen",
             "exec-sourcefile": "JavaScript Datei",
-            "exec-sourcefile-description": "Auszuführende JavaScript-Datei.",
-            "exec-sourcefile-error-required": "Fehler: Eine JavaScript-Datei ist erforderlich"
+            "exec-sourcefile-description": "Auszuführende JavaScript-Datei."
         },
         "js-engine": {
             "eval-expr": "JavaScript-Ausdruck",
@@ -61,8 +53,6 @@
             "exec-sourcefile": "JavaScript Datei",
             "exec-sourcefile-description": "Auszuführende JavaScript-Datei.",
             "exec-sourcefile-error-required": "Fehler: Eine JavaScript-Datei ist erforderlich",
-            "importexec-args": "Argumente (optional)",
-            "importexec-args-description": "Von Ihrer Skriptfunktion akzeptierte Argumente im durch Kommas getrennten Format „Name: Wert“, mit Zeichenfolgenwerten in Anführungszeichen.",
             "importexec-function": "JavaScript importieren und ausführen.",
             "importexec-sourcefile": "JavaScript Datei",
             "importexec-sourcefile-description": "Zu importierende JavaScript-Datei. Beachten Sie, dass diese Datei nur einmal importiert wird. Möglicherweise müssen Sie Obsidian neu starten, damit die Änderungen übernommen werden.",
@@ -103,15 +93,11 @@
             "error-invalid-icon": "Ungültige Icon-ID: {{iconId}}"
         },
         "msg": {
-            "block-no-id": "Keine Block-ID gefunden.",
             "clipboard-copied": "In die Zwischenablage kopiert.",
-            "error-console": "Fehler: Weitere Informationen finden Sie in der Konsole.",
-            "file-created": "Erstellt: {{filename}}",
-            "file-not-exist": "Datei existiert nicht."
+            "file-created": "Erstellt: {{filename}}"
         },
         "ui": {
             "button-submit": "Senden",
-            "error-cancelled": "Abgebrochene Eingabeaufforderung",
             "error-file-unsupported": "Nicht unterstützter Dateityp: {{filetype}}",
             "error-missing-property": "Erfoderliche Eigenschaft für API fehlt: {{property}}",
             "error-undefined": "Undefiniertes Element",
@@ -150,7 +136,6 @@
     "export": {
         "item-generic": "Element{{number}}",
         "label-callout": "Als Hinweis kopieren",
-        "label-share": "Teilen...",
         "label-share-description": "Teile diesen Link mit einem anderen Note Toolbar-Nutzer, um deine Toolbar zu seinem Vault hinzuzufügen.",
         "label-share-preview": "Vorschau",
         "option-uri": "Obsidian URI verwenden",
@@ -163,8 +148,6 @@
         "error-invalid-plugin": "Ungültiges Plug-In oder keines für das Galerieelement aktiviert.",
         "error-missing-item-type": "Galerieelement: Fehlende Elementtyp-Eigenschaft",
         "error-missing-property": "Fehlende Plugin- oder Skripteigenschaft in den Galeriedaten.",
-        "label-add-item": "Klicken oder tippen Sie, um Folgendes zu einer Symbolleiste hinzuzufügen:",
-        "label-plugin": "{{plugin}}",
         "label-suggestions": "VORSCHLÄGE AUS DER ELEMENTGALERIE",
         "select-plugin-placeholder": "Wählen sie das zu verwendende Plugin aus...",
         "select-plugin-suggestion": "{{plugin}}",
@@ -179,7 +162,6 @@
         "button-create": "Erstellen",
         "button-import-into-tooltip": "Toolbarelemente aus Hinweis hinzufügen",
         "button-import-tooltip": "Toolbar aus Hinweis erstellen",
-        "error-invalid-uri-content": "Note Toolbar: Es scheint ein Problem mit diesem Link zu geben. Überprüfe, ob die URI korrekt ist, oder schaue im Benutzerhandbuch nach.",
         "errorlog-command-not-recognized": "Befehl nicht erkannt: {{command}}",
         "errorlog-heading": "Fehler während des Toolbar-Imports gefunden:",
         "errorlog-icon-not-found": "Icon nicht gefunden: {{icon}}",
@@ -212,10 +194,6 @@
         "warning-no-matching-toolbar": "Note Toolbar: Keine passende Toolbar: {{toolbar}}\nKlicken sie hier, um sie zu erstellen."
     },
     "onboarding": {
-        "new-toolbar-mapping-content": "Um diese Toolbar in Ihrer Notiz anzuzeigen, fügen Sie eine Eigenschaft mit dem Namen ({{property}}) dieser Toolbar hinzu. Oder ordnen Sie diese Toolbar dem Ordner zu, in dem sich die Notiz befindet (Einstellungen für die Toolbar der Notiz → Ordnerzuordnungen).",
-        "new-toolbar-mapping-title": "So verwenden sie diese Toolbar",
-        "swap-toolbar-content": "Wenn Sie unten eine Option auswählen, wird diese Notiz aktualisiert, indem der Wert der Eigenschaft ({{property}}) geändert oder entfernt wird.",
-        "swap-toolbar-title": "Diese Notiz wird geändert "
     },
     "plugin": {
         "canvas": "Canvas",
@@ -246,16 +224,13 @@
         "button-cancel": "Abbrechen",
         "button-enable": "Aktivieren",
         "button-proceed": "Weiter",
-        "button-collapse-tooltip": "Abschnitt schließen",
         "button-delete-tooltip": "Löschen",
         "button-drag-tooltip": "Zum Umsortieren ziehen",
-        "button-expand-tooltip": "Abschnitt erweitern",
         "button-gallery": "Galerie",
         "button-gallery-tooltip": "Galerie öffnen",
         "button-help": "Hilfe",
         "button-help-tooltip": "Hilfe-Fenster öffnen",
         "button-learn-more": "Mehr\u00A0erfahren",
-        "button-user-guide": "Benutzer\u00A0Handbuch",
         "button-whats-new": "Was ist\u00A0neu?",
         "button-whats-new-tooltip": "Was ist neu-Fenster öffnen",
         "command-suggest-modal": {
@@ -273,14 +248,12 @@
             "option-ids": "IDs in Menüpunkten verwenden",
             "option-ids-description": "Dies stellt sicher, dass Menüpunkte weiterhin funktionieren, wenn die Menü-Toolbar umbenannt wird. Wenn du Hinweise teilen möchtest, schalte dies aus und der Name der Toolbar wird verwendet.",
             "option-vars": "Variablen ersetzen",
-            "option-vars-description": "Alle im Toolbar verwendeten Variablen werden durch Werte aus der aktuell geöffneten Notiz ersetzt. Beispiel: {{note_title}} → Meine Notiz",
-            "title": "Als Hinweis kopieren"
+            "option-vars-description": "Alle im Toolbar verwendeten Variablen werden durch Werte aus der aktuell geöffneten Notiz ersetzt. Beispiel: {{note_title}} → Meine Notiz"
         },
         "delete-toolbar": {
             "button-delete": "Löschen...",
             "button-delete-confirm": "Löschen",
             "button-delete-tooltip": "Diese Toolbar löschen",
-            "description": "Dies kann nicht Rückgängig gemacht werden.",
             "label-delete-confirm": "Sind Sie sicher, dass sie diese Toolbar löschen möchten?",
             "label-usage-note": "Diese Toolbar kann in einer `{{propertyName}}`-Eigenschaft verwendet werden. Um sicherzugehen, schließen sie dieses Fenster und suchen sie nach `[{{propertyName}}:\u00A0{{toolbarName}}]`",
             "name": "Diese Toolbar löschen",
@@ -313,10 +286,7 @@
         },
         "display-rules": {
             "description": "Bestimmen Sie mithilfe einer Eigenschaft, Zuordnungen oder beidem, für welche Notizen Toolbars angezeigt werden sollen.",
-            "name": "Anzeigeregeln",
-            "option-property": "Eigenschaft",
-            "option-property-description": "Wenn in dieser Eigenschaft ein Symbolleistenname gefunden wird, wird die Symbolleiste in der Notiz angezeigt. Sie hat Vorrang vor allen Ordnerzuordnungen. Setzen Sie sie auf „none“, um die Symbolleiste auszublenden.",
-            "option-property-placeholder": "Eigenschaft"
+            "name": "Anzeigeregeln"
         },
         "error-old-settings-description": "Alte Einstellungsdatei geladen ({{oldVersion}}), aber aktuellste ist {{currentVersion}}",
         "error-old-settings-name": "⚠️ Fehler: Bitte Note Toolbar deaktivieren und reaktivieren, oder Obsidian neustarten.",
@@ -327,23 +297,14 @@
             "button-open-external": "Öffnen ↗",
             "button-open-github": "github.com öffnen",
             "button-read": "Lesen ↗",
-            "description": "Erstelle kontextabhängige Toolbars für deine Notizen.",
             "error-failed-to-load": "Konnte nicht geladen werden:\n{{baseUrl}}/{{lang}}/{{name}}.md",
-            "heading": "Hilfe zur Verwendung der Toolbar",
             "heading-donate": "Spenden",
             "heading-support": "Unterstützen",
-            "heading-user-guide": "Benutzerhandbuch",
-            "label-article-1": "Erstellen von Toolbarelementen",
-            "label-article-1-description": "Lerne die verschiedenen Typen von Elementen kennen.",
-            "label-article-2": "Note Toolbar-Hinweise",
-            "label-article-2-description": "Lerne, wie du Toolbars in deinen Notizen erstellst.",
             "label-bug": "Einen Fehler melden",
             "label-donate": "Kauf mir einen Kaffee",
             "label-donate-description": "Wenn du dieses Plugin nützlich findest und mich finanziell unterstützen möchtest, kannst du eine Spende in Betracht ziehen. Vielen Dank!",
             "label-feedback": "Feedback geben",
             "label-feedback-description": "Nutze dieses Google-Formular für Feedback, Fragen, Probleme oder Ideen, die du hast.",
-            "label-gallery": "Galerie öffnen",
-            "label-gallery-description": "Besuchen Sie die Galerie, um Ihren Toolbars gebrauchsfertige Elemente hinzuzufügen.",
             "label-issues": "Bekannte Probleme anzeigen",
             "label-support": "Unterstützung erhalten",
             "label-user-guide": "Benutzerhandbuch lesen",
@@ -386,8 +347,6 @@
             "option-command-placeholder": "Befehl suchen",
             "option-command-target": "Wo soll der Befehl ausgeführt werden?",
             "option-command-target-description": "Einige Befehle können diese Einstellung außer Kraft setzen.",
-            "option-component-icon": "Symbol",
-            "option-component-label": "Bezeichnung",
             "option-dataview-help": "Führt eine Dataview-Abfrage, wertet einen Ausdruck oder führt ein Skript aus.",
             "option-file": "Datei",
             "option-file-error-does-not-exist": "Datei oder Ordner existiert nicht.",
@@ -396,7 +355,6 @@
             "option-file-target-description": "Die Verwendung von Modifikatortasten oder Plug-Ins kann diese Einstellung außer Kraft setzen.",
             "option-file-placeholder": "Datei oder Ordner suchen",
             "option-item-group": "Elemement-Gruppe",
-            "option-item-group-error-does-not-exist": "Toolbar exisitiert nicht",
             "option-item-group-error-invalid": "⚠️ Ungültige Elementgruppe",
             "option-item-group-help": "Symbolleiste auswählen, um sie in diese einzufügen.",
             "option-item-group-placeholder": "Toolbar",
@@ -425,13 +383,6 @@
             "option-uri-target-description": "Die Verwendung von Modifikatortasten oder Plug-Ins kann diese Einstellung außer Kraft setzen.",
             "option-uri-target-disclaimer-device": "Diese Option bewirkt auf diesem Gerät nichts.",
             "option-uri-target-disclaimer-non-default": "Für externe Links muss das Web Viewer-Plugin aktiviert sein, um andere Optionen als die Standardoption verwenden zu können. Nur auf dem Desktop verfügbar.",
-            "option-visibility-component-hidden-platform": "{{component}} ausgeblendet auf {{platform}}",
-            "option-visibility-component-visible-platform": "{{component}} sichtbar auf {{platform}}",
-            "option-visibility-hidden": "ausgeblendet",
-            "option-visibility-hidden-platform": "ausgeblendet auf {{platform}}",
-            "option-visibility-platform-desktop": "Desktop",
-            "option-visibility-platform-mobile": "Mobil",
-            "option-visibility-visible-platform": "sichtbar auf {{platform}}",
             "title": "Toolbar-Element bearbeiten"
         },
         "item-suggest-modal": {
@@ -449,7 +400,6 @@
             "key-use": "↵",
             "label-empty-no-items": "Keine Ergebnisse gefunden.",
             "link-gallery": "Galerie entdecken...",
-            "link-search": "Nach Element suchen",
             "option-new": "Neues Element erstellen",
             "placeholder": "Element suchen...",
             "placeholder-toolbar": "{{toolbar}}: Elemente suchen...",
@@ -473,19 +423,8 @@
             "option-item-empty-label": "Keine Bezeichnung festgelegt"
         },
         "mappings": {
-            "button-collapse-tooltip": "Alle Zuweisungen einklappen",
-            "button-expand-tooltip": "Alle Zuweisungen ausklappen",
-            "button-new": "Neue Zuweisung",
-            "button-new-tooltip": "Eine neue Zuweisung hinzufügen",
-            "description": "Notizen in den unten aufgeführten Ordnern zeigen die zugewiesene Toolbar an. Die Reihenfolge wird von oben nach unten priorisiert.",
-            "error-folder-already-mapped": "Dieser Ordner hat bereits eine zugewiesene Toolbar.",
-            "label-empty": "Klicke auf die Schaltfläche, um eine Zuweisung zu erstellen.",
-            "name": "Ordnerzuweisungen",
-            "name-with-count": "Ordnerzuweisungen ({{count}})",
             "option-folder-all": "Alle Ordner",
-            "option-folder-root": "Nur Hauptordner",
-            "placeholder-folder": "Ordner",
-            "placeholder-toolbar": "Toolbar"
+            "option-folder-root": "Nur Hauptordner"
         },
         "name": {
             "description": "Dieser Toolbar einen eindeutigen Namen geben.",
@@ -513,10 +452,6 @@
             "keep-props-state": {
                 "description": "Behält den Sichtbarkeitsstatus von Eigenschaften in Notizen bei, wenn Sie die Optionen der Notiz-Toolbar zum Umschalten der Eigenschaften verwenden. Wenn diese Option aktiviert ist, müssen Sie die Option „Notizeigenschaften anzeigen“ der Notiz-Toolbar verwenden, um die Eigenschaften wieder anzuzeigen.",
                 "name": "Zustand der Eigenschaften beibehalten"
-            },
-            "load-settings-changes": {
-                "description": "Wenn Sie Plugin-Einstellungen geräteübergreifend synchronisieren, aktivieren Sie diese Option, um Toolbar-Updates automatisch zu laden. Andernfalls müssen Sie Obsidian neu starten, um Änderungen auf anderen Geräten zu sehen.",
-                "name": "Einstellungsänderungen laden"
             },
             "lock-callouts": {
                 "description": "Notiz Toolbar-Callouts werden beim Klicken nicht zur Bearbeitung erweitert. Wenn diese Option aktiviert ist, können Sie Änderungen über die Option „Bearbeiten“ im Callout-Menü vornehmen.",
@@ -548,20 +483,12 @@
             "option-top": "oben (fixiert)"
         },
         "rules": {
-            "button-collapse-tooltip": "Alle Regeln einklappen",
-            "button-expand-tooltip": "Alle Regeln erweitern",
             "button-new": "Neue Regel",
             "button-new-tooltip": "Neue Regel hinzufügen",
             "button-newcondition": "Neue Bedingung",
             "button-newcondition-tooltip": "Fügen sie dieser Regel eine neue Bedingung hinzu.",
             "description": "Regeln, die festlegen, für welche Notizen Symbolleisten angezeigt werden sollen.",
-            "error-folder-already-mapped": "Diesem Ordner ist bereits eine Toolbar zugeordnet. Die Rangfolge ist von oben nach unten.",
-            "label-empty": "Benutze die Schaltfäche um eine neue Regel zu erstellen.",
             "name": "Regeln",
-            "name-with-count": "Regeln ({{count}})",
-            "option-folder-all": "Alle Ordner",
-            "option-folder-root": "Nur im Stammordner",
-            "placeholder-folder": "Ordner",
             "placeholder-toolbar": "Toolbar"
         },
         "search": {
@@ -640,8 +567,7 @@
             "description-mappings_plural": "{{count}} Zuordnungen",
             "description-search": "Suche nach verwendeten Eigenschaften",
             "description-toolbar-items": "{{count}} Toolbar Element",
-            "description-toolbar-items_plural": "{{count}} Toolbar Elemente",
-            "name": "Verwendung"
+            "description-toolbar-items_plural": "{{count}} Toolbar Elemente"
         },
         "use-item-command": {
             "error-noname": "Der Befehl muss erneut hinzugefügt werden. Mindestens eine Beschriftung oder ein Tooltip darf nicht leer sein oder Ausdrücke enthalten.",
@@ -649,7 +575,6 @@
             "name-copy": "Kopieren Befehl für Element",
             "name-remove": "Löschen Befehl für Element",
             "notice-command-added": "Befehl verfügbar:\n{{command}}",
-            "notice-command-added-hotkeys": "Hotkey-Einstellungen öffnen {{cta}} →",
             "notice-command-error-noname": "Befehl konnte nicht hinzugefügt werden. Stellen Sie sicher, dass für das Element ein Name oder eine Bezeichnung festgelegt ist und mindestens eine davon keine Variablen oder Ausdrücke enthält.",
             "notice-command-error-startup-noname": "Note Toolbar: Einige Elementbefehle in diesen Symbolleisten wurden aufgrund leerer Beschriftungen oder Tooltips nicht hinzugefügt: {{toolbars}}",
             "notice-command-removed": "Befehl entfernt:\n{{command}}",
@@ -660,8 +585,6 @@
         "whats-new": {
             "button-read": "Lesen ↗",
             "button-read-tooltip": "github.com öffnen",
-            "error-failed-to-load": "Das Laden der Versionshinweise ist fehlgeschlagen:\n{{baseUrl}}/{{lang}}/{{version}}.md",
-            "placehoder-loading": "Laden...",
             "label-release-notes": "Versionshinweise",
             "label-release-notes-description": "Detaillierte Hinweise zu den neuesten Versionen findest du auf GitHub.",
             "label-roadmap": "Was steht für Note Toolbar als nächstes an?",

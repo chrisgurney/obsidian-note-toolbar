@@ -1,6 +1,6 @@
 {
   "name": "obsidian-note-toolbar",
-  "version": "1.36.11",
+  "version": "1.36.13",
   "releaseVersion": "1.36",
   "settingsVersion": 20260812.1,
   "description": "Obsidian plugin that adds customizable toolbars to your notes.",
@@ -11,6 +11,7 @@
     "build:skills": "node build/copy-skill-references.mjs",
     "check": "npm run lint && npm run typecheck && npm run stylelint && npm run build",
     "check:install": "npm ci --dry-run",
+    "check:lang": "node build/check-lang.mjs",
     "check:skills": "node build/copy-skill-references.mjs --check",
     "dev": "npm run prebuild && node esbuild.config.mjs",
     "docs": "node build/docs.mjs",
@@ -35,10 +36,11 @@
     "chokidar": "^6.0.0",
     "esbuild": "^0.28.2",
     "eslint": "^10.13.0",
-    "eslint-plugin-obsidianmd": "^0.4.2",
+    "eslint-plugin-obsidianmd": "^0.5.1",
     "obsidian": "^1.14.4",
-    "stylelint": "^17.16.0",
-    "stylelint-config-standard": "^40.0.0",
+    "stylelint": "^18.0.0",
+    "stylelint-config-standard": "^41.0.0",
+    "tslib": "^2.9.1",
     "typedoc": "^0.28.14",
     "typedoc-plugin-markdown": "^4.13.1",
     "typescript": "^6.0.3",
@@ -49,7 +51,6 @@
     "sortablejs": "^1.15.2"
   },
   "overrides": {
-    "moment": "2.31.0",
     "minimatch": "11.0.1"
   }
 }

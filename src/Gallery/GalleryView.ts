@@ -106,8 +106,7 @@ export default class GalleryView extends ItemView {
 			return false;
 		});
 
-		let sortedCategories: Category[] = [] as Category[];
-		sortedCategories = (gallery as Gallery).categories.sort((a, b) => {
+		const sortedCategories = (gallery as Gallery).categories.sort((a, b) => {
 			// featured categories first
 			if (!!a.featured !== !!b.featured) return a.featured ? -1 : 1;
 			const nameA = t(`gallery.category.${a.id}.name`).toLowerCase();

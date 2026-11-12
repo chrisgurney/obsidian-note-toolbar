@@ -1387,7 +1387,7 @@ export function removeFieldError(el: HTMLElement | null, position: 'beforeend' |
 	if (el) {
 		const itemControlClass = 'setting-item-control';
 		const itemPreviewClass = 'note-toolbar-setting-item-preview';
-		let containerEl = null;
+		let containerEl: HTMLElement | null;
 		containerEl = el.hasClass(itemControlClass) ? el : el.closest(`.${itemControlClass}`);
 		if (!containerEl) {
 			containerEl = el.hasClass(itemPreviewClass) ? el : el.closest(`.${itemPreviewClass}`);
