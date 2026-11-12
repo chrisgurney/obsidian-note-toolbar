@@ -1,310 +1,310 @@
 {
-	"cli": {
-		"category": {
-			"general": {
-				"heading": "General commands"
-			},
-			"items-add": {
-				"heading": "Adding items"
-			},
-			"items-add-tp": {
-				"heading": "Adding Templater items"
-			},
-			"items-copy": {
-				"heading": "Copying + Moving items"
-			},
-			"items": {
-				"heading": "Listing items"
-			},
-			"items-use": {
-				"heading": "Using items"
-			},
-			"rules": {
-				"heading": "Rules"
-			},
-			"toolbars": {
-				"heading": "Create toolbars"
-			}
-		},
-		"command": {
-			"note-toolbar": {
-				"description": "List toolbars or a toolbar's items",
-				"flag": {
-					"toolbar": {
-						"description": "Toolbar to list items for (name or ID)"
-					}
-				}
-			},
-			"note-toolbar-add-break": {
-				"description": "Add a line break to a toolbar"
-			},
-			"note-toolbar-add-command": {
-				"description": "Add a command item to a toolbar",
-				"flag": {
-					"command": {
-						"description": "Obsidian command ID (e.g. editor:toggle-bold)"
-					},
-					"focus": {
-						"description": "Focus the editor after executing the command (default: false)"
-					},
-					"target": {
-						"description": "Where to run command"
-					}
-				}
-			},
-			"note-toolbar-add-dv": {
-				"description": "Add a Dataview item to a toolbar",
-				"flag": {
-					"eval": {
-						"description": "Dataview expression to evaluate (required: eval, query, or file/path)"
-					},
-					"query": {
-						"description": "Dataview query to execute (required: eval, query, or file/path)"
-					},
-					"file": {
-						"description": "Filename to execute (required: eval, query, or file/path)"
-					},
-					"path": {
-						"description": "Filename with path to execute (required: eval, query, or file/path)"
-					},
-					"args": {
-						"description": "Comma-separated 'name: value' format, with string values in quotes"
-					}
-				}
-			},
-			"note-toolbar-add-file": {
-				"description": "Add a file item to a toolbar",
-				"flag": {
-					"file": {
-						"description": "File to link to (required: file or path)"
-					},
-					"path": {
-						"description": "Path of file to link to (required: file or path)"
-					},
-					"target": {
-						"description": "Where to open the file"
-					}
-				}
-			},
-			"note-toolbar-add-group": {
-				"description": "Add an item group to a toolbar",
-				"flag": {
-					"toolbar": {
-						"description": "Toolbar to add as a group"
-					}
-				}
-			},
-			"note-toolbar-add-js": {
-				"description": "Add a JavaScript item to a toolbar",
-				"flag": {
-					"code": {
-						"description": "JavaScript code to execute (required: code, file, or path)"
-					},
-					"file": {
-						"description": "Filename to execute (required: code, file, or path)"
-					},
-					"path": {
-						"description": "Filename with path to execute (required: code, file, or path)"
-					},
-					"args": {
-						"description": "Comma-separated 'name: value' format, with string values in quotes"
-					}
-				}
-			},
-			"note-toolbar-add-menu": {
-				"description": "Add an item menu to a toolbar",
-				"flag": {
-					"toolbar": {
-						"description": "Toolbar to add as a menu"
-					}
-				}
-			},
-			"note-toolbar-add-sep": {
-				"description": "Add a separator to a toolbar"
-			},
-			"note-toolbar-add-spread": {
-				"description": "Add a spreader to a toolbar"
-			},
-			"note-toolbar-add-tp": {
-				"description": "List commands that add a Templater item to a toolbar"
-			},
-			"note-toolbar-add-tp-command": {
-				"description": "Add a Templater item to a toolbar: Execute Templater command.",
-				"flag": {
-					"command": {
-						"description": "Templater command to execute"
-					}
-				}
-			},
-			"note-toolbar-add-tp-create": {
-				"description": "Add a Templater item to a toolbar: Creates new note from template.",
-				"flag": {
-					"file": {
-						"description": "Template filename to create note from (required: file, or path)"
-					},
-					"path": {
-						"description": "Template filename with path to create note from (required: file, or path)"
-					},
-					"output": {
-						"description": "Folder and filename (without file extension) to output to"
-					}
-				}
-			},
-			"note-toolbar-add-tp-exec": {
-				"description": "Add a Templater item to a toolbar: Execute Templater file.",
-				"flag": {
-					"file": {
-						"description": "Template filename to execute (required: file, or path)"
-					},
-					"path": {
-						"description": "Template filename with path to execute (required: file, or path)"
-					}
-				}
-			},
-			"note-toolbar-add-tp-insert": {
-				"description": "Add a Templater item to a toolbar: Insert template.",
-				"flag": {
-					"file": {
-						"description": "Template filename to insert (required: file, or path)"
-					},
-					"path": {
-						"description": "Template filename with path to insert (required: file, or path)"
-					}
-				}
-			},
-			"note-toolbar-add-uri": {
-				"description": "Add a URI item to a toolbar",
-				"flag": {
-					"uri": {
-						"description": "Website, URI, or note title"
-					},
-					"target": {
-						"description": "Where to open the URI"
-					}
-				}
-			},
-			"note-toolbar-copy": {
-				"description": "Copy one or more items to a toolbar",
-				"flag": {
-					"item": {
-						"description": "Item ID, or comma-separated list of item IDs"
-					}
-				}
-			},
-			"note-toolbar-gallery": {
-				"description": "List items available in the Gallery"
-			},
-			"note-toolbar-help": {
-				"description": "Display Note Toolbar CLI help"
-			},
-			"note-toolbar-import": {
-				"description": "Add items or create toolbar from a Note Toolbar Callout",
-				"flag": {
-					"toolbar": {
-						"description": "Toolbar name to add items to"
-					},
-					"callout": {
-						"description": "Callout markdown (required: callout, file, or path)"
-					},
-					"file": {
-						"description": "Filename of callout (required: callout, file, or path)"
-					},
-					"path": {
-						"description": "Filename with path of callout (required: callout, file, or path)"
-					}
-				}
-			},
-			"note-toolbar-items": {
-				"description": "List toolbar items",
-				"flag": {
-					"toolbar": {
-						"description": "Toolbar to list items for"
-					},
-					"filter": {
-						"description": "Filter by string in label/tooltip"
-					},
-					"empty": {
-						"description": "Include empty items in output"
-					}
-				}
-			},
-			"note-toolbar-move": {
-				"description": "Move an item to a toolbar"
-			},
-			"note-toolbar-new": {
-				"description": "Create a new toolbar",
-				"flag": {
-					"name": {
-						"description": "Toolbar name"
-					},
-					"desc": {
-						"description": "Toolbar description"
-					},
-					"icon": {
-						"description": "Toolbar icon, from Lucide's icon set"
-					}
-				}
-			},
-			"note-toolbar-rules": {
-				"description": "List toolbar display rules"
-			},
-			"note-toolbar-settings": {
-				"description": "Open Note Toolbar settings in Obsidian",
-				"flag": {
-					"item": {
-						"description": "ID of item to open settings for"
-					},
-					"toolbar": {
-						"description": "Name or ID of toolbar to open settings for"
-					}
-				}
-			},
-			"note-toolbar-status": {
-				"description": "List toolbars that are visible (positioned) in the current view."
-			},
-			"note-toolbar-use": {
-				"description": "Use an item",
-				"flag": {
-					"item": {
-						"description": "ID of item to use"
-					},
-					"file": {
-						"description": "File to use the item in"
-					},
-					"path": {
-						"description": "Path of file to use the item in"
-					}
-				}
-			}
-		},
-		"flag": {
-			"format": {
-				"description": "Output format (default: tsv)"
-			},
-			"label": {
-				"description": "Item label (required: label or icon)"
-			},
-			"icon": {
-				"description": "Item icon, from Lucide's icon set (required: label or icon)"
-			},
-			"item": {
-				"description": "Item ID"
-			},
-			"pos": {
-				"description": "Item position in toolbar (default: end of toolbar)"
-			},
-			"to": {
-				"description": "Toolbar name or ID to add item to"
-			},
-			"tooltip": {
-				"description": "Item tooltip"
-			},
-			"total": {
-				"description": "Returns count"
-			},
-			"verbose": {
-				"description": "Include additional details in output"
-			}
-		}
-	}
+  "cli": {
+    "category": {
+      "general": {
+        "heading": "General commands"
+      },
+      "items-add": {
+        "heading": "Adding items"
+      },
+      "items-add-tp": {
+        "heading": "Adding Templater items"
+      },
+      "items-copy": {
+        "heading": "Copying + Moving items"
+      },
+      "items": {
+        "heading": "Listing items"
+      },
+      "items-use": {
+        "heading": "Using items"
+      },
+      "rules": {
+        "heading": "Rules"
+      },
+      "toolbars": {
+        "heading": "Create toolbars"
+      }
+    },
+    "command": {
+      "note-toolbar": {
+        "description": "List toolbars or a toolbar's items",
+        "flag": {
+          "toolbar": {
+            "description": "Toolbar to list items for (name or ID)"
+          }
+        }
+      },
+      "note-toolbar-add-break": {
+        "description": "Add a line break to a toolbar"
+      },
+      "note-toolbar-add-command": {
+        "description": "Add a command item to a toolbar",
+        "flag": {
+          "command": {
+            "description": "Obsidian command ID (e.g. editor:toggle-bold)"
+          },
+          "focus": {
+            "description": "Focus the editor after executing the command (default: false)"
+          },
+          "target": {
+            "description": "Where to run command"
+          }
+        }
+      },
+      "note-toolbar-add-dv": {
+        "description": "Add a Dataview item to a toolbar",
+        "flag": {
+          "eval": {
+            "description": "Dataview expression to evaluate (required: eval, query, or file/path)"
+          },
+          "query": {
+            "description": "Dataview query to execute (required: eval, query, or file/path)"
+          },
+          "file": {
+            "description": "Filename to execute (required: eval, query, or file/path)"
+          },
+          "path": {
+            "description": "Filename with path to execute (required: eval, query, or file/path)"
+          },
+          "args": {
+            "description": "Comma-separated 'name: value' format, with string values in quotes"
+          }
+        }
+      },
+      "note-toolbar-add-file": {
+        "description": "Add a file item to a toolbar",
+        "flag": {
+          "file": {
+            "description": "File to link to (required: file or path)"
+          },
+          "path": {
+            "description": "Path of file to link to (required: file or path)"
+          },
+          "target": {
+            "description": "Where to open the file"
+          }
+        }
+      },
+      "note-toolbar-add-group": {
+        "description": "Add an item group to a toolbar",
+        "flag": {
+          "toolbar": {
+            "description": "Toolbar to add as a group"
+          }
+        }
+      },
+      "note-toolbar-add-js": {
+        "description": "Add a JavaScript item to a toolbar",
+        "flag": {
+          "code": {
+            "description": "JavaScript code to execute (required: code, file, or path)"
+          },
+          "file": {
+            "description": "Filename to execute (required: code, file, or path)"
+          },
+          "path": {
+            "description": "Filename with path to execute (required: code, file, or path)"
+          },
+          "args": {
+            "description": "Comma-separated 'name: value' format, with string values in quotes"
+          }
+        }
+      },
+      "note-toolbar-add-menu": {
+        "description": "Add an item menu to a toolbar",
+        "flag": {
+          "toolbar": {
+            "description": "Toolbar to add as a menu"
+          }
+        }
+      },
+      "note-toolbar-add-sep": {
+        "description": "Add a separator to a toolbar"
+      },
+      "note-toolbar-add-spread": {
+        "description": "Add a spreader to a toolbar"
+      },
+      "note-toolbar-add-tp": {
+        "description": "List commands that add a Templater item to a toolbar"
+      },
+      "note-toolbar-add-tp-command": {
+        "description": "Add a Templater item to a toolbar: Execute Templater command.",
+        "flag": {
+          "command": {
+            "description": "Templater command to execute"
+          }
+        }
+      },
+      "note-toolbar-add-tp-create": {
+        "description": "Add a Templater item to a toolbar: Creates new note from template.",
+        "flag": {
+          "file": {
+            "description": "Template filename to create note from (required: file, or path)"
+          },
+          "path": {
+            "description": "Template filename with path to create note from (required: file, or path)"
+          },
+          "output": {
+            "description": "Folder and filename (without file extension) to output to"
+          }
+        }
+      },
+      "note-toolbar-add-tp-exec": {
+        "description": "Add a Templater item to a toolbar: Execute Templater file.",
+        "flag": {
+          "file": {
+            "description": "Template filename to execute (required: file, or path)"
+          },
+          "path": {
+            "description": "Template filename with path to execute (required: file, or path)"
+          }
+        }
+      },
+      "note-toolbar-add-tp-insert": {
+        "description": "Add a Templater item to a toolbar: Insert template.",
+        "flag": {
+          "file": {
+            "description": "Template filename to insert (required: file, or path)"
+          },
+          "path": {
+            "description": "Template filename with path to insert (required: file, or path)"
+          }
+        }
+      },
+      "note-toolbar-add-uri": {
+        "description": "Add a URI item to a toolbar",
+        "flag": {
+          "uri": {
+            "description": "Website, URI, or note title"
+          },
+          "target": {
+            "description": "Where to open the URI"
+          }
+        }
+      },
+      "note-toolbar-copy": {
+        "description": "Copy one or more items to a toolbar",
+        "flag": {
+          "item": {
+            "description": "Item ID, or comma-separated list of item IDs"
+          }
+        }
+      },
+      "note-toolbar-gallery": {
+        "description": "List items available in the Gallery"
+      },
+      "note-toolbar-help": {
+        "description": "Display Note Toolbar CLI help"
+      },
+      "note-toolbar-import": {
+        "description": "Add items or create toolbar from a Note Toolbar Callout",
+        "flag": {
+          "toolbar": {
+            "description": "Toolbar name to add items to"
+          },
+          "callout": {
+            "description": "Callout markdown (required: callout, file, or path)"
+          },
+          "file": {
+            "description": "Filename of callout (required: callout, file, or path)"
+          },
+          "path": {
+            "description": "Filename with path of callout (required: callout, file, or path)"
+          }
+        }
+      },
+      "note-toolbar-items": {
+        "description": "List toolbar items",
+        "flag": {
+          "toolbar": {
+            "description": "Toolbar to list items for"
+          },
+          "filter": {
+            "description": "Filter by string in label/tooltip"
+          },
+          "empty": {
+            "description": "Include empty items in output"
+          }
+        }
+      },
+      "note-toolbar-move": {
+        "description": "Move an item to a toolbar"
+      },
+      "note-toolbar-new": {
+        "description": "Create a new toolbar",
+        "flag": {
+          "name": {
+            "description": "Toolbar name"
+          },
+          "desc": {
+            "description": "Toolbar description"
+          },
+          "icon": {
+            "description": "Toolbar icon, from Lucide's icon set"
+          }
+        }
+      },
+      "note-toolbar-rules": {
+        "description": "List toolbar display rules"
+      },
+      "note-toolbar-settings": {
+        "description": "Open Note Toolbar settings in Obsidian",
+        "flag": {
+          "item": {
+            "description": "ID of item to open settings for"
+          },
+          "toolbar": {
+            "description": "Name or ID of toolbar to open settings for"
+          }
+        }
+      },
+      "note-toolbar-status": {
+        "description": "List toolbars that are visible (positioned) in the current view."
+      },
+      "note-toolbar-use": {
+        "description": "Use an item",
+        "flag": {
+          "item": {
+            "description": "ID of item to use"
+          },
+          "file": {
+            "description": "File to use the item in"
+          },
+          "path": {
+            "description": "Path of file to use the item in"
+          }
+        }
+      }
+    },
+    "flag": {
+      "format": {
+        "description": "Output format (default: tsv)"
+      },
+      "label": {
+        "description": "Item label (required: label or icon)"
+      },
+      "icon": {
+        "description": "Item icon, from Lucide's icon set (required: label or icon)"
+      },
+      "item": {
+        "description": "Item ID"
+      },
+      "pos": {
+        "description": "Item position in toolbar (default: end of toolbar)"
+      },
+      "to": {
+        "description": "Toolbar name or ID to add item to"
+      },
+      "tooltip": {
+        "description": "Item tooltip"
+      },
+      "total": {
+        "description": "Returns count"
+      },
+      "verbose": {
+        "description": "Include additional details in output"
+      }
+    }
+  }
 }
