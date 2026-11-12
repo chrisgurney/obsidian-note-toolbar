@@ -7,9 +7,6 @@ import { deprecate } from "node:util";
 
 export default defineConfig([
 
-  // tests/ and the Vitest config are not part of the shipped plugin and are
-  // not in tsconfig's include (src/**), so the type-checked lint below
-  // cannot process them; Vitest/esbuild handles them instead
   { ignores: ['build/**', 'docs/**', '*.mjs', '**/main.js', 'tests/**', 'vitest.config.ts'] },
 
   ...obsidianmd.configs.recommended,
