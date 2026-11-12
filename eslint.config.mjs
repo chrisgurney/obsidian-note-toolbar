@@ -7,7 +7,7 @@ import { deprecate } from "node:util";
 
 export default defineConfig([
 
-  { ignores: ['build/**', 'docs/**', '*.mjs', '**/main.js'] },
+  { ignores: ['build/**', 'docs/**', '*.mjs', '**/main.js', 'tests/**', 'vitest.config.ts'] },
 
   ...obsidianmd.configs.recommended,
   {

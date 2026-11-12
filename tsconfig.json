@@ -13,11 +13,14 @@
     "isolatedModules": true,
     "strict": true,
     "strictNullChecks": true,
-    "rootDir": "src",
 		"lib": ["DOM", "ES2019"],
     "paths": {
       "*": ["./src/*"]
     }
   },
-  "include": ["src/**/*.ts"]
+  "include": [
+    "src/**/*.ts",
+    "tests/**/*.ts",
+    "vitest.config.ts"
+  ]
 }
