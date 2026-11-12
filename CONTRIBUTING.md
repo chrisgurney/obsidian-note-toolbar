@@ -4,6 +4,8 @@ Thanks for your interest in contributing! This document covers how to build, dev
 
 For how the plugin is put together, see [ARCHITECTURE.md](ARCHITECTURE.md).
 
+By participating in this project, you agree to abide by its [Code of Conduct](CODE_OF_CONDUCT.md).
+
 ## Development setup
 
 ### Prerequisites
