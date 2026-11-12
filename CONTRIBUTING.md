@@ -20,6 +20,8 @@ npm ci
 
 Use `npm ci`, not `npm install`. Run it again after pulling changes to `package.json` or `package-lock.json`. Use `npm install` only when adding or updating a dependency, and commit the lockfile change with it.
 
+When adding a dependency, use a `^` range like the existing entries, never `latest`, and commit the lockfile change with it. The exception is `@codemirror/view`, which stays exact-pinned to the version the `obsidian` package expects, and moves only in lockstep with it. Bumping it alone breaks `npm ci`.
+
 ## Development loop
 
 ### Run the watcher
@@ -154,6 +156,7 @@ Cover each item in the pull request description.
 - [ ] User-facing text: `en.json` keys added for any new user-facing strings. Other locales fall back to English until translated.
   -  Note that language keys passed as literal `t()` arguments: no dynamic templates, no context: options, and no keys stored in data for later translation.
 - [ ] UI changes: screenshots or GIF attached.
+- [ ] Settings changes: migration added in `src/Settings/SettingsMigrator.ts` and `settingsVersion` bumped in `package.json`.
 - [ ] No generated files: no changes to `src/version.ts`, `docs/dist/`, `main.js`, or `styles.css`.
 - [ ] No release steps: do not push tags to upstream, and do not run `npm run release`.
 
@@ -174,3 +177,7 @@ Commit messages follow [Conventional Commits](https://www.conventionalcommits.or
 | `style:` | Formatting only |
 
 A scope such as `API:` after the type is common. Strict Conventional Commits uses parentheses, such as `feat(api):`, but either form is acceptable. This is a convention only, not checked by CI.
+
+## Licence
+
+Note Toolbar is licensed under GPL-3.0 (see `LICENSE`). By contributing, your changes are licensed under the same terms.
