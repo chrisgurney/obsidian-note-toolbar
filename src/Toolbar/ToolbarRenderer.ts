@@ -1221,6 +1221,22 @@ export default class ToolbarRenderer {
 	}
 
 	/**
+	 * Builds the key identifying one update pass for a leaf: the toolbar (id and
+	 * updated stamp), the file, the view (leaf, file, and mode for Markdown views),
+	 * and the theme. Two passes with the same key have nothing new to show.
+	 * @param toolbar ToolbarSettings to get values from.
+	 * @param activeFile TFile to update toolbar for.
+	 * @param currentView ItemView to update toolbar within.
+	 * @returns the leaf id and the update key for this pass.
+	 */
+	private getUpdateKey(toolbar: ToolbarSettings, activeFile: TFile | null, currentView: ItemView | null): { leafId: string | undefined; updateKey: string } {
+		const viewKey = getViewId(currentView) ?? `${currentView?.leaf?.id ?? ''} ${currentView?.getViewType() ?? ''}`;
+		const theme = activeDocument.body.getAttribute('data-ntb-csstheme') ?? '';
+		const updateKey = [toolbar.uuid, toolbar.updated, activeFile?.path ?? '', viewKey, theme].join('|');
+		return { leafId: currentView?.leaf?.id, updateKey };
+	}
+
+	/**
 	 * Updates any toolbar elements that use properties, including labels and tooltips.
 	 * If the item resolves to a URI that's empty, the item is hidden.
 	 * @param toolbar ToolbarSettings to get values from.
@@ -1251,10 +1267,7 @@ export default class ToolbarRenderer {
 		}
 
 		// A no-change update is one with the same toolbar, file, view, mode, and theme as the last update for this leaf.
-		const viewKey = getViewId(currentView) ?? `${currentView?.leaf?.id ?? ''} ${currentView?.getViewType() ?? ''}`;
-		const theme = activeDocument.body.getAttribute('data-ntb-csstheme') ?? '';
-		const updateKey = [toolbar.uuid, toolbar.updated, activeFile?.path ?? '', viewKey, theme].join('|');
-		const leafId = currentView?.leaf?.id;
+		const { leafId, updateKey } = this.getUpdateKey(toolbar, activeFile, currentView);
 		const isNoChange = leafId ? this.lastUpdateKeys[leafId] === updateKey : false;
 
 		// Build the item lookup once, instead of scanning all toolbars for every item.
