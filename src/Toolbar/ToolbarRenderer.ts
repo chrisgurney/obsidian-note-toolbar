@@ -34,6 +34,8 @@ export default class ToolbarRenderer {
 
 	activeViewIds: string[] = []; // track opened views, to reduce unneccesary toolbar re-renders
     isRendering: Record<string, boolean> = {}; // track if a toolbar is being rendered in a view, to prevent >1 event from triggering two renders
+	// last update key per leaf, to skip static items when nothing changed
+	private lastUpdateKeys: Record<string, string> = {};
 
     constructor(
         private ntb: NoteToolbarPlugin
@@ -322,6 +324,11 @@ export default class ToolbarRenderer {
                 }
                 break;
         }
+
+		// Set a Bottom toolbar's horizontal position once it is in the DOM.
+		if (position === PositionType.Bottom && embedBlock.isConnected) {
+			this.renderBottomToolbarStyles(toolbar, embedBlock);
+		}
 
 		// fix: (#415) unable to connect Canvas cards when the toolbar is in Top (fixed) position
 		if (view.getViewType() === 'canvas') view.onResize();
@@ -968,7 +975,7 @@ export default class ToolbarRenderer {
 					// render the toolbar if we have one, and we don't have an existing toolbar to keep
 					if (Platform.isPhone || toolbarRemoved) {
 						this.ntb.debug('renderForView: rendering...');
-						await this.render(toolbar, null, toolbarView);	
+						await this.render(toolbar, null, toolbarView);
 					}
 					this.ntb.debug('renderForView: updating...');
 					await this.update(toolbar, null, toolbarView);
@@ -1243,6 +1250,21 @@ export default class ToolbarRenderer {
 			return;
 		}
 
+		// A no-change update is one with the same toolbar, file, view, mode, and theme as the last update for this leaf.
+		const viewKey = getViewId(currentView) ?? `${currentView?.leaf?.id ?? ''} ${currentView?.getViewType() ?? ''}`;
+		const theme = activeDocument.body.getAttribute('data-ntb-csstheme') ?? '';
+		const updateKey = [toolbar.uuid, toolbar.updated, activeFile?.path ?? '', viewKey, theme].join('|');
+		const leafId = currentView?.leaf?.id;
+		const isNoChange = leafId ? this.lastUpdateKeys[leafId] === updateKey : false;
+
+		// Build the item lookup once, instead of scanning all toolbars for every item.
+		const itemById = new Map<string, ToolbarItemSettings>();
+		for (const tbar of this.ntb.settings.toolbars) {
+			for (const item of tbar.items) {
+				if (!itemById.has(item.uuid)) itemById.set(item.uuid, item);
+			}
+		}
+
 		// iterate over the item elements of this toolbarEl
 		const toolbarItemEls = Array.from(toolbarEl.querySelectorAll('.callout-content > ul > li'));
 		for (const itemEl of toolbarItemEls) {
@@ -1252,8 +1274,16 @@ export default class ToolbarRenderer {
 			// skip separators and breaks
 			if (!itemSpanEl) { continue }
 
-			const itemSetting = this.ntb.settingsManager.getToolbarItemById(itemSpanEl.id);
+			const itemSetting = itemById.get(itemSpanEl.id);
 			if (itemSetting && itemSpanEl.id === itemSetting.uuid) {
+
+				// Skip a static item on a no-change update, since its values cannot have changed.
+				const hasVars = this.ntb.vars.hasVars(itemSetting.tooltip) ||
+					this.ntb.vars.hasVars(itemSetting.label) ||
+					this.ntb.vars.hasVars(itemSetting.link);
+				if (isNoChange && !hasVars && itemSetting.linkAttr.type !== ItemType.Command) {
+					continue;
+				}
 
 				// update tooltip + label
 				let itemTooltip = itemSetting.tooltip;
@@ -1323,6 +1353,9 @@ export default class ToolbarRenderer {
 			}
 
 		}
+
+		// Record this pass, so the next identical pass can skip static items.
+		if (leafId) this.lastUpdateKeys[leafId] = updateKey;
 
 		// re-align bottom toolbar in case width changed 
 		if (currentPosition === PositionType.Bottom) {
@@ -1695,6 +1728,14 @@ export default class ToolbarRenderer {
 		// this.ntb.debug('removeIfNeeded');
 
 		let toolbarRemoved: boolean = false;
+
+		// fix: (#650) Reading view reuses its header and detaches it while a long note loads;
+		// a toolbar left inside it is invisible to getAllToolbarEl() and reappears next to the new one.
+		const mdView = view ?? this.ntb.app.workspace.getActiveViewOfType(MarkdownView);
+		const headerEl = mdView instanceof MarkdownView ? mdView.previewMode.renderer?.header?.el : undefined;
+		if (headerEl && !headerEl.isConnected) {
+			headerEl.querySelectorAll('.cg-note-toolbar-container').forEach((el) => el.remove());
+		}
 
 		// get toolbar elements in current view, or active view if not provided
 		const existingToolbarEls = this.ntb.el.getAllToolbarEl(view);
