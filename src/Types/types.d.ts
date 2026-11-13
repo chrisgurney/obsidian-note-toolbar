@@ -100,6 +100,15 @@ declare module "obsidian" {
         }
     }
 
+    // allows access to the reading view's header element, to remove a stale toolbar from it while the header is detached during a long note load (#650)
+    interface MarkdownPreviewView {
+        renderer?: {
+            header?: {
+                el?: HTMLElement;
+            };
+        };
+    }
+
     interface MetadataCache {
         getTags: () => { [key: string]: number };
     }
