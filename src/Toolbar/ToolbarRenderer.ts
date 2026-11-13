@@ -325,7 +325,7 @@ export default class ToolbarRenderer {
                 break;
         }
 
-		// Set a Bottom toolbar's horizontal position once it is in the DOM.
+		// set a Bottom toolbar's horizontal position once it is in the DOM
 		if (position === PositionType.Bottom && embedBlock.isConnected) {
 			this.renderBottomToolbarStyles(toolbar, embedBlock);
 		}
@@ -1266,11 +1266,11 @@ export default class ToolbarRenderer {
 			return;
 		}
 
-		// A no-change update is one with the same toolbar, file, view, mode, and theme as the last update for this leaf.
+		// a no-change update is one with the same toolbar, file, view, mode, and theme as the last update for this leaf
 		const { leafId, updateKey } = this.getUpdateKey(toolbar, activeFile, currentView);
 		const isNoChange = leafId ? this.lastUpdateKeys[leafId] === updateKey : false;
 
-		// Build the item lookup once, instead of scanning all toolbars for every item.
+		// build the item lookup once, instead of scanning all toolbars for every item
 		const itemById = new Map<string, ToolbarItemSettings>();
 		for (const tbar of this.ntb.settings.toolbars) {
 			for (const item of tbar.items) {
@@ -1290,7 +1290,7 @@ export default class ToolbarRenderer {
 			const itemSetting = itemById.get(itemSpanEl.id);
 			if (itemSetting && itemSpanEl.id === itemSetting.uuid) {
 
-				// Skip a static item on a no-change update, since its values cannot have changed.
+				// skip a static item on a no-change update, since its values cannot have changed
 				const hasVars = this.ntb.vars.hasVars(itemSetting.tooltip) ||
 					this.ntb.vars.hasVars(itemSetting.label) ||
 					this.ntb.vars.hasVars(itemSetting.link);
@@ -1367,7 +1367,7 @@ export default class ToolbarRenderer {
 
 		}
 
-		// Record this pass, so the next identical pass can skip static items.
+		// record this pass, so the next identical pass can skip static items
 		if (leafId) this.lastUpdateKeys[leafId] = updateKey;
 
 		// re-align bottom toolbar in case width changed 
@@ -1743,7 +1743,7 @@ export default class ToolbarRenderer {
 		let toolbarRemoved: boolean = false;
 
 		// fix: (#650) Reading view reuses its header and detaches it while a long note loads;
-		// a toolbar left inside it is invisible to getAllToolbarEl() and reappears next to the new one.
+		// a toolbar left inside it is invisible to getAllToolbarEl() and reappears next to the new one
 		const mdView = view ?? this.ntb.app.workspace.getActiveViewOfType(MarkdownView);
 		const headerEl = mdView instanceof MarkdownView ? mdView.previewMode.renderer?.header?.el : undefined;
 		if (headerEl && !headerEl.isConnected) {
