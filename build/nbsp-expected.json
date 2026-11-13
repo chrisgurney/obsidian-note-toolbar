@@ -1,0 +1,53 @@
+{
+  "de.json": {
+    "plugin.daily-notes": 1,
+    "plugin.js-engine": 1,
+    "plugin.note-toolbar": 1,
+    "plugin.open-with-default-app": 2,
+    "plugin.periodic-notes": 1,
+    "plugin.sync": 1,
+    "setting.button-learn-more": 1,
+    "setting.button-whats-new": 1,
+    "setting.delete-toolbar.label-usage-note": 1,
+    "setting.item.label-review-plugin": 1
+  },
+  "en.json": {
+    "adapter.error.general_file": 1,
+    "api.link-name": 2,
+    "plugin.daily-notes": 1,
+    "plugin.js-engine": 1,
+    "plugin.note-toolbar": 1,
+    "plugin.open-with-default-app": 2,
+    "plugin.periodic-notes": 1,
+    "plugin.sync": 1,
+    "setting.button-learn-more": 1,
+    "setting.button-whats-new": 1,
+    "setting.delete-toolbar.label-usage-note": 1,
+    "setting.item.label-review-plugin": 1
+  },
+  "ja.json": {
+    "plugin.daily-notes": 1,
+    "plugin.js-engine": 1,
+    "plugin.note-toolbar": 1,
+    "plugin.open-with-default-app": 2,
+    "plugin.periodic-notes": 1,
+    "plugin.sync": 1,
+    "setting.delete-toolbar.label-usage-note": 1
+  },
+  "uk.json": {
+    "api.link-name": 2,
+    "plugin.js-engine": 1,
+    "plugin.note-toolbar": 1,
+    "plugin.periodic-notes": 1,
+    "setting.delete-toolbar.label-usage-note": 1
+  },
+  "zh-CN.json": {
+    "api.link-name": 2,
+    "plugin.daily-notes": 1,
+    "plugin.js-engine": 1,
+    "plugin.note-toolbar": 1,
+    "plugin.periodic-notes": 1,
+    "plugin.sync": 1,
+    "setting.delete-toolbar.label-usage-note": 1
+  }
+}
