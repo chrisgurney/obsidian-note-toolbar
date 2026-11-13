@@ -604,12 +604,12 @@ Error behavior: throws with no content, no sidebar leaf, or `append` with file c
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `content` | `string` \| `TFile` \| `URL` | Text content (rendered as markdown), file, or URL to display. |
-| `options?` | \{ `active?`: `boolean`; `append?`: `string`; `class?`: `string`; `id?`: `string`; `navigation?`: (`"clear"` \| `"close"` \| `"export"`)[]; `reuse?`: `boolean`; `side?`: `"left"` \| `"right"`; `split?`: `boolean`; `viewIcon?`: `string`; `viewTitle?`: `string`; \} | Optional display options. |
+| `options?` | \{ `active?`: `boolean`; `append?`: `string`; `class?`: `string`; `id?`: `string`; `navigation?`: (\{ `icon`: `string`; `onClick`: (`context`) => `void` \| `Promise`\<`void`\>; `tooltip`: `string`; \} \| `"clear"` \| `"close"` \| `"export"`)[]; `reuse?`: `boolean`; `side?`: `"left"` \| `"right"`; `split?`: `boolean`; `viewIcon?`: `string`; `viewTitle?`: `string`; \} | Optional display options. |
 | `options.active?` | `boolean` | Activate the sidebar after opening or updating it. Defaults to `true`. |
 | `options.append?` | `string` | Append text content using a provided separator string, instead of replacing it. Only applies when a sidebar is being reused. **Since** 1.36 |
 | `options.class?` | `string` | Optional CSS class(es) to add to the sidebar, separated by spaces. **Since** 1.36 |
-| `options.id?` | `string` | Uniquely identify the sidebar view for reuse. When set, only a sidebar with the same ID is reused. |
-| `options.navigation?` | (`"clear"` \| `"close"` \| `"export"`)[] | Navigation buttons to show in the sidebar. Can only be set once per sidebar. Defaults to adding no buttons. **Since** 1.36 |
+| `options.id?` | `string` | Uniquely identify the sidebar view for reuse. When set, only a sidebar with the same ID is reused. Effectively required when `navigation` has custom buttons, so their callbacks can be found again. |
+| `options.navigation?` | (\{ `icon`: `string`; `onClick`: (`context`) => `void` \| `Promise`\<`void`\>; `tooltip`: `string`; \} \| `"clear"` \| `"close"` \| `"export"`)[] | Navigation buttons to show in the sidebar, in the order they are shown. Use `'clear'`, `'close'`, or `'export'` for the built-in buttons, or a custom button object with an icon, tooltip, and `onClick` handler. Custom buttons are session only: they work until Obsidian is shut down or restarted, or the plugin is reloaded, and must be re-registered by re-running the `ntb.sidebar()` call. Set `id`, so a custom button can be found again reliably. Can only be set once per sidebar. Defaults to adding no buttons. **Since** 1.36 |
 | `options.reuse?` | `boolean` | Reuse an existing sidebar view instead of creating a new one. Ignored when `id` is set. Defaults to `true`. |
 | `options.side?` | `"left"` \| `"right"` | Indicates which side to open the sidebar on. Default is `right`. |
 | `options.split?` | `boolean` | Indicates whether to create the sidebar in a new split. Default is `false`. |
@@ -646,6 +646,42 @@ await ntb.sidebar(`*It is now:*\n${new Date()}`, { reuse: false });
 // show a string, in the same sidebar, with an icon, title, and navigation
 ntb.sidebar(`*It is now:*\n${new Date()}`, {
   append: '', viewIcon: 'calendar', viewTitle: 'Dates', navigation: ['clear', 'export', 'close']
+});
+```
+
+```ts
+// add a custom copy button to a sidebar that collects selected text
+const editor = app.workspace.activeLeaf.view?.editor;
+const selection = editor.getSelection();
+ntb.sidebar(selection, {
+  id: 'multi-copy', append: '', viewIcon: 'copy', viewTitle: 'Multiple Copy',
+  navigation: ['clear',
+    {
+      icon: 'copy', tooltip: 'Copy',
+      onClick: async ({ content }) => {
+        const text = typeof content === 'string' ? content : content.path;
+        await navigator.clipboard.writeText(text);
+        new Notice(ntb.t('api.msg.clipboard-copied'));
+      }
+    },
+    'export', 'close']
+});
+```
+
+```ts
+// add a custom button that closes both the sidebar view and the sidebar itself
+const editor = app.workspace.activeLeaf.view?.editor;
+const selection = editor.getSelection();
+ntb.sidebar(selection, {
+  id: 'multi-copy', viewIcon: 'copy', viewTitle: 'Multiple Copy',
+  navigation: ['clear', 'export', 'close',
+    {
+      icon: 'panel-right-close', tooltip: 'Close sidebar',
+      onClick: ({ view }) => {
+        view.leaf.detach();
+        app.workspace.rightSplit?.collapse();
+      }
+    }]
 });
 ```
 
