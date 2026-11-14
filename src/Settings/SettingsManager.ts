@@ -14,7 +14,22 @@ export default class SettingsManager {
 	// while set, save() asks before overwriting the stored file; overwriteConfirmed records a per-session approval
 	private settingsLoadFailed = false;
 	private settingsOverwriteConfirmed = false;
-	
+
+	/**
+	 * Path of the backup copy made automatically after the most recent
+	 * migration failure in this session, or null if no such copy was made.
+	 * Read by the settings tab so its error block can say whether an
+	 * automatic copy already exists. Reset at the start of every load().
+	 */
+	public migrationBackupPath: string | null = null;
+
+	/**
+	 * True if an automatic backup was attempted after the most recent
+	 * migration failure in this session and that attempt failed.
+	 * Reset at the start of every load().
+	 */
+	public migrationBackupFailed = false;
+
 	constructor(
 		private ntb: NoteToolbarPlugin
 	) {}
@@ -497,6 +512,9 @@ export default class SettingsManager {
 	 */
 	async load(): Promise<void> {
 
+		this.migrationBackupPath = null;
+		this.migrationBackupFailed = false;
+
 		let loaded_settings: NoteToolbarSettings | null = null;
 		try {
 			loaded_settings = await this.ntb.loadData() as NoteToolbarSettings;
@@ -536,7 +554,23 @@ export default class SettingsManager {
 				// keep the settings as loaded (the migrator only stamps the new version once it completes),
 				// and don't save here, so the stored settings are left untouched for the next attempt
 				this.ntb.error('Note Toolbar: failed to migrate settings from version ' + old_version + '; continuing with settings as loaded.', error);
-				new Notice(t('setting.error-migration-failed'), 10000).containerEl.addClass('mod-warning');
+				// Back up the stored settings automatically, without asking the user, so a later
+				// save cannot be the first thing that overwrites the failing file. A failed
+				// backup must not block load either, so it is logged only and the user is
+				// pointed at the manual button in settings instead.
+				try {
+					this.migrationBackupPath = await this.findOrCreateMigrationBackup();
+				}
+				catch (backupError) {
+					this.migrationBackupFailed = true;
+					this.ntb.error('Note Toolbar: failed to back up settings automatically after migration failure.', backupError);
+				}
+				if (this.migrationBackupPath) {
+					new Notice(t('setting.error-migration-failed', { path: this.migrationBackupPath }), 10000).containerEl.addClass('mod-warning');
+				}
+				else {
+					new Notice(t('setting.error-migration-failed-backup-failed'), 10000).containerEl.addClass('mod-warning');
+				}
 				return;
 			}
 			// don't render the initial toolbar, as managers + helpers may not be initialized yet
@@ -587,6 +621,46 @@ export default class SettingsManager {
 		}
 
 		this.ntb.debug("SETTINGS SAVED: " + new Date().getTime());
+	}
+
+	/**
+	 * Returns a backup copy of the stored settings file for a failed migration,
+	 * creating one only if no identical copy already exists. A failed migration
+	 * retries on every load, so creating a new copy on every retry would fill
+	 * the backups folder with duplicates of the same file. Comparing contents
+	 * also means a genuinely changed file still gets a new copy, while a
+	 * manual backup of the same file is reused instead of duplicated.
+	 * A failure in the deduplication check itself falls through to a fresh
+	 * copy, so it never prevents the backup. Current settings are NOT saved
+	 * first, so the copy captures the stored file as-is.
+	 * @returns the vault path of the existing or new backup copy
+	 */
+	private async findOrCreateMigrationBackup(): Promise<string> {
+		const adapter = this.ntb.app.vault.adapter;
+		const pluginFolder = this.ntb.manifest.dir ?? `${this.ntb.app.vault.configDir}/plugins/${this.ntb.manifest.id}`;
+		const dataFilePath = normalizePath(`${pluginFolder}/data.json`);
+		if (!(await adapter.exists(dataFilePath))) {
+			throw new Error('Note Toolbar settings file was not found.');
+		}
+		const backupFolder = 'Note Toolbar Backups';
+		try {
+			const data = await adapter.read(dataFilePath);
+			const listing = await adapter.list(backupFolder);
+			for (const file of listing.files) {
+				if (!file.includes('note-toolbar-settings-') || !file.endsWith('.json')) continue;
+				const backupFilePath = file.startsWith(`${backupFolder}/`) ? file : `${backupFolder}/${file}`;
+				try {
+					if ((await adapter.read(backupFilePath)) === data) return backupFilePath;
+				}
+				catch {
+					continue;
+				}
+			}
+		}
+		catch {
+			// fall through to a fresh copy below
+		}
+		return await this.exportSettings();
 	}
 
 	/**
