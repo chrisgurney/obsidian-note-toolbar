@@ -57,12 +57,23 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		containerEl.addClass('note-toolbar-setting-ui');
 
 		if (this.ntb.settings.version !== SETTINGS_VERSION) {
+			// The automatic backup line is only shown when load() actually made
+			// (or failed to make) one, so the block never claims a copy exists
+			// when it does not. Restarting is a retry, not the first step, so
+			// it lives in those lines rather than in the heading.
+			let migrationErrorDesc = t('setting.error-old-settings-description', { oldVersion: this.ntb.settings.version + '', currentVersion: SETTINGS_VERSION + '' });
+			if (this.ntb.settingsManager.migrationBackupPath) {
+				migrationErrorDesc += ' ' + t('setting.error-old-settings-auto-backup');
+			}
+			else if (this.ntb.settingsManager.migrationBackupFailed) {
+				migrationErrorDesc += ' ' + t('setting.error-old-settings-auto-backup-failed');
+			}
 			const errorGroup = new SettingGroup(containerEl);
 			errorGroup.addClass('note-toolbar-setting-plugin-error');
 			errorGroup.addSetting((setting) => {
 				setting
 					.setName(t('setting.error-old-settings-name'))
-					.setDesc(t('setting.error-old-settings-description', { oldVersion: this.ntb.settings.version + '', currentVersion: SETTINGS_VERSION + '' }));
+					.setDesc(migrationErrorDesc);
 			});
 			errorGroup.addSetting((setting) => {
 				setting
