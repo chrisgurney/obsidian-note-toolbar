@@ -26,7 +26,7 @@ import { fileURLToPath } from 'node:url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
 const i18nDir = path.join(rootDir, 'src', 'I18n');
-const manifestPath = path.join(__dirname, 'nbsp-expected.json');
+const manifestPath = path.join(__dirname, 'lang-nbsp-expected.json');
 const NBSP = '\u00A0';
 const verbose = process.argv.includes('--verbose');
 
