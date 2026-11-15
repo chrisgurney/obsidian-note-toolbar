@@ -17,9 +17,10 @@ Use these sources in order of preference:
 
 1. Gallery catalog: read `references/gallery.json` before answering. Do not fetch the repo version instead: the included reference is the version matched to this checkout.
 2. Gallery item definitions: read `references/gallery-items.json` before answering. Do not fetch the repo version instead: the included reference is the version matched to this checkout.
-3. Gallery documentation: read `references/gallery-reference.md` before answering. It includes the full items catalog. Do not fetch the wiki version instead: the included reference is the version matched to this checkout.
-4. Additional Gallery items: https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Additional-Gallery-items
-5. Creating toolbar items: https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items
+3. Gallery translations: read `references/gallery-en.json` before answering. Item descriptions and tooltips, and category names and descriptions, live there, keyed by item id and category id, not in the other two JSON files.
+4. Gallery documentation: read `references/gallery-reference.md` before answering. It includes the full items catalog. Do not fetch the wiki version instead: the included reference is the version matched to this checkout.
+5. Additional Gallery items: https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Additional-Gallery-items
+6. Creating toolbar items: https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Creating-toolbar-items
 
 The included JSON references are the primary source for Gallery metadata and configurations. Documentation provides descriptions and usage context, especially for items not included in the built-in catalog.
 
@@ -40,7 +41,7 @@ Ask only for details that materially affect the recommendation. If reasonable de
 
 ### 2. Load and inspect the Gallery data
 
-Read both JSON references included with this skill (`references/gallery.json` and `references/gallery-items.json`).
+Read the JSON references included with this skill (`references/gallery.json`, `references/gallery-items.json`, and `references/gallery-en.json`). Resolve an item's description and tooltip from `gallery-en.json` under `item[<item id>]`, and a category's name and description from `gallery-en.json` under `category[<category id>]`, rather than expecting those fields in the other two files.
 
 Before querying the data:
 

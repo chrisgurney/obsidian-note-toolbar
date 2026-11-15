@@ -2,12 +2,12 @@
 
 To update or add UI documentation in the relevant language:
 
-1. Copy [`en.json`](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/src/I18n/en.json) to `LANGUAGECODE.json` using the [language codes per Obsidian](https://github.com/obsidianmd/obsidian-translations?tab=readme-ov-file#existing-languages).
+1. Copy the three English files to the new language code, using the [language codes per Obsidian](https://github.com/obsidianmd/obsidian-translations?tab=readme-ov-file#existing-languages): [`src/I18n/en.json`](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/src/I18n/en.json) to `src/I18n/LANGUAGECODE.json`, [`src/I18n/gallery/en.json`](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/src/I18n/gallery/en.json) to `src/I18n/gallery/LANGUAGECODE.json`, and [`src/I18n/cli/en.json`](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/src/I18n/cli/en.json) to `src/I18n/cli/LANGUAGECODE.json`.
 2. Start translating strings.
    - Under the covers the plugin uses [i18next](https://www.i18next.com/translation-function/formatting), so you can refer to their docs for help with formatting strings (in particular refer to [Formatting](https://www.i18next.com/translation-function/formatting), [Plurals](https://www.i18next.com/translation-function/plurals), and [Context](https://www.i18next.com/translation-function/context)).
 3. For new languages, in [`NoteToolbarSettings.ts`](https://github.com/chrisgurney/obsidian-note-toolbar/blob/master/src/Settings/NoteToolbarSettings.ts):
-   - Import the new language; and
-   - add an `addResourceBundle` line, using the [language codes per Obsidian](https://github.com/obsidianmd/obsidian-translations?tab=readme-ov-file#existing-languages).
+   - Import the three new files (main, gallery, and cli); and
+   - add a line to the `resources` object for the new language, following the existing per-language pattern (merging the main, gallery, and cli files). Note the resources key and the file name do not always match: for Chinese the files are `zh-CN.json` and the key is `zh`.
 
 ## For Style Settings plugin (styles.css) translations:
 

@@ -57,12 +57,19 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 		containerEl.addClass('note-toolbar-setting-ui');
 
 		if (this.ntb.settings.version !== SETTINGS_VERSION) {
+			let migrationErrorDesc = t('setting.error-old-settings-description', { oldVersion: this.ntb.settings.version + '', currentVersion: SETTINGS_VERSION + '' });
+			if (this.ntb.settingsManager.migrationBackupPath) {
+				migrationErrorDesc += ' ' + t('setting.error-old-settings-auto-backup');
+			}
+			else if (this.ntb.settingsManager.migrationBackupFailed) {
+				migrationErrorDesc += ' ' + t('setting.error-old-settings-auto-backup-failed');
+			}
 			const errorGroup = new SettingGroup(containerEl);
 			errorGroup.addClass('note-toolbar-setting-plugin-error');
 			errorGroup.addSetting((setting) => {
 				setting
 					.setName(t('setting.error-old-settings-name'))
-					.setDesc(t('setting.error-old-settings-description', { oldVersion: this.ntb.settings.version + '', currentVersion: SETTINGS_VERSION + '' }));
+					.setDesc(migrationErrorDesc);
 			});
 			errorGroup.addSetting((setting) => {
 				setting
@@ -375,7 +382,7 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 			// support up/down arrow keys
 			this.ntb.registerDomEvent(
 				toolbarListDiv, 'keydown', (keyEvent) => {
-					if (!['ArrowUp', 'ArrowDown'].contains(keyEvent.key)) return;
+					if (!['ArrowUp', 'ArrowDown'].includes(keyEvent.key)) return;
 					const currentFocussed = activeDocument.activeElement as HTMLElement;
 					if (currentFocussed) {
 						const buttonSelector = `.setting-item-control > button.${currentFocussed.className}`;
@@ -626,8 +633,8 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 	): void {
 		this.ntb.registerDomEvent(setting.infoEl, 'click', (event) => {
 			// ignore the "Learn more" link
-			if (!(event.target instanceof HTMLElement && 
-				event.target.matches('a.note-toolbar-setting-focussable-link'))) {
+			if (!(event.targetNode?.instanceOf(HTMLElement) && 
+				event.targetNode.matches('a.note-toolbar-setting-focussable-link'))) {
 				this.handleSettingToggle(containerSelector, section, callback);
 			}
 		});
@@ -1039,20 +1046,6 @@ export default class NoteToolbarSettingTab extends PluginSettingTab {
 						});
 				});
 		});
-
-		// sync setting (stored locally only)
-		//  * FIXME: DISABLED DUE TO DATA LOSS ISSUES WITH USERS NOT EVEN USING SETTING (POTENTIAL CAUSE)
-		//  * More info: https://github.com/chrisgurney/obsidian-note-toolbar/issues/340
-		// const loadSettingsChanges = this.ntb.app.loadLocalStorage(LocalVar.LoadSettings) === 'true';
-		// new Setting(containerEl)
-		// 	.setName(t('setting.other.load-settings-changes.name'))
-		// 	.setDesc(t('setting.other.load-settings-changes.description'))
-		// 	.addToggle((cb) => {
-		// 		cb.setValue(loadSettingsChanges)
-		// 		cb.onChange(async (value) => {
-		// 			this.ntb.app.saveLocalStorage(LocalVar.LoadSettings, value.toString());
-		// 		});
-		// 	});
 
 		otherGroup.addSetting((keepPropsStateSetting) => {
 			keepPropsStateSetting

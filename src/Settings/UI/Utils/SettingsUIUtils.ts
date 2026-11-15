@@ -1,6 +1,6 @@
 import NoteToolbarPlugin from "main";
 import { ButtonComponent, Component, getIcon, ItemView, MarkdownRenderer, Notice, Platform, requireApiVersion, setIcon, Setting, setTooltip, TFile, TFolder, ToggleComponent } from "obsidian";
-import { COMMAND_DOES_NOT_EXIST, ComponentType, DEFAULT_ITEM_VISIBILITY_SETTINGS, ErrorBehavior, IGNORE_PLUGIN_IDS, ItemComponentVisibility, ItemType, NONE_TOOLBAR_ID, ScriptContext, SettingType, t, ToolbarItemSettings, ToolbarSettings, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_WHATS_NEW, ViewModeType, Visibility } from "Settings/NoteToolbarSettings";
+import { COMMAND_DOES_NOT_EXIST, ComponentType, DEFAULT_ITEM_VISIBILITY_SETTINGS, ErrorBehavior, IGNORE_PLUGIN_IDS, ItemComponentVisibility, ItemType, NONE_TOOLBAR_ID, ScriptContext, SettingType, t, ToolbarItemSettings, ToolbarSettings, TranslationKey, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_WHATS_NEW, ViewModeType, Visibility } from "Settings/NoteToolbarSettings";
 import SettingsManager from "Settings/SettingsManager";
 import { URLS } from "Utils/Urls";
 import { hasVisibleComponents, importArgs } from "Utils/Utils";
@@ -330,7 +330,7 @@ export default class SettingsUIUtils {
 		let whatsNewEl: HTMLElement | undefined;
 		if (this.ntb.settings.onboarding['onboarding-whats-new'] !== RELEASE_VERSION) {
 
-			const whatsNewDescLangKey = `setting.whats-new.${RELEASE_VERSION.replace('.', '-')}`;
+			const whatsNewDescLangKey: TranslationKey = `setting.whats-new.${RELEASE_VERSION.replace('.', '-')}`;
 			const whatsNewLangExists = t(whatsNewDescLangKey) !== whatsNewDescLangKey;
 
 			if (whatsNewLangExists) {
@@ -650,7 +650,7 @@ export default class SettingsUIUtils {
 	 */
 	async openScriptPrompt(items: ToolbarItemSettings[]): Promise<boolean> {
 		const isScript = items.some(item =>
-			[ItemType.Dataview, ItemType.JavaScript, ItemType.JsEngine, ItemType.Templater].contains(item.linkAttr.type)
+			[ItemType.Dataview, ItemType.JavaScript, ItemType.JsEngine, ItemType.Templater].includes(item.linkAttr.type)
 		);
 
 		if (isScript && !this.ntb.settings.scriptingEnabled) {
@@ -815,7 +815,7 @@ export default class SettingsUIUtils {
 			itemDescEl.setText(item.description);
 
 			// show the plugin(s) supported, or the command ID used
-			if ([ItemType.Command, ItemType.Dataview, ItemType.JsEngine, ItemType.Plugin, ItemType.Templater].contains(item.linkAttr.type)) {
+			if ([ItemType.Command, ItemType.Dataview, ItemType.JsEngine, ItemType.Plugin, ItemType.Templater].includes(item.linkAttr.type)) {
 				const itemPluginText = this.getPluginNames(item);
 				if (itemPluginText) {
 					const pluginDescEl = el.createDiv();
@@ -1387,7 +1387,7 @@ export function removeFieldError(el: HTMLElement | null, position: 'beforeend' |
 	if (el) {
 		const itemControlClass = 'setting-item-control';
 		const itemPreviewClass = 'note-toolbar-setting-item-preview';
-		let containerEl = null;
+		let containerEl: HTMLElement | null;
 		containerEl = el.hasClass(itemControlClass) ? el : el.closest(`.${itemControlClass}`);
 		if (!containerEl) {
 			containerEl = el.hasClass(itemPreviewClass) ? el : el.closest(`.${itemPreviewClass}`);

@@ -17,7 +17,7 @@ export class RibbonManager {
     add(item: RibbonItem): void {
         this.addRibbonItem(item);
         this.ntb.settings.ribbon.push(item);
-        void this.ntb.settingsManager.save(false);
+        this.saveRibbonSettings();
     }
 
     /**
@@ -71,7 +71,7 @@ export class RibbonManager {
         this.remove(item.uuid);
         this.ntb.settings.ribbon.splice(index, 0, item);
         this.addRibbonItem(item);
-        void this.ntb.settingsManager.save(false);
+        this.saveRibbonSettings();
     }
 
     /**
@@ -115,7 +115,18 @@ export class RibbonManager {
 
     private removeFromSettings(uuid: string): void {
         this.ntb.settings.ribbon = this.ntb.settings.ribbon.filter(ribbonItem => ribbonItem.uuid !== uuid);
-        void this.ntb.settingsManager.save(false);
+        this.saveRibbonSettings();
+    }
+
+    /**
+     * Persists the ribbon settings, logging and notifying if the save fails.
+     * (A failed save leaves the ribbon settings on disk out of sync.)
+     */
+    private saveRibbonSettings(): void {
+        void this.ntb.settingsManager.save(false).catch((error) => {
+            this.ntb.error('Note Toolbar: Error saving ribbon settings.', error);
+            new Notice(t('notice.error-save-ribbon-settings-failed'), 10000).containerEl.addClass('mod-warning');
+        });
     }
 
 	/**

@@ -1,4 +1,5 @@
 import { COMMAND_PREFIX_ITEM, COMMAND_PREFIX_TBAR, DEFAULT_ITEM_SETTINGS, DEFAULT_SETTINGS, ItemType, LocalVar, NONE_TOOLBAR, NONE_TOOLBAR_ID, NoteToolbarSettings, Position, PositionType, t, ToolbarItemSettings, ToolbarSettings } from "Settings/NoteToolbarSettings";
+import { confirmWithModal } from "Settings/UI/Modals/ConfirmModal";
 import { getUUID, isUuid } from "Utils/Utils";
 import NoteToolbarPlugin from "main";
 import { normalizePath, Notice, Platform } from "obsidian";
@@ -8,7 +9,24 @@ import ToolbarSettingsModal from "./UI/Modals/ToolbarSettingsModal";
 import NoteToolbarSettingTab from "./UI/NoteToolbarSettingTab";
 
 export default class SettingsManager {
-	
+
+	// set when settings could not be loaded
+	// while set, save() asks before overwriting the stored file; overwriteConfirmed records a per-session approval
+	private settingsLoadFailed = false;
+	private settingsOverwriteConfirmed = false;
+
+	/**
+	 * Path of the backup copy made automatically after the most recent
+	 * migration failure in this session, or null if no such copy was made.
+	 */
+	public migrationBackupPath: string | null = null;
+
+	/**
+	 * True if an automatic backup was attempted after the most recent
+	 * migration failure in this session and that attempt failed.
+	 */
+	public migrationBackupFailed = false;
+
 	constructor(
 		private ntb: NoteToolbarPlugin
 	) {}
@@ -491,6 +509,9 @@ export default class SettingsManager {
 	 */
 	async load(): Promise<void> {
 
+		this.migrationBackupPath = null;
+		this.migrationBackupFailed = false;
+
 		let loaded_settings: NoteToolbarSettings | null = null;
 		try {
 			loaded_settings = await this.ntb.loadData() as NoteToolbarSettings;
@@ -498,7 +519,17 @@ export default class SettingsManager {
 		catch (error) {
 			// could not read the stored settings at all; fall back to defaults below, without overwriting what's on disk;
 			// using console.error, as ntb.error isn't guaranteed to exist yet
+			this.settingsLoadFailed = true;
 			console.error('Note Toolbar: failed to load settings; starting with defaults.', error);
+			// warn now, before anything can save: a later save would persist these defaults over the stored settings
+			new Notice(t('setting.error-load-failed'), 10000).containerEl.addClass('mod-warning');
+		}
+
+		if (loaded_settings !== null && (typeof loaded_settings !== 'object' || Array.isArray(loaded_settings))) {
+			this.settingsLoadFailed = true;
+			console.error('Note Toolbar: stored settings could not be loaded; starting with defaults.', loaded_settings);
+			new Notice(t('setting.error-load-failed'), 10000).containerEl.addClass('mod-warning');
+			loaded_settings = null;
 		}
 		this.ntb.settings = Object.assign({}, DEFAULT_SETTINGS, loaded_settings);
 		
@@ -520,11 +551,34 @@ export default class SettingsManager {
 				// keep the settings as loaded (the migrator only stamps the new version once it completes),
 				// and don't save here, so the stored settings are left untouched for the next attempt
 				this.ntb.error('Note Toolbar: failed to migrate settings from version ' + old_version + '; continuing with settings as loaded.', error);
-				new Notice(t('setting.error-migration-failed'), 10000).containerEl.addClass('mod-warning');
+				// back up the stored settings automatically, without asking the user, so a later
+				// save cannot be the first thing that overwrites the failing file
+				try {
+					this.migrationBackupPath = await this.findOrCreateMigrationBackup();
+				}
+				catch (backupError) {
+					this.migrationBackupFailed = true;
+					this.ntb.error('Note Toolbar: failed to back up settings automatically after migration failure.', backupError);
+				}
+				if (this.migrationBackupPath) {
+					new Notice(t('setting.error-migration-failed', { path: this.migrationBackupPath }), 10000).containerEl.addClass('mod-warning');
+				}
+				else {
+					new Notice(t('setting.error-migration-failed-backup-failed'), 10000).containerEl.addClass('mod-warning');
+				}
 				return;
 			}
 			// don't render the initial toolbar, as managers + helpers may not be initialized yet
-			await this.save(false);
+			try {
+				await this.save(false);
+			}
+			catch (error) {
+				// a failed save must not stop the plugin from loading: the migrated
+				// settings are kept in memory, and migration will retry on the next load
+				// (the version on disk is still the old one)
+				this.ntb.error('Note Toolbar: failed to save migrated settings.', error);
+				new Notice(t('setting.error-migration-save-failed'), 10000).containerEl.addClass('mod-warning');
+			}
 		}
 
 	}
@@ -533,14 +587,68 @@ export default class SettingsManager {
 	 * Saves settings.
 	 */
 	async save(renderToolbar: boolean = true): Promise<void> {
+		// if settings did not load from disk, confirm before overwriting the stored file
+		if (this.settingsLoadFailed && !this.settingsOverwriteConfirmed) {
+			const confirmed = await confirmWithModal(this.ntb.app, {
+				title: t('setting.confirm-overwrite-title'),
+				questionLabel: t('setting.confirm-overwrite-question'),
+				approveLabel: t('setting.confirm-overwrite-approve'),
+				denyLabel: t('setting.confirm-overwrite-deny'),
+				warning: true,
+			});
+			if (confirmed) {
+				this.settingsOverwriteConfirmed = true;
+			}
+			else {
+				// the user chose not to save: skip both the write and the re-render
+				new Notice(t('setting.save-cancelled-notice'), 10000).containerEl.addClass('mod-warning');
+				return;
+			}
+		}
 		await this.ntb.saveData(this.ntb.settings);
 
 		if (renderToolbar) {
 			this.ntb.render.removeActive();
 			await this.ntb.render.renderForView();
+
+			// apply the configured phone navbar visibility, even when no toolbar renders
+			this.ntb.render.updatePhoneNavbarVisibility();
 		}
 
 		this.ntb.debug("SETTINGS SAVED: " + new Date().getTime());
+	}
+
+	/**
+	 * Returns a backup copy of the stored settings file for a failed migration,
+	 * creating one only if no identical copy already exists.
+	 * @returns the vault path of the existing or new backup copy
+	 */
+	private async findOrCreateMigrationBackup(): Promise<string> {
+		const adapter = this.ntb.app.vault.adapter;
+		const pluginFolder = this.ntb.manifest.dir ?? `${this.ntb.app.vault.configDir}/plugins/${this.ntb.manifest.id}`;
+		const dataFilePath = normalizePath(`${pluginFolder}/data.json`);
+		if (!(await adapter.exists(dataFilePath))) {
+			throw new Error('Note Toolbar settings file was not found.');
+		}
+		const backupFolder = 'Note Toolbar Backups';
+		try {
+			const data = await adapter.read(dataFilePath);
+			const listing = await adapter.list(backupFolder);
+			for (const file of listing.files) {
+				if (!file.includes('note-toolbar-settings-') || !file.endsWith('.json')) continue;
+				const backupFilePath = file.startsWith(`${backupFolder}/`) ? file : `${backupFolder}/${file}`;
+				try {
+					if ((await adapter.read(backupFilePath)) === data) return backupFilePath;
+				}
+				catch {
+					continue;
+				}
+			}
+		}
+		catch {
+			// fall through to a fresh copy below
+		}
+		return await this.exportSettings();
 	}
 
 	/**

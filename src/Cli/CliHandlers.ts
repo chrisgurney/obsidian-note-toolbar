@@ -83,7 +83,7 @@ export default class CliHandlers {
             item.linkAttr.commandId = args.command;
             if (args.focus === 'true') item.linkAttr.focus = 'editor';
             if (args.target) {
-                if (!['split', 'tab'].contains(args.target)) return t('cli.error-invalid-target', { target: args.target });
+                if (!['split', 'tab'].includes(args.target)) return t('cli.error-invalid-target', { target: args.target });
                 item.linkAttr.target = args.target as 'split' | 'tab';
             }
         });
@@ -94,9 +94,6 @@ export default class CliHandlers {
             if (!(hasValue(args.eval) || hasValue(args.query)) && !(hasValue(args.file) || hasValue(args.path))) {
                 return t('cli.error-dv-code-or-file-required');
             }
-            // if (hasValue(args.eval) && (hasValue(args.file) || hasValue(args.path))) {
-            //     return t('cli.error-dv-code-and-file-exclusive');
-            // }
             const fileResult = this.resolveFileArgs(args.file, args.path);
             if (typeof fileResult === 'string') return fileResult; // error resolving file or path
             const file: TFile | null = fileResult;
@@ -127,7 +124,7 @@ export default class CliHandlers {
             if (!file) return t('cli.error-file-or-path-required');
             item.link = file.path;
             if (args.target) {
-                if (!['modal', 'split', 'tab', 'window'].contains(args.target)) return t('cli.error-invalid-target', { target: args.target });
+                if (!['modal', 'split', 'tab', 'window'].includes(args.target)) return t('cli.error-invalid-target', { target: args.target });
                 item.linkAttr.target = args.target as PaneType | 'modal';
             }
         });
@@ -194,7 +191,7 @@ export default class CliHandlers {
         if (!pluginFunction) return this.cliDefinition.formatCommandList('note-toolbar:add-tp:');
         // check for file/path argument when required
         let file: TFile | null;
-        if (['appendTemplate', 'createFrom', 'parseTemplateFile'].contains(pluginFunction)) {
+        if (['appendTemplate', 'createFrom', 'parseTemplateFile'].includes(pluginFunction)) {
             if (!hasValue(args.file) && !hasValue(args.path)) {
                 return t('cli.error-file-or-path-required');
             }
@@ -217,7 +214,7 @@ export default class CliHandlers {
         return await this.addItemHelper(args, ItemType.Uri, (item) => {
             item.link = args.uri;
             if (args.target) {
-                if (!['modal', 'split', 'tab', 'window'].contains(args.target)) return t('cli.error-invalid-target', { target: args.target });
+                if (!['modal', 'split', 'tab', 'window'].includes(args.target)) return t('cli.error-invalid-target', { target: args.target });
                 item.linkAttr.target = args.target as PaneType | 'modal';
             }
         });
@@ -298,8 +295,7 @@ export default class CliHandlers {
             await this.ntb.settingsManager.save();
         }
         
-        let result = '';
-        result = t('import.label-success-heading', { count: toolbarWithImport.items.length, toolbar: toolbarWithImport.name, interpolation: { escapeValue: false } } ) + '\n\n';
+        let result = t('import.label-success-heading', { count: toolbarWithImport.items.length, toolbar: toolbarWithImport.name, interpolation: { escapeValue: false } } ) + '\n\n';
         result += this.cliItemsHandler.formatItemList({ includeEmpty: 'true', verbose: 'true' }, toolbarWithImport);
         if (warningLog) result += `\n\n${t('import.errorlog-warning-heading')}\n\n${warningLog}`;
         return result;
@@ -382,7 +378,7 @@ export default class CliHandlers {
             ],
         ];
 
-        let rowOutput = '';
+        let rowOutput;
         switch (format) {
             case 'csv': {
                 const header = schema.join(',');
@@ -588,7 +584,7 @@ export default class CliHandlers {
         const itemError = populateItem(item);
         if (itemError) return itemError;
         // apply the label, icon, and tooltip
-        if (![ItemType.Break, ItemType.Group, ItemType.Separator, ItemType.Spreader].contains(itemType)) {
+        if (![ItemType.Break, ItemType.Group, ItemType.Separator, ItemType.Spreader].includes(itemType)) {
             const labelIconTooltipError = this.addItemArgs(item, args);
             if (labelIconTooltipError) return labelIconTooltipError;
         }

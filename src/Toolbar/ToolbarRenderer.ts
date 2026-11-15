@@ -1,8 +1,8 @@
 import { Rect } from "@codemirror/view";
 import NoteToolbarPlugin from "main";
 import { FrontMatterCache, getIcon, ItemView, MarkdownView, Menu, MenuItem, MenuPositionDef, Notice, Platform, setIcon, setTooltip, TFile, TFolder } from "obsidian";
-import { DefaultStyleType, ErrorBehavior, ItemType, LocalVar, MobileStyleType, OBSIDIAN_UI_ELEMENTS, PositionType, ScriptContext, t, ToggleUiStateType, ToolbarItemSettings, ToolbarSettings, ToolbarStyle } from "Settings/NoteToolbarSettings";
-import { calcComponentVisToggles, getItemFallbackName, getViewId, hasStyle, isValidUri, putFocusInMenu } from "Utils/Utils";
+import { DefaultStyleType, ErrorBehavior, ItemType, LocalVar, MobileStyleType, OBSIDIAN_UI_ELEMENTS, PositionType, ScriptContext, t, ToggleUiStateType, ToolbarItemSettings, ToolbarSettings, ToolbarStyle, VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_WHATS_NEW } from "Settings/NoteToolbarSettings";
+import { calcComponentVisToggles, getItemFallbackName, getViewId, hasStyle, isValidUri, putFocusInMenu, waitFor } from "Utils/Utils";
 
 // note: make sure CSS is updated if these are changed
 export enum TbarData {
@@ -109,8 +109,8 @@ export default class ToolbarRenderer {
      */
     renderBottomLeftStyle(toolbarEl: HTMLElement): string {
         const viewPaddingOffset = 0;
-        let activeLeaf: MarkdownView | ItemView | null = this.ntb.app.workspace.getActiveViewOfType(MarkdownView);
-        if (!activeLeaf) activeLeaf = this.ntb.app.workspace.getActiveViewOfType(ItemView);
+        // let activeLeaf: MarkdownView | ItemView | null = this.ntb.app.workspace.getActiveViewOfType(MarkdownView);
+        // if (!activeLeaf) activeLeaf = this.ntb.app.workspace.getActiveViewOfType(ItemView);
         // if (activeLeaf) {
         // 	const contentElStyle = getComputedStyle(activeLeaf?.contentEl);
         // 	viewPaddingOffset = parseFloat(contentElStyle.paddingLeft) || 0;
@@ -373,7 +373,7 @@ export default class ToolbarRenderer {
             this.ntb.registerDomEvent(noteToolbarCallout, 'mouseover', async (evt: MouseEvent) => {
                 const target = (evt.target as HTMLElement)?.closest('.external-link');
                 const type = target?.getAttribute('data-toolbar-link-attr-type');
-                if (target && type && [ItemType.File, ItemType.Uri].contains(type as ItemType)) {
+                if (target && type && [ItemType.File, ItemType.Uri].includes(type as ItemType)) {
                     let itemLink = target.getAttribute('href') || '';
 					const errorContext: ScriptContext = { errorBehavior: ErrorBehavior.Ignore, component: 'URI', toolbar };
                     itemLink = await this.ntb.vars.replaceVars(itemLink, this.ntb.app.workspace.getActiveFile(), errorContext);
@@ -976,6 +976,8 @@ export default class ToolbarRenderer {
 			}
 		}
 
+		void this.restorePropsState();
+
 	}
 
 	/**
@@ -1192,6 +1194,26 @@ export default class ToolbarRenderer {
 	}
 
 	/**
+	 * Restores the Properties section to its previously saved visibility state.
+	 */
+	async restorePropsState(): Promise<void> {
+		if (this.ntb.settings.keepPropsState) {
+			// restore properties to the state they were before
+			const propsState = this.ntb.app.loadLocalStorage(LocalVar.TogglePropsState) as ToggleUiStateType;
+			if (propsState && ['toggle', 'show', 'hide', 'fold'].includes(propsState)) {
+				// at app open the Properties element may not exist yet; wait for it before applying the state
+				const propsEl = await waitFor(() => this.ntb.el.getPropsEl());
+				if (!propsEl) {
+					// this.ntb.debug("restorePropsState: Unable to find .metadata-container to restore Properties state");
+					return;
+				}
+				this.ntb.commands.toggleUi('props', propsState, true);
+			}
+		}
+
+	}
+
+	/**
 	 * Updates any toolbar elements that use properties, including labels and tooltips.
 	 * If the item resolves to a URI that's empty, the item is hidden.
 	 * @param toolbar ToolbarSettings to get values from.
@@ -1202,13 +1224,7 @@ export default class ToolbarRenderer {
 
 		this.ntb.debug(`update: ${toolbar.name}`);
 
-		if (this.ntb.settings.keepPropsState) {
-			// restore properties to the state they were before
-			const propsState = this.ntb.app.loadLocalStorage(LocalVar.TogglePropsState) as ToggleUiStateType;
-			if (propsState && ['toggle', 'show', 'hide', 'fold'].includes(propsState)) {
-				this.ntb.commands.toggleUi('props', propsState, true);
-			}
-		}
+		void this.restorePropsState();
 
 		const currentView = view ? view : this.ntb.app.workspace.getActiveViewOfType(ItemView);
 		const toolbarEl = this.ntb.el.getToolbarEl(currentView ?? undefined);
@@ -1362,26 +1378,50 @@ export default class ToolbarRenderer {
 
 		if (!Platform.isPhone || !toolbarPosition) return;
 
-		//
-		// top navigation bar (view header)
-		//
-
-		const hideViewHeader = this.ntb.settings.obsidianUiVisibility['view-header'] === false;
-		activeDocument.body.toggleClass('ntb-remove-view-header', hideViewHeader);
+		// apply the configured navbar visibility (top bar + bottom actions)
+		this.updatePhoneNavbarVisibility();
 
 		//
-		// bottom navigation bar
+		// bottom navigation bar: make room for the FAB
 		//
-		
+
 		const navbarEl = activeDocument.querySelector('.mobile-navbar') as HTMLElement;
 		if (!navbarEl) return;
-		
+
 		// navbarEl.style.marginBottom = ''; // reset spacing
 		navbarEl.setCssProps({ marginBottom: '' }); // reset spacing
 
 		// move Navbar left/right to make room for the FAB
 		navbarEl.toggleClass('note-toolbar-navbar-right', toolbarPosition === PositionType.FabLeft);
 		navbarEl.toggleClass('note-toolbar-navbar-left', toolbarPosition === PositionType.FabRight);
+
+	}
+
+	/**
+	 * Hides or shows the navigation bar based on settings. 
+	 * The top bar is always shown on the plugin views (Help, Gallery, What's New).
+	 */
+	updatePhoneNavbarVisibility(): void {
+
+		if (!Platform.isPhone) return;
+
+		//
+		// top navigation bar (view header)
+		//
+
+		const activeView = this.ntb.app.workspace.getActiveViewOfType(ItemView);
+		const isPluginView = activeView !== null && [
+			VIEW_TYPE_GALLERY, VIEW_TYPE_HELP, VIEW_TYPE_WHATS_NEW
+		].includes(activeView.getViewType());
+		const hideViewHeader = this.ntb.settings.obsidianUiVisibility?.['view-header'] === false && !isPluginView;
+		activeDocument.body.toggleClass('ntb-remove-view-header', hideViewHeader);
+
+		//
+		// bottom navigation bar
+		//
+
+		const navbarEl = activeDocument.querySelector('.mobile-navbar') as HTMLElement;
+		if (!navbarEl) return;
 
 		// hide actions on the navbar
 		if (this.ntb.settings.obsidianUiVisibility) {

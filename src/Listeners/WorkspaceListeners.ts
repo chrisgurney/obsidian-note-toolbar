@@ -179,7 +179,7 @@ export default class WorkspaceListeners {
 		}
 
 		// exit if the view has already been handled, after updating the toolbar
-		if (!renderToolbar && !Platform.isPhone && viewId && this.ntb.render.activeViewIds.contains(viewId)) {
+		if (!renderToolbar && !Platform.isPhone && viewId && this.ntb.render.activeViewIds.includes(viewId)) {
 			this.ntb.debug('LEAF-CHANGE: SKIPPED RENDERING: VIEW ALREADY HANDLED');
 			await this.ntb.render.updateActive();
 			return;

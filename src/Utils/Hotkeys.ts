@@ -74,7 +74,7 @@ export default class HotkeyHelper {
 			}
 		}
 
-		return modifiersArray.filter(m => MODIFIERS.contains(m as Modifier)) as Modifier[];
+		return modifiersArray.filter(m => MODIFIERS.includes(m as Modifier)) as Modifier[];
 	}
 
 	getHotkeysForCommand(command: Command): (KeymapInfo | Hotkey)[] | undefined {

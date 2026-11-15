@@ -247,7 +247,7 @@ export default class ToolbarItemUi {
                         .onClick(async () => this.handleItemDuplicate(toolbarItem));
             });
 
-            if (![ItemType.Break, ItemType.Group, ItemType.Separator, ItemType.Spreader].contains(toolbarItem.linkAttr.type)) {
+            if (![ItemType.Break, ItemType.Group, ItemType.Separator, ItemType.Spreader].includes(toolbarItem.linkAttr.type)) {
                 const itemCommand = this.ntb.commands.getCommandFor(toolbarItem);
                 const hotkey = itemCommand ? this.ntb.hotkeys.getHotkeyText(itemCommand) : undefined;
                 new Setting(itemControlsContainer)
@@ -469,7 +469,7 @@ export default class ToolbarItemUi {
 
         menu.addSeparator();
 
-        if (![ItemType.Break, ItemType.Group, ItemType.Separator, ItemType.Spreader].contains(toolbarItem.linkAttr.type)) {
+        if (![ItemType.Break, ItemType.Group, ItemType.Separator, ItemType.Spreader].includes(toolbarItem.linkAttr.type)) {
 
             // add to ribbon / remove from ribbon
             const initialRibbonItem = this.ntb.ribbon.get(toolbarItem.uuid);
@@ -553,7 +553,7 @@ export default class ToolbarItemUi {
         // share, copy as callout, copy developer ID
         //
 
-        if (![ItemType.Group].contains(toolbarItem.linkAttr.type)) {
+        if (![ItemType.Group].includes(toolbarItem.linkAttr.type)) {
 
             menu.addItem((menuItem: MenuItem) => {
                 menuItem

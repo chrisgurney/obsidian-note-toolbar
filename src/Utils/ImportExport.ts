@@ -228,7 +228,7 @@ export async function exportItemToCallout(
 /**
  * Returns a string that shouldn't break an attribute value portion.
  */
-function escapeAttribute(str: string): string {
+export function escapeAttribute(str: string): string {
     return str
         .replace(/"/g, '&quot;')
         .replace(/>/g, '&gt;')
@@ -241,7 +241,7 @@ function escapeAttribute(str: string): string {
  * @param str string to escape
  * @returns escaped string
  */
-function escapeLinkForCallout(str: string): string {
+export function escapeLinkForCallout(str: string): string {
     return str
         .replace(/\[/g, '\\[')
         .replace(/\]/g, '\\]')
@@ -249,7 +249,7 @@ function escapeLinkForCallout(str: string): string {
         .replace(/\(/g, '\\(');
 }
 
-function unescapeLinkForCallout(str: string): string {
+export function unescapeLinkForCallout(str: string): string {
     return str
         .replace(/\\\[/g, '[')
         .replace(/\\\]/g, '[')
@@ -268,7 +268,7 @@ function unescapeLinkForCallout(str: string): string {
  * Returns a string that replaces Dataview + Templater delimeters with
  * Note Toolbar's agnostic {{ }} script delimiters.
  */
-function replaceScriptDelimiters(ntb: NoteToolbarPlugin, input: string): string {
+export function replaceScriptDelimiters(ntb: NoteToolbarPlugin, input: string): string {
     if (ntb.adapters.hasPlugin(ItemType.Templater)) {
         input = input.replace(/<%\s*(.*?)\s*%?>/g, '{{tp: $1}}');
     }
@@ -285,19 +285,19 @@ function replaceScriptDelimiters(ntb: NoteToolbarPlugin, input: string): string 
  * @param str string to escape
  * @returns escaped string
  */
-function escapeTextForCallout(str: string): string {
+export function escapeTextForCallout(str: string): string {
     return str
         .replace(/\[/g, '\\[')
         .replace(/\]/g, '\\]');
 }
 
-function stripJsComments(code: string): string {
+export function stripJsComments(code: string): string {
     return code
         .replace(/\/\*[\s\S]*?\*\//g, '') // block comments
         .replace(/(^|\s)\/\/.*$/gm, '$1'); // line comments
 }
 
-function unescapeTextForCallout(str: string): string {
+export function unescapeTextForCallout(str: string): string {
     return str
         .replace(/\\\[/g, '[')
         .replace(/\\\]/g, ']');
@@ -309,7 +309,7 @@ function unescapeTextForCallout(str: string): string {
  * @param callout the raw callout string to parse
  * @returns Array of line strings ready for item processing.
  */
-function parseCalloutLines(callout: string): string[] {
+export function parseCalloutLines(callout: string): string[] {
     // temporarily protect newlines inside quotes/scripts from splitting
     const protectedCallout = callout.replace(/(["'])([\s\S]*?)\1/g, (match) => {
         return match.replace(/\\n/g, '___ESCAPED_NL___');

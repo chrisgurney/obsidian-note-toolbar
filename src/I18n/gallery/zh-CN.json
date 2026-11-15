@@ -1,0 +1,493 @@
+{
+  "gallery": {
+    "bannerTitle": "Note Toolbar 示例库",
+    "overview": "浏览项目示例，点击以将其添加到工具栏。",
+    "pluginNote": "某些项目需要特定插件以实现更复杂的功能。",
+    "category": {
+      "daily-notes": {
+        "name": "Daily Notes 每日笔记",
+        "description": "快速在每日笔记之间导航。需要启用 _日记_ 核心插件。"
+      },
+      "editing": {
+        "name": "编辑",
+        "description": "调整内容的顺序和格式。"
+      },
+      "editor-navigation": {
+        "description": "更快地在文本编辑器中导航。"
+      },
+      "files": {
+        "name": "文件",
+        "description": "用于处理文件的工具。"
+      },
+      "formatting": {
+        "name": "格式化",
+        "description": "更改文本的外观。"
+      },
+      "lists-indentation": {
+        "name": "列表与缩进",
+        "description": "将项目组织成列表并调整结构。"
+      },
+      "insertions": {
+        "name": "插入",
+        "description": "添加各种类型的内容，如链接或媒体。"
+      },
+      "new-tab-view": {
+        "name": "新标签页视图",
+        "description": "使用工具栏替换新标签页视图。  [了解更多](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/New-tab-view)"
+      },
+      "note-toolbar": {
+        "name": "笔记工具栏",
+        "description": "快速访问笔记工具栏设置和工具。"
+      },
+      "obsidian-support": {
+        "name": "Obsidian 支持",
+        "description": "从 Obsidian 社区资源中获取帮助。"
+      },
+      "search": {
+        "name": "搜索",
+        "description": "在笔记和整个库中搜索。"
+      },
+      "vault-navigation": {
+        "name": "库导航",
+        "description": "在不同的文件和目录之间导航。"
+      },
+      "views-themes": {
+        "name": "视图与主题",
+        "description": "切换主题和视图。"
+      },
+      "workspaces": {
+        "name": "工作区",
+        "description": "在工作区之间切换。需要启用 _工作区_ 核心插件。"
+      },
+      "periodic-notes": {
+        "name": "Periodic Notes 周期性笔记",
+        "description": "导航到每周、每月和每年的笔记。需要 [Periodic Notes](obsidian://show-plugin?id=periodic-notes) 插件。"
+      },
+      "templater": {
+        "name": "Templater 模板",
+        "description": "从模板中插入或创建笔记。需要 [Templater](obsidian://show-plugin?id=templater-obsidian) 插件。请参阅用户指南以了解 [更多使用 Templater 的方法](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater)。"
+      },
+      "plugins": {
+        "name": "探索更多",
+        "description": "通过 Obsidian 的插件实现更多妙妙功能。"
+      }
+    },
+    "item": {
+      "attach-file": {
+        "description": "插入附件文件。",
+        "tooltip": "插入附件"
+      },
+      "bookmarks-open": {
+        "description": "打开书签侧边栏。",
+        "tooltip": "显示书签"
+      },
+      "canvas-new": {
+        "description": "创建一个新的画布文件。",
+        "tooltip": "新建画布（Canvas）"
+      },
+      "clear-formatting": {
+        "description": "移除所有文本格式。",
+        "tooltip": "清除格式"
+      },
+      "copy": {
+        "description": "将选中文本复制到剪贴板。",
+        "tooltip": "复制"
+      },
+      "copy-block-link": {
+        "description": "复制当前块的链接到剪贴板。",
+        "tooltip": "复制块链接（Block ID）"
+      },
+      "copy-note-content": {
+        "description": "复制笔记正文到剪贴板，忽略 frontmatter。",
+        "tooltip": "复制笔记内容"
+      },
+      "copy-obsidian-url": {
+        "description": "将当前笔记的 Obsidian URL 复制到剪贴板。",
+        "tooltip": "复制 Obsidian URL"
+      },
+      "cut": {
+        "description": "将选中文本剪切到剪贴板。",
+        "tooltip": "剪切"
+      },
+      "cycle-list-checklist": {
+        "description": "在项目符号、复选框（勾选和未勾选）之间切换。",
+        "tooltip": "切换项目符号/复选框"
+      },
+      "cycle-themes": {
+        "description": "在已安装的主题之间循环切换，包括默认主题。",
+        "tooltip": "切换主题"
+      },
+      "cycle-workspace": {
+        "description": "在工作区之间循环切换。",
+        "tooltip": "切换工作区"
+      },
+      "daily-notes-prev": {
+        "description": "转到上一条每日笔记。",
+        "tooltip": "上一条每日笔记"
+      },
+      "daily-notes-today": {
+        "description": "转到今天的每日笔记。",
+        "tooltip": "今天的每日笔记"
+      },
+      "daily-notes-next": {
+        "description": "转到下一条每日笔记。",
+        "tooltip": "下一条每日笔记"
+      },
+      "editor-toggle-preview": {
+        "description": "在编辑器的预览和阅读模式之间切换。",
+        "tooltip": "切换阅读视图"
+      },
+      "editor-toggle-source": {
+        "description": "打开和关闭源码模式。",
+        "tooltip": "切换源码模式"
+      },
+      "file-append": {
+        "description": "将提示框输入的文本附加到您指定的文件中。",
+        "tooltip": "附加文本"
+      },
+      "file-in-explorer": {
+        "description": "在导航中显示当前文件。",
+        "tooltip": "在导航中显示文件"
+      },
+      "file-in-system": {
+        "description": "在系统的文件资源管理器中显示当前文件。",
+        "tooltip": "在系统中显示文件"
+      },
+      "file-move": {
+        "description": "将当前文件移动到选定的文件夹。",
+        "tooltip": "将文件移动到文件夹"
+      },
+      "file-new": {
+        "description": "创建一个新笔记。",
+        "tooltip": "新笔记"
+      },
+      "file-new-tab": {
+        "description": "在新标签页中打开选定的文件。",
+        "tooltip": "在新标签页中打开文件"
+      },
+      "file-next": {
+        "description": "打开文件夹中的下一个文件，按 A-Z 排序。超过范围时，将重新循环到第一个文件。",
+        "tooltip": "下一个文件"
+      },
+      "file-prev": {
+        "description": "打开文件夹中的上一个文件，按 A-Z 排序。超过范围时，将重新循环回到最后一个文件。",
+        "tooltip": "上一个文件"
+      },
+      "folder-search": {
+        "description": "打开基于当前文件夹的搜索，如果文件在根目录中，则搜索所有文件。",
+        "tooltip": "搜索文件夹"
+      },
+      "global-search-open": {
+        "description": "打开搜索侧边栏。",
+        "tooltip": "搜索所有文件"
+      },
+      "go-bottom": {
+        "description": "将光标移动到当前笔记的底部。",
+        "tooltip": "跳到底部"
+      },
+      "go-home": {
+        "description": "转到您的主页笔记（在 URL 中输入您的主页笔记）",
+        "tooltip": "主页"
+      },
+      "go-top": {
+        "description": "将光标移动到当前笔记的顶部。",
+        "tooltip": "跳到顶部"
+      },
+      "go-up": {
+        "description": "使用您的笔记的 \"up\" 属性导航到您的库中的父笔记。",
+        "tooltip": "向上"
+      },
+      "go-next-callout": {
+        "description": "将光标移动到笔记中的下一个标注。",
+        "tooltip": "下一个标注（Callout）"
+      },
+      "go-next-heading": {
+        "description": "将光标移动到笔记中的下一个标题。",
+        "tooltip": "下一个标题"
+      },
+      "go-prev-heading": {
+        "description": "将光标移动到笔记中的上一个标题。",
+        "tooltip": "上一个标题"
+      },
+      "indent": {
+        "description": "增加当前行的缩进。",
+        "tooltip": "缩进"
+      },
+      "insert-callout": {
+        "description": "插入一个标注块。",
+        "tooltip": "插入标注（Callout）"
+      },
+      "insert-codeblock": {
+        "description": "插入一个代码块。",
+        "tooltip": "插入代码块（Code Block）"
+      },
+      "insert-embed": {
+        "description": "添加一个嵌入的文件或笔记。",
+        "tooltip": "添加嵌入"
+      },
+      "insert-horizontal-rule": {
+        "description": "插入一条分隔线。",
+        "tooltip": "插入分隔线"
+      },
+      "insert-link": {
+        "description": "插入一个 Markdown 链接。",
+        "tooltip": "插入 markdown 链接"
+      },
+      "insert-mathblock": {
+        "description": "插入一个数学块。",
+        "tooltip": "插入数学块"
+      },
+      "insert-table": {
+        "description": "插入一个表格。",
+        "tooltip": "插入表格"
+      },
+      "insert-tag": {
+        "description": "给笔记添加一个标签。",
+        "tooltip": "添加标签"
+      },
+      "insert-wikilink": {
+        "description": "添加一个内部链接。",
+        "tooltip": "添加内部链接"
+      },
+      "load-workspace": {
+        "description": "选择并加载一个配置的工作区。",
+        "tooltip": "加载工作区"
+      },
+      "new-note": {
+        "description": "创建一个新笔记。",
+        "tooltip": "新笔记"
+      },
+      "note-toolbar-backup-data": {
+        "description": "将 Note Toolbar 的设置（data.json）文件复制到库中。",
+        "tooltip": "备份 Note Toolbar 配置"
+      },
+      "note-toolbar-quick-toolbars": {
+        "description": "打开一个窗口，以访问所有的笔记工具栏。",
+        "tooltip": "快速工具栏"
+      },
+      "note-toolbar-quick-tools": {
+        "description": "打开一个可搜索的窗口，访问所有的笔记工具栏项目。",
+        "tooltip": "快速工具"
+      },
+      "note-toolbar-tbar-settings": {
+        "description": "打开活动的笔记工具栏设置，以自定义您的工具栏。",
+        "tooltip": "（当前）工具栏设置"
+      },
+      "note-toolbar-toggle-properties": {
+        "description": "切换笔记属性区的可见性。",
+        "tooltip": "切换属性（Property）"
+      },
+      "note-toolbar-user-guide": {
+        "description": "访问笔记工具栏用户指南，获取帮助和提示。",
+        "tooltip": "笔记工具栏用户指南"
+      },
+      "obsidian-excalidraw-create": {
+        "description": "创建一个新的 Excalidraw 绘图。",
+        "tooltip": "新建绘图"
+      },
+      "obsidian-help-site": {
+        "description": "打开官方的 Obsidian 帮助网站。",
+        "tooltip": "Obsidian 帮助"
+      },
+      "obsidian-kanban-create": {
+        "description": "创建一个新的看板。",
+        "tooltip": "新建看板"
+      },
+      "obsidian-markdown-reference": {
+        "description": "打开 Obsidian 的 Markdown 格式指南。",
+        "tooltip": "Markdown 参考"
+      },
+      "obsidian-sync-version-history": {
+        "description": "查看当前文件的版本历史。",
+        "tooltip": "版本历史"
+      },
+      "obsidian-tasks-edit": {
+        "description": "创建一个新任务。",
+        "tooltip": "创建/编辑任务"
+      },
+      "paste": {
+        "description": "粘贴剪贴板中的文本。",
+        "tooltip": "粘贴"
+      },
+      "periodic-notes-monthly-next": {
+        "description": "打开下一个月度笔记（当前位于一个月度笔记中时才有效）",
+        "tooltip": "下一个月度笔记（Monthly Note）"
+      },
+      "periodic-notes-monthly-open": {
+        "description": "打开月度笔记。",
+        "tooltip": "打开月度笔记（Monthly Note）"
+      },
+      "periodic-notes-monthly-prev": {
+        "description": "打开上一个月度笔记（当前位于一个月度笔记中时才有效）",
+        "tooltip": "上一个月度笔记（Monthly Note）"
+      },
+      "periodic-notes-weekly-next": {
+        "description": "下一个周记（当前位于一个周记中时才有效）",
+        "tooltip": "下一个周记（Weekly Note）"
+      },
+      "periodic-notes-weekly-open": {
+        "description": "打开每周笔记。",
+        "tooltip": "打开周记（Weekly Note）"
+      },
+      "periodic-notes-weekly-prev": {
+        "description": "上一个周记（当前位于一个周记中时才有效）",
+        "tooltip": "上一个周记（Weekly Note）"
+      },
+      "periodic-notes-yearly-next": {
+        "description": "下一个年度笔记（当前位于一个年度笔记中时才有效）",
+        "tooltip": "下一个年度笔记（Yearly Note）"
+      },
+      "periodic-notes-yearly-open": {
+        "description": "打开年度笔记。",
+        "tooltip": "打开年度笔记（Yearly Note）"
+      },
+      "periodic-notes-yearly-prev": {
+        "description": "上一个年度笔记（当前位于一个年度笔记中时才有效）",
+        "tooltip": "上一个年度笔记（Yearly Note）"
+      },
+      "pin": {
+        "description": "固定或取消固定当前笔记，防止在打开新笔记时被替换。",
+        "tooltip": "切换固定（Pin）"
+      },
+      "search-replace-open": {
+        "description": "在当前笔记中打开查找/替换面板。",
+        "tooltip": "查找和替换"
+      },
+      "set-workspace": {
+        "description": "切换到您提供的特定工作区。",
+        "tooltip": "我的工作区"
+      },
+      "settings-open": {
+        "description": "打开 Obsidian 的设置。",
+        "tooltip": "打开设置"
+      },
+      "tab-close": {
+        "description": "关闭当前标签页。",
+        "tooltip": "关闭标签页"
+      },
+      "tab-new": {
+        "description": "打开一个新的空标签页。",
+        "tooltip": "新标签页"
+      },
+      "tab-next": {
+        "description": "转到下一个标签页。",
+        "tooltip": "下一个标签页"
+      },
+      "tab-prev": {
+        "description": "转到上一个标签页。",
+        "tooltip": "上一个标签页"
+      },
+      "templater-insert-template": {
+        "description": "插入选定的模板。",
+        "tooltip": "插入模板"
+      },
+      "templater-new-note-from-template": {
+        "description": "从您选择的模板创建一个新笔记。",
+        "tooltip": "从模板新建"
+      },
+      "redo": {
+        "description": "重新应用上一个撤销的操作。",
+        "tooltip": "重做"
+      },
+      "swap-line-down": {
+        "description": "将当前行向下移动。",
+        "tooltip": "向下移动当前行"
+      },
+      "swap-line-up": {
+        "description": "将当前行向上移动。",
+        "tooltip": "向上移动当前行"
+      },
+      "system-snippets-open": {
+        "description": "在系统的文件资源管理器中打开库的 CSS 片段文件夹。",
+        "tooltip": "在系统中显示 CSS 片段（Snippets）"
+      },
+      "system-vault-open": {
+        "description": "在系统的文件资源管理器中打开库所在的文件夹。",
+        "tooltip": "在系统中显示库"
+      },
+      "theme-switch": {
+        "description": "打开 Obsidian 主题切换器。",
+        "tooltip": "更改主题"
+      },
+      "theme-toggle-light-dark": {
+        "description": "在浅色和深色模式之间切换。",
+        "tooltip": "切换浅色/深色"
+      },
+      "toggle-blockquote": {
+        "description": "应用或移除引用块格式。",
+        "tooltip": "切换引用块（Blockquote）"
+      },
+      "toggle-bold": {
+        "description": "应用或移除粗体格式。",
+        "tooltip": "切换粗体"
+      },
+      "toggle-bullet-list": {
+        "description": "应用或移除无序列表格式。",
+        "tooltip": "切换无序列表"
+      },
+      "toggle-checklist-status": {
+        "description": "切换任务列表的状态。",
+        "tooltip": "切换任务状态"
+      },
+      "toggle-code": {
+        "description": "应用或移除内联代码格式。",
+        "tooltip": "切换代码（Inline Code）"
+      },
+      "toggle-comments": {
+        "description": "添加或移除注释。",
+        "tooltip": "切换注释（Comment）"
+      },
+      "toggle-css-class": {
+        "description": "在 cssclasses 属性中添加或移除提供的 CSS 类。",
+        "tooltip": "切换 CSS 类"
+      },
+      "toggle-highlight": {
+        "description": "应用或移除文本高亮。",
+        "tooltip": "切换高亮文本（Highlight）"
+      },
+      "toggle-inline-math": {
+        "description": "应用或移除内联数学格式。",
+        "tooltip": "切换内联数学（Inline Math）"
+      },
+      "toggle-italics": {
+        "description": "应用或移除斜体格式。",
+        "tooltip": "切换斜体（Italic）"
+      },
+      "toggle-numbered-list": {
+        "description": "应用或移除有序列表格式。",
+        "tooltip": "切换有序列表"
+      },
+      "toggle-ui": {
+        "description": "显示或隐藏 Obsidian 的状态栏、笔记属性、侧边栏和视图标题。",
+        "tooltip": "切换 UI 显示"
+      },
+      "toggle-status-bar": {
+        "description": "显示或隐藏 Obsidian 的状态栏。",
+        "tooltip": "切换状态栏"
+      },
+      "toggle-strikethrough": {
+        "description": "应用或移除删除线格式。",
+        "tooltip": "切换删除线（Strikethrough）"
+      },
+      "toggle-vim-mode": {
+        "description": "打开和关闭 Vim 模式。",
+        "tooltip": "切换 Vim 模式"
+      },
+      "toggle-color-highlight": {
+        "description": "应用或移除文本高亮。"
+      },
+      "undo": {
+        "description": "撤销最新的操作。",
+        "tooltip": "撤销"
+      },
+      "unindent": {
+        "description": "减少当前行的缩进。",
+        "tooltip": "取消缩进"
+      },
+      "vscode-open": {
+        "description": "在 VS Code 中打开当前文件。",
+        "tooltip": "在 VS Code 中打开"
+      }
+    }
+  }
+}

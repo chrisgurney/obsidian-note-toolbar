@@ -220,8 +220,14 @@ export default class AdapterUtils {
         let result = '';
         const { scriptFile, toolbar, item, component, adapterFunction } = context;
 
-        const wrap = ( subject: string, type: 'for' | 'in' | 'of' | 'with', target: string ): string => 
-            t(`adapter.error.context.${type}`, { subject, target });
+        const wrap = ( subject: string, type: 'for' | 'in' | 'of' | 'with', target: string ): string => {
+            switch (type) {
+                case 'for': return t('adapter.error.context.for', { subject, target });
+                case 'in': return t('adapter.error.context.in', { subject, target });
+                case 'of': return t('adapter.error.context.of', { subject, target });
+                case 'with': return t('adapter.error.context.with', { subject, target });
+            }
+        };
 
         if (component === 'callout') { return t('adapter.error.context.callout'); }
 

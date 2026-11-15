@@ -334,8 +334,9 @@ export default class SettingsMigrator {
             // if a rules array had to be created above, settings still points at the default (empty) one
             this.ntb.settings.rules = loaded_settings.rules;
 
+            // UNCOMMENT THIS WHEN NEW MIGRATION IS ADDED
             // for the next migration to run
-            old_version = new_version;
+            // old_version = new_version;
         }
 
         // COMMENT THIS OUT while testing new migration code

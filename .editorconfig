@@ -8,3 +8,7 @@ insert_final_newline = true
 indent_style = tab
 indent_size = 4
 tab_width = 4
+
+[src/I18n/**.json]
+indent_style = space
+indent_size = 2

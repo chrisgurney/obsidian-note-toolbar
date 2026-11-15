@@ -31,6 +31,9 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
 
+      - name: Test
+        run: npm test
+
       - name: Check styles
         run: npm run stylelint
 
@@ -39,3 +42,6 @@ jobs:
 
       - name: Build plugin
         run: npm run build
+
+      - name: Check language keys
+        run: npm run check:lang -- --strict

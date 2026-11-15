@@ -4,9 +4,10 @@
 import fs from 'fs';
 import path from 'path';
 
-export function galleryDocs(itemsFile, galleryFile, outputFile) {
+export function galleryDocs(itemsFile, galleryFile, galleryLangFile, outputFile) {
     const items = JSON.parse(fs.readFileSync(itemsFile, 'utf-8'));
     const gallery = JSON.parse(fs.readFileSync(galleryFile, 'utf-8'));
+    const galleryLang = JSON.parse(fs.readFileSync(galleryLangFile, 'utf-8')).gallery;
 
     let markdown = '';
 
@@ -20,14 +21,14 @@ export function galleryDocs(itemsFile, galleryFile, outputFile) {
     };
 
     for (const category of gallery.categories) {
-        markdown += `## ${category.name.en}\n\n${category.description.en}\n\n`;
+        markdown += `## ${galleryLang.category[category.id].name}\n\n${galleryLang.category[category.id].description}\n\n`;
 
         markdown += '| Item | Description |\n| --- | --- |\n';
         for (const itemId of category.itemIds) {
             const item = items.find(item => item.id === itemId);
             if (!item) continue;
 
-            let description = `${item.description.en}`;
+            let description = `${galleryLang.item[item.id].description}`;
 
             // FIXME: reuse function to check command ID here?
             // if (item.type === 'plugin' && item.pluginName) {
@@ -43,7 +44,7 @@ export function galleryDocs(itemsFile, galleryFile, outputFile) {
             
             description += item.since ? ` *Since ${item.since}*` : '';
 
-            let line = `| ${item.tooltip.en} | ${description} |`;
+            let line = `| ${galleryLang.item[item.id].tooltip} | ${description} |`;
             markdown += line + '\n';
         }
         markdown += '\n';

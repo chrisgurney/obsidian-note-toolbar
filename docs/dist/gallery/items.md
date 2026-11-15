@@ -12,6 +12,7 @@ Obsidian's built-in editor toolbar.
 | Insert attachment | Insert a file attachment. |
 | Toggle heading | Toggle the heading level on the current line. |
 | Toggle bold | Apply or remove bold formatting. |
+| Toggle italic | Apply or remove italic formatting. |
 | Toggle strikethrough | Apply or remove strikethrough formatting. |
 | Toggle highlight | Apply or remove text highlighting. |
 | Color highlight | Apply or remove color text highlighting. |
