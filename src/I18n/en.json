@@ -483,7 +483,7 @@
     "error-invalid-floating-toolbar": "Note Toolbar: Floating toolbar does not exist. Check your settings.",
     "error-invalid-text-toolbar": "Note Toolbar: Selected text toolbar does not exist. Check your settings.",
     "error-load-failed": "Note Toolbar: Failed to load settings; starting with defaults. Your stored settings have not been changed, but saving now may overwrite them. Please check the console for details.",
-    "error-migration-failed": "Note Toolbar: Failed to update settings to the latest version. Your existing settings have been kept. A backup copy was saved to:\n{{-path}} If you report this problem, please attach that file to your issue.",
+    "error-migration-failed": "Note Toolbar: Failed to update settings to the latest version. Your existing settings have been kept. A backup copy was saved to:\n{{-path}}\nIf you report this problem, please attach that file to your issue.",
     "error-migration-failed-backup-failed": "Note Toolbar: Failed to update settings to the latest version. Your existing settings have been kept. A backup copy could not be saved automatically. Please open Note Toolbar's settings to back up manually and attach that file to your issue.",
     "error-migration-save-failed": "Note Toolbar: Settings were updated to the latest version, but the updated settings could not be saved. The update will be retried the next time Obsidian loads; please check the console for details.",
     "confirm-overwrite-title": "Overwrite stored settings?",
