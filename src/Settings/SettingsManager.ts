@@ -18,15 +18,12 @@ export default class SettingsManager {
 	/**
 	 * Path of the backup copy made automatically after the most recent
 	 * migration failure in this session, or null if no such copy was made.
-	 * Read by the settings tab so its error block can say whether an
-	 * automatic copy already exists. Reset at the start of every load().
 	 */
 	public migrationBackupPath: string | null = null;
 
 	/**
 	 * True if an automatic backup was attempted after the most recent
 	 * migration failure in this session and that attempt failed.
-	 * Reset at the start of every load().
 	 */
 	public migrationBackupFailed = false;
 
@@ -554,10 +551,8 @@ export default class SettingsManager {
 				// keep the settings as loaded (the migrator only stamps the new version once it completes),
 				// and don't save here, so the stored settings are left untouched for the next attempt
 				this.ntb.error('Note Toolbar: failed to migrate settings from version ' + old_version + '; continuing with settings as loaded.', error);
-				// Back up the stored settings automatically, without asking the user, so a later
-				// save cannot be the first thing that overwrites the failing file. A failed
-				// backup must not block load either, so it is logged only and the user is
-				// pointed at the manual button in settings instead.
+				// back up the stored settings automatically, without asking the user, so a later
+				// save cannot be the first thing that overwrites the failing file
 				try {
 					this.migrationBackupPath = await this.findOrCreateMigrationBackup();
 				}
@@ -625,14 +620,7 @@ export default class SettingsManager {
 
 	/**
 	 * Returns a backup copy of the stored settings file for a failed migration,
-	 * creating one only if no identical copy already exists. A failed migration
-	 * retries on every load, so creating a new copy on every retry would fill
-	 * the backups folder with duplicates of the same file. Comparing contents
-	 * also means a genuinely changed file still gets a new copy, while a
-	 * manual backup of the same file is reused instead of duplicated.
-	 * A failure in the deduplication check itself falls through to a fresh
-	 * copy, so it never prevents the backup. Current settings are NOT saved
-	 * first, so the copy captures the stored file as-is.
+	 * creating one only if no identical copy already exists.
 	 * @returns the vault path of the existing or new backup copy
 	 */
 	private async findOrCreateMigrationBackup(): Promise<string> {
