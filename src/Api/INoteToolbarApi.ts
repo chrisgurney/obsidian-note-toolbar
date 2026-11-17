@@ -146,9 +146,9 @@ export default interface INoteToolbarApi<T> {
     getActiveItem: () => IItem | undefined;
 
     /**
-     * Gets an item by its [ID](Developer-IDs), if it exists.
+     * Gets an item by its [ID](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Developer-IDs), if it exists.
      * 
-     * @param id The [ID](Developer-IDs) of the item.
+     * @param id The [ID](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Developer-IDs) of the item.
      * @returns The item, or undefined.
      * 
      * @example
@@ -244,7 +244,7 @@ export default interface INoteToolbarApi<T> {
     /**
      * Shows a menu with the provided items.
      * 
-     * @param {string | NtbMenuItem[]} toolbarOrItems Toolbar name or [ID](Developer-IDs); or an array of items to display. See {@link NtbMenuItem}.
+     * @param {string | NtbMenuItem[]} toolbarOrItems Toolbar name or [ID](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Developer-IDs); or an array of items to display. See {@link NtbMenuItem}.
      * @param options Optional display options.
      * @returns Nothing. Displays the menu.
      * 
@@ -511,7 +511,7 @@ export default interface INoteToolbarApi<T> {
     /**
      * Shows a (floating) toolbar. Defaults to the 'toolbar' position. 
      * 
-     * @param {string} toolbarNameOrId Toolbar name or [ID](Developer-IDs).
+     * @param {string} toolbarNameOrId Toolbar name or [ID](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Developer-IDs).
      * @param options Optional display options.
      * @returns Nothing. Displays the toolbar.
      * 
