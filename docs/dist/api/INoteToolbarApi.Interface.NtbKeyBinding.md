@@ -26,10 +26,10 @@ The key that triggers this binding, as a [KeyboardEvent.key](https://developer.m
 
 ### modifiers?
 
-> `optional` **modifiers?**: `Modifier`[] \| `null`
+> `optional` **modifiers?**: [`Modifier`](https://docs.obsidian.md/Reference/TypeScript+API/Modifier)[] \| `null`
 
 Modifier keys that must be held for this binding to trigger. Use `null` if no modifier is required.
 
 #### See
 
-Modifier
+[Modifier](https://docs.obsidian.md/Reference/TypeScript+API/Modifier)
