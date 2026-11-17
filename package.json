@@ -59,5 +59,8 @@
   },
   "overrides": {
     "minimatch": "11.0.1"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true
   }
 }
