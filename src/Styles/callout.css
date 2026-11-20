@@ -749,11 +749,13 @@ body.is-phone .cg-note-toolbar-container[data-tbar-position*="top"] {
 /* Licensed under the MIT License; see the LICENSE file */
 body .callout[data-callout="note-toolbar"][data-callout-metadata*="glass"]:not([data-callout-metadata*="card"]),
 body.is-mobile .callout[data-callout="note-toolbar"][data-callout-metadata*="mgls"]:not([data-callout-metadata*="card"]) {
-    background: unset;
     mix-blend-mode: normal;
-    overflow: visible;
-    & .callout-content {
+    &:not[data-tbar-position*="text"] {
+        background: unset;
         overflow: visible;
+        & .callout-content {
+            overflow: visible;
+        }
     }
     & ul {
         gap: var(--size-4-2);
