@@ -1,6 +1,11 @@
 {
     "disableSources": true,
     "entryFileName": "index",
+    "externalSymbolLinkMappings": { 
+        "obsidian": { 
+            "Modifier": "https://docs.obsidian.md/Reference/TypeScript+API/Modifier" 
+        } 
+    },
     "flattenOutputFiles": true,
     "hideGroupHeadings": true,
     "hidePageHeader": true,
@@ -9,5 +14,5 @@
     "outputFileStrategy": "members",
     "plugin": ["typedoc-plugin-markdown"],
     "out": "./docs/dist/api",
-    "skipErrorChecking": true
+    "skipErrorChecking": true,
 }

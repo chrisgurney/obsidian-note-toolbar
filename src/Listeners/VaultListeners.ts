@@ -37,7 +37,8 @@ export default class VaultListeners {
         });
         if (settingsChanged) {
             try {
-                await this.ntb.settingsManager.save(false);
+                // make sure toolbar is re-rendered on save, so any file items that were renamed are updated
+                await this.ntb.settingsManager.save();
             }
             catch (error) {
                 // a failed save leaves the settings on disk out of sync

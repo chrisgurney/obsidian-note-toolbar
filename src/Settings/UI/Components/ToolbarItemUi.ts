@@ -1047,7 +1047,8 @@ export default class ToolbarItemUi {
                         .setValue(item.linkAttr.commandCheck)
                         .onChange(async (value: boolean) => {
                             item.linkAttr.commandCheck = value;
-                            await this.ntb.settingsManager.save(false);
+                            // make sure toolbar is re-rendered on save, so command check is applied to the item
+                            await this.ntb.settingsManager.save();
                         });
                     fixToggleTab(toggle);
                 });       

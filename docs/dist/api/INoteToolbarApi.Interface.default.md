@@ -276,13 +276,13 @@ This does not work with Note Toolbar Callouts.
 
 > **getItem**: (`id`) => [`IItem`](IItem.Interface.IItem.md) \| `undefined`
 
-Gets an item by its [ID](Developer-IDs), if it exists.
+Gets an item by its [ID](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Developer-IDs), if it exists.
 
 #### Parameters
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `id` | `string` | The [ID](Developer-IDs) of the item. |
+| `id` | `string` | The [ID](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Developer-IDs) of the item. |
 
 #### Returns
 
@@ -388,7 +388,7 @@ Shows a menu with the provided items.
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `toolbarOrItems` | `string` \| [`NtbMenuItem`](INoteToolbarApi.Interface.NtbMenuItem.md)[] | Toolbar name or [ID](Developer-IDs); or an array of items to display. See [NtbMenuItem](INoteToolbarApi.Interface.NtbMenuItem.md). |
+| `toolbarOrItems` | `string` \| [`NtbMenuItem`](INoteToolbarApi.Interface.NtbMenuItem.md)[] | Toolbar name or [ID](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Developer-IDs); or an array of items to display. See [NtbMenuItem](INoteToolbarApi.Interface.NtbMenuItem.md). |
 | `options?` | \{ `class?`: `string`; `focusInMenu?`: `boolean`; `id?`: `string`; `position?`: `"cursor"` \| `"pointer"` \| `"toolbar"`; \} | Optional display options. |
 | `options.class?` | `string` | Optional CSS class(es) to add to the component, separated by spaces. |
 | `options.focusInMenu?` | `boolean` | If `true`, the menu item will be focused when the menu opens; defaults to `false`. |
@@ -707,7 +707,7 @@ Shows a (floating) toolbar. Defaults to the 'toolbar' position.
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `toolbarNameOrId` | `string` | Toolbar name or [ID](Developer-IDs). |
+| `toolbarNameOrId` | `string` | Toolbar name or [ID](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Developer-IDs). |
 | `options?` | \{ `class?`: `string`; `position?`: `"cursor"` \| `"pointer"` \| `"toolbar"`; \} | Optional display options. |
 | `options.class?` | `string` | Optional CSS class(es) to add to the component, separated by spaces. |
 | `options.position?` | `"cursor"` \| `"pointer"` \| `"toolbar"` | Sets the position in which the toolbar will appear; defaults to `toolbar`. `cursor`: editor cursor or selected text position (falls back to pointer position, e.g., if editor is not in focus); `pointer`: mouse/pointer position; `toolbar`: last clicked toolbar element position (falls back to pointer position) |

@@ -713,16 +713,16 @@
         "tooltip": "Select icon"
       },
       "keep-props-state": {
-        "description": "Remembers whether Properties are shown or hidden, and restores that state in every note, including after restarting Obsidian. While this is on, use Note Toolbar's \"Show note properties\" to show them again.",
+        "description": "If enabled, Properties are shown, hidden, or folded in every note based on how you last set them with Note Toolbar, including after restarting Obsidian. To show them again, use Note Toolbar's \"Show note properties\".",
         "name": "Keep properties view state"
       },
       "lock-callouts": {
-        "description": "Note Toolbar Callouts will not be expanded for editing on click. If enabled, use the Edit option in the callout menu to make changes.",
+        "description": "If enabled, clicking or tapping a Note Toolbar Callout (outside of its items) won't expand it for editing. To make changes, use the Edit option in the callout's menu.",
         "name": "Lock Note Toolbar Callouts"
       },
       "name": "Other",
       "scripting": {
-        "description": "Adds support for Dataview, JavaScript, JS Engine, and Templater. Plugins must be installed and enabled.",
+        "description": "If enabled, toolbar items can run JavaScript, Dataview, JS Engine, and Templater scripts. Dataview, JS Engine, and Templater require their plugins to be installed and enabled.",
         "name": "Scripting"
       }
     },
