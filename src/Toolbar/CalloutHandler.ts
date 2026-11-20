@@ -106,6 +106,10 @@ export default class CalloutHandler {
                                                 new Error('No last clicked position available.'), { errorBehavior: ErrorBehavior.Console, toolbar: toolbar }
                                             );
                                         }
+                                    }).catch(error => {
+                                        this.ntb.adapters.utils.handleError(
+                                            error, { component: 'callout', errorBehavior: ErrorBehavior.Report, toolbar: toolbar }
+                                        );
                                     });
                                 }
                                 else {
