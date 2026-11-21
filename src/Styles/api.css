@@ -44,7 +44,7 @@
     }
     &[data-ntb-ui-type="modal"] {
         height: 100%;
-        .is-mobile & {
+        .is-phone & {
             top: calc(var(--safe-area-inset-top) + var(--header-height) + var(--size-4-4));
         }
         width: var(--cg-nt-ui-modal-width);        
