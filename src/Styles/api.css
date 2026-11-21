@@ -44,7 +44,10 @@
     }
     &[data-ntb-ui-type="modal"] {
         height: 100%;
-        width: var(--cg-nt-ui-modal-width);
+        .is-mobile & {
+            top: calc(var(--safe-area-inset-top) + var(--header-height) + var(--size-4-4));
+        }
+        width: var(--cg-nt-ui-modal-width);        
         & .view-header-left, .view-actions {
             display: none;
         }
