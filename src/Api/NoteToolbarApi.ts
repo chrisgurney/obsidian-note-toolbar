@@ -6,12 +6,12 @@ import { App, Menu, MenuItem, Modal, normalizePath, Notice, TAbstractFile, TFile
 import { ErrorBehavior, LocalVar, PositionType, t, TranslationKey } from "Settings/NoteToolbarSettings";
 import { exportToCalloutById } from "Utils/ImportExport";
 import { putFocusInMenu } from "Utils/Utils";
-import INoteToolbarApi, { AppendOptions, GetSelectionOptions, NtbFileSuggesterOptions, NtbMenuItem, NtbMenuOptions, NtbModalOptions, NtbPromptOptions, NtbSidebarOptions, NtbSuggesterOptions, NtbToolbarOptions } from "./INoteToolbarApi";
+import INoteToolbarApi, { AppendOptions, GetSelectionOptions, NtbFileSuggesterOptions, NtbMenuItem, NtbMenuOptions, NtbModalOptions, NtbPromptOptions, NtbSidebarCustomButton, NtbSidebarCustomButtonCallback, NtbSidebarOptions, NtbSuggesterOptions, NtbToolbarOptions } from "./INoteToolbarApi";
 import Item from "./Item";
 import { IToolbar } from "./IToolbar";
 import NtbModal from "./NtbModal";
 import NtbPrompt from "./NtbPrompt";
-import { NtbSidebarView, NtbSidebarViewState } from "./NtbSidebarView";
+import { NtbSidebarNavigation, NtbSidebarView, NtbSidebarViewState } from "./NtbSidebarView";
 import NtbSuggester from "./NtbSuggester";
 import Toolbar from "./Toolbar";
 
@@ -437,6 +437,14 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
     private sidebarQueue: Promise<void> = Promise.resolve();
 
     /**
+     * Custom sidebar navigation button callbacks, kept in memory only.
+     * A callback function cannot be stored in a sidebar view state, which Obsidian
+     * persists and restores, so callbacks live here for the current session only.
+     * Keyed by sidebar id, with one callback per custom button, in navigation order.
+     */
+    private sidebarCustomButtons = new Map<string, NtbSidebarCustomButtonCallback[]>();
+
+    /**
      * Shows a sidebar view with the given content.
      * 
      * @see INoteToolbarApi.sidebar
@@ -501,12 +509,30 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
             ? content.toString()
             : content;
 
+        // set up the navigation buttons, for a sidebar view only
+        let serializableNavigation: NtbSidebarNavigation[] = [];
+        if (viewType === NtbSidebarView.VIEW_TYPE_SIDEBAR) {
+            if (options?.navigation !== undefined) {
+                // Custom buttons: keep their callbacks in memory and store only their
+                // icon and tooltip in the view state. Register them now, before the
+                // view renders, so a new or restored view can look them up.
+                const split = this.splitSidebarNavigation(options.navigation);
+                serializableNavigation = split.navigation;
+                this.sidebarCustomButtons.set(options?.id ?? '', split.callbacks);
+            }
+            else if (leaf.view instanceof NtbSidebarView) {
+                // no navigation given: keep the sidebar's existing buttons, and the
+                // callbacks already registered for them
+                serializableNavigation = leaf.view.state.navigation;
+            }
+        }
+
         // set the view state
         const viewState: NtbSidebarViewState = {
             content: viewContent,
             class: options?.class ?? '',
             id: options?.id ?? '',
-            navigation: options?.navigation ?? [],
+            navigation: serializableNavigation,
             viewIcon: options?.viewIcon ?? this.ntb.settings.icon,
             viewTitle: options?.viewTitle ?? t('plugin.note-toolbar')
         };
@@ -539,6 +565,50 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
         // if (leaf.view instanceof NtbSidebarView) {
         //     await leaf.view.setState({ content, id: options?.id ?? '' }, {} as ViewStateResult);
         // }
+    }
+
+    /**
+     * Splits sidebar navigation into the serializable entries stored in view state
+     * and the custom button callbacks kept in the in-memory registry.
+     * Custom buttons keep only their icon and tooltip in view state.
+     */
+    private splitSidebarNavigation(
+        navigation: ('clear' | 'close' | 'export' | NtbSidebarCustomButton)[]
+    ): {
+        navigation: NtbSidebarNavigation[];
+        callbacks: NtbSidebarCustomButtonCallback[];
+    } {
+        const serializable: NtbSidebarNavigation[] = [];
+        const callbacks: NtbSidebarCustomButtonCallback[] = [];
+
+        for (const entry of navigation) {
+            if (typeof entry === 'string') {
+                serializable.push(entry);
+            } else {
+                serializable.push({ icon: entry.icon, tooltip: entry.tooltip });
+                callbacks.push(entry.onClick);
+            }
+        }
+
+        return { navigation: serializable, callbacks };
+    }
+
+    /**
+     * Returns the callback for a custom sidebar navigation button, if one is registered
+     * for the given sidebar id at the given position among its custom buttons.
+     * Returns undefined when the view was restored before any script re-registered it.
+     */
+    private getSidebarCustomButton(id: string, index: number): NtbSidebarCustomButtonCallback | undefined {
+        return this.sidebarCustomButtons.get(id)?.[index];
+    }
+
+    /**
+     * Removes the custom navigation button callbacks registered for a sidebar id.
+     * Called when the sidebar view is closed, so a closed sidebar does not keep
+     * its callbacks, and the variables they close over, in memory.
+     */
+    private removeSidebarCustomButtons(id: string): void {
+        this.sidebarCustomButtons.delete(id);
     }
 
     /**
@@ -615,7 +685,10 @@ export default class NoteToolbarApi<T> implements INoteToolbarApi<T> {
 
         this.ntb.registerView(
             NtbSidebarView.VIEW_TYPE_SIDEBAR,
-            leaf => new NtbSidebarView(this.ntb, leaf, options)
+            leaf => new NtbSidebarView(this.ntb, leaf, options, {
+                get: (id, index) => this.getSidebarCustomButton(id, index),
+                remove: (id) => this.removeSidebarCustomButtons(id)
+            })
         );
 
         this.sidebarRegistered = true;
