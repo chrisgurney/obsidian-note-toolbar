@@ -9,6 +9,7 @@ files:
   - source: /src/I18n/en.json
     translation: /src/I18n/%locale%.json
     type: i18next_json
+    skip_untranslated_strings: true
     languages_mapping:
       locale:
         en: en
@@ -20,6 +21,7 @@ files:
   - source: /src/I18n/cli/en.json
     translation: /src/I18n/cli/%locale%.json
     type: i18next_json
+    skip_untranslated_strings: true
     languages_mapping:
       locale:
         en: en
@@ -31,6 +33,7 @@ files:
   - source: /src/I18n/gallery/en.json
     translation: /src/I18n/gallery/%locale%.json
     type: i18next_json
+    skip_untranslated_strings: true
     languages_mapping:
       locale:
         en: en
