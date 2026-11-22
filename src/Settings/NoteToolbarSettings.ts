@@ -42,6 +42,7 @@ const cliFor = (base: Record<string, unknown>, file: { cli: Record<string, unkno
 const Locales = i18next.createInstance({
 	lng: getLanguage(),
 	fallbackLng: 'en',
+    returnEmptyString: false, // treat empty strings as missing, so they fall back to EN
 	resources: {
 		de: { 'plugin-note-toolbar': { ...de, gallery: { ...de.gallery, ...galleryDe.gallery }, cli: cliFor(de, cliDe) } }, // German
 		en: { 'plugin-note-toolbar': { ...en, gallery: { ...en.gallery, ...galleryEn.gallery }, cli: cliFor(en, cliEn) } }, // English
