@@ -13,10 +13,7 @@
  * build/re-escape-nbsp.mjs first if the escape form matters to you.
  *
  * When a string legitimately gains or loses an NBSP, update
- * build/nbsp-expected.json in the same commit.
- *
- * Usage: node build/check-nbsp.mjs [--verbose]
- *   npm run check:nbsp
+ * build/i18n-nbsp-expected.json in the same commit.
  */
 
 import fs from 'node:fs';
@@ -26,7 +23,7 @@ import { fileURLToPath } from 'node:url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
 const i18nDir = path.join(rootDir, 'src', 'I18n');
-const manifestPath = path.join(__dirname, 'lang-nbsp-expected.json');
+const manifestPath = path.join(__dirname, 'i18n-nbsp-expected.json');
 const NBSP = '\u00A0';
 const verbose = process.argv.includes('--verbose');
 

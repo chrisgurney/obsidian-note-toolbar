@@ -16,7 +16,7 @@ import { fileURLToPath } from 'node:url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const args = process.argv.slice(2);
 let exitCode = 0;
-for (const script of ['check-lang-keys.mjs', 'check-lang-ids.mjs']) {
+for (const script of ['check-i18n-keys.mjs', 'check-i18n-ids.mjs']) {
     const result = spawnSync(process.execPath, [path.join(__dirname, script), ...args], { stdio: 'inherit' });
     if (result.status !== 0 && exitCode === 0) exitCode = result.status;
 }
