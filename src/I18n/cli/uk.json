@@ -1,3 +1,310 @@
 {
-  "cli": {}
+  "cli": {
+    "category": {
+      "general": {
+        "heading": ""
+      },
+      "items-add": {
+        "heading": ""
+      },
+      "items-add-tp": {
+        "heading": ""
+      },
+      "items-copy": {
+        "heading": ""
+      },
+      "items": {
+        "heading": ""
+      },
+      "items-use": {
+        "heading": ""
+      },
+      "rules": {
+        "heading": ""
+      },
+      "toolbars": {
+        "heading": ""
+      }
+    },
+    "command": {
+      "note-toolbar": {
+        "description": "",
+        "flag": {
+          "toolbar": {
+            "description": ""
+          }
+        }
+      },
+      "note-toolbar-add-break": {
+        "description": ""
+      },
+      "note-toolbar-add-command": {
+        "description": "",
+        "flag": {
+          "command": {
+            "description": ""
+          },
+          "focus": {
+            "description": ""
+          },
+          "target": {
+            "description": ""
+          }
+        }
+      },
+      "note-toolbar-add-dv": {
+        "description": "",
+        "flag": {
+          "eval": {
+            "description": ""
+          },
+          "query": {
+            "description": ""
+          },
+          "file": {
+            "description": ""
+          },
+          "path": {
+            "description": ""
+          },
+          "args": {
+            "description": ""
+          }
+        }
+      },
+      "note-toolbar-add-file": {
+        "description": "",
+        "flag": {
+          "file": {
+            "description": ""
+          },
+          "path": {
+            "description": ""
+          },
+          "target": {
+            "description": ""
+          }
+        }
+      },
+      "note-toolbar-add-group": {
+        "description": "",
+        "flag": {
+          "toolbar": {
+            "description": ""
+          }
+        }
+      },
+      "note-toolbar-add-js": {
+        "description": "",
+        "flag": {
+          "code": {
+            "description": ""
+          },
+          "file": {
+            "description": ""
+          },
+          "path": {
+            "description": ""
+          },
+          "args": {
+            "description": ""
+          }
+        }
+      },
+      "note-toolbar-add-menu": {
+        "description": "",
+        "flag": {
+          "toolbar": {
+            "description": ""
+          }
+        }
+      },
+      "note-toolbar-add-sep": {
+        "description": ""
+      },
+      "note-toolbar-add-spread": {
+        "description": ""
+      },
+      "note-toolbar-add-tp": {
+        "description": ""
+      },
+      "note-toolbar-add-tp-command": {
+        "description": "",
+        "flag": {
+          "command": {
+            "description": ""
+          }
+        }
+      },
+      "note-toolbar-add-tp-create": {
+        "description": "",
+        "flag": {
+          "file": {
+            "description": ""
+          },
+          "path": {
+            "description": ""
+          },
+          "output": {
+            "description": ""
+          }
+        }
+      },
+      "note-toolbar-add-tp-exec": {
+        "description": "",
+        "flag": {
+          "file": {
+            "description": ""
+          },
+          "path": {
+            "description": ""
+          }
+        }
+      },
+      "note-toolbar-add-tp-insert": {
+        "description": "",
+        "flag": {
+          "file": {
+            "description": ""
+          },
+          "path": {
+            "description": ""
+          }
+        }
+      },
+      "note-toolbar-add-uri": {
+        "description": "",
+        "flag": {
+          "uri": {
+            "description": ""
+          },
+          "target": {
+            "description": ""
+          }
+        }
+      },
+      "note-toolbar-copy": {
+        "description": "",
+        "flag": {
+          "item": {
+            "description": ""
+          }
+        }
+      },
+      "note-toolbar-gallery": {
+        "description": ""
+      },
+      "note-toolbar-help": {
+        "description": ""
+      },
+      "note-toolbar-import": {
+        "description": "",
+        "flag": {
+          "toolbar": {
+            "description": ""
+          },
+          "callout": {
+            "description": ""
+          },
+          "file": {
+            "description": ""
+          },
+          "path": {
+            "description": ""
+          }
+        }
+      },
+      "note-toolbar-items": {
+        "description": "",
+        "flag": {
+          "toolbar": {
+            "description": ""
+          },
+          "filter": {
+            "description": ""
+          },
+          "empty": {
+            "description": ""
+          }
+        }
+      },
+      "note-toolbar-move": {
+        "description": ""
+      },
+      "note-toolbar-new": {
+        "description": "",
+        "flag": {
+          "name": {
+            "description": ""
+          },
+          "desc": {
+            "description": ""
+          },
+          "icon": {
+            "description": ""
+          }
+        }
+      },
+      "note-toolbar-rules": {
+        "description": ""
+      },
+      "note-toolbar-settings": {
+        "description": "",
+        "flag": {
+          "item": {
+            "description": ""
+          },
+          "toolbar": {
+            "description": ""
+          }
+        }
+      },
+      "note-toolbar-status": {
+        "description": ""
+      },
+      "note-toolbar-use": {
+        "description": "",
+        "flag": {
+          "item": {
+            "description": ""
+          },
+          "file": {
+            "description": ""
+          },
+          "path": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "flag": {
+      "format": {
+        "description": ""
+      },
+      "label": {
+        "description": ""
+      },
+      "icon": {
+        "description": ""
+      },
+      "item": {
+        "description": ""
+      },
+      "pos": {
+        "description": ""
+      },
+      "to": {
+        "description": ""
+      },
+      "tooltip": {
+        "description": ""
+      },
+      "total": {
+        "description": ""
+      },
+      "verbose": {
+        "description": ""
+      }
+    }
+  }
 }

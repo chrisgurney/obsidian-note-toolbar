@@ -4,6 +4,14 @@
     "overview": "アイテムの例を閲覧し、クリック/タップでツールバーに追加します。",
     "pluginNote": "一部のアイテムは、より高度な動作のためにプラグインが必要です。 ",
     "category": {
+      "editor-tools": {
+        "name": "",
+        "description": ""
+      },
+      "clipboard": {
+        "name": "",
+        "description": ""
+      },
       "daily-notes": {
         "name": "デイリーノート",
         "description": "デイリーノート間をすばやく移動します。コアプラグイン「Daily Notes」が必要です。"
@@ -13,11 +21,20 @@
         "description": "内容の順序や配置を調整します。"
       },
       "editor-navigation": {
+        "name": "",
         "description": "テキストエディター内を素早く移動します。"
       },
       "files": {
         "name": "ファイル",
         "description": "ファイル操作のためのツール。"
+      },
+      "focus": {
+        "name": "",
+        "description": ""
+      },
+      "folding": {
+        "name": "",
+        "description": ""
       },
       "formatting": {
         "name": "書式",
@@ -30,6 +47,10 @@
       "insertions": {
         "name": "挿入",
         "description": "リンクやメディアなど、さまざまなコンテンツを追加します。"
+      },
+      "mobile-navigation": {
+        "name": "",
+        "description": ""
       },
       "new-tab-view": {
         "name": "新しいタブビュー",
@@ -46,6 +67,10 @@
       "search": {
         "name": "検索",
         "description": "ノートやボールト全体を検索します。"
+      },
+      "vault-files": {
+        "name": "",
+        "description": ""
       },
       "vault-navigation": {
         "name": "ボールトのナビゲーション",
@@ -73,6 +98,14 @@
       }
     },
     "item": {
+      "add-cursor-above": {
+        "description": "",
+        "tooltip": ""
+      },
+      "add-cursor-below": {
+        "description": "",
+        "tooltip": ""
+      },
       "attach-file": {
         "description": "ファイルを添付します。",
         "tooltip": "添付ファイルを挿入"
@@ -133,6 +166,10 @@
         "description": "次のデイリーノートに移動します。",
         "tooltip": "次のデイリーノート"
       },
+      "delete-paragraph": {
+        "description": "",
+        "tooltip": ""
+      },
       "editor-toggle-preview": {
         "description": "エディターのプレビューモードと閲覧モードを切り替えます。",
         "tooltip": "閲覧ビューを切替"
@@ -173,6 +210,10 @@
         "description": "フォルダ内の前のファイルをA-Z順で開きます。最初のファイルに達したら最後に戻ります。",
         "tooltip": "前のファイル"
       },
+      "file-switcher-open": {
+        "description": "",
+        "tooltip": ""
+      },
       "folder-search": {
         "description": "現在のフォルダ内を検索します。ルートにいる場合はすべてのファイルを検索します。",
         "tooltip": "フォルダを検索"
@@ -181,9 +222,17 @@
         "description": "検索サイドバーを開きます。",
         "tooltip": "すべてのファイルを検索"
       },
+      "go-back": {
+        "description": "",
+        "tooltip": ""
+      },
       "go-bottom": {
         "description": "カーソルを現在のノートの一番下に移動します。",
         "tooltip": "最下部にジャンプ"
+      },
+      "go-forward": {
+        "description": "",
+        "tooltip": ""
       },
       "go-home": {
         "description": "ホームノートに移動します。（URLにホームノートを入力してください。）",
@@ -221,9 +270,17 @@
         "description": "コードブロックを挿入します。",
         "tooltip": "コードブロックを挿入"
       },
+      "insert-footnote": {
+        "description": "",
+        "tooltip": ""
+      },
       "insert-embed": {
         "description": "埋め込みファイルまたはノートを追加します。",
         "tooltip": "埋め込みを追加"
+      },
+      "paste-external-embed": {
+        "description": "",
+        "tooltip": ""
       },
       "insert-horizontal-rule": {
         "description": "セクションを区切る水平線を挿入します。",
@@ -253,6 +310,22 @@
         "description": "設定されたワークスペースを選択して読み込みます。",
         "tooltip": "ワークスペースを読み込み"
       },
+      "move-caret-up": {
+        "description": "",
+        "tooltip": ""
+      },
+      "move-caret-down": {
+        "description": "",
+        "tooltip": ""
+      },
+      "move-caret-left": {
+        "description": "",
+        "tooltip": ""
+      },
+      "move-caret-right": {
+        "description": "",
+        "tooltip": ""
+      },
       "new-note": {
         "description": "新しいノートを作成します。",
         "tooltip": "新しいノート"
@@ -260,6 +333,10 @@
       "note-toolbar-backup-data": {
         "description": "Note Toolbarの設定(data.json)ファイルを保管庫にコピーします。",
         "tooltip": "Note Toolbar設定をバックアップ"
+      },
+      "note-toolbar-export": {
+        "description": "",
+        "tooltip": ""
       },
       "note-toolbar-quick-toolbars": {
         "description": "すべてのNote Toolbarにアクセスできるウィンドウを開きます。",
@@ -285,6 +362,10 @@
         "description": "新しいExcalidrawドローイングを作成します。",
         "tooltip": "新しいドローイング"
       },
+      "obsidian-hotkeys": {
+        "description": "",
+        "tooltip": ""
+      },
       "obsidian-help-site": {
         "description": "Obsidian公式ヘルプサイトを開きます。",
         "tooltip": "Obsidianヘルプ"
@@ -308,6 +389,18 @@
       "paste": {
         "description": "クリップボードからテキストを貼り付けます。",
         "tooltip": "貼り付け"
+      },
+      "periodic-notes-daily-next": {
+        "description": "",
+        "tooltip": ""
+      },
+      "periodic-notes-daily-prev": {
+        "description": "",
+        "tooltip": ""
+      },
+      "periodic-notes-daily-open": {
+        "description": "",
+        "tooltip": ""
       },
       "periodic-notes-monthly-next": {
         "description": "次の月次ノートを開きます。（月次ノート内にいる必要があります。）",
@@ -353,6 +446,34 @@
         "description": "現在のノートで検索/置換パネルを開きます。",
         "tooltip": "検索と置換"
       },
+      "search-selection": {
+        "description": "",
+        "tooltip": ""
+      },
+      "set-heading-1": {
+        "description": "",
+        "tooltip": ""
+      },
+      "set-heading-2": {
+        "description": "",
+        "tooltip": ""
+      },
+      "set-heading-3": {
+        "description": "",
+        "tooltip": ""
+      },
+      "set-heading-4": {
+        "description": "",
+        "tooltip": ""
+      },
+      "set-heading-5": {
+        "description": "",
+        "tooltip": ""
+      },
+      "set-heading-6": {
+        "description": "",
+        "tooltip": ""
+      },
       "set-workspace": {
         "description": "指定したワークスペースに切り替えます。",
         "tooltip": "マイワークスペース"
@@ -377,6 +498,10 @@
         "description": "前のタブに移動します。",
         "tooltip": "前のタブ"
       },
+      "tab-switcher-open": {
+        "description": "",
+        "tooltip": ""
+      },
       "templater-insert-template": {
         "description": "選択したテンプレートを挿入します。",
         "tooltip": "テンプレートを挿入"
@@ -388,6 +513,10 @@
       "redo": {
         "description": "元に戻した操作をやり直します。",
         "tooltip": "やり直し"
+      },
+      "remove-heading": {
+        "description": "",
+        "tooltip": ""
       },
       "swap-line-down": {
         "description": "現在の行を下に移動します。",
@@ -441,6 +570,26 @@
         "description": "cssclassesプロパティに指定されたクラスを追加または削除します。",
         "tooltip": "CSSクラスを切替"
       },
+      "toggle-fold": {
+        "description": "",
+        "tooltip": ""
+      },
+      "fold-all": {
+        "description": "",
+        "tooltip": ""
+      },
+      "fold-less": {
+        "description": "",
+        "tooltip": ""
+      },
+      "fold-more": {
+        "description": "",
+        "tooltip": ""
+      },
+      "unfold-all": {
+        "description": "",
+        "tooltip": ""
+      },
       "toggle-highlight": {
         "description": "テキストのハイライトを適用または削除します。",
         "tooltip": "ハイライトを切替"
@@ -456,6 +605,14 @@
       "toggle-numbered-list": {
         "description": "番号付きリストの書式を適用または削除します。",
         "tooltip": "番号付きリストを切替"
+      },
+      "toggle-keyboard": {
+        "description": "",
+        "tooltip": ""
+      },
+      "toggle-heading": {
+        "description": "",
+        "tooltip": ""
       },
       "toggle-ui": {
         "description": "Obsidianのステータスバー、ノートプロパティ、サイドバー、ビューヘッダーの表示/非表示を切り替えます。",
@@ -474,7 +631,8 @@
         "tooltip": "Vimモードを切替"
       },
       "toggle-color-highlight": {
-        "description": "テキストのハイライトを適用または削除します。"
+        "description": "テキストのハイライトを適用または削除します。",
+        "tooltip": ""
       },
       "undo": {
         "description": "最後の操作を元に戻します。",

@@ -53,9 +53,11 @@
         "description": "Корисно для навігації по програмі та редактору на мобільному пристрої."
       },
       "new-tab-view": {
-        "name": "Вигляд Нової вкладки"
+        "name": "Вигляд Нової вкладки",
+        "description": ""
       },
       "note-toolbar": {
+        "name": "",
         "description": "Отримайте швидкий доступ до налаштувань та інструментів Note Toolbar."
       },
       "obsidian-support": {
@@ -83,9 +85,11 @@
         "description": "Перемикання між робочими просторами. Потрібен вбудований додаток _Простори_."
       },
       "periodic-notes": {
+        "name": "",
         "description": "Перехід до щотижневих, щомісячних та річних нотаток. Потрібен додаток [Periodic Notes](obsidian://show-plugin?id=periodic-notes)."
       },
       "templater": {
+        "name": "",
         "description": "Вставляйте, або створюйте нотатки з шаблонів. Потрібен додаток [Templater](obsidian://show-plugin?id=templater-obsidian) plugin. See the user guide for even [more ways to use Templater](https://github.com/chrisgurney/obsidian-note-toolbar/wiki/Templater)."
       },
       "plugins": {
@@ -627,7 +631,8 @@
         "tooltip": "Режим Vim"
       },
       "toggle-color-highlight": {
-        "description": "Перемикайте виділення тексту."
+        "description": "Перемикайте виділення тексту.",
+        "tooltip": ""
       },
       "undo": {
         "description": "Скасуйте останню дію.",

@@ -1,3 +1,651 @@
 {
-  "gallery": {}
+  "gallery": {
+    "bannerTitle": "",
+    "overview": "",
+    "pluginNote": "",
+    "category": {
+      "editor-tools": {
+        "name": "",
+        "description": ""
+      },
+      "clipboard": {
+        "name": "",
+        "description": ""
+      },
+      "daily-notes": {
+        "name": "",
+        "description": ""
+      },
+      "editing": {
+        "name": "",
+        "description": ""
+      },
+      "editor-navigation": {
+        "name": "",
+        "description": ""
+      },
+      "files": {
+        "name": "",
+        "description": ""
+      },
+      "focus": {
+        "name": "",
+        "description": ""
+      },
+      "folding": {
+        "name": "",
+        "description": ""
+      },
+      "formatting": {
+        "name": "",
+        "description": ""
+      },
+      "lists-indentation": {
+        "name": "",
+        "description": ""
+      },
+      "insertions": {
+        "name": "",
+        "description": ""
+      },
+      "mobile-navigation": {
+        "name": "",
+        "description": ""
+      },
+      "new-tab-view": {
+        "name": "",
+        "description": ""
+      },
+      "note-toolbar": {
+        "name": "",
+        "description": ""
+      },
+      "obsidian-support": {
+        "name": "",
+        "description": ""
+      },
+      "search": {
+        "name": "",
+        "description": ""
+      },
+      "vault-files": {
+        "name": "",
+        "description": ""
+      },
+      "vault-navigation": {
+        "name": "",
+        "description": ""
+      },
+      "views-themes": {
+        "name": "",
+        "description": ""
+      },
+      "workspaces": {
+        "name": "",
+        "description": ""
+      },
+      "periodic-notes": {
+        "name": "",
+        "description": ""
+      },
+      "templater": {
+        "name": "",
+        "description": ""
+      },
+      "plugins": {
+        "name": "",
+        "description": ""
+      }
+    },
+    "item": {
+      "add-cursor-above": {
+        "description": "",
+        "tooltip": ""
+      },
+      "add-cursor-below": {
+        "description": "",
+        "tooltip": ""
+      },
+      "attach-file": {
+        "description": "",
+        "tooltip": ""
+      },
+      "bookmarks-open": {
+        "description": "",
+        "tooltip": ""
+      },
+      "canvas-new": {
+        "description": "",
+        "tooltip": ""
+      },
+      "clear-formatting": {
+        "description": "",
+        "tooltip": ""
+      },
+      "copy": {
+        "description": "",
+        "tooltip": ""
+      },
+      "copy-block-link": {
+        "description": "",
+        "tooltip": ""
+      },
+      "copy-note-content": {
+        "description": "",
+        "tooltip": ""
+      },
+      "copy-obsidian-url": {
+        "description": "",
+        "tooltip": ""
+      },
+      "cut": {
+        "description": "",
+        "tooltip": ""
+      },
+      "cycle-list-checklist": {
+        "description": "",
+        "tooltip": ""
+      },
+      "cycle-themes": {
+        "description": "",
+        "tooltip": ""
+      },
+      "cycle-workspace": {
+        "description": "",
+        "tooltip": ""
+      },
+      "daily-notes-prev": {
+        "description": "",
+        "tooltip": ""
+      },
+      "daily-notes-today": {
+        "description": "",
+        "tooltip": ""
+      },
+      "daily-notes-next": {
+        "description": "",
+        "tooltip": ""
+      },
+      "delete-paragraph": {
+        "description": "",
+        "tooltip": ""
+      },
+      "editor-toggle-preview": {
+        "description": "",
+        "tooltip": ""
+      },
+      "editor-toggle-source": {
+        "description": "",
+        "tooltip": ""
+      },
+      "file-append": {
+        "description": "",
+        "tooltip": ""
+      },
+      "file-in-explorer": {
+        "description": "",
+        "tooltip": ""
+      },
+      "file-in-system": {
+        "description": "",
+        "tooltip": ""
+      },
+      "file-move": {
+        "description": "",
+        "tooltip": ""
+      },
+      "file-new": {
+        "description": "",
+        "tooltip": ""
+      },
+      "file-new-tab": {
+        "description": "",
+        "tooltip": ""
+      },
+      "file-next": {
+        "description": "",
+        "tooltip": ""
+      },
+      "file-prev": {
+        "description": "",
+        "tooltip": ""
+      },
+      "file-switcher-open": {
+        "description": "",
+        "tooltip": ""
+      },
+      "folder-search": {
+        "description": "",
+        "tooltip": ""
+      },
+      "global-search-open": {
+        "description": "",
+        "tooltip": ""
+      },
+      "go-back": {
+        "description": "",
+        "tooltip": ""
+      },
+      "go-bottom": {
+        "description": "",
+        "tooltip": ""
+      },
+      "go-forward": {
+        "description": "",
+        "tooltip": ""
+      },
+      "go-home": {
+        "description": "",
+        "tooltip": ""
+      },
+      "go-top": {
+        "description": "",
+        "tooltip": ""
+      },
+      "go-up": {
+        "description": "",
+        "tooltip": ""
+      },
+      "go-next-callout": {
+        "description": "",
+        "tooltip": ""
+      },
+      "go-next-heading": {
+        "description": "",
+        "tooltip": ""
+      },
+      "go-prev-heading": {
+        "description": "",
+        "tooltip": ""
+      },
+      "indent": {
+        "description": "",
+        "tooltip": ""
+      },
+      "insert-callout": {
+        "description": "",
+        "tooltip": ""
+      },
+      "insert-codeblock": {
+        "description": "",
+        "tooltip": ""
+      },
+      "insert-footnote": {
+        "description": "",
+        "tooltip": ""
+      },
+      "insert-embed": {
+        "description": "",
+        "tooltip": ""
+      },
+      "paste-external-embed": {
+        "description": "",
+        "tooltip": ""
+      },
+      "insert-horizontal-rule": {
+        "description": "",
+        "tooltip": ""
+      },
+      "insert-link": {
+        "description": "",
+        "tooltip": ""
+      },
+      "insert-mathblock": {
+        "description": "",
+        "tooltip": ""
+      },
+      "insert-table": {
+        "description": "",
+        "tooltip": ""
+      },
+      "insert-tag": {
+        "description": "",
+        "tooltip": ""
+      },
+      "insert-wikilink": {
+        "description": "",
+        "tooltip": ""
+      },
+      "load-workspace": {
+        "description": "",
+        "tooltip": ""
+      },
+      "move-caret-up": {
+        "description": "",
+        "tooltip": ""
+      },
+      "move-caret-down": {
+        "description": "",
+        "tooltip": ""
+      },
+      "move-caret-left": {
+        "description": "",
+        "tooltip": ""
+      },
+      "move-caret-right": {
+        "description": "",
+        "tooltip": ""
+      },
+      "new-note": {
+        "description": "",
+        "tooltip": ""
+      },
+      "note-toolbar-backup-data": {
+        "description": "",
+        "tooltip": ""
+      },
+      "note-toolbar-export": {
+        "description": "",
+        "tooltip": ""
+      },
+      "note-toolbar-quick-toolbars": {
+        "description": "",
+        "tooltip": ""
+      },
+      "note-toolbar-quick-tools": {
+        "description": "",
+        "tooltip": ""
+      },
+      "note-toolbar-tbar-settings": {
+        "description": "",
+        "tooltip": ""
+      },
+      "note-toolbar-toggle-properties": {
+        "description": "",
+        "tooltip": ""
+      },
+      "note-toolbar-user-guide": {
+        "description": "",
+        "tooltip": ""
+      },
+      "obsidian-excalidraw-create": {
+        "description": "",
+        "tooltip": ""
+      },
+      "obsidian-hotkeys": {
+        "description": "",
+        "tooltip": ""
+      },
+      "obsidian-help-site": {
+        "description": "",
+        "tooltip": ""
+      },
+      "obsidian-kanban-create": {
+        "description": "",
+        "tooltip": ""
+      },
+      "obsidian-markdown-reference": {
+        "description": "",
+        "tooltip": ""
+      },
+      "obsidian-sync-version-history": {
+        "description": "",
+        "tooltip": ""
+      },
+      "obsidian-tasks-edit": {
+        "description": "",
+        "tooltip": ""
+      },
+      "paste": {
+        "description": "",
+        "tooltip": ""
+      },
+      "periodic-notes-daily-next": {
+        "description": "",
+        "tooltip": ""
+      },
+      "periodic-notes-daily-prev": {
+        "description": "",
+        "tooltip": ""
+      },
+      "periodic-notes-daily-open": {
+        "description": "",
+        "tooltip": ""
+      },
+      "periodic-notes-monthly-next": {
+        "description": "",
+        "tooltip": ""
+      },
+      "periodic-notes-monthly-open": {
+        "description": "",
+        "tooltip": ""
+      },
+      "periodic-notes-monthly-prev": {
+        "description": "",
+        "tooltip": ""
+      },
+      "periodic-notes-weekly-next": {
+        "description": "",
+        "tooltip": ""
+      },
+      "periodic-notes-weekly-open": {
+        "description": "",
+        "tooltip": ""
+      },
+      "periodic-notes-weekly-prev": {
+        "description": "",
+        "tooltip": ""
+      },
+      "periodic-notes-yearly-next": {
+        "description": "",
+        "tooltip": ""
+      },
+      "periodic-notes-yearly-open": {
+        "description": "",
+        "tooltip": ""
+      },
+      "periodic-notes-yearly-prev": {
+        "description": "",
+        "tooltip": ""
+      },
+      "pin": {
+        "description": "",
+        "tooltip": ""
+      },
+      "search-replace-open": {
+        "description": "",
+        "tooltip": ""
+      },
+      "search-selection": {
+        "description": "",
+        "tooltip": ""
+      },
+      "set-heading-1": {
+        "description": "",
+        "tooltip": ""
+      },
+      "set-heading-2": {
+        "description": "",
+        "tooltip": ""
+      },
+      "set-heading-3": {
+        "description": "",
+        "tooltip": ""
+      },
+      "set-heading-4": {
+        "description": "",
+        "tooltip": ""
+      },
+      "set-heading-5": {
+        "description": "",
+        "tooltip": ""
+      },
+      "set-heading-6": {
+        "description": "",
+        "tooltip": ""
+      },
+      "set-workspace": {
+        "description": "",
+        "tooltip": ""
+      },
+      "settings-open": {
+        "description": "",
+        "tooltip": ""
+      },
+      "tab-close": {
+        "description": "",
+        "tooltip": ""
+      },
+      "tab-new": {
+        "description": "",
+        "tooltip": ""
+      },
+      "tab-next": {
+        "description": "",
+        "tooltip": ""
+      },
+      "tab-prev": {
+        "description": "",
+        "tooltip": ""
+      },
+      "tab-switcher-open": {
+        "description": "",
+        "tooltip": ""
+      },
+      "templater-insert-template": {
+        "description": "",
+        "tooltip": ""
+      },
+      "templater-new-note-from-template": {
+        "description": "",
+        "tooltip": ""
+      },
+      "redo": {
+        "description": "",
+        "tooltip": ""
+      },
+      "remove-heading": {
+        "description": "",
+        "tooltip": ""
+      },
+      "swap-line-down": {
+        "description": "",
+        "tooltip": ""
+      },
+      "swap-line-up": {
+        "description": "",
+        "tooltip": ""
+      },
+      "system-snippets-open": {
+        "description": "",
+        "tooltip": ""
+      },
+      "system-vault-open": {
+        "description": "",
+        "tooltip": ""
+      },
+      "theme-switch": {
+        "description": "",
+        "tooltip": ""
+      },
+      "theme-toggle-light-dark": {
+        "description": "",
+        "tooltip": ""
+      },
+      "toggle-blockquote": {
+        "description": "",
+        "tooltip": ""
+      },
+      "toggle-bold": {
+        "description": "",
+        "tooltip": ""
+      },
+      "toggle-bullet-list": {
+        "description": "",
+        "tooltip": ""
+      },
+      "toggle-checklist-status": {
+        "description": "",
+        "tooltip": ""
+      },
+      "toggle-code": {
+        "description": "",
+        "tooltip": ""
+      },
+      "toggle-comments": {
+        "description": "",
+        "tooltip": ""
+      },
+      "toggle-css-class": {
+        "description": "",
+        "tooltip": ""
+      },
+      "toggle-fold": {
+        "description": "",
+        "tooltip": ""
+      },
+      "fold-all": {
+        "description": "",
+        "tooltip": ""
+      },
+      "fold-less": {
+        "description": "",
+        "tooltip": ""
+      },
+      "fold-more": {
+        "description": "",
+        "tooltip": ""
+      },
+      "unfold-all": {
+        "description": "",
+        "tooltip": ""
+      },
+      "toggle-highlight": {
+        "description": "",
+        "tooltip": ""
+      },
+      "toggle-inline-math": {
+        "description": "",
+        "tooltip": ""
+      },
+      "toggle-italics": {
+        "description": "",
+        "tooltip": ""
+      },
+      "toggle-numbered-list": {
+        "description": "",
+        "tooltip": ""
+      },
+      "toggle-keyboard": {
+        "description": "",
+        "tooltip": ""
+      },
+      "toggle-heading": {
+        "description": "",
+        "tooltip": ""
+      },
+      "toggle-ui": {
+        "description": "",
+        "tooltip": ""
+      },
+      "toggle-status-bar": {
+        "description": "",
+        "tooltip": ""
+      },
+      "toggle-strikethrough": {
+        "description": "",
+        "tooltip": ""
+      },
+      "toggle-vim-mode": {
+        "description": "",
+        "tooltip": ""
+      },
+      "toggle-color-highlight": {
+        "description": "",
+        "tooltip": ""
+      },
+      "undo": {
+        "description": "",
+        "tooltip": ""
+      },
+      "unindent": {
+        "description": "",
+        "tooltip": ""
+      },
+      "vscode-open": {
+        "description": "",
+        "tooltip": ""
+      }
+    }
+  }
 }

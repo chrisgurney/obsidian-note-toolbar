@@ -22,13 +22,36 @@
     },
     "error": {
       "args-parsing": "无法解析参数",
+      "args-parsing-field-error": "",
       "callout-not-found": "错误：在当前笔记中无法找到 ID 为 {{id}} 的 note-toolbar-output 标注",
+      "check-console": "",
+      "check-sidebar": "",
+      "context": {
+        "adapterFunction": "",
+        "callout": "",
+        "component": "",
+        "file": "",
+        "for": "",
+        "in": "",
+        "item": "",
+        "of": "",
+        "toolbar": "",
+        "with": ""
+      },
+      "details-additional": "",
+      "details-file": "",
+      "exec-failed_context": "",
       "expr-failed": "无法执行表达式：{{expression}}",
+      "expr-failed_context": "",
       "expr-note-not-open": "该表达式仅支持在打开的笔记中执行。",
+      "file-empty": "",
       "file-not-found": "找不到文件：{{filename}}",
+      "file-not-found_load": "",
       "function-invalid": "不支持的函数：{{function}}",
       "function-not-found": "找不到函数：{{function}}",
       "general": "错误：查看控制台以获取更多细节\n```\n{{error}}\n```",
+      "general_file": "",
+      "label-title": "",
       "plugin-disabled": "安装并启用插件后，切换脚本设置：",
       "plugin-not-installed": "尚未安装和启用插件。",
       "scripting-disabled": "在 Note Toolbar 设置中启用脚本功能以使用此项目。"
@@ -59,6 +82,8 @@
       "importexec-sourcefunction": "函数（可选）",
       "importexec-sourcefunction-description": "如果脚本有函数，要执行的函数名。"
     },
+    "link-edit-item": "",
+    "link-edit-item_tooltip": "",
     "option-advanced": "进阶设置",
     "option-advanced-tooltip": "打开进阶设置",
     "option-function-default": "选择一个函数…",
@@ -88,10 +113,18 @@
     }
   },
   "api": {
+    "error": {
+      "file-not-markdown": "",
+      "no-active-editor": "",
+      "no-active-file": "",
+      "sidebar-append-file": "",
+      "sidebar-content-undefined": "",
+      "sidebar-no-leaf": ""
+    },
     "item": {
       "error-invalid-icon": "无效的图标 ID：{{iconId}}"
     },
-    "link-name": "Note\u00A0Toolbar\u00A0API",
+    "link-name": "Note Toolbar API",
     "msg": {
       "clipboard-copied": "已复制到剪贴板",
       "file-created": "已创建：{{filename}}",
@@ -100,6 +133,7 @@
     "ui": {
       "button-submit": "提交",
       "error-file-unsupported": "不支持的文件类型：{{filetype}}",
+      "error-export-no-contents": "",
       "error-missing-property": "缺少 API 所需的参数：{{property}}\n请参阅文档。",
       "error-undefined": "未定义的项目",
       "error-unsupported-property": "无法将 {{property}} 属性传给 API\n请参阅文档。",
@@ -110,8 +144,14 @@
       "instruction-dismiss": "取消",
       "instruction-navigate": "导航",
       "instruction-select": "确认",
+      "prompt-label-file": "",
       "prompt-placeholder": "在此输入文本",
       "prompt-placeholder-large": "输入文本",
+      "prompt-placeholder-sidebar-export": "",
+      "sidebar-clear": "",
+      "sidebar-close": "",
+      "sidebar-empty": "",
+      "sidebar-export": "",
       "suggester-placeholder": "选择一个选项…",
       "suggester-placeholder-no-values": "输入内容…"
     }
@@ -165,6 +205,7 @@
     "name-item-suggester-current": "快速工具（当前工具栏）",
     "name-open-gallery": "打开示例库",
     "name-open-help": "打开帮助",
+    "name-open-rules": "",
     "name-open-toolbar": "打开：{{toolbar}}",
     "name-settings": "插件设置",
     "name-show-properties": "显示笔记属性",
@@ -174,11 +215,14 @@
     "name-toolbar-settings": "工具栏设置",
     "name-toolbar-suggester": "快速工具栏",
     "name-use-item": "调用「{{item}}」",
+    "name-use-toolbar": "",
     "notice-command-updated": "命令已更新：\n{{command}}"
   },
   "copy": {
     "description": "复制下方文本。",
-    "instructions_desktop": "使用 Ctrl/Cmd+C 或右键复制"
+    "instructions_desktop": "使用 Ctrl/Cmd+C 或右键复制",
+    "instructions_phone": "",
+    "instructions_tablet": ""
   },
   "export": {
     "item-generic": "项目{{number}}",
@@ -188,9 +232,12 @@
     "label-share-description": "分享此链接给其他 Note Toolbar 用户，让他们能将你的工具栏添加到仓库内。",
     "label-share-preview": "预览",
     "label-share-script": "脚本",
+    "label-share-uri": "",
+    "menu-copy-share": "",
     "option-uri": "使用 Obsidian URI",
     "option-uri-description": "提供 obsidian:// 链接而不是 https:// URL。",
     "title-share": "分享工具栏：{{toolbar}}",
+    "tooltip-copy-share": "",
     "warning-share-length": "某些网页浏览器可能无法加载长度超过 2,048 个字符的 URL。",
     "warning-share-menu": "此工具栏引用了至少一个外部工具栏，接收者将无法访问。"
   },
@@ -228,6 +275,7 @@
     "errorlog-icon-not-found": "未找到图标：`{{icon}}`",
     "errorlog-invalid-format": "格式无效：`{{line}}`",
     "errorlog-invalid-styles": "无效样式：`{{styles}}`",
+    "errorlog-line": "",
     "errorlog-menu-not-found": "未找到菜单：`{{menu}}`",
     "label-import": "在下方粘贴笔记工具栏的标注（Callout），它将被添加为新的工具栏。",
     "label-import-confirmation": "确认要添加此工具栏。添加后，需要将此工具栏映射到一个或多个笔记。",
@@ -252,6 +300,8 @@
     "error-command-not-found": "错误：请检查 Note Toolbar 设置或 URI 中的此命令。未找到命令：{{command}}",
     "error-folder-not-found": "错误：请检查 Note Toolbar 设置或 URI 中的此文件夹。未找到文件夹：{{folder}}",
     "error-item-menu-not-found": "错误：请检查 Note Toolbar 设置或 URI 中的此菜单项。未找到工具栏：{{toolbar}}",
+    "error-save-ribbon-settings-failed": "",
+    "error-save-settings-failed": "",
     "error-scripting-not-enabled": "错误：请在 Note Toolbar 设置中启用脚本功能以使用此项目。",
     "error-scripting-plugin-not-enabled": "错误：请在安装并启用插件后切换脚本设置：{{plugin}}",
     "error-toolbar-not-found": "错误：请检查 Note Toolbar 设置或 URI 中的此工具栏。未找到工具栏：{{toolbar}}",
@@ -259,20 +309,33 @@
     "warning-no-matching-toolbar": "Note Toolbar：没有匹配的 {{toolbar}} 工具栏\n点击/轻触此处创建。"
   },
   "onboarding": {
+    "new-toolbar": {
+      "label-default": "",
+      "label-property-set": "",
+      "label-rules": "",
+      "content": "",
+      "title": "",
+      "notice-default-set": "",
+      "notice-property-set": ""
+    },
+    "swap-toolbar": {
+      "content": "",
+      "title": ""
+    },
     "tooltip-dismiss": "关闭"
   },
   "plugin": {
     "canvas": "Canvas 画布",
-    "daily-notes": "Daily\u00A0Notes",
+    "daily-notes": "Daily Notes",
     "dataview": "Dataview",
-    "js-engine": "JS\u00A0Engine",
-    "note-toolbar": "Note\u00A0Toolbar",
+    "js-engine": "JS Engine",
+    "note-toolbar": "Note Toolbar",
     "obsidian-excalidraw-plugin": "Excalidraw",
     "obsidian-kanban": "Kanban",
     "obsidian-tasks-plugin": "Tasks",
     "open-with-default-app": "使用默认应用打开",
-    "periodic-notes": "Periodic\u00A0Notes",
-    "sync": "Obsidian\u00A0Sync 官方同步",
+    "periodic-notes": "Periodic Notes",
+    "sync": "Obsidian Sync 官方同步",
     "templater-obsidian": "Templater",
     "workspaces": "Workspaces 工作区"
   },
@@ -282,10 +345,11 @@
       "label-confirm-command": "命令不支持或未找到：\n\n`{{commandId}}`\n\n您还想将此项目添加到工具栏中吗？您可以稍后安装/启用提供此命令的插件。",
       "label-confirm-mobile-uri": "该项目使用了文件 URI，在移动设备上可能不受支持。\n\n您还想将此项目添加到工具栏中吗？",
       "label-confirm-plugin": "插件未安装（或未启用）：\n\n**{{plugin}}**\n\n您还想将此项目添加到工具栏中吗？您可以稍后安装/启用此插件。",
-      "label-confirm-scripting": "为了使用此项目，必须启用 Note Toolbar 设置中的 _Scripting_（脚本）设置。\n\n- 此设置允许您的工具栏执行 JavaScript 脚本，并使用 Dataview、Templater 和 JS Engine（前提是您已安装并启用了这些插件）。\n\n您想现在启用此设置吗？",
+      "label-confirm-scripting-description": "",
       "notice-item-added": "已将项目添加至 {{toolbarName}}",
       "title-confirm-scripting": "该项目需要启用脚本功能",
-      "title-confirm": "添加项目：{{itemName}}"
+      "title-confirm": "添加项目：{{itemName}}",
+      "label-confirm-scripting_0": ""
     },
     "button-cancel": "取消",
     "button-enable": "启用",
@@ -298,6 +362,11 @@
     "button-help": "帮助",
     "button-help-tooltip": "打开帮助标签页",
     "button-learn-more": "了解更多",
+    "button-open-file": "",
+    "button-open-file-tooltip": "",
+    "button-open-link-tooltip": "",
+    "button-reveal-file": "",
+    "button-reveal-file-tooltip": "",
     "button-whats-new": "更新了啥？",
     "button-whats-new-tooltip": "打开「更新了啥？」标签页",
     "command-suggest-modal": {
@@ -307,7 +376,11 @@
       "placeholder": "搜索命令…"
     },
     "copy-as-callout": {
+      "button-close": "",
+      "button-close-description": "",
+      "button-callout-settings": "",
       "description": "定义将工具栏转换为标注时的行为。",
+      "label-callout-settings": "",
       "option-data": "使用数据元素",
       "option-data-description": "数据元素使得在新窗口中打开的工具栏仍然能正常工作。如果禁用，将使用 Note Toolbar 的 URI 而不是数据元素，并提供看起来更简洁的 Markdown。",
       "option-icons": "包含图标",
@@ -315,14 +388,15 @@
       "option-ids": "在菜单项中使用 ID",
       "option-ids-description": "这可以确保即使菜单工具栏更名，菜单项仍然适用于您。如果您想共享标注，请关闭此选项，将改用工具栏的名称。",
       "option-vars": "替换变量和表达式",
-      "option-vars-description": "工具栏中使用的任何变量和表达式都将被替换为当前查看笔记中的值。示例：{{note_title}} → 我的笔记"
+      "option-vars-description": "工具栏中使用的任何变量和表达式都将被替换为当前查看笔记中的值。示例：{{note_title}} → 我的笔记",
+      "title-modal": ""
     },
     "delete-toolbar": {
       "button-delete": "删除…",
       "button-delete-confirm": "删除",
       "button-delete-tooltip": "删除此工具栏",
       "label-delete-confirm": "您确定要删除此工具栏吗？",
-      "label-usage-note": "该工具栏可能在 `{{propertyName}}` 属性中被使用。如果你想确认，请关闭此窗口后搜索 `[{{propertyName}}:\u00A0{{toolbarName}}]`",
+      "label-usage-note": "该工具栏可能在 `{{propertyName}}` 属性中被使用。如果你想确认，请关闭此窗口后搜索 `[{{propertyName}}: {{toolbarName}}]`",
       "name": "删除此工具栏",
       "title": "删除工具栏：{{toolbar}}",
       "warning-default": "⚠️ 警告：这是您的默认工具栏。",
@@ -379,6 +453,9 @@
       "option-webviewer-description": "在网页浏览器中显示工具栏。"
     },
     "display-navbar": {
+      "label-hidden": "",
+      "label-partial": "",
+      "label-visible": "",
       "bottom": {
         "description": "隐藏 Obsidian 手机端底部导航栏中的操作。",
         "name": "底部导航栏可见性",
@@ -393,13 +470,30 @@
       }
     },
     "display-rules": {
+      "button-edit-label": "",
+      "button-edit-tooltip": "",
       "description": "定义在哪些笔记上显示工具栏。",
       "name": "显示规则"
     },
-    "error-old-settings-description": "加载了旧的设置文件（{{oldVersion}}），当前最新版本为 {{currentVersion}}",
-    "error-old-settings-name": "⚠️ 错误：请重新启用 Note Toolbar，或重启 Obsidian。",
+    "error-backup-settings-description": "",
+    "error-backup-settings-button": "",
+    "error-backup-settings-success": "",
+    "error-backup-settings-failed": "",
     "error-invalid-floating-toolbar": "Note Toolbar：浮动工具栏不存在。请检查您的设置。",
     "error-invalid-text-toolbar": "Note Toolbar：选中文本工具栏不存在。请检查您的设置。",
+    "error-load-failed": "",
+    "error-migration-failed": "",
+    "error-migration-failed-backup-failed": "",
+    "error-migration-save-failed": "",
+    "confirm-overwrite-title": "",
+    "confirm-overwrite-question": "",
+    "confirm-overwrite-approve": "",
+    "confirm-overwrite-deny": "",
+    "save-cancelled-notice": "",
+    "error-old-settings-auto-backup": "",
+    "error-old-settings-auto-backup-failed": "",
+    "error-old-settings-description": "加载了旧的设置文件（{{oldVersion}}），当前最新版本为 {{currentVersion}}",
+    "error-old-settings-name": "⚠️ 错误：请重新启用 Note Toolbar，或重启 Obsidian。",
     "help": {
       "button-close": "关闭",
       "button-donate": "捐赠 ↗",
@@ -413,6 +507,7 @@
       "heading-learn": "学习",
       "heading-support": "获取支持",
       "label-bug": "报告 bug",
+      "label-contribute": "",
       "label-donate": "请我喝杯咖啡",
       "label-donate-description": "如果您认为此插件有帮助，并希望在经济上支持我，请考虑捐赠。谢谢您！",
       "label-feedback": "提供反馈",
@@ -458,6 +553,7 @@
       "menu-copy-id-title": "项目开发者 ID",
       "menu-copy-item": "复制项目至工具栏…",
       "menu-copy-item-notice": "已将项目复制到工具栏：{{toolbarName}}",
+      "menu-copy-share": "",
       "menu-more-actions": "更多操作…",
       "menu-move-item": "移至工具栏…",
       "menu-move-item-notice": "项目已移至工具栏：{{toolbarName}}",
@@ -671,13 +767,70 @@
       "option-position-description": "选择从侧边栏访问工具栏时的显示方式。"
     },
     "rules": {
+      "button-close": "",
+      "button-close-description": "",
+      "button-delete-condition-tooltip": "",
       "button-new": "新规则",
       "button-new-tooltip": "添加新规则",
       "button-newcondition": "新条件",
       "button-newcondition-tooltip": "为此规则添加新的条件",
+      "cli-label-default": "",
+      "cli-label-property": "",
+      "cli-label-property-na": "",
+      "condition-field-placeholder": "",
+      "condition-field-prefix-and": "",
+      "condition-field-prefix-or": "",
+      "condition-value-file-placeholder": "",
+      "condition-value-folder-placeholder": "",
+      "condition-value-string-placeholder": "",
+      "condition-value-tags-placeholder": "",
       "description": "决定笔记如何显示工具栏的规则。",
+      "description-active-file": "",
+      "description-modal": "",
+      "error-file-type-disabled_field": "",
+      "error-file-type-disabled_view": "",
+      "label-conjunction-if": "",
+      "label-no-toolbar": "",
+      "menu-delete-rule": "",
+      "menu-duplicate-rule": "",
       "name": "规则",
-      "placeholder-toolbar": "工具栏"
+      "name-modal": "",
+      "operator-contains": "",
+      "operator-doesNotContain": "",
+      "operator-doesNotExist": "",
+      "operator-endsWith": "",
+      "operator-exists": "",
+      "operator-is": "",
+      "operator-isEmpty": "",
+      "operator-isNot": "",
+      "operator-isNotEmpty": "",
+      "operator-startsWith": "",
+      "option-conjunction-and": "",
+      "option-conjunction-or": "",
+      "option-editormode-editing": "",
+      "option-editormode-reading": "",
+      "option-field-editormode": "",
+      "option-field-filename": "",
+      "option-field-filetype": "",
+      "option-field-folder": "",
+      "option-field-platform": "",
+      "option-field-property": "",
+      "option-field-tags": "",
+      "option-other": "",
+      "option-platform-desktop": "",
+      "option-platform-mobile": "",
+      "option-platform-phone": "",
+      "option-platform-tablet": "",
+      "placeholder-other-filetype": "",
+      "placeholder-toolbar": "工具栏",
+      "setting-default": "",
+      "setting-default-description": "",
+      "setting-default-placeholder": "",
+      "setting-property": "",
+      "setting-property-description": "",
+      "setting-property-placeholder": "",
+      "tooltip-edit": "",
+      "tooltip-options": ""
     },
     "search": {
       "button-tooltip": "搜索工具栏",
@@ -766,12 +919,10 @@
     },
     "usage": {
       "description": "此工具栏使用情况：",
-      "description-mappings": "{{count}} 个映射",
-      "description-mappings_plural": "{{count}} 个映射",
+      "description_none": "此工具栏未被任何映射或项目使用。",
       "description-search": "搜索属性的使用情况",
-      "description-toolbar-items": "{{count}} 个工具栏项目",
-      "description-toolbar-items_plural": "{{count}} 个工具栏项目",
-      "description_none": "此工具栏未被任何映射或项目使用。"
+      "description-mappings_0": "",
+      "description-toolbar-items_0": ""
     },
     "use-item-command": {
       "error-noname": "请重新添加命令。\n至少需要填写一个不为空（或不含表达式）的标签或工具提示。",
@@ -793,7 +944,8 @@
       "label-release-notes-description": "最新版本的详细说明位于 GitHub。",
       "label-roadmap": "Note Toolbar 的未来？",
       "label-roadmap-description": "查看路线图，预览正在考虑开发的新功能。",
-      "title": "Note Toolbar 更新内容"
+      "title": "Note Toolbar 更新内容",
+      "title_version": ""
     }
   },
   "toolbar": {
@@ -806,6 +958,7 @@
     "menu-hide-base-toolbar": "隐藏数据库工具栏",
     "menu-hide-properties": "隐藏笔记属性",
     "menu-position": "设置位置",
+    "menu-rules": "",
     "menu-show-base-toolbar": "显示数据库工具栏",
     "menu-show-properties": "显示笔记属性",
     "menu-style": "样式…",
