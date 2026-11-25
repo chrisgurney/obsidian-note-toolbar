@@ -4,10 +4,10 @@
  * or cli/en.json, and every gallery.* / cli.* key maps back to a real id.
  *
  * This is the data-integrity half of the language check. The other half,
- * build/check-lang-keys.mjs, checks key usage and translation sync;
+ * build/check-i18n-keys.mjs, checks key usage and translation sync;
  * it marks every key under a dynamic prefix (gallery.item.${id},
  * cli.command.${id}) as used, so orphans under those prefixes are only
- * caught here. Run both through `npm run check-lang`.
+ * caught here. Run both through `npm run check:i18n`.
  *
  * Reports are counts only by default. --verbose lists the missing and
  * orphan keys. --strict exits 1 on any finding: id mismatches are
@@ -15,8 +15,8 @@
  * sync. Unknown options exit 2. Skipped (exit 0) on a tree with no
  * gallery/en.json or cli/en.json.
  *
- * Usage: node build/check-lang-ids.mjs [--verbose] [--strict]
- *   npm run check-lang / npm run check-lang -- --verbose
+ * Usage: node build/check-i18n-ids.mjs [--verbose] [--strict]
+ *   npm run check:i18n / npm run check:i18n -- --verbose
  */
 
 import fs from 'node:fs';
@@ -37,7 +37,7 @@ const unknown = args.filter((arg) => !['--verbose', '--strict', '--help', '-h'].
 
 if (help || unknown.length > 0) {
     if (unknown.length > 0) console.error(`[lang] Unknown option: ${unknown.join(' ')}`);
-    console.log('Usage: node build/check-lang-ids.mjs [--verbose] [--strict]');
+    console.log('Usage: node build/check-i18n-ids.mjs [--verbose] [--strict]');
     console.log('  --verbose  Also list the individual missing and orphan Gallery/CLI id keys.');
     console.log('  --strict   Exit 1 if any Gallery/CLI id mismatch is found.');
     process.exit(unknown.length > 0 ? 2 : 0);
