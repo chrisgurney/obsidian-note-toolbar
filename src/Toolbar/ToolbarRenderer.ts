@@ -914,8 +914,12 @@ export default class ToolbarRenderer {
 		}
 
 		for (const item of toolbar.items) {
+			// truncate titles that still contain unresolved variables, so long
+			// expressions don't widen the menu (same 24 chars as getItemText)
+			let title = item.label || item.tooltip || '';
+			if (this.ntb.vars.hasVars(title)) title = title.slice(0, 24);
 			resolvedMenuText.set(item.uuid, {
-				title: item.label || item.tooltip || '',
+				title,
 				resolvedLink: item.link
 			});
 
