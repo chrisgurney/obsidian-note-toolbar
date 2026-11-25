@@ -13,7 +13,7 @@
  * its three files the same way. Scanned code: TypeScript in src/,
  * JavaScript in docs/examples/, and the "script" strings in
  * src/Gallery/gallery-items.json. Gallery and CLI id integrity is
- * checked by build/check-lang-ids.mjs, not here.
+ * checked by build/check-i18n-ids.mjs, not here.
  *
  * The documented rules:
  *   1. Plural: a t('base', { count: ... }) call also uses the plural
@@ -36,6 +36,10 @@
  * keys, --strict exits 1 only on issues in the English-language (base)
  * translations: unused keys and code keys missing from the base.
  * Missing translations and extra keys never fail: they lag by design.
+ * An empty translated string counts as missing: the runtime falls back
+ * to English for empty values (returnEmptyString: false in
+ * src/Settings/NoteToolbarSettings.ts), so the checker reports them the
+ * same way. Verbose mode marks them (empty) in the missing list.
  */
 
 
@@ -64,11 +68,11 @@ const API_ALLOWLIST = [
 ];
 
 // A dynamic template can resolve to any key under its static head, so
-// those keys count as used; orphans are caught by check-lang-ids.mjs.
+// those keys count as used; orphans are caught by check-i18n-ids.mjs.
 const DYNAMIC_PREFIX_ROOTS = ['plugin.', 'gallery.', 'cli.'];
 
 // TranslationKey allows any suffix after these prefixes, so keys under
-// them are never "missing"; check-lang-ids.mjs verifies gallery.* and
+// them are never "missing"; check-i18n-ids.mjs verifies gallery.* and
 // cli.* keys belong to real ids.
 const ESCAPE_HATCH_PREFIXES = ['plugin.', 'setting.whats-new.', 'gallery.', 'cli.'];
 
@@ -80,7 +84,7 @@ const unknown = args.filter((arg) => !['--verbose', '--strict', '--help', '-h'].
 
 if (help || unknown.length > 0) {
     if (unknown.length > 0) console.error(`[lang] Unknown option: ${unknown.join(' ')}`);
-    console.log('Usage: node build/check-lang-keys.mjs [--verbose] [--strict]');
+    console.log('Usage: node build/check-i18n-keys.mjs [--verbose] [--strict]');
     console.log('  --verbose  Also list the individual unused, missing, and extra keys, the escape-hatch keys, and the dynamic t() calls.');
     console.log('  --strict   Exit 1 only on issues in the English-language (base) translations: unused keys and code keys missing from the base. Missing translations and extra keys never fail.');
     process.exit(unknown.length > 0 ? 2 : 0);
@@ -93,6 +97,20 @@ function flatten(obj, prefix, out) {
             flatten(value, fullKey, out);
         } else {
             out.add(fullKey);
+        }
+    }
+    return out;
+}
+
+// Leaf key/value pairs, so a translation can be judged on its value as
+// well as its presence: an empty string is untranslated, not translated.
+function flattenValues(obj, prefix, out) {
+    for (const [key, value] of Object.entries(obj)) {
+        const fullKey = prefix ? `${prefix}.${key}` : key;
+        if (value !== null && typeof value === 'object' && !Array.isArray(value)) {
+            flattenValues(value, fullKey, out);
+        } else {
+            out.set(fullKey, value);
         }
     }
     return out;
@@ -263,7 +281,7 @@ if (typeof packageJson.releaseVersion === 'string') {
 }
 // Rule 5: CLI category headings are read by build/cli-docs.mjs straight
 // from cli/en.json, not through t(); a heading for a removed category
-// is still caught as an orphan by check-lang-ids.mjs.
+// is still caught as an orphan by check-i18n-ids.mjs.
 for (const key of baseKeys) {
     if (/^cli\.category\.[^.]+\.heading$/.test(key)) usedKeys.add(key);
 }
@@ -277,19 +295,27 @@ const codeKeysMissingFromBase = [...codeKeys].filter((key) => !baseKeys.has(key)
 const escapeHatchKeysMissingFromBase = [...codeKeys].filter((key) => !baseKeys.has(key) && isEscapeHatchKey(key)).sort();
 
 // Each language from its three files, combined like the base; a missing
-// file contributes nothing.
+// file contributes nothing. Returns the keys with a non-empty value and,
+// separately, the keys present with an empty value: the runtime treats
+// empty strings as missing (returnEmptyString: false), so they count as
+// missing here too.
 function readLanguageKeys(lang) {
     const keys = new Set();
+    const emptyKeys = new Set();
     for (const file of [
         path.join(i18nDir, `${lang}.json`),
         path.join(i18nDir, 'gallery', `${lang}.json`),
         path.join(i18nDir, 'cli', `${lang}.json`),
     ]) {
         if (fs.existsSync(file)) {
-            for (const key of readKeys(file)) keys.add(key);
+            const values = flattenValues(JSON.parse(fs.readFileSync(file, 'utf8')), '', new Map());
+            for (const [key, value] of values) {
+                if (value === '') emptyKeys.add(key);
+                else keys.add(key);
+            }
         }
     }
-    return keys;
+    return { keys, emptyKeys };
 }
 
 const languageFiles = fs.readdirSync(i18nDir)
@@ -367,10 +393,13 @@ if (verbose) {
 let outOfSyncCount = 0;
 for (const file of languageFiles) {
     const lang = path.basename(file, '.json');
-    const langKeys = readLanguageKeys(lang);
+    const { keys: langKeys, emptyKeys } = readLanguageKeys(lang);
     const present = [...baseKeys].filter((key) => langKeys.has(key));
     const missing = [...baseKeys].filter((key) => !langKeys.has(key)).sort();
-    const extra = [...langKeys].filter((key) => !baseKeys.has(key)).sort();
+    // Extra keys count whether or not they have a value: an empty extra
+    // key is still a key that should not be there.
+    const allLangKeys = new Set([...langKeys, ...emptyKeys]);
+    const extra = [...allLangKeys].filter((key) => !baseKeys.has(key)).sort();
     const coverage = ((present.length / baseKeys.size) * 100).toFixed(1);
     const outOfSync = missing.length > 0 || extra.length > 0;
     if (outOfSync) outOfSyncCount += 1;
@@ -383,7 +412,7 @@ for (const file of languageFiles) {
 
     if (verbose) {
         console.log(`  Missing keys in ${lang} (${missing.length}):`);
-        for (const key of missing) console.log(`    - ${key}`);
+        for (const key of missing) console.log(`    - ${key}${emptyKeys.has(key) ? ' (empty)' : ''}`);
         console.log(`  Extra keys in ${lang} (${extra.length}):`);
         for (const key of extra) console.log(`    - ${key}`);
     }
